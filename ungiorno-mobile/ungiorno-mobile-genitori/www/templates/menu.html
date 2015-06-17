@@ -1,0 +1,30 @@
+<ion-side-menus enable-menu-with-back-views="false">
+    <ion-side-menu-content drag-content="false">
+        <ion-nav-bar class="bar bar-percorsi">
+            <ion-nav-buttons side="left">
+                <!-- O: button-clear or button-icon -->
+                <button class="button button-percorsi button-clear" menu-toggle="left">
+                    <i class="icon ion-navicon"></i>
+                </button>
+            </ion-nav-buttons>
+        </ion-nav-bar>
+        <ion-nav-view name="menuContent"></ion-nav-view>
+    </ion-side-menu-content>
+
+    <ion-side-menu side="left">
+        <ion-header-bar class="bar bar-percorsi">
+            <h1 class="title">Menu</h1>
+        </ion-header-bar>
+        <ion-content class="leftmenu">
+            <ion-list>
+ <ion-item nav-clear menu-close item-icon-left ui-sref="app.assenza">
+    assenza
+</ion-item>
+                <ion-item nav-clear menu-close item-icon-left ui-sref="app.ritiro">
+                    ritiro
+                </ion-item>
+
+            </ion-list>
+        </ion-content>
+    </ion-side-menu>
+</ion-side-menus>

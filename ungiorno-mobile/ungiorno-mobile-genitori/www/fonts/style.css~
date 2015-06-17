@@ -1,0 +1,107 @@
+@font-face {
+	font-family: 'sco';
+	src:url('fonts/sco.eot?-9tbda1');
+	src:url('fonts/sco.eot?#iefix-9tbda1') format('embedded-opentype'),
+		url('fonts/sco.woff?-9tbda1') format('woff'),
+		url('fonts/sco.ttf?-9tbda1') format('truetype'),
+		url('fonts/sco.svg?-9tbda1#sco') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+[class^="sco-"], [class*=" sco-"] {
+	font-family: 'sco';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.sco-flag:before {
+	content: "\e611";
+}
+
+.sco-public:before {
+	content: "\e612";
+}
+
+.sco-difficulty-high .path1:before {
+	content: "\e600";
+	color: rgb(237, 28, 36);
+}
+.sco-difficulty-high .path2:before {
+	content: "\e607";
+	margin-left: -1em;
+	color: rgb(0, 0, 0);
+}
+
+.sco-difficulty-medium .path1:before {
+	content: "\e608";
+	color: rgb(247, 147, 30);
+}
+.sco-difficulty-medium .path2:before {
+	content: "\e609";
+	margin-left: -1em;
+	color: rgb(0, 0, 0);
+}
+
+.sco-accessibility:before {
+	content: "\e60a";
+}
+
+.sco-difficulty-low .path1:before {
+	content: "\e60b";
+	color: rgb(57, 181, 74);
+}
+.sco-difficulty-low .path2:before {
+	content: "\e60c";
+	margin-left: -1em;
+	color: rgb(0, 0, 0);
+}
+
+.sco-duration:before {
+	content: "\e60d";
+}
+
+.sco-parking:before {
+	content: "\e60e";
+}
+
+.sco-price:before {
+	content: "\e60f";
+}
+
+.sco-public_transport:before {
+	content: "\e610";
+}
+
+.sco-log-in:before {
+	content: "\e605";
+}
+
+.sco-log-out:before {
+	content: "\e606";
+}
+
+.sco-bookmark-outline:before {
+	content: "\e604";
+}
+
+.sco-bookmark:before {
+	content: "\e603";
+}
+
+.sco-heart-outline:before {
+	content: "\e601";
+}
+
+.sco-distance-h-pois:before {
+	content: "\e602";
+}
+

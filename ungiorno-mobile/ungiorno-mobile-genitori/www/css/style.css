@@ -15,6 +15,15 @@ body {
     background-color: #000;
 }
 
+.retireDiv{
+    padding-left: 20px;
+}
+.retireInput{
+    margin-left: 15px;
+    margin-top:20px;
+    margin-bottom:20px;
+}
+
 .modal-backdrop.active .modal-backdrop-bg {
     opacity: 0.8;
 }
@@ -113,7 +122,7 @@ body {
     z-index: 99;
 }
 
-.bar.bar-percorsi {
+.bar.bar-ungiorno {
     border-color: #009688;
     background-color: #009688;
     /*background-image: none;*/
@@ -121,12 +130,12 @@ body {
     color: #fff;
 }
 
-.bar.bar-percorsi h1,
-.bar.bar-percorsi h2 {
+.bar.bar-ungiorno h1,
+.bar.bar-ungiorno h2 {
     color: white;
 }
 
-.bar.bar-percorsi .button {
+.bar.bar-ungiorno .button {
     border-color: transparent;
     background-color: transparent;
     color: #fff;

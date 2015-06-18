@@ -129,20 +129,33 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     $urlRouterProvider.otherwise('/app/home');
 
     $translateProvider.translations('it', {
-        menu_home: 'Home'
-
+        menu_home: 'Home',
+        home_assenza: 'Assenza',
+        home_ritiro: 'Ritiro',
+        home_bus: 'Bus',
+        home_mensa: 'Mensa',
+        home_calendario: 'Calendario',
+        home_contatta: 'Contatta'
     });
 
     $translateProvider.translations('en', {
-        menu_home: 'Home'
-
-
+        menu_home: 'Home',
+        home_assenza: 'Assenza',
+        home_ritiro: 'Ritiro',
+        home_bus: 'Bus',
+        home_mensa: 'Mensa',
+        home_calendario: 'Calendario',
+        home_contatta: 'Contatta'
     });
 
     $translateProvider.translations('de', {
-        menu_home: 'Home'
-
-
+        menu_home: 'Home',
+        home_assenza: 'Assenza',
+        home_ritiro: 'Ritiro',
+        home_bus: 'Bus',
+        home_mensa: 'Mensa',
+        home_calendario: 'Calendario',
+        home_contatta: 'Contatta'
     });
 
     $translateProvider.preferredLanguage("en");

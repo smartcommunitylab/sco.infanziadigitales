@@ -113,7 +113,7 @@ body {
     z-index: 99;
 }
 
-.bar.bar-ungiorno {
+.bar.bar-percorsi {
     border-color: #009688;
     background-color: #009688;
     /*background-image: none;*/
@@ -121,12 +121,12 @@ body {
     color: #fff;
 }
 
-.bar.bar-ungiorno h1,
-.bar.bar-ungiorno h2 {
+.bar.bar-percorsi h1,
+.bar.bar-percorsi h2 {
     color: white;
 }
 
-.bar.bar-ungiorno .button {
+.bar.bar-percorsi .button {
     border-color: transparent;
     background-color: transparent;
     color: #fff;

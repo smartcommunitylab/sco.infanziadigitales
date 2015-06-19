@@ -126,7 +126,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         })
      .state('app.delegate', {
             cache: false,
-            url: '/delega',
+            url: '/delegate',
             abstract: false,
             views: {
                 'menuContent': {

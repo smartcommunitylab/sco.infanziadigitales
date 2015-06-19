@@ -4,7 +4,7 @@
         <ion-nav-back-button>
         </ion-nav-back-button>
     </ion-nav-bar>
-    <ion-content has-header="true" ng-controller="RitiroCtrl">
+    <ion-content has-header="true">
 
 <!---
     p    {color:deeppink; font: Georgia}
@@ -23,7 +23,7 @@
                  <input type="checkbox" ng-model="item.ifRetire" class="retireInput">{{item.Name}}</input> <p show="item.ifTemp" class="temporaryDelegate">{{item.DelegationDate}}</p><p hide="item.ifTemp">{{item.DelegationDate}}</p>
              </ion-item>
          </ion-list>
-        <button class="retireInput">Delega straordinaria</button>
+        <button class="retireInput" ng-click="NavigateToDelegate(null)">Delega straordinaria</button>
         <p><b>Note:</b></p>
         <input type="text" ng-model="note" class="retireInput" placeholder="Inserisci una nota...">
         </div>

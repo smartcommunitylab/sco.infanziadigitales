@@ -171,16 +171,18 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.c
         }
     };
 })
-.factory('addingDelegate',function(){
-    var delegate=""
-    return{
-    Insert: function(InputObj) {
+.factory('addingDelegateService',function(){
+    var delegate=null;
+    var addingDelegateService={}
+     addingDelegateService.insert= function(InputObj) {
         delegate=InputObj;
     },
-        Estract:function()
+    addingDelegateService.estract=function()
         {
             return delegate;
         }
-    };
 
-})
+         return addingDelegateService;
+     }
+
+)

@@ -3,8 +3,13 @@
     <ion-nav-bar class="bar bar-ungiorno">
         <ion-nav-back-button>
         </ion-nav-back-button>
+            <ion-nav-buttons side="right">
+      <button class="button" ng-click="NavigateToRitiro(Delega)">
+        Invia
+      </button>
+    </ion-nav-buttons>
     </ion-nav-bar>
-    <ion-content has-header="true" ng-controller="RitiroCtrl">
+    <ion-content has-header="true">
 
 <!---
     p    {color:deeppink; font: Georgia}
@@ -12,9 +17,6 @@
 
 
         <div class="retireDiv">
-
-        <p><b>Data:</b></p>
-        <input type="date" ng-model="Delega.Date" class="retireInput"/> <!--- need to set a  default value-->
         <p><b>Nome:</b></p>
         <input type="text" ng-model="Delega.Name" class="retireInput" placeholder="Inserisci il nome...">
         </div>

@@ -5,14 +5,7 @@
     </ion-nav-bar>
     <ion-content has-header="true">
 
-
-        <style>
-            h5 { color: deeppink }
-        </style>
-
-
-        <body>
-
+        <div class="assenzaDiv">
             <div>
                 <h5>
                     <strong>Periodo:</strong>
@@ -27,8 +20,10 @@
             </div>
 
             <div>
-                <p>A:</p>
-
+                <p>A: <label class="item item-input">
+                        <input type="text" placeholder="Inserisci una data">
+                    </label>
+                </p>
             </div>
 
             <div>
@@ -38,8 +33,7 @@
             </div>
 
 
-            <div>
-                <ion-checkbox>
+                <!---<ion-checkbox>
                     <select >
                         <option>Malattia</option>
                         <option>Influenza</option>
@@ -58,11 +52,43 @@
 
                 </ion-checkbox>
                 <label class="item item-input">
-                        <input type="text" placeholder="Altro">
-                    </label>
-            </div>
 
-        </body>
+                    </label>
+            </div>-->
+               <div class="list">
+
+                  <label class="item item-radio" ng-click="showSelect(1)">
+                    <input type="radio" name="group">
+                    <div class="item-content" >
+                        Malattia
+                        <div class="item item-select">  <!--- class="input-label" -->
+
+                        <select ng-show="isMalattia">
+                            <option ng-repeat="item in malattieArray">{{item}}</option>
+                        </select>
+                      </div>
+
+                    </div>
+                    <i class="radio-icon ion-checkmark"></i>
+
+
+                  </label>
+                                   <label class="item item-radio">
+                    <input type="radio" name="group" ng-click="showSelect(0)">
+                    <div class="item-content">
+                      Vaccino
+                    </div>
+                    <i class="radio-icon ion-checkmark"></i>
+                  </label>
+                                   <label class="item item-radio">
+                    <input type="radio" name="group" ng-click="showSelect(0)">
+                    <div class="item-content">
+                      Altro
+                    </div>
+                    <i class="radio-icon ion-checkmark"></i>
+                  </label>
+
+</div>
 
 
     </ion-content>

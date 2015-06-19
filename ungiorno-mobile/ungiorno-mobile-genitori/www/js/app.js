@@ -14,7 +14,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
      'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.home',
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.assenza',
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.ritiro',
-    'it.smartcommunitylab.infanziadigitales.diario.parents.services.conf'
+    'it.smartcommunitylab.infanziadigitales.diario.parents.services.conf',
+        'it.smartcommunitylab.infanziadigitales.diario.parents.services.assenzaService',
+        'it.smartcommunitylab.infanziadigitales.diario.parents.services.ritiroService'
+
+
 ])
 
 .run(function ($ionicPlatform, $rootScope, $cordovaSplashscreen, $state, $translate, $q, $ionicHistory, $ionicConfig, Config) {

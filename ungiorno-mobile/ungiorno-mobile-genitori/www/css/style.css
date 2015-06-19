@@ -18,6 +18,9 @@ body {
 .retireDiv{
     padding-left: 20px;
 }
+.temporaryDelegate{
+    color: red;
+}
 .retireInput{
     margin-left: 15px;
     margin-top:20px;

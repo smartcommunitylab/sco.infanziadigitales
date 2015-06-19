@@ -20,7 +20,7 @@
         <p><b>Chi può ritirare il bambino:</b></p>
          <ion-list>
              <ion-item ng-repeat="item in retirelist">
-                 <input type="checkbox" ng-model="item.ifRetire" class="retireInput">{{item.Name}}</input> <p>{{item.DelegationDate}}</p>
+                 <input type="checkbox" ng-model="item.ifRetire" class="retireInput">{{item.Name}}</input> <p show="item.ifTemp" class="temporaryDelegate">{{item.DelegationDate}}</p><p hide="item.ifTemp">{{item.DelegationDate}}</p>
              </ion-item>
          </ion-list>
         <button class="retireInput">Delega straordinaria</button>

@@ -123,7 +123,19 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
                     controller: 'RitiroCtrl'
                 }
             }
-        });
+        })
+     .state('app.delegate', {
+            cache: false,
+            url: '/delega',
+            abstract: false,
+            views: {
+                'menuContent': {
+                    templateUrl: "templates/delega.html",
+                    controller: 'DelegateCtrl'
+                }
+            }
+        })
+    ;
 
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/app/home');

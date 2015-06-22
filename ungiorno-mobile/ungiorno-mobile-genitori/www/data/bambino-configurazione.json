@@ -1,0 +1,40 @@
+{
+    "data": [
+        {
+            "appId": "a",
+            "schoolId": "a",
+            "kidId": "a",
+            "services": {
+                "anticipo": {
+                    "active": true
+                },
+                "posticipo": {
+                    "active": true
+                },
+                "bus": {
+                    "active": true,
+                    "defaultId": "idstop1"
+                },
+                "mensa": {
+                    "active": true
+                },
+            },
+            "exitTime": 1534964475576,
+            "defaultPerson": "personId1",
+            "receiveNotification": true,
+            "extraPersons": {
+                "personId": "personId1",
+                "fullName": "fullName1",
+                "lastName": "lastName1",
+                "firstName": "firstName1",
+                "phone": ["12345", "67890"],
+                "email": ["email1", "email2"],
+                "relation": "mamma",
+                "isParent": true,
+                "default": true,
+                "authorizationDeadline": 1534964475576,
+                "authorizationUrl": "url1",
+                "adult": true
+            }
+        }]
+}

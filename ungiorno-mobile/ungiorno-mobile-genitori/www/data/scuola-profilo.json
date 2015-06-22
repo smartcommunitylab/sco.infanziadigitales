@@ -1,0 +1,58 @@
+{
+    "data": [
+        {
+            "appId": "a",
+            "schoolId": "a",
+            "regularTiming": {
+                "fromTime": "0900",
+                "toTime": "1600"
+            },
+            "anticipoTiming": {
+
+                "fromTime": "0700",
+                "toTime": "0900"
+            },
+            "posticipoTiming": {
+
+                "fromTime": "1600",
+                "toTime": "1800"
+            },
+            "contacts": {
+                "telephone": ["0461123456", "456789"],
+                "email": ["scuola@scuola.sc", "scuola2@scuola2.sc"]
+            },
+            "absenceTypes": [{
+                    "typeid": "assenza1",
+                    "type": "assenza1"
+                }, {
+                    "typeid": "assenza2",
+                    "type": "assenza2"
+                }
+                        ],
+            "frequentIllnesses": [{
+                    "typeid": "malattia1",
+                    "type": "malattia1"
+                }, {
+                    "typeid": "malattia2",
+                    "type": "malattia2"
+                }
+                        ],
+            "teacherNoteTypes": [{
+                    "typeid": "nota1",
+                    "type": "nota1"
+                }, {
+                    "typeid": "nota2",
+                    "type": "nota2"
+                }
+                        ],
+            "foodType": [
+                {
+                    "typeid": "cibo1",
+                    "type": "cibo1"
+                }, {
+                    "typeid": "cibo2",
+                    "type": "cibo2"
+                }
+                        ]
+    }]
+}

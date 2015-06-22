@@ -39,9 +39,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     }
     today=dd+'/'+mm+'/'+yyyy
    $scope.Delega = {Name: "", DelegationDate:today, ifRetire:"true", ifTemp:true};
-      $scope.NavigateToRitiro=function(delega)
+      $scope.NavigateToRitiro=function()
     {
-        addingDelegateService.insert(delega);
+        addingDelegateService.insert($scope .Delega);
         window.location.href="#/app/ritiro.html";
     }
 })

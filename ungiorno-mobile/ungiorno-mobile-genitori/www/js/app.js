@@ -17,14 +17,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.conf',
         'it.smartcommunitylab.infanziadigitales.diario.parents.services.assenzaService',
         'it.smartcommunitylab.infanziadigitales.diario.parents.services.ritiroService',
-            'it.smartcommunitylab.infanziadigitales.diario.parents.services.getConfigurationService',
-        'it.smartcommunitylab.infanziadigitales.diario.parents.services.getProfilesService',
+            'it.smartcommunitylab.infanziadigitales.diario.parents.services.configurationService',
+            'it.smartcommunitylab.infanziadigitales.diario.parents.services.dataFromServerService',
+        'it.smartcommunitylab.infanziadigitales.diario.parents.services.profileService'
 
 
 
 ])
 
-.run(function ($ionicPlatform, $rootScope, $cordovaSplashscreen, $state, $translate, $q, $ionicHistory, $ionicConfig, Config) {
+.run(function ($ionicPlatform, $rootScope, $cordovaSplashscreen, $state, $translate, $q, $ionicHistory, $ionicConfig, Config, configurationService, profileService, dataFromServerService) {
     $rootScope.userIsLogged = (localStorage.userId != null && localStorage.userId != "null");
 
     $rootScope.getUserId = function () {
@@ -34,9 +35,27 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         return null;
     };
 
-    //    /* TEMP */
-    //    $rootScope.userIsLogged = true;
-    //    /* TEMP */
+    $rootScope.getConfiguration = function () {
+        dataFromServerService.getBabyConfiguration().then(function (data) {
+            configurationService.setBabyConfiguration(data[0]);
+            configurationService.getBabyConfiguration();
+
+            console.log("SUCCESS -> " + data);
+        }, function (error) {
+            console.log("ERROR -> " + error);
+        });
+        dataFromServerService.getBabyProfile().then(function (data) {
+            console.log("SUCCESS -> " + data);
+        }, function (error) {
+            console.log("ERROR -> " + error);
+        });
+        dataFromServerService.getSchoolProfile().then(function (data) {
+            console.log("SUCCESS -> " + data);
+        }, function (error) {
+            console.log("ERROR -> " + error);
+        });
+
+    }
 
     $ionicPlatform.ready(function () {
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -62,6 +81,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         }
         $rootScope.platform = ionic.Platform;
         $rootScope.backButtonStyle = $ionicConfig.backButton.icon();
+        $rootScope.getConfiguration();
     });
 
 
@@ -80,10 +100,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     }
 
     $rootScope.appName = Config.cityName;
-
-    $rootScope.previousState;
-    $rootScope.currentState;
-    $rootScope.comeFrom = null;
 
 })
 

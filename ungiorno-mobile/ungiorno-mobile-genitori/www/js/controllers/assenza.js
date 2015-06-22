@@ -14,4 +14,5 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         }
     }
     $scope.malattieArray = ['Influenza', 'Varicella', 'Pertosse'];
+    $scope.radiobuttonArray = ['Vaccino', 'Pidocchi']
 });

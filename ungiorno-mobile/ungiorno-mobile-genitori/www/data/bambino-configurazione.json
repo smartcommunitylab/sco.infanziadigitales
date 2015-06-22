@@ -17,7 +17,7 @@
                 },
                 "mensa": {
                     "active": true
-                },
+                }
             },
             "exitTime": 1534964475576,
             "defaultPerson": "personId1",

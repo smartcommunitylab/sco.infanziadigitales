@@ -3,9 +3,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 .controller('RitiroCtrl', function ($scope,addingDelegateService,configurationService,profileService) {
     $scope.BabyConfiguration=configurationService.getBabyConfiguration();
     $scope.BabyProfile=profileService.getBabyProfile();
-    $scope.note="";
-    $scope.date;
-    $scope.time;
+    $scope.time="";
+    $scope.datapack={
+            "appId": $scope.BabyProfile.appId,
+            "schoolId":$scope.BabyProfile.schoolId,
+            "kidId": $scope.BabyProfile.kidId,
+            "date": "dd/mm/yyyy",
+            "time": 123456789,
+            "personId": $scope.BabyProfile.personId,
+            "note": "a",
+
+    }
     $scope.addTemporaryDelegate= function(){
         if(addingDelegateService.estract()!=null)
         {
@@ -17,6 +25,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.NavigateToDelegate=function()
     {
          window.location.href="#/app/delegate";
+    }
+    $scope.AddTimeToPack= function(){
+        var Datetime=new Date($scope.datapack.date+","+$scope.time);
+        return Datetime.getTime()
     }
 
 })

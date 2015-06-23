@@ -16,5 +16,4 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         }
     }
 
-    $scope.radiobuttonArray = ['Vaccino', 'Pidocchi'];
 });

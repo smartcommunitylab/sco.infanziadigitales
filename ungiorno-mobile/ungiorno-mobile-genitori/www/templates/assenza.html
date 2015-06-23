@@ -2,6 +2,11 @@
     <ion-nav-bar class="bar bar-ungiorno">
         <ion-nav-back-button>
         </ion-nav-back-button>
+        <ion-nav-buttons side="right">
+            <button class="button" ng-click="">
+                invia
+            </button>
+        </ion-nav-buttons>
     </ion-nav-bar>
     <ion-content has-header="true">
 
@@ -56,23 +61,21 @@
                     </label>
             </div>-->
             <div class="row">
-                <div class="col col-50">
+                <div class="col col-25">
             <div class="list">
 
                 <label class="item item-radio" ng-click="showSelect(1)">
                     <input type="radio" name="group">
                     <div class="item-content" >
                         Malattia
-
-
                     </div>
                     <i class="radio-icon ion-checkmark"></i>
                 </label>
 
-                <label class="item item-radio" ng-repeat="item in radiobuttonArray">
+                <label class="item item-radio" ng-repeat="item in profile.absenceTypes">
                     <input type="radio" name="group" ng-click="showSelect(0)">
                     <div class="item-content">
-                      {{item}}
+                      {{item.type}}
                     </div>
                     <i class="radio-icon ion-checkmark"></i>
                 </label>
@@ -86,19 +89,19 @@
                 </label>
 
             </div>
-
             </div>
-                <div class="col col-50">
-                <div class="item item-input item-select">
+
+                <div class="sceltaMalattia">
+                <div class="item item-input item-select sceltaMalattia">
                     <div class="input-label">
-      Lightsaber
-    </div>
+                      Malattia specifica:
+                    </div>
                     <select ng-show="isMalattia">
                     <option ng-repeat="item in profile.frequentIllnesses">{{item.type}}</option>
                     </select>
                 </div>
             </div>
-
+            </div>
 </div>
     </ion-content>
 </ion-view>

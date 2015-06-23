@@ -1,15 +1,7 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.ritiro', [])
 
-.controller('RitiroCtrl', function ($scope,addingDelegateService) {
-    $scope.retirelist =[
-        {Name:"Mara Rossi", DelegationDate:"30/06/2015", ifRetire:true,ifTemp:false},
-        {Name:"Paolo Rossi",DelegationDate:"14/09/2015",ifRetire:false,ifTemp:false},
-        {Name:"Mariarosa Bianchi",DelegationDate:"22/05/2015",ifRetire:false,ifTemp:false},
-        {Name:"Cinzia Rossi",DelegationDate:"13/03/2016",ifRetire:false,ifTemp:true}
-        ];
-    $scope.date="";
-    $scope.time="";
-    $scope.note="";
+.controller('RitiroCtrl', function ($scope,addingDelegateService,configurationService) {
+    $scope.data=configurationService.getBabyConfiguration();
     $scope.addTemporaryDelegate= function(){
         if(addingDelegateService.estract()!=null)
         {

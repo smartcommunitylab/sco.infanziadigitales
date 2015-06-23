@@ -18,14 +18,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         'it.smartcommunitylab.infanziadigitales.diario.parents.services.assenzaService',
         'it.smartcommunitylab.infanziadigitales.diario.parents.services.ritiroService',
             'it.smartcommunitylab.infanziadigitales.diario.parents.services.configurationService',
-            'it.smartcommunitylab.infanziadigitales.diario.parents.services.dataFromServerService',
+            'it.smartcommunitylab.infanziadigitales.diario.parents.services.dataServerService',
         'it.smartcommunitylab.infanziadigitales.diario.parents.services.profileService'
 
 
 
 ])
 
-.run(function ($ionicPlatform, $rootScope, $cordovaSplashscreen, $state, $translate, $q, $ionicHistory, $ionicConfig, Config, configurationService, profileService, dataFromServerService) {
+.run(function ($ionicPlatform, $rootScope, $cordovaSplashscreen, $state, $translate, $q, $ionicHistory, $ionicConfig, Config, configurationService, profileService, dataServerService, Toast) {
     $rootScope.userIsLogged = (localStorage.userId != null && localStorage.userId != "null");
 
     $rootScope.getUserId = function () {
@@ -36,23 +36,29 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     };
 
     $rootScope.getConfiguration = function () {
-        dataFromServerService.getBabyConfiguration().then(function (data) {
+        dataServerService.getBabyConfiguration().then(function (data) {
             configurationService.setBabyConfiguration(data);
             configurationService.getBabyConfiguration();
-
             console.log("SUCCESS -> " + data);
         }, function (error) {
             console.log("ERROR -> " + error);
         });
-        dataFromServerService.getSchoolProfile().then(function (data) {
+        dataServerService.getSchoolProfile().then(function (data) {
             profileService.setSchoolProfile(data);
             console.log("SUCCESS -> " + data);
         }, function (error) {
             console.log("ERROR -> " + error);
         });
 
-        dataFromServerService.getBabyProfile().then(function (data) {
+        dataServerService.getBabyProfile().then(function (data) {
             profileService.setBabyProfile(data);
+            console.log("SUCCESS -> " + data);
+        }, function (error) {
+            console.log("ERROR -> " + error);
+        });
+        var prova = null
+        dataServerService.sendRitiro(prova).then(function (data) {
+            Toast.show("prova", 'short', 'bottom');
             console.log("SUCCESS -> " + data);
         }, function (error) {
             console.log("ERROR -> " + error);

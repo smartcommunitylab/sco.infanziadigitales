@@ -1,7 +1,11 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.ritiro', [])
 
-.controller('RitiroCtrl', function ($scope,addingDelegateService,configurationService) {
-    $scope.data=configurationService.getBabyConfiguration();
+.controller('RitiroCtrl', function ($scope,addingDelegateService,configurationService,profileService) {
+    $scope.BabyConfiguration=configurationService.getBabyConfiguration();
+    $scope.BabyProfile=profileService.getBabyProfile();
+    $scope.note="";
+    $scope.date;
+    $scope.time;
     $scope.addTemporaryDelegate= function(){
         if(addingDelegateService.estract()!=null)
         {
@@ -17,7 +21,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
 })
 .controller('DelegateCtrl', function ($scope,addingDelegateService) {
-    var today=new Date();
+    $scope.today=new Date();
     var dd=today.getDate();
     var mm=today.getMonth()+1;
     var yyyy=today.getFullYear();
@@ -29,8 +33,45 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     {
         mm='0'+mm;
     }
-    today=dd+'/'+mm+'/'+yyyy
-   $scope.Delega = {Name: "", DelegationDate:today, ifRetire:"true", ifTemp:true};
+    $scope.today=dd+'/'+mm+'/'+yyyy
+   $scope.Delega = [
+        {
+            "appId": "a",
+            "schoolId": "a",
+            "kidId": "a",
+            "services": {
+                "anticipo": {
+                    "active": true
+                },
+                "posticipo": {
+                    "active": true
+                },
+                "bus": {
+                    "active": true,
+                    "defaultId": "idstop1"
+                },
+                "mensa": {
+                    "active": true
+                }
+            },
+            "exitTime": 1534964475576,
+            "defaultPerson": "personId1",
+            "receiveNotification": true,
+            "extraPersons": {
+                "personId": "personId1",
+                "fullName": $scope.Delega[0].extraPersons.firstName + " " + $scope.Delega[0].extraPersons.lastName,
+                "lastName": "lastName1",
+                "firstName": "firstName1",
+                "phone": ["12345", "67890"],
+                "email": ["email1", "email2"],
+                "relation": "mamma",
+                "isParent": true,
+                "default": true,
+                "authorizationDeadline": new Date($scope.today).getTime(),
+                "authorizationUrl": "url1",
+                "adult": true
+            }
+        }]
       $scope.NavigateToRitiro=function()
     {
         addingDelegateService.insert($scope .Delega);

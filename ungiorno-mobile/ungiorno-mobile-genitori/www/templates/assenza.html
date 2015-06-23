@@ -17,6 +17,18 @@
                 </h5>
             </div>
 
+            <div class="list">
+                <label class="item item-input item-stacked-label">
+                    <span class="input-label">Da:</span>
+                    <input type="text" placeholder="Lunedì, 23 marzo 2015">
+                </label>
+                <label class="item item-input item-stacked-label">
+                    <span class="input-label">A:</span>
+                    <input type="text" placeholder="Inserisci una data">
+                </label>
+            </div>
+
+<!--
             <div>
                 <p>DA: <label class="item item-input">
                         <input type="text" placeholder="Lunedì, 23 marzo 2015">
@@ -30,6 +42,7 @@
                     </label>
                 </p>
             </div>
+-->
 
             <div>
                 <h5>
@@ -37,34 +50,11 @@
                 </h5>
             </div>
 
-
-                <!---<ion-checkbox>
-                    <select >
-                        <option>Malattia</option>
-                        <option>Influenza</option>
-                        <option>Varicella</option>
-                        <option>Pertosse</option>
-                    </select>
-            </div>
-
-            <div>
-                <ion-checkbox>
-                    Vaccino
-                </ion-checkbox>
-            </div>
-            <div>
-                <ion-checkbox>
-
-                </ion-checkbox>
-                <label class="item item-input">
-
-                    </label>
-            </div>-->
             <div class="row">
                 <div class="col col-25">
             <div class="list">
 
-                <label class="item item-radio" ng-click="showSelect(1)">
+                <label class="item item-radio" ng-click="showSelect(11)">
                     <input type="radio" name="group">
                     <div class="item-content" >
                         Malattia
@@ -81,7 +71,7 @@
                 </label>
 
                 <label class="item item-radio">
-                    <input type="radio" name="group" ng-click="showSelect(0)">
+                    <input type="radio" name="group" ng-click="showSelect(10)">
                     <div class="item-content">
                       Altro
                     </div>
@@ -101,7 +91,13 @@
                     </select>
                 </div>
             </div>
+
             </div>
+            <div>
+                    <label class="item item-input" ng-show="isAltro">
+                        <input type="text" placeholder="Inserire una motivazione">
+                    </label>
+                </div>
 </div>
     </ion-content>
 </ion-view>

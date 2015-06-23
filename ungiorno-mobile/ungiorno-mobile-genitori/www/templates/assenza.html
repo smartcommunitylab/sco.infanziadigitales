@@ -55,18 +55,15 @@
 
                     </label>
             </div>-->
+            <div class="row">
+                <div class="col col-50">
             <div class="list">
 
                 <label class="item item-radio" ng-click="showSelect(1)">
                     <input type="radio" name="group">
                     <div class="item-content" >
                         Malattia
-                        <div class="item item-select">  <!--- class="input-label" -->
 
-                            <select ng-show="isMalattia">
-                            <option ng-repeat="item in frequentIllnesses">{{item.type}}</option>
-                            </select>
-                        </div>
 
                     </div>
                     <i class="radio-icon ion-checkmark"></i>
@@ -90,6 +87,18 @@
 
             </div>
 
+            </div>
+                <div class="col col-50">
+                <div class="item item-input item-select">
+                    <div class="input-label">
+      Lightsaber
+    </div>
+                    <select ng-show="isMalattia">
+                    <option ng-repeat="item in profile.frequentIllnesses">{{item.type}}</option>
+                    </select>
+                </div>
+            </div>
 
+</div>
     </ion-content>
 </ion-view>

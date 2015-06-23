@@ -1,7 +1,9 @@
-angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.assenza', [])
+angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.assenza',  [])
 
-.controller('AssenzaCtrl', function ($scope) {
+.controller('AssenzaCtrl', function ($scope, profileService) {
     $scope.isMalattia = false;
+    $scope.profile = profileService.getSchoolProfile();
+
     $scope.showSelect = function(intInput)
     {
         if(intInput === 1)
@@ -13,6 +15,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             $scope.isMalattia = false;
         }
     }
-    $scope.malattieArray = ['Influenza', 'Varicella', 'Pertosse'];
-    $scope.radiobuttonArray = ['Vaccino', 'Pidocchi']
+
+    $scope.radiobuttonArray = ['Vaccino', 'Pidocchi'];
 });

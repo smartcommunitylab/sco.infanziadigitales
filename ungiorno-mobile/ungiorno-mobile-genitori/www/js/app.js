@@ -37,7 +37,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
 
     $rootScope.getConfiguration = function () {
         dataFromServerService.getBabyConfiguration().then(function (data) {
-            configurationService.setBabyConfiguration(data[0]);
+            configurationService.setBabyConfiguration(data);
             configurationService.getBabyConfiguration();
 
             console.log("SUCCESS -> " + data);
@@ -45,14 +45,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
             console.log("ERROR -> " + error);
         });
         dataFromServerService.getSchoolProfile().then(function (data) {
-            profileService.setSchoolProfile(data[0]);
+            profileService.setSchoolProfile(data);
             console.log("SUCCESS -> " + data);
         }, function (error) {
             console.log("ERROR -> " + error);
         });
 
         dataFromServerService.getBabyProfile().then(function (data) {
-            profileService.setBabyProfile(data[0]);
+            profileService.setBabyProfile(data);
             console.log("SUCCESS -> " + data);
         }, function (error) {
             console.log("ERROR -> " + error);

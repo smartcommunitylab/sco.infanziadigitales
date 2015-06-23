@@ -20,7 +20,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.p
     }
 
     profileService.getSchoolProfile = function () {
-        return babyProfile;
+        return schoolProfile;
     }
 
 

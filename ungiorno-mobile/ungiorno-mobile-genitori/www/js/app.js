@@ -45,11 +45,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
             console.log("ERROR -> " + error);
         });
         dataFromServerService.getBabyProfile().then(function (data) {
+            profileService.setBabyProfile(data[0]);
             console.log("SUCCESS -> " + data);
         }, function (error) {
             console.log("ERROR -> " + error);
         });
         dataFromServerService.getSchoolProfile().then(function (data) {
+            profileService.setSchoolProfile(data[0]);
             console.log("SUCCESS -> " + data);
         }, function (error) {
             console.log("ERROR -> " + error);
@@ -147,7 +149,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
                 }
             }
         })
-     .state('app.delegate', {
+        .state('app.delegate', {
             cache: false,
             url: '/delegate',
             abstract: false,
@@ -157,8 +159,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
                     controller: 'DelegateCtrl'
                 }
             }
-        })
-    ;
+        });
 
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/app/home');

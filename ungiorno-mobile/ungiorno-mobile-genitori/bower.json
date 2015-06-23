@@ -19,6 +19,7 @@
       "angular-filter": "bower_components/angular-filter/dist/angular-filter.min.js",
       "angular-translate": "bower_components/angular-translate/angular-translate.min.js",
       "angular-ui-router": "bower_components/angular-ui-router/release/angular-ui-router.min.js",
+      "angular-i18n": "bower_components/angular-i18n/angular-locale_it.js",
       "angular-sanitize": [
         "bower_components/angular-sanitize/angular-sanitize.min.js",
         "bower_components/angular-sanitize/angular-sanitize.min.js.map"

@@ -1,41 +1,13 @@
 {
     "data": [
         {
-            "id": "a",
-            "name": {
+            "appId": "a",
+            "schoolId": "a",
+            "kidId": "a",
+            "date": "23/06/2015",
+            "time": 1435075887150,
+            "personId": "personId1",
+            "note": "a",
 
-                "it": "categoria 1",
-                "en": "category 1",
-                "de": "kategorien 1"
-
-            },
-            "description": {
-
-                "it": "descrizione 1",
-                "en": "description 1",
-                "de": "descrizionen 1"
-
-            },
-            "image": "http://stopthatpigeon.altervista.org/wp-content/uploads/2012/07/pane-e-vino.jpg"
-        },
-        {
-            "id": "b",
-
-            "name": {
-
-                "it": "categoria 2",
-                "en": "category 2",
-                "de": "kategorien 2"
-
-            },
-            "description": {
-
-                "it": "descrizione 2",
-                "en": "description 2",
-                "de": "descrizionen 2"
-
-            },
-            "image": "http://www.superedo.it/sfondi/sfondi/Architettura/Castelli/castelli009.jpg"
-        }
-    ]
+        }]
 }

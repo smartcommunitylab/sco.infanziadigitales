@@ -19,8 +19,8 @@
         <input type="time" ng-model="time" class="retireInput"/><!--- same here, need a default value-->
         <p><b>Chi può ritirare il bambino:</b></p>
          <ion-list>
-             <ion-item ng-repeat="item in retirelist">
-                 <input type="checkbox" ng-model="item.ifRetire" class="retireInput">{{item.Name}}</input> <p show="item.ifTemp" class="temporaryDelegate">{{item.DelegationDate}}</p><p hide="item.ifTemp">{{item.DelegationDate}}</p>
+             <ion-item ng-repeat="item in BabyProfile.persons">
+                 <input type="checkbox" class="retireInput">{{item.fullName}}</input><p>{{item.authorizationDeadline | date:'EEEE, d MMMM yyyy'}}</p>
              </ion-item>
          </ion-list>
         <button class="retireInput" ng-click="NavigateToDelegate(null)">Delega straordinaria</button>

@@ -44,14 +44,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         }, function (error) {
             console.log("ERROR -> " + error);
         });
-        dataFromServerService.getBabyProfile().then(function (data) {
-            profileService.setBabyProfile(data[0]);
+        dataFromServerService.getSchoolProfile().then(function (data) {
+            profileService.setSchoolProfile(data[0]);
             console.log("SUCCESS -> " + data);
         }, function (error) {
             console.log("ERROR -> " + error);
         });
-        dataFromServerService.getSchoolProfile().then(function (data) {
-            profileService.setSchoolProfile(data[0]);
+
+        dataFromServerService.getBabyProfile().then(function (data) {
+            profileService.setBabyProfile(data[0]);
             console.log("SUCCESS -> " + data);
         }, function (error) {
             console.log("ERROR -> " + error);

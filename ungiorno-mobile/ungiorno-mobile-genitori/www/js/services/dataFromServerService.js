@@ -5,10 +5,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
     var babyProfile = null;
     var schoolProfile = null;
     var dataFromServerService = {};
-    var deferred = $q.defer();
 
 
     dataFromServerService.getBabyConfiguration = function (from) {
+        var deferred = $q.defer();
+
         /*temp*/
         if (babyConfiguration == null) {
             $http.get('data/bambino-configurazione.json').success(function (data) {
@@ -26,6 +27,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
 
 
     dataFromServerService.getBabyProfile = function (from) {
+        var deferred = $q.defer();
+
         /*temp*/
         if (babyProfile == null) {
             $http.get('data/bambino-profilo.json').success(function (data) {
@@ -41,6 +44,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
     }
 
     dataFromServerService.getSchoolProfile = function (from) {
+        var deferred = $q.defer();
+
         /*temp*/
         if (schoolProfile == null) {
             $http.get('data/scuola-profilo.json').success(function (data) {

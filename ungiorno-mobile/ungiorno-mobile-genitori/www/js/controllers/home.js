@@ -1,25 +1,22 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.home', [])
 
-.controller('HomeCtrl', function ($scope, $location) {
+.controller('HomeCtrl', function ($scope, $location, dataServerService) {
 
     $scope.date = "";
+    $scope.kid = {};
 
+
+    dataServerService.getBabyProfile().then(function (data) {
+        kid = data[0];
+    }, function (error) {
+        console.log("ERROR -> " + error);
+    });
     $scope.goTo = function (location) {
         window.location.assign(location);
     }
 
     $scope.getDateString = function () {
         var today = new Date();
-        var dd = today.getDate();
-        var mm = today.getMonth() + 1; //January is 0!
-
-        var yyyy = today.getFullYear();
-        if (dd < 10) {
-            dd = '0' + dd
-        }
-        if (mm < 10) {
-            mm = '0' + mm
-        }
         $scope.date = today.getTime();;
     }
 });

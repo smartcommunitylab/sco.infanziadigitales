@@ -15,16 +15,18 @@ body {
     background-color: #000;
 }
 
-.retireDiv{
+.retireDiv {
     padding-left: 20px;
 }
-.temporaryDelegate{
+
+.temporaryDelegate {
     color: red;
 }
-.retireInput{
+
+.retireInput {
     margin-left: 15px;
-    margin-top:20px;
-    margin-bottom:20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .modal-backdrop.active .modal-backdrop-bg {
@@ -1011,4 +1013,12 @@ ul.rating {
 .sceltaMalattia {
     width: inherit;
     height: 50px;
+}
+
+.button-home {
+    height: 100px;
+}
+
+.home_informations {
+    margin: 10px;
 }

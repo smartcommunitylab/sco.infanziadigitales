@@ -5,29 +5,24 @@
     <ion-content has-header="true">
         <div class="row">
             <div class="col col-50">
-                <!--
-                <button class="button button-block button-positive" ui-sref="app.assenza">
-    {{'home_assenza' | translate}}
-</button>
--->
-                <a class="button button-block button-positive" ng-click="goTo('#/app/assenza')">
+                <button class="button button-block button-positive button-home" ng-click="goTo('#/app/assenza')">
                     {{'home_assenza' | translate}}
-                </a>
+                </button>
             </div>
             <div class="col col-50">
-                <button class="button button-block button-positive" ui-sref="app.ritiro">
+                <button class="button button-block button-positive button-home" ui-sref="app.ritiro">
                     {{'home_ritiro' | translate}}
                 </button>
             </div>
         </div>
         <div class="row">
             <div class="col col-50">
-                <button class="button button-block button-positive">
+                <button class="button button-block button-positive button-home">
                     {{'home_bus' | translate}}
                 </button>
             </div>
             <div class="col col-50">
-                <button class="button button-block button-positive">
+                <button class="button button-block button-positive button-home">
                     {{'home_mensa' | translate}}
                 </button>
             </div>
@@ -35,22 +30,23 @@
         </div>
         <div class="row">
             <div class="col col-50">
-                <button class="button button-block button-positive">
+                <button class="button button-block button-positive button-home">
                     {{'home_calendario' | translate}}
                 </button>
             </div>
             <div class="col col-50">
-                <button class="button button-block button-positive">
+                <button class="button button-block button-positive button-home">
                     {{'home_contatta' | translate}}
                 </button>
             </div>
         </div>
-
-        <p>Informazioni su </p>
-        <div class="separator"></div>
-        <p>blablabla</p>
-        <p>Informazioni di servizio</p>
-        <div class="separator"></div>
-        <p>blablabla</p>
+        <div class="home_informations">
+            <p>{{'home_personal_information' | translate}} {{kid.firstName}}</p>
+            <div class="separator"></div>
+            <p>blablabla</p>
+            <p>{{'home_school_information' | translate}}</p>
+            <div class="separator"></div>
+            <p>blablabla</p>
+        </div>
     </ion-content>
 </ion-view>

@@ -38,7 +38,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     $rootScope.getConfiguration = function () {
         dataServerService.getBabyConfiguration().then(function (data) {
             configurationService.setBabyConfiguration(data);
-            configurationService.getBabyConfiguration();
             console.log("SUCCESS -> " + data);
         }, function (error) {
             console.log("ERROR -> " + error);
@@ -52,13 +51,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
 
         dataServerService.getBabyProfile().then(function (data) {
             profileService.setBabyProfile(data);
-            console.log("SUCCESS -> " + data);
-        }, function (error) {
-            console.log("ERROR -> " + error);
-        });
-        var prova = null
-        dataServerService.sendRitiro(prova).then(function (data) {
-            Toast.show("prova", 'short', 'bottom');
             console.log("SUCCESS -> " + data);
         }, function (error) {
             console.log("ERROR -> " + error);
@@ -178,7 +170,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         home_bus: 'Bus',
         home_mensa: 'Mensa',
         home_calendario: 'Calendario',
-        home_contatta: 'Contatta'
+        home_contatta: 'Contatta',
+        home_personal_information: 'Informazioni su ',
+        home_school_information: 'Informazioni di servizio'
     });
 
     $translateProvider.translations('en', {
@@ -188,7 +182,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         home_bus: 'Bus',
         home_mensa: 'Mensa',
         home_calendario: 'Calendario',
-        home_contatta: 'Contatta'
+        home_contatta: 'Contatta',
+        home_personal_information: 'Informazioni su ',
+        home_school_information: 'Informazioni di servizio'
     });
 
     $translateProvider.translations('de', {
@@ -198,7 +194,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         home_bus: 'Bus',
         home_mensa: 'Mensa',
         home_calendario: 'Calendario',
-        home_contatta: 'Contatta'
+        home_contatta: 'Contatta',
+        home_personal_information: 'Informazioni su ',
+        home_school_information: 'Informazioni di servizio'
     });
 
     $translateProvider.preferredLanguage("en");

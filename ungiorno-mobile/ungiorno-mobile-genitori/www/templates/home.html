@@ -43,10 +43,18 @@
         <div class="home_informations">
             <p>{{'home_personal_information' | translate}} {{kid.firstName}}</p>
             <div class="separator"></div>
-            <p>blablabla</p>
+            <p>
+                <div ng-repeat="parentNote in notes.parentNotes">
+                    {{parentNote.note}}
+                </div>
+            </p>
             <p>{{'home_school_information' | translate}}</p>
             <div class="separator"></div>
-            <p>blablabla</p>
+            <p>
+                <div ng-repeat="schoolNotes in notes.schoolNotes">
+                    {{schoolNotes.note}}
+                </div>
+            </p>
         </div>
     </ion-content>
 </ion-view>

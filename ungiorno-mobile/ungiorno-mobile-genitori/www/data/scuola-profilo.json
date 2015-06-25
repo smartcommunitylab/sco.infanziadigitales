@@ -39,10 +39,10 @@
                         ],
             "teacherNoteTypes": [{
                     "typeid": "nota1",
-                    "type": "nota1"
+                    "type": "typeNoteId1"
                 }, {
                     "typeid": "nota2",
-                    "type": "nota2"
+                    "type": "typeNoteId2"
                 }
                         ],
             "foodType": [

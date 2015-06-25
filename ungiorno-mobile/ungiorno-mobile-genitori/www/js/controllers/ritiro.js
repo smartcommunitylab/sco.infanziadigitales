@@ -10,7 +10,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             "kidId": $scope.BabyProfile.kidId,
             "date": "dd/mm/yyyy",
             "time": 123456789,
-            "personId": $scope.BabyProfile.personId,
+            "personId": ""
             "note": "a",
 
     }
@@ -29,6 +29,18 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.AddTimeToPack= function(){
         var Datetime=new Date($scope.datapack.date+","+$scope.time);
         return Datetime.getTime()
+    }
+    $scope.sendToServer=function(){
+        $scope.AddTimeToPack();
+     dataServerService.sendRitiro(p$scope.datapack).then(function (data) {
+         window.location.href="#/app/home.html"
+            Toast.show("Invio Riuscito!!", 'short', 'bottom');
+            console.log("SUCCESSFULL SENDING -> " + data);
+        }, function (error) {
+         Toast.show("Invio Non Riuscito!!", 'short', 'bottom');
+            console.log("ERROR IN SENDING -> " + error);
+        });
+
     }
 
 })

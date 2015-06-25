@@ -23,7 +23,7 @@
         <p><b>Chi può ritirare il bambino:</b></p>
          <ion-list>
              <ion-item ng-repeat="item in BabyProfile.persons">
-                 <input type="checkbox" class="retireInput">{{item.fullName}}</input><p>{{item.authorizationDeadline | date:'EEEE, d MMMM yyyy'}}</p>
+                 <input type="radiobutton" class="retireInput">{{item.fullName}}</input><p>{{item.authorizationDeadline | date:'EEEE, d MMMM yyyy'}}</p>
              </ion-item>
          </ion-list>
         <button class="retireInput" ng-click="NavigateToDelegate(null)">Delega straordinaria</button>

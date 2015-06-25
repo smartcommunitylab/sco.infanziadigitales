@@ -17,18 +17,15 @@
                 </h5>
             </div>
 
-            <div>
-                <p>DA: <label class="item item-input">
-                        <input type="text" placeholder="Lunedì, 23 marzo 2015">
-                    </label>
-                </p>
-            </div>
-
-            <div>
-                <p>A: <label class="item item-input">
-                        <input type="text" placeholder="Inserisci una data">
-                    </label>
-                </p>
+            <div class="list">
+                <label class="item item-input item-stacked-label">
+                    <span class="input-label">Da:</span>
+                    <input type="date">
+                </label>
+                <label class="item item-input item-stacked-label">
+                    <span class="input-label">A:</span>
+                    <input type="date">
+                </label>
             </div>
 
             <div>
@@ -37,71 +34,55 @@
                 </h5>
             </div>
 
-
-                <!---<ion-checkbox>
-                    <select >
-                        <option>Malattia</option>
-                        <option>Influenza</option>
-                        <option>Varicella</option>
-                        <option>Pertosse</option>
-                    </select>
-            </div>
-
-            <div>
-                <ion-checkbox>
-                    Vaccino
-                </ion-checkbox>
-            </div>
-            <div>
-                <ion-checkbox>
-
-                </ion-checkbox>
-                <label class="item item-input">
-
-                    </label>
-            </div>-->
             <div class="row">
-                <div class="col col-25">
-            <div class="list">
+                        <div class="col col-25">
+                <div class="list">
 
-                <label class="item item-radio" ng-click="showSelect(1)">
-                    <input type="radio" name="group">
-                    <div class="item-content" >
-                        Malattia
-                    </div>
-                    <i class="radio-icon ion-checkmark"></i>
-                </label>
+                    <label class="item item-radio" ng-click="showSelect(11)">
+                        <input type="radio" name="group">
+                        <div class="item-content" >
+                            Malattia
+                        </div>
+                        <i class="radio-icon ion-checkmark"></i>
+                    </label>
 
-                <label class="item item-radio" ng-repeat="item in profile.absenceTypes">
-                    <input type="radio" name="group" ng-click="showSelect(0)">
-                    <div class="item-content">
-                      {{item.type}}
-                    </div>
-                    <i class="radio-icon ion-checkmark"></i>
-                </label>
+                    <label class="item item-radio" ng-repeat="item in profile.absenceTypes">
+                        <input type="radio" name="group" ng-click="showSelect(0)">
+                        <div class="item-content">
+                            {{item.type}}
+                        </div>
+                        <i class="radio-icon ion-checkmark"></i>
+                    </label>
 
-                <label class="item item-radio">
-                    <input type="radio" name="group" ng-click="showSelect(0)">
-                    <div class="item-content">
-                      Altro
-                    </div>
-                    <i class="radio-icon ion-checkmark"></i>
-                </label>
+                    <label class="item item-radio">
+                        <input type="radio" name="group" ng-click="showSelect(10)">
+                        <div class="item-content">
+                            Altro
+                        </div>
+                        <i class="radio-icon ion-checkmark"></i>
+                    </label>
 
-            </div>
+                </div>
             </div>
 
                 <div class="sceltaMalattia">
-                <div class="item item-input item-select sceltaMalattia">
-                    <div class="input-label">
-                      Malattia specifica:
+                    <div class="item item-input item-select sceltaMalattia">
+                        <div class="input-label">
+                            Malattia specifica:
+                        </div>
+                        <select ng-show="isMalattia">
+                            <option ng-repeat="item in profile.frequentIllnesses">{{item.type}}</option>
+                        </select>
                     </div>
-                    <select ng-show="isMalattia">
-                    <option ng-repeat="item in profile.frequentIllnesses">{{item.type}}</option>
-                    </select>
                 </div>
             </div>
+
+            <div>
+                <label class="item item-input" ng-show="isAltro">
+                    <input type="text" placeholder="Inserire una motivazione">
+                </label>
             </div>
-</div>
+        </div>
+
     </ion-content>
 </ion-view>

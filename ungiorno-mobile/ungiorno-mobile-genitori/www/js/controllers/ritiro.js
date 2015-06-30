@@ -10,7 +10,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             "kidId": $scope.BabyProfile.kidId,
             "date": "dd/mm/yyyy",
             "time": 123456789,
-            "personId": ""
+            "personId": "",
             "note": "a",
 
     }
@@ -46,9 +46,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 })
 .controller('DelegateCtrl', function ($scope,addingDelegateService) {
     $scope.today=new Date();
-    var dd=today.getDate();
-    var mm=today.getMonth()+1;
-    var yyyy=today.getFullYear();
+    var dd=$scope.today.getDate();
+    var mm=$scope.today.getMonth()+1;
+    var yyyy=$scope.today.getFullYear();
     if(dd<10)
     {
         dd='0'+dd
@@ -83,9 +83,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             "receiveNotification": true,
             "extraPersons": {
                 "personId": "personId1",
-                "fullName": $scope.Delega[0].extraPersons.firstName + " " + $scope.Delega[0].extraPersons.lastName,
                 "lastName": "lastName1",
                 "firstName": "firstName1",
+                "fullName": "a",
                 "phone": ["12345", "67890"],
                 "email": ["email1", "email2"],
                 "relation": "mamma",
@@ -96,6 +96,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 "adult": true
             }
         }]
+   $scope.Delega[0].extraPersons=$scope.Delega[0].extraPersons.firstName + " " + $scope.Delega[0].extraPersons.lastName;
       $scope.NavigateToRitiro=function()
     {
         addingDelegateService.insert($scope .Delega);

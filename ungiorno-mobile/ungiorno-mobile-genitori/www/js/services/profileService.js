@@ -7,7 +7,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.p
 
 
     profileService.setBabyProfile = function (input) {
-        babyProfile = input[0];
+        babyProfile = input;
     }
 
     profileService.getBabyProfile = function () {
@@ -16,7 +16,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.p
 
 
     profileService.setSchoolProfile = function (input) {
-        schoolProfile = input.data[0];
+        schoolProfile = input;
     }
 
     profileService.getSchoolProfile = function () {

@@ -1,0 +1,77 @@
+@font-face {
+	font-family: 'infanzia_digitales';
+	src: url('infanzia_digitales.eot');
+}
+
+
+[class^="inf_dig"], [class*=" inf_dig"] {
+	font-family: 'infanzia_digitales';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.inf_digalert:before {
+	content: "\e000";
+}
+.inf_digcall:before {
+	content: "\e03f";
+}
+.inf_digedit:before {
+	content: "\e0ee";
+}
+.inf_digmenu:before {
+	content: "\e15c";
+}
+.inf_digbus:before {
+	content: "\e1ca";
+}
+.inf_digarrow_back:before {
+	content: "\e200";
+}
+.inf_digcheck:before {
+	content: "\e206";
+}
+.inf_digclose:before {
+	content: "\e209";
+}
+.inf_digcalendar:before {
+	content: "\e21c";
+}
+.inf_digphone:before {
+	content: "\e223";
+}
+.inf_digchildren_list:before {
+	content: "\e245";
+}
+.inf_digaccount:before {
+	content: "\e268";
+}
+.inf_digassignment:before {
+	content: "\e272";
+}
+.inf_digcheck_circle:before {
+	content: "\e281";
+}
+.inf_digdelete:before {
+	content: "\e287";
+}
+.inf_dighome:before {
+	content: "\e29e";
+}
+.inf_diginfo:before {
+	content: "\e2a2";
+}
+.inf_digprint:before {
+	content: "\e2c1";
+}
+.inf_digsettings:before {
+	content: "\e2cb";
+}

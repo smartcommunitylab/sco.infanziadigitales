@@ -9,7 +9,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.c
         return babyConfiguration;
     }
     configurationService.setBabyConfiguration = function (newBabyConfiguration) {
-        babyConfiguration = newBabyConfiguration[0];
+        babyConfiguration = newBabyConfiguration;
     }
 
 

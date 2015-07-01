@@ -1,13 +1,13 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.dataServerService', [])
 
 .factory('dataServerService', function ($http, $q) {
-    var babyConfiguration = null;
+    var babyConfiguration = null; //static info
     var babyProfile = null;
-    var schoolProfile = null;
+    var schoolProfile = null; //static info
     var dataServerService = {};
 
 
-    dataServerService.getBabyConfiguration = function (from) {
+    dataServerService.getBabyConfiguration = function () {
         var deferred = $q.defer();
 
         /*temp*/
@@ -26,7 +26,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
     }
 
 
-    dataServerService.getBabyProfile = function (from) {
+    dataServerService.getBabyProfile = function () {
         var deferred = $q.defer();
 
         /*temp*/
@@ -43,7 +43,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
         /*temp*/
     }
 
-    dataServerService.getSchoolProfile = function (from) {
+    dataServerService.getSchoolProfile = function () {
         var deferred = $q.defer();
 
         /*temp*/
@@ -56,6 +56,24 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
                 //deferred.reject(err);
             })
         } else deferred.resolve(schoolProfile);
+        return deferred.promise;
+        /*temp*/
+    }
+
+    dataServerService.getNotes = function () {
+        var calendarioNote = null;
+        var deferred = $q.defer();
+
+        /*temp*/
+        if (calendarioNote == null) {
+            $http.get('data/calendario-note.json').success(function (data) {
+                calendarioNote = data;
+                deferred.resolve(calendarioNote);
+            }).error(function (data, status, headers, config) {
+                console.log(data + status + headers + config);
+                //deferred.reject(err);
+            })
+        } else deferred.resolve(calendarioNote);
         return deferred.promise;
         /*temp*/
     }
@@ -86,7 +104,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
         return deferred.promise;
         /*temp*/
     }
-    dataServerService.sendRitiro = function (from) {
+    dataServerService.sendRitiro = function (ritiro) {
         var deferred = $q.defer();
 
 

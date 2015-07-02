@@ -3,16 +3,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 .controller('HomeCtrl', function ($scope, $location, dataServerService, profileService, configurationService) {
 
     $scope.date = "";
-    $scope.kid = {};
+    $scope.kidProfile = {};
+    $scope.kidConfiguration = {};
+    $scope.school = {};
     $scope.notes = {};
-
-
-    //    dataServerService.getBabyProfile().then(function (data) {
-    //        $scope.kid = data[0];
-    //    }, function (error) {
-    //        console.log("ERROR -> " + error);
-    //    });
-
+    $scope.fromTime = "";
+    $scope.toTime = "";
     $scope.goTo = function (location) {
         window.location.assign(location);
     }
@@ -22,29 +18,49 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         $scope.date = today.getTime();;
     }
 
+    //corretto tutte e tre annidate? cosa succede se una salta? ma come faccio a settare il profilo temporaneo senza avere conf, prof????
     $scope.getConfiguration = function () {
         dataServerService.getBabyConfiguration().then(function (data) {
-            configurationService.setBabyConfiguration(data[0]);
-        }, function (error) {
-            console.log("ERROR -> " + error);
-        });
-        dataServerService.getSchoolProfile().then(function (data) {
-            profileService.setSchoolProfile(data.data[0]);
-        }, function (error) {
-            console.log("ERROR -> " + error);
-        });
+                configurationService.setBabyConfiguration(data[0]);
+                $scope.kidConfiguration = data[0];
+                dataServerService.getBabyProfile().then(function (data) {
+                        profileService.setBabyProfile(data[0]);
+                        $scope.kidProfile = data[0];
+                        dataServerService.getSchoolProfile().then(function (data) {
+                                profileService.setSchoolProfile(data.data[0]);
+                                $scope.school = data.data[0];
+                                if ($scope.kidProfile.services.anticipo.enabled && $scope.kidConfiguration.services.anticipo.active) {
+                                    $scope.fromTime = $scope.school.anticipoTiming.fromTime;
+                                } else {
+                                    $scope.fromTime = $scope.school.regularTiming.fromTime;
+                                }
+                                if ($scope.kidProfile.services.posticipo.enabled && $scope.kidConfiguration.services.posticipo.active) {
+                                    $scope.toTime = $scope.school.posticipoTiming.toTime;
+                                } else {
+                                    $scope.toTime = $scope.school.regularTiming.fromTime;
 
-        dataServerService.getBabyProfile().then(function (data) {
-            profileService.setBabyProfile(data[0]);
-            $scope.kid = data[0];
-        }, function (error) {
-            console.log("ERROR -> " + error);
-        });
-        dataServerService.getNotes().then(function (data) {
-            $scope.notes = data.data[0];
-        }, function (error) {
-            console.log("ERROR -> " + error);
-        });
+                                }
+
+                            },
+                            function (error) {
+                                console.log("ERROR -> " + error);
+                            });
+                    },
+                    function (error) {
+                        console.log("ERROR -> " + error);
+                    });
+                dataServerService.getNotes().then(function (data) {
+                    $scope.notes = data.data[0];
+                }, function (error) {
+                    console.log("ERROR -> " + error);
+                });
+            },
+            function (error) {
+                console.log("ERROR -> " + error);
+            });
+
+
+
 
     }
     $scope.getConfiguration();

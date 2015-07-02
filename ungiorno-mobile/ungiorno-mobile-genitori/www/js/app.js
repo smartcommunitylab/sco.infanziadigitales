@@ -149,7 +149,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         home_calendario: 'Calendario',
         home_contatta: 'Contatta',
         home_personal_information: 'Informazioni su ',
-        home_school_information: 'Informazioni di servizio'
+        home_school_information: 'Informazioni di servizio',
+        home_entry_to: ' entra alle ore ',
+        home_exit_to: ' ed esce alle ore ',
+        menu_exit: 'Esci',
+        menu_enter: 'Entra'
     });
 
     $translateProvider.translations('en', {
@@ -161,7 +165,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         home_calendario: 'Calendario',
         home_contatta: 'Contatta',
         home_personal_information: 'Informazioni su ',
-        home_school_information: 'Informazioni di servizio'
+        home_school_information: 'Informazioni di servizio',
+        home_entry_to: ' entra alle ore ',
+        home_exit_to: ' ed esce alle ore ',
+        menu_exit: 'Esci',
+        menu_enter: 'Entra'
     });
 
     $translateProvider.translations('de', {
@@ -173,9 +181,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         home_calendario: 'Calendario',
         home_contatta: 'Contatta',
         home_personal_information: 'Informazioni su ',
-        home_school_information: 'Informazioni di servizio'
+        home_school_information: 'Informazioni di servizio',
+        home_entry_to: ' entra alle ore ',
+        home_exit_to: ' ed esce alle ore ',
+        menu_exit: 'Esci',
+        menu_enter: 'Entra'
+
     });
 
-    $translateProvider.preferredLanguage("en");
-    $translateProvider.fallbackLanguage("en");
+    $translateProvider.preferredLanguage("it");
+    $translateProvider.fallbackLanguage("it");
 });

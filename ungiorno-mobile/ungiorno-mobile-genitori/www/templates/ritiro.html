@@ -4,35 +4,47 @@
         <ion-nav-back-button>
         </ion-nav-back-button>
         <ion-nav-buttons side="right">
-      <button class="button" ng-click="NavigateToDelegate()">
-        Invia
-      </button>
-    </ion-nav-buttons>
+            <button class="button" ng-click="NavigateToDelegate()">
+                Invia
+            </button>
+        </ion-nav-buttons>
     </ion-nav-bar>
     <ion-content has-header="true">
 
-<!---
+        <!---
     p    {color:deeppink; font: Georgia}
     div {padding-left:20px}-->
 
 
         <div class="retireDiv">
+            <label class="item item-input">
+                <span class="input-label">Date</span>
+                <input type="date">
+            </label>
 
-        <p><b>Data:</b></p>
-        <input type="date" ng-model="TemporaryDate" class="retireInput"/> <!--- need to set a  default value-->
-        <p><b>Ora:</b></p>
-        <input type="time" ng-model="time" class="retireInput"/><!--- same here, need a default value-->
-        <p><b>Chi può ritirare il bambino:</b></p>
-         <ion-list>
-             <ion-item ng-repeat="item in BabyProfile.persons">
-                 <!---
+            <p><b>Data:</b>
+            </p>
+            <input type="date" ng-model="TemporaryDate" class="retireInput" />
+            <!--- need to set a  default value-->
+            <p><b>Ora:</b>
+            </p>
+            <input type="time" ng-model="time" class="retireInput" />
+            <!--- same here, need a default value-->
+            <p><b>Chi può ritirare il bambino:</b>
+            </p>
+            <ion-list>
+                <ion-item ng-repeat="item in BabyProfile.persons">
+                    <!---
                  <input type="radiobutton" class="retireInput"></input>-->
-             <ion-radio ng-value="{{item.personId}}" name="Radio">{{item.fullName}} </br><p>{{item.authorizationDeadline | date:'EEEE, d MMMM yyyy'}}</p></ion-radio>
-             </ion-item>
-         </ion-list>
-        <button class="retireInput" ng-click="NavigateToDelegate(null)">Delega straordinaria</button>
-        <p><b>Note:</b></p>
-        <input type="text" ng-model="datapack.note" class="retireInput" placeholder="Inserisci una nota...">
+                    <ion-radio ng-value="{{item.personId}}" name="Radio">{{item.fullName}} </br>
+                        <p>{{item.authorizationDeadline | date:'EEEE, d MMMM yyyy'}}</p>
+                    </ion-radio>
+                </ion-item>
+            </ion-list>
+            <button class="retireInput" ng-click="NavigateToDelegate(null)">Delega straordinaria</button>
+            <p><b>Note:</b>
+            </p>
+            <input type="text" ng-model="datapack.note" class="retireInput" placeholder="Inserisci una nota...">
         </div>
 
     </ion-content>

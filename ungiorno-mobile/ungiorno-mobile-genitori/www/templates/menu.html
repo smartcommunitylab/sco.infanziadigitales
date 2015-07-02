@@ -17,11 +17,89 @@
         </ion-header-bar>
         <ion-content class="leftmenu">
             <ion-list>
-                <ion-item nav-clear menu-close item-icon-left ui-sref="app.assenza">
-                    <i class="icon inf_digbus"></i>
+                <!--                <ion-item nav-clear item-icon-left ui-sref="app.assenza">-->
+                <!--
+                    <select class="ion-input-select">
+
+                        <option>
+-->
+                <!--
+                <ul class="list">
+                    <li class="item item-checkbox">
+                        <label class="checkbox">
+                            <input type="checkbox">
+                        </label>
+                        <h2>ksjisfdj</h2>
+
+                        <i class="icon ion-chevron-down"></i>
+                    </li>
+                </ul>
+-->
+
+                <p>
+                    <!--<button ng-click="openPopover($event)">Open Popover</button>-->
+                    <div class="item item-avatar" ng-click="openPopover($event)">
+                        <img src="http://placehold.it/100x100">
+                        <h2>Pretty Hate Machine</h2>
+                        <p>Nine Inch Nails</p>
+                    </div>
+                </p>
+
+                <script id="my-popover.html" type="text/ng-template">
+                    <ion-popover-view>
+                        <!--
+                        <ion-header-bar>
+                            <h1 class="title">My Popover Title</h1>
+                        </ion-header-bar>
+-->
+                        <ion-content>
+                            <li class="item item-avatar-right item-checkbox">
+                                <img src="http://placehold.it/100x100">
+                                <label class="checkbox">
+                                    <input type="checkbox">
+                                </label>
+                                <h2>Headline</h2>
+                                <p>Description</p>
+                            </li>
+                            <li class="item item-avatar-right item-checkbox">
+                                <img src="http://placehold.it/100x100">
+                                <label class="checkbox">
+                                    <input type="checkbox">
+                                </label>
+                                <h2>Headline</h2>
+                                <p>Description</p>
+                            </li>
+                        </ion-content>
+                    </ion-popover-view>
+                </script>
+                <!--
+                    <div class="home-baby">
+                        <a class="item item-avatar" href="#">
+                            <img src="http://ionicframework.com/img/docs/venkman.jpg">
+                            <h2>Venkman</h2>
+                            <h2>ksjisfdj</h2>
+                            <i class="icon ion-chevron-up"></i>
+                            <i class="icon ion-chevron-down"></i></span>
+                        </a>
+
+                    </div>
+-->
+                <!--
+                       </option>
+<option>Firefox Nightly</option>
+<option>Chrome Canary</option>
+<option>Firefox Nightly</option>
+<option>Chrome Canary</option>
+<option>Firefox Nightly</option>
+<option>Chrome Canary</option>
+</select>
+-->
+                <!--</ion-item>-->
+                <ion-item nav-clear menu-close item-icon-left ui-sref="app.ritiro">
+                    {{'menu_exit' | translate}}
                 </ion-item>
                 <ion-item nav-clear menu-close item-icon-left ui-sref="app.ritiro">
-                    ritiro
+                    {{'menu_enter' | translate}}
                 </ion-item>
 
             </ion-list>

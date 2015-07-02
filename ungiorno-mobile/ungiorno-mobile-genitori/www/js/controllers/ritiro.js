@@ -4,7 +4,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         $scope.BabyConfiguration = configurationService.getBabyConfiguration();
         $scope.BabyProfile = profileService.getBabyProfile();
         $scope.time = "";
-    $scope.TemporaryDate=new Date();
+        $scope.TemporaryDate = new Date();
         $scope.datapack = {
             "appId": "",
             "schoolId": "",
@@ -21,17 +21,18 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             var Datetime = new Date($scope.datapack.date + "," + $scope.time);
             return Datetime.getTime()
         }
-        $scope.InvertDateFont=function(){
-        var dd = $scope.TemporaryDate.getDate();
-        var mm = $scope.TemporaryDate.getMonth() + 1;
-        var yyyy = $scope.TemporaryDate.getFullYear();
-        if (dd < 10) {
-            dd = '0' + dd
-        }
-        if (mm < 10) {
-            mm = '0' + mm;
-        }
-        $scope.datapack.date = dd + '/' + mm + '/' + yyyy
+        $scope.InvertDateFont = function () {
+            var my_date = new Date($scope.TemporaryDate);
+            var dd = $scope.TemporaryDate.getDate();
+            var mm = $scope.TemporaryDate.getMonth() + 1;
+            var yyyy = $scope.TemporaryDate.getFullYear();
+            if (dd < 10) {
+                dd = '0' + dd
+            }
+            if (mm < 10) {
+                mm = '0' + mm;
+            }
+            $scope.datapack.date = dd + '/' + mm + '/' + yyyy
         }
         $scope.sendToServer = function () {
             $scope.AddTimeToPack();
@@ -45,61 +46,61 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             });
 
         }
-        $scope.GetSelectedValue = function (){
+        $scope.GetSelectedValue = function () {
             var radio = document.getElementsByName('Radio');
             var radio_value;
-            for(var i = 0; i < radio.length; i++){
-                if(radio[i].checked){
+            for (var i = 0; i < radio.length; i++) {
+                if (radio[i].checked) {
                     radio_value = radio[i].value;
                 }
             }
-            $scope.datapack.personId=radio_value;
+            $scope.datapack.personId = radio_value;
         }
-        $scope.seDataPack=function(){
-          $scope.datapack.appId=$scope.BabyProfile.appId;
-            $scope.datapack.schoolId= $scope.BabyProfile.schoolId;
+        $scope.seDataPack = function () {
+            $scope.datapack.appId = $scope.BabyProfile.appId;
+            $scope.datapack.schoolId = $scope.BabyProfile.schoolId;
             $scope.datapack.kidId = $scope.BabyProfile.kidId;
-            $scope.datapack.time=$scope.AddTimeToPack();
+            $scope.datapack.time = $scope.AddTimeToPack();
             $scope.GetSelectedValue();
         }
 
 
-})
-/*
-.controller('DelegateCtrl', function ($scope,) {
-    $scope.today=new Date();
-    var dd=$scope.today.getDate();
-    var mm=$scope.today.getMonth()+1;
-    var yyyy=$scope.today.getFullYear();
-    if(dd<10)
-    {
-        dd='0'+dd
-    }
-    if(mm<10)
-    {
-        mm='0'+mm;
-    }
-    $scope.today=dd+'/'+mm+'/'+yyyy
-   $scope.Delega = [
+    })
+    /*
+    .controller('DelegateCtrl', function ($scope,) {
+        $scope.today=new Date();
+        var dd=$scope.today.getDate();
+        var mm=$scope.today.getMonth()+1;
+        var yyyy=$scope.today.getFullYear();
+        if(dd<10)
         {
-            "appId": "a",
-            "schoolId": "a",
-            "kidId": "a",
-            "services": {
-                "anticipo": {
-                    "active": true
-                },
-                "posticipo": {
-                    "active": true
-                },
-                "bus": {
-                    "active": true,
-                    "defaultId": "idstop1"
+            dd='0'+dd
+        }
+        if(mm<10)
+        {
+            mm='0'+mm;
+        }
+        $scope.today=dd+'/'+mm+'/'+yyyy
+       $scope.Delega = [
+            {
+                "appId": "a",
+                "schoolId": "a",
+                "kidId": "a",
+                "services": {
+                    "anticipo": {
+                        "active": true
+                    },
+                    "posticipo": {
+                        "active": true
+                    },
+                    "bus": {
+                        "active": true,
+                        "defaultId": "idstop1"
+                    }
                 }
             }
-        }
-       ]
-    })*/
+           ]
+        })*/
     .controller('DelegateCtrl', function ($scope) {
         $scope.today = new Date();
         var dd = $scope.today.getDate();
@@ -151,10 +152,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 }
             }
         ]
-        $scope.SetFullName=function(){
-         $scope.Delega[0].extraPersons.fullName=$scope.Delega[0].extraPersons.firstName + " " + $scope.Delega[0].extraPersons.lastName;
+        $scope.SetFullName = function () {
+            $scope.Delega[0].extraPersons.fullName = $scope.Delega[0].extraPersons.firstName + " " + $scope.Delega[0].extraPersons.lastName;
         }
-   $scope.Delega[0].extraPersons=$scope.Delega[0].extraPersons.firstName + " " + $scope.Delega[0].extraPersons.lastName;
+        $scope.Delega[0].extraPersons = $scope.Delega[0].extraPersons.firstName + " " + $scope.Delega[0].extraPersons.lastName;
         $scope.NavigateToRitiro = function () {
             window.location.href = "#/app/ritiro.html";
         }

@@ -4,18 +4,18 @@
             "appId": "a",
             "schoolId": "a",
             "regularTiming": {
-                "fromTime": "0900",
-                "toTime": "1600"
+                "fromTime": "9:00",
+                "toTime": "16:00"
             },
             "anticipoTiming": {
 
-                "fromTime": "0700",
-                "toTime": "0900"
+                "fromTime": "7:00",
+                "toTime": "9:00"
             },
             "posticipoTiming": {
 
-                "fromTime": "1600",
-                "toTime": "1800"
+                "fromTime": "16:00",
+                "toTime": "18:00"
             },
             "contacts": {
                 "telephone": ["0461123456", "456789"],

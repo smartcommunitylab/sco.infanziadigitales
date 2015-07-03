@@ -1,11 +1,11 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.ritiro', [])
 
-.controller('RitiroCtrl', function ($scope, configurationService, profileService) {
+.controller('RitiroCtrl', function ($scope, configurationService, profileService,dataServerService,Toast) {
         $scope.BabyConfiguration = configurationService.getBabyConfiguration();
         $scope.BabyProfile = profileService.getBabyProfile();
         $scope.Temporary = {
-            "date":new Date(0),
-            "time":new Date(0)
+            date:new Date(),
+            time:new Date()
         };
         $scope.datapack = {
             "appId": "",
@@ -21,16 +21,21 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         }
 
         $scope.AddTimeToPack = function () {
-            var h=$scope.Temporary.time.getTime();
+           /* var h=$scope.Temporary.time.getTime();
             var tmp=new Date($scope.Temporary.date.getFullYear(),$scope.Temporary.date.getMonth(),$scope.Temporary.date.getDate(),$scope.Temporary.date.getHours(),$scope.Temporary.date.getMinutes(),$scope.Temporary.date.getSeconds(),$scope.Temporary.date.getMilliseconds())
             var d=tmp.getTime();
-            return d+h;
+            return d+h;*/
+              var dateinsert = new Date($scope.Temporary.date);
+            var timeinsert = new Date($scope.Temporary.time);
+            dateinsert.setHours(timeinsert.getHours(), timeinsert.getMinutes(), 0, 0);
+            var datetosend = dateinsert.getTime();
+            return datetosend
         }
 
 
         $scope.sendToServer = function () {
             $scope.setDataPack();
-            dataServerService.sendRitiro(p$scope.datapack).then(function (data) {
+            dataServerService.sendRitiro($scope.datapack).then(function (data) {
                 window.location.href = "#/app/home"
                 Toast.show("Invio Riuscito!!", 'short', 'bottom');
                 console.log("SUCCESSFULL SENDING -> " + data);
@@ -54,7 +59,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
           $scope.datapack.appId=$scope.BabyProfile.appId;
             $scope.datapack.schoolId= $scope.BabyProfile.schoolId;
             $scope.datapack.kidId = $scope.BabyProfile.kidId;
-            $scope.datapack.time=$scope.AddTimeToPack();
+            $scope.datapack.datetime=$scope.AddTimeToPack();
             $scope.GetSelectedValue();
         }
 

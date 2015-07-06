@@ -15,19 +15,61 @@ body {
     background-color: #000;
 }
 
-.retireDiv {
-    padding-left: 20px;
+.accent-color {
+    color: #37392E;
 }
+
+.page-padding {
+    padding-left: 10px;
+    padding-right: 15px;
+}
+
+.input-description-padding {
+    margin-top: 24px;
+}
+
+.input-padding {
+    padding-left: 0;
+    padding-right: 0;
+    margin-top: -5px;
+}
+
+.delegate-field {
+    color: #A5A5A5;
+    text-align: right;
+    font-size: 13px;
+    margin-top: 18px; 
+}
+
+.delegate-field.description {
+    font-size: 12px;
+    margin-top: 0px;
+    margin-bottom: -10px;
+}
+
+.delegate-input {
+    text-align: center;
+    margin-top: 6px;
+}
+
+.no-padding {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.item.item-checkbox.delegate {
+    font-size: 12px;
+    font-weight: bold;
+    border-color: transparent;
+
+    margin-top: -5px;
+}
+
 
 .temporaryDelegate {
     color: red;
 }
 
-.retireInput {
-    margin-left: 15px;
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
 
 .modal-backdrop.active .modal-backdrop-bg {
     opacity: 0.8;

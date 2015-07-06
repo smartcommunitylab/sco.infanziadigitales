@@ -29,8 +29,8 @@
                         "address": "stopaddress1",
                         "default": false
                     }, {
-                        "stopId": "idstop1",
-                        "address": "stopaddress1",
+                        "stopId": "idstop2",
+                        "address": "stopaddress2",
                         "default": true
                     }]
                 },

@@ -115,16 +115,41 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         return false;
     };
 
+    //tmp, cosa mi faccio arrivare? array di bambini?
+    $scope.babies = [
+        {
+            id: "a",
+            img: "http://ionicframework.com/img/docs/venkman.jpg",
+            name: "Venkman",
+            checked: true
+        },
+        {
+            id: "b",
+            img: "http://ionicframework.com/img/docs/stantz.jpg",
+            name: "Ray",
+            checked: false
 
-    // .fromTemplate() method
-    var template = '<ion-popover-view><ion-header-bar> <h1 class="title">My Popover Title</h1> </ion-header-bar> <ion-content> Hello! </ion-content></ion-popover-view>';
+        }
+    ];
+    $scope.babyselected = {
+        id: "a",
+        img: "http://ionicframework.com/img/docs/venkman.jpg",
+        name: "Venkman",
+        checked: true
+    }
 
-    $scope.popover = $ionicPopover.fromTemplate(template, {
-        scope: $scope
-    });
-
-    // .fromTemplateUrl() method
-    $ionicPopover.fromTemplateUrl('my-popover.html', {
+    $scope.selectBaby = function (item) {
+        $scope.babyselected = item;
+        for (var index = 0; index < $scope.babies.length; index++) {
+            if ($scope.babyselected.id != $scope.babies[index].id) {
+                $scope.babies[index].checked = false;
+            }
+        }
+        setTimeout(function () {
+            $scope.closePopover();
+        }, 500);
+    }
+    $scope.popover = $ionicPopover.fromTemplateUrl('templates/dropdown.html', {
         scope: $scope
     }).then(function (popover) {
         $scope.popover = popover;
@@ -149,6 +174,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.$on('popover.removed', function () {
         // Execute action
     });
+    $scope.openSetting = function (babyselected) {
+        window.location.href = "#/app/babysetting/" + babyselected.id;
+    }
 });
 
 function showNoPlace() {

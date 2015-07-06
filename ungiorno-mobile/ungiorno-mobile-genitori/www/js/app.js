@@ -14,6 +14,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
      'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.home',
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.assenza',
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.ritiro',
+    'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.babysetting',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.conf',
         'it.smartcommunitylab.infanziadigitales.diario.parents.services.assenzaService',
         'it.smartcommunitylab.infanziadigitales.diario.parents.services.ritiroService',
@@ -125,6 +126,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
                 }
             }
         })
+        .state('app.babysetting', {
+            cache: false,
+            url: '/babysetting/:id',
+            abstract: false,
+            views: {
+                'menuContent': {
+                    templateUrl: "templates/babysetting.html",
+                    controller: 'BabySettingCtrl'
+                }
+            }
+        })
         .state('app.delegate', {
             cache: false,
             url: '/delegate',
@@ -153,7 +165,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         home_entry_to: ' entra alle ore ',
         home_exit_to: ' ed esce alle ore ',
         menu_exit: 'Esci',
-        menu_enter: 'Entra'
+        menu_enter: 'Entra',
+        babysetting_intro: 'Definisci i seguenti dati relativi all\'orario scolastico del bambino.',
+        babysetting_services: 'Servizi',
+        babysetting_hours: 'Orario di uscita:',
+        babysetting_who: 'Chi ritira il bambino:',
+        babysetting_busGo: 'Fermata bus andata:',
+        babysetting_busBack: 'Fermata bus ritorno:'
+
     });
 
     $translateProvider.translations('en', {
@@ -169,7 +188,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         home_entry_to: ' entra alle ore ',
         home_exit_to: ' ed esce alle ore ',
         menu_exit: 'Esci',
-        menu_enter: 'Entra'
+        menu_enter: 'Entra',
+        babysetting_intro: 'Definisci i seguenti dati relativi all\'orario scolastico del bambino.',
+        babysetting_services: 'Servizi',
+        babysetting_hours: 'Orario di uscita:',
+        babysetting_who: 'Chi ritira il bambino:',
+        babysetting_busGo: 'Fermata bus andata:',
+        babysetting_busBack: 'Fermata bus ritorno:'
+
     });
 
     $translateProvider.translations('de', {
@@ -185,7 +211,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         home_entry_to: ' entra alle ore ',
         home_exit_to: ' ed esce alle ore ',
         menu_exit: 'Esci',
-        menu_enter: 'Entra'
+        menu_enter: 'Entra',
+        babysetting_intro: 'Definisci i seguenti dati relativi all\'orario scolastico del bambino.',
+        babysetting_services: 'Servizi',
+        babysetting_hours: 'Orario di uscita:',
+        babysetting_who: 'Chi ritira il bambino:',
+        babysetting_busGo: 'Fermata bus andata:',
+        babysetting_busBack: 'Fermata bus ritorno:'
+
+
 
     });
 

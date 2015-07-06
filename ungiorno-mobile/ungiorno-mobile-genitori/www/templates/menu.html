@@ -17,91 +17,37 @@
         </ion-header-bar>
         <ion-content class="leftmenu">
             <ion-list>
-                <!--                <ion-item nav-clear item-icon-left ui-sref="app.assenza">-->
-                <!--
-                    <select class="ion-input-select">
-
-                        <option>
--->
-                <!--
-                <ul class="list">
-                    <li class="item item-checkbox">
-                        <label class="checkbox">
-                            <input type="checkbox">
-                        </label>
-                        <h2>ksjisfdj</h2>
-
-                        <i class="icon ion-chevron-down"></i>
-                    </li>
-                </ul>
--->
-
                 <p>
-                    <!--<button ng-click="openPopover($event)">Open Popover</button>-->
-                    <div class="item item-avatar" ng-click="openPopover($event)">
-                        <img src="http://placehold.it/100x100">
-                        <h2>Pretty Hate Machine</h2>
-                        <p>Nine Inch Nails</p>
+                    <div class="row">
+                        <div class="col col-80">
+                            <div class="item item-avatar slected-baby" ng-click="openPopover($event)">
+                                <img ng-src="{{babyselected.img}}">
+                                <h2>{{babyselected.name}}</h2>
+                            </div>
+                        </div>
+                        <div class="col col-20" id="babysettingcell">
+                            <button menu-close class="button icon ion-gear-a" id="babysetting" ui-sref="app.babysetting({id:babyselected.id})"></button>
+                        </div>
                     </div>
+
                 </p>
 
-                <script id="my-popover.html" type="text/ng-template">
-                    <ion-popover-view>
-                        <!--
-                        <ion-header-bar>
-                            <h1 class="title">My Popover Title</h1>
-                        </ion-header-bar>
--->
-                        <ion-content>
-                            <li class="item item-avatar-right item-checkbox">
-                                <img src="http://placehold.it/100x100">
-                                <label class="checkbox">
-                                    <input type="checkbox">
-                                </label>
-                                <h2>Headline</h2>
-                                <p>Description</p>
-                            </li>
-                            <li class="item item-avatar-right item-checkbox">
-                                <img src="http://placehold.it/100x100">
-                                <label class="checkbox">
-                                    <input type="checkbox">
-                                </label>
-                                <h2>Headline</h2>
-                                <p>Description</p>
-                            </li>
-                        </ion-content>
-                    </ion-popover-view>
-                </script>
-                <!--
-                    <div class="home-baby">
-                        <a class="item item-avatar" href="#">
-                            <img src="http://ionicframework.com/img/docs/venkman.jpg">
-                            <h2>Venkman</h2>
-                            <h2>ksjisfdj</h2>
-                            <i class="icon ion-chevron-up"></i>
-                            <i class="icon ion-chevron-down"></i></span>
-                        </a>
-
-                    </div>
--->
-                <!--
-                       </option>
-<option>Firefox Nightly</option>
-<option>Chrome Canary</option>
-<option>Firefox Nightly</option>
-<option>Chrome Canary</option>
-<option>Firefox Nightly</option>
-<option>Chrome Canary</option>
-</select>
--->
                 <!--</ion-item>-->
-                <ion-item nav-clear menu-close item-icon-left ui-sref="app.ritiro">
-                    {{'menu_exit' | translate}}
-                </ion-item>
-                <ion-item nav-clear menu-close item-icon-left ui-sref="app.ritiro">
-                    {{'menu_enter' | translate}}
+                <!--
+<ion-item nav-clear menu-close item-icon-left ui-sref="app.ritiro">
+    {{'menu_exit' | translate}}
+</ion-item>
+<ion-item nav-clear menu-close item-icon-left ui-sref="app.ritiro">
+    {{'menu_enter' | translate}}
+</ion-item>
+-->
+                <ion-item nav-clear menu-close item-icon-left ng-click="logout()" ng-if="userIsLogged">
+                    <i class="icon voice-menu  sco-log-out"></i>{{'menu_exit' | translate}}
                 </ion-item>
 
+                <ion-item nav-clear menu-close item-icon-left ng-click="login()" ng-if="!userIsLogged">
+                    <i class="icon voice-menu  sco-log-out"></i>{{'menu_enter' | translate}}
+                </ion-item>
             </ion-list>
         </ion-content>
     </ion-side-menu>

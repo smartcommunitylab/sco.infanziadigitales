@@ -1,0 +1,15 @@
+<ion-popover-view>
+    <ion-content>
+        <div ng-repeat="baby in babies track by $index">
+            <li class="item item-avatar-right item-checkbox">
+                <img ng-src="{{baby.img}}">
+                <label class="checkbox">
+                    <input type="checkbox" ng-model="baby.checked" ng-checked="baby.checked" ng-change="selectBaby(baby)">
+                </label>
+                <h2>{{baby.name}}</h2>
+            </li>
+        </div>
+
+
+    </ion-content>
+</ion-popover-view>

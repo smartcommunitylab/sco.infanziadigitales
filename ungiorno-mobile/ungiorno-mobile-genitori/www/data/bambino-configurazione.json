@@ -6,7 +6,7 @@
             "kidId": "a",
             "services": {
                 "anticipo": {
-                    "active": true
+                    "active": false
                 },
                 "posticipo": {
                     "active": true

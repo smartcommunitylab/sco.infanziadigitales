@@ -15,6 +15,15 @@ body {
     background-color: #000;
 }
 
+.accent-color {
+    color: #37392E;
+}
+
+.page-padding {
+    padding-left: 10px;
+    padding-right: 15px;
+}
+
 .retireDiv {
     padding-left: 20px;
 }
@@ -1044,4 +1053,20 @@ select {
     background-image: url(http://i.imgur.com/nA9xx1X.png);
     text-indent: 20px;
     padding: .5rem 0;
+}
+
+#babysettingcell {
+    padding: 5% 0;
+}
+
+#babysetting {
+    padding: 10% 0;
+}
+
+.padlist>.list {
+    padding: 10px;
+}
+
+.item-select.setting {
+    border-bottom-width: 0px;
 }

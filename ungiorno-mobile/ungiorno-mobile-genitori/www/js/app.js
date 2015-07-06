@@ -13,16 +13,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.common',
      'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.home',
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.assenza',
-    'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.ritiro',
+    'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.retire',
+    'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.delegate',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.conf',
-        'it.smartcommunitylab.infanziadigitales.diario.parents.services.assenzaService',
-        'it.smartcommunitylab.infanziadigitales.diario.parents.services.ritiroService',
-            'it.smartcommunitylab.infanziadigitales.diario.parents.services.configurationService',
-            'it.smartcommunitylab.infanziadigitales.diario.parents.services.dataServerService',
-        'it.smartcommunitylab.infanziadigitales.diario.parents.services.profileService'
-
-
-
+    'it.smartcommunitylab.infanziadigitales.diario.parents.services.assenzaService',
+    'it.smartcommunitylab.infanziadigitales.diario.parents.services.retireService',
+    'it.smartcommunitylab.infanziadigitales.diario.parents.services.configurationService',
+    'it.smartcommunitylab.infanziadigitales.diario.parents.services.dataServerService',
+    'it.smartcommunitylab.infanziadigitales.diario.parents.services.profileService'
 ])
 
 .run(function ($ionicPlatform, $rootScope, $cordovaSplashscreen, $state, $translate, $q, $ionicHistory, $ionicConfig, Config, configurationService, profileService, dataServerService, Toast) {
@@ -101,37 +99,39 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         }
     })
 
-
-
     .state('app.assenza', {
-            cache: false,
-            url: '/assenza',
-            abstract: false,
-            views: {
-                'menuContent': {
-                    templateUrl: "templates/assenza.html",
-                    controller: 'AssenzaCtrl'
-                }
+        cache: false,
+        url: '/assenza',
+        abstract: false,
+        views: {
+            'menuContent': {
+                templateUrl: "templates/assenza.html",
+                controller: 'AssenzaCtrl'
             }
-        })
-        .state('app.ritiro', {
-            cache: false,
-            url: '/ritiro',
-            abstract: false,
-            views: {
-                'menuContent': {
-                    templateUrl: "templates/ritiro.html",
-                    controller: 'RitiroCtrl'
-                }
+        }
+    })
+
+    .state('app.retire', {
+        cache: false,
+        url: '/retire',
+        abstract: false,
+        views: {
+            'menuContent': {
+                templateUrl: "templates/retire.html",
+                controller: 'RetireCtrl'
             }
-        })
+        }
+    })
+
+
+
         .state('app.delegate', {
             cache: false,
             url: '/delegate',
             abstract: false,
             views: {
                 'menuContent': {
-                    templateUrl: "templates/delega.html",
+                    templateUrl: "templates/delegate.html",
                     controller: 'DelegateCtrl'
                 }
             }
@@ -143,13 +143,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     $translateProvider.translations('it', {
         menu_home: 'Home',
         home_assenza: 'Assenza',
-        home_ritiro: 'Ritiro',
+        home_retire: 'Ritiro',
         home_bus: 'Bus',
         home_mensa: 'Mensa',
         home_calendario: 'Calendario',
         home_contatta: 'Contatta',
         home_personal_information: 'Informazioni su ',
-        home_school_information: 'Informazioni di servizio'
+        home_school_information: 'Informazioni di servizio',
+        retire: "Ritiro del bambino",
+        date: "Data",
+        hour: "Ora",
+        who_takes_baby: "Chi ritira il bambino?"
     });
 
     $translateProvider.translations('en', {
@@ -161,7 +165,23 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         home_calendario: 'Calendario',
         home_contatta: 'Contatta',
         home_personal_information: 'Informazioni su ',
-        home_school_information: 'Informazioni di servizio'
+        home_school_information: 'Informazioni di servizio',
+        retire: "Ritiro del bambino",
+        date: "Data",
+        hour: "Ora",
+        who_takes_baby: "Chi ritira il bambino?",
+        nav_delegate: "Delega straordinaria",
+        delegate_status: "Validità delega",
+        note: "Note",
+        note_description: "Inserisci una nota...",
+        delegate: "Delega straordinaria",
+        delegate_description: "Dati del delegato",
+        name: "Nome del delegato",
+        surname: "Cognome del delegato",
+        add_image: "Aggiungi documento di identità del delegato",
+        delegate_auth: "Autorizzazione",
+        delegate_majority: "Il delegato è maggiorenne",
+        auth_take_baby: "Autorizzo il soggetto sopraindicato a ritirare mio figlio da scuola"
     });
 
     $translateProvider.translations('de', {
@@ -173,7 +193,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         home_calendario: 'Calendario',
         home_contatta: 'Contatta',
         home_personal_information: 'Informazioni su ',
-        home_school_information: 'Informazioni di servizio'
+        home_school_information: 'Informazioni di servizio',
+        retire: "Ritiro",
+        date: "Data",
+        hour: "Ora",
+        who_takes_baby: "Chi ritira il bambino?"
     });
 
     $translateProvider.preferredLanguage("en");

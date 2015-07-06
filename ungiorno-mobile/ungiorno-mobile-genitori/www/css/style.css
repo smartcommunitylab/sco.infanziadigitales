@@ -15,10 +15,6 @@ body {
     background-color: #000;
 }
 
-.accent-color {
-    color: #37392E;
-}
-
 .page-padding {
     padding-left: 10px;
     padding-right: 15px;
@@ -47,6 +43,11 @@ body {
     margin-bottom: -10px;
 }
 
+.delegate-field.add-image {
+    margin-top: 0px; 
+    margin-left:15px;
+}
+
 .delegate-input {
     text-align: center;
     margin-top: 6px;
@@ -65,11 +66,21 @@ body {
     margin-top: -5px;
 }
 
-
-.temporaryDelegate {
-    color: red;
+.item.item-checkbox.delegate.no-bold {
+    font-weight: normal;
 }
 
+input[type=text] {
+    border-bottom: 1px solid #B0B0B0;
+    padding-right: 50%;
+}
+
+.icon.ion-image.gallery {
+    margin-left: 15px;
+    border: transparent; 
+    background: transparent; 
+    font-size: 20px;
+}
 
 .modal-backdrop.active .modal-backdrop-bg {
     opacity: 0.8;

@@ -1,0 +1,47 @@
+<ion-view id="retire" title="{{'retire' | translate}}">
+    <ion-nav-bar class="bar bar-ungiorno page-padding">
+        <!-- back button -->
+        <ion-nav-back-button></ion-nav-back-button>
+
+        <!-- Send server button -->
+        <ion-nav-buttons side="right">
+            <button class="button" ng-click="sendToServer()">
+                <i class="icon ion-android-done"></i>
+            </button>
+        </ion-nav-buttons>
+    </ion-nav-bar>
+
+    <ion-content class="page-padding" has-header="true">
+        <div>
+
+            <!-- Date -->
+            <h5 class="accent-color input-description-padding"><b>{{'date' | translate}}:</b></h5>
+            <input type="date" ng-change="convertInput(this)" ng-model="Temporary.date" class="input-padding" required>
+
+            <!-- Hour -->
+            <h5 class="accent-color input-description-padding"><b>{{'hour' | translate}}:</b></h5>
+            <input type="time" ng-model="Temporary.time" class="input-padding" required/>
+            
+            
+            <!-- Who takes baby -->
+            <h5 class="accent-color input-description-padding"><b>{{'who_takes_baby' | translate}}</b></h5>
+            <p class="delegate-field description">{{'delegate_status' | translate}}</p>
+            <ion-list>
+                <div class="row no-padding" id="person" ng-repeat="item in BabyProfile.persons">
+                    <div class="col">
+                        <ion-checkbox class="item item-checkbox delegate" ng-value="{{item.personId}}" name="radio">{{item.fullName}}</ion-radio>
+                    </div>
+                    <p class="delegate-field">{{item.authorizationDeadline | date:'d MMMM yyyy'}}</p>
+                </div>
+            </ion-list>
+
+            <div class="delegate-input">
+                <button ui-sref="app.delegate">{{'nav_delegate' | translate}}</button>  
+            </div>
+
+            <h5 class="accent-color input-description-padding"><b>{{'note' | translate}}:</b></h4>
+            <input type="text" ng-model="datapack.note" placeholder="{{'note_description' | translate}}">
+        </div>
+
+    </ion-content>
+</ion-view>

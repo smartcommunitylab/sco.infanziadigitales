@@ -21,7 +21,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.retireService',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.configurationService',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.dataServerService',
-    'it.smartcommunitylab.infanziadigitales.diario.parents.services.profileService'
+    'it.smartcommunitylab.infanziadigitales.diario.parents.services.profileService',
+    'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.calendar'
 ])
 
 .run(function ($ionicPlatform, $rootScope, $cordovaSplashscreen, $state, $translate, $q, $ionicHistory, $ionicConfig, Config, configurationService, profileService, dataServerService, Toast) {
@@ -137,6 +138,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         }
     })
 
+    .state('app.calendar', {
+        cache: false,
+        url: '/calendar',
+        abstract: false,
+        views: {
+            'menuContent': {
+                templateUrl: "templates/calendar.html",
+                controller: "CalendarCtrl"
+            }
+        }
+    })
 
     .state('app.authorization', {
         cache: false,
@@ -190,7 +202,22 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         delegate_majority: "Il delegato è maggiorenne",
         auth_take_baby: "Autorizzo il soggetto sopraindicato a ritirare mio figlio da scuola",
         babysetting_save: "Salva",
-        add_image_completed: "Documento aggiunto correttamente"
+        add_image_completed: "Documento aggiunto correttamente",
+        calendar: "Calendario",
+        monday: "Lunedì",
+        tuesday: "Martedì",
+        wednesday: "Mercoledì",
+        thursday: "Giovedì",
+        friday: "Venerdì",
+        saturday: "Sabato",
+        sunday: "Domenica",
+        monday_reduced: "Lun",
+        tuesday_reduced: "Mart",
+        wednesday_reduced: "Merc",
+        thursday_reduced: "Giov",
+        friday_reduced: "Ven",
+        saturday_reduced: "Sab",
+        sunday_reduced: "Dom"
     });
 
     $translateProvider.translations('en', {
@@ -230,7 +257,22 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         delegate_majority: "Il delegato è maggiorenne",
         auth_take_baby: "Autorizzo il soggetto sopraindicato a ritirare mio figlio da scuola",
         babysetting_save: "Salva",
-        add_image_completed: "Documento aggiunto correttamente"
+        add_image_completed: "Documento aggiunto correttamente",
+        calendar: "Calendario",
+        monday: "Lunedì",
+        tuesday: "Martedì",
+        wednesday: "Mercoledì",
+        thursday: "Giovedì",
+        friday: "Venerdì",
+        saturday: "Sabato",
+        sunday: "Domenica",
+        monday_reduced: "Lun",
+        tuesday_reduced: "Mart",
+        wednesday_reduced: "Merc",
+        thursday_reduced: "Giov",
+        friday_reduced: "Ven",
+        saturday_reduced: "Sab",
+        sunday_reduced: "Dom"
     });
 
     $translateProvider.translations('de', {
@@ -270,7 +312,22 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         delegate_majority: "Il delegato è maggiorenne",
         auth_take_baby: "Autorizzo il soggetto sopraindicato a ritirare mio figlio da scuola",
         babysetting_save: "Salva",
-        add_image_completed: "Documento aggiunto correttamente"
+        add_image_completed: "Documento aggiunto correttamente",
+        calendar: "Calendario",
+        monday: "Lunedì",
+        tuesday: "Martedì",
+        wednesday: "Mercoledì",
+        thursday: "Giovedì",
+        friday: "Venerdì",
+        saturday: "Sabato",
+        sunday: "Domenica",
+        monday_reduced: "Lun",
+        tuesday_reduced: "Mart",
+        wednesday_reduced: "Merc",
+        thursday_reduced: "Giov",
+        friday_reduced: "Ven",
+        saturday_reduced: "Sab",
+        sunday_reduced: "Dom"
     });
 
     $translateProvider.preferredLanguage("it");

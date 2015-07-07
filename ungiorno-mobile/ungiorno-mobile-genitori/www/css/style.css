@@ -98,6 +98,47 @@ input[type=text] {
 .modal-backdrop.active .modal-backdrop-bg {
     opacity: 0.8;
 }
+
+.row.calendar-month {
+    margin-top: -10px;
+    background: red;
+}
+
+.row.calendar-container {
+    background: yellow;
+    height: 40px;
+}
+
+.col.calendar-arrow {
+}
+
+.col.calendar-month {
+    padding-top: 8px;
+    margin-bottom: -10px;
+    text-align: center;
+}
+
+.calendar-month {
+    font-size: 14px;
+}
+
+.calendar-arrow {
+    background: transparent;
+    border-color: transparent;
+}
+
+.calendar-arrow.left {
+    float: right;
+}
+
+.calendar-arrow.right {
+    float: left;
+}
+
+.calendar-container {
+    text-align: center;
+    
+}
 /*
 #map {
     position: absolute;

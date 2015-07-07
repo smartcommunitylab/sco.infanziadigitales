@@ -8,8 +8,21 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.babyServices = [];
     $scope.busEnabled = true;
     $scope.busStops = [];
-    $scope.busGo = null;
-    $scope.busBack = null;
+//    $scope.items = [
+//        {
+//            id: 1,
+//            name: 'Foo'
+//        },
+//        {
+//            id: 2,
+//            name: 'Bar'
+//        }
+//    ];
+//
+//    $scope.selectedBusGo = $scope.busStops[0];
+//    $scope.selectedBusBack = $scope.busStops[0];
+
+
     $scope.time = new Date(0);
 
     for (var k in $scope.babyProfile.services) {
@@ -28,14 +41,23 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
     //if bus set stop
     for (var i = 0; i < $scope.babyProfile.services.bus.stops.length; i++) {
-        $scope.busStops[$scope.babyProfile.services.bus.stops[i].stopId] =
-            $scope.babyProfile.services.bus.stops[i].address;
+        $scope.busStops.push({
+            id: $scope.babyProfile.services.bus.stops[i].stopId,
+            name: $scope.babyProfile.services.bus.stops[i].address
+        });
     }
-//    //init select
-    if ($scope.busStops[0]) {
-        $scope.busGo = $scope.busStops[0];
-        $scope.busBack = $scope.busStops[0];
-    }
+    $scope.selectedBusGo = $scope.busStops[0];
+    $scope.selectedBusBack = $scope.busStops[0];
+    //init select
+
+    //    if ($scope.busStops[0]) {
+    //        $scope.busGo = $scope.busStops[0];
+    //        $scope.busBack = $scope.busStops[0];
+    //    }
+//    $scope.initStops = function () {
+//        $scope.busGo = $scope.busStops[0];
+//        $scope.busBack = $scope.busStops[0];
+//    }
     $scope.showOptions = function (item) {
         if (item.text == "bus") {
             $scope.busEnabled = item.checked;

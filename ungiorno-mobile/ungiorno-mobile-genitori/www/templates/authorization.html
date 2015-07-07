@@ -1,11 +1,11 @@
-<ion-view id="ritiro" title="{{'delegate' | translate}}">
+<ion-view id="delegate" title="{{'delegate' | translate}}">
     <ion-nav-bar class="bar bar-ungiorno page-padding">
         <!-- back button -->
         <ion-nav-back-button></ion-nav-back-button>
 
         <!-- Send server button -->
         <ion-nav-buttons side="right">
-            <button class="button">
+            <button class="button" ng-click="sendDelegate()">
                 <i class="icon ion-android-done"></i>
             </button>
         </ion-nav-buttons>
@@ -19,18 +19,19 @@
         <input type="text" ng-model="person.firstName" placeholder="{{'surname' | translate}}">
 
         <!-- Image -->
-        <div class="row input-description-padding">
+        <div class="row input-description-padding" ng-click="getPhoto()">
             <i class="icon ion-image gallery"></i>
-            <p class="delegate-field add-image">{{'add_image' | translate}}</p>
+            <p ng-hide="hasAuthorization" class="delegate-field add-image text-wrap">{{'add_image' | translate}}</p>
+            <p ng-hide="!hasAuthorization" class="delegate-field add-image text-wrap">{{'add_image_completed' | translate}}</p>
         </div>
 
         <!-- Auths-->
-        <h5 class="accent-color input-description-padding"><b>{{'delegate_auth' | translate}}:</b></h5>
+        <h5 class="accent-color input-description-padding"><b>{{'delegate_auth' | translate}}</b></h5>
         <div class="row">
-            <ion-checkbox class="item item-checkbox delegate no-bold" name="radio">{{'delegate_majority' | translate}}</ion-radio>
+            <ion-checkbox class="item item-checkbox delegate no-bold item-text-wrap" name="radio">{{'delegate_majority' | translate}}</ion-radio>
         </div>
         <div class="row">
-            <ion-checkbox class="item item-checkbox delegate no-bold" name="radio">{{'auth_take_baby' | translate}}</ion-radio>
+            <ion-checkbox class="item item-checkbox delegate no-bold item-text-wrap" name="radio">{{'auth_take_baby' | translate}}</ion-radio>
         </div>
     </ion-content>
 </ion-view>

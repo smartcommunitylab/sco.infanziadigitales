@@ -11,11 +11,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     'it.smartcommunitylab.infanziadigitales.diario.parents.filters',
     'it.smartcommunitylab.infanziadigitales.diario.parents.directives',
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.common',
-     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.home',
+    'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.home',
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.assenza',
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.babysetting',
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.retire',
-    'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.delegate',
+    'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.authorization',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.conf',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.assenzaService',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.retireService',
@@ -138,14 +138,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     })
 
 
-    .state('app.delegate', {
+    .state('app.authorization', {
         cache: false,
-        url: '/delegate',
+        url: '/authorization',
         abstract: false,
         views: {
             'menuContent': {
-                templateUrl: "templates/delegate.html",
-                controller: 'DelegateCtrl'
+                templateUrl: "templates/authorization.html",
+                controller: 'AuthorizationCtrl'
             }
         }
     });
@@ -185,11 +185,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         delegate_description: "Dati del delegato",
         name: "Nome del delegato",
         surname: "Cognome del delegato",
-        add_image: "Aggiungi documento di identità del delegato",
+        add_image: "Aggiungi documento del delegato",
         delegate_auth: "Autorizzazione",
         delegate_majority: "Il delegato è maggiorenne",
         auth_take_baby: "Autorizzo il soggetto sopraindicato a ritirare mio figlio da scuola",
-        babysetting_save: "Salva"
+        babysetting_save: "Salva",
+        add_image_completed: "Documento aggiunto correttamente"
     });
 
     $translateProvider.translations('en', {
@@ -224,12 +225,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         delegate_description: "Dati del delegato",
         name: "Nome del delegato",
         surname: "Cognome del delegato",
-        add_image: "Aggiungi documento di identità del delegato",
+        add_image: "Aggiungi documento del delegato",
         delegate_auth: "Autorizzazione",
         delegate_majority: "Il delegato è maggiorenne",
         auth_take_baby: "Autorizzo il soggetto sopraindicato a ritirare mio figlio da scuola",
-        babysetting_save: "Salva"
-
+        babysetting_save: "Salva",
+        add_image_completed: "Documento aggiunto correttamente"
     });
 
     $translateProvider.translations('de', {
@@ -264,12 +265,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         delegate_description: "Dati del delegato",
         name: "Nome del delegato",
         surname: "Cognome del delegato",
-        add_image: "Aggiungi documento di identità del delegato",
+        add_image: "Aggiungi documento del delegato",
         delegate_auth: "Autorizzazione",
         delegate_majority: "Il delegato è maggiorenne",
         auth_take_baby: "Autorizzo il soggetto sopraindicato a ritirare mio figlio da scuola",
-        babysetting_save: "Salva"
-
+        babysetting_save: "Salva",
+        add_image_completed: "Documento aggiunto correttamente"
     });
 
     $translateProvider.preferredLanguage("it");

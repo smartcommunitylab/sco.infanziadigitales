@@ -1,131 +1,77 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.retire', [])
 
-.controller('RetireCtrl', function ($scope, configurationService, profileService, dataServerService, Toast) {
-        $scope.BabyConfiguration = configurationService.getBabyConfiguration();
-        $scope.BabyProfile = profileService.getBabyProfile();
+.controller('RetireCtrl', function ($scope, configurationService, profileService, dataServerService, Toast, $ionicHistory, retireService) {
+    var retireConfiguration;
 
-        $scope.Temporary = {
-            date:new Date(),
-            time:new Date()
-        };
+    function getTime() {
+        var dateInsert = new Date($scope.temporary.date);
+        var timeInsert = new Date($scope.temporary.time);
+        dateInsert.setHours(timeInsert.getHours(), timeInsert.getMinutes(), 0, 0);
+        return dateInsert.getTime();
+    }
 
-        $scope.datapack = {
-            "appId": "",
-            "schoolId": "",
-            "kidId": "",
-            "datetime": 123456789,
-            "personId": "",
-            "note": "a",
+    function setTime(value) {
+        if (value) {
+            var date = new Date(value);
+            $scope.temporary.date = date;
+            $scope.temporary.time = date;
         }
+    }
 
-        $scope.convertInput = function(sender) {
-            alert(TODO);
-        };
-
-        $scope.sendToServer = function () {
-            $scope.setDataPack();
-            dataServerService.sendRitiro($scope.datapack).then(function (data) {
-                window.location.href = "#/app/home"
-                Toast.show("Invio Riuscito!!", 'short', 'bottom');
-                console.log("SUCCESSFULL SENDING -> " + data);
-            }, function (error) {
-                Toast.show("Invio Non Riuscito!!", 'short', 'bottom');
-                console.log("ERROR IN SENDING -> " + error);
-            });
-
-        }
-
-        $scope.setDataPack=function(){
-            $scope.datapack.appId=$scope.BabyProfile.appId;
-            $scope.datapack.schoolId= $scope.BabyProfile.schoolId;
-            $scope.datapack.kidId = $scope.BabyProfile.kidId;
-            $scope.datapack.datetime= addTimeToPack();
-            $scope.getSelectedValue();
-        }
-
-        function addtimeTopack() {
-            var dateinsert = new Date($scope.Temporary.date);
-            var timeinsert = new Date($scope.Temporary.time);
-            dateinsert.setHours(timeinsert.getHours(), timeinsert.getMinutes(), 0, 0);
-            return dateinsert.getTime();
-        }
-
-        getSelectedPerson = function (){
-            var radio = document.getElementsByName('radio');
-            var radio_value;
-            for(var i = 0; i < radio.length; i++) {
-                if(radio[i].checked){
-                    radio_value = radio[i].value;
-                }
+    function getSelectedPersonId() {
+        var radio = document.getElementsByName('radio');
+        for(var i = 0; i < radio.length; i++) {
+            if (radio[i].checked) {
+                return radio[i].value;
             }
-            $scope.datapack.personId=radio_value;
         }
-})
+        return null;
+    }
 
-.directive('dateParser', function ($window) {
-    return {
-        require:'^ngModel',
-        restrict:'A',
-        link:function (scope, elm, attrs, ctrl) {
-            var moment = $window.moment;
-            var dateFormat = attrs.moMediumDate;
-            attrs.$observe('dateParser', function (newValue) {
-                if (!newValue) {
-                    newValue = new Date();
-                }
-
-                alert(dateFormat);
-                if (dateFormat == newValue || !ctrl.$modelValue) return;
-                dateFormat = newValue;
-                ctrl.$modelValue = new Date(ctrl.$setViewValue);
-            });
-
-            ctrl.$formatters.unshift(function (modelValue) {
-                if (!dateFormat || !modelValue) return "";
-                var retVal = moment(modelValue).format(dateFormat);
-                return retVal;
-            });
-
-            ctrl.$parsers.unshift(function (viewValue) {
-                var date = moment(viewValue, dateFormat);
-                return (date && date.isValid() && date.year() > 1950 ) ? date.toDate() : "";
-            });
-        }
+    $scope.babyProfile = profileService.getBabyProfile();
+    $scope.babyConfiguration = configurationService.getBabyConfiguration();
+    $scope.temporary = {
+        date: new Date(),
+        time: new Date(),
+        note: null
     };
-});
 
-/*
-.controller('DelegateCtrl', function ($scope,) {
-    $scope.today=new Date();
-    var dd=$scope.today.getDate();
-    var mm=$scope.today.getMonth()+1;
-    var yyyy=$scope.today.getFullYear();
-    if(dd<10)
-    {
-        dd='0'+dd
-    }
-    if(mm<10)
-    {
-        mm='0'+mm;
-    }
-    $scope.today=dd+'/'+mm+'/'+yyyy
-   $scope.Delega = [
-        {
-            "appId": "a",
-            "schoolId": "a",
-            "kidId": "a",
-            "services": {
-                "anticipo": {
-                    "active": true
-                },
-                "posticipo": {
-                    "active": true
-                },
-                "bus": {
-                    "active": true,
-                    "defaultId": "idstop1"
-                }
-            }
+    $scope.setRetire = function() {
+        retireConfiguration = {
+            appId: $scope.babyConfiguration.appId,
+            schoolId: $scope.babyConfiguration.schoolId,
+            kidId: $scope.babyConfiguration.kidId,
+            date: getTime(),
+            personId: getSelectedPersonId(),
+            note: $scope.temporary.note
+        };
+
+        retireService.setRetire(retireConfiguration);
+    };
+
+    $scope.getRetire = function() {
+        retireConfiguration = retireService.getRetire();
+
+        if (retireConfiguration) {
+            setTime(retireConfiguration.date);
+            $scope.temporary.note = retireConfiguration.note;
+        };
+    };
+
+    $scope.sendRetire = function () {
+        $scope.setRetire();
+        if (!retireConfiguration.personId) {
+            alert("Indica chi ritira il bambino");
+            return;
         }
-       ]
-    })*/
+
+        dataServerService.sendRitiro(retireConfiguration).then(function (data) {
+            Toast.show("Invio Riuscito!!", 'short', 'bottom');
+            console.log("SENDING OK -> " + data);
+            $ionicHistory.goBack();
+        }, function (error) {
+            Toast.show("Invio Non Riuscito!!", 'short', 'bottom');
+            console.log("SENDING ERROR -> " + error);
+        });
+    }
+})

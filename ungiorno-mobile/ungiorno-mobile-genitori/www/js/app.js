@@ -13,17 +13,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.common',
      'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.home',
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.assenza',
-    'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.ritiro',
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.babysetting',
+    'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.retire',
+    'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.delegate',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.conf',
-        'it.smartcommunitylab.infanziadigitales.diario.parents.services.assenzaService',
-        'it.smartcommunitylab.infanziadigitales.diario.parents.services.ritiroService',
-            'it.smartcommunitylab.infanziadigitales.diario.parents.services.configurationService',
-            'it.smartcommunitylab.infanziadigitales.diario.parents.services.dataServerService',
-        'it.smartcommunitylab.infanziadigitales.diario.parents.services.profileService'
-
-
-
+    'it.smartcommunitylab.infanziadigitales.diario.parents.services.assenzaService',
+    'it.smartcommunitylab.infanziadigitales.diario.parents.services.retireService',
+    'it.smartcommunitylab.infanziadigitales.diario.parents.services.configurationService',
+    'it.smartcommunitylab.infanziadigitales.diario.parents.services.dataServerService',
+    'it.smartcommunitylab.infanziadigitales.diario.parents.services.profileService'
 ])
 
 .run(function ($ionicPlatform, $rootScope, $cordovaSplashscreen, $state, $translate, $q, $ionicHistory, $ionicConfig, Config, configurationService, profileService, dataServerService, Toast) {
@@ -102,52 +100,55 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         }
     })
 
-
-
     .state('app.assenza', {
-            cache: false,
-            url: '/assenza',
-            abstract: false,
-            views: {
-                'menuContent': {
-                    templateUrl: "templates/assenza.html",
-                    controller: 'AssenzaCtrl'
-                }
+        cache: false,
+        url: '/assenza',
+        abstract: false,
+        views: {
+            'menuContent': {
+                templateUrl: "templates/assenza.html",
+                controller: 'AssenzaCtrl'
             }
-        })
-        .state('app.ritiro', {
-            cache: false,
-            url: '/ritiro',
-            abstract: false,
-            views: {
-                'menuContent': {
-                    templateUrl: "templates/ritiro.html",
-                    controller: 'RitiroCtrl'
-                }
+        }
+    })
+
+    .state('app.retire', {
+        cache: false,
+        url: '/retire',
+        abstract: false,
+        views: {
+            'menuContent': {
+                templateUrl: "templates/retire.html",
+                controller: 'RetireCtrl'
             }
-        })
-        .state('app.babysetting', {
-            cache: false,
-            url: '/babysetting/:id',
-            abstract: false,
-            views: {
-                'menuContent': {
-                    templateUrl: "templates/babysetting.html",
-                    controller: 'BabySettingCtrl'
-                }
+
+        }
+    })
+
+    .state('app.babysetting', {
+        cache: false,
+        url: '/babysetting/:id',
+        abstract: false,
+        views: {
+            'menuContent': {
+                templateUrl: "templates/babysetting.html",
+                controller: 'BabySettingCtrl'
             }
-        })
-        .state('app.delegate', {
-            cache: false,
-            url: '/delegate',
-            abstract: false,
-            views: {
-                'menuContent': {
-                    templateUrl: "templates/delega.html",
-                    controller: 'DelegateCtrl'
-                }
+        }
+    })
+
+
+    .state('app.delegate', {
+        cache: false,
+        url: '/delegate',
+        abstract: false,
+        views: {
+            'menuContent': {
+                templateUrl: "templates/delegate.html",
+                controller: 'DelegateCtrl'
             }
-        });
+        }
+    });
 
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/app/home');
@@ -155,7 +156,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     $translateProvider.translations('it', {
         menu_home: 'Home',
         home_assenza: 'Assenza',
-        home_ritiro: 'Ritiro',
+        home_retire: 'Ritiro',
         home_bus: 'Bus',
         home_mensa: 'Mensa',
         home_calendario: 'Calendario',
@@ -171,8 +172,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         babysetting_hours: 'Orario di uscita:',
         babysetting_who: 'Chi ritira il bambino:',
         babysetting_busGo: 'Fermata bus andata:',
-        babysetting_busBack: 'Fermata bus ritorno:'
-
+        babysetting_busBack: 'Fermata bus ritorno:',
+        retire: "Ritiro del bambino",
+        date: "Data",
+        hour: "Ora",
+        who_takes_baby: "Chi ritira il bambino?"
     });
 
     $translateProvider.translations('en', {
@@ -194,8 +198,23 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         babysetting_hours: 'Orario di uscita:',
         babysetting_who: 'Chi ritira il bambino:',
         babysetting_busGo: 'Fermata bus andata:',
-        babysetting_busBack: 'Fermata bus ritorno:'
-
+        babysetting_busBack: 'Fermata bus ritorno:',
+        retire: "Ritiro del bambino",
+        date: "Data",
+        hour: "Ora",
+        who_takes_baby: "Chi ritira il bambino?",
+        nav_delegate: "Delega straordinaria",
+        delegate_status: "Validità delega",
+        note: "Note",
+        note_description: "Inserisci una nota...",
+        delegate: "Delega straordinaria",
+        delegate_description: "Dati del delegato",
+        name: "Nome del delegato",
+        surname: "Cognome del delegato",
+        add_image: "Aggiungi documento di identità del delegato",
+        delegate_auth: "Autorizzazione",
+        delegate_majority: "Il delegato è maggiorenne",
+        auth_take_baby: "Autorizzo il soggetto sopraindicato a ritirare mio figlio da scuola"
     });
 
     $translateProvider.translations('de', {
@@ -217,10 +236,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         babysetting_hours: 'Orario di uscita:',
         babysetting_who: 'Chi ritira il bambino:',
         babysetting_busGo: 'Fermata bus andata:',
-        babysetting_busBack: 'Fermata bus ritorno:'
-
-
-
+        babysetting_busBack: 'Fermata bus ritorno:',
+        retire: "Ritiro",
+        date: "Data",
+        hour: "Ora",
+        who_takes_baby: "Chi ritira il bambino?"
     });
 
     $translateProvider.preferredLanguage("it");

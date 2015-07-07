@@ -21,7 +21,8 @@
         <!-- Image -->
         <div class="row input-description-padding" ng-click="getPhoto()">
             <i class="icon ion-image gallery"></i>
-            <p name="add-image-description" class="delegate-field add-image text-wrap">{{'add_image' | translate}}</p>
+            <p ng-hide="hasAuthorization" class="delegate-field add-image text-wrap">{{'add_image' | translate}}</p>
+            <p ng-hide="!hasAuthorization" class="delegate-field add-image text-wrap">{{'add_image_completed' | translate}}</p>
         </div>
 
         <!-- Auths-->

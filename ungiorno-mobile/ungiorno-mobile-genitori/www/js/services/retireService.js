@@ -1,7 +1,17 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.retireService', [])
 
-.factory('retireService', function ($http, $q) {
-    var ritiroService = {};
+.factory('retireService', function () {
+	var retire;
+    var retireService = {};
 
-    return ritiroService;
+
+    retireService.setRetire = function (input) {
+        retire = input;
+    }
+
+    retireService.getRetire = function () {
+        return retire;
+    }
+
+    return retireService;
 })

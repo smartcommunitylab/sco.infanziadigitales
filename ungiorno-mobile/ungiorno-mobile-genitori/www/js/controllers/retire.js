@@ -25,6 +25,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 return radio[i].value;
             }
         }
+        return null;
     }
 
     $scope.babyProfile = profileService.getBabyProfile();
@@ -58,7 +59,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
 
     $scope.sendRetire = function () {
-        dataServerService.sendRitiro(getRetireConfiguration()).then(function (data) {
+        $scope.setRetire();
+        if (!retireConfiguration.personId) {
+            alert("Indica chi ritira il bambino");
+            return;
+        }
+
+        dataServerService.sendRitiro(retireConfiguration).then(function (data) {
             Toast.show("Invio Riuscito!!", 'short', 'bottom');
             console.log("SENDING OK -> " + data);
             $ionicHistory.goBack();

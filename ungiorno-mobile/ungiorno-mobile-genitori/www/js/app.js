@@ -171,7 +171,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     $translateProvider.translations('en', {
         menu_home: 'Home',
         home_assenza: 'Assenza',
-        home_ritiro: 'Ritiro',
+        home_retire: 'Ritiro',
         home_bus: 'Bus',
         home_mensa: 'Mensa',
         home_calendario: 'Calendario',
@@ -199,7 +199,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     $translateProvider.translations('de', {
         menu_home: 'Home',
         home_assenza: 'Assenza',
-        home_ritiro: 'Ritiro',
+        home_retire: 'Ritiro',
         home_bus: 'Bus',
         home_mensa: 'Mensa',
         home_calendario: 'Calendario',

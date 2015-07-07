@@ -127,7 +127,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
 
     .state('app.babysetting', {
         cache: false,
-        url: '/babysetting/:id',
+        url: '/babysetting',
         abstract: false,
         views: {
             'menuContent': {
@@ -188,7 +188,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         add_image: "Aggiungi documento di identità del delegato",
         delegate_auth: "Autorizzazione",
         delegate_majority: "Il delegato è maggiorenne",
-        auth_take_baby: "Autorizzo il soggetto sopraindicato a ritirare mio figlio da scuola"   
+        auth_take_baby: "Autorizzo il soggetto sopraindicato a ritirare mio figlio da scuola"
     });
 
     $translateProvider.translations('en', {

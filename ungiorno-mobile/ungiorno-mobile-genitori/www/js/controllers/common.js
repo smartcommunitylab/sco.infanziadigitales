@@ -52,7 +52,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
 })
 
-.controller('AppCtrl', function ($scope, $rootScope, $cordovaDevice, $ionicModal, $ionicHistory, $timeout, $filter, $ionicPopover, Toast, Config) {
+.controller('AppCtrl', function ($scope, $rootScope, $cordovaDevice, $ionicModal, $ionicHistory, $timeout, $filter, $ionicPopover, $state, Toast, Config) {
     // Categories submenu
     $scope.categoriesSubmenu = false;
     $scope.version = Config.getVersion();
@@ -174,8 +174,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.$on('popover.removed', function () {
         // Execute action
     });
-    $scope.openSetting = function (babyselected) {
-        window.location.href = "#/app/babysetting/" + babyselected.id;
+    $scope.gotoSetting = function (id) {
+        $state.go('app.babysetting', {
+            id: id
+        });
     }
 });
 

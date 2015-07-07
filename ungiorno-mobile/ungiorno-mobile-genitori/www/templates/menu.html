@@ -26,7 +26,7 @@
                             </div>
                         </div>
                         <div class="col col-20" id="babysettingcell">
-                            <button menu-close class="button icon ion-gear-a" id="babysetting" ui-sref="app.babysetting({id:babyselected.id})"></button>
+                            <button menu-close class="button icon ion-gear-a" id="babysetting" ng-click="gotoSetting({{babyselected.id}})"></button>
                         </div>
                     </div>
 

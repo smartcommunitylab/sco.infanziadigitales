@@ -1,6 +1,8 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.babysetting', [])
 
-.controller('BabySettingCtrl', function ($scope, configurationService, profileService) {
+.controller('BabySettingCtrl', function ($scope, configurationService, profileService, $ionicNavBarDelegate, $ionicHistory) {
+    $ionicNavBarDelegate.showBackButton(true);
+    $ionicHistory.backView();
     var babyConfiguration = configurationService.getBabyConfiguration();
     $scope.babyProfile = profileService.getBabyProfile();
     $scope.babyServices = [];

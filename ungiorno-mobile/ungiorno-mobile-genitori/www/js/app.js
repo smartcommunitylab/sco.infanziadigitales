@@ -176,7 +176,19 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         retire: "Ritiro del bambino",
         date: "Data",
         hour: "Ora",
-        who_takes_baby: "Chi ritira il bambino?"
+        who_takes_baby: "Chi ritira il bambino?",
+        nav_delegate: "Delega straordinaria",
+        delegate_status: "Validità delega",
+        note: "Note",
+        note_description: "Inserisci una nota...",
+        delegate: "Delega straordinaria",
+        delegate_description: "Dati del delegato",
+        name: "Nome del delegato",
+        surname: "Cognome del delegato",
+        add_image: "Aggiungi documento di identità del delegato",
+        delegate_auth: "Autorizzazione",
+        delegate_majority: "Il delegato è maggiorenne",
+        auth_take_baby: "Autorizzo il soggetto sopraindicato a ritirare mio figlio da scuola"   
     });
 
     $translateProvider.translations('en', {
@@ -240,7 +252,19 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         retire: "Ritiro",
         date: "Data",
         hour: "Ora",
-        who_takes_baby: "Chi ritira il bambino?"
+        who_takes_baby: "Chi ritira il bambino?",
+        nav_delegate: "Delega straordinaria",
+        delegate_status: "Validità delega",
+        note: "Note",
+        note_description: "Inserisci una nota...",
+        delegate: "Delega straordinaria",
+        delegate_description: "Dati del delegato",
+        name: "Nome del delegato",
+        surname: "Cognome del delegato",
+        add_image: "Aggiungi documento di identità del delegato",
+        delegate_auth: "Autorizzazione",
+        delegate_majority: "Il delegato è maggiorenne",
+        auth_take_baby: "Autorizzo il soggetto sopraindicato a ritirare mio figlio da scuola"
     });
 
     $translateProvider.preferredLanguage("it");

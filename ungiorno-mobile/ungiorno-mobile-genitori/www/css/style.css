@@ -81,7 +81,7 @@ body {
 
 input[type=text] {
     border-bottom: 1px solid #B0B0B0;
-    padding-right: 50%;
+    width: 100%;
 }
 
 .icon.ion-image.gallery {

@@ -34,6 +34,10 @@ body {
     margin-bottom: 20px;
 }
 
+.input-description-padding {
+    margin-top: 24px;
+}
+
 .input-padding {
     padding-left: 0;
     padding-right: 0;

@@ -1,21 +1,14 @@
 <ion-view id="ritiro" hide-back-button="false">
-<ion-nav-bar class="bar bar-ungiorno">
-    <ion-nav-back-button>
-    </ion-nav-back-button>
-    <ion-nav-buttons side="right">
-        <button class="button" ng-click="">
-            invia
-        </button>
-    </ion-nav-buttons>
-</ion-nav-bar>
+    <ion-nav-bar class="bar bar-ungiorno">
+        <ion-nav-back-button>
+        </ion-nav-back-button>
+        <ion-nav-buttons side="right">
+            <button class="button" ng-click="">
+                {{'babysetting_save' | translate}}
+            </button>
+        </ion-nav-buttons>
+    </ion-nav-bar>
 
-    <!--
-<ion-nav-buttons side="right">
-    <button class="button" ng-click="NavigateToRitiro()">
-        Invia
-    </button>
-</ion-nav-buttons>
--->
     <ion-content has-header="true" class="page-padding">
 
         <div>
@@ -35,7 +28,6 @@
             <div>
                 {{'babysetting_hours' | translate}}
                 <input type="time" ng-model="time" />
-
             </div>
             <div>
                 {{'babysetting_who' | translate}}
@@ -43,9 +35,6 @@
             <ion-list class="padlist">
                 <ion-radio ng-repeat="person in babyProfile.persons" ng-model="choice" ng-value="person.personId">{{person.fullName}}</ion-radio>
             </ion-list>
-
-
-
         </div>
         <div ng-show="busEnabled">
             {{'babysetting_hours' | translate}}
@@ -55,30 +44,15 @@
                         <div class="input-label">
                             {{'babysetting_busGo' | translate}}
                         </div>
-                        <!--
-                        <select>
-                            <option ng-repeat="(key, value) in busStops" value="{{key}}">{{value}}</option>
-                        </select>
--->
-                        <select ng-model="busGo" ng-options="key as value for (key , value) in busStops"></select>
-
-                        <!--
-
-                        <select>
-                            <option>Blue</option>
-                            <option selected>Green</option>
-                            <option>Red</option>
-                        </select>
--->
+                        <select ng-model="busGo" ng-options="key as value for (key , value) in busStops" ng-init="busGo = busGo || busStops[0].value"></select>
                     </label>
-
                 </div>
                 <div>
                     <label class="item item-input item-select setting">
                         <div class="input-label">
                             {{'babysetting_busBack' | translate}}
                         </div>
-                        <select ng-model="busBack" ng-options="key as value for (key , value) in busStops"></select>
+                        <select ng-model="busBack" ng-options="key as value for (key , value) in busStops" ng-init="busBack = busBack || busStops[0].value"></select>
 
                     </label>
                 </div>

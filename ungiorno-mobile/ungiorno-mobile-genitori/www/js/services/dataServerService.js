@@ -81,25 +81,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
         var deferred = $q.defer();
 
         /*temp*/
-        //        $http({
-        //            method: 'POST',
-        //            url: Config.URL() + '/' + Config.app() + '/' + Config.userdata() + '/' + Config.appId() + '/' + pathId + '/' + 'rate',
-        //            headers: {
-        //                'Accept': 'application/json',
-        //                'Content-Type': 'application/json'
-        //            },
-        //            data: {
-        //                'vote': vote,
-        //                'comment': comment
-        //            }
-        //        }).
-        //        success(function (data, status, headers, config) {
-        //            deferred.resolve(data.data);
-        //        }).
-        //        error(function (data, status, headers, config) {
-        //            console.log(data + status + headers + config);
-        //            deferred.reject(data.errorCode + ' ' + data.errorMessage);
-        //        });
         deferred.resolve(true);
         return deferred.promise;
         /*temp*/
@@ -109,30 +90,28 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
 
 
         /*temp*/
-        //        $http({
-        //            method: 'POST',
-        //            url: Config.URL() + '/' + Config.app() + '/' + Config.userdata() + '/' + Config.appId() + '/' + pathId + '/' + 'rate',
-        //            headers: {
-        //                'Accept': 'application/json',
-        //                'Content-Type': 'application/json'
-        //            },
-        //            data: {
-        //                'vote': vote,
-        //                'comment': comment
-        //            }
-        //        }).
-        //        success(function (data, status, headers, config) {
-        //            deferred.resolve(data.data);
-        //        }).
-        //        error(function (data, status, headers, config) {
-        //            console.log(data + status + headers + config);
-        //            deferred.reject(data.errorCode + ' ' + data.errorMessage);
-        //        });
         deferred.resolve(true);
         return deferred.promise;
         /*temp*/
 
     }
 
+    dataServerService.getCalendars = function (from, to, schoolid, kidid) {
+        var calendarioScuola = null;
+        var deferred = $q.defer();
+
+        /*temp*/
+        if (calendario == null) {
+            $http.get('data/calendario-scuola.json').success(function (data) {
+                calendarioScuola = data;
+                deferred.resolve(calendarioScuola);
+            }).error(function (data, status, headers, config) {
+                console.log(data + status + headers + config);
+                //deferred.reject(err);
+            })
+        } else deferred.resolve(calendarioScuola);
+        return deferred.promise;
+        /*temp*/
+    }
     return dataServerService;
 })

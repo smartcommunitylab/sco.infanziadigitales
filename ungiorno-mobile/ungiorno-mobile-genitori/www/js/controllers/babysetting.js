@@ -31,7 +31,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         $scope.busStops[$scope.babyProfile.services.bus.stops[i].stopId] =
             $scope.babyProfile.services.bus.stops[i].address;
     }
-
+//    //init select
+    if ($scope.busStops[0]) {
+        $scope.busGo = $scope.busStops[0];
+        $scope.busBack = $scope.busStops[0];
+    }
     $scope.showOptions = function (item) {
         if (item.text == "bus") {
             $scope.busEnabled = item.checked;

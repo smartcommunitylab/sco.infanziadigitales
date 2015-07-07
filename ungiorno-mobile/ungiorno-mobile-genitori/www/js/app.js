@@ -188,7 +188,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         add_image: "Aggiungi documento di identità del delegato",
         delegate_auth: "Autorizzazione",
         delegate_majority: "Il delegato è maggiorenne",
-        auth_take_baby: "Autorizzo il soggetto sopraindicato a ritirare mio figlio da scuola"
+        auth_take_baby: "Autorizzo il soggetto sopraindicato a ritirare mio figlio da scuola",
+        babysetting_save: "Salva"
     });
 
     $translateProvider.translations('en', {
@@ -226,7 +227,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         add_image: "Aggiungi documento di identità del delegato",
         delegate_auth: "Autorizzazione",
         delegate_majority: "Il delegato è maggiorenne",
-        auth_take_baby: "Autorizzo il soggetto sopraindicato a ritirare mio figlio da scuola"
+        auth_take_baby: "Autorizzo il soggetto sopraindicato a ritirare mio figlio da scuola",
+        babysetting_save: "Salva"
+
     });
 
     $translateProvider.translations('de', {
@@ -264,7 +267,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         add_image: "Aggiungi documento di identità del delegato",
         delegate_auth: "Autorizzazione",
         delegate_majority: "Il delegato è maggiorenne",
-        auth_take_baby: "Autorizzo il soggetto sopraindicato a ritirare mio figlio da scuola"
+        auth_take_baby: "Autorizzo il soggetto sopraindicato a ritirare mio figlio da scuola",
+        babysetting_save: "Salva"
+
     });
 
     $translateProvider.preferredLanguage("it");

@@ -137,7 +137,10 @@ input[type=text] {
 
 .calendar-container {
     text-align: center;
-    
+}
+
+.col.day-col {
+    text-align: center;
 }
 /*
 #map {

@@ -213,9 +213,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         saturday: "Sabato",
         sunday: "Domenica",
         monday_reduced: "Lun",
-        tuesday_reduced: "Mart",
-        wednesday_reduced: "Merc",
-        thursday_reduced: "Giov",
+        tuesday_reduced: "Mar",
+        wednesday_reduced: "Mer",
+        thursday_reduced: "Gio",
         friday_reduced: "Ven",
         saturday_reduced: "Sab",
         sunday_reduced: "Dom"

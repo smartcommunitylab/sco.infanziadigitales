@@ -22,7 +22,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.configurationService',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.dataServerService',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.profileService',
-    'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.calendar'
+    'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.calendar',
+    'angularMoment'
 ])
 
 .run(function ($ionicPlatform, $rootScope, $cordovaSplashscreen, $state, $translate, $q, $ionicHistory, $ionicConfig, Config, configurationService, profileService, dataServerService, Toast) {

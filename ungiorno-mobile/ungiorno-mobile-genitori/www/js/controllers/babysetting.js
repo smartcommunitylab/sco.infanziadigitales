@@ -1,44 +1,32 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.babysetting', [])
 
-.controller('BabySettingCtrl', function ($scope, configurationService, profileService, $ionicNavBarDelegate, $ionicHistory) {
+.controller('BabySettingCtrl', function ($scope, configurationService, profileService, $ionicNavBarDelegate, $ionicHistory, dataServerService, Toast) {
     $ionicNavBarDelegate.showBackButton(true);
     $ionicHistory.backView();
-    var babyConfiguration = configurationService.getBabyConfiguration();
+    $scope.babyConfiguration = configurationService.getBabyConfiguration();
     $scope.babyProfile = profileService.getBabyProfile();
     $scope.babyServices = [];
     $scope.busEnabled = true;
     $scope.busStops = [];
-//    $scope.items = [
-//        {
-//            id: 1,
-//            name: 'Foo'
-//        },
-//        {
-//            id: 2,
-//            name: 'Bar'
-//        }
-//    ];
-//
-//    $scope.selectedBusGo = $scope.busStops[0];
-//    $scope.selectedBusBack = $scope.busStops[0];
-
-
-    $scope.time = new Date(0);
+    $scope.retireDefault = null;
+    $scope.time = new Date();
 
     for (var k in $scope.babyProfile.services) {
         if ($scope.babyProfile.services.hasOwnProperty(k)) {
             if ($scope.babyProfile.services[k].enabled)
                 $scope.babyServices.push({
                     text: k,
-                    checked: babyConfiguration.services[k].active
+                    checked: $scope.babyConfiguration.services[k].active
                 })
-                // user[k] = data[k];
         }
     }
     //set hour
+    var exitTime = new Date($scope.babyConfiguration.exitTime);
+    exitTime.setHours(exitTime.getHours(), exitTime.getMinutes(), 0, 0);
+    $scope.time = exitTime;
 
     //set who get child
-
+    $scope.retireDefault = $scope.babyConfiguration.defaultPerson;
     //if bus set stop
     for (var i = 0; i < $scope.babyProfile.services.bus.stops.length; i++) {
         $scope.busStops.push({
@@ -48,20 +36,60 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     }
     $scope.selectedBusGo = $scope.busStops[0];
     $scope.selectedBusBack = $scope.busStops[0];
-    //init select
 
-    //    if ($scope.busStops[0]) {
-    //        $scope.busGo = $scope.busStops[0];
-    //        $scope.busBack = $scope.busStops[0];
-    //    }
-//    $scope.initStops = function () {
-//        $scope.busGo = $scope.busStops[0];
-//        $scope.busBack = $scope.busStops[0];
-//    }
+
     $scope.showOptions = function (item) {
         if (item.text == "bus") {
             $scope.busEnabled = item.checked;
         }
 
     }
+
+    $scope.setBabyConfiguration = function () {
+
+        //set the new data
+        $scope.babyConfiguration.services.bus.defaultIdGo = $scope.selectedBusGo.id;
+        $scope.babyConfiguration.services.bus.defaultIdBack = $scope.selectedBusBack.id;
+        var newServices = {};
+        for (var i = 0; i < $scope.babyServices.length; i++) {
+            if ($scope.babyServices[i].text == "bus") {
+                newServices["bus"] = {
+                    active: $scope.babyServices[i].checked,
+                    defaultIdGo: $scope.selectedBusGo.id,
+                    defaultIdBack: $scope.selectedBusBack.id
+                }
+
+            } else {
+                newServices[$scope.babyServices[i].text] = {
+                    active: $scope.babyServices[i].checked
+                }
+            }
+        }
+        $scope.babyConfiguration = {
+            appId: $scope.babyConfiguration.appId,
+            schoolId: $scope.babyConfiguration.schoolId,
+            kidId: $scope.babyConfiguration.kidId,
+            services: newServices,
+            exitTime: $scope.time,
+            defaultPerson: $scope.retireDefault,
+            receiveNotification: $scope.babyConfiguration.receiveNotification,
+            extraPersons: $scope.babyConfiguration.extraPerson
+        };
+
+        configurationService.setBabyConfiguration($scope.setBabyConfiguration);
+    };
+
+    $scope.saveNewSetting = function () {
+        $scope.setBabyConfiguration();
+
+        dataServerService.sendBabySetting($scope.babyConfiguration).then(function (data) {
+            Toast.show("Invio Riuscito!!", 'short', 'bottom');
+            console.log("SENDING OK -> " + data);
+            $ionicHistory.goBack();
+        }, function (error) {
+            Toast.show("Invio Non Riuscito!!", 'short', 'bottom');
+            console.log("SENDING ERROR -> " + error);
+        });
+    }
+
 });

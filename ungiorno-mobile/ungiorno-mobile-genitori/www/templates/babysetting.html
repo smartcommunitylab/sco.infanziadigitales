@@ -3,7 +3,7 @@
         <ion-nav-back-button>
         </ion-nav-back-button>
         <ion-nav-buttons side="right">
-            <button class="button" ng-click="">
+            <button class="button" ng-click="saveNewSetting()">
                 {{'babysetting_save' | translate}}
             </button>
         </ion-nav-buttons>
@@ -33,7 +33,7 @@
                 {{'babysetting_who' | translate}}
             </div>
             <ion-list class="padlist">
-                <ion-radio ng-repeat="person in babyProfile.persons" ng-model="choice" ng-value="person.personId">{{person.fullName}}</ion-radio>
+                <ion-radio ng-repeat="person in babyProfile.persons" ng-model="retireDefault" ng-value="person.personId">{{person.fullName}}</ion-radio>
             </ion-list>
         </div>
         <div ng-show="busEnabled">

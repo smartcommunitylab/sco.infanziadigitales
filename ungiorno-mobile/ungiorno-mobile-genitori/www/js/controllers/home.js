@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.home', [])
 
-.controller('HomeCtrl', function ($scope, $location, dataServerService, profileService, configurationService) {
+.controller('HomeCtrl', function ($scope, $location, dataServerService, profileService, configurationService, $filter) {
 
     $scope.date = "";
     $scope.kidProfile = {};
@@ -9,6 +9,33 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.notes = {};
     $scope.fromTime = "";
     $scope.toTime = "";
+    $scope.elements = [
+        {
+            state: "app.retire",
+            string: $filter('translate')('home_retire'),
+        },
+        {
+            state: "app.retire",
+            string: $filter('translate')('home_retire'),
+        },
+        {
+            state: "app.retire",
+            string: $filter('translate')('home_retire'),
+        },
+        {
+            state: "app.retire",
+            string: $filter('translate')('home_retire'),
+        },
+        {
+            state: "app.retire",
+            string: $filter('translate')('home_retire'),
+        },
+        {
+            state: "app.retire",
+            string: $filter('translate')('home_retire'),
+        }
+
+    ];
     $scope.goTo = function (location) {
         window.location.assign(location);
     }

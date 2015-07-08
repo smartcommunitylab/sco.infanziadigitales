@@ -58,7 +58,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         };
     };
 
-    $scope.sendRetire = function () {
+    $scope.send = function () {
         $scope.setRetire();
         if (!retireConfiguration.personId) {
             alert("Indica chi ritira il bambino");

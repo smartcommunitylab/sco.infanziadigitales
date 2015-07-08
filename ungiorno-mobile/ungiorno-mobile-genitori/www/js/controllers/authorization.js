@@ -22,7 +22,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
     $scope.person = { };
     $scope.hasAuthorization = false;
-    $scope.sendDelegate = function () {
+    $scope.send = function () {
         if (setDelegation()) {
             configurationService.setBabyConfiguration(currentBaby);
             $ionicHistory.goBack();

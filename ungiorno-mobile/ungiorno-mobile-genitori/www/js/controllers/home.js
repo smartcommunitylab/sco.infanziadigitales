@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.home', [])
 
-.controller('HomeCtrl', function ($scope, $location, dataServerService, profileService, configurationService, $filter, retireService, busService) {
+.controller('HomeCtrl', function ($scope, $location, dataServerService, profileService, configurationService, $filter, retireService, busService, $state) {
 
     $scope.date = "";
     $scope.kidProfile = {};
@@ -68,52 +68,63 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         //build the array
         style = getButtonStyle("retire");
         $scope.elements.push({
-            state: "app.retire",
+            click: "app.retire",
             string: $filter('translate')('home_retire'),
-            class: style
+            class: style,
+
         });
         //if bus is available put it
         if (profileService.getBabyProfile().services.bus.enabled) {
             style = getButtonStyle("bus");
             $scope.elements.push({
-                state: "app.home",
+                click: "app.home",
                 string: $filter('translate')('home_bus'),
-                class: style
-
+                class: style,
             });
         }
         style = getButtonStyle("default");
         $scope.elements.push({
-            state: "app.calendar",
+            click: "app.calendar",
             string: $filter('translate')('home_calendario'),
-            class: style
+            class: style,
+
 
         });
         if (profileService.getBabyProfile().services.mensa.enabled) {
             style = getButtonStyle("default");
             $scope.elements.push({
-                state: "app.mensa",
+                click: "app.mensa",
                 string: $filter('translate')('home_mensa'),
-                class: style
+                class: style,
 
             });
         }
 
         style = getButtonStyle("default");
         $scope.elements.push({
-            state: "app.assenza",
+            click: "app.assenza",
             string: $filter('translate')('home_assenza'),
-            class: style
+            class: style,
 
         });
         style = getButtonStyle("default");
         $scope.elements.push({
-            state: "app.contatta",
+            click: 'printlog()',
             string: $filter('translate')('home_contatta'),
-            class: style
+            class: style,
 
         });
 
+    }
+    var printlog = function () {
+        console.log("test");
+    }
+    $scope.execute = function (stateorfunction) {
+        if (stateorfunction.substring(0, 4) == "app.") {
+            $state.go(stateorfunction);
+        } else {
+            eval(stateorfunction);
+        }
     }
 
     //corretto tutte e tre annidate? cosa succede se una salta? ma come faccio a settare il profilo temporaneo senza avere conf, prof????

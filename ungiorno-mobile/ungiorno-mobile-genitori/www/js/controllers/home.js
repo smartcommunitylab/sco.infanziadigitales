@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.home', [])
 
-.controller('HomeCtrl', function ($scope, $location, dataServerService, profileService, configurationService, $filter) {
+.controller('HomeCtrl', function ($scope, $location, dataServerService, profileService, configurationService, $filter, retireService, busService) {
 
     $scope.date = "";
     $scope.kidProfile = {};
@@ -9,33 +9,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.notes = {};
     $scope.fromTime = "";
     $scope.toTime = "";
-    $scope.elements = [
-        {
-            state: "app.retire",
-            string: $filter('translate')('home_retire'),
-        },
-        {
-            state: "app.retire",
-            string: $filter('translate')('home_retire'),
-        },
-        {
-            state: "app.retire",
-            string: $filter('translate')('home_retire'),
-        },
-        {
-            state: "app.retire",
-            string: $filter('translate')('home_retire'),
-        },
-        {
-            state: "app.retire",
-            string: $filter('translate')('home_retire'),
-        },
-        {
-            state: "app.retire",
-            string: $filter('translate')('home_retire'),
-        }
+    //build options
+    $scope.elements = [];
 
-    ];
     $scope.goTo = function (location) {
         window.location.assign(location);
     }
@@ -43,6 +19,101 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.getDateString = function () {
         var today = new Date();
         $scope.date = today.getTime();;
+    }
+
+    var isRetireSet = function () {
+        if (retireService.getDailyRetire()) {
+            return true
+        }
+        return false
+    }
+    var isBusDisabled = function () {
+        if (!$scope.kidConfiguration.services.bus.active) {
+            return true
+        }
+        return false
+    }
+    var isBusSet = function () {
+        if (busService.getDailyBusStop()) {
+            return true
+        }
+        return false
+    }
+    var getButtonStyle = function (button) {
+        if (button == "default") {
+            return "button-positive"
+        }
+        if (button == "retire") {
+            if (isRetireSet()) {
+                return "button-positive";
+            }
+            return "button-assertive";
+
+        }
+        if (button == "bus") {
+            if (isBusDisabled()) {
+                return "button-stable";
+            }
+            if (isBusSet()) {
+                return "button-positive";
+            }
+            return "button-assertive";
+
+        }
+
+    }
+
+    var buildHome = function () {
+        var style = null;
+        //build the array
+        style = getButtonStyle("retire");
+        $scope.elements.push({
+            state: "app.retire",
+            string: $filter('translate')('home_retire'),
+            class: style
+        });
+        //if bus is available put it
+        if (profileService.getBabyProfile().services.bus.enabled) {
+            style = getButtonStyle("bus");
+            $scope.elements.push({
+                state: "app.home",
+                string: $filter('translate')('home_bus'),
+                class: style
+
+            });
+        }
+        style = getButtonStyle("default");
+        $scope.elements.push({
+            state: "app.calendar",
+            string: $filter('translate')('home_calendario'),
+            class: style
+
+        });
+        if (profileService.getBabyProfile().services.mensa.enabled) {
+            style = getButtonStyle("default");
+            $scope.elements.push({
+                state: "app.mensa",
+                string: $filter('translate')('home_mensa'),
+                class: style
+
+            });
+        }
+
+        style = getButtonStyle("default");
+        $scope.elements.push({
+            state: "app.assenza",
+            string: $filter('translate')('home_assenza'),
+            class: style
+
+        });
+        style = getButtonStyle("default");
+        $scope.elements.push({
+            state: "app.contatta",
+            string: $filter('translate')('home_contatta'),
+            class: style
+
+        });
+
     }
 
     //corretto tutte e tre annidate? cosa succede se una salta? ma come faccio a settare il profilo temporaneo senza avere conf, prof????
@@ -67,7 +138,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                                     $scope.toTime = $scope.school.regularTiming.fromTime;
 
                                 }
-
+                                buildHome();
                             },
                             function (error) {
                                 console.log("ERROR -> " + error);

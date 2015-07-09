@@ -1,7 +1,8 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.retireService', [])
 
 .factory('retireService', function () {
-	var retire;
+    var retire;
+    var dailyRetire = false;
     var retireService = {};
 
 
@@ -12,6 +13,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.r
     retireService.getRetire = function () {
         return retire;
     }
+
+    retireService.setDailyRetire = function (input) {
+        dailyRetire = input;
+    }
+
+    retireService.getDailyRetire = function () {
+        return dailyRetire;
+    }
+
 
     return retireService;
 })

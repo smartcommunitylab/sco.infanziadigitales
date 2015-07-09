@@ -61,8 +61,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
 
 
-
-    /* Utils */
+    $scope.isToday = function (date) {
+            var today = new Date();
+            today.setHours(0);
+            today.setMinutes(0);
+            today.setSeconds(0);
+            if (date < today.getTime()) {
+                return false;
+            }
+            return true;
+        }
+        /* Utils */
     $scope.m2km = function (m) {
         return Math.round((m / 1000) * 10) / 10;
     }

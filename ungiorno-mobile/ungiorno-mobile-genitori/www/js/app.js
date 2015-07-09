@@ -19,6 +19,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.conf',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.assenzaService',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.retireService',
+    'it.smartcommunitylab.infanziadigitales.diario.parents.services.busService',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.configurationService',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.dataServerService',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.profileService',

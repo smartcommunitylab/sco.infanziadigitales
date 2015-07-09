@@ -20,7 +20,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
     function getSelectedPersonId() {
         var radio = document.getElementsByName('radio');
-        for(var i = 0; i < radio.length; i++) {
+        for (var i = 0; i < radio.length; i++) {
             if (radio[i].checked) {
                 return radio[i].value;
             }
@@ -36,7 +36,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         note: null
     };
 
-    $scope.setRetire = function() {
+    $scope.setRetire = function () {
         retireConfiguration = {
             appId: $scope.babyConfiguration.appId,
             schoolId: $scope.babyConfiguration.schoolId,
@@ -49,7 +49,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         retireService.setRetire(retireConfiguration);
     };
 
-    $scope.getRetire = function() {
+
+
+
+    $scope.getRetire = function () {
         retireConfiguration = retireService.getRetire();
 
         if (retireConfiguration) {
@@ -67,6 +70,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
         dataServerService.sendRitiro(retireConfiguration).then(function (data) {
             Toast.show("Invio Riuscito!!", 'short', 'bottom');
+            retireService.setDailyRetire(true);
             console.log("SENDING OK -> " + data);
             $ionicHistory.goBack();
         }, function (error) {

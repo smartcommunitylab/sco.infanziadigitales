@@ -8,63 +8,23 @@
         </div>
         <div ng-repeat="element in elements | limitTo: (elements.length-elements.length%2)" ng-if="$index % 2 == 0" class="row">
             <div class="col col-50">
-                <button class="button button-block button-positive button-home" ui-sref="{{element[$index].state}}">
-                    {{element.string}}
+                <button class="button button-block button-home {{elements[$index].class}}" ui-sref="{{elements[$index].state}}">
+                    {{elements[$index].string}}
                 </button>
             </div>
             <div class="col col-50">
-                <button class="button button-block button-positive button-home" ui-sref="{{element[$index+1].state}}">
-                    {{element.string}}
+                <button class="button button-block button-positive button-home {{elements[$index].class}} " ui-sref="{{elements[$index+1].state}}">
+                    {{elements[$index+1].string}}
                 </button>
             </div>
         </div>
         <div class="row" ng-if="elements.length%2==1">
             <div class="col">
-                <button class="button button-block button-positive button-home" ui-sref="{{element[elements.length-1].state}}">
-                    {{element.string}}
+                <button class="button button-block button-positive button-home {{elements[$index].class}}" ui-sref="{{elements[elements.length-1].state}}">
+                    {{elements[elements.length-1].string}}
                 </button>
             </div>
         </div>
-
-        <!--
-        <div class="row">
-            <div class="col col-50">
-                <button class="button button-block button-positive button-home" ui-sref="app.retire">
-                    {{'home_retire' | translate}}
-                </button>
-            </div>
-            <div class="col col-50">
-                <button class="button button-block button-positive button-home">
-                    {{'home_bus' | translate}}
-                </button>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col col-50">
-                <button class="button button-block button-positive button-home" ui-sref="app.calendar">
-                    {{'home_calendario' | translate}}
-                </button>
-            </div>
-            <div class="col col-50">
-                <button class="button button-block button-positive button-home">
-                    {{'home_mensa' | translate}}
-                </button>
-            </div>
-
-        </div>
-        <div class="row">
-            <div class="col col-50">
-                <button class="button button-block button-positive button-home" ui-sref="app.assenza">
-                    {{'home_assenza' | translate}}
-                </button>
-            </div>
-            <div class="col col-50">
-                <button class="button button-block button-positive button-home">
-                    {{'home_contatta' | translate}}
-                </button>
-            </div>
-        </div>
--->
         <div class="home_informations">
             <p>{{'home_personal_information' | translate}} {{kidProfile.firstName}}</p>
             <div class="separator"></div>

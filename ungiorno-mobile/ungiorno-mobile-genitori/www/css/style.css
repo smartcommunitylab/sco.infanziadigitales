@@ -109,8 +109,7 @@ input[type=text] {
     height: 40px;
 }
 
-.col.calendar-arrow {
-}
+.col.calendar-arrow {}
 
 .col.calendar-month {
     padding-top: 8px;
@@ -137,7 +136,6 @@ input[type=text] {
 
 .calendar-container {
     text-align: center;
-    
 }
 /*
 #map {
@@ -1167,4 +1165,8 @@ select {
 
 .item-select.setting {
     border-bottom-width: 0px;
+}
+
+.button.redbutton {
+    background-color: red;
 }

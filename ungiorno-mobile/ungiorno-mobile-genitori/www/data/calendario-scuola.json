@@ -3,8 +3,8 @@
         {
             "appId": "a",
             "schoolId": "a",
-            "start": 1234567,
-            "end": 1234567,
+            "start": 1436357713,
+            "end": 1436368513,
             "sectionId": "sectionId1",
             "type": "gita",
             "forWhom": "kid",
@@ -23,8 +23,8 @@
         {
             "appId": "a",
             "schoolId": "a",
-            "start": 1234567,
-            "end": 1234567,
+            "start": 1457450113,
+            "end": 1457471713,
             "sectionId": "sectionId1",
             "type": "meeting",
             "forWhom": "parent",

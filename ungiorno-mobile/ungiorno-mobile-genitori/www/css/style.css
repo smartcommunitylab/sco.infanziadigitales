@@ -141,6 +141,28 @@ input[type=text] {
 .col.day-col {
     text-align: center;
 }
+
+
+.calendar-container.open-day {
+    background: green;
+}
+
+.calendar-container.close-day {
+    background: red;
+}
+
+.calendar-container.meeting {
+    background: yellow;
+}
+
+.calendar-container.holiday {
+    background: orange;
+}
+
+.calendar-container.trip {
+    background: purple;
+}
+
 /*
 #map {
     position: absolute;

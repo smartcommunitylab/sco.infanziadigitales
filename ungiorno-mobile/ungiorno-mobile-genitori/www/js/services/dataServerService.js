@@ -108,7 +108,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
         var deferred = $q.defer();
 
         /*temp*/
-        if (calendario == null) {
+        if (calendarioScuola == null) {
             $http.get('data/calendario-scuola.json').success(function (data) {
                 calendarioScuola = data;
                 deferred.resolve(calendarioScuola);

@@ -1,16 +1,17 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.calendar',  [])
 
-.controller('CalendarCtrl', function ($scope, moment) {
+.controller('CalendarCtrl', function ($scope, moment, dataServerService, profileService) {
+	var counter = 1;
+	var month = moment();
+
+	// Note: when an appointment "forWhom" field is set as "all", that will be added to both parents and kid calendar
+	var babyProfile = profileService.getBabyProfile(); 
+	var parentsAppointments = [];
+	var kidAppointments =  [];
 
 	function getMonthDateRange(year, month) {
-	    // month in moment is 0 based, so 9 is actually october, subtract 1 to compensate
-	    // array is 'year', 'month', 'day', etc
 	    var startDate = moment([year, month - 1]);
-
-	    // Clone the value before .endOf()
 	    var endDate = moment(startDate).endOf('month');
-
-	    // make sure to call toDate() for plain JavaScript date type
 	    return { start: startDate, end: endDate };
 	}
 
@@ -19,23 +20,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 	    return Math.ceil(used / 7);
 	}
 
-	$scope.monthRange = getMonthDateRange(2015, 07); // TODO: change
-	$scope.monthDisplay = moment().locale('it').format("MMMM gggg");
-	$scope.week = [
-		'monday_reduced',
-		'tuesday_reduced',
-		'wednesday_reduced',
-		'thursday_reduced',
-		'friday_reduced',
-		'saturday_reduced',
-		'sunday_reduced'
-	];
+	function isWeekend(value) {
+		return value != 6 && value != 0? true : false;
+	}
 
-	$scope.weeks = weekCount($scope.monthRange);
-
-	var counter = 1;
-	$scope.month = [];
-	$scope.generateCalendar = function() {
+	function generateCalendar() {
 		// Magic here. Do not touch.
 		for (var j = 0; j < $scope.weeks; j++) {
 			var week = [];
@@ -58,7 +47,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
 			// Start pushing
 			for (var i = 0; i < weekDuration; i++) {
-				week.push(counter);
+				var style = isWeekend($scope.monthRange.start.day())? "open-day": "close-day"; 
+				$scope.monthRange.start = $scope.monthRange.start.add(1, 'day');			
+
+				var day = {
+					value: counter,
+					style: style
+				};
+
+				week.push(day);
 				counter++;
 			}
 
@@ -74,5 +71,80 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 		}
 
 		console.log($scope.month); // TODO: remove when magic has been built
+	}
+
+	function populateCalendar() {
+		if (babyProfile && $scope.monthRange) {
+			dataServerService.getCalendars($scope.monthRange.start.unix(), $scope.monthRange.end.unix(), babyProfile.schoolId, babyProfile.kidId).then(function(data) {
+				if (data && data.data) {
+					for(var i = 0; i < data.data.length; i++) {
+						var thisData = data.data[i];
+						var appointment = {
+							title: thisData.title,
+							type: thisData.type,
+							start: moment(thisData.start),
+							end: thisData.end,
+							forWhom: thisData.forWhom
+						};
+
+						if (appointment.forWhom == "kid") {
+							kidAppointments.push(appointment);
+						} else if (appointment.forWhom == "parent") {
+							parentsAppointments.push(appointment);
+						} else {
+							kidAppointments.push(appointment);
+							parentsAppointments.push(appointment);
+						}
+					}
+
+					console.log(kidAppointments);
+					console.log(parentsAppointments);
+				}
+			});
+		}
+	};
+
+	function displayCalendar() {
+		if ($scope.month) {
+
+		}
+	};
+
+	$scope.initialize = function() {
+
+		// Basic calendar, user information will be added later on
+		// reset counter
+		counter = 1;
+		$scope.monthRange = getMonthDateRange(month.format('YYYY'), month.format('M'));
+		$scope.monthDisplay = month.locale('it').format("MMMM gggg");
+		$scope.weeks = weekCount($scope.monthRange);
+		$scope.month =  [];
+		generateCalendar();
+
+		// User infomation
+		populateCalendar();
+		displayCalendar();
+	};
+
+	$scope.week = [
+		'monday_reduced',
+		'tuesday_reduced',
+		'wednesday_reduced',
+		'thursday_reduced',
+		'friday_reduced',
+		'saturday_reduced',
+		'sunday_reduced'
+	];
+
+	// Go forward a month
+	$scope.next = function() {
+		month = month.add(1, 'month');
+		$scope.initialize();
+	};
+
+	// Go back to previous month
+	$scope.previous = function() {
+		month = month.add(-1, 'month');
+		$scope.initialize();
 	};
 });

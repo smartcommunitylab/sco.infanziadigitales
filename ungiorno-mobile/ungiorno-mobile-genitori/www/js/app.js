@@ -23,6 +23,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.configurationService',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.dataServerService',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.profileService',
+    'it.smartcommunitylab.infanziadigitales.diario.parents.services.calendarService',
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.calendar',
     'angularMoment'
 ])

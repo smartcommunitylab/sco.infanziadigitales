@@ -1,4 +1,4 @@
-<ion-view id="calendar" title="{{'calendar' | translate}}" ng-init="generateCalendar()">
+<ion-view id="calendar" title="{{'calendar' | translate}}" ng-init="initialize()">
 	<ion-nav-bar class="bar bar-ungiorno">
 	    <ion-nav-back-button></ion-nav-back-button>
 	</ion-nav-bar>
@@ -6,7 +6,7 @@
 	<ion-content has-header="true">
 		<div class="row calendar-month">
 			<div class="col calendar-arrow">
-				<button class="calendar-arrow left">
+				<button class="calendar-arrow left" ng-click="previous()">
 					<i class="icon ion-ios-arrow-back"></i>
 				</button>
 			</div>
@@ -14,7 +14,7 @@
 				<p class="calendar-month">{{monthDisplay}}</p>
 			</div>
 			<div class="col calendar-arrow">
-				<button class="calendar-arrow right">
+				<button class="calendar-arrow right" ng-click="next()">
 					<i class="icon ion-ios-arrow-forward"></i>
 				</button>
 			</div>
@@ -27,8 +27,8 @@
 		</div>
 
 		<div class="row" ng-repeat="item in month track by $index">
-			<div class="col calendar-container" ng-repeat="days in item track by $index">
-				<p>{{days}}</p>
+			<div class="col calendar-container {{days.style}}" ng-repeat="days in item track by $index">
+				<p>{{days.value}}</p>
 			</div>
 		</div>
 	</ion-content>

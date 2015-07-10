@@ -1,9 +1,9 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.calendar',  [])
 
-.controller('CalendarCtrl', function ($scope, moment, dataServerService, profileService) {
+.controller('CalendarCtrl', function ($scope, moment, dataServerService, profileService, $q) {
 	var counter = 1;
-	var month = moment();
-
+	var month = moment().locale('it');
+	var displayParentsCalendar = true;
 	// Note: when an appointment "forWhom" field is set as "all", that will be added to both parents and kid calendar
 	var babyProfile = profileService.getBabyProfile(); 
 	var parentsAppointments = [];
@@ -15,12 +15,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 	    return { start: startDate, end: endDate };
 	}
 
+	// Get number of weeks from a range of days
 	function weekCount() {
 	    var used = $scope.monthRange.start.day() + $scope.monthRange.end.date();
 	    return Math.ceil(used / 7);
 	}
 
-	function isWeekend(value) {
+	function isWeekend() {
+		var value = $scope.monthRange.start.day();
 		return value != 6 && value != 0? true : false;
 	}
 
@@ -32,9 +34,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 			var weekDuration = 7;
 			if (j == 0) { // First week
 				// Get first week start
-				var firstWeekStart = $scope.monthRange.start.day();
+				var firstWeekStart = $scope.monthRange.start.add(- 1,'day').day() + 1;
+				console.log(firstWeekStart);
 				for (var i = 0; i < firstWeekStart - 1; i++) {
-					week.push('nullo');
+					week.push({
+						value: 0,
+						dayFromBegin: 0,
+						background: 'white',
+						color: 'white'
+					});
 				}
 
 				weekDuration -= firstWeekStart - 1;
@@ -47,12 +55,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
 			// Start pushing
 			for (var i = 0; i < weekDuration; i++) {
-				var style = isWeekend($scope.monthRange.start.day())? "open-day": "close-day"; 
+				var background = isWeekend()? 'green': 'red'; 
+				var dayFromBegin = $scope.monthRange.start.format('DDD');
 				$scope.monthRange.start = $scope.monthRange.start.add(1, 'day');			
 
 				var day = {
 					value: counter,
-					style: style
+					dayFromBegin: dayFromBegin,
+					background: background,
+					color: 'black'
 				};
 
 				week.push(day);
@@ -63,17 +74,27 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 			if (j == $scope.weeks - 1) {
 				var daysMissing = 7 - weekDuration;
 				for (var i = 0; i < daysMissing; i++) {
-					week.push('nullo');
+					week.push({
+						value: 0,
+						dayFromBegin : 0,
+						background: 'white',
+						color:'white'
+					});
 				}
 			}
 
 			$scope.month.push(week);
 		}
 
-		console.log($scope.month); // TODO: remove when magic has been built
+		console.log($scope.month);
 	}
 
-	function populateCalendar() {
+	// Get data from server and split them in two arrays, one for parents appointments and one for kid
+	function getCalendar() {
+		// Delete previous data loaded
+		kidAppointments = [];
+		parentsAppointments = [];
+
 		if (babyProfile && $scope.monthRange) {
 			dataServerService.getCalendars($scope.monthRange.start.unix(), $scope.monthRange.end.unix(), babyProfile.schoolId, babyProfile.kidId).then(function(data) {
 				if (data && data.data) {
@@ -82,8 +103,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 						var appointment = {
 							title: thisData.title,
 							type: thisData.type,
-							start: moment(thisData.start),
-							end: thisData.end,
+							start: moment(thisData.start, 'X'),
+							end: moment(thisData.end, 'X'),
 							forWhom: thisData.forWhom
 						};
 
@@ -99,14 +120,72 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
 					console.log(kidAppointments);
 					console.log(parentsAppointments);
+
+					displayCalendar(); // ... and here we display them
 				}
 			});
-		}
+		} 
 	};
 
 	function displayCalendar() {
 		if ($scope.month) {
+			for (var i = 0; i < $scope.month.length; i++) {
+				for (var j = 0; j < $scope.month[i].length; j++) {
+					var thisDay = $scope.month[i][j];
 
+					if (displayParentsCalendar) {
+						// Find appointments on parents calendar
+						var appointmentsForToday = getAppointmentsPerDay(thisDay, parentsAppointments);
+					} else {
+						// Find appointments on kid calendar
+						var appointmentsForToday = getAppointmentsPerDay(thisDay, kidAppointments);
+					}
+
+					var colorToDisplay = getColorPerAppointments(appointmentsForToday);
+					if (colorToDisplay) {
+						$scope.month[i][j].background = colorToDisplay;
+					}
+				}
+			}
+		} 
+	};
+
+	// Get an array of appointments found for a specific day in a specific calendar (like parents calendar)
+	function getAppointmentsPerDay(day, calendar) {
+		var appointmentsPerDay =  [];
+		for (var i = 0; i < calendar.length; i++) {
+			if ((calendar[i].start.format('DDD') == day.dayFromBegin) || 
+				(calendar[i].end.format('DDD') == day.dayFromBegin) || (
+				day.dayFromBegin > calendar[i].start.format('DDD') && day.dayFromBegin < calendar[i].end.format('DDD')))
+			{
+				appointmentsPerDay.push(calendar[i]);
+			}
+		}
+
+		return appointmentsPerDay;
+	};
+
+
+	function getColorPerAppointments(appointments) {
+		if (appointments.length == 1) {
+			switch(appointments[0].type) {
+				case 'holiday':
+					return 'orange';
+					break;
+				case 'trip':
+					return 'purple';
+					break;
+				case 'events':
+					return 'blue';
+					break;
+				case 'meeting':
+					return 'yellow';
+					break;
+			}
+		} else if (appointments.length > 1) {
+			return 'white';
+		} else {
+			return null;
 		}
 	};
 
@@ -117,13 +196,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 		counter = 1;
 		$scope.monthRange = getMonthDateRange(month.format('YYYY'), month.format('M'));
 		$scope.monthDisplay = month.locale('it').format("MMMM gggg");
-		$scope.weeks = weekCount($scope.monthRange);
-		$scope.month =  [];
-		generateCalendar();
+		$scope.weeks = weekCount();
+		$scope.month =  []; // Array of week (which is an array of days)
+		generateCalendar(); // Generate just the view, not data!
 
 		// User infomation
-		populateCalendar();
-		displayCalendar();
+		getCalendar(); // This is where actually we retrieve and display data
 	};
 
 	$scope.week = [

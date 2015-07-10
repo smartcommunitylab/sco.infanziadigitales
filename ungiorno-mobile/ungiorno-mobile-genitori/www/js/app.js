@@ -250,7 +250,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         sunday_reduced: "Dom",
         home_disabledbutton: "Funzione disabilitata",
         retire_sendok: "Il ritiro del bambino e' stato confermato",
-        retire_sendno: "Problemi di invio dati"
+        retire_sendno: "Problemi di invio dati",
         send_note: "Invia una nota",
         text: "Testo",
         send: "Invia",
@@ -316,7 +316,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         sunday_reduced: "Dom",
         home_disabledbutton: "Funzione disabilitata",
         retire_sendok: "Il ritiro del bambino e' stato confermato",
-        retire_sendno: "Problemi di invio dati"
+        retire_sendno: "Problemi di invio dati",
         call: "Chiama",
         send_note: "Invia una nota",
         text: "Testo",
@@ -382,7 +382,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         sunday_reduced: "Dom",
         home_disabledbutton: "Funzione disabilitata",
         retire_sendok: "Il ritiro del bambino e' stato confermato",
-        retire_sendno: "Problemi di invio dati"
+        retire_sendno: "Problemi di invio dati",
         send_note: "Invia una nota",
         text: "Testo",
         send: "Invia",

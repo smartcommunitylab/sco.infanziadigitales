@@ -134,7 +134,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             alert(err);
         }, number);
     }
-<<<<<<< Updated upstream
     $scope.execute = function (element) {
             if (element.class != "button-stable") {
                 if (typeof element.click == "string") {
@@ -144,17 +143,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 }
             } else {
                 Toast.show($filter('translate')('home_disabledbutton'), 'short', 'bottom');
-=======
-
-    $scope.execute = function (stateorfunction) {
-        if (typeof stateorfunction == "string") {
-            $state.go(stateorfunction);
-        } else {
-            stateorfunction();
-        }
-    }
->>>>>>> Stashed changes
-
             }
         }
         //corretto tutte e tre annidate? cosa succede se una salta? ma come faccio a settare il profilo temporaneo senza avere conf, prof????

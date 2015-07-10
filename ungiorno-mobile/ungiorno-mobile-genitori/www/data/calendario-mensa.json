@@ -1,41 +1,40 @@
 {
     "data": [
         {
-            "id": "a",
-            "name": {
-
-                "it": "categoria 1",
-                "en": "category 1",
-                "de": "kategorien 1"
-
+            "appId": "a",
+            "schoolId": "a",
+            "date": 1435075887150,
+            "lunch": [{
+                    name: "battuta di manzo",
+                    type: "meat"
             },
-            "description": {
+                {
+                    name: "insalata",
+                    type: "veg"
+            }],
+            "break": [{
+                name: "yogurt",
+                type: "milk"
+            }],
 
-                "it": "descrizione 1",
-                "en": "description 1",
-                "de": "descrizionen 1"
-
-            },
-            "image": "http://stopthatpigeon.altervista.org/wp-content/uploads/2012/07/pane-e-vino.jpg"
         },
         {
-            "id": "b",
-
-            "name": {
-
-                "it": "categoria 2",
-                "en": "category 2",
-                "de": "kategorien 2"
-
+            "appId": "a",
+            "schoolId": "a",
+            "date": 1435075887150,
+            "lunch": [{
+                    name: "minestrone",
+                    type: "soup"
             },
-            "description": {
+                {
+                    name: "insalata",
+                    type: "veg"
+            }],
+            "break": [{
+                name: "mela",
+                type: "fruit"
+            }],
 
-                "it": "descrizione 2",
-                "en": "description 2",
-                "de": "descrizionen 2"
-
-            },
-            "image": "http://www.superedo.it/sfondi/sfondi/Architettura/Castelli/castelli009.jpg"
         }
     ]
 }

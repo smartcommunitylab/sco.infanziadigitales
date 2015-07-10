@@ -1,0 +1,20 @@
+<ion-view id="sendnote" title="{{'send_note' | translate}}">
+	<ion-nav-bar class="bar bar-ungiorno">
+	    <ion-nav-back-button>
+	    </ion-nav-back-button>
+
+	    <ion-nav-buttons side="right">
+            <button class="button" ng-click="send()">{{'send' | translate}}</button>
+        </ion-nav-buttons>
+	</ion-nav-bar>
+
+	<ion-content class="page-padding" has-header="true">
+		<div>
+			<h5 class="accent-color input-description-padding"><b>{{'date' | translate}}:</b></h5>
+            	<input type="date" ng-model="note.date" class="input-padding" required>
+
+            	<h5 class="accent-color input-description-padding"><b>{{'text' | translate}}:</b></h5>
+            		<input type="text" ng-model="note.description" class="input-padding" required>
+		</div>
+	</ion-content>
+</ion-view>

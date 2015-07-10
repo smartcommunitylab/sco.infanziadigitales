@@ -25,6 +25,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.profileService',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.calendarService',
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.calendar',
+    'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.addNote',
+    'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.buses',
     'angularMoment'
 ])
 
@@ -163,7 +165,32 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
                 controller: 'AuthorizationCtrl'
             }
         }
-    });
+    })
+
+    .state('app.addnote', {
+        cache: false,
+        url: '/addnote',
+        abstract: false,
+        views: {
+            'menuContent': {
+                templateUrl: "templates/note.html",
+                controller: 'NoteCtrl'
+            }
+        }
+    })
+
+    .state('app.bus', {
+        cache: false,
+        url: '/bus',
+        abstract: false,
+        views: {
+            'menuContent': {
+                templateUrl: "templates/bus.html",
+                controller: 'BusCtrl'
+            }
+        }
+    })
+    ;
 
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/app/home');
@@ -224,6 +251,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         home_disabledbutton: "Funzione disabilitata",
         retire_sendok: "Il ritiro del bambino e' stato confermato",
         retire_sendno: "Problemi di invio dati"
+        send_note: "Invia una nota",
+        text: "Testo",
+        send: "Invia",
+        contact_school: "Contatta la scuola",
+        call: "Chiama",
+        bus_stop: "Fermata bus",
+        baby_drops_off_to: "Il bambino scende in",
+        whos_waiting_is: "Ad aspettare c'è"
     });
 
     $translateProvider.translations('en', {
@@ -282,6 +317,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         home_disabledbutton: "Funzione disabilitata",
         retire_sendok: "Il ritiro del bambino e' stato confermato",
         retire_sendno: "Problemi di invio dati"
+        call: "Chiama",
+        send_note: "Invia una nota",
+        text: "Testo",
+        send: "Invia",
+        contact_school: "Contatta la scuola",
+        bus_stop: "Fermata bus",
+        baby_drops_off_to: "Il bambino scende in",
+        whos_waiting_is: "Ad aspettare c'è"
     });
 
     $translateProvider.translations('de', {
@@ -340,6 +383,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         home_disabledbutton: "Funzione disabilitata",
         retire_sendok: "Il ritiro del bambino e' stato confermato",
         retire_sendno: "Problemi di invio dati"
+        send_note: "Invia una nota",
+        text: "Testo",
+        send: "Invia",
+        contact_school: "Contatta la scuola",
+        call: "Chiama",
+        bus_stop: "Fermata bus",
+        baby_drops_off_to: "Il bambino scende in",
+        whos_waiting_is: "Ad aspettare c'è"
     });
 
     $translateProvider.preferredLanguage("it");

@@ -76,7 +76,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             extraPersons: $scope.babyConfiguration.extraPerson
         };
 
-        configurationService.setBabyConfiguration($scope.setBabyConfiguration);
+        configurationService.setBabyConfiguration($scope.babyConfiguration);
     };
 
     $scope.saveNewSetting = function () {

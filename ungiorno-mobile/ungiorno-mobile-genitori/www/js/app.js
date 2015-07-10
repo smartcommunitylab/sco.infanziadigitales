@@ -220,7 +220,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         thursday_reduced: "Gio",
         friday_reduced: "Ven",
         saturday_reduced: "Sab",
-        sunday_reduced: "Dom"
+        sunday_reduced: "Dom",
+        home_disabledbutton: "Funzione disabilitata"
     });
 
     $translateProvider.translations('en', {
@@ -275,7 +276,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         thursday_reduced: "Giov",
         friday_reduced: "Ven",
         saturday_reduced: "Sab",
-        sunday_reduced: "Dom"
+        sunday_reduced: "Dom",
+        home_disabledbutton: "Funzione disabilitata"
     });
 
     $translateProvider.translations('de', {
@@ -330,7 +332,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         thursday_reduced: "Giov",
         friday_reduced: "Ven",
         saturday_reduced: "Sab",
-        sunday_reduced: "Dom"
+        sunday_reduced: "Dom",
+        home_disabledbutton: "Funzione disabilitata"
     });
 
     $translateProvider.preferredLanguage("it");

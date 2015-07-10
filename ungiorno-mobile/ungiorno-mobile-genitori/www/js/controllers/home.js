@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.home', [])
 
-.controller('HomeCtrl', function ($scope, $location, dataServerService, profileService, configurationService, $filter, retireService, busService, $state) {
+.controller('HomeCtrl', function ($scope, $location, dataServerService, profileService, configurationService, $filter, retireService, busService, $state, Toast) {
 
     $scope.date = "";
     $scope.kidProfile = {};
@@ -54,7 +54,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             if (isBusDisabled()) {
                 return "button-stable";
             }
-            if (isBusSet()) {
+            if (isBusSet() || isRetireSet()) {
                 return "button-positive";
             }
             return "button-assertive";
@@ -121,15 +121,19 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     var printlog = function () {
         console.log("test");
     }
-    $scope.execute = function (stateorfunction) {
-        if (typeof stateorfunction == "string") {
-            $state.go(stateorfunction);
-        } else {
-            stateorfunction();
-        }
-    }
+    $scope.execute = function (element) {
+            if (element.class != "button-stable") {
+                if (typeof element.click == "string") {
+                    $state.go(element.click);
+                } else {
+                    element.click();
+                }
+            } else {
+                Toast.show($filter('translate')('home_disabledbutton'), 'short', 'bottom');
 
-    //corretto tutte e tre annidate? cosa succede se una salta? ma come faccio a settare il profilo temporaneo senza avere conf, prof????
+            }
+        }
+        //corretto tutte e tre annidate? cosa succede se una salta? ma come faccio a settare il profilo temporaneo senza avere conf, prof????
     $scope.getConfiguration = function () {
         dataServerService.getBabyConfiguration().then(function (data) {
                 configurationService.setBabyConfiguration(data[0]);

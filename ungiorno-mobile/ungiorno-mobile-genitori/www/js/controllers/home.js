@@ -109,7 +109,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         });
         style = getButtonStyle("default");
         $scope.elements.push({
-            click: 'printlog()',
+            click: function () {
+                printlog();
+            },
             string: $filter('translate')('home_contatta'),
             class: style,
 
@@ -120,10 +122,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         console.log("test");
     }
     $scope.execute = function (stateorfunction) {
-        if (stateorfunction.substring(0, 4) == "app.") {
+        if (typeof stateorfunction == "string") {
             $state.go(stateorfunction);
         } else {
-            eval(stateorfunction);
+            stateorfunction();
         }
     }
 

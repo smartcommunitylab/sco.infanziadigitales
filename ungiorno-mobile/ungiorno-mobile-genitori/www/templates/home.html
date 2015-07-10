@@ -13,14 +13,14 @@
                 </button>
             </div>
             <div class="col col-50">
-                <button class="button button-block button-positive button-home {{elements[$index].class}} " ng-click="execute(elements[$index+1].click)">
+                <button class="button button-block button-positive button-home {{elements[$index+1].class}} " ng-click="execute(elements[$index+1].click)">
                     {{elements[$index+1].string}}
                 </button>
             </div>
         </div>
         <div class="row" ng-if="elements.length%2==1">
             <div class="col">
-                <button class="button button-block button-positive button-home {{elements[$index].class}}" ng-click="execute({{elements[elements.length-1].click}})">
+                <button class="button button-block button-positive button-home {{elements[elements.length-1].class}}" ng-click="execute({{elements[elements.length-1].click}})">
                     {{elements[elements.length-1].string}}
                 </button>
             </div>

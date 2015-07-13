@@ -223,7 +223,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         sunday_reduced: "Dom",
         home_disabledbutton: "Funzione disabilitata",
         retire_sendok: "Il ritiro del bambino e' stato confermato",
-        retire_sendno: "Problemi di invio dati"
+        retire_sendno: "Problemi di invio dati",
+        setting_sendok: "Modifica configurazione registrata",
+        setting_sendno: "Problemi di invio dati"
     });
 
     $translateProvider.translations('en', {
@@ -281,7 +283,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         sunday_reduced: "Dom",
         home_disabledbutton: "Funzione disabilitata",
         retire_sendok: "Il ritiro del bambino e' stato confermato",
-        retire_sendno: "Problemi di invio dati"
+        retire_sendno: "Problemi di invio dati",
+        setting_sendok: "Modifica configurazione registrata",
+        setting_sendno: "Problemi di invio dati"
     });
 
     $translateProvider.translations('de', {
@@ -339,7 +343,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         sunday_reduced: "Dom",
         home_disabledbutton: "Funzione disabilitata",
         retire_sendok: "Il ritiro del bambino e' stato confermato",
-        retire_sendno: "Problemi di invio dati"
+        retire_sendno: "Problemi di invio dati",
+        setting_sendok: "Modifica configurazione registrata",
+        setting_sendno: "Problemi di invio dati"
     });
 
     $translateProvider.preferredLanguage("it");

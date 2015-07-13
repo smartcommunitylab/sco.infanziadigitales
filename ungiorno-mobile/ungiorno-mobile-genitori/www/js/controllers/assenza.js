@@ -13,6 +13,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 //        "motivazione": $scope.BabyProfile.motivazione
 //    }
 
+    $scope.temporary = {
+        date: new Date()
+    };
     $scope.showSelect = function(intInput)
     {
         if(intInput === 11)

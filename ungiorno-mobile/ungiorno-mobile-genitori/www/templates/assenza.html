@@ -8,32 +8,73 @@
             </button>
         </ion-nav-buttons>
     </ion-nav-bar>
-    <ion-content has-header="true">
-
-        <div class="assenzaDiv">
-            <div>
-                <h5>
-                    <strong>Periodo:</strong>
-                </h5>
+    <ion-content has-header="true" class="page-padding">
+        <h5 class="accent-color input-description-padding"><b>Periodo:</b></h5>
+        <div class="row">
+            <div class="col col-10">
+                <h5>Da:</h5>
             </div>
-
-            <div class="list">
-                <label class="item item-input item-stacked-label">
-                    <span class="input-label">Da:</span>
-                    <input type="date" placeholder="dd/mm/yyyy">
-                </label>
-                <label class="item item-input item-stacked-label">
-                    <span class="input-label">A:</span>
-                    <input type="date" placeholder="dd/mm/yyyy">
-                </label>
+            <div class="col">
+                <input type="date" ng-model="temporary.date"/>
             </div>
+        </div>
 
-            <div>
-                <h5>
-                    <strong>Motivazione:</strong>
-                </h5>
+        <div class="row">
+            <div class="col col-10">
+                <h5>A:</h5>
             </div>
+            <div class="col">
+                <input type="date" ng-model="temporary.date"/>
+            </div>
+        </div>
 
+        <!---
+        <div class="list">
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">Da:</span>
+                <input type="date" placeholder="dd/mm/yyyy">
+            </label>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">A:</span>
+                <input type="date" placeholder="dd/mm/yyyy">
+            </label>
+        </div>
+        --->
+
+        <h5 class="accent-color input-description-padding"><b>Motivazione:</b></h5>
+
+        <ion-list>
+            <ion-checkbox class="item item-checkbox delegate" ng-value="illness" name="radio" ng-click="showSelect(11)">
+                <dropdown placeholder="Malattia" ng-repeat="item in profile.frequentIllnesses">
+                    {{item.type}}
+                </dropdown>
+                <!---<ion-list>
+                    <ion-item ng-repeat="item in profile.frequentIllnesses">
+                        <p>{{item.type}}</p>
+                    </ion-item>
+                </ion-list>--->
+            </ion-checkbox>
+            <ion-checkbox class="item item-checkbox delegate" ng-value="{{item.typeid}}" ng-repeat="item in profile.absenceTypes" name="radio" ng-click="showSelect(0)">{{item.type}}</ion-checkbox>
+            <ion-checkbox class="item item-checkbox delegate" ng-value="other" name="radio" ng-click="showSelect(10)">Altro</ion-checkbox>
+        </ion-list>
+
+        <!--<div class="sceltaMalattia">
+            <div class="item item-input item-select sceltaMalattia">
+                <div class="input-label">
+                    Malattia specifica:
+                </div>
+                <select ng-show="isMalattia">
+                    <option ng-repeat="item in profile.frequentIllnesses">{{item.type}}</option>
+                </select>
+            </div>
+        </div>-->
+
+        <label class="item item-input" ng-show="isAltro">
+                <input type="text" placeholder="Inserire una motivazione">
+        </label>
+
+
+        <!---
             <div class="row">
                         <div class="col col-25">
                 <div class="list">
@@ -64,25 +105,9 @@
 
                 </div>
             </div>
+--->
 
-                <div class="sceltaMalattia">
-                    <div class="item item-input item-select sceltaMalattia">
-                        <div class="input-label">
-                            Malattia specifica:
-                        </div>
-                        <select ng-show="isMalattia">
-                            <option ng-repeat="item in profile.frequentIllnesses">{{item.type}}</option>
-                        </select>
-                    </div>
-                </div>
             </div>
-
-            <div>
-                <label class="item item-input" ng-show="isAltro">
-                    <input type="text" placeholder="Inserire una motivazione">
-                </label>
-            </div>
-        </div>
 
     </ion-content>
 </ion-view>

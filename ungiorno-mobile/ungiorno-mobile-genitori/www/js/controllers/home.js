@@ -124,7 +124,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         }).then(function(modal) {
              $scope.modal = modal;
              $scope.modal.show();
-        }) 
+        })
     }
 
     $scope.call = function(number) {

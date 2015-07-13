@@ -3,33 +3,53 @@
 	    <ion-nav-back-button></ion-nav-back-button>
 	</ion-nav-bar>
 
-	<ion-content has-header="true">
-			<div class="row calendar-month">
-				<div class="col calendar-arrow">
-					<button class="calendar-arrow left" ng-click="previous()">
-						<i class="icon ion-ios-arrow-back"></i>
-					</button>
+	<ion-pane>
+		<ion-content has-header="true">
+			<div class="calendar-background" on-drag-top="disableDrag()">
+				<div class="row calendar-month">
+					<div class="col calendar-arrow">
+						<button class="calendar-arrow left" ng-click="previous()">
+							<i class="icon ion-ios-arrow-back"></i>
+						</button>
+					</div>
+					<div class="col calendar-month">
+						<p class="calendar-month">{{monthDisplay}}</p>
+					</div>
+					<div class="col calendar-arrow">
+						<button class="calendar-arrow right" ng-click="next()">
+							<i class="icon ion-ios-arrow-forward"></i>
+						</button>
+					</div>
 				</div>
-				<div class="col calendar-month">
-					<p class="calendar-month">{{monthDisplay}}</p>
+
+				<div class="row calendar-container">
+					<div class="col" ng-repeat="day in week">
+						<p class="calendar-container">{{day | translate}}</p>
+					</div>
 				</div>
-				<div class="col calendar-arrow">
-					<button class="calendar-arrow right" ng-click="next()">
-						<i class="icon ion-ios-arrow-forward"></i>
-					</button>
+
+				<div class="row" ng-repeat="item in month track by $index">
+					<div style="background: {{days.background}}; color: {{days.color}}" class="col calendar-container day" ng-repeat="days in item track by $index" ng-click="viewAppointmentsPerDay({{days}})">
+						<p class="calendar-container day">{{days.value}}</p>
+					</div>
+				</div>
+
+				<hr class="page-padding"/>
+				<div class="page-padding row">
+					<div class="color-container" ng-repeat="appointmentType in colors.specific">
+						<div class="color-box" style="background: {{appointmentType.value}};"></div>
+						<p class="color-text">{{appointmentType.type | translate}}</p>
+					</div>
 				</div>
 			</div>
 
-			<div class="row calendar-container">
-				<div class="col" ng-repeat="day in week">
-					<p class="calendar-container">{{day | translate}}</p>
+			<ion-scroll class="page-padding calendar-day-background" style="margin-top: 1px;">
+				<h5>{{selectedDay}}</h5>
+				<div ng-repeat="appointment in daysAppointments">
+					<p>{{appointment.title}}</p>
 				</div>
-			</div>
-
-			<div class="row" ng-repeat="item in month track by $index">
-				<div style="background: {{days.background}}; color: {{days.color}}" class="col calendar-container day" ng-repeat="days in item track by $index">
-					<p class="calendar-container day">{{days.value}}</p>
-				</div>
-			</div>
-	</ion-content>
+			</ion-scroll>
+		</ion-content>
+	</ion-pane>
 </ion-view>
+>>>>>>> Stashed changes

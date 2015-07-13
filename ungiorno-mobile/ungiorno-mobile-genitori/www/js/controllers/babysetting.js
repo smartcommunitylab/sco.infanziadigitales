@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.babysetting', [])
 
-.controller('BabySettingCtrl', function ($scope, configurationService, profileService, $ionicNavBarDelegate, $ionicHistory, dataServerService, Toast) {
+.controller('BabySettingCtrl', function ($scope, configurationService, profileService, $ionicNavBarDelegate, $ionicHistory, dataServerService, Toast, $filter) {
     $ionicNavBarDelegate.showBackButton(true);
     $ionicHistory.backView();
     $scope.babyConfiguration = configurationService.getBabyConfiguration();
@@ -83,11 +83,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         $scope.setBabyConfiguration();
 
         dataServerService.sendBabySetting($scope.babyConfiguration).then(function (data) {
-            Toast.show("Invio Riuscito!!", 'short', 'bottom');
+            Toast.show($filter('translate')('setting_sendok'), 'short', 'bottom');
             console.log("SENDING OK -> " + data);
             $ionicHistory.goBack();
         }, function (error) {
-            Toast.show("Invio Non Riuscito!!", 'short', 'bottom');
+            Toast.show($filter('translate')('setting_sendok'), 'short', 'bottom');
             console.log("SENDING ERROR -> " + error);
         });
     }

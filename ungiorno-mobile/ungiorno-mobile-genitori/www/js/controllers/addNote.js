@@ -15,6 +15,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 		else{
 			alert("Nota inviata");
 		$ionicHistory.goBack();
-		}	
+		}
 	}
 })

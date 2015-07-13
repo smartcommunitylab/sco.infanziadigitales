@@ -103,6 +103,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
         /*temp*/
 
     }
+    dataServerService.sendFermata = function(fermata) {
+        var deferred = $q.defer();
+
+        deferred.resolve(true);
+        return deferred.promise;
+    }
     dataServerService.getCalendars = function (from, to, schoolid, kidid) {
         var calendarioScuola = null;
         var deferred = $q.defer();

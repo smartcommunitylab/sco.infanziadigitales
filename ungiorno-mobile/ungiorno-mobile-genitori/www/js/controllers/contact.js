@@ -19,7 +19,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     animation: 'slide-in-up'
   }).then(function(modal) {
     $scope.modal = modal
-  }) 
+  })
 
 	$scope.openModal = function() {
     $scope.modal.show()

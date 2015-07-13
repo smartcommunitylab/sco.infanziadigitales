@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.retire', [])
 
-.controller('RetireCtrl', function ($scope, configurationService, profileService, dataServerService, Toast, $ionicHistory, retireService) {
+.controller('RetireCtrl', function ($scope, configurationService, profileService, dataServerService, Toast, $ionicHistory, retireService, $filter) {
     var retireConfiguration;
 
     function getTime() {
@@ -35,6 +35,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         time: new Date(),
         note: null
     };
+    $scope.temporary.time.setHours($scope.temporary.time.getHours(), $scope.temporary.time.getMinutes(), 0, 0)
 
     $scope.setRetire = function () {
         retireConfiguration = {
@@ -69,12 +70,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         }
 
         dataServerService.sendRitiro(retireConfiguration).then(function (data) {
-            Toast.show("Invio Riuscito!!", 'short', 'bottom');
+            Toast.show($filter('translate')('retire_sendok'), 'short', 'bottom');
             retireService.setDailyRetire(true);
             console.log("SENDING OK -> " + data);
             $ionicHistory.goBack();
         }, function (error) {
-            Toast.show("Invio Non Riuscito!!", 'short', 'bottom');
+            Toast.show($filter('translate')('retire_sendno'), 'short', 'bottom');
             console.log("SENDING ERROR -> " + error);
         });
     }

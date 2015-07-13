@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.home', [])
 
-.controller('HomeCtrl', function ($scope, $location, dataServerService, profileService, configurationService, $filter, retireService, busService, $state, Toast) {
+.controller('HomeCtrl', function ($scope, $location, dataServerService, profileService, configurationService, $filter, retireService, busService, $state, Toast, $ionicModal) {
 
     $scope.date = "";
     $scope.kidProfile = {};
@@ -77,7 +77,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         if (profileService.getBabyProfile().services.bus.enabled) {
             style = getButtonStyle("bus");
             $scope.elements.push({
-                click: "app.home",
+                click: "app.bus",
                 string: $filter('translate')('home_bus'),
                 class: style,
             });
@@ -116,10 +116,23 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             class: style,
 
         });
-
     }
     var printlog = function () {
-        console.log("test");
+        $ionicModal.fromTemplateUrl('templates/contacts.html', {
+            scope: $scope,
+            animation: 'slide-in-up'
+        }).then(function(modal) {
+             $scope.modal = modal;
+             $scope.modal.show();
+        })
+    }
+
+    $scope.call = function(number) {
+        window.plugins.CallNumber.callNumber(function(){
+            alert("call swap");
+        }, function(err){
+            alert(err);
+        }, number);
     }
     $scope.execute = function (element) {
             if (element.class != "button-stable") {
@@ -130,7 +143,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 }
             } else {
                 Toast.show($filter('translate')('home_disabledbutton'), 'short', 'bottom');
-
             }
         }
         //corretto tutte e tre annidate? cosa succede se una salta? ma come faccio a settare il profilo temporaneo senza avere conf, prof????

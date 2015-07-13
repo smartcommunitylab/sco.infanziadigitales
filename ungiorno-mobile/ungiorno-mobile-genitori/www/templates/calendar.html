@@ -4,32 +4,32 @@
 	</ion-nav-bar>
 
 	<ion-content has-header="true">
-		<div class="row calendar-month">
-			<div class="col calendar-arrow">
-				<button class="calendar-arrow left" ng-click="previous()">
-					<i class="icon ion-ios-arrow-back"></i>
-				</button>
+			<div class="row calendar-month">
+				<div class="col calendar-arrow">
+					<button class="calendar-arrow left" ng-click="previous()">
+						<i class="icon ion-ios-arrow-back"></i>
+					</button>
+				</div>
+				<div class="col calendar-month">
+					<p class="calendar-month">{{monthDisplay}}</p>
+				</div>
+				<div class="col calendar-arrow">
+					<button class="calendar-arrow right" ng-click="next()">
+						<i class="icon ion-ios-arrow-forward"></i>
+					</button>
+				</div>
 			</div>
-			<div class="col calendar-month">
-				<p class="calendar-month">{{monthDisplay}}</p>
-			</div>
-			<div class="col calendar-arrow">
-				<button class="calendar-arrow right" ng-click="next()">
-					<i class="icon ion-ios-arrow-forward"></i>
-				</button>
-			</div>
-		</div>
 
-		<div class="row calendar-container">
-			<div class="col" ng-repeat="day in week">
-				<p class="calendar-container">{{day | translate}}</p>
+			<div class="row calendar-container">
+				<div class="col" ng-repeat="day in week">
+					<p class="calendar-container">{{day | translate}}</p>
+				</div>
 			</div>
-		</div>
 
-		<div class="row" ng-repeat="item in month track by $index">
-			<div class="col calendar-container {{days.style}}" ng-repeat="days in item track by $index">
-				<p>{{days.value}}</p>
+			<div class="row" ng-repeat="item in month track by $index">
+				<div style="background: {{days.background}}; color: {{days.color}}" class="col calendar-container day" ng-repeat="days in item track by $index">
+					<p class="calendar-container day">{{days.value}}</p>
+				</div>
 			</div>
-		</div>
 	</ion-content>
 </ion-view>

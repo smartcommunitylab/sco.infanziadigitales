@@ -1,11 +1,11 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.busService', [])
 
-.factory('busService', function () {
+.factory('busService', function ($http, $q) {
 
     var busService = {};
 
-    busService.getDailyBusStop = function () {
-        return null;
+    busService.getDailyBusStop = function (input) {
+        getDailyBusStop = input;
     }
 
     return busService;

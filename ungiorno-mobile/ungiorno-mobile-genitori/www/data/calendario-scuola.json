@@ -3,8 +3,8 @@
         {
             "appId": "a",
             "schoolId": "a",
-            "start": 1436357713,
-            "end": 1436368513,
+            "start": 1436540725,
+            "end": 1436540725,
             "sectionId": "sectionId1",
             "type": "gita",
             "forWhom": "kid",
@@ -13,42 +13,12 @@
         {
             "appId": "a",
             "schoolId": "a",
-            "start": 1234567,
-            "end": 1234567,
-            "sectionId": "sectionId1",
-            "type": "event",
-            "forWhom": "all",
-            "title": "Teatro con i genitori"
-        },
-        {
-            "appId": "a",
-            "schoolId": "a",
-            "start": 1457450113,
-            "end": 1457471713,
+            "start": 1436540725,
+            "end": 1436972725,
             "sectionId": "sectionId1",
             "type": "meeting",
             "forWhom": "parent",
             "title": "Incontro con genitori"
-        }
-        , {
-            "appId": "a",
-            "schoolId": "a",
-            "start": 1234567,
-            "end": 1234567,
-            "sectionId": "sectionId1",
-            "type": "closed",
-            "forWhom": "all",
-            "title": "Chiusura vacanza pasquale"
-        },
-        {
-            "appId": "a",
-            "schoolId": "a",
-            "start": 1234567,
-            "end": 1234567,
-            "sectionId": "sectionId1",
-            "type": "closed",
-            "forWhom": "all",
-            "title": "Domenica"
         }
     ]
 }

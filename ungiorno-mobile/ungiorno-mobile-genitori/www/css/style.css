@@ -101,15 +101,11 @@ input[type=text] {
 
 .row.calendar-month {
     margin-top: -10px;
-    background: red;
 }
 
 .row.calendar-container {
-    background: yellow;
     height: 40px;
 }
-
-.col.calendar-arrow {}
 
 .col.calendar-month {
     padding-top: 8px;
@@ -138,29 +134,14 @@ input[type=text] {
     text-align: center;
 }
 
+.calendar-container.day {
+    margin-right: 3px;
+    margin-left: 3px;
+    margin-bottom: 5px;
+}
+
 .col.day-col {
     text-align: center;
-}
-
-
-.calendar-container.open-day {
-    background: green;
-}
-
-.calendar-container.close-day {
-    background: red;
-}
-
-.calendar-container.meeting {
-    background: yellow;
-}
-
-.calendar-container.holiday {
-    background: orange;
-}
-
-.calendar-container.trip {
-    background: purple;
 }
 
 /*

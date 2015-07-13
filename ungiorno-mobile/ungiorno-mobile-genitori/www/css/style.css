@@ -16,8 +16,8 @@ body {
 }
 
 .page-padding {
-    padding-left: 10px;
-    padding-right: 15px;
+    margin-left: 10px;
+    margin-right: 15px;
 }
 
 .retireDiv {
@@ -108,18 +108,20 @@ input[type=text] {
 }
 
 .col.calendar-month {
-    padding-top: 8px;
+    padding-top: 15px;
     margin-bottom: -10px;
     text-align: center;
 }
 
 .calendar-month {
-    font-size: 14px;
+    font-size: 20px;
 }
 
 .calendar-arrow {
     background: transparent;
     border-color: transparent;
+    padding-top: 6px;
+    font-size: 15px;
 }
 
 .calendar-arrow.left {
@@ -140,10 +142,30 @@ input[type=text] {
     margin-bottom: 5px;
 }
 
-.col.day-col {
-    text-align: center;
+.color-container {
+    display: inline;
 }
 
+.color-box {
+    width: 13px;
+    height: 13px;
+    display: inline-block;
+}
+
+.color-text {
+    margin-right: 10px;
+    margin-bottom: 15px;
+    font-size: 15px;
+    display: inline-block;
+}
+
+.calendar-background {
+    background:  #C8C8CD;
+}
+
+.calendar-day-background {
+    background: #FFFFFF;
+}
 /*
 #map {
     position: absolute;

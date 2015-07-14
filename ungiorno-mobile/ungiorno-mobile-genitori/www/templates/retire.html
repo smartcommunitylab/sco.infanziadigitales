@@ -1,5 +1,5 @@
 <ion-view id="retire" title="{{'retire' | translate}}" ng-init="getRetire()">
-    <ion-nav-bar class="bar bar-ungiorno page-padding">
+    <ion-nav-bar class="bar bar-ungiorno">
         <!-- back button -->
         <ion-nav-back-button></ion-nav-back-button>
 
@@ -33,7 +33,7 @@
                     </div>
                     <p class="delegate-field">{{item.authorizationDeadline | date:'d MMMM yyyy'}}</p>
                 </div>
-                <div class="row no-padding" ng-hide="babyConfiguration.extraPersons == null">
+                <div class="row no-padding" ng-show="!babyConfiguration.extraPersons">
                     <div class="col">
                         <ion-checkbox class="item item-checkbox delegate" ng-value="{{babyConfiguration.extraPersons.personId}}" name="radio">{{babyConfiguration.extraPersons.fullName}}</ion-radio>
                     </div>

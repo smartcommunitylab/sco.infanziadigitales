@@ -24,13 +24,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     }
 
     function getSelectedPersonId() {
-        var radio = document.getElementsByName('radio');
-        for (var i = 0; i < radio.length; i++) {
-            if (radio[i].checked) {
-                return radio[i].value;
+        for (var i = 0; i < $scope.retirePersons.length; i++) {
+            if ($scope.retirePersons[i].checked == true) {
+                return $scope.retirePersons[i].personId;
             }
         }
         return null;
+
     }
 
     $scope.babyProfile = profileService.getBabyProfile();

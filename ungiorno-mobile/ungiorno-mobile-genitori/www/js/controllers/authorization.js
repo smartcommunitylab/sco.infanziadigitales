@@ -70,6 +70,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             $scope.image.push(image);
             $scope.imageBase64.push(imageData);
             $scope.hasAuthorization = true; // useless, just debug
+            authorizationUrl = "tmp";
         }, function (err) {
             console.log(err);
         });

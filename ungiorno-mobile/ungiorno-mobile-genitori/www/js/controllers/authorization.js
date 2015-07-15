@@ -35,7 +35,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
         $scope.image.splice(index, 1);
         $scope.imageBase64.splice(index, 1);
-        //}
+        $scope.hasAuthorization = false;
     };
 
     //actually it gets only camera

@@ -25,9 +25,9 @@
             "receiveNotification": true,
             "extraPersons": {
                 "personId": "personId3",
-                "fullName": "fullName1",
-                "lastName": "lastName1",
-                "firstName": "firstName1",
+                "fullName": "fullName3",
+                "lastName": "lastName3",
+                "firstName": "firstName3",
                 "phone": ["12345", "67890"],
                 "email": ["email1", "email2"],
                 "relation": "mamma",

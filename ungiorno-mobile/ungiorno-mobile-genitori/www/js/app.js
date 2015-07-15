@@ -259,7 +259,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         call: "Chiama",
         bus_stop: "Fermata bus",
         baby_drops_off_to: "Il bambino scende in",
-        whos_waiting_is: "Ad aspettare c'è"
+        whos_waiting_is: "Ad aspettare c'è",
+        open: "Aperture",
+        close: "Chiusure",
+        holiday: "Vacanza",
+        meeting: "Riunione genitori",
+        trip: "Gita",
+        events: "Eventi sul territorio"
     });
 
     $translateProvider.translations('en', {
@@ -327,7 +333,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         contact_school: "Contatta la scuola",
         bus_stop: "Fermata bus",
         baby_drops_off_to: "Il bambino scende in",
-        whos_waiting_is: "Ad aspettare c'è"
+        whos_waiting_is: "Ad aspettare c'è",
+        open: "Aperture",
+        close: "Chiusure",
+        holiday: "Vacanza",
+        meeting: "Riunione genitori",
+        trip: "Gita",
+        events: "Eventi sul territorio"
     });
 
     $translateProvider.translations('de', {
@@ -395,7 +407,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         call: "Chiama",
         bus_stop: "Fermata bus",
         baby_drops_off_to: "Il bambino scende in",
-        whos_waiting_is: "Ad aspettare c'è"
+        whos_waiting_is: "Ad aspettare c'è",
+        open: "Aperture",
+        close: "Chiusure",
+        holiday: "Vacanza",
+        meeting: "Riunione genitori",
+        trip: "Gita",
+        events: "Eventi sul territorio"
     });
 
     $translateProvider.preferredLanguage("it");

@@ -25,12 +25,14 @@
 
             <!-- Who takes baby -->
             <h5 class="accent-color input-description-padding"><b>{{'who_takes_baby' | translate}}</b></h5>
-            <p class="delegate-field description">{{'delegate_status' | translate}}</p>
+            <p class="delegate-label description">{{'delegate_status' | translate}}</p>
             <ion-list>
                 <ion-list class="padlist">
                     <ion-checkbox ng-repeat="item in retirePersons" ng-model="item.checked" ng-checked="item.checked" ng-change="selectPerson(item)">
-                        {{item.fullName}}
-                        <p class="delegate-field">{{item.authorizationDeadline | date:'d MMMM yyyy'}}</p>
+                        <div class="retire">
+                            <div class="retireFullName">{{item.fullName}}</div>
+                            <div class="delegate-field">{{item.authorizationDeadline | date:'d MMMM yyyy'}}</div>
+                        </div>
                     </ion-checkbox>
                 </ion-list>
                 <!--

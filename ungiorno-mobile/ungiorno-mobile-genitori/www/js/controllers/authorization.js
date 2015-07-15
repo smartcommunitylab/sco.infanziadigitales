@@ -1,8 +1,12 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.authorization', [])
 
-.controller('AuthorizationCtrl', function ($scope, $ionicHistory, configurationService, $q, $filter) {
+.controller('AuthorizationCtrl', function ($scope, $ionicHistory, configurationService, $q, $filter, $cordovaCamera) {
     var currentBaby = configurationService.getBabyConfiguration();
     var authorizationUrl;
+    $scope.image = [];
+    $scope.imageBase64 = [];
+    $scope.person = {};
+    $scope.hasAuthorization = false;
 
     function setDelegation() {
         if (!$scope.person.firstName ||
@@ -20,26 +24,68 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         return true;
     }
 
-    $scope.person = { };
-    $scope.hasAuthorization = false;
+
     $scope.send = function () {
         if (setDelegation()) {
             configurationService.setBabyConfiguration(currentBaby);
             $ionicHistory.goBack();
-        }   
+        }
     }
+    $scope.removeImage = function (index) {
 
-    $scope.getPhoto = function() {
-        var q = $q.defer();
-        $scope.hasAuthorization = true; // useless, just debug
-
-        navigator.camera.getPicture(function(result) {
-            authorizationUrl = result; 
-            q.resolve(true);
-        }, function(err) {
-            q.resolve(false);
-        });
-
-        q.promise;
+        $scope.image.splice(index, 1);
+        $scope.imageBase64.splice(index, 1);
+        //}
     };
+
+    //actually it gets only camera
+    $scope.addImage = function (wherePic) {
+        var options = {};
+
+        // 2
+        if (wherePic == 'Camera') {
+            options = {
+                destinationType: Camera.DestinationType.DATA_URL,
+                sourceType: Camera.PictureSourceType.CAMERA, // Camera.PictureSourceType.PHOTOLIBRARY
+                allowEdit: false,
+                encodingType: Camera.EncodingType.JPEG,
+                popoverOptions: CameraPopoverOptions,
+                saveToPhotoAlbum: false
+            };
+        } else {
+            options = {
+                destinationType: Camera.DestinationType.DATA_URL,
+                sourceType: Camera.PictureSourceType.PHOTOLIBRARY, // Camera.PictureSourceType.PHOTOLIBRARY
+                allowEdit: false,
+                encodingType: Camera.EncodingType.JPEG,
+                popoverOptions: CameraPopoverOptions,
+                saveToPhotoAlbum: false
+            };
+        }
+
+        // 3
+        $cordovaCamera.getPicture(options).then(function (imageData) {
+            // 4
+            image = "data:image/jpeg;base64," + imageData;
+            $scope.image.push(image);
+            $scope.imageBase64.push(imageData);
+            $scope.hasAuthorization = true; // useless, just debug
+        }, function (err) {
+            console.log(err);
+        });
+    };
+
+    //    $scope.getPhoto = function () {
+    //        var q = $q.defer();
+    //        $scope.hasAuthorization = true; // useless, just debug
+    //
+    //        navigator.camera.getPicture(function (result) {
+    //            authorizationUrl = result;
+    //            q.resolve(true);
+    //        }, function (err) {
+    //            q.resolve(false);
+    //        });
+    //
+    //        q.promise;
+    //    };
 });

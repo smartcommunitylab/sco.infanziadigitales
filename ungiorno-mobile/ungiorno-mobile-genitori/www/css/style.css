@@ -44,11 +44,21 @@ body {
     margin-top: -5px;
 }
 
+.retireFullName {
+    float: left;
+    width: 50px;
+}
+
+.delegate-label {
+    color: #A5A5A5;
+    text-align: right;
+    width: 75%;
+}
+
 .delegate-field {
     color: #A5A5A5;
     text-align: right;
-    font-size: 13px;
-    margin-top: 18px;
+    width: 80%;
 }
 
 .delegate-field.description {
@@ -160,7 +170,7 @@ input[type=text] {
 }
 
 .calendar-background {
-    background:  #C8C8CD;
+    background: #C8C8CD;
 }
 
 .calendar-day-background {
@@ -1193,4 +1203,27 @@ select {
 
 .button.redbutton {
     background-color: red;
+}
+
+.wrapper {
+    position: relative;
+    display: table;
+    align-content: center;
+    margin: 0 auto;
+}
+
+.wrapper img {
+    display: block;
+}
+
+.close:before {
+    content: '✕';
+    color: white;
+}
+
+.close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    cursor: pointer;
 }

@@ -1,5 +1,5 @@
 <ion-view id="delegate" title="{{'delegate' | translate}}">
-    <ion-nav-bar class="bar bar-ungiorno page-padding">
+    <ion-nav-bar class="bar bar-ungiorno">
         <!-- back button -->
         <ion-nav-back-button></ion-nav-back-button>
 
@@ -19,12 +19,16 @@
         <input type="text" ng-model="person.firstName" placeholder="{{'surname' | translate}}">
 
         <!-- Image -->
-        <div class="row input-description-padding" ng-click="getPhoto()">
+        <div class="row input-description-padding" ng-click="addImage('Camera')">
             <i class="icon ion-image gallery"></i>
             <p ng-hide="hasAuthorization" class="delegate-field add-image text-wrap">{{'add_image' | translate}}</p>
             <p ng-hide="!hasAuthorization" class="delegate-field add-image text-wrap">{{'add_image_completed' | translate}}</p>
         </div>
-
+        <div class="wrapper" ng-repeat="img in image">
+            <img data-ng-src="{{img}}" width="200px">
+            </img>
+            <span class="close" ng-click="removeImage($index)"></span>
+        </div>
         <!-- Auths-->
         <h5 class="accent-color input-description-padding"><b>{{'delegate_auth' | translate}}</b></h5>
         <div class="row">

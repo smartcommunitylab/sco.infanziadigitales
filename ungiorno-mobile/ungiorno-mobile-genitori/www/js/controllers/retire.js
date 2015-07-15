@@ -37,6 +37,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.babyConfiguration = configurationService.getBabyConfiguration();
     for (var k in $scope.babyProfile.persons) {
         $scope.retirePersons.push({
+            personId: $scope.babyProfile.persons[k].personId,
             fullName: $scope.babyProfile.persons[k].fullName,
             authorizationDeadline: $scope.babyProfile.persons[k].authorizationDeadline,
             checked: ($scope.babyConfiguration.defaultPerson == $scope.babyProfile.persons[k].personId)
@@ -46,13 +47,23 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     }
     if ($scope.babyConfiguration.extraPersons != null) {
         $scope.retirePersons.push({
+            personId: $scope.babyConfiguration.extraPersons.personId,
             fullName: $scope.babyConfiguration.extraPersons.fullName,
             authorizationDeadline: $scope.babyConfiguration.extraPersons.authorizationDeadline,
             checked: ($scope.babyConfiguration.defaultPerson == $scope.babyConfiguration.extraPersons.personId)
 
         });
     }
-    //set default time (forget the days, because it is overwritten by new date
+    $scope.selectPerson = function (newperson) {
+            for (var i = 0; i < $scope.retirePersons.length; i++) {
+                if ($scope.retirePersons[i].personId == newperson.personId) {
+                    $scope.retirePersons[i].checked = true;
+                } else {
+                    $scope.retirePersons[i].checked = false;
+                }
+            }
+        }
+        //set default time (forget the days, because it is overwritten by new date
     $scope.temporary = {
         date: new Date(),
         time: new Date($scope.babyConfiguration.exitTime),

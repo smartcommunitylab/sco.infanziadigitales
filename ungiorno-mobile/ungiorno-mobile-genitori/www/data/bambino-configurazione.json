@@ -21,7 +21,7 @@
                 }
             },
             "exitTime": 1034964475576,
-            "defaultPerson": "personId1",
+            "defaultPerson": "personId2",
             "receiveNotification": true,
             "extraPersons": {
                 "personId": "personId3",

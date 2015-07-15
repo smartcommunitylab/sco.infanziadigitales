@@ -13,17 +13,20 @@
 	<ion-content class="page-padding" has-header="true">
 		<div>
 			<h5 class="accent-color input-description-padding"><b>{{'date' | translate}}:</b></h5>
-            	<input type="date" ng-model="busStop.date" class="input-padding" required>
+            	<input type="date" ng-model="busStop.date" class="input-padding">
 
                 <ion-list>
                     <h5 class="accent-color input-description-padding"><b>{{'baby_drops_off_to' | translate}}:</b></h5>
-            		<div class="row no-padding" id="busStop" ng-repeat="item in busStops track by $index">
-                        <ion-checkbox class="item item-checkbox delegate" ng-value="{{item.address}}" ng-model="item.checked" ng-click="changeStops(item)" name="radio">{{item.address}}</ion-checkbox>
+            		<div class="row no-padding" ng-repeat="item in busStops track by $index">
+                        <ion-checkbox class="item item-checkbox delegate" ng-value="{{item.address}}" name="radio">{{item.address}}</ion-checkbox>
                     </div>
 
                     <h5 class="accent-color input-description-padding"><b>{{'whos_waiting_is' | translate}}:</b></h5>
-                    <div class="row no-padding" id="person" ng-repeat="item in persons track by $index">
-                        <ion-checkbox class="item item-checkbox delegate" ng-value="{{item.fullName}}" ng-model="item.checked" ng-click="changePersons(item)" name="radio">{{item.fullName}}</ion-checkbox>
+                    <div class="row no-padding" ng-repeat="item in persons track by $index">
+                        <ion-checkbox class="item item-checkbox delegate" ng-value="{{item.fullName}}" name="radio">{{item.fullName}}</ion-checkbox>
+                    </div>
+                    <div class="row no-padding" ng-show="babyConfiguration.extraPersons">
+                        <ion-checkbox class="item item-checkbox delegate" ng-value="{{babyConfiguration.extraPersons.fullName}}" name="radio">{{babyConfiguration.extraPersons.fullName}}</ion-checkbox>
                     </div>
                 </ion-list>
 		</div>

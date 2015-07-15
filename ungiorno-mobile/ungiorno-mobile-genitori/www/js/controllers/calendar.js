@@ -33,7 +33,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 			var week = [];
 			var weekDuration = 7;
 
-			if (j == 0) { 
+			if (j == 0) {
 				// first week
 				var paddingFirstWeek = $scope.monthRange.start.day() - 1;
 				if (paddingFirstWeek == -1) {
@@ -52,7 +52,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 				}
 
 				weekDuration -= paddingFirstWeek;
-			} else if (j == $scope.weeks - 1) { 
+			} else if (j == $scope.weeks - 1) {
 				// last week
 				var lastWeekDuration = $scope.monthRange.end.day();
 				//console.log($scope.monthRange);
@@ -65,9 +65,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
 			// Start pushing
 			for (var i = 0; i < weekDuration; i++) {
-				var background = isWeekend()? $scope.colors.specific[0].value: $scope.colors.specific[1].value; 
+				var background = isWeekend()? $scope.colors.specific[0].value: $scope.colors.specific[1].value;
 				var dayFromBegin = $scope.monthRange.start.format('DDD');
-				$scope.monthRange.start = $scope.monthRange.start.add(1, 'day'); // next day			
+				$scope.monthRange.start = $scope.monthRange.start.add(1, 'day'); // next day
 
 				var day = {
 					value: counter,
@@ -211,7 +211,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 			console.log('Error while downloading calendar-colors');
 		}).then(function() {
 			generateCalendar(); // Generate just the view, not data!
-			
+
 			// User infomation
 			getCalendar(); // This is where actually we retrieve and display data
 		});

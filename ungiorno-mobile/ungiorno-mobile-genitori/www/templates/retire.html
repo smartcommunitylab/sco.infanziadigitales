@@ -1,5 +1,5 @@
 <ion-view id="retire" title="{{'retire' | translate}}" ng-init="getRetire()">
-    <ion-nav-bar class="bar bar-ungiorno page-padding">
+    <ion-nav-bar class="bar bar-ungiorno">
         <!-- back button -->
         <ion-nav-back-button></ion-nav-back-button>
 
@@ -25,20 +25,33 @@
 
             <!-- Who takes baby -->
             <h5 class="accent-color input-description-padding"><b>{{'who_takes_baby' | translate}}</b></h5>
-            <p class="delegate-field description">{{'delegate_status' | translate}}</p>
+            <p class="delegate-label description">{{'delegate_status' | translate}}</p>
             <ion-list>
-                <div class="row no-padding" id="person" ng-repeat="item in babyProfile.persons">
+                <ion-list class="padlist">
+                    <ion-checkbox ng-repeat="item in retirePersons" ng-model="item.checked" ng-checked="item.checked" ng-change="selectPerson(item)">
+                        <div class="retire">
+                            <div class="retireFullName">{{item.fullName}}</div>
+                            <div class="delegate-field">{{item.authorizationDeadline | date:'d MMMM yyyy'}}</div>
+                        </div>
+                    </ion-checkbox>
+                </ion-list>
+                <!--
+                <div class="row no-padding" ng-hide="babyConfiguration.extraPersons == null">
+=======                <div class="row no-padding" id="person" ng-repeat="item in babyProfile.persons">
                     <div class="col">
                         <ion-checkbox class="item item-checkbox delegate" ng-value="{{item.personId}}" name="radio">{{item.fullName}}</ion-radio>
                     </div>
                     <p class="delegate-field">{{item.authorizationDeadline | date:'d MMMM yyyy'}}</p>
                 </div>
-                <div class="row no-padding" ng-hide="babyConfiguration.extraPersons == null">
+                <div class="row no-padding" ng-show="!babyConfiguration.extraPersons">
+>>>>>>> origin/master
                     <div class="col">
                         <ion-checkbox class="item item-checkbox delegate" ng-value="{{babyConfiguration.extraPersons.personId}}" name="radio">{{babyConfiguration.extraPersons.fullName}}</ion-radio>
                     </div>
-                    <p class="delegate-field">{{babyConfiguration.extraPersons.authorizationDeadline | date:'d MMMM yyyy'}}<p>
+                    <p class="delegate-field">{{babyConfiguration.extraPersons.authorizationDeadline | date:'d MMMM yyyy'}}
+                        <p>
                 </div>
+-->
             </ion-list>
 
             <div class="delegate-input">

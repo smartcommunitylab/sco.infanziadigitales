@@ -24,7 +24,7 @@
             "defaultPerson": "personId1",
             "receiveNotification": true,
             "extraPersons": {
-                "personId": "personId1",
+                "personId": "personId3",
                 "fullName": "fullName1",
                 "lastName": "lastName1",
                 "firstName": "firstName1",

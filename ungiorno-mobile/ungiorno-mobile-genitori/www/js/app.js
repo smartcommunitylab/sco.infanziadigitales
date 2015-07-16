@@ -12,7 +12,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     'it.smartcommunitylab.infanziadigitales.diario.parents.directives',
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.common',
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.home',
-    'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.assenza',
+    'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.absence',
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.babysetting',
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.retire',
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.authorization',
@@ -106,14 +106,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         }
     })
 
-    .state('app.assenza', {
+    .state('app.absence', {
         cache: false,
         url: '/assenza',
         abstract: false,
         views: {
             'menuContent': {
-                templateUrl: "templates/assenza.html",
-                controller: 'AssenzaCtrl'
+                templateUrl: "templates/absence.html",
+                controller: 'AbsenceCtrl'
             }
         }
     })

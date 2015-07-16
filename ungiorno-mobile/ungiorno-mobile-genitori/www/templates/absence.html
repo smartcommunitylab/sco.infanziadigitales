@@ -1,0 +1,43 @@
+<ion-view id="absence">
+    <ion-nav-bar class="bar bar-ungiorno">
+        <ion-nav-back-button>
+        </ion-nav-back-button>
+        <ion-nav-buttons side="right">
+            <button class="button" ng-click="">
+                invia
+            </button>
+        </ion-nav-buttons>
+    </ion-nav-bar>
+    <ion-content has-header="true" class="page-padding">
+        <h5 class="accent-color input-description-padding"><b>Periodo:</b></h5>
+        <div class="row">
+            <div class="col col-20">
+                <h5>Da:</h5>
+            </div>
+            <div class="col">
+                <input type="date" ng-model="illness.dateFrom"/>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col col-20">
+                <h5>A:</h5>
+            </div>
+            <div class="col">
+                <input type="date" ng-model="illness.dateTo"/>
+            </div>
+        </div>
+
+        <h5 class="accent-color input-description-padding"><b>Motivazione:</b></h5>
+
+        <ion-list>
+            <ion-checkbox class="item item-checkbox delegate" ng-value="illness" name="radio" ng-click="openModal()">{{selectedIllness}}</ion-checkbox>
+            <ion-checkbox class="item item-checkbox delegate" ng-value="{{item.typeid}}" ng-repeat="item in babyProfile.absenceTypes" name="radio" ng-click="setIllness(item)">{{item.type}}</ion-checkbox>
+            <ion-checkbox class="item item-checkbox delegate" ng-value="other" name="radio" ng-click="setIllness()">Altro...</ion-checkbox>
+        </ion-list>
+
+        <label class="item item-input">
+            <input type="text" ng-model="babyProfile.note" placeholder="Inserire una motivazione">
+        </label>
+    </ion-content>
+</ion-view>

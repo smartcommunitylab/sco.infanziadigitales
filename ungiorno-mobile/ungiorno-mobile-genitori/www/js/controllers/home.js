@@ -102,7 +102,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
         style = getButtonStyle("default");
         $scope.elements.push({
-            click: "app.assenza",
+            click: "app.absence",
             string: $filter('translate')('home_assenza'),
             class: style,
 

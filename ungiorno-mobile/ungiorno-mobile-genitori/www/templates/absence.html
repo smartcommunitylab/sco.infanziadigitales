@@ -31,13 +31,13 @@
         <h5 class="accent-color input-description-padding"><b>Motivazione:</b></h5>
 
         <ion-list>
-            <ion-checkbox class="item item-checkbox delegate" ng-value="illness" name="radio" ng-click="openModal()">{{selectedIllness}}</ion-checkbox>
-            <ion-checkbox class="item item-checkbox delegate" ng-value="{{item.typeid}}" ng-repeat="item in babyProfile.absenceTypes" name="radio" ng-click="setIllness(item)">{{item.type}}</ion-checkbox>
-            <ion-checkbox class="item item-checkbox delegate" ng-value="other" name="radio" ng-click="setIllness()">Altro...</ion-checkbox>
+            <ion-checkbox class="item item-checkbox delegate" ng-value="illness" name="radio" ng-click="openModal(false)">{{selectedIllness}}</ion-checkbox>
+            <ion-checkbox class="item item-checkbox delegate" ng-value="{{item.typeid}}" ng-repeat="item in babyProfile.absenceTypes" name="radio" ng-click="setIllness(false, item)">{{item.type}}</ion-checkbox>
+            <ion-checkbox class="item item-checkbox delegate" ng-value="other" name="radio" ng-click="setIllness(true)">Altro...</ion-checkbox>
         </ion-list>
 
         <label class="item item-input">
-            <input type="text" ng-model="babyProfile.note" placeholder="Inserire una motivazione">
+            <input type="text" ng-model="babyProfile.note" placeholder="Inserire una motivazione" ng-show="isOther">
         </label>
     </ion-content>
 </ion-view>

@@ -16,13 +16,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         note: ''
     };
 
-    $scope.setIllness = function(item) {
-        $scope.illness.reason.type = item? item.type: 'other';
-        $scope.closeModal();
-    }
+    var delay = 1000; //1 sec
+    $scope.isOther = false;
 
-    $scope.send = function() {
-        // TODO
+    $scope.setIllness = function(boolInput, item) {
+        $scope.illness.reason.type = item? item.type: 'other';
+        if(boolInput)
+        {
+            $scope.isOther = true;
+        }
+        $scope.closeModal();
     }
 
     // Modal select specific illness
@@ -38,6 +41,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     }
 
     $scope.closeModal = function() {
-        $scope.modal.hide();
+        setTimeout(function(){
+            $scope.modal.hide();
+        }, delay);
     };
+
+    $scope.send = function() {
+        if(dateFrom > dateTo)
+        {
+            alert("La data d'inizio dell'assenza succede quella della fine. Modificare le date.");
+            return;
+        }
+    }
 });

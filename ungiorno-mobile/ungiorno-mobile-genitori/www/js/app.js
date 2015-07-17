@@ -265,7 +265,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         holiday: "Vacanza",
         meeting: "Riunione genitori",
         trip: "Gita",
-        events: "Eventi sul territorio"
+        events: "Eventi sul territorio",
+        kid_toggle: "Bambino",
+        parents_toggle: "Genitori"
     });
 
     $translateProvider.translations('en', {
@@ -339,7 +341,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         holiday: "Vacanza",
         meeting: "Riunione genitori",
         trip: "Gita",
-        events: "Eventi sul territorio"
+        events: "Eventi sul territorio",
+        kid_toggle: "Bambino",
+        parents_toggle: "Genitori"
     });
 
     $translateProvider.translations('de', {
@@ -413,7 +417,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         holiday: "Vacanza",
         meeting: "Riunione genitori",
         trip: "Gita",
-        events: "Eventi sul territorio"
+        events: "Eventi sul territorio",
+        kid_toggle: "Bambino",
+        parents_toggle: "Genitori"
     });
 
     $translateProvider.preferredLanguage("it");

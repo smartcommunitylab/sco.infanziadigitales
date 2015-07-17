@@ -1,6 +1,10 @@
 <ion-view id="calendar" title="{{'calendar' | translate}}" ng-init="initialize()">
 	<ion-nav-bar class="bar bar-ungiorno">
 	    <ion-nav-back-button></ion-nav-back-button>
+
+	    <ion-nav-buttons side="right">
+	    	<ion-toggle ng-click="changeCalendar()">{{toggleDisplay | translate}}</ion-toggle>
+	    </ion-nav-buttons>
 	</ion-nav-bar>
 
 	<ion-pane>
@@ -29,7 +33,7 @@
 				</div>
 
 				<div class="row" ng-repeat="item in month track by $index">
-					<div style="background: {{days.background}}; color: {{days.color}}" class="col calendar-container day" ng-repeat="days in item track by $index" ng-click="viewAppointmentsPerDay({{days}})">
+					<div style="background: {{days.background}}; color: {{days.color}}; border: 2px solid {{getBorderColor(days)}};" class="col calendar-container day" ng-repeat="days in item track by $index" ng-click="viewAppointmentsPerDay({{days}})">
 						<p class="calendar-container day">{{days.value}}</p>
 					</div>
 				</div>

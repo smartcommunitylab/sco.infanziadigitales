@@ -239,8 +239,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 		$scope.initialize();
 	};
 
-	$scope.disableDrag = function() {
-		alert("ciao");
+	$scope.getBorderColor = function (day) {
+		return day.dayFromBegin == moment().format('DDD')? '#000000': 'transparent';
 	}
 
 	$scope.daysAppointments = [];
@@ -258,5 +258,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 		}
 
 		console.log($scope.daysAppointments);
+	};
+
+	$scope.toggleDisplay = "parents-toggle";
+	$scope.changeCalendar = function() {
+		displayParentsCalendar = !displayParentsCalendar;
+		if (displayParentsCalendar) {
+			$scope.toggleDisplay = "kid-toggle"
+		} else {
+			$scope.toggleDisplay = "parents-toggle";
+		}
+
+		$scope.initialize();
 	};
 });

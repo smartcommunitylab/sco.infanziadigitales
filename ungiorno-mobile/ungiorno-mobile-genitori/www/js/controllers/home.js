@@ -93,7 +93,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         if (profileService.getBabyProfile().services.mensa.enabled) {
             style = getButtonStyle("default");
             $scope.elements.push({
-                click: "app.mensa",
+                click: "app.canteen",
                 string: $filter('translate')('home_mensa'),
                 class: style,
 

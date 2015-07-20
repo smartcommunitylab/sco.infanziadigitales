@@ -27,6 +27,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.calendar',
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.addNote',
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.buses',
+    'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.canteen',
+    'it.smartcommunitylab.infanziadigitales.diario.parents.services.canteenService',
     'angularMoment'
 ])
 
@@ -126,6 +128,19 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
             'menuContent': {
                 templateUrl: "templates/retire.html",
                 controller: 'RetireCtrl'
+            }
+
+        }
+    })
+
+    .state('app.canteen', {
+        cache: false,
+        url: '/canteen',
+        abstract: false,
+        views: {
+            'menuContent': {
+                templateUrl: "templates/canteen.html",
+                controller: 'CanteenCtrl'
             }
 
         }
@@ -267,7 +282,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         trip: "Gita",
         events: "Eventi sul territorio",
         kid_toggle: "Bambino",
-        parents_toggle: "Genitori"
+        parents_toggle: "Genitori",
+        meal: "Pasto"
     });
 
     $translateProvider.translations('en', {
@@ -343,7 +359,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         trip: "Gita",
         events: "Eventi sul territorio",
         kid_toggle: "Bambino",
-        parents_toggle: "Genitori"
+        parents_toggle: "Genitori",
+        meal: "Pasto"
     });
 
     $translateProvider.translations('de', {
@@ -419,7 +436,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         trip: "Gita",
         events: "Eventi sul territorio",
         kid_toggle: "Bambino",
-        parents_toggle: "Genitori"
+        parents_toggle: "Genitori",
+        meal: "Pasto"
     });
 
     $translateProvider.preferredLanguage("it");

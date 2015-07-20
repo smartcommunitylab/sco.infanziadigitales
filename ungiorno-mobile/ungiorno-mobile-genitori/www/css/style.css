@@ -176,6 +176,29 @@ input[type=text] {
 .calendar-day-background {
     background: #FFFFFF;
 }
+
+.canteen {
+
+}
+
+.canteen.col-description {
+    text-align: center;
+    font-size: 16px;
+    height: 25px;
+}
+
+.canteen.weekly-date {
+    background: red;
+    text-align: center;    
+}
+
+.canteen.weekly-lunch {
+    background: yellow;
+}
+
+.canteen.weekly-break {
+    background: orange;   
+}
 /*
 #map {
     position: absolute;

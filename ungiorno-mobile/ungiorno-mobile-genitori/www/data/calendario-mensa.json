@@ -3,38 +3,36 @@
         {
             "appId": "a",
             "schoolId": "a",
-            "date": 1435075887150,
+            "date": 1437343200,
             "lunch": [{
-                    name: "battuta di manzo",
-                    type: "meat"
+                    "name": "battuta di manzo",
+                    "type": "meat"
             },
                 {
-                    name: "insalata",
-                    type: "veg"
+                    "name": "insalata",
+                    "type": "veg"
             }],
             "break": [{
-                name: "yogurt",
-                type: "milk"
-            }],
-
+                "name": "yogurt",
+                "type": "milk"
+            }]
         },
         {
             "appId": "a",
             "schoolId": "a",
             "date": 1435075887150,
             "lunch": [{
-                    name: "minestrone",
-                    type: "soup"
+                    "name": "minestrone",
+                    "type": "soup"
             },
-                {
-                    name: "insalata",
-                    type: "veg"
+            {
+                    "name": "insalata",
+                    "type": "veg"
             }],
             "break": [{
-                name: "mela",
-                type: "fruit"
-            }],
-
+                "name": "mela",
+                "type": "fruit"
+            }]
         }
     ]
 }

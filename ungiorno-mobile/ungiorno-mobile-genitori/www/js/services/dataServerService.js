@@ -126,5 +126,24 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
         return deferred.promise;
         /*temp*/
     }
+
+    dataServerService.getMeals = function() {
+        var meals = null;
+        var deferred = $q.defer();
+
+        /*temp*/
+        if (meals == null) {
+            $http.get('data/calendario-mensa.json').success(function (data) {
+                meals = data;
+                deferred.resolve(meals);
+            }).error(function (data, status, headers, config) {
+                console.log(data + status + headers + config);
+                //deferred.reject(err);
+            })
+        } else deferred.resolve(meals);
+        return deferred.promise;
+        /*temp*/
+    }
+
     return dataServerService;
 })

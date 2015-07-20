@@ -283,7 +283,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         events: "Eventi sul territorio",
         kid_toggle: "Bambino",
         parents_toggle: "Genitori",
-        meal: "Pasto"
+        meal: "Pasto",
+        lunch: "Pranzo",
+        break: "Merenda"
     });
 
     $translateProvider.translations('en', {
@@ -360,7 +362,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         events: "Eventi sul territorio",
         kid_toggle: "Bambino",
         parents_toggle: "Genitori",
-        meal: "Pasto"
+        meal: "Pasto",
+        lunch: "Pranzo",
+        break: "Merenda"
     });
 
     $translateProvider.translations('de', {
@@ -437,7 +441,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         events: "Eventi sul territorio",
         kid_toggle: "Bambino",
         parents_toggle: "Genitori",
-        meal: "Pasto"
+        meal: "Pasto",
+        lunch: "Pranzo",
+        break: "Merenda"
     });
 
     $translateProvider.preferredLanguage("it");

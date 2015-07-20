@@ -5,6 +5,32 @@
     </ion-nav-bar>
 
     <ion-content has-header="true" class="page-padding">
-        
+        <!-- WEEKLY -->
+        <div class="row" ng-show="displayMode == 'weekly'">
+            <!-- Date col -->
+            <div class="col col-25 canteen weekly-date" ng-init="initializeWeekly()">
+                <div class="canteen col-description"></div>
+
+                <div class="canteen weekly-date" ng-repeat="day in week">
+                    <h4>{{day.value.date()}}</h4>
+                </div>
+            </div>
+
+            <!-- Lunch col -->
+            <div class="col canteen weekly-lunch">
+                <div class="canteen col-description">
+                    <p>{{'lunch' | translate}}</p>
+                </div>
+
+
+            </div>
+
+            <!-- Break col -->
+            <div class="col canteen weekly-break">
+                <div class="canteen col-description">
+                    <p>{{'break' | translate}}</p>
+                </div>
+            </div>
+        </div>
     </ion-content>
 </ion-view>

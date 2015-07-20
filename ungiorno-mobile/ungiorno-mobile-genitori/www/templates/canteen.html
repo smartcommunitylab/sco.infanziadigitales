@@ -1,36 +1,68 @@
-<ion-view id="canteen" title="{{'meal' | translate}}">
+<ion-view id="canteen" title="{{'meal' | translate}}" ng-init="initialize()">
     <ion-nav-bar class="bar bar-ungiorno">
         <ion-nav-back-button>
         </ion-nav-back-button>
+
+        <ion-nav-buttons side="right">
+            <button class="button" ng-click="openChangeViewModal()">
+                <i class="icon ion-calendar"></i>
+            </button>
+
+            <button class="button" ng-click="openInfoModal()">
+                <i class="icon ion-information"></i>
+            </button>
+        </ion-nav-buttons>
     </ion-nav-bar>
 
-    <ion-content has-header="true" class="page-padding">
-        <!-- WEEKLY -->
-        <div class="row" ng-show="displayMode == 'weekly'">
-            <!-- Date col -->
-            <div class="col col-25 canteen weekly-date" ng-init="initializeWeekly()">
-                <div class="canteen col-description"></div>
+    <ion-content has-header="true">
+        <div class="calendar-background">
+            <div class="row calendar-date">
+                <div class="col calendar-arrow">
+                    <button class="calendar-arrow left" ng-click="previous()">
+                        <i class="icon ion-ios-arrow-back"></i>
+                    </button>
+                </div>
+                <div class="col calendar-month">
+                    <p class="calendar-month">{{dateDisplay}}</p>
+                </div>
+                <div class="col calendar-arrow">
+                    <button class="calendar-arrow right" ng-click="next()">
+                        <i class="icon ion-ios-arrow-forward"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- WEEKLY -->
+            <div class="row" ng-show="displayMode == 'weekly'">
+                <!-- Date col -->
+                <div class="col col-25 canteen weekly-date">
+                    <div class="canteen col-description"></div>
 
-                <div class="canteen weekly-date" ng-repeat="day in week">
-                    <h4>{{day.value.date()}}</h4>
+                    <div class="canteen weekly-date" ng-repeat="day in week">
+                        <h4>{{day.value.date()}}</h4>
+                    </div>
+                </div>
+
+                <!-- Lunch col -->
+                <div class="col canteen weekly-lunch">
+                    <div class="canteen col-description">
+                        <p>{{'lunch' | translate}}</p>
+                    </div>
+
+
+                </div>
+
+                <!-- Break col -->
+                <div class="col canteen weekly-break">
+                    <div class="canteen col-description">
+                        <p>{{'break' | translate}}</p>
+                    </div>
                 </div>
             </div>
 
-            <!-- Lunch col -->
-            <div class="col canteen weekly-lunch">
-                <div class="canteen col-description">
-                    <p>{{'lunch' | translate}}</p>
-                </div>
-
+        <!-- DAILY -->
+            <div class="row" ng-show="displayMode == 'daily'">
 
             </div>
-
-            <!-- Break col -->
-            <div class="col canteen weekly-break">
-                <div class="canteen col-description">
-                    <p>{{'break' | translate}}</p>
-                </div>
-            </div>
-        </div>
+        </div>    
     </ion-content>
 </ion-view>

@@ -13,4 +13,5 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.c
     };
 
     return canteenService;
+
 })

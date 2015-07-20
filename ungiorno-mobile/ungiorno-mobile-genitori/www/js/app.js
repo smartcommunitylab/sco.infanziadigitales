@@ -285,7 +285,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         parents_toggle: "Genitori",
         meal: "Pasto",
         lunch: "Pranzo",
-        break: "Merenda"
+        break: "Merenda",
+        meals_info: "Info pasti",
+        show_type: "Tipo visualizzazione",
+        daily: "Giornaliera",
+        weekly: "Settimanale",
+        monthly: "Mensile"
     });
 
     $translateProvider.translations('en', {
@@ -364,7 +369,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         parents_toggle: "Genitori",
         meal: "Pasto",
         lunch: "Pranzo",
-        break: "Merenda"
+        break: "Merenda",
+        meals_info: "Info pasti",
+        show_type: "Tipo visualizzazione",
+        daily: "Giornaliera",
+        weekly: "Settimanale",
+        monthly: "Mensile"
     });
 
     $translateProvider.translations('de', {
@@ -443,7 +453,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         parents_toggle: "Genitori",
         meal: "Pasto",
         lunch: "Pranzo",
-        break: "Merenda"
+        break: "Merenda",
+        meals_info: "Info pasti",
+        show_type: "Tipo visualizzazione",
+        daily: "Giornaliera",
+        weekly: "Settimanale",
+        monthly: "Mensile"
     });
 
     $translateProvider.preferredLanguage("it");

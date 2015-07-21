@@ -59,7 +59,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 	})
 
 	$scope.openInfoModal = function() {
-		console.log('ciao');
 		$scope.infoModal.show();
 	}
 
@@ -80,7 +79,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         doWeek();
     };
 
-    function doWeek() {
+
+    function doWeek() { 
         dataServerService.getMeals().then(function(data) {
             for (var i = 0; i < 7; i++) {
                 var today = {
@@ -88,7 +88,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 };
                 $scope.weekRange.start = moment().locale('it').startOf('week');
 
-                var mealToday = getMealPerDay(today, data);
+                var mealToday = getMealPerDay(today.value, data);
                 if (mealToday) {
                     today.lunch = mealToday.lunch;
                     if (mealToday.break) {
@@ -103,8 +103,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     }
 
     function getMealPerDay(day, data) {
+    	// temp
+    	return data.data[0];
+
         for (var i = 0; i < data.data.length; i++) {
-            if (data.data[i].date == day.value.format('X')) {
+            if (data.data[i].date == day.format('X')) {
                 return data.data[i];
             } 
         }
@@ -115,6 +118,21 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.initializeDaily = function() {
     	$scope.day = moment().locale('it');
     	$scope.dateDisplay = $scope.day.format("dddd, D MMMM gggg");
+    	doDay();
 	};
+
+	function doDay() {
+		dataServerService.getMeals().then(function(data) {
+			var mealToday = getMealPerDay($scope.day, data);
+			if(mealToday) {
+				$scope.day.lunch = mealToday.lunch;
+				if(mealToday.break) {
+					$scope.day.break = mealToday.break;
+				}
+
+				console.log($scope.day);
+			}
+		})
+	}
     // end day
 })

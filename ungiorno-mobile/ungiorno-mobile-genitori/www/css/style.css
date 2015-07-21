@@ -199,6 +199,18 @@ input[type=text] {
 .canteen.weekly-break {
     background: orange;   
 }
+
+.canteen.daily-lunch {
+    background: orange;
+}
+
+.canteen.daily-break {
+    background: #33CCFF;
+}
+
+ion-item {
+    background: red;
+}
 /*
 #map {
     position: absolute;

@@ -31,6 +31,7 @@
                     </button>
                 </div>
             </div>
+                
             <!-- WEEKLY -->
             <div class="row" ng-show="displayMode == 'weekly'">
                 <!-- Date col -->
@@ -47,8 +48,6 @@
                     <div class="canteen col-description">
                         <p>{{'lunch' | translate}}</p>
                     </div>
-
-
                 </div>
 
                 <!-- Break col -->
@@ -61,8 +60,13 @@
 
         <!-- DAILY -->
             <div class="row" ng-show="displayMode == 'daily'">
+                <ion-list>
+                    <div class="canteen daily-lunch">{{'lunch' | translate}}</div>
+                    <div ng-repeat="lunch in day.lunch">{{lunch.name}}</div>
 
-            </div>
-        </div>    
+                    <div>{{'break' | translate}}</div>
+                    <div ng-repeat="lunch in day.break">{{lunch.name}}</div>
+                </ion-list>
+            </div> 
     </ion-content>
 </ion-view>

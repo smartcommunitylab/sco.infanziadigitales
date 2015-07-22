@@ -148,8 +148,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 				if(mealToday.break) {
 					$scope.day.break = mealToday.break;
 				}
-
-				console.log($scope.day);
 			}
 		})
 	}
@@ -158,15 +156,75 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     // start month
     var monthPadding = 0;
     $scope.initializeMonthly = function() {
-        $scope.month = moment().locale('it').add(monthPadding, 'month');
-        $scope.dateDisplay = $scope.month.format('MMMM gggg');
+        $scope.month = {
+            start: moment().locale('it').startOf('month').add(monthPadding, 'month'),
+            end: moment().locale('it').endOf('month').add(monthPadding, 'month')
+        };
+
+        $scope.dateDisplay = $scope.month.start.format('MMMM gggg');
+
+        if ($scope.month.start.day() != 1) {
+            $scope.month.start = $scope.month.start.startOf('week');
+        }
+
+        console.log($scope.month);
+        doMonth();
     }
 
+    // Get number of weeks from a range of days
+    function weekCount() {
+        var used = $scope.month.start.day() + $scope.month.end.date();
+        return Math.ceil(used / 7);
+    }
+
+    function isWeekend(value) {
+        return value != 6 && value != 0? true : false;
+    }
+
+    $scope.weeks = [];
     function doMonth() {
         dataServerService.getMeals().then(function(data) {
-            // todo
+            $scope.weeks = [];
+
+            // Magic here. Do not touch.
+            // Update 2015.13.07: don't know how this works... Please don't hurt me
+            for (var j = 0; j < weekCount(); j++) {
+                var week = [];
+                var weekDuration = 5;
+
+                for (var i = 0; i < weekDuration; i++) {
+                    var dayFromBegin = $scope.month.start.format('DDD');
+                    var day = $scope.month.start.date();
+
+                    // Find food for today
+                    var mealToday = getMealPerDay($scope.month.startOf, data);
+                    var food = mealToday.lunch;
+                    if (mealToday.break) {
+                        food = food.concat(mealToday.break);
+                    }
+
+                    week.push({
+                        value: day,
+                        dayFromBegin: dayFromBegin,
+                        food: food
+                    });
+
+                    $scope.month.start = $scope.month.start.add(1, 'day');
+                }
+
+                // Check if all days of weeks are = 0 (worse way to fix a bug)
+                // Please don't kill me
+                if (week[0].value == 0 && week[1].value == 0 && week[2].value == 0 && week[3].value == 0 && week[4].value == 0) {
+                    // Remove, empty week
+                    week = week.slice(0, 0);
+                }
+
+                $scope.weeks.push(week);
+                $scope.month.start = $scope.month.start.add(2, 'day');
+            }
+
+            console.log($scope.weeks);
         });
     }
-
     // end month
 })

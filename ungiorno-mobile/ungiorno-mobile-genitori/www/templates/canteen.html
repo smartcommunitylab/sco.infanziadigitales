@@ -82,6 +82,31 @@
                     <div class="canteen daily-text" ng-repeat="lunch in day.break">{{lunch.name}}</div>
                 </ion-list>
             </div> 
+
+            <!-- MONTHLY -->
+            <div ng-show="displayMode == 'monthly'">
+                <div class="row" ng-repeat="item in weeks track by $index">
+                    <div class="col" style="padding: 0px;" ng-repeat="days in item track by $index">
+                        <p class="canteen day-container">{{days.value}}</p>
+                        <div class="row canteen food-image">
+                            <div class="col">
+                                <i class="icon ion-calendar"></i>
+                            </div>
+                            <div class="col">
+                                <i class="icon ion-calendar"></i>
+                            </div>
+                        </div>
+                        <div class="row canteen food-image">
+                            <div class="col">
+                                <i class="icon ion-calendar"></i>
+                            </div>
+                            <div class="col">
+                                <i class="icon ion-calendar"></i>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </div>
         </div>
     </ion-content>
 </ion-view>

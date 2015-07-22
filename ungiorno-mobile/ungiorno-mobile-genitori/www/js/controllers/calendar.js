@@ -36,7 +36,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
 	function generateCalendar() {
 		// Magic here. Do not touch.
-		// Update 2015.13.07: don't know why this works...
+		// Update 2015.13.07: don't know how this works...
 		for (var j = 0; j < $scope.weeks; j++) {
 			var week = [];
 			var weekDuration = 7;

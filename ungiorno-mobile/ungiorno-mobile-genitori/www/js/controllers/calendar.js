@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.calendar',  [])
 
-.controller('CalendarCtrl', function ($scope, moment, dataServerService, profileService, $http) {
+.controller('CalendarCtrl', function ($scope, moment, dataServerService, profileService, $http, $ionicModal) {
 	var counter = 1;
 	var month = moment().locale('it');
 	var displayParentsCalendar = true;
@@ -8,6 +8,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 	var babyProfile = profileService.getBabyProfile(); 
 	var parentsAppointments = [];
 	var kidAppointments =  [];
+
+		// change view modal
+	$ionicModal.fromTemplateUrl('templates/changeCalendarViewModal.html', {
+		scope: $scope,
+		animation: 'slide-in-up'
+	}).then(function(modal) {
+		$scope.modal = modal
+	})
 
 	function getMonthDateRange(year, month) {
 	    var startDate = moment([year, month - 1]);
@@ -260,15 +268,23 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 		console.log($scope.daysAppointments);
 	};
 
-	$scope.toggleDisplay = "parents-toggle";
-	$scope.changeCalendar = function() {
-		displayParentsCalendar = !displayParentsCalendar;
-		if (displayParentsCalendar) {
-			$scope.toggleDisplay = "kid-toggle"
+	$scope.openModal = function() {
+		$scope.options = [
+			'parents',
+			'kid'
+		];
+
+		$scope.modal.show();
+	};
+
+	$scope.changeView = function(item) {
+		if (item == $scope.options[0]) {
+			displayParentsCalendar = true;
 		} else {
-			$scope.toggleDisplay = "parents-toggle";
+			displayParentsCalendar = false;
 		}
 
 		$scope.initialize();
+		$scope.modal.hide();
 	};
 });

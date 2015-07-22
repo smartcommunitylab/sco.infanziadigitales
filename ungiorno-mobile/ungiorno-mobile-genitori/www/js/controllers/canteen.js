@@ -2,7 +2,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
 .controller('CanteenCtrl', function ($scope, moment, canteenService, dataServerService, $ionicModal) {
     // Can be weekly, monthly or daily
-    $scope.displayMode = 'daily'; 
+    $scope.displayMode = 'monthly'; 
 
     $scope.initialize = function() {
     	if ($scope.displayMode == 'daily') {
@@ -15,14 +15,30 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
 
     $scope.next = function() {
-		$scope.day = $scope.day.add(1, 'day');
-		$scope.dateDisplay = $scope.day.format("dddd, D MMMM gggg");
+        if ($scope.displayMode == 'daily') {
+            dayPadding++;
+            $scope.initializeDaily();
+        } else if ($scope.displayMode == 'weekly') {
+            weekpadding++;
+            $scope.initializeWeekly();
+        } else if ($scope.displayMode == 'monthly') {
+            monthPadding++;
+            $scope.initializeMonthly();
+        }
 	};
 
 	// Go back to previous
 	$scope.previous = function() {
-		day = $scope.day.add(-1, 'day');
-		$scope.dateDisplay = $scope.day.format("dddd, D MMMM gggg");
+	    if ($scope.displayMode == 'daily') {
+            dayPadding--;
+            $scope.initializeDaily();
+        } else if ($scope.displayMode == 'weekly') {
+            weekpadding--;
+            $scope.initializeWeekly();
+        } else if ($scope.displayMode == 'monthly') {
+            monthPadding--;
+            $scope.initializeMonthly();
+        }
 	};
 
 	// change view modal
@@ -64,29 +80,31 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
     // start week
     $scope.week = [];
+    var weekpadding = 0;
     $scope.initializeWeekly = function() {
-        var startWeek = moment().locale('it').startOf('week');
-        var endWeek = moment().locale('it').endOf('week');
+        var startWeek = moment().locale('it').startOf('week').add(weekpadding, 'week');
+        var endWeek = moment().locale('it').endOf('week').add(weekpadding, 'week');
+
+        console.log(startWeek);
+        console.log(endWeek);
 
         $scope.weekRange = {
             start: startWeek,
             end: endWeek
         };
 
-        $scope.dateDisplay = "dal " + startWeek.format('D MMMM') + " al " + endWeek.format('D MMMM gggg');  
-        console.log($scope.weekDisplay);
-
         doWeek();
     };
 
-
-    function doWeek() { 
+    function doWeek() {
+        $scope.week = [];
+        $scope.dateDisplay = "dal " + $scope.weekRange.start.format('D MMMM') + " al " + $scope.weekRange.end.format('D MMMM gggg');
         dataServerService.getMeals().then(function(data) {
             for (var i = 0; i < 7; i++) {
                 var today = {
                     value: $scope.weekRange.start.add(i, 'day')
                 };
-                $scope.weekRange.start = moment().locale('it').startOf('week');
+                $scope.weekRange.start = moment().locale('it').add(weekpadding, 'week').startOf('week');
 
                 var mealToday = getMealPerDay(today.value, data);
                 if (mealToday) {
@@ -94,9 +112,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                     if (mealToday.break) {
                         today.break = mealToday.break;
                     }
-
-                    console.log(today);
                 } 
+
+                today.background = today.value.day() %2 == 0 && today.value.day() != 0? 'transparent': '#93DAF2';
                 $scope.week.push(today);
             }
         });
@@ -115,8 +133,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     // end week
 
     // start day
+    var dayPadding = 0;
     $scope.initializeDaily = function() {
-    	$scope.day = moment().locale('it');
+    	$scope.day = moment().locale('it').add(dayPadding, 'day');
     	$scope.dateDisplay = $scope.day.format("dddd, D MMMM gggg");
     	doDay();
 	};
@@ -135,4 +154,19 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 		})
 	}
     // end day
+
+    // start month
+    var monthPadding = 0;
+    $scope.initializeMonthly = function() {
+        $scope.month = moment().locale('it').add(monthPadding, 'month');
+        $scope.dateDisplay = $scope.month.format('MMMM gggg');
+    }
+
+    function doMonth() {
+        dataServerService.getMeals().then(function(data) {
+            // todo
+        });
+    }
+
+    // end month
 })

@@ -3,7 +3,9 @@
 	    <ion-nav-back-button></ion-nav-back-button>
 
 	    <ion-nav-buttons side="right">
-	    	<ion-toggle ng-click="changeCalendar()">{{toggleDisplay | translate}}</ion-toggle>
+	    	<button class="button" ng-click="openModal()">
+	    		<i class="icon ion-calendar"></i>
+	    	</button>
 	    </ion-nav-buttons>
 	</ion-nav-bar>
 
@@ -49,7 +51,7 @@
 
 			<ion-scroll class="page-padding calendar-day-background" style="margin-top: 1px;">
 				<h5>{{selectedDay}}</h5>
-				<div ng-repeat="appointment in daysAppointments">
+				<div ng-repeat="appointment in daysAppintments">
 					<p>{{appointment.title}}</p>
 				</div>
 			</ion-scroll>

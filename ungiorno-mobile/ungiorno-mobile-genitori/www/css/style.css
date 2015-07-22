@@ -118,13 +118,14 @@ input[type=text] {
 }
 
 .col.calendar-month {
-    padding-top: 15px;
-    margin-bottom: -10px;
+    padding-top: 0px;
+    margin-bottom: -5px;
     text-align: center;
 }
 
 .calendar-month {
     font-size: 20px;
+    margin-top: 7px;
 }
 
 .calendar-arrow {
@@ -135,11 +136,12 @@ input[type=text] {
 }
 
 .calendar-arrow.left {
-    float: right;
+    margin-left: 10px;
 }
 
 .calendar-arrow.right {
-    float: left;
+    float: right;
+    margin-right: 10px;
 }
 
 .calendar-container {
@@ -185,32 +187,27 @@ input[type=text] {
     text-align: center;
     font-size: 16px;
     height: 25px;
+    margin-top: 5px;
+}
+
+.canteen.food-description {
+    text-align: center;
 }
 
 .canteen.weekly-date {
-    background: red;
-    text-align: center;    
+    margin-left: 10px;
 }
 
-.canteen.weekly-lunch {
-    background: yellow;
+.canteen.daily-description {
+    background: #93DAF2;
+    font-weight: bold;
+    width: 100vh;
 }
 
-.canteen.weekly-break {
-    background: orange;   
+.canteen.daily-text {
+    margin-left: 10px;
 }
 
-.canteen.daily-lunch {
-    background: orange;
-}
-
-.canteen.daily-break {
-    background: #33CCFF;
-}
-
-ion-item {
-    background: red;
-}
 /*
 #map {
     position: absolute;

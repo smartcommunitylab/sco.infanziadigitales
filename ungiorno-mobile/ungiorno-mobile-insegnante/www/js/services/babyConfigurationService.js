@@ -1,6 +1,6 @@
-angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.configurationService', [])
+angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.babyConfigurationService', [])
 
-.factory('configurationService', function ($http, $q) {
+.factory('babyConfigurationService', function ($http, $q) {
     var babyConfiguration = null;
     var configurationService = {};
 

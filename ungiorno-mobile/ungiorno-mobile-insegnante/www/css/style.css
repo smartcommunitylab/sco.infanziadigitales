@@ -8,6 +8,40 @@ body {
     /*font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;*/
 }
 
+.circle {
+    position: absolute;
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    background: transparent;
+    border: 10px solid white;
+    border-color: #009688;
+
+    margin-left: 10%;
+}
+
+.menu-item {
+    margin-left: 15px;
+}
+
+.menu-item img {
+    height: 32px;
+    width: 32px;
+}
+
+.menu-item p {
+    margin-top: 5px;
+}
+
+.avatar-teacher {
+    border-color: transparent;
+}
+
+.tabs {
+    border-color: #009688;
+    background-color: #009688;
+    color: #fff;
+}
+
 .modal-backdrop .modal-backdrop-bg {
     -webkit-transition: opacity 300ms ease-in-out;
     transition: opacity 300ms ease-in-out;
@@ -342,6 +376,14 @@ p {
     border-color: transparent;
     background-color: transparent;
     color: #fff;
+}
+
+.bar.bar-ungiorno.bar-teachers {
+    height: 93px;
+}
+
+.leftmenu {
+    padding-top: 50px;   
 }
 
 .tabs-percorsi>.tabs,

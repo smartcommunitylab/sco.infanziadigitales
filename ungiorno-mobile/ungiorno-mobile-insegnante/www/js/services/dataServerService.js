@@ -145,5 +145,41 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
         /*temp*/
     }
 
+    dataServerService.getSections = function() {
+        var sections = null;
+        var deferred = $q.defer();
+
+        // temp
+        if (sections == null) {
+            $http.get('data/sections.json').success(function(data) {
+                sections = data;
+                deferred.resolve(sections);
+            }).error(function(data, status, headers, config) {
+                console.log(data + status + headers + config);
+            });
+        } else {
+            deferred.resolve(sections);
+        }
+        return deferred.promise;
+    };
+
+    dataServerService.getTeachers = function() {
+        var teachers = null;
+        var deferred = $q.defer();
+
+        // temp
+        if (teachers == null) {
+            $http.get('data/teachers.json').success(function(data) {
+                teachers = data;
+                deferred.resolve(teachers);
+            }).error(function(data, status, headers, config) {
+                console.log(data + status + headers + config);
+            });
+        } else {
+            deferred.resolve(teachers);
+        }
+        return deferred.promise;
+    };
+
     return dataServerService;
 })

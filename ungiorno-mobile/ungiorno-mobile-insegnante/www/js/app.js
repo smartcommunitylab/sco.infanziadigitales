@@ -12,15 +12,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     'it.smartcommunitylab.infanziadigitales.diario.parents.directives',
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.common',
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.home',
+    'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.section',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.conf',
-    'it.smartcommunitylab.infanziadigitales.diario.parents.services.configurationService',
+    'it.smartcommunitylab.infanziadigitales.diario.parents.services.babyConfigurationService',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.dataServerService',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.profileService',
+    'it.smartcommunitylab.infanziadigitales.diario.parents.services.teachersService',
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.login',
     'angularMoment'
 ])
 
-.run(function ($ionicPlatform, $rootScope, $cordovaSplashscreen, $state, $translate, $q, $ionicHistory, $ionicConfig, Config, configurationService, profileService, dataServerService, Toast) {
+.run(function ($ionicPlatform, $rootScope, $cordovaSplashscreen, $state, $translate, $q, $ionicHistory, $ionicConfig, Config, babyConfigurationService, profileService, dataServerService, Toast, $ionicSideMenuDelegate) {
     $rootScope.userIsLogged = (localStorage.userId != null && localStorage.userId != "null");
 
     $rootScope.getUserId = function () {
@@ -76,39 +78,28 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
 
 })
 
-.config(function ($stateProvider, $urlRouterProvider, $translateProvider) {
+.config(function ($stateProvider, $urlRouterProvider, $translateProvider, $ionicConfigProvider) {
+    $ionicConfigProvider.tabs.position('top');
+
     $stateProvider.state('app', {
         url: "/app",
         abstract: true,
-        templateUrl: "templates/menu.html",
-        controller: 'AppCtrl'
+        templateUrl: "templates/home.html",
+        controller: 'HomeCtrl'
     })
 
-
-    .state('app.home', {
-        cache: false,
-        url: "/home",
+    .state('app.section', {
+        url: '/section',
         views: {
-            'menuContent': {
-                templateUrl: "templates/home.html",
-                controller: 'HomeCtrl'
-            }
-        }
-    })
-
-    .state('app.login', {
-        cache: false,
-        url: '/login',
-        views: {
-            'menuContent': {
-                templateUrl: 'templates/login.html',
-                controller: 'LoginCtrl'
+            'section': {
+                templateUrl: 'templates/section.html',
+                controller: 'SectionCtrl'
             }
         }
     })
 
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/app/home');
+    $urlRouterProvider.otherwise('/app/section');
 
     $translateProvider.translations('it', {
         menu_home: 'Home',
@@ -191,175 +182,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         show_type: "Tipo visualizzazione",
         daily: "Giornaliera",
         weekly: "Settimanale",
-        monthly: "Mensile"
-    });
-
-    $translateProvider.translations('en', {
-        menu_home: 'Home',
-        home_assenza: 'Assenza',
-        home_retire: 'Ritiro',
-        home_bus: 'Bus',
-        home_mensa: 'Mensa',
-        home_calendario: 'Calendario',
-        home_contatta: 'Contatta',
-        home_personal_information: 'Informazioni su ',
-        home_school_information: 'Informazioni di servizio',
-        home_entry_to: ' entra alle ore ',
-        home_exit_to: ' ed esce alle ore ',
-        menu_exit: 'Esci',
-        menu_enter: 'Entra',
-        babysetting_intro: 'Definisci i seguenti dati relativi all\'orario scolastico del bambino.',
-        babysetting_services: 'Servizi',
-        babysetting_hours: 'Orario di uscita:',
-        babysetting_who: 'Chi ritira il bambino:',
-        babysetting_busGo: 'Fermata bus andata:',
-        babysetting_busBack: 'Fermata bus ritorno:',
-        retire: "Ritiro del bambino",
-        date: "Data",
-        hour: "Ora",
-        who_takes_baby: "Chi ritira il bambino?",
-        nav_delegate: "Delega straordinaria",
-        delegate_status: "Validità delega",
-        note: "Note",
-        note_description: "Inserisci una nota...",
-        delegate: "Delega straordinaria",
-        delegate_description: "Dati del delegato",
-        name: "Nome del delegato",
-        surname: "Cognome del delegato",
-        add_image: "Aggiungi documento del delegato",
-        delegate_auth: "Autorizzazione",
-        delegate_majority: "Il delegato è maggiorenne",
-        auth_take_baby: "Autorizzo il soggetto sopraindicato a ritirare mio figlio da scuola",
-        babysetting_save: "Salva",
-        add_image_completed: "Documento aggiunto correttamente",
-        calendar: "Calendario",
-        monday: "Lunedì",
-        tuesday: "Martedì",
-        wednesday: "Mercoledì",
-        thursday: "Giovedì",
-        friday: "Venerdì",
-        saturday: "Sabato",
-        sunday: "Domenica",
-        monday_reduced: "Lun",
-        tuesday_reduced: "Mart",
-        wednesday_reduced: "Merc",
-        thursday_reduced: "Giov",
-        friday_reduced: "Ven",
-        saturday_reduced: "Sab",
-        sunday_reduced: "Dom",
-        home_disabledbutton: "Funzione disabilitata",
-        retire_sendok: "Il ritiro del bambino e' stato confermato",
-        retire_sendno: "Problemi di invio dati",
-        setting_sendok: "Modifica configurazione registrata",
-        setting_sendno: "Problemi di invio dati",
-        call: "Chiama",
-        send_note: "Invia una nota",
-        text: "Testo",
-        send: "Invia",
-        contact_school: "Contatta la scuola",
-        bus_stop: "Fermata bus",
-        baby_drops_off_to: "Il bambino scende in",
-        whos_waiting_is: "Ad aspettare c'è",
-        open: "Aperture",
-        close: "Chiusure",
-        holiday: "Vacanza",
-        meeting: "Riunione genitori",
-        trip: "Gita",
-        events: "Eventi sul territorio",
-        kid_toggle: "Bambino",
-        parents_toggle: "Genitori",
-        meal: "Pasto",
-        lunch: "Pranzo",
-        break: "Merenda",
-        meals_info: "Info pasti",
-        show_type: "Tipo visualizzazione",
-        daily: "Giornaliera",
-        weekly: "Settimanale",
-        monthly: "Mensile"
-    });
-
-    $translateProvider.translations('de', {
-        menu_home: 'Home',
-        home_assenza: 'Assenza',
-        home_retire: 'Ritiro',
-        home_bus: 'Bus',
-        home_mensa: 'Mensa',
-        home_calendario: 'Calendario',
-        home_contatta: 'Contatta',
-        home_personal_information: 'Informazioni su ',
-        home_school_information: 'Informazioni di servizio',
-        home_entry_to: ' entra alle ore ',
-        home_exit_to: ' ed esce alle ore ',
-        menu_exit: 'Esci',
-        menu_enter: 'Entra',
-        babysetting_intro: 'Definisci i seguenti dati relativi all\'orario scolastico del bambino.',
-        babysetting_services: 'Servizi',
-        babysetting_hours: 'Orario di uscita:',
-        babysetting_who: 'Chi ritira il bambino:',
-        babysetting_busGo: 'Fermata bus andata:',
-        babysetting_busBack: 'Fermata bus ritorno:',
-        retire: "Ritiro",
-        date: "Data",
-        hour: "Ora",
-        who_takes_baby: "Chi ritira il bambino?",
-        nav_delegate: "Delega straordinaria",
-        delegate_status: "Validità delega",
-        note: "Note",
-        note_description: "Inserisci una nota...",
-        delegate: "Delega straordinaria",
-        delegate_description: "Dati del delegato",
-        name: "Nome del delegato",
-        surname: "Cognome del delegato",
-        add_image: "Aggiungi documento del delegato",
-        delegate_auth: "Autorizzazione",
-        delegate_majority: "Il delegato è maggiorenne",
-        auth_take_baby: "Autorizzo il soggetto sopraindicato a ritirare mio figlio da scuola",
-        babysetting_save: "Salva",
-        add_image_completed: "Documento aggiunto correttamente",
-        calendar: "Calendario",
-        monday: "Lunedì",
-        tuesday: "Martedì",
-        wednesday: "Mercoledì",
-        thursday: "Giovedì",
-        friday: "Venerdì",
-        saturday: "Sabato",
-        sunday: "Domenica",
-        monday_reduced: "Lun",
-        tuesday_reduced: "Mart",
-        wednesday_reduced: "Merc",
-        thursday_reduced: "Giov",
-        friday_reduced: "Ven",
-        saturday_reduced: "Sab",
-        sunday_reduced: "Dom",
-        home_disabledbutton: "Funzione disabilitata",
-        retire_sendok: "Il ritiro del bambino e' stato confermato",
-        retire_sendno: "Problemi di invio dati",
-        setting_sendok: "Modifica configurazione registrata",
-        setting_sendno: "Problemi di invio dati",
-        send_note: "Invia una nota",
-        text: "Testo",
-        send: "Invia",
-        contact_school: "Contatta la scuola",
-        call: "Chiama",
-        bus_stop: "Fermata bus",
-        baby_drops_off_to: "Il bambino scende in",
-        whos_waiting_is: "Ad aspettare c'è",
-        open: "Aperture",
-        close: "Chiusure",
-        holiday: "Vacanza",
-        meeting: "Riunione genitori",
-        trip: "Gita",
-        events: "Eventi sul territorio",
-        kid: "Bambino",
-        parents: "Genitori",
-        meal: "Pasto",
-        lunch: "Pranzo",
-        break: "Merenda",
-        meals_info: "Info pasti",
-        show_type: "Tipo visualizzazione",
-        daily: "Giornaliera",
-        weekly: "Settimanale",
-        monthly: "Mensile"
+        monthly: "Mensile",
+        // new!!
+        teacher: "Maestra",
+        all_section: "Tutte le sezioni",
+        logout: "Esci",
+        parents_alerts: "Comunicazioni"
     });
 
     $translateProvider.preferredLanguage("it");

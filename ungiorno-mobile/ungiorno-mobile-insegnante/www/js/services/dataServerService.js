@@ -3,6 +3,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
 .factory('dataServerService', function ($http, $q) {
     var babyConfiguration = null; //static info
     var babyProfile = null;
+    var assenza = null;
     var schoolProfile = null; //static info
     var dataServerService = {};
 
@@ -67,7 +68,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
         /*temp*/
         if (calendarioNote == null) {
             $http.get('data/calendario-note.json').success(function (data) {
-                calendarioNote = data;
+                calendarioNote = data.data;
                 deferred.resolve(calendarioNote);
             }).error(function (data, status, headers, config) {
                 console.log(data + status + headers + config);
@@ -77,6 +78,26 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
         return deferred.promise;
         /*temp*/
     }
+
+    dataServerService.getAssenza = function (babyID) {
+        var deferred = $q.defer();
+
+        /*temp*/
+        if (assenza == null) {
+            //TODO: get assenza for babyID
+            $http.get('data/calendario-assenza.json').success(function (data) {
+                assenza = data;
+                deferred.resolve(assenza);
+            }).error(function (data, status, headers, config) {
+                console.log(data + status + headers + config);
+                //deferred.reject(err);
+            })
+        } else deferred.resolve(assenza);
+        return deferred.promise;
+        /*temp*/
+    }
+
+
     dataServerService.sendAssenza = function (assenza) {
         var deferred = $q.defer();
 

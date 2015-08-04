@@ -1323,3 +1323,7 @@ select {
     right: 0;
     cursor: pointer;
 }
+
+.babyProfile.detailsTitle {
+    color: #0028b8;
+}

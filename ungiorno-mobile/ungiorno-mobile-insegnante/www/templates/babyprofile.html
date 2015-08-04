@@ -3,29 +3,29 @@
         <div class="row">
             <div class="col-50">
                 <img ng-src="{{babyPhoto}}" style="width: 200px; height: 200px;">
-                <h3>{{babyProfile.firstName}} è {{babyStatus | uppercase}}</h3>
-                <h3>Entra ad ore: {{babyEnterHour}}</h3>
-                <h3 ng-if="checkBusServiceActive()">Fermata bus andata id: {{babyConfig.services.bus.defaultIdGo}}</h3>
-                <h3 ng-if="checkBusServiceActive()">Fermata bus ritorno id: {{babyConfig.services.bus.defaultIdBack}}</h3>
-                <h3>Esce ad ore: {{babyConfig.exitTime | date:'hh:mm'}}</h3>
-                <h3>Persona incaricata del ritiro: {{babyConfig.extraPersons.fullName}}</h3>
+                <h3>{{babyProfile.firstName}} {{'is' | translate}} {{babyStatus | uppercase}}</h3>
+                <h3>{{'enter_at' | translate}} {{babyEnterHour}}</h3>
+                <h3 ng-if="checkBusServiceActive()">{{'bus_stop_go' | translate}} {{babyConfig.services.bus.defaultIdGo}}</h3>
+                <h3 ng-if="checkBusServiceActive()">{{'bus_stop_back' | translate}} {{babyConfig.services.bus.defaultIdBack}}</h3>
+                <h3>{{'enter_at' | translate}}{{babyConfig.exitTime | date:'hh:mm'}}</h3>
+                <h3>{{'person_who_retire' | translate}}{{babyConfig.extraPersons.fullName}}</h3>
                 <br>
-                <h2 style="color: #FF0066;">Note del genitore:</h2>
+                <h2 style="color: #FF0066;">{{'parents_notes' | translate}}</h2>
                 <h3 ng-repeat="note in notes.parentNotes">{{note.note}}</h2>
                 <br>
-                <h2 style="color: #0050ff;">Note della maestra:</h2>
+                <h2 style="color: #0050ff;">{{'teachers_notes' | translate}}</h2>
                 <h3 ng-repeat="note in notes.schoolNotes">{{note.note}}</h2>
                 <select>
-                    <option value="" disabled selected>Argomento</option>
+                    <option value="" disabled selected>{{'arguments' | translate}}</option>
                     <option ng-repeat="arg in arguments">{{arg}}</option>
                 </select>
-                <input type="text" placeholder="Descrizione">
-                <button>Invia</button>
+                <input type="text" placeholder="{{'description' | translate}}">
+                <button>{{'send' | translate}}</button>
             </div>
             <div class="col-25 col-offset-10">
-                <h2>Info generali bambino</h2>
+                <h2>{{'baby_info' | translate}}</h2>
                 <br>
-                <h2 class="genitore">Genitore 1</h2>
+                <h2 class="babyProfile detailsTitle">{{'parent_one' | translate}}</h2>
                 <h3>{{babyProfile.persons[0].fullName}}</h2>
                 <ion-list>
                     <ion-item ng-repeat="num in babyProfile.persons[0].phone" ng-click="callPhone({{num}});">
@@ -33,14 +33,14 @@
                     </ion-item>
                 </ion-list>
                 <br>
-                <h2 class="genitore">Genitore 1</h2>
+                <h2 class="babyProfile detailsTitle">{{'parent_two' | translate}}</h2>
                 <h3>{{babyProfile.persons[1].fullName}}</h2>
                 <ion-list>
                     <ion-item ng-repeat="num in babyProfile.persons[1].phone" ng-click="callPhone({{num}});">
                         <i class="icon voice-menu ion-ios-telephone" style="margin-right: 20px;"></i>{{num}}
                     </ion-item>
                 </ion-list>
-                <h2 class="genitore">Allergie alimentari:</h2>
+                <h2 class="babyProfile detailsTitle">{{'food_allergies' | translate}}</h2>
                 <h2 ng-repeat="allergia in allergieAlimentari">{{allergia}}</h2>
             </div>
 

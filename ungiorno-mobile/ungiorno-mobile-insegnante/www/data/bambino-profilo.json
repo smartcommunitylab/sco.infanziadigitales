@@ -26,11 +26,11 @@
                     "enabled": true,
                     "stops": [{
                         "stopId": "idstop1",
-                        "address": "stopaddress1",
+                        "address": "Via boh, Trento TN",
                         "default": false
                     }, {
                         "stopId": "idstop2",
-                        "address": "stopaddress2",
+                        "address": "Via S.Margherita, Povo TN",
                         "default": true
                     }]
                 },

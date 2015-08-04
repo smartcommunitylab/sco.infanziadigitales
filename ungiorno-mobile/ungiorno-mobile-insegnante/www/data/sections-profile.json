@@ -1,0 +1,55 @@
+[
+    {
+        "appId": "a",
+        "schoolId": "a",
+        "sectionId": "section1",
+        "sectionName": "Section 1",
+        "children": [
+            {
+                "childrenId": "a"
+            },
+            {
+                "childrenId": "b"
+            },
+            {
+                "childrenId": "c"
+            },
+            {
+                "childrenId": "d"
+            }]
+ },
+    {
+        "sectionId": "section2",
+        "sectionName": "Section 2",
+        "children": [
+            {
+                "childrenId": "e"
+            },
+            {
+                "childrenId": "f"
+            },
+            {
+                "childrenId": "g"
+            },
+            {
+                "childrenId": "h"
+            }]
+ },
+    {
+        "sectionId": "section3",
+        "sectionName": "Section 3",
+        "children": [
+            {
+                "childrenId": "i"
+            },
+            {
+                "childrenId": "l"
+            },
+            {
+                "childrenId": "m"
+            },
+            {
+                "childrenId": "n"
+            }]
+ }
+]

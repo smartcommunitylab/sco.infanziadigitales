@@ -8,6 +8,7 @@
             "stopId": "stopid1",
             "personId": "personId1",
             "note": "a",
+            "busId": "a"
 
         }]
 }

@@ -1,4 +1,4 @@
-angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.teachersService', [])
+angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.teachersService', [])
 
 .factory('teachersService', function ($http, $q) {
     var teachers = null;
@@ -13,12 +13,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.t
         teachers = item;
     }
 
-    teachersService.getSelectedTeacher = function() {
-    	return selectedTeacher;
+    teachersService.getSelectedTeacher = function () {
+        return selectedTeacher;
     }
 
-    teachersService.setSelectedTeacher = function(item) {
-    	selectedTeacher = item;
+    teachersService.setSelectedTeacher = function (item) {
+        selectedTeacher = item;
     }
 
     return teachersService;

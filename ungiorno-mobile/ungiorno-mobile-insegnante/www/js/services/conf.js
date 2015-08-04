@@ -1,4 +1,4 @@
-angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.conf', [])
+angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.conf', [])
 
 .factory('Config', function ($q, $http, $window, $filter, $rootScope) {
 
@@ -147,42 +147,41 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.c
 })
 
 .factory('Profiling', function (Config) {
-    var reallyDoProfiling = Config.doProfiling();
-    var startTimes = {};
-    return {
-        start2: function (label) {
-            startTimes[label] = (new Date).getTime();
-        },
-        start: function (label) {
-            if (reallyDoProfiling) this.start2(label);
-        },
+        var reallyDoProfiling = Config.doProfiling();
+        var startTimes = {};
+        return {
+            start2: function (label) {
+                startTimes[label] = (new Date).getTime();
+            },
+            start: function (label) {
+                if (reallyDoProfiling) this.start2(label);
+            },
 
-        _do2: function (label, details, info) {
-            var startTime = startTimes[label] || -1;
-            if (startTime != -1) {
-                var nowTime = (new Date).getTime();
-                console.log('PROFILING: ' + label + (details ? '(' + details + ')' : '') + '=' + (nowTime - startTime));
-                //if (details) startTimes[label]=nowTime;
-                if (!!info) console.log(info);
+            _do2: function (label, details, info) {
+                var startTime = startTimes[label] || -1;
+                if (startTime != -1) {
+                    var nowTime = (new Date).getTime();
+                    console.log('PROFILING: ' + label + (details ? '(' + details + ')' : '') + '=' + (nowTime - startTime));
+                    //if (details) startTimes[label]=nowTime;
+                    if (!!info) console.log(info);
+                }
+            },
+            _do: function (label, details, info) {
+                if (reallyDoProfiling) this._do2(label, details);
             }
-        },
-        _do: function (label, details, info) {
-            if (reallyDoProfiling) this._do2(label, details);
-        }
-    };
-})
-.factory('addingDelegateService',function(){
-    var delegate=null;
-    var addingDelegateService={}
-     addingDelegateService.insert= function(InputObj) {
-        delegate=InputObj;
-    },
-    addingDelegateService.estract=function()
-        {
-            return delegate;
+        };
+    })
+    .factory('addingDelegateService', function () {
+            var delegate = null;
+            var addingDelegateService = {}
+            addingDelegateService.insert = function (InputObj) {
+                    delegate = InputObj;
+                },
+                addingDelegateService.estract = function () {
+                    return delegate;
+                }
+
+            return addingDelegateService;
         }
 
-         return addingDelegateService;
-     }
-
-)
+    )

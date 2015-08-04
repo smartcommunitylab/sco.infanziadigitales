@@ -4,21 +4,24 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
+angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
     'ionic',
     'ngCordova',
     'pascalprecht.translate',
-    'it.smartcommunitylab.infanziadigitales.diario.parents.filters',
-    'it.smartcommunitylab.infanziadigitales.diario.parents.directives',
-    'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.common',
-    'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.home',
-    'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.section',
-    'it.smartcommunitylab.infanziadigitales.diario.parents.services.conf',
-    'it.smartcommunitylab.infanziadigitales.diario.parents.services.babyConfigurationService',
-    'it.smartcommunitylab.infanziadigitales.diario.parents.services.dataServerService',
-    'it.smartcommunitylab.infanziadigitales.diario.parents.services.profileService',
-    'it.smartcommunitylab.infanziadigitales.diario.parents.services.teachersService',
-    'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.login',
+    'it.smartcommunitylab.infanziadigitales.diario.teachers.filters',
+    'it.smartcommunitylab.infanziadigitales.diario.teachers.directives',
+    'it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.common',
+    'it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.home',
+    'it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.communications',
+    'it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.bus',
+    'it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.babyprofile',
+    'it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.calendar',
+    'it.smartcommunitylab.infanziadigitales.diario.teachers.services.conf',
+    'it.smartcommunitylab.infanziadigitales.diario.teachers.services.babyConfigurationService',
+    'it.smartcommunitylab.infanziadigitales.diario.teachers.services.dataServerService',
+    'it.smartcommunitylab.infanziadigitales.diario.teachers.services.profileService',
+    'it.smartcommunitylab.infanziadigitales.diario.teachers.services.teachersService',
+    'it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.login',
     'angularMoment'
 ])
 
@@ -84,22 +87,67 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     $stateProvider.state('app', {
         url: "/app",
         abstract: true,
-        templateUrl: "templates/home.html",
-        controller: 'HomeCtrl'
+        templateUrl: "templates/menu.html",
+        controller: 'AppCtrl'
     })
 
-    .state('app.section', {
-        url: '/section',
+
+    .state('app.home', {
+        cache: false,
+        url: "/home",
         views: {
-            'section': {
-                templateUrl: 'templates/section.html',
-                controller: 'SectionCtrl'
+            'menuContent': {
+                templateUrl: "templates/home.html",
+                controller: 'HomeCtrl'
             }
         }
+
     })
 
+    .state('app.communications', {
+            cache: false,
+            url: "/communications",
+            views: {
+                'menuContent': {
+                    templateUrl: "templates/communications.html",
+                    controller: 'communicationsCtrl'
+                }
+            }
+        })
+        .state('app.bus', {
+            cache: false,
+            url: "/bus",
+            views: {
+                'menuContent': {
+                    templateUrl: "templates/bus.html",
+                    controller: 'busCtrl'
+                }
+            }
+        })
+        .state('app.calendar', {
+            cache: false,
+            url: "/calendar",
+            views: {
+                'menuContent': {
+                    templateUrl: "templates/calendar.html",
+                    controller: 'calendarCtrl'
+                }
+            }
+        })
+        .state('app.babyprofile', {
+            cache: false,
+            url: "/babyprofile",
+            views: {
+                'menuContent': {
+                    templateUrl: "templates/babyprofile.html",
+                    controller: 'babyprofileCtrl'
+                }
+            }
+        })
+
+
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/app/section');
+    $urlRouterProvider.otherwise('/app/home');
 
     $translateProvider.translations('it', {
         menu_home: 'Home',

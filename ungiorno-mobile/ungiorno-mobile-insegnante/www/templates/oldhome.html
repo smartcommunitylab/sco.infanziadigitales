@@ -1,0 +1,49 @@
+<ion-side-menus enable-menu-with-back-views="false">
+    <!-- page content -->
+    <ion-side-menu-content>
+        <!-- right menu -->
+        <ion-side-menu side="right">
+            <div ng-show="rightView == 'alerts'">
+                <p>alerts</p>
+            </div>
+
+            <div ng-show="rightView == 'deadlines'">
+                <p>deadlines</p>
+            </div>
+        </ion-side-menu>
+
+        <!-- left menu -->
+        <ion-side-menu side="left">
+            <ion-header-bar class="bar bar-ungiorno bar-teachers">
+                <div class="row">
+                    <div class="item item-avatar avatar-teacher">
+                        <img ng-src="http://ionicframework.com/img/docs/venkman.jpg" src="http://ionicframework.com/img/docs/venkman.jpg">
+                        <h2>{{'teacher' | translate}} {{teacherName}}</h2>
+                    </div>
+                </div>
+            </ion-header-bar>
+            <ion-content class="leftmenu" ng-init="initialize()">
+                <div class="row menu-item" ng-repeat="item in menuItems" ui-sref="{{item.ref}}" ng-click="alert('ciao')">
+                    <div class="col col-25">
+                        <img ng-src="{{item.img}}">
+                    </div>
+
+                    <div class="col">
+                        <p>{{item.name | translate}}</p>
+                    </div>
+                </div>
+            </ion-content>
+        </ion-side-menu>
+
+        <ion-view id="home" ng-init="initialize()">
+            <ion-tabs>
+                <ion-tab ng-repeat="section in sections" title="{{section.sectionName}}" href="#/tab/section/{{section.sectionId}}">
+                    <ion-nav-view name="section"></ion-nav-view>
+                </ion-tab>
+                <!--<ion-tab ng-repeat="section in sections" title="{{section.sectionName}}" href="#/tab/home">
+                    <ion-nav-view name="home-tab"></ion-nav-view>
+                </ion-tab>-->
+            </ion-tabs>
+        </ion-view>
+    </ion-side-menu-content>
+</ion-side-menus>

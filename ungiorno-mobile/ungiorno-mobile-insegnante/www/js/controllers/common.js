@@ -1,4 +1,4 @@
-angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.common', [])
+angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.common', [])
 
 .factory('Toast', function ($rootScope, $timeout, $ionicPopup, $cordovaToast) {
     return {
@@ -54,45 +54,45 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
 .controller('AppCtrl', function ($scope, $rootScope, $cordovaDevice, $ionicModal, $ionicHistory, $timeout, $filter, $ionicPopover, $state, Toast, Config, $ionicSideMenuDelegate, teachersService) {
     $scope.rightView = null;
-    $scope.openRightMenu = function(item) {
+    $scope.openRightMenu = function (item) {
         $scope.rightView = item;
         $ionicSideMenuDelegate.toggleRight();
     };
 
-    $scope.openLeftMenu = function() {
+    $scope.openLeftMenu = function () {
         $scope.teacherName = teachersService.getSelectedTeacher().teacherName;
         $ionicSideMenuDelegate.toggleLeft();
     };
 
 
-    $scope.initialize = function() {
+    $scope.initialize = function () {
         $scope.menuItems = [
             {
                 "name": "menu_home",
                 "img": "img/home.png",
-                "ref": "app.home" 
+                "ref": "app.home"
             },
             {
                 "name": "parents_alerts",
                 "img": "img/notes.png",
-                "ref": "app.alerts" 
+                "ref": "app.alerts"
             },
             {
                 "name": "home_bus",
                 "img": "img/bus.png",
-                "ref": "app.bus" 
-            }, 
+                "ref": "app.bus"
+            },
             {
                 "name": "calendar",
                 "img": "img/calendar.png",
-                "ref": "app.calendar" 
+                "ref": "app.calendar"
             },
             {
                 "name": "logout",
                 "img": "img/exit.png",
-                "ref": "app.logout" 
+                "ref": "app.logout"
             }
-        ];  
+        ];
     };
 
     // Categories submenu

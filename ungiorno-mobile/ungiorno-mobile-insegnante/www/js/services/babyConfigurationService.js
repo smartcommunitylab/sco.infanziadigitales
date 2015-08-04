@@ -1,4 +1,4 @@
-angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.babyConfigurationService', [])
+angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.babyConfigurationService', [])
 
 .factory('babyConfigurationService', function ($http, $q) {
     var babyConfiguration = null;

@@ -1,4 +1,4 @@
-angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.filters', [])
+angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.filters', [])
 
 .filter('ellipsis', function ($rootScope) {
     return function (input, limit) {

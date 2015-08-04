@@ -1,4 +1,4 @@
-angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.directives', [])
+angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.directives', [])
 
 .directive('backImg', function () {
     return function (scope, element, attrs) {

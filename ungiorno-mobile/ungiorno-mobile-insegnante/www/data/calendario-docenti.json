@@ -1,0 +1,25 @@
+{
+    "data": [
+        {
+            "appId": "a",
+            "schoolId": "a",
+            "teachers": [
+                {
+                    "teacherId": "a",
+                    "teacherId": "b",
+                }
+            ],
+            "from": 1437343200,
+            "to": 1437343200,
+            "what": "class"
+        },
+        {
+            "appId": "a",
+            "schoolId": "a",
+            "teachers": [],
+            "from": 1437343200,
+            "to": 1437343200,
+            "what": "visita oculistica"
+        }
+    ]
+}

@@ -1,4 +1,4 @@
-angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.dataServerService', [])
+angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.dataServerService', [])
 
 .factory('dataServerService', function ($http, $q) {
     var babyConfiguration = null; //static info
@@ -103,7 +103,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
         /*temp*/
 
     }
-    dataServerService.sendFermata = function(fermata) {
+    dataServerService.sendFermata = function (fermata) {
         var deferred = $q.defer();
 
         deferred.resolve(true);
@@ -127,7 +127,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
         /*temp*/
     }
 
-    dataServerService.getMeals = function() {
+    dataServerService.getMeals = function () {
         var meals = null;
         var deferred = $q.defer();
 
@@ -145,16 +145,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
         /*temp*/
     }
 
-    dataServerService.getSections = function() {
+    dataServerService.getSections = function () {
         var sections = null;
         var deferred = $q.defer();
 
         // temp
         if (sections == null) {
-            $http.get('data/sections.json').success(function(data) {
+            $http.get('data/sections-profile.json').success(function (data) {
                 sections = data;
                 deferred.resolve(sections);
-            }).error(function(data, status, headers, config) {
+            }).error(function (data, status, headers, config) {
                 console.log(data + status + headers + config);
             });
         } else {
@@ -163,16 +163,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
         return deferred.promise;
     };
 
-    dataServerService.getTeachers = function() {
+    dataServerService.getTeachers = function () {
         var teachers = null;
         var deferred = $q.defer();
 
         // temp
         if (teachers == null) {
-            $http.get('data/teachers.json').success(function(data) {
+            $http.get('data/teacher-profile.json').success(function (data) {
                 teachers = data;
                 deferred.resolve(teachers);
-            }).error(function(data, status, headers, config) {
+            }).error(function (data, status, headers, config) {
                 console.log(data + status + headers + config);
             });
         } else {

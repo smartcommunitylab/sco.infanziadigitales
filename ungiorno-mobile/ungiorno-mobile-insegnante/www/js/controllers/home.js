@@ -1,9 +1,9 @@
-angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.home', [])
+angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.home', [])
 
 .controller('HomeCtrl', function ($scope, $location, dataServerService, profileService, babyConfigurationService, $filter, $state, Toast, $ionicModal, moment, teachersService, $ionicSideMenuDelegate) {
     $scope.title = moment().locale('it').format("dddd, D MMMM gggg");
-    $scope.initialize = function() {
-        dataServerService.getTeachers().then(function(data) {
+    $scope.initialize = function () {
+        dataServerService.getTeachers().then(function (data) {
             teachersService.setTeachers(data.data);
             // temp
             $scope.selectedTeacher = data.data[0];
@@ -11,7 +11,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             console.log($scope.selectedTeacher);
         });
 
-        dataServerService.getSections().then(function(data) {
+        dataServerService.getSections().then(function (data) {
             $scope.sections = data;
         });
     };

@@ -33,7 +33,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
         /*temp*/
         if (babyProfile == null) {
             $http.get('data/bambino-profilo.json').success(function (data) {
-                babyProfile = data.data;
+                babyProfile = data.data[0];
                 deferred.resolve(babyProfile);
             }).error(function (data, status, headers, config) {
                 console.log(data + status + headers + config);

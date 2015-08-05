@@ -259,6 +259,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
         logout: "Esci",
         parents_alerts: "Comunicazioni",
         enter_at: "Entra ad ore: ",
+        exit_at: "Esce ad ore: ",
         is: "è",
         bus_stop_go: "Fermata bus andata id: ",
         bus_stop_back: "Fermata bus ritorno id: ",
@@ -272,6 +273,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
         parent_one: "Genitore 1",
         parent_two: "Genitore 2",
         food_allergies: "Allergie alimentari: ",
+        teachers: "Maestre",
+        extra_delegation: "Questa è una delega straordinaria",
+        view_delegation: "Vedi delega"
+
 
     });
 

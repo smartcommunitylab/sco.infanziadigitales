@@ -1,24 +1,4 @@
 <ion-view id="home" ng-init="initialize()">
-
-    <!--
-    <ion-nav-title>
-        Nome maestra
-    </ion-nav-title>
-    <ion-content has-header="true">
--->
-    <!--
-    <ion-tabs>
-        <ion-tab ng-repeat="section in sections" title="{{section.sectionName}}" ng-click="changeSection(section)">
-        </ion-tab>
-        <ion-content>
-            <ion-content has-header="true">
-
-                section 1
-
-            </ion-content>
-        </ion-content>
-    </ion-tabs>
--->
     <ion-content has-header="true">
         <div class="row">
             <div ng-repeat="section in sections" class="col">
@@ -27,8 +7,39 @@
                 </button>
             </div>
         </div>
+        <div class="row">
+            <div class="col">
+                <svg id="svg" viewbox="0 0 100 100">
+                    <circle cx="50" cy="50" r="45" fill="#ddd" />
+                    <path fill="none" stroke-linecap="round" stroke-width="5" stroke="#fff" stroke-dasharray="125,250" d="M50 10
+           a 40 40 0 0 1 0 80
+           a 40 40 0 0 1 0 -80" />
+                    <text x="50" y="50" text-anchor="middle" dy="7" font-size="20">15 su 30</text>
+                </svg>
+            </div>
+            <div class="col">
+
+                <svg id="svg" viewbox="0 0 100 100">
+                    <circle cx="50" cy="50" r="45" fill="#ddd" />
+                    <path fill="none" stroke-linecap="round" stroke-width="5" stroke="#fff" stroke-dasharray="150,250" d="M50 10
+           a 40 40 0 0 1 0 80
+           a 40 40 0 0 1 0 -80" />
+                    <text x="50" y="50" text-anchor="middle" dy="7" font-size="20">5 su 7</text>
+                </svg>
+            </div>
+            <div class="col">
+
+                <svg id="svg" viewbox="0 0 100 100">
+                    <circle cx="50" cy="50" r="45" fill="#ddd" />
+                    <path fill="none" stroke-linecap="round" stroke-width="5" stroke="#fff" stroke-dasharray="100,250" d="M50 10
+           a 40 40 0 0 1 0 80
+           a 40 40 0 0 1 0 -80" />
+                    <text x="50" y="50" text-anchor="middle" dy="7" font-size="20">8 su 20</text>
+                </svg>
+            </div>
+        </div>
         <div>
-            <img class="chldren-home" ng-repeat="child in children track by $index" ng-src="{{child.image}}" ng-click="openDetail(child)">
+            <img class="chldren-home" ng-repeat="child in childrenProfiles track by $index" ng-src="{{child.image}}" ng-click="openDetail(child)">
         </div>
     </ion-content>
 </ion-view>

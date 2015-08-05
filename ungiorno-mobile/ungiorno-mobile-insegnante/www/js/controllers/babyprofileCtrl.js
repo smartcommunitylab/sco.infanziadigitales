@@ -20,7 +20,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
 
     dataServerService.getNotes().then(function (data) {
         $scope.notes = data[0];
-        console.log("cazz" + JSON.stringify($scope.notes));
     },
     function (error) {
         console.log("ERROR -> " + error);

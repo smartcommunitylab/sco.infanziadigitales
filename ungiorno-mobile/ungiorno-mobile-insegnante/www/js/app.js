@@ -16,6 +16,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
     'it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.bus',
     'it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.babyprofile',
     'it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.calendar',
+    'it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.notes',
     'it.smartcommunitylab.infanziadigitales.diario.teachers.services.conf',
     'it.smartcommunitylab.infanziadigitales.diario.teachers.services.babyConfigurationService',
     'it.smartcommunitylab.infanziadigitales.diario.teachers.services.dataServerService',
@@ -141,6 +142,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
                 'menuContent': {
                     templateUrl: "templates/babyprofile.html",
                     controller: 'babyprofileCtrl'
+                }
+            }
+        })
+        .state('app.notes', {
+            cache: false,
+            url: "/notes",
+            views: {
+                'menuContent': {
+                    templateUrl: "templates/notes.html",
+                    controller: 'notesCtrl'
                 }
             }
         })

@@ -39,7 +39,7 @@
             </div>
         </div>
         <div>
-            <img class="chldren-home" ng-repeat="child in childrenProfiles track by $index" ng-src="{{child.image}}" ng-click="openDetail(child)">
+            <img class="chldren-home" ng-repeat="child in childrenProfiles track by $index" ng-src="{{child.image}}" ng-click="openDetail($index)">
         </div>
     </ion-content>
 </ion-view>

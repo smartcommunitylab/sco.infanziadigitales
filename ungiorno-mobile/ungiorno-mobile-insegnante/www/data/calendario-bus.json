@@ -3,12 +3,39 @@
         {
             "appId": "a",
             "schoolId": "a",
-            "kidId": "a",
             "date": 1435075887150,
-            "stopId": "stopid1",
-            "personId": "personId1",
-            "note": "a",
-            "busId": "a"
-
+            "buses": [{
+                    "busId": "a",
+                    "children": [
+                        {
+                            "childrenId": "a"
+            },
+                        {
+                            "childrenId": "b"
+            },
+                        {
+                            "childrenId": "c"
+            },
+                        {
+                            "childrenId": "d"
+            }]
+                },
+                {
+                    "busId": "b",
+                    "children": [
+                        {
+                            "childrenId": "e"
+            },
+                        {
+                            "childrenId": "f"
+            },
+                        {
+                            "childrenId": "g"
+            },
+                        {
+                            "childrenId": "h"
+            }]
+                }
+]
         }]
 }

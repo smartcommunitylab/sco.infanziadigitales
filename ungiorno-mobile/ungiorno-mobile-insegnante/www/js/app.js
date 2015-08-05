@@ -20,6 +20,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
     'it.smartcommunitylab.infanziadigitales.diario.teachers.services.babyConfigurationService',
     'it.smartcommunitylab.infanziadigitales.diario.teachers.services.dataServerService',
     'it.smartcommunitylab.infanziadigitales.diario.teachers.services.profileService',
+    'it.smartcommunitylab.infanziadigitales.diario.teachers.services.sectionService',
     'it.smartcommunitylab.infanziadigitales.diario.teachers.services.teachersService',
     'it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.login',
     'angularMoment'
@@ -104,7 +105,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
 
     })
 
-    .state('app.communications', {
+    .state('app.section', {
+            url: '/section/:id',
+            views: {
+                'section': {
+                    templateUrl: 'templates/section.html',
+                    controller: 'SectionCtrl'
+                }
+            }
+
+        })
+        .state('app.communications', {
             cache: false,
             url: "/communications",
             views: {

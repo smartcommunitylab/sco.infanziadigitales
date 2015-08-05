@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.home', [])
 
-.controller('HomeCtrl', function ($scope, $location, dataServerService, profileService, babyConfigurationService, $filter, $state, Toast, $ionicModal, moment, teachersService, schoolService, sectionService, $ionicSideMenuDelegate) {
+.controller('HomeCtrl', function ($scope, $location, dataServerService, profileService, babyConfigurationService, $filter, $state, Toast, $ionicModal, moment, teachersService, sectionService, $ionicSideMenuDelegate) {
     $scope.sections = null;
     $scope.section = null;
     $scope.childrenConfigurations = [];
@@ -18,7 +18,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         });
         dataServerService.getSchoolProfile().then(function (schoolProfile) {
             $scope.schoolProfile = schoolProfile.data[0];
-            schoolService.setSchoolProfile($scope.schoolProfile);
+            profileService.setSchoolProfile($scope.schoolProfile);
             dataServerService.getSections().then(function (data) {
                 $scope.sections = data;
                 $scope.section = $scope.sections[0];

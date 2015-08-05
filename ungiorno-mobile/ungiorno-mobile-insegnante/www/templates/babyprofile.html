@@ -8,7 +8,7 @@
             <div class="col-50 babyProfile card">
                 <div>
                     <div style="display:inline-block; vertical-align:top;">
-                        <img ng-src="{{babyPhoto}}" style="width: 200px; height: 200px;">
+                        <img ng-src="{{babyProfile.image}}" style="width: 200px; height: 200px;">
                     </div>
                     <div style="display:inline-block; vertical-align:top; margin-left: 32px; margin-top: 8px;">
                         <h3 class="babyProfile detailItem">{{babyProfile.firstName}} {{'is' | translate}} {{babyStatus | uppercase}}</h3>
@@ -24,17 +24,12 @@
                 <h2 class="babyProfile detailsTitle" id="parentsNotes" style="margin-top: 24px;">{{'parents_notes' | translate}}</h2>
                 <h3 class="babyProfile detailItem"  ng-repeat="note in notes.parentNotes">{{note.note}}</h2>
                 <h2 class="babyProfile detailsTitle" id="teachersNotes" style="margin-top: 24px;">{{'teachers_notes' | translate}}</h2>
-                <h3 class="babyProfile detailItem"  ng-repeat="note in notes.schoolNotes">{{note.note}}</h2>
-
-                <button ng-click="newNoteDialog()">Nuova nota</button>
-
-
-                <!--<select>
+                <select>
                     <option value="" disabled selected>{{'arguments' | translate}}</option>
                     <option ng-repeat="arg in arguments">{{arg}}</option>
                 </select>
                 <input type="text" placeholder="{{'description' | translate}}">
-                <button>{{'send' | translate}}</button>-->
+                <button>{{'send' | translate}}</button>
             </div>
             <div class="col-25 col-offset-10 babyProfile card">
                 <h2>{{'baby_info' | translate}}</h2>

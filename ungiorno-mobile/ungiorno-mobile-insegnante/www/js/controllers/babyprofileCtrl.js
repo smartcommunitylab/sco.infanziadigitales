@@ -1,15 +1,11 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.babyprofile', [])
 
-.controller('babyprofileCtrl', function ($scope, $location, dataServerService) {
+.controller('babyprofileCtrl', function ($scope, $location, dataServerService, profileService) {
 
     //Acquiring data from server
-    dataServerService.getBabyProfile().then(function (data) {
-        $scope.babyProfile = data[0];
-    },
-    function (error) {
-        console.log("ERROR -> " + error);
-    });
-
+    $scope.babyProfile = profileService.getBabyProfile();
+    //$scope.babyConfig = profileService.getBabyConfig();
+    //temp babyConfig
     dataServerService.getBabyConfiguration().then(function (data) {
         $scope.babyConfig = data[0];
         $scope.babyStatus = new Date().getTime() > $scope.babyConfig.exitTime ? "uscito" : "presente";
@@ -33,7 +29,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     }
 
     $scope.checkBusServiceActive = function() {
+        return $scope.babyConfig.services.bus.active;
+    }
+    $scope.isDelegation = function() {
         return true;
+    }
+
+
+    $scope.newNoteDialog = function() {
+
     }
 
 });

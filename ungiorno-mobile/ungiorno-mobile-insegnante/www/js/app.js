@@ -275,7 +275,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
         food_allergies: "Allergie alimentari: ",
         teachers: "Maestre",
         extra_delegation: "Questa è una delega straordinaria",
-        view_delegation: "Vedi delega"
+        view_delegation: "Vedi delega",
+        exit: "Uscito",
+        present: "Presente"
 
 
     });

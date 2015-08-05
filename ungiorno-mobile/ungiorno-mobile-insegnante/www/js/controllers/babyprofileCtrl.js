@@ -6,6 +6,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     $scope.babyProfile = profileService.getBabyProfile();
     $scope.schoolProfile = profileService.getSchoolProfile();
     $scope.babyConfig = babyConfigurationService.getBabyConfiguration();
+    $scope.notes = babyConfigurationService.getBabyNotes();
     //temp babyConfig
 
     $scope.babyEnterHour = $scope.babyConfig.services.anticipo ? $scope.schoolProfile.anticipoTiming.fromTime : $scope.schoolProfile.regularTiming.fromTime;
@@ -20,13 +21,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
 
 
     $scope.babyStatus = today.getTime() > exitDayWithHour.getTime() ? $filter('translate')('exit') : $filter('translate')('present');
-
-    dataServerService.getNotes().then(function (data) {
-        $scope.notes = data[0];
-    },
-    function (error) {
-        console.log("ERROR -> " + error);
-    });
 
 
     //Custom methods

@@ -4,6 +4,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     $scope.sections = null;
     $scope.section = null;
     $scope.childrenConfigurations = [];
+    $scope.childrenNotes = [];
     $scope.childrenProfiles = [];
     $scope.schoolProfile = null;
     $scope.numberOfChildren = 0;
@@ -33,6 +34,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
                     babyConfigurationService.getBabyConfigurationById($scope.section.children[i].childrenId).then(function (configuration) {
                         $scope.childrenConfigurations.push(configuration);
                     });
+                    babyConfigurationService.getBabyNotesById($scope.section.children[i].childrenId).then(function (notes) {
+                        $scope.childrenNotes.push(notes);
+                    });
+
                 };
             })
         });
@@ -45,6 +50,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     $scope.openDetail = function (index) {
         profileService.setBabyProfile($scope.childrenProfiles[index]);
         babyConfigurationService.setBabyConfiguration($scope.childrenConfigurations[index]);
+        babyConfigurationService.setBabyNotes($scope.childrenNotes[index]);
         window.location.assign('#/app/babyprofile');
     }
 });

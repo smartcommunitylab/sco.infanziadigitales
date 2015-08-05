@@ -2,6 +2,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
 
 .factory('babyConfigurationService', function ($http, $q, dataServerService) {
     var babyConfiguration = null;
+    var babyNotes = null;
     var configurationService = {};
 
 
@@ -11,6 +12,24 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
     configurationService.setBabyConfiguration = function (newBabyConfiguration) {
         babyConfiguration = newBabyConfiguration;
     }
+
+    configurationService.getBabyNotes = function () {
+        return babyNotes;
+    }
+    configurationService.setBabyNotes = function (newBabyNotes) {
+        babyNotes = newBabyNotes;
+    }
+
+     configurationService.getBabyNotesById = function (babyId) {
+        var deferred = $q.defer();
+        /*tmp*/
+        dataServerService.getNotes().then(function (data) {
+            deferred.resolve(data[0]);
+        });
+        return deferred.promise;
+        /*tmp*/
+    }
+
 
     configurationService.getBabyConfigurationById = function (babyId) {
         var deferred = $q.defer();

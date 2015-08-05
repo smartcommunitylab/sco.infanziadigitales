@@ -23,7 +23,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
     'it.smartcommunitylab.infanziadigitales.diario.teachers.services.profileService',
     'it.smartcommunitylab.infanziadigitales.diario.teachers.services.sectionService',
     'it.smartcommunitylab.infanziadigitales.diario.teachers.services.teachersService',
-    'it.smartcommunitylab.infanziadigitales.diario.teachers.services.schoolService',
     'it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.login',
     'angularMoment'
 ])

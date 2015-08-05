@@ -16,6 +16,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
     'it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.bus',
     'it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.babyprofile',
     'it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.calendar',
+    'it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.notes',
     'it.smartcommunitylab.infanziadigitales.diario.teachers.services.conf',
     'it.smartcommunitylab.infanziadigitales.diario.teachers.services.babyConfigurationService',
     'it.smartcommunitylab.infanziadigitales.diario.teachers.services.dataServerService',
@@ -155,6 +156,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
                 }
             }
         })
+        .state('app.notes', {
+            cache: false,
+            url: "/notes",
+            views: {
+                'menuContent': {
+                    templateUrl: "templates/notes.html",
+                    controller: 'notesCtrl'
+                }
+            }
+        })
 
 
     // if none of the above states are matched, use this as the fallback
@@ -246,7 +257,22 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
         teacher: "Maestra",
         all_section: "Tutte le sezioni",
         logout: "Esci",
-        parents_alerts: "Comunicazioni"
+        parents_alerts: "Comunicazioni",
+        enter_at: "Entra ad ore: ",
+        is: "è",
+        bus_stop_go: "Fermata bus andata id: ",
+        bus_stop_back: "Fermata bus ritorno id: ",
+        person_who_retire: "Persona incaricata del ritiro: ",
+        parents_notes: "Note del genitore: ",
+        teachers_notes: "Note della maestra: ",
+        arguments: "Argomento",
+        description: "Descrizione",
+        send: "Invia",
+        baby_info: "Info generali bambino",
+        parent_one: "Genitore 1",
+        parent_two: "Genitore 2",
+        food_allergies: "Allergie alimentari: ",
+
     });
 
     $translateProvider.preferredLanguage("it");

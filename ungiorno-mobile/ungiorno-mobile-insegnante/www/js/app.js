@@ -277,7 +277,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
         extra_delegation: "Questa è una delega straordinaria",
         view_delegation: "Vedi delega",
         exit: "Uscito",
-        present: "Presente"
+        present: "Presente",
+        today: "Oggi",
+        select_argument: "Seleziona un argomento",
+        type_description: "Immetti una descrizione",
+        note_sent_success: "Nota registrata con successo",
 
 
     });

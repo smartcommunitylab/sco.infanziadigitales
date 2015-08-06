@@ -1,25 +1,44 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.babyprofile', [])
 
-.controller('babyprofileCtrl', function ($scope, $location, dataServerService, profileService) {
+.controller('babyprofileCtrl', function ($scope, $location, dataServerService, profileService, babyConfigurationService, $filter) {
 
     //Acquiring data from server
-    $scope.babyProfile = profileService.getBabyProfile();
-    //$scope.babyConfig = profileService.getBabyConfig();
-    //temp babyConfig
-    dataServerService.getBabyConfiguration().then(function (data) {
-        $scope.babyConfig = data[0];
-        $scope.babyStatus = new Date().getTime() > $scope.babyConfig.exitTime ? "uscito" : "presente";
-    },
-    function (error) {
-        console.log("ERROR -> " + error);
-    });
 
-    dataServerService.getNotes().then(function (data) {
-        $scope.notes = data[0];
-    },
-    function (error) {
-        console.log("ERROR -> " + error);
-    });
+    $scope.checkBusServiceActive = function() {
+        return $scope.babyConfig.services.bus.active && $scope.babyProfile.services.bus.enabled;
+    }
+    var getBusStopAddressByID = function(busStopID) {
+        for (var i = 0; i < $scope.babyProfile.services.bus.stops.length; i++) {
+            if ($scope.babyProfile.services.bus.stops[i].stopId === busStopID) {
+                return $scope.babyProfile.services.bus.stops[i].address;
+            }
+        }
+
+    }
+
+    //Acquiring data from services
+    $scope.babyProfile = profileService.getBabyProfile();
+    $scope.schoolProfile = profileService.getSchoolProfile();
+    $scope.babyConfig = babyConfigurationService.getBabyConfiguration();
+    $scope.notes = babyConfigurationService.getBabyNotes();
+
+    $scope.babyEnterHour = $scope.babyConfig.services.anticipo ? $scope.schoolProfile.anticipoTiming.fromTime : $scope.schoolProfile.regularTiming.fromTime;
+    $scope.babyExitHour = $scope.babyConfig.services.posticipo ? $scope.schoolProfile.posticipoTiming.toTime : $scope.schoolProfile.regularTiming.toTime;
+
+    //used to get if the baby is present
+    var today = new Date();
+    var exitDayWithHour = new Date();
+    var exitHour = new Date('01/01/2000 ' + $scope.babyExitHour); //placeholder date, well completed after
+    exitDayWithHour.setHours(exitHour.getHours());
+    exitDayWithHour.setMinutes(exitHour.getMinutes());
+
+
+    $scope.babyStatus = today.getTime() > exitDayWithHour.getTime() ? $filter('translate')('exit') : $filter('translate')('present');
+
+    if ($scope.checkBusServiceActive()) {
+        $scope.babyBusStopGoName = getBusStopAddressByID($scope.babyConfig.services.bus.defaultIdGo);
+        $scope.babyBusStopBackName = getBusStopAddressByID($scope.babyConfig.services.bus.defaultIdBack);
+    }
 
 
     //Custom methods
@@ -28,16 +47,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         document.location.href = 'tel:' + number;
     }
 
-    $scope.checkBusServiceActive = function() {
-        return $scope.babyConfig.services.bus.active;
-    }
     $scope.isDelegation = function() {
-        return true;
-    }
-
-
-    $scope.newNoteDialog = function() {
-
+        return $scope.babyConfig.extraPerson.personId === $scope.babyConfig.personWhoRetireBaby.personId;
     }
 
 });

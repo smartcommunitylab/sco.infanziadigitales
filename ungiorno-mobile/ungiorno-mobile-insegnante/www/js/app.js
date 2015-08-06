@@ -261,8 +261,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
         enter_at: "Entra ad ore: ",
         exit_at: "Esce ad ore: ",
         is: "è",
-        bus_stop_go: "Fermata bus andata id: ",
-        bus_stop_back: "Fermata bus ritorno id: ",
+        bus_stop_go: "Fermata bus andata: ",
+        bus_stop_back: "Fermata bus ritorno: ",
         person_who_retire: "Persona incaricata del ritiro: ",
         parents_notes: "Note del genitore: ",
         teachers_notes: "Note della maestra: ",
@@ -278,7 +278,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
         view_delegation: "Vedi delega",
         home_anticipo: "Anticipo",
         home_pranzo: "Pranzo",
-        home_posticipo: "Posticipo"
+        home_posticipo: "Posticipo",
+        exit: "Uscito",
+        present: "Presente"
+
 
     });
 

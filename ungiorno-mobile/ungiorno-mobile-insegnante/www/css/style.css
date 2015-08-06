@@ -1321,6 +1321,7 @@ select {
 .babyProfile.detailsTitle {
     color: #0028b8;
 }
+
 .babyProfile.card {
     padding: 32px;
 }
@@ -1328,12 +1329,19 @@ select {
 .babyProfile.note {
     padding: 32px;
 }
+
 .babyProfile #parentsNotes {
     color: #ff0066;
 }
+
 .babyProfile #teachersNotes {
     color: #0050ff;
 }
+
 .babyProfile.detailItem {
     font-size: 18px;
+}
+
+.section-text {
+    text-align: center;
 }

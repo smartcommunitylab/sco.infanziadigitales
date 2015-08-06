@@ -6,16 +6,72 @@
         "sectionName": "Section 1",
         "children": [
             {
-                "childrenId": "a"
+                "childrenId": "a",
+                "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg",
+                "exitTime": 1034964475576,
+                "anticipo": {
+                    "active": true,
+                    "enabled": true
+                },
+                "posticipo": {
+                    "active": false,
+                    "enabled": true
+                },
+                "mensa": {
+                    "active": false,
+                    "enabled": true
+                }
             },
             {
-                "childrenId": "b"
+                "childrenId": "b",
+                "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg",
+                "exitTime": 1034964475576,
+                "anticipo": {
+                    "active": true,
+                    "enabled": true
+                },
+                "posticipo": {
+                    "active": true,
+                    "enabled": true
+                },
+                "mensa": {
+                    "active": false,
+                    "enabled": false
+                }
             },
             {
-                "childrenId": "c"
+                "childrenId": "c",
+                "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg",
+                "exitTime": 1034964475576,
+                "anticipo": {
+                    "active": false,
+                    "enabled": true
+                },
+                "posticipo": {
+                    "active": false,
+                    "enabled": true
+                },
+                "mensa": {
+                    "active": true,
+                    "enabled": true
+                }
             },
             {
-                "childrenId": "d"
+                "childrenId": "d",
+                "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg",
+                "exitTime": null,
+                "anticipo": {
+                    "active": false,
+                    "enabled": false
+                },
+                "posticipo": {
+                    "active": false,
+                    "enabled": true
+                },
+                "mensa": {
+                    "active": true,
+                    "enabled": true
+                }
             }]
  },
     {
@@ -23,16 +79,55 @@
         "sectionName": "Section 2",
         "children": [
             {
-                "childrenId": "e"
+                "childrenId": "e",
+                "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg",
+                "exitTime": 1034964475576,
+                "anticipo": {
+                    "active": true,
+                    "enabled": true
+                },
+                "posticipo": {
+                    "active": true,
+                    "enabled": true
+                },
+                "mensa": {
+                    "active": true,
+                    "enabled": true
+                }
             },
             {
-                "childrenId": "f"
+                "childrenId": "f",
+                "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg",
+                "exitTime": 1034964475576,
+                "anticipo": {
+                    "active": true,
+                    "enabled": true
+                },
+                "posticipo": {
+                    "active": false,
+                    "enabled": true
+                },
+                "mensa": {
+                    "active": true,
+                    "enabled": true
+                }
             },
             {
-                "childrenId": "g"
-            },
-            {
-                "childrenId": "h"
+                "childrenId": "g",
+                "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg",
+                "exitTime": 1034964475576,
+                "anticipo": {
+                    "active": false,
+                    "enabled": false
+                },
+                "posticipo": {
+                    "active": false,
+                    "enabled": true
+                },
+                "mensa": {
+                    "active": true,
+                    "enabled": true
+                }
             }]
  },
     {
@@ -40,16 +135,123 @@
         "sectionName": "Section 3",
         "children": [
             {
-                "childrenId": "i"
+                "childrenId": "i",
+                "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg",
+                "exitTime": 1034964475576,
+                "anticipo": {
+                    "active": true,
+                    "enabled": true
+                },
+                "posticipo": {
+                    "active": true,
+                    "enabled": true
+                },
+                "mensa": {
+                    "active": true,
+                    "enabled": true
+                }
             },
             {
-                "childrenId": "l"
+                "childrenId": "l",
+                "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg",
+                "exitTime": 1034964475576,
+                "anticipo": {
+                    "active": true,
+                    "enabled": true
+                },
+                "posticipo": {
+                    "active": true,
+                    "enabled": true
+                },
+                "mensa": {
+                    "active": true,
+                    "enabled": true
+                }
             },
             {
-                "childrenId": "m"
+                "childrenId": "m",
+                "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg",
+                "exitTime": 1034964475576,
+                "anticipo": {
+                    "active": false,
+                    "enabled": false
+                },
+                "posticipo": {
+                    "active": false,
+                    "enabled": false
+                },
+                "mensa": {
+                    "active": false,
+                    "enabled": false
+                }
             },
             {
-                "childrenId": "n"
+                "childrenId": "n",
+                "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg",
+                "exitTime": 1034964475576,
+                "anticipo": {
+                    "active": true,
+                    "enabled": true
+                },
+                "posticipo": {
+                    "active": true,
+                    "enabled": true
+                },
+                "mensa": {
+                    "active": true,
+                    "enabled": true
+                }
+            },
+            {
+                "childrenId": "h",
+                "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg",
+                "exitTime": null,
+                "anticipo": {
+                    "active": true,
+                    "enabled": true
+                },
+                "posticipo": {
+                    "active": true,
+                    "enabled": true
+                },
+                "mensa": {
+                    "active": true,
+                    "enabled": true
+                }
+            },
+            {
+                "childrenId": "o",
+                "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg",
+                "exitTime": null,
+                "anticipo": {
+                    "active": true,
+                    "enabled": true
+                },
+                "posticipo": {
+                    "active": false,
+                    "enabled": true
+                },
+                "mensa": {
+                    "active": false,
+                    "enabled": true
+                }
+            },
+            {
+                "childrenId": "p",
+                "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg",
+                "exitTime": 1034964475576,
+                "anticipo": {
+                    "active": true,
+                    "enabled": true
+                },
+                "posticipo": {
+                    "active": true,
+                    "enabled": true
+                },
+                "mensa": {
+                    "active": true,
+                    "enabled": true
+                }
             }]
  }
 ]

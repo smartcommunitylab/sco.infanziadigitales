@@ -9,33 +9,48 @@
         </div>
         <div class="row">
             <div class="col">
-                <svg id="svg" viewbox="0 0 100 100">
-                    <circle cx="50" cy="50" r="45" fill="#ddd" />
-                    <path fill="none" stroke-linecap="round" stroke-width="5" stroke="#fff" stroke-dasharray="125,250" d="M50 10
+                <div class="section">
+                    <svg id="svg" viewbox="0 0 100 100">
+                        <circle cx="50" cy="50" r="45" fill="#ddd" />
+                        <path fill="none" stroke-linecap="round" stroke-width="5" stroke="#fff" stroke-dasharray="125,250" d="M50 10
            a 40 40 0 0 1 0 80
            a 40 40 0 0 1 0 -80" />
-                    <text x="50" y="50" text-anchor="middle" dy="7" font-size="20">15 su 30</text>
-                </svg>
+                        <text x="50" y="50" text-anchor="middle" dy="7" font-size="20">{{availableChildren['anticipo']}} su {{totalChildrenNumber['anticipo']}}</text>
+                    </svg>
+                </div>
+                <div class="section-text">
+                    {{'home_anticipo' | translate}}
+                </div>
             </div>
             <div class="col">
+                <div class="section">
 
-                <svg id="svg" viewbox="0 0 100 100">
-                    <circle cx="50" cy="50" r="45" fill="#ddd" />
-                    <path fill="none" stroke-linecap="round" stroke-width="5" stroke="#fff" stroke-dasharray="150,250" d="M50 10
+                    <svg id="svg" viewbox="0 0 100 100">
+                        <circle cx="50" cy="50" r="45" fill="#ddd" />
+                        <path fill="none" stroke-linecap="round" stroke-width="5" stroke="#fff" stroke-dasharray="150,250" d="M50 10
            a 40 40 0 0 1 0 80
            a 40 40 0 0 1 0 -80" />
-                    <text x="50" y="50" text-anchor="middle" dy="7" font-size="20">5 su 7</text>
-                </svg>
+                        <text x="50" y="50" text-anchor="middle" dy="7" font-size="20">{{availableChildren['mensa']}} su {{totalChildrenNumber['mensa']}}</text>
+                    </svg>
+                </div>
+                <div class="section-text">
+                    {{'home_pranzo' | translate}}
+                </div>
             </div>
             <div class="col">
-
-                <svg id="svg" viewbox="0 0 100 100">
-                    <circle cx="50" cy="50" r="45" fill="#ddd" />
-                    <path fill="none" stroke-linecap="round" stroke-width="5" stroke="#fff" stroke-dasharray="100,250" d="M50 10
+                <div class="section">
+                    <svg id="svg" viewbox="0 0 100 100">
+                        <circle cx="50" cy="50" r="45" fill="#ddd" />
+                        <path fill="none" stroke-linecap="round" stroke-width="5" stroke="#fff" stroke-dasharray="100,250" d="M50 10
            a 40 40 0 0 1 0 80
            a 40 40 0 0 1 0 -80" />
-                    <text x="50" y="50" text-anchor="middle" dy="7" font-size="20">8 su 20</text>
-                </svg>
+                        <text x="50" y="50" text-anchor="middle" dy="7" font-size="20">{{availableChildren['posticipo']}} su {{totalChildrenNumber['posticipo']}}</text>
+                    </svg>
+                </div>
+                <div class="section-text">
+                    {{'home_posticipo' | translate}}
+                </div>
+                <!--                <div section></div>-->
             </div>
         </div>
         <div>

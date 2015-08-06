@@ -5,37 +5,81 @@
             "schoolId": "a",
             "date": 1435075887150,
             "buses": [{
-                    "busId": "a",
-                    "children": [
-                        {
-                            "childrenId": "a"
-            },
-                        {
-                            "childrenId": "b"
-            },
-                        {
-                            "childrenId": "c"
-            },
-                        {
-                            "childrenId": "d"
-            }]
+                "busId": "a",
+                "busName": "Bus 1",
+                "children": [
+                {
+                    "childrenId": "a",
+                    "personWhoWaitName": "fullName2",
+                    "personWhoWaitRelation": "papà",
+                    "fullName": "Mario Rossi",
+                    "busStop": "Via S.Margherita, Povo TN",
+                    "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg"
                 },
                 {
-                    "busId": "b",
-                    "children": [
-                        {
-                            "childrenId": "e"
-            },
-                        {
-                            "childrenId": "f"
-            },
-                        {
-                            "childrenId": "g"
-            },
-                        {
-                            "childrenId": "h"
-            }]
+                    "childrenId": "b",
+                    "personWhoWaitName": "Mara Rossi",
+                    "personWhoWaitRelation": "mamma",
+                    "fullName": "Chiara Bianchi",
+                    "busStop": "Via S.Margherita, Povo TN",
+                    "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg"
+                },
+                {
+                    "childrenId": "c",
+                    "personWhoWaitName": "fullName2",
+                    "personWhoWaitRelation": "papà",
+                    "fullName": "Mario Rossi",
+                    "busStop": "Via S.Margherita, Povo TN",
+                    "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg"
+                },
+                {
+                    "childrenId": "d",
+                    "personWhoWaitName": "fullName2",
+                    "personWhoWaitRelation": "papà",
+                    "fullName": "Mario Rossi",
+                    "busStop": "Via S.Margherita, Povo TN",
+                    "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg"
+                },
+                {
+                    "childrenId": "e",
+                    "personWhoWaitName": "fullName2",
+                    "personWhoWaitRelation": "papà",
+                    "fullName": "Mario Rossi",
+                    "busStop": "Via S.Margherita, Povo TN",
+                    "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg"
                 }
-]
-        }]
+                ]
+            },
+            {
+                "busId": "b",
+                "busName": "Bus 2",
+                "children": [
+                {
+                    "childrenId": "f",
+                    "personWhoWaitName": "fullName2",
+                    "personWhoWaitRelation": "papà",
+                    "fullName": "Mario Rossi",
+                    "busStop": "Via S.Margherita, Povo TN",
+                    "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg"
+                },
+                {
+                    "childrenId": "g",
+                    "personWhoWaitName": "fullName2",
+                    "personWhoWaitRelation": "papà",
+                    "fullName": "Mario Rossi",
+                    "busStop": "Via S.Margherita, Povo TN",
+                    "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg"
+                },
+                {
+                    "childrenId": "h",
+                    "personWhoWaitName": "fullName2",
+                    "personWhoWaitRelation": "papà",
+                    "fullName": "Mario Rossi",
+                    "busStop": "Via S.Margherita, Povo TN",
+                    "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg"
+                }
+                ]
+            }
+        ]
+    }]
 }

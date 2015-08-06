@@ -2,6 +2,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
 
 .controller('busCtrl', function ($scope, $location) {
 
+    dataServerService.getBuses().then(function (data) {
+        $scope.buses = data;
+
+
+
+
+    });
 
 
 });

@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.babyprofile', [])
 
-.controller('babyprofileCtrl', function ($scope, $location, dataServerService, profileService, babyConfigurationService, $filter) {
+.controller('babyprofileCtrl', function ($scope, $location, dataServerService, profileService, babyConfigurationService, $filter, Toast, $ionicLoading, $timeout) {
 
     //Acquiring data from server
 
@@ -49,6 +49,22 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
 
     $scope.isDelegation = function() {
         return $scope.babyConfig.extraPerson.personId === $scope.babyConfig.personWhoRetireBaby.personId;
+    }
+
+    $scope.sendTeacherNote = function() {
+        var noteTypeID = document.getElementById("note_type").value;
+        var noteDescription = document.getElementById("note_description").value;
+
+        if (noteTypeID === "") {
+            Toast.show($filter('translate')('select_argument'));
+        } else if (noteDescription === "") {
+            Toast.show($filter('translate')('type_description'));
+        } else {    //all data are correct
+            console.log("Note typeID: " + noteTypeID + " description: " + noteDescription);
+            Toast.show($filter('translate')('note_sent_success'));
+            //TODO: http post with data
+        }
+
     }
 
 });

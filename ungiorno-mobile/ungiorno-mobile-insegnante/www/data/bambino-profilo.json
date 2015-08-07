@@ -65,6 +65,15 @@
                     "authorizationDeadline": 1534964475576,
                     "authorizationUrl": "url1",
                     "adult": true
-                }]
+                }],
+            "allergies": [{
+                    "name": "insalata",
+                    "type": "veg"
+                },
+                {
+                    "name": "insalata",
+                    "type": "veg"
+                }
+            ]
         }]
 }

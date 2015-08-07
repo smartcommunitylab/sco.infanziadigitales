@@ -24,12 +24,12 @@
                 <h2 class="babyProfile detailsTitle" id="parentsNotes" style="margin-top: 24px;">{{'parents_notes' | translate}}</h2>
                 <h3 class="babyProfile detailItem"  ng-repeat="note in notes.parentNotes">{{note.note}}</h2>
                 <h2 class="babyProfile detailsTitle" id="teachersNotes" style="margin-top: 24px;">{{'teachers_notes' | translate}}</h2>
-                <select>
+                <select id="note_type">
                     <option value="" disabled selected>{{'arguments' | translate}}</option>
-                    <option ng-repeat="arg in arguments">{{arg}}</option>
+                    <option value="{{arg.typeid}}" ng-repeat="arg in schoolProfile.teacherNoteTypes">{{arg.type}}</option>
                 </select>
-                <input type="text" placeholder="{{'description' | translate}}">
-                <button>{{'send' | translate}}</button>
+                <input id="note_description" type="text" placeholder="{{'description' | translate}}">
+                <button ng-click="sendTeacherNote()">{{'send' | translate}}</button>
             </div>
             <div class="col-25 col-offset-10 babyProfile card">
                 <h2>{{'baby_info' | translate}}</h2>
@@ -49,7 +49,11 @@
                     </ion-item>
                 </ion-list>
                 <h2 class="babyProfile detailsTitle">{{'food_allergies' | translate}}</h2>
-                <h3 class="babyProfile detailItem"  ng-repeat="allergia in allergieAlimentari">{{allergia}}</h2>
+                <ion-list>
+                    <ion-item ng-repeat="allergia in babyProfile.allergies">
+                        <i class="voice-menu" style="margin-right: 20px;"></i>{{allergia.name}}
+                    </ion-item>
+                </ion-list>
             </div>
 
         </div>

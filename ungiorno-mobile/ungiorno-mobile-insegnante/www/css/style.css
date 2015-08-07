@@ -1345,3 +1345,17 @@ select {
 .section-text {
     text-align: center;
 }
+
+.babyItemBus.card {
+    padding: 8px;
+}
+
+.bus-tabs {
+    width: 100%;
+}
+
+.busBabyDetail {
+    font-size: 1.3em;
+    width: 10px;
+    white-space: nowrap;
+}

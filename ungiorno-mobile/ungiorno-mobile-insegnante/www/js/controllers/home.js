@@ -48,9 +48,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         sectionService.setSection(section)
     }
     $scope.openDetail = function (index) {
-        profileService.setBabyProfile($scope.childrenProfiles[index]);
-        babyConfigurationService.setBabyConfiguration($scope.childrenConfigurations[index]);
-        babyConfigurationService.setBabyNotes($scope.childrenNotes[index]);
+        profileService.setCurrentBabyID($scope.childrenProfiles[index].kidId);
         window.location.assign('#/app/babyprofile');
     }
 });

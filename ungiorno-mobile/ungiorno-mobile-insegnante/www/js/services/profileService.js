@@ -3,9 +3,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
 .factory('profileService', function ($http, $q, dataServerService) {
     var babyProfile = null;
     var schoolProfile = null;
+    var currentBabyID = null;
     var profileService = {};
 
-
+    //not used anymore by babyProfile!
     profileService.setBabyProfile = function (input) {
         babyProfile = input;
     }
@@ -13,6 +14,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
     profileService.getBabyProfile = function () {
         return babyProfile;
     }
+
+    //usefull to pass babyID to the babyProfileCtrl
+    profileService.setCurrentBabyID = function (babyId) {
+        currentBabyID = babyId;
+    }
+    profileService.getCurrentBabyID = function () {
+        return currentBabyID;
+    }
+
 
     profileService.getBabyProfileById = function (babyId) {
         var deferred = $q.defer();

@@ -8,11 +8,11 @@
                     </button>
                 </div>
             </div>
-            <h3>{{'today' | translate}}, {{nowDate | date:'EEEE dd MMMM y'}} {{'catch_the_bus' | translate}} {{selectedBus.children.length}} {{'baby_on_the' | translate}} {{selectedBus.busName}}</h3>
+            <h3>{{'today' | translate}}, {{nowDate | date:'EEEE dd MMMM y'}} {{'catch_the_bus' | translate}} {{realBabyNumer}} {{'baby_on_the' | translate}} {{selectedBus.busName}}</h3>
             <div class="babiesDisplay">
                 <div class="row" ng-repeat="nRow in totalNumRow()">
                     <div class="col" ng-repeat="baby in getBabiesByRow(nRow)">
-                        <div class="card babyItemBus" ng-click="openBabyDetails(baby)">
+                        <div class="card babyItemBus" ng-click="openBabyDetails(baby)" ng-if="!baby.isFake">
                             <div style="display:inline-block; vertical-align:top;">
                                 <img ng-src="{{baby.image}}" style="width: 100px; height: 100px;">
                             </div>

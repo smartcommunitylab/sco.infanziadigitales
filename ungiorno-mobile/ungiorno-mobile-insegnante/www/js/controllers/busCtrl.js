@@ -18,8 +18,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     $scope.nowDate = new Date();
     $scope.changeSelectedBus = function(bus) {
         $scope.selectedBus = bus;
-        $scope.numberOfBabyFirstCol = Math.round(bus.children.length / 2);
-        $scope.numberOfBabySecondCol = bus.children.length - $scope.numberOfBabyFirstCol;
+        $scope.realBabyNumer = $scope.selectedBus.children.length;
+        if ($scope.selectedBus.lastChildIsFake) {
+            $scope.realBabyNumer -= 1;
+        }
+        if ($scope.selectedBus.children.length % 2 === 1) { //last fake element if baby are odd, workaround to not have last baby card length 100% of the page
+            var fakeBaby = {
+                isFake: true
+            };
+            $scope.selectedBus.lastChildIsFake = true;
+            $scope.selectedBus.children.push(fakeBaby);
+        }
     }
 
     dataServerService.getBuses().then(function (data) {

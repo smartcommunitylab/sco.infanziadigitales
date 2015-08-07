@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.bus', [])
 
-.controller('busCtrl', function ($scope, $location, dataServerService, profileService, $ionicLoading, $timeout) {
+.controller('busCtrl', function ($scope, $location, dataServerService, profileService, $ionicLoading, $timeout, $cordovaPrinter) {
 
     $scope.showLoader = function() {
         return $ionicLoading.show({
@@ -60,6 +60,27 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     $scope.openBabyDetails = function(baby) {
         profileService.setCurrentBabyID(baby.childrenId);
         window.location.assign('#/app/babyprofile');
+    }
+
+    $scope.print = function() {
+
+        var doc = "<html><body>";
+        for (var busIndex = 0; busIndex < $scope.buses.length; busIndex++) {
+            doc += "<h2>" + $scope.buses[busIndex].busName + "</h2>";
+            var babyNumber = $scope.buses[busIndex].children.length;
+            if ($scope.buses[busIndex].lastChildIsFake) {
+                babyNumber -= 1;
+            }
+            for (var babyIndex = 0; babyIndex < babyNumber; babyIndex++) {
+                doc += "<h3 style=\"margin: 2px 0px 2px 8px;\">" + $scope.buses[busIndex].children[babyIndex].fullName + "</h3>";
+                doc += "<h4 style=\"margin: 2px 0px 2px 16px;\">" + $scope.buses[busIndex].children[babyIndex].busStop + "</h4>";
+                doc += "<h4 style=\"margin: 2px 0px 8px 16px;\">" + $scope.buses[busIndex].children[babyIndex].personWhoWaitName + " (" + $scope.buses[busIndex].children[babyIndex].personWhoWaitRelation + ")" + "</h4>";
+            }
+        }
+        doc += "</body></html>";
+        console.log(doc);
+        var printerAvail = $cordovaPrinter.isAvailable();
+        $cordovaPrinter.print(doc);
     }
 
 

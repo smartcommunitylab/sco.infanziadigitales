@@ -1,4 +1,11 @@
 <ion-view id="bus" title="{{'buses' | translate}}">
+
+    <ion-nav-buttons side="right">
+        <button class="button" ng-click="print()">
+            <i class="icon ion-printer"></i>
+        </button>
+    </ion-nav-buttons>
+
     <ion-content has-header="true" >
         <div ng-if="dataLoaded">
             <div class="row">

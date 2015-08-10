@@ -202,6 +202,25 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
         return deferred.promise;
     };
 
+    dataServerService.getTeachersCalendar = function () {
+        var teachersCalendar = null;
+        var deferred = $q.defer();
+
+        // temp
+        if (teachersCalendar == null) {
+            $http.get('data/calendario-docenti.json').success(function (data) {
+                teachersCalendar = data.data;
+                deferred.resolve(teachersCalendar);
+            }).error(function (data, status, headers, config) {
+                console.log(data + status + headers + config);
+            });
+        } else {
+            deferred.resolve(teachersCalendar);
+        }
+        return deferred.promise;
+    };
+
+
     dataServerService.getBuses = function () {
         var buses = null;
         var deferred = $q.defer();

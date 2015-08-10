@@ -1,7 +1,23 @@
-<ion-view id="calendar">
+<ion-view id="calendar" title="{{today | date:'EEEE, dd MMMM yyyy'}}">
     <ion-content has-header="true">
 
-        calendar
+
+        <div class="row">
+            <div class="col"></div><!-- fake element to adapt columns -->
+            <div class="calendar col" ng-repeat="day in days">
+                {{day | date:'EEEE dd'}}
+            </div>
+        </div>
+        <div class="row" ng-repeat="hour in timeDivisions">
+            <div class="calendar col" style="width: 30px;">
+                <p>{{hour | date:"HH:mm"}}</p>
+            </div>
+            <div class="calendar col" ng-repeat="day in days">
+                <h4 ng-repeat="teacher in calendarMatrix[$parent.$index][$index].teachers">{{teacher.teacherFullname}}</h4>
+                <h4 style="color: #ff0000;" ng-if="calendarMatrix[$parent.$index][$index].eventForAll">{{calendarMatrix[$parent.$index][$index].eventName}}</h4>
+            </div>
+        </div>
+
 
     </ion-content>
 </ion-view>

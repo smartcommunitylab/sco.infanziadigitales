@@ -34,6 +34,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
         /*tmp*/
     }
 
+    profileService.getTeacherProfileById = function (teacherId) {
+        var deferred = $q.defer();
+        /*tmp*/
+        dataServerService.getTeachers().then(function (data) {
+            deferred.resolve(data.data[0]);
+        });
+        return deferred.promise;
+        /*tmp*/
+    }
+
     profileService.setSchoolProfile = function (input) {
         schoolProfile = input;
     }

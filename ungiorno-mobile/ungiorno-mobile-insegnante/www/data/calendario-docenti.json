@@ -1,25 +1,49 @@
 {
     "data": [
         {
-            "appId": "a",
-            "schoolId": "a",
-            "teachers": [
-                {
-                    "teacherId": "a",
-                    "teacherId": "b",
-                }
-            ],
-            "from": 1437343200,
-            "to": 1437343200,
-            "what": "class"
-        },
-        {
-            "appId": "a",
-            "schoolId": "a",
-            "teachers": [],
-            "from": 1437343200,
-            "to": 1437343200,
-            "what": "visita oculistica"
+            "timeDivisionInterval": 1800,
+            "events": [{
+                "appId": "a",
+                "schoolId": "a",
+                "teachers": [
+                    {
+                        "teacherId": "a"
+                    },
+                    {
+                        "teacherId": "b"
+                    },
+                    {
+                        "teacherId": "c"
+                    }
+                ],
+                "from": 1439370000,
+                "to": 1439373600,
+                "what": "class"
+            },
+            {
+                "appId": "a",
+                "schoolId": "a",
+                "teachers": [],
+                "from": 1439535600,
+                "to": 1439546400,
+                "what": "visita oculistica"
+            },
+            {
+                "appId": "a",
+                "schoolId": "a",
+                "teachers": [
+                    {
+                        "teacherId": "b"
+                    },
+                    {
+                        "teacherId": "c"
+                    }
+                ],
+                "from": 1439535600,
+                "to": 1439542800,
+                "what": "visita oculistica"
+            }
+            ]
         }
     ]
 }

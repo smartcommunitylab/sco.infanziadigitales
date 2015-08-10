@@ -1403,3 +1403,12 @@ select {
 .section-tab-pressed {
     background-color: #d4145a;
 }
+
+.calendar.col {
+    border-style: solid;
+    border-width: 1px;
+}
+.calendar.row {
+    border-style: solid;
+    border-width: 1px;
+}

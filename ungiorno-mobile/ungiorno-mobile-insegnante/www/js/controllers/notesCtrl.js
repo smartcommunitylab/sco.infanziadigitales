@@ -2,6 +2,4 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
 
 .controller('notesCtrl', function ($scope, $location) {
 
-
-
 });

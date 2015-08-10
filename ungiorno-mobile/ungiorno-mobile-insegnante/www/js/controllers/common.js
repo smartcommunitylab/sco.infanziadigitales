@@ -146,6 +146,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         }
     };
 
+    $scope.goto = function (state) {
+        $state.go(state);
+    }
     $scope.bringmethere = function (loc) {
         if (device != undefined && device.platform == "Android") {
             setTimeout(function () {

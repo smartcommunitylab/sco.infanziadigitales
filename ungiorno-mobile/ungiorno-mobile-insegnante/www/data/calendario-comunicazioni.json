@@ -3,28 +3,14 @@
         {
             "appId": "a",
             "schoolId": "a",
-            "childrenList": [{
-                "childenId": "a"
-            }, {
-                "childenId": "b"
-            }, {
-                "childenId": "c"
-            }],
-            "date": 1437343200,
+            "date": 1288323623,
             "description": "lolol",
             "doCheck": true
         },
         {
             "appId": "a",
             "schoolId": "a",
-            "childrenList": [{
-                "childenId": "a"
-            }, {
-                "childenId": "b"
-            }, {
-                "childenId": "c"
-            }],
-            "date": 1437543200,
+            "date": null,
             "description": "lolol",
             "doCheck": true
         }

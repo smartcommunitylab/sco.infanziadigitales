@@ -1403,3 +1403,11 @@ select {
 .section-tab-pressed {
     background-color: #d4145a;
 }
+
+.communication-selected {
+    background-color: antiquewhite;
+}
+
+.communication-not-selected {
+    background-color: white;
+}

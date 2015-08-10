@@ -37,7 +37,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         $scope.events.forEach(function(event) {
             event.teachers.forEach(function (teacher) {
                 if ($scope.teachers[teacher.teacherId] == undefined) {//not already present in the teachers array, get it
-                    profileService.getTeacherProfileById().then(function (data) {
+                    profileService.getTeacherProfileById(teacher.teacherId).then(function (data) {
                         $scope.teachers[teacher.teacherId] = data;
                         remainingCalls--;
                         if (remainingCalls === 0) {

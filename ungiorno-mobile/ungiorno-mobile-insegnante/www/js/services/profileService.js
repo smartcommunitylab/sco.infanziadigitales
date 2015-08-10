@@ -38,7 +38,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
         var deferred = $q.defer();
         /*tmp*/
         dataServerService.getTeachers().then(function (data) {
-            deferred.resolve(data.data[0]);
+            var found = false;
+            var i = 0;
+            while (!found && i < data.data.length) {
+                if (data.data[i].teacherId == teacherId) {
+                    found = true;
+                    deferred.resolve(data.data[i]);
+                }
+                i++;
+            }
         });
         return deferred.promise;
         /*tmp*/

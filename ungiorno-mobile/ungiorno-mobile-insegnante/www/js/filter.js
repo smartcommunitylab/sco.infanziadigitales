@@ -98,3 +98,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.filters',
         return data.replace(/\n\r?/g, '<br />');
     };
 })
+
+.filter('capitalize', function() {
+  return function(input, scope) {
+    if (input!=null)
+    input = input.toLowerCase();
+    return input.substring(0,1).toUpperCase()+input.substring(1);
+  }
+});

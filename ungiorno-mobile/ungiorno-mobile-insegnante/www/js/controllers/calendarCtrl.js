@@ -1,6 +1,19 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.calendar', [])
 
-.controller('calendarCtrl', function ($scope, $location, dataServerService, profileService, $q) {
+.controller('calendarCtrl', function ($scope, $location, dataServerService, profileService, $q, $ionicLoading, $filter) {
+
+    var timePadding = 0; //used to move through weeks, months
+
+    $scope.showLoader = function() {
+        return $ionicLoading.show({
+            content: 'Loading',
+            animation: 'fade-in',
+            showBackdrop: false,
+            maxWidth: 200,
+            showDelay: 0,
+        });
+        $scope.dataLoaded = false;
+    };
 
     var getMonday = function (d) {
         d = new Date(d);
@@ -20,8 +33,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         return weekDays;
     }
 
-    $scope.teachers = [];
     var insertAllTeachers = function () {
+        $scope.teachers = [];
         var deferred = $q.defer();
         var remainingCalls = 0;
         //counts the number of profile calls to do, necessary to notify when all the teachers array is popolated.
@@ -63,40 +76,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
 
     }
 
-    var createCalendarMatrix = function () {
-        $scope.calendarMatrix = [];
-        for (var i = 0; i < $scope.timeDivisions.length; i++) {
-            var eventsInDaysAtSameHour = [];
-            for (var j = 0; j < $scope.days.length; j++) {
-                eventsInDaysAtSameHour.push($scope.getEventsFor($scope.days[j], $scope.timeDivisions[i]));
-            }
-            $scope.calendarMatrix.push(eventsInDaysAtSameHour);
-        }
-        console.log($scope.calendarMatrix);
-
-    }
-
-    $scope.today = new Date();
-    $scope.days = getWeekDays($scope.today);
-    //$scope.days = [$scope.today];
-
-    dataServerService.getTeachersCalendar().then(function (data) {
-        $scope.events = data[0].events;
-        $scope.timeInterval = data[0].timeDivisionInterval;
-        var schoolProfile = profileService.getSchoolProfile();
-        //tmp, useful to refresh the page instead of coming back to the home page and then go to calendar page
-        //beacuse schoolProfile is null
-        if (schoolProfile === null) {
-            createHoursDivisionsArray("7:00:00", "18:00:00");
-        } else {
-            createHoursDivisionsArray(schoolProfile.anticipoTiming.fromTime, schoolProfile.posticipoTiming.toTime);
-        }
-        insertAllTeachers().then(function (data) {
-            createCalendarMatrix();
-        });
-    });
-
-    $scope.getEventsFor = function(day, hour) {
+    var getEventsFor = function(day, hour) {
         var realDateWithHour = new Date(day);
         realDateWithHour.setHours(hour.getHours());
         realDateWithHour.setMinutes(hour.getMinutes());
@@ -125,6 +105,60 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         });
 
         return eventHere;
+    }
+
+    var createCalendarMatrix = function () {
+        $scope.calendarMatrix = [];
+        for (var i = 0; i < $scope.timeDivisions.length; i++) {
+            var eventsInDaysAtSameHour = [];
+            for (var j = 0; j < $scope.days.length; j++) {
+                eventsInDaysAtSameHour.push(getEventsFor($scope.days[j], $scope.timeDivisions[i]));
+            }
+            $scope.calendarMatrix.push(eventsInDaysAtSameHour);
+        }
+        $scope.dataLoaded = true;
+        $ionicLoading.hide();
+    }
+
+    $scope.isToday = function (date) {
+        return $scope.today.getDate() === date.getDate() &&
+            $scope.today.getMonth() === date.getMonth() &&
+            $scope.today.getYear() === date.getYear();;
+    }
+
+
+    $scope.initCalendarForCurrentSettings = function () {
+        $scope.showLoader();
+
+        $scope.today = new Date();
+        $scope.days = getWeekDays($scope.today.valueOf() + timePadding * 60*60*1000*24*7); //+- 1 week or month
+        $scope.currentMonthText = $filter('date')($scope.days[0],'MMMM');
+
+
+        dataServerService.getTeachersCalendar().then(function (data) {
+            $scope.events = data[0].events;
+            $scope.timeInterval = data[0].timeDivisionInterval;
+            var schoolProfile = profileService.getSchoolProfile();
+            //tmp, useful to refresh the page instead of coming back to the home page and then go to calendar page
+            //beacuse schoolProfile is null
+            if (schoolProfile === null) {
+                createHoursDivisionsArray("7:00:00", "18:00:00");
+            } else {
+                createHoursDivisionsArray(schoolProfile.anticipoTiming.fromTime, schoolProfile.posticipoTiming.toTime);
+            }
+            insertAllTeachers().then(function (data) {
+                createCalendarMatrix();
+            });
+        });
+    }
+
+    $scope.previousTime = function () {
+        timePadding--;
+        $scope.initCalendarForCurrentSettings();
+    }
+    $scope.nextTime = function () {
+        timePadding++;
+        $scope.initCalendarForCurrentSettings();
     }
 
 

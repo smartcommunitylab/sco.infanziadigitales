@@ -1349,6 +1349,29 @@ select {
     padding: 8px;
 }
 
+.baby-card-element {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.baby-card-element-right {
+    margin-left: 24px;
+    margin-top: 8px;
+}
+
+.baby-card-image {
+    width: 100px;
+    height: 100px;
+}
+
+.busBabyDetail.accent-color {
+    color: #ff0000;
+}
+
+.busBabyDetail.description-color {
+    color: #0080ff;
+}
+
 .bus-tabs {
     width: 100%;
 }
@@ -1410,4 +1433,27 @@ select {
 
 .communication-not-selected {
     background-color: white;
+}
+
+.calendar.col {
+    border-style: solid;
+    border-width: 1px;
+}
+
+.calendar.row {
+    border-style: solid;
+    border-width: 1px;
+}
+
+.calendar.event-for-all {
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.calendar-today-cell {
+    background-color: #DBE2E5;
+}
+
+.calendar-header {
+    font-weight: bold;
 }

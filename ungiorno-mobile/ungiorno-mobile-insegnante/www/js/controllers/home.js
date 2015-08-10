@@ -8,8 +8,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     $scope.childrenNotes = [];
     $scope.availableChildren = [];
     $scope.totalChildrenNumber = [];
+    $scope.colors = [];
     $scope.schoolProfile = null;
     $scope.numberOfChildren = 0;
+
+    //dovrebbe essere in base all'ora
+    $scope.selectedPeriod = 'anticipo';
+
     $scope.title = moment().locale('it').format("dddd, D MMMM gggg");
     $scope.initialize = function () {
         dataServerService.getTeachers().then(function (data) {
@@ -25,38 +30,99 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
             dataServerService.getSections().then(function (data) {
                 $scope.sections = data;
                 $scope.section = $scope.sections[0];
-                sectionService.setSection($scope.section)
-                    //get children info
-                $scope.getChildrenNumber('anticipo');
-                $scope.getChildrenNumber('posticipo');
-                $scope.getChildrenNumber('mensa');
+                sectionService.setSection(0);
+                $scope.getChildrenByCurrentSection();
 
-                $scope.numberOfChildren = $scope.section.children.length;
-                for (var i = 0; i < $scope.numberOfChildren; i++) {
-                    profileService.getBabyProfileById($scope.section.children[i].childrenId).then(function (profile) {
-                        $scope.childrenProfiles.push(profile);
-                    });
-                    babyConfigurationService.getBabyConfigurationById($scope.section.children[i].childrenId).then(function (configuration) {
-                        $scope.childrenConfigurations.push(configuration);
-                    });
-                    babyConfigurationService.getBabyNotesById($scope.section.children[i].childrenId).then(function (notes) {
-                        $scope.childrenNotes.push(notes);
-                    });
-                };
             })
         });
 
     };
 
+    $scope.getChildrenByCurrentSection = function () {
+        //get children info
+        $scope.childrenProfiles = [];
+        $scope.getChildrenNumber('anticipo');
+        $scope.getChildrenNumber('posticipo');
+        $scope.getChildrenNumber('mensa');
+
+        $scope.getChildrenProfilesByPeriod($scope.selectedPeriod);
+
+        $scope.numberOfChildren = $scope.section.children.length;
+        for (var i = 0; i < $scope.numberOfChildren; i++) {
+            profileService.getBabyProfileById($scope.section.children[i].childrenId).then(function (profile) {
+                $scope.childrenProfiles.push(profile);
+            });
+            babyConfigurationService.getBabyConfigurationById($scope.section.children[i].childrenId).then(function (configuration) {
+                $scope.childrenConfigurations.push(configuration);
+            });
+            babyConfigurationService.getBabyNotesById($scope.section.children[i].childrenId).then(function (notes) {
+                $scope.childrenNotes.push(notes);
+            });
+        };
+    }
+    var getAllChildren = function () {
+        var allchildren = [];
+        for (var i = 0; i < $scope.sections.length; i++) {
+            allchildren = allchildren.concat($scope.sections[i].children);
+        }
+        return allchildren;
+    }
+    $scope.isThisSection = function (sectionId) {
+        if (sectionId != 'all') {
+            if (sectionService.getSection() == sectionId)
+                return true;
+            return false;
+        } else {
+            if (sectionService.getSection() == -1)
+                return true;
+            return false;
+        }
+
+    }
     $scope.changeSection = function (sectionId) {
-        sectionService.setSection(section)
+        sectionService.setSection(sectionId);
+        if (sectionId != 'all') {
+            $scope.section = $scope.sections[sectionId];
+            $scope.getChildrenByCurrentSection();
+        } else {
+            //section == allchildren
+            sectionService.setSection(-1);
+
+            $scope.section = {
+                appId: "a",
+                schoolId: "a",
+                sectionId: "all",
+                sectionName: "All",
+                children: getAllChildren()
+            }
+            $scope.getChildrenByCurrentSection();
+        }
     }
     $scope.openDetail = function (index) {
         profileService.setBabyProfile($scope.childrenProfiles[index]);
         babyConfigurationService.setBabyConfiguration($scope.childrenConfigurations[index]);
         window.location.assign('#/app/babyprofile');
     }
+    $scope.getChildrenProfilesByPeriod = function (periodOfTheDay) {
+        $scope.childrenProfiles[periodOfTheDay] = [];
+        $scope.colors['anticipo'] = '#ddd';
+        $scope.colors['posticipo'] = '#ddd';
+        $scope.colors['mensa'] = '#ddd';
 
+        $scope.colors[periodOfTheDay] = '#abc';
+
+        if ($scope.section != null) {
+            for (var i = 0; i < $scope.section.children.length; i++) {
+                if ($scope.section.children[i][periodOfTheDay].enabled) {
+                    //totalNumber++;
+                    $scope.childrenProfiles[periodOfTheDay].push($scope.section.children[i]);
+                }
+            }
+        }
+    }
+    $scope.getNowDate = function () {
+        return Date.now()
+    }
     $scope.getChildrenNumber = function (periodOfTheDay) {
         $scope.totalChildrenNumber[periodOfTheDay] = 0;
         $scope.availableChildren[periodOfTheDay] = 0;
@@ -80,8 +146,23 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     //            template: '<svg id="svg" viewbox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="#ddd" /><path fill="none" stroke-linecap="round" stroke-width="5" stroke="#fff" stroke-dasharray="100,250" d="M50 10 a 40 40 0 0 1 0 80 a 40 40 0 0 1 0 -80" /><text x="50" y="50" text-anchor="middle" dy="7" font-size="20">{{sections.length}}</text></svg>'
     //        };
     //    });
-    $scope.changeSection = function (sectionId) {
-        sectionService.setSection(section)
+    $scope.getLineStroke = function (getNumberChildren, totalNumberOfChildren) {
+        var lineStroke = null;
+        lineStroke = (250 / totalNumberOfChildren) * getNumberChildren;
+        return lineStroke + ",250";
+    }
+
+    $scope.sectionColor = function (period) {
+            if (period == $scope.selectedPeriod)
+                return '#abc';
+            return '#ddd';
+        }
+        //    $scope.changeSection = function (sectionId) {
+        //        sectionService.setSection(sectionId)
+        //    }
+    $scope.changeSectionPeriod = function (period) {
+        $scope.selectedPeriod = period;
+        $scope.getChildrenProfilesByPeriod(period);
     }
     $scope.openDetail = function (index) {
         profileService.setBabyProfile($scope.childrenProfiles[index]);

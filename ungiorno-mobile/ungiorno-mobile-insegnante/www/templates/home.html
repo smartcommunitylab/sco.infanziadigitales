@@ -1,18 +1,23 @@
 <ion-view id="home" ng-init="initialize()">
     <ion-content has-header="true">
         <div class="row">
-            <div ng-repeat="section in sections" class="col">
-                <button class="button section-tabs" ng-click="changeSection(section)">
+            <div ng-repeat="section in sections track by $index" class="col">
+                <button class="button section-tabs" ng-click="changeSection($index)" ng-class="{'section-tab-notpressed' : (!isThisSection($index)), 'section-tab-pressed' :  (isThisSection($index))}">
                     {{section.sectionName}}
+                </button>
+            </div>
+            <div class="col">
+                <button class="button section-tabs" ng-click="changeSection('all')" ng-class="{'section-tab-notpressed' : (!isThisSection('all')), 'section-tab-pressed' :  (isThisSection('all'))}">
+                    tutte le sezioni
                 </button>
             </div>
         </div>
         <div class="row">
             <div class="col">
-                <div class="section">
+                <div class="sectionPeriod" ng-click="changeSectionPeriod('anticipo')">
                     <svg id="svg" viewbox="0 0 100 100">
-                        <circle cx="50" cy="50" r="45" fill="#ddd" />
-                        <path fill="none" stroke-linecap="round" stroke-width="5" stroke="#fff" stroke-dasharray="125,250" d="M50 10
+                        <circle cx="50" cy="50" r="45" fill="{{colors['anticipo']}}" />
+                        <path fill="none" stroke-linecap="round" stroke-width="5" stroke="#d4145a" stroke-dasharray="{{getLineStroke(availableChildren['anticipo'],totalChildrenNumber['anticipo'])}}" d="M50 10
            a 40 40 0 0 1 0 80
            a 40 40 0 0 1 0 -80" />
                         <text x="50" y="50" text-anchor="middle" dy="7" font-size="20">{{availableChildren['anticipo']}} su {{totalChildrenNumber['anticipo']}}</text>
@@ -23,11 +28,11 @@
                 </div>
             </div>
             <div class="col">
-                <div class="section">
+                <div class="sectionPeriod" ng-click="changeSectionPeriod('mensa')">
 
                     <svg id="svg" viewbox="0 0 100 100">
-                        <circle cx="50" cy="50" r="45" fill="#ddd" />
-                        <path fill="none" stroke-linecap="round" stroke-width="5" stroke="#fff" stroke-dasharray="150,250" d="M50 10
+                        <circle cx="50" cy="50" r="45" fill="{{colors['mensa']}}" />
+                        <path fill="none" stroke-linecap="round" stroke-width="5" stroke="#d4145a" stroke-dasharray="{{getLineStroke(availableChildren['mensa'],totalChildrenNumber['mensa'])}}" d="M50 10
            a 40 40 0 0 1 0 80
            a 40 40 0 0 1 0 -80" />
                         <text x="50" y="50" text-anchor="middle" dy="7" font-size="20">{{availableChildren['mensa']}} su {{totalChildrenNumber['mensa']}}</text>
@@ -38,10 +43,10 @@
                 </div>
             </div>
             <div class="col">
-                <div class="section">
+                <div class="sectionPeriod" ng-click="changeSectionPeriod('posticipo')">
                     <svg id="svg" viewbox="0 0 100 100">
-                        <circle cx="50" cy="50" r="45" fill="#ddd" />
-                        <path fill="none" stroke-linecap="round" stroke-width="5" stroke="#fff" stroke-dasharray="100,250" d="M50 10
+                        <circle cx="50" cy="50" r="45" fill="{{colors['posticipo']}}" />
+                        <path fill="none" stroke-linecap="round" stroke-width="5" stroke="#d4145a" stroke-dasharray="{{getLineStroke(availableChildren['posticipo'],totalChildrenNumber['posticipo'])}}" d="M50 10
            a 40 40 0 0 1 0 80
            a 40 40 0 0 1 0 -80" />
                         <text x="50" y="50" text-anchor="middle" dy="7" font-size="20">{{availableChildren['posticipo']}} su {{totalChildrenNumber['posticipo']}}</text>
@@ -53,8 +58,17 @@
                 <!--                <div section></div>-->
             </div>
         </div>
-        <div>
-            <img class="chldren-home" ng-repeat="child in childrenProfiles track by $index" ng-src="{{child.image}}" ng-click="openDetail($index)">
+        <div class="children-home" ng-repeat="child in childrenProfiles[selectedPeriod] track by $index" ng-click="openDetail($index)">
+            <img ng-src="{{child.image}}" ng-class="{'child-assente' : (child.exitTime == null  || child.exitTime <= getNowDate()), 'child-presente' :  (child.exitTime != null && child.exitTime>getNowDate())}">
+            <!--            <img ng-src="{{child.image}}">-->
+            <div class="children-assente" ng-if="child.exitTime == null"><span>Assente</span>
+            </div>
+            <div class="children-uscito" ng-if="(child.exitTime != null && child.exitTime<=getNowDate())"><span>Uscito</span>
+            </div>
+            <div class="children-presente" ng-if="(child.exitTime != null && child.exitTime>getNowDate())"><span>Presente</span>
+            </div>
+
         </div>
+        <!--            <img class="chldren-home" ng-class="(child.exitTime == null ||child.exitTime >= Date.now()) ? 'child-assente' :  'child-presente'" ng-repeat="child in childrenProfiles track by $index" ng-src="{{child.image}}" ng-click="openDetail($index)">-->
     </ion-content>
 </ion-view>

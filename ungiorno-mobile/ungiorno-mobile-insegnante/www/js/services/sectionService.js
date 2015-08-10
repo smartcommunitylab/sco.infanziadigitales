@@ -8,11 +8,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
     sectionService.setSection = function (section) {
         selectedSection = section;
     }
-
-    sectionService.getBabyProfile = function () {
+    sectionService.getSection = function () {
         return selectedSection;
     }
-
 
     return sectionService;
 })

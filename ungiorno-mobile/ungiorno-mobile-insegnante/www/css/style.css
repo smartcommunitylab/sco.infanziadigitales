@@ -23,14 +23,13 @@ body {
     margin-left: 15px;
 }
 
-.chldren-home {
-    width: 100px;
-    height: 100px;
-}
-
 .menu-item img {
     height: 32px;
     width: 32px;
+}
+
+.home-circle {
+    color: #d4145a
 }
 
 .menu-item p {
@@ -982,7 +981,7 @@ ul.rating {
     background: transparent;
 }
 
-.section {
+.sectionPeriod {
     position: relative
 }
 
@@ -1358,4 +1357,49 @@ select {
     font-size: 1.3em;
     width: 10px;
     white-space: nowrap;
+}
+
+.child-img {
+    width: 100%;
+    height: 100%;
+}
+
+.children-home {
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    position: relative;
+    text-align: center;
+}
+
+.children-home span {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+}
+
+.children-home img {
+    width: 100%;
+    height: 100%;
+}
+
+.child-assente {
+    opacity: 0.4;
+}
+
+.child-presente {
+    opacity: 1;
+}
+
+.child-uscito {
+    opacity: 0.4;
+}
+
+.section-tab-notpressed {
+    background-color: #C8C6C6;
+}
+
+.section-tab-pressed {
+    background-color: #d4145a;
 }

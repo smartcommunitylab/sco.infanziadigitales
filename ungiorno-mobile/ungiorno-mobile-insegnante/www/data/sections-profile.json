@@ -8,7 +8,7 @@
             {
                 "childrenId": "a",
                 "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg",
-                "exitTime": 1438970260000,
+                "exitTime": 128970260000,
                 "anticipo": {
                     "active": true,
                     "enabled": true
@@ -24,8 +24,8 @@
             },
             {
                 "childrenId": "b",
-                "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg",
-                "exitTime": 1438970260000,
+                "image": "http://tipnut.com/wp-content/uploads/2010/12/happychild.jpg",
+                "exitTime": 1538970260000,
                 "anticipo": {
                     "active": true,
                     "enabled": true
@@ -42,7 +42,7 @@
             {
                 "childrenId": "c",
                 "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg",
-                "exitTime": 1438970260000,
+                "exitTime": null,
                 "anticipo": {
                     "active": false,
                     "enabled": true
@@ -80,18 +80,18 @@
         "children": [
             {
                 "childrenId": "e",
-                "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg",
-                "exitTime": 1438970260000,
+                "image": "http://tipnut.com/wp-content/uploads/2010/12/happychild.jpg",
+                "exitTime": 128970260000,
                 "anticipo": {
                     "active": true,
                     "enabled": true
                 },
                 "posticipo": {
-                    "active": true,
+                    "active": false,
                     "enabled": true
                 },
                 "mensa": {
-                    "active": true,
+                    "active": false,
                     "enabled": true
                 }
             },
@@ -104,7 +104,24 @@
                     "enabled": true
                 },
                 "posticipo": {
+                    "active": true,
+                    "enabled": true
+                },
+                "mensa": {
                     "active": false,
+                    "enabled": false
+                }
+            },
+            {
+                "childrenId": "g",
+                "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg",
+                "exitTime": null,
+                "anticipo": {
+                    "active": false,
+                    "enabled": true
+                },
+                "posticipo": {
+                    "active": true,
                     "enabled": true
                 },
                 "mensa": {
@@ -113,15 +130,15 @@
                 }
             },
             {
-                "childrenId": "g",
+                "childrenId": "h",
                 "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg",
                 "exitTime": 1438970260000,
                 "anticipo": {
-                    "active": false,
-                    "enabled": false
+                    "active": true,
+                    "enabled": true
                 },
                 "posticipo": {
-                    "active": false,
+                    "active": true,
                     "enabled": true
                 },
                 "mensa": {

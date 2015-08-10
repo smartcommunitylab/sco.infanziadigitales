@@ -6,6 +6,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
     var configurationService = {};
 
 
+    //not used anymore by babyProfile!
     configurationService.getBabyConfiguration = function () {
         return babyConfiguration;
     }

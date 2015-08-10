@@ -4,59 +4,60 @@
         </ion-nav-back-button>
     </ion-nav-bar>
     <ion-content has-header="true">
-        <div class="row">
-            <div class="col-50 babyProfile card">
-                <div>
-                    <div style="display:inline-block; vertical-align:top;">
-                        <img ng-src="{{babyProfile.image}}" style="width: 200px; height: 200px;">
+        <div ng-if="dataLoaded">
+            <div class="row">
+                <div class="col-50 babyProfile card">
+                    <div>
+                        <div style="display:inline-block; vertical-align:top;">
+                            <img ng-src="{{babyProfile.image}}" style="width: 200px; height: 200px;">
+                        </div>
+                        <div style="display:inline-block; vertical-align:top; margin-left: 32px; margin-top: 8px;">
+                            <h3 class="babyProfile detailItem">{{babyProfile.firstName}} {{'is' | translate}} {{babyStatus | uppercase}}</h3>
+                            <h3 class="babyProfile detailItem">{{'enter_at' | translate}} {{babyEnterHour}}</h3>
+                            <h3 class="babyProfile detailItem" ng-if="checkBusServiceActive()">{{'bus_stop_go' | translate}} {{babyBusStopGoName}}</h3>
+                            <h3 class="babyProfile detailItem" ng-if="checkBusServiceActive()">{{'bus_stop_back' | translate}} {{babyBusStopBackName}}</h3>
+                            <h3 class="babyProfile detailItem" >{{'exit_at' | translate}}{{babyExitHour | date:'hh:mm'}}</h3>
+                            <h3 class="babyProfile detailItem" >{{'person_who_retire' | translate}}{{babyConfig.personWhoRetireBaby.fullName}}</h3>
+                            <h4 class="babyProfile detailItem" style="color: #ff0000;" ng-if="isDelegation()">{{'extra_delegation' | translate}}</h3>
+                            <a href="http://www.google.it" class="babyProfile detailItem" ng-if="isDelegation()">{{'view_delegation' | translate}}</a>
+                        </div>
                     </div>
-                    <div style="display:inline-block; vertical-align:top; margin-left: 32px; margin-top: 8px;">
-                        <h3 class="babyProfile detailItem">{{babyProfile.firstName}} {{'is' | translate}} {{babyStatus | uppercase}}</h3>
-                        <h3 class="babyProfile detailItem">{{'enter_at' | translate}} {{babyEnterHour}}</h3>
-                        <h3 class="babyProfile detailItem" ng-if="checkBusServiceActive()">{{'bus_stop_go' | translate}} {{babyBusStopGoName}}</h3>
-                        <h3 class="babyProfile detailItem" ng-if="checkBusServiceActive()">{{'bus_stop_back' | translate}} {{babyBusStopBackName}}</h3>
-                        <h3 class="babyProfile detailItem" >{{'exit_at' | translate}}{{babyExitHour | date:'hh:mm'}}</h3>
-                        <h3 class="babyProfile detailItem" >{{'person_who_retire' | translate}}{{babyConfig.personWhoRetireBaby.fullName}}</h3>
-                        <h4 class="babyProfile detailItem" style="color: #ff0000;" ng-if="isDelegation()">{{'extra_delegation' | translate}}</h3>
-                        <a href="http://www.google.it" class="babyProfile detailItem" ng-if="isDelegation()">{{'view_delegation' | translate}}</a>
-                    </div>
+                    <h2 class="babyProfile detailsTitle" id="parentsNotes" style="margin-top: 24px;">{{'parents_notes' | translate}}</h2>
+                    <h3 class="babyProfile detailItem"  ng-repeat="note in notes.parentNotes">{{note.note}}</h2>
+                    <h2 class="babyProfile detailsTitle" id="teachersNotes" style="margin-top: 24px;">{{'teachers_notes' | translate}}</h2>
+                    <select id="note_type">
+                        <option value="" disabled selected>{{'arguments' | translate}}</option>
+                        <option value="{{arg.typeid}}" ng-repeat="arg in schoolProfile.teacherNoteTypes">{{arg.type}}</option>
+                    </select>
+                    <input id="note_description" type="text" placeholder="{{'description' | translate}}">
+                    <button ng-click="sendTeacherNote()">{{'send' | translate}}</button>
                 </div>
-                <h2 class="babyProfile detailsTitle" id="parentsNotes" style="margin-top: 24px;">{{'parents_notes' | translate}}</h2>
-                <h3 class="babyProfile detailItem"  ng-repeat="note in notes.parentNotes">{{note.note}}</h2>
-                <h2 class="babyProfile detailsTitle" id="teachersNotes" style="margin-top: 24px;">{{'teachers_notes' | translate}}</h2>
-                <select id="note_type">
-                    <option value="" disabled selected>{{'arguments' | translate}}</option>
-                    <option value="{{arg.typeid}}" ng-repeat="arg in schoolProfile.teacherNoteTypes">{{arg.type}}</option>
-                </select>
-                <input id="note_description" type="text" placeholder="{{'description' | translate}}">
-                <button ng-click="sendTeacherNote()">{{'send' | translate}}</button>
-            </div>
-            <div class="col-25 col-offset-10 babyProfile card">
-                <h2>{{'baby_info' | translate}}</h2>
-                <br>
-                <h2 class="babyProfile detailsTitle">{{'parent_one' | translate}}</h2>
-                <h3>{{babyProfile.persons[0].fullName}}</h2>
-                <ion-list>
-                    <ion-item ng-repeat="num in babyProfile.persons[0].phone" ng-click="callPhone({{num}});">
-                        <i class="icon voice-menu ion-ios-telephone" style="margin-right: 20px;"></i>{{num}}
-                    </ion-item>
-                </ion-list>
-                <h2 class="babyProfile detailsTitle">{{'parent_two' | translate}}</h2>
-                <h3>{{babyProfile.persons[1].fullName}}</h2>
-                <ion-list>
-                    <ion-item ng-repeat="num in babyProfile.persons[1].phone" ng-click="callPhone({{num}});">
-                        <i class="icon voice-menu ion-ios-telephone" style="margin-right: 20px;"></i>{{num}}
-                    </ion-item>
-                </ion-list>
-                <h2 class="babyProfile detailsTitle">{{'food_allergies' | translate}}</h2>
-                <ion-list>
-                    <ion-item ng-repeat="allergia in babyProfile.allergies">
-                        <i class="voice-menu" style="margin-right: 20px;"></i>{{allergia.name}}
-                    </ion-item>
-                </ion-list>
-            </div>
+                <div class="col-25 col-offset-10 babyProfile card">
+                    <h2>{{'baby_info' | translate}}</h2>
+                    <br>
+                    <h2 class="babyProfile detailsTitle">{{'parent_one' | translate}}</h2>
+                    <h3>{{babyProfile.persons[0].fullName}}</h2>
+                    <ion-list>
+                        <ion-item ng-repeat="num in babyProfile.persons[0].phone" ng-click="callPhone({{num}});">
+                            <i class="icon voice-menu ion-ios-telephone" style="margin-right: 20px;"></i>{{num}}
+                        </ion-item>
+                    </ion-list>
+                    <h2 class="babyProfile detailsTitle">{{'parent_two' | translate}}</h2>
+                    <h3>{{babyProfile.persons[1].fullName}}</h2>
+                    <ion-list>
+                        <ion-item ng-repeat="num in babyProfile.persons[1].phone" ng-click="callPhone({{num}});">
+                            <i class="icon voice-menu ion-ios-telephone" style="margin-right: 20px;"></i>{{num}}
+                        </ion-item>
+                    </ion-list>
+                    <h2 class="babyProfile detailsTitle">{{'food_allergies' | translate}}</h2>
+                    <ion-list>
+                        <ion-item ng-repeat="allergia in babyProfile.allergies">
+                            <i class="voice-menu" style="margin-right: 20px;"></i>{{allergia.name}}
+                        </ion-item>
+                    </ion-list>
+                </div>
 
+            </div>
         </div>
-    </div>
     </ion-content>
 </ion-view>

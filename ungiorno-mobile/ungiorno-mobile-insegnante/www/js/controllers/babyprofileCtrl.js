@@ -2,7 +2,19 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
 
 .controller('babyprofileCtrl', function ($scope, $location, dataServerService, profileService, babyConfigurationService, $filter, Toast, $ionicLoading, $timeout) {
 
-    //Acquiring data from server
+
+    $scope.showLoader = function() {
+        return $ionicLoading.show({
+            content: 'Loading',
+            animation: 'fade-in',
+            showBackdrop: false,
+            maxWidth: 200,
+            showDelay: 0,
+        });
+        $scope.dataLoaded = false;
+    };
+
+    $scope.myLoader = $scope.showLoader();
 
     $scope.checkBusServiceActive = function() {
         return $scope.babyConfig.services.bus.active && $scope.babyProfile.services.bus.enabled;
@@ -15,32 +27,78 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         }
 
     }
-
-    //Acquiring data from services
-    $scope.babyProfile = profileService.getBabyProfile();
-    $scope.schoolProfile = profileService.getSchoolProfile();
-    $scope.babyConfig = babyConfigurationService.getBabyConfiguration();
-    $scope.notes = babyConfigurationService.getBabyNotes();
-
-    $scope.babyEnterHour = $scope.babyConfig.services.anticipo ? $scope.schoolProfile.anticipoTiming.fromTime : $scope.schoolProfile.regularTiming.fromTime;
-    $scope.babyExitHour = $scope.babyConfig.services.posticipo ? $scope.schoolProfile.posticipoTiming.toTime : $scope.schoolProfile.regularTiming.toTime;
-
-    //used to get if the baby is present
-    var today = new Date();
-    var exitDayWithHour = new Date();
-    var exitHour = new Date('01/01/2000 ' + $scope.babyExitHour); //placeholder date, well completed after
-    exitDayWithHour.setHours(exitHour.getHours());
-    exitDayWithHour.setMinutes(exitHour.getMinutes());
-
-
-    $scope.babyStatus = today.getTime() > exitDayWithHour.getTime() ? $filter('translate')('exit') : $filter('translate')('present');
-
-    if ($scope.checkBusServiceActive()) {
-        $scope.babyBusStopGoName = getBusStopAddressByID($scope.babyConfig.services.bus.defaultIdGo);
-        $scope.babyBusStopBackName = getBusStopAddressByID($scope.babyConfig.services.bus.defaultIdBack);
+    var babyProfileLoaded = false;
+    var babyConfigLoaded = false;
+    var schoolProfileLoaded = false;
+    var notesLoaded = false;
+    $scope.dataLoaded = false;
+    var checkAllDataLoaded = function() {
+        if (babyProfileLoaded && babyConfigLoaded && schoolProfileLoaded && notesLoaded) {
+            $scope.calculateOtherData();
+            $scope.dataLoaded = true;
+            $scope.myLoader.hide();
+        }
     }
 
 
+    //Acquiring data from service
+    var babyProfileID = profileService.getCurrentBabyID();
+    //Acquiring data from server
+    profileService.getBabyProfileById(babyProfileID).then(function (data) {
+        $timeout(function () {
+            $scope.babyProfile = data;
+            babyProfileLoaded = true;
+            checkAllDataLoaded();
+        }, 500); //delay to emulate response time from the server.
+
+    });
+    babyConfigurationService.getBabyConfigurationById(babyProfileID).then(function (data) {
+        $scope.babyConfig = data;
+        babyConfigLoaded = true;
+        checkAllDataLoaded();
+    });
+
+    babyConfigurationService.getBabyNotesById(babyProfileID).then(function (data) {
+        $scope.notes = data;
+        notesLoaded = true;
+        checkAllDataLoaded();
+    });
+
+    var loadSchoolProfile = function () {
+        $scope.schoolProfile = profileService.getSchoolProfile();
+        schoolProfileLoaded = true;
+        checkAllDataLoaded();
+    }
+    loadSchoolProfile();
+
+    /*
+    $scope.babyProfile = profileService.getBabyProfile();
+    $scope.schoolProfile = profileService.getSchoolProfile();
+    $scope.babyConfig = babyConfigurationService.getBabyConfiguration();
+    $scope.notes = babyConfigurationService.getBabyNotes();*/
+
+
+    $scope.calculateOtherData = function () {
+
+        $scope.babyEnterHour = $scope.babyConfig.services.anticipo ? $scope.schoolProfile.anticipoTiming.fromTime : $scope.schoolProfile.regularTiming.fromTime;
+        $scope.babyExitHour = $scope.babyConfig.services.posticipo ? $scope.schoolProfile.posticipoTiming.toTime : $scope.schoolProfile.regularTiming.toTime;
+
+        //used to get if the baby is present
+        var today = new Date();
+        var exitDayWithHour = new Date();
+        var exitHour = new Date('01/01/2000 ' + $scope.babyExitHour); //placeholder date, well completed after
+        exitDayWithHour.setHours(exitHour.getHours());
+        exitDayWithHour.setMinutes(exitHour.getMinutes());
+
+
+        $scope.babyStatus = today.getTime() > exitDayWithHour.getTime() ? $filter('translate')('exit') : $filter('translate')('present');
+
+        if ($scope.checkBusServiceActive()) {
+            $scope.babyBusStopGoName = getBusStopAddressByID($scope.babyConfig.services.bus.defaultIdGo);
+            $scope.babyBusStopBackName = getBusStopAddressByID($scope.babyConfig.services.bus.defaultIdBack);
+        }
+
+    }
     //Custom methods
     $scope.callPhone = function(number) {
         console.log("Calling " + number);

@@ -99,8 +99,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         }
     }
     $scope.openDetail = function (index) {
-        profileService.setBabyProfile($scope.childrenProfiles[index]);
-        babyConfigurationService.setBabyConfiguration($scope.childrenConfigurations[index]);
+        profileService.setCurrentBabyID($scope.childrenProfiles[index].kidId);
         window.location.assign('#/app/babyprofile');
     }
     $scope.getChildrenProfilesByPeriod = function (periodOfTheDay) {
@@ -163,11 +162,5 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     $scope.changeSectionPeriod = function (period) {
         $scope.selectedPeriod = period;
         $scope.getChildrenProfilesByPeriod(period);
-    }
-    $scope.openDetail = function (index) {
-        profileService.setBabyProfile($scope.childrenProfiles[index]);
-        babyConfigurationService.setBabyConfiguration($scope.childrenConfigurations[index]);
-        babyConfigurationService.setBabyNotes($scope.childrenNotes[index]);
-        window.location.assign('#/app/babyprofile');
     }
 });

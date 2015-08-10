@@ -20,49 +20,19 @@
                 <div class="row" ng-repeat="nRow in totalNumRow()">
                     <div class="col" ng-repeat="baby in getBabiesByRow(nRow)">
                         <div class="card babyItemBus" ng-click="openBabyDetails(baby)" ng-if="!baby.isFake">
-                            <div style="display:inline-block; vertical-align:top;">
-                                <img ng-src="{{baby.image}}" style="width: 100px; height: 100px;">
+                            <div class="baby-card-element">
+                                <img ng-src="{{baby.image}}" class="baby-card-image">
                             </div>
-                            <div style="display:inline-block; vertical-align:top; margin-left: 24px; margin-top: 8px;">
+                            <div class="baby-card-element baby-card-element-right">
                                 <h3 class="busBabyDetail">{{baby.fullName}}</h3>
-                                <h3 class="busBabyDetail" style="color: #ff0000"><span style="color: #0080ff">Scende in: </span>{{baby.busStop}}</h3>
-                                <h3 class="busBabyDetail"><span style="color: #0080ff">Ad aspettare c'è: </span>{{baby.personWhoWaitName}} ({{baby.personWhoWaitRelation}})</h3>
+                                <h3 class="busBabyDetail accent-color"><span class="busBabyDetail description-color">Scende in: </span>{{baby.busStop}}</h3>
+                                <h3 class="busBabyDetail"><span class="busBabyDetail description-color">Ad aspettare c'è: </span>{{baby.personWhoWaitName}} ({{baby.personWhoWaitRelation}})</h3>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-
-        <!--<div class="row">
-            <div class="col">
-                <div class="card babyItemBus" ng-repeat="baby in selectedBus.children.slice(0,numberOfBabyFirstCol)">
-                    <div style="display:inline-block; vertical-align:top;">
-                        <img ng-src="{{baby.image}}" style="width: 150px; height: 150px;">
-                    </div>
-                    <div style="display:inline-block; vertical-align:top; margin-left: 24px; margin-top: 8px;">
-                        <h2>{{baby.fullName}}</h3>
-                        <h3 style="color: #ff0000"><span style="color: #0080ff">Scende in: </span>{{baby.busStop}}</h3>
-                        <h3><span style="color: #0080ff">Ad aspettare c'è: </span>{{baby.personWhoWaitName}} ({{baby.personWhoWaitRelation}})</h3>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card babyItemBus" ng-repeat="baby in selectedBus.children.slice(numberOfBabyFirstCol,selectedBus.children.lenght)">
-                    <div style="display:inline-block; vertical-align:top;">
-                        <img ng-src="{{baby.image}}" style="width: 150px; height: 150px;">
-                    </div>
-                    <div style="display:inline-block; vertical-align:top; margin-left: 24px; margin-top: 8px;">
-                        <h2>{{baby.fullName}}</h3>
-                        <h3 style="color: #ff0000"><span style="color: #0080ff">Scende in: </span>{{baby.busStop}}</h3>
-                        <h3><span style="color: #0080ff">Ad aspettare c'è: </span>{{baby.personWhoWaitName}} ({{baby.personWhoWaitRelation}})</h3>
-                    </div>
-                </div>
-            </div>
-        </div>-->
-
-
 
     </ion-content>
 </ion-view>

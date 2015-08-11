@@ -1,6 +1,28 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.communications', [])
 
-.controller('communicationsCtrl', function ($scope, $location, $ionicHistory) {
+.controller('communicationsCtrl', function ($scope, $location, $ionicHistory, dataServerService) {
+
+    var selectedCommunicationIndex = -1;
+
+
+     dataServerService.getCommunications().then(function(data){
+        $scope.communications = data;
+     });
+
+    $scope.pippo = function(index){
+
+        if (selectedCommunicationIndex === index) {
+            selectedCommunicationIndex=-1;
+        }
+        else {
+            selectedCommunicationIndex = index;
+        }
+
+    }
+
+    $scope.isCommunicationSelected = function(index){
+        return selectedCommunicationIndex === index;
+    }
 
     //    creare un oggetto che memorizza la lista di comunicazioni a livello di scope
     //    chiamare la funzione che scarica le comunicazioni dal server e associarle alla lista creata

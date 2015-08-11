@@ -1457,3 +1457,12 @@ select {
 .calendar-header {
     font-weight: bold;
 }
+
+.communication.card {
+    padding: 18px;
+}
+
+.communication-selected{
+    background-color: red;
+
+}

@@ -287,7 +287,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
         note_sent_success: "Nota registrata con successo",
         catch_the_bus: "salgono",
         baby_on_the: "bambini sul",
-        buses: 'Bus'
+        buses: 'Bus',
+        parent_communicatons: 'Comunicazione per genitori'
 
     });
 

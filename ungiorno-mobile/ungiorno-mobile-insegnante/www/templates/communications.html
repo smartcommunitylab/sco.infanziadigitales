@@ -1,16 +1,32 @@
-<ion-view id="communications">
+<ion-view id="communications" title="{{'parent_communicatons' | translate}}">
     <ion-nav-bar class="bar bar-ungiorno">
         <!--
         questa e' la navigation bar. Ci serve un pulsante di back.
-
         -> ionic back button
-
         Ci servono inoltre un blocco di pulsanti sulla destra per aggiungere cancellare e modificare una comunicazione
-
         ->creare un set di ionic buttons e allinearli a dx e dentro aggiungere singoli pulsanti con le varie icone
--->
+        -->
+
+        <ion-nav-back-button>
+        </ion-nav-back-button>
+
+            <ion-nav-buttons side="right">
+                <button class="button" ng-click="addCom()">
+                    <i class="icon ion-plus-round"></i>
+                </button>
+
+                <button class="button" ng-click="modifyCom()">
+                    <i class="icon ion-android-create"></i>
+                </button>
+
+                <button class="button" ng-click="deleteCom()">
+                    <i class="icon ion-trash-b"></i>
+                </button>
+            </ion-nav-buttons>
 
     </ion-nav-bar>
+
+
     <ion-content has-header="true">
         <!--
         Nel contenuto della pagina vogliamo inserira una lista di elementi
@@ -22,5 +38,19 @@
         ->creare una funzione del controller che gestisce la selezione in base all'index (ng-click). Per l'evidenziazione utilizzare ng-class che permette di impostare una classe del css in base al verificarsi di una variabile (Es. funzione che verifica se l'indice attuale e' quello selezionato)
 -->
 
+
+
+        <div class="communication card" ng-repeat="communication in communications track by $index" ng-click="pippo($index)" ng-class="{'communication-selected': isCommunicationSelected($index)}">
+            <div ng-if="communication.doCheck">
+                <a>{{communication.description}}</a>
+                <a style="position: absolute; right: 15px;">Comunicazione del {{communication.date | date}}</a>
+
+            </div>
+        </div>
+
+
+
+
+        </div>
     </ion-content>
 </ion-view>

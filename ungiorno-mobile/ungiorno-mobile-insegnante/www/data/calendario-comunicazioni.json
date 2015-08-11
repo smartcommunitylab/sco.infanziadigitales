@@ -3,16 +3,30 @@
         {
             "appId": "a",
             "schoolId": "a",
-            "date": 65415165465,
-            "description": "Questa comunicazione è per la mamma di Marco!",
-            "doCheck": true
+            "dateToCheck": 1539296618,
+            "creationDate": 1439296618,
+            "description": "Questa comunicazione è per la una consegna!,
+            "doCheck": true,
+            "children": ["a", "c", "d"]
         },
         {
             "appId": "a",
             "schoolId": "a",
-            "date": 1288323623,
+            "dateToCheck": 1539296618,
+            "creationDate": 1439296618,
             "description": "Questa comunicazione è per la mamma di Marco!",
-            "doCheck": true
+            "doCheck": false,
+            "children": null
+        }
+        ,
+        {
+            "appId": "a",
+            "schoolId": "a",
+            "dateToCheck": 1539296618,
+            "creationDate": 1439296618,
+            "description": "Questa comunicazione è per un'altra consegna 2!",
+            "doCheck": true,
+            "children": ["a", "c", "d", "e"]
         }
     ]
 }

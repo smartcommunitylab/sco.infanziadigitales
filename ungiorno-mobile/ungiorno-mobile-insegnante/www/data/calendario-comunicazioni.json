@@ -5,14 +5,14 @@
             "schoolId": "a",
             "dateToCheck": 1539296618,
             "creationDate": 1439296618,
-            "description": "Questa comunicazione è per la una consegna!,
+            "description": "Questa comunicazione è per la una consegna!",
             "doCheck": true,
             "children": ["a", "c", "d"]
         },
         {
             "appId": "a",
             "schoolId": "a",
-            "dateToCheck": 1539296618,
+            "dateToCheck": null,
             "creationDate": 1439296618,
             "description": "Questa comunicazione è per la mamma di Marco!",
             "doCheck": false,

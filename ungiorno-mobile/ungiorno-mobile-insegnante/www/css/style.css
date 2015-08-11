@@ -1454,6 +1454,11 @@ select {
     background-color: #DBE2E5;
 }
 
+.calendar-day-not-current-month {
+    background-color: #e3e3e3;
+    color: #606060;
+}
+
 .calendar-header {
     font-weight: bold;
 }

@@ -31,7 +31,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
 	function isWeekend() {
 		var value = $scope.monthRange.start.day();
-		return value != 6 && value != 0? true : false;
+		return value != 6 && value != 0;
 	}
 
 	function generateCalendar() {
@@ -52,8 +52,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 				//console.log("first week starts -> " + (paddingFirstWeek + 1));
 				for (var i = 0; i < paddingFirstWeek; i++) {
 					week.push({
-						value: 0,
-						dayFromBegin: 0,
+						dayDate: 0,
 						background: "#C8C8CD",
 						color: "#C8C8CD"
 					});
@@ -74,15 +73,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 			// Start pushing
 			for (var i = 0; i < weekDuration; i++) {
 				var background = isWeekend()? $scope.colors.specific[0].value: $scope.colors.specific[1].value;
-				var dayFromBegin = $scope.monthRange.start.format('DDD');
+				var dayDate = new Date($scope.monthRange.start._d);
 				$scope.monthRange.start = $scope.monthRange.start.add(1, 'day'); // next day
 
 				var day = {
-					value: counter,
-					dayFromBegin: dayFromBegin,
+					dayDate: dayDate,
 					background: background,
 					color: "#000000"
 				};
+
 
 				week.push(day);
 				counter++;
@@ -94,8 +93,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 				if (daysMissing == 7) daysMissing = 0;
 				for (var i = 0; i < daysMissing; i++) {
 					week.push({
-						value: 0,
-						dayFromBegin : 0,
+						dayDate : 0,
 						background: "#C8C8CD",
 						color: "#C8C8CD"
 					});
@@ -172,10 +170,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 	// Get an array of appointments found for a specific day in a specific calendar (like parents calendar)
 	function getAppointmentsPerDay(day, calendar) {
 		var appointmentsPerDay =  [];
+        var dayStart = new Date(day.dayDate);
+        var dayEnd = new Date(day.dayDate.valueOf() + 60*60*1000*24); //day after
 		for (var i = 0; i < calendar.length; i++) {
-			if ((calendar[i].start.format('DDD') == day.dayFromBegin) ||
-				(calendar[i].end.format('DDD') == day.dayFromBegin) || (
-				day.dayFromBegin > calendar[i].start.format('DDD') && day.dayFromBegin < calendar[i].end.format('DDD')))
+            if (calendar[i].start._d.valueOf() <= dayEnd.valueOf() && calendar[i].end._d.valueOf() >= dayStart.valueOf())
 			{
 				appointmentsPerDay.push(calendar[i]);
 			}
@@ -248,24 +246,24 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 	};
 
 	$scope.getBorderColor = function (day) {
-		return day.dayFromBegin == moment().format('DDD')? '#000000': 'transparent';
+        var today = new Date();
+        if (day.dayDate === 0) return false;
+        return today.getDate() === day.dayDate.getDate() &&
+            today.getMonth() === day.dayDate.getMonth() &&
+            today.getFullYear() === day.dayDate.getFullYear() ? '#000000': 'transparent';
 	}
 
 	$scope.daysAppointments = [];
 	$scope.selectedDay;
 	$scope.viewAppointmentsPerDay = function(day) {
-		console.log(day);
-		$scope.selectedDay = moment(day.dayFromBegin, 'DDDD').locale("it").format("dddd, D MMMM gggg");
-		console.log($scope.selectedDay);
-
-		console.log("selected days -> " + day);
+        if (day.dayDate === 0) return false; //workaround, blank cells are 0 dayEvent.
+		$scope.selectedDay = day;
 		if (displayParentsCalendar) {
 			$scope.daysAppointments = getAppointmentsPerDay(day, parentsAppointments);
 		} else {
 			$scope.daysAppointments = getAppointmentsPerDay(day, kidAppointments);
 		}
 
-		console.log($scope.daysAppointments);
 	};
 
 	$scope.openModal = function() {
@@ -283,7 +281,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 		} else {
 			displayParentsCalendar = false;
 		}
-
+        $scope.viewAppointmentsPerDay($scope.selectedDay);
 		$scope.initialize();
 		$scope.modal.hide();
 	};

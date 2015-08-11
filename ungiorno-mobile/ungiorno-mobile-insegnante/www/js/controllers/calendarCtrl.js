@@ -166,8 +166,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     }
 
     $scope.isDayNotCurrentMonth = function (date) {
-        return !($scope.today.getMonth() === date.getMonth() &&
-            $scope.today.getFullYear() === date.getFullYear());
+        return !($scope.currentMonth.getMonth() === date.getMonth() &&
+            $scope.currentMonth.getFullYear() === date.getFullYear());
     }
 
     $scope.isCalendarMode = function (mode) {
@@ -180,7 +180,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         $scope.today = new Date();
         if (currentCalendarMode === CALENDAR_MODE_WEEKLY) {
             $scope.days = getWeekDays($scope.today.valueOf() + timePadding * 60*60*1000*24*7); //+- 1 week
-            $scope.currentMonthText = $filter('date')($scope.days[0],'MMMM');
+            $scope.currentMonth = $scope.days[0];
         } else {
             $scope.month = {
                 start: moment().locale('it').startOf('month').add(timePadding, 'month'),
@@ -189,11 +189,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
             if ($scope.month.start.day() != 1) {
                 $scope.month.start = $scope.month.start.startOf('week');
             }
+            console.log("last day: " + $scope.month.end.day());
             if ($scope.month.end.day() != 0) {
-                $scope.month.end = $scope.month.end.endOf('week');
+                $scope.month.end = $scope.month.end.startOf('week').add(6, "days");;
             }
 
-            $scope.currentMonthText = $filter('date')(moment().locale('it').startOf('month').add(timePadding, 'month')._d, 'MMMM');
+            $scope.currentMonth = moment().locale('it').startOf('month').add(timePadding, 'month')._d;
 
         }
 
@@ -249,6 +250,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
 
 	$scope.changeView = function(view) {
 		currentCalendarMode = view;
+        timePadding = 0;
 		$scope.initCalendarForCurrentSettings();
 		changeCalendarModeModal.hide();
 	}

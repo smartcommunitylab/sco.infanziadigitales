@@ -19,7 +19,7 @@
                     </button>
                 </div>
                 <div class="col calendar-month">
-                    <p class="calendar-month">{{currentMonthText}}</p>
+                    <p class="calendar-month">{{currentMonth | date:"MMMM"}}</p>
                 </div>
                 <div class="col col-10 calendar-arrow">
                     <button class="calendar-arrow right" ng-click="nextTime()">

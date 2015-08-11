@@ -1471,3 +1471,10 @@ select {
     background-color: red;
 
 }
+.communication-text {
+    font-size: 22px;
+}
+.communication-date{
+    position: absolute;
+    right: 15px;
+}

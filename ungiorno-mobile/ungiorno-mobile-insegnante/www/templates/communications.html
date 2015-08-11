@@ -40,10 +40,11 @@
 
 
 
-        <div class="communication card" ng-repeat="communication in communications track by $index" ng-click="pippo($index)" ng-class="{'communication-selected': isCommunicationSelected($index)}">
-            <div ng-if="communication.doCheck">
-                <a>{{communication.description}}</a>
-                <a style="position: absolute; right: 15px;">Comunicazione del {{communication.date | date}}</a>
+        <div class="communication card" ng-repeat="communication in communications track by $index" ng-click="pippo($index)" ng-class="{'communication-selected': isCommunicationSelected($index)}" ng-if="communication.doCheck">
+            <div >
+                <a class="communication-text">{{communication.description}}</a>
+                <a class="communication-date">Comunicazione del {{communication.creationDate * 1000 | date}}</a>
+                <p ng-if="controlDateToCheck($index)">Scadenza {{communication.dateToCheck * 1000 | date}}</p>
 
             </div>
         </div>

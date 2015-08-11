@@ -11,15 +11,15 @@
         </ion-nav-back-button>
 
             <ion-nav-buttons side="right">
-                <button class="button" ng-click="addCom()">
+                <button class="button" ng-click="addCom()" ng-if="!isCommunicationSelectedMode()">
                     <i class="icon ion-plus-round"></i>
                 </button>
 
-                <button class="button" ng-click="modifyCom()">
+                <button class="button" ng-click="modifyCom()" ng-if="isCommunicationSelectedMode()">
                     <i class="icon ion-android-create"></i>
                 </button>
 
-                <button class="button" ng-click="deleteCom()">
+                <button class="button" ng-click="deleteCom()" ng-if="isCommunicationSelectedMode()">
                     <i class="icon ion-trash-b"></i>
                 </button>
             </ion-nav-buttons>
@@ -40,10 +40,10 @@
 
 
 
-        <div class="communication card" ng-repeat="communication in communications track by $index" ng-click="pippo($index)" ng-class="{'communication-selected': isCommunicationSelected($index)}">
-            <div ng-if="communication.doCheck">
+        <div class="communication card" ng-repeat="communication in communications track by $index" ng-click="selectCommunication($index)" ng-class="{'communication-selected': isCommunicationSelected($index)}"  ng-if="communication.doCheck">
+            <div>
                 <a>{{communication.description}}</a>
-                <a style="position: absolute; right: 15px;">Comunicazione del {{communication.date | date}}</a>
+                <a style="position: absolute; right: 15px;">Comunicazione del {{communication.creationDate | date}}</a>
 
             </div>
         </div>

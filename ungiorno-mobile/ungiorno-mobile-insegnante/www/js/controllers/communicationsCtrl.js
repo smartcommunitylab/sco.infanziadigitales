@@ -9,7 +9,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         $scope.communications = data;
      });
 
-    $scope.pippo = function(index){
+    $scope.selectCommunication = function(index){
 
         if (selectedCommunicationIndex === index) {
             selectedCommunicationIndex=-1;
@@ -23,6 +23,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     $scope.isCommunicationSelected = function(index){
         return selectedCommunicationIndex === index;
     }
+
+
+    $scope.isCommunicationSelectedMode = function() {
+        return selectedCommunicationIndex !== -1;
+    }
+
 
     //    creare un oggetto che memorizza la lista di comunicazioni a livello di scope
     //    chiamare la funzione che scarica le comunicazioni dal server e associarle alla lista creata

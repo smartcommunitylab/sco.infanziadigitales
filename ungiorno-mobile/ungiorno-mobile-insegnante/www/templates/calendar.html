@@ -1,9 +1,15 @@
 <ion-view id="calendar" title="{{today | date:'EEEE, dd MMMM yyyy'}}" ng-init="initCalendarForCurrentSettings()">
-    <ion-nav-buttons side="right">
-        <button class="button" ng-click="openChangeViewModal()">
-            <i class="icon ion-calendar"></i>
-        </button>
-    </ion-nav-buttons>
+    <ion-nav-bar class="bar bar-ungiorno">
+        <ion-nav-back-button>
+        </ion-nav-back-button>
+        <ion-nav-buttons side="right">
+            <button class="button" ng-click="openChangeCalendarMode()">
+                <i class="icon ion-calendar"></i>
+            </button>
+        </ion-nav-buttons>
+    </ion-nav-bar>
+
+
 
     <ion-content has-header="true">
         <div class="row calendar-navigator">
@@ -22,7 +28,7 @@
                 </div>
         </div>
 
-        <div class="calendarDisplay" ng-if="dataLoaded">
+        <div class="calendarDisplay" ng-if="dataLoaded && isCalendarMode('weekly')">
             <div class="row calendar-header">
                 <div class="col"></div><!-- fake element to adapt columns -->
                 <div class="calendar col" ng-repeat="day in days" ng-class="{'calendar-today-cell': isToday(day)}">
@@ -34,10 +40,27 @@
                     <p>{{hour | date:"HH:mm"}}</p>
                 </div>
                 <div class="calendar col" ng-repeat="day in days" ng-class="{'calendar-today-cell': isToday(day)}">
-                    <h4 ng-repeat="teacher in calendarMatrix[$parent.$index][$index].teachers" style="color: {{teacher.colorToDisplay}}">{{teacher.teacherFullname}}</h4>
+                    <h4 ng-repeat="teacher in calendarMatrix[$parent.$index][$index].teachers track by $index" style="color: {{teacher.colorToDisplay}}">{{teacher.teacherFullname}}</h4>
                     <h4 class="calendar event-for-all" ng-if="calendarMatrix[$parent.$index][$index].eventForAll">{{calendarMatrix[$parent.$index][$index].eventName}}</h4>
                 </div>
             </div>
         </div>
+
+        <div class="calendarDisplay" ng-if="dataLoaded && isCalendarMode('monthly')">
+            <div class="row calendar-header">
+                <div class="calendar col" ng-repeat="dayEvent in calendarMatrix[0]">
+                    {{dayEvent.day | date:'EEEE' | capitalize}}
+                </div>
+            </div>
+
+            <div class="row" ng-repeat="week in calendarMatrix">
+                <div class="calendar col" ng-repeat="dayEvent in week" ng-class="{'calendar-today-cell': isToday(dayEvent.day), 'calendar-day-not-current-month': isDayNotCurrentMonth(dayEvent.day)}">
+                    <div class="calendar-monthly-day-text">{{dayEvent.day | date:"dd"}}</div>
+                    <h4 ng-repeat="teacher in dayEvent.event.teachers" style="color: {{teacher.colorToDisplay}}">{{teacher.teacherFullname}}</h4>
+                    <h4 class="calendar event-for-all" ng-if="dayEvent.event.eventForAll">{{day.event.eventName}}</h4>
+                </div>
+            </div>
+        </div>
+
     </ion-content>
 </ion-view>

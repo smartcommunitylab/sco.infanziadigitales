@@ -1,7 +1,26 @@
 <ion-view id="communications">
-    <ion-content has-header="true">
+    <ion-nav-bar class="bar bar-ungiorno">
+        <!--
+        questa e' la navigation bar. Ci serve un pulsante di back.
 
-        communications
+        -> ionic back button
+
+        Ci servono inoltre un blocco di pulsanti sulla destra per aggiungere cancellare e modificare una comunicazione
+
+        ->creare un set di ionic buttons e allinearli a dx e dentro aggiungere singoli pulsanti con le varie icone
+-->
+
+    </ion-nav-bar>
+    <ion-content has-header="true">
+        <!--
+        Nel contenuto della pagina vogliamo inserira una lista di elementi
+
+        ->lista di elementi di ionic. Associare la lista ad un elemento di $scope del controllore e ripetere il contenuto per il numero di elementi (ng-repeat)
+
+        Ognuno di questi riporta descrizione e data della comunicazione Se uno viene selezionato, evidenziarlo e visualizzare i pulsanti di cancellazione e modifica, se cliccato ancora deselezionarlo e visualizzare il menu con la creazione di una nuova comunicazione
+
+        ->creare una funzione del controller che gestisce la selezione in base all'index (ng-click). Per l'evidenziazione utilizzare ng-class che permette di impostare una classe del css in base al verificarsi di una variabile (Es. funzione che verifica se l'indice attuale e' quello selezionato)
+-->
 
     </ion-content>
 </ion-view>

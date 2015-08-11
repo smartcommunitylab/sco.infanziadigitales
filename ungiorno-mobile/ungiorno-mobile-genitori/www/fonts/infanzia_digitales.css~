@@ -1,8 +1,13 @@
 @font-face {
 	font-family: 'infanzia_digitales';
-	src: url('infanzia_digitales.eot');
+	src:url('fonts/infanzia_digitales.eot?-aiz9j');
+	src:url('fonts/infanzia_digitales.eot?#iefix-aiz9j') format('embedded-opentype'),
+		url('fonts/infanzia_digitales.ttf?-aiz9j') format('truetype'),
+		url('fonts/infanzia_digitales.woff?-aiz9j') format('woff'),
+		url('fonts/infanzia_digitales.svg?-aiz9j#infanzia_digitales') format('svg');
+	font-weight: normal;
+	font-style: normal;
 }
-
 
 [class^="inf_dig"], [class*=" inf_dig"] {
 	font-family: 'infanzia_digitales';
@@ -18,6 +23,36 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
+.inf_digverdura:before {
+	content: "\e600";
+}
+.inf_digfrutta:before {
+	content: "\e601";
+}
+.inf_digpesce:before {
+	content: "\e602";
+}
+.inf_digdolce:before {
+	content: "\e603";
+}
+.inf_digpizza:before {
+	content: "\e604";
+}
+.inf_digcarne-rossa:before {
+	content: "\e605";
+}
+.inf_diglatticini:before {
+	content: "\e606";
+}
+.inf_digriso:before {
+	content: "\e607";
+}
+.inf_digpasta:before {
+	content: "\e608";
+}
+.inf_digcarne-bianca:before {
+	content: "\e609";
+}
 .inf_digalert:before {
 	content: "\e000";
 }

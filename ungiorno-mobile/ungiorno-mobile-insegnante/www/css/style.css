@@ -1468,9 +1468,24 @@ select {
     padding: 18px;
 }
 
-.communication-selected{
+.communication-selected {
     background-color: red;
+}
 
+.home-side {
+    display: inline-block;
+}
+
+.comunication-done:before {
+    content: url(/www/img/checked.png);
+    color: green;
+}
+
+.comunication-done {
+    position: absolute;
+    top: 0;
+    right: 0;
+    cursor: pointer;
 }
 .communication-text {
     font-size: 22px;

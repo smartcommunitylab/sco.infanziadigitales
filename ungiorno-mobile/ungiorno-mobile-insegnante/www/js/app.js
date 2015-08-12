@@ -22,6 +22,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
     'it.smartcommunitylab.infanziadigitales.diario.teachers.services.dataServerService',
     'it.smartcommunitylab.infanziadigitales.diario.teachers.services.profileService',
     'it.smartcommunitylab.infanziadigitales.diario.teachers.services.sectionService',
+    'it.smartcommunitylab.infanziadigitales.diario.teachers.services.communicationService',
     'it.smartcommunitylab.infanziadigitales.diario.teachers.services.teachersService',
     'it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.login',
     'angularMoment'
@@ -255,7 +256,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
         monthly: "Mensile",
         // new!!
         teacher: "Maestra",
-        all_section: "Tutte le sezioni",
+        all_section: "Tutte",
         logout: "Esci",
         parents_alerts: "Comunicazioni",
         enter_at: "Entra ad ore: ",

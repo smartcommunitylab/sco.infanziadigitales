@@ -134,6 +134,7 @@ body {
 input[type=text] {
     border-bottom: 1px solid #B0B0B0;
     width: 100%;
+    font-size: 20px;
 }
 
 .icon.ion-image.gallery {

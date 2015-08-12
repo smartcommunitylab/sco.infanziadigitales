@@ -35,8 +35,8 @@
 				</div>
 
 				<div class="row" ng-repeat="item in month track by $index">
-					<div style="background: {{days.background}}; color: {{days.color}}; border: 2px solid {{getBorderColor(days)}};" class="col calendar-container day" ng-repeat="days in item track by $index" ng-click="viewAppointmentsPerDay({{days}})">
-						<p class="calendar-container day">{{days.value}}</p>
+					<div style="background: {{days.background}}; color: {{days.color}}; border: 2px solid {{getBorderColor(days)}};" class="col calendar-container day" ng-repeat="days in item track by $index" ng-click="viewAppointmentsPerDay(days)">
+						<p class="calendar-container day">{{days.dayDate | date:"dd"}}</p>
 					</div>
 				</div>
 
@@ -50,8 +50,8 @@
 			</div>
 
 			<ion-scroll class="page-padding calendar-day-background" style="margin-top: 1px;">
-				<h5>{{selectedDay}}</h5>
-				<div ng-repeat="appointment in daysAppintments">
+				<h5>{{selectedDay.dayDate | date:'EEEE, dd MMMM yyyy'}}</h5>
+				<div ng-repeat="appointment in daysAppointments">
 					<p>{{appointment.title}}</p>
 				</div>
 			</ion-scroll>

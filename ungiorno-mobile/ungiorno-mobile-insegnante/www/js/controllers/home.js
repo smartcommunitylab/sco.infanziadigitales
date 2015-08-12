@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.home', [])
 
-.controller('HomeCtrl', function ($scope, $location, dataServerService, profileService, babyConfigurationService, $filter, $state, Toast, $ionicModal, moment, teachersService, sectionService, $ionicSideMenuDelegate) {
+.controller('HomeCtrl', function ($scope, $location, dataServerService, profileService, babyConfigurationService, $filter, $state, Toast, $ionicModal, moment, teachersService, sectionService, communicationService, $ionicSideMenuDelegate) {
     $scope.sections = null;
     $scope.section = null;
     $scope.childrenConfigurations = [];
@@ -9,9 +9,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     $scope.availableChildren = [];
     $scope.totalChildrenNumber = [];
     $scope.colors = [];
+    $scope.noteExpanded = false;
+    $scope.communicationExpanded = false;
     $scope.schoolProfile = null;
     $scope.numberOfChildren = 0;
-
+    $scope.communications = null;
+    $scope.childrenCommunicationDelivery = null;
+    $scope.data = {
+        communication: null
+    };
     //dovrebbe essere in base all'ora
     $scope.selectedPeriod = 'anticipo';
 
@@ -32,12 +38,36 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
                 $scope.section = $scope.sections[0];
                 sectionService.setSection(0);
                 $scope.getChildrenByCurrentSection();
-
             })
         });
-
+        communicationService.getCommunicationsFromServer().then(function (data) {
+            $scope.communications = data;
+            //check if parameter is sent otherwise take the first
+            $scope.data.communication = $scope.communications[0].communicationId;
+            $scope.changeCommunication($scope.data.communication);
+        });
     };
+    //when select is clicked
+    $scope.changeCommunication = function (communicationId) {
+        communicationService.setCommunication(communicationId);
+        $scope.childrenCommunicationDelivery = communicationService.getCommunication().children;
+    }
+    $scope.getChildrenDeliveryByID = function (id) {
+        if ($scope.communicationExpanded && $scope.childrenCommunicationDelivery != null) {
+            if ($scope.childrenCommunicationDelivery.indexOf(id) >= 0)
+                return true
+            return false
+        }
+        return false
+    }
+    $scope.communicationDone = function (childId) {
+        //se sono in modalita' communication e id contenuto nella lista attuale return true
 
+        if ($scope.communicationExpanded && communicationService.childSelectedCommunication(childId)) {
+            return true;
+        }
+        return false;
+    }
     $scope.getChildrenByCurrentSection = function () {
         //get children info
         $scope.childrenProfiles = [];
@@ -101,6 +131,26 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     $scope.openDetail = function (index) {
         profileService.setCurrentBabyID($scope.childrenProfiles[index].kidId);
         window.location.assign('#/app/babyprofile');
+    }
+
+    $scope.openNotes = function () {
+        if (!$scope.noteExpanded) {
+            $scope.noteExpanded = true;
+            $scope.communicationExpanded = false;
+
+        } else {
+            $scope.noteExpanded = false;
+        }
+    }
+    $scope.openCommunications = function () {
+        if (!$scope.communicationExpanded) {
+            $scope.communicationExpanded = true;
+            $scope.noteExpanded = false;
+
+        } else {
+            $scope.communicationExpanded = false;
+
+        }
     }
     $scope.getChildrenProfilesByPeriod = function (periodOfTheDay) {
         $scope.childrenProfiles[periodOfTheDay] = [];

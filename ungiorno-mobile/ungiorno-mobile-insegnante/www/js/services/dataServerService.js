@@ -83,15 +83,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
         var deferred = $q.defer();
 
         /*temp*/
-        if (calendarioCommunications == null) {
-            $http.get('data/calendario-comunicazioni.json').success(function (data) {
+        //if (calendarioCommunications == null) {
+        $http.get('data/calendario-comunicazioni.json').success(function (data) {
                 calendarioCommunications = data.data;
                 deferred.resolve(calendarioCommunications);
             }).error(function (data, status, headers, config) {
                 console.log(data + status + headers + config);
                 //deferred.reject(err);
             })
-        } else deferred.resolve(calendarioCommunications);
+            //} else deferred.resolve(calendarioCommunications);
         return deferred.promise;
         /*temp*/
     }

@@ -115,7 +115,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         dataServerService.getMeals().then(function(data) {
             for (var i = 0; i < 7; i++) {
                 var today = {
-                    value: $scope.weekRange.start.add(i, 'day')
+                    value: $scope.weekRange.start.add(i, 'day')._d
                 };
                 $scope.weekRange.start = moment().locale('it').add(weekpadding, 'week').startOf('week');
 
@@ -127,7 +127,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                     }
                 } 
 
-                today.background = today.value.day() %2 == 0 && today.value.day() != 0? 'transparent': '#93DAF2';
+                today.background = today.value.getDay() % 2 === 0 && today.value.getDay() !== 0 ? 'transparent': '#93DAF2';
+
+
+
+
+
+
                 $scope.week.push(today);
             }
         });
@@ -214,7 +220,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
 	function doDay() {
 		dataServerService.getMeals().then(function(data) {
-			var mealToday = getMealPerDay($scope.day, data);
+			var mealToday = getMealPerDay($scope.day._d, data);
 			if(mealToday) {
 				$scope.day.lunch = mealToday.lunch;
 				if(mealToday.break) {

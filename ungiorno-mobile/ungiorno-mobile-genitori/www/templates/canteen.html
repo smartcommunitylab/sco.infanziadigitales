@@ -56,15 +56,21 @@
 
             <div style="background: {{day.background}}" class="row" ng-repeat="day in week" ng-show="displayMode == 'weekly'">
                 <div class="col col-25">
-                    <h4 class="canteen weekly-date">{{day.value.date()}}</h4>
+                    <h4 class="canteen weekly-date">{{day.value | date:"EEEE dd"}}</h4>
                 </div>
 
                 <div class="col">
-                    <div class="canteen food-description" ng-repeat="food in day.lunch">{{food.name}}</div>
+                    <div ng-repeat="food in day.lunch">
+                        <div class="canteen food-description">{{food.name}}</div>
+                        <i class="col canteen food-description food-image icon {{food.icon}}"></i>
+                    </div>
                 </div>
 
                 <div class="col">
-                    <div class="canteen food-description" ng-repeat="food in day.break">{{food.name}}</div>
+                    <div ng-repeat="food in day.break">
+                        <div class="canteen food-description">{{food.name}}</div>
+                        <i class="col canteen food-description food-image icon {{food.icon}}"></i>
+                    </div>
                 </div>
             </div>
 
@@ -74,12 +80,18 @@
                     <div class="canteen daily-description">
                         <p class="canteen daily-text">{{'lunch' | translate | uppercase}}</p>
                     </div>
-                    <div class="canteen daily-text" ng-repeat="lunch in day.lunch">{{lunch.name}}</div>
+                    <div ng-repeat="food in day.lunch">
+                        <div class="canteen daily-text">{{food.name}}</div>
+                        <i class="col canteen food-image icon {{food.icon}}"></i>
+                    </div>
 
                     <div class="canteen daily-description">
                         <p style="margin-top: 5px;" class="canteen daily-text">{{'break' | translate | uppercase}}</p>
                     </div>
-                    <div class="canteen daily-text" ng-repeat="lunch in day.break">{{lunch.name}}</div>
+                    <div ng-repeat="food in day.break">
+                        <div class="canteen daily-text">{{food.name}}</div>
+                        <i class="col canteen food-image icon {{food.icon}}"></i>
+                    </div>
                 </ion-list>
             </div>
 

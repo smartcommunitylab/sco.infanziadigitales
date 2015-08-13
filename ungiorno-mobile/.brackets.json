@@ -1,0 +1,12 @@
+{
+    "jscodehints.detectedExclusions": [
+        "/home/smartcommunity/dema/infanziaDigitale/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-insegnante/www/js/services/babyConfigurationService.js",
+        "/home/smartcommunity/dema/infanziaDigitale/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-insegnante/www/js/controllers/babyprofileCtrl.js",
+        "/home/smartcommunity/dema/infanziaDigitale/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-insegnante/www/js/services/dataServerService.js",
+        "/home/smartcommunity/dema/infanziaDigitale/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-insegnante/www/js/controllers/notesTeachersCtrl.js",
+        "/home/smartcommunity/dema/infanziaDigitale/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-insegnante/www/js/controllers/home.js",
+        "/home/smartcommunity/dema/infanziaDigitale/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-insegnante/www/js/controllers/busCtrl.js",
+        "/home/smartcommunity/dema/infanziaDigitale/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-insegnante/www/js/controllers/calendarCtrl.js",
+        "/home/smartcommunity/dema/infanziaDigitale/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-genitori/www/js/controllers/canteen.js"
+    ]
+}

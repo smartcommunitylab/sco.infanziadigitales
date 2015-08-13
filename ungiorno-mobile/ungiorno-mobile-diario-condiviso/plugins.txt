@@ -1,0 +1,12 @@
+(already added by ionic)
+cordova plugin add org.apache.cordova.console
+cordova plugin add org.apache.cordova.device
+cordova plugin add org.apache.cordova.statusbar
+
+(project related)
+cordova plugin add nl.x-services.plugins.toast
+cordova plugin add org.apache.cordova.splashscreen
+cordova plugin add org.apache.cordova.camera
+cordova plugin add com.ionic.keyboard
+cordova plugin add https://github.com/Rohfosho/CordovaCallNumberPlugin.git
+cordova plugin add https://github.com/katzer/cordova-plugin-printer.git

@@ -1,0 +1,5 @@
+<ion-view id="home" ng-init="initialize()">
+    <ion-content>
+         home
+    </ion-content>
+</ion-view>

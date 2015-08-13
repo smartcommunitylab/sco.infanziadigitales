@@ -1,2 +1,6 @@
 /* Empty. Add your own CSS if you like */
 
+.person-details {
+    display: inline-block;
+    vertical-align: middle;
+}

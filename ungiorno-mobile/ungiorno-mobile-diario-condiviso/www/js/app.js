@@ -144,6 +144,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
         date_birth_m: 'Data di nascita del',
         date_birth_f: 'Data di nascita della',
         acces_diary: 'Hanno accesso al diario:',
+        has: 'ha'
     });
 
     $translateProvider.preferredLanguage("it");

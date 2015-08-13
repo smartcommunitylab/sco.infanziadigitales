@@ -63,7 +63,32 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.di
                 });
             }
         }
-    });
+    })
+
+.directive('babyPost', function () {
+    return {
+        restrict: 'E',
+        templateUrl: "templates/babyPost.html",
+        scope: {
+            post: '=',
+            baby: '=',
+        },
+        link: function (scope, elem, attrs) {
+            scope.getBabyAgeString = function (birthday, postDate) {
+                var difference = postDate - birthday;
+                difference = new Date(difference * 1000);
+                var toRtn = (difference.getFullYear() - 1970) + "a " +
+                    difference.getMonth() + "m " +
+                    difference.getDate() + "g";
+
+
+                return toRtn;
+            };
+        }
+    }
+});
+
+;
 //    .directive('preventDrag', function ($ionicGesture, $ionicSlideBoxDelegate) {
 //        return {
 //            restrict: 'A',

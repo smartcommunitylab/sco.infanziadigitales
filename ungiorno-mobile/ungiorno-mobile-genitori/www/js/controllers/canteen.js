@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.canteen',  [])
 
-.controller('CanteenCtrl', function ($scope, moment, canteenService, dataServerService, $ionicModal) {
+.controller('CanteenCtrl', function ($scope, moment, canteenService, dataServerService, $ionicModal, $filter) {
     // Can be weekly, monthly or daily
     $scope.displayMode = 'monthly'; 
 
@@ -78,6 +78,19 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 		$scope.infoModal.show();
 	}
 
+    $scope.isToday = function (date) {
+        var today = new Date();
+        return today.getDate() === date.getDate() &&
+            today.getMonth() === date.getMonth() &&
+            today.getFullYear() === date.getFullYear();
+    }
+
+    $scope.isDayNotCurrentMonth = function (date) {
+        return !($scope.currentMonth.getMonth() === date.getMonth() &&
+            $scope.currentMonth.getFullYear() === date.getFullYear());
+    }
+
+
     // start week
     $scope.week = [];
     var weekpadding = 0;
@@ -102,7 +115,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         dataServerService.getMeals().then(function(data) {
             for (var i = 0; i < 7; i++) {
                 var today = {
-                    value: $scope.weekRange.start.add(i, 'day')
+                    value: $scope.weekRange.start.add(i, 'day')._d
                 };
                 $scope.weekRange.start = moment().locale('it').add(weekpadding, 'week').startOf('week');
 
@@ -114,21 +127,86 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                     }
                 } 
 
-                today.background = today.value.day() %2 == 0 && today.value.day() != 0? 'transparent': '#93DAF2';
+                today.background = today.value.getDay() % 2 === 0 && today.value.getDay() !== 0 ? 'transparent': '#93DAF2';
+
+
+
+
+
+
                 $scope.week.push(today);
             }
         });
     }
 
+
+
+    var insertIconForMeal = function (meal) {
+
+        var insertIconForFood = function (food) {
+            var icon;
+            switch (food.type) {
+                case "veg":
+                    icon = "inf_digverdura";
+                    break;
+                case "fruit":
+                    icon = "inf_digfrutta";
+                    break;
+                case "fish":
+                    icon = "inf_digpesce";
+                    break;
+                case "sweet":
+                    icon = "inf_digdolce";
+                    break;
+                case "pizza":
+                    icon = "inf_digpizza";
+                    break;
+                case "meat":
+                    icon = "inf_digcarne-rossa";
+                    break;
+                case "milk":
+                    icon = "inf_diglatticini";
+                    break;
+                case "rise":
+                    icon = "inf_digriso";
+                    break;
+                case "pasta":
+                    icon = "inf_digpasta";
+                    break;
+                case "white_meat":
+                    icon = "inf_digcarne-bianca";
+                    break;
+                default:
+                    icon = "inf_digpizza"; //tmp!! soup??
+            }
+            food['icon'] = icon;
+        }
+
+
+        meal.lunch.forEach(insertIconForFood);
+        meal.break.forEach(insertIconForFood);
+    }
+
     function getMealPerDay(day, data) {
     	// temp
-    	return data.data[0];
+        //var meal = insertIconForMeal(data.data[0]);
+        //return data.data[0];
 
+        //check this!
         for (var i = 0; i < data.data.length; i++) {
-            if (data.data[i].date == day.format('X')) {
+            insertIconForMeal(data.data[i]);
+            var foodDay = new Date(data.data[i].date * 1000);
+            if (foodDay.getDate() === day.getDate() &&
+                foodDay.getMonth() === day.getMonth() &&
+                foodDay.getFullYear() === day.getFullYear()) {
                 return data.data[i];
             } 
         }
+        var foods = { //workaround if in a day no food is found!
+            lunch: [],
+            break: []
+        }
+        return foods;
     }
     // end week
 
@@ -142,7 +220,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
 	function doDay() {
 		dataServerService.getMeals().then(function(data) {
-			var mealToday = getMealPerDay($scope.day, data);
+			var mealToday = getMealPerDay($scope.day._d, data);
 			if(mealToday) {
 				$scope.day.lunch = mealToday.lunch;
 				if(mealToday.break) {
@@ -160,14 +238,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             start: moment().locale('it').startOf('month').add(monthPadding, 'month'),
             end: moment().locale('it').endOf('month').add(monthPadding, 'month')
         };
-
-        $scope.dateDisplay = $scope.month.start.format('MMMM gggg');
-
         if ($scope.month.start.day() != 1) {
             $scope.month.start = $scope.month.start.startOf('week');
         }
+        console.log("last day: " + $scope.month.end.day());
+        if ($scope.month.end.day() != 0) {
+            $scope.month.end = $scope.month.end.startOf('week').add(6, "days");;
+        }
 
-        console.log($scope.month);
+        $scope.currentMonth = moment().locale('it').startOf('month').add(monthPadding, 'month')._d;
+    	$scope.dateDisplay = $filter('date')($scope.currentMonth, 'MMMM');
+
         doMonth();
     }
 
@@ -181,49 +262,49 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         return value != 6 && value != 0? true : false;
     }
 
+    var divideFoodsInCols = function (foodsArray) {
+        var foodsFormattedInCols = [];
+        var foodsPerRow = 2;
+        for (var i = 0; i < foodsArray.length; i += foodsPerRow) {
+            var singleRow = [];
+            for (var j = i; j - i < foodsPerRow && j < foodsArray.length; j++) {
+                singleRow.push(foodsArray[j]);
+            }
+            foodsFormattedInCols.push(singleRow);
+        }
+        return foodsFormattedInCols;
+    }
+
     $scope.weeks = [];
     function doMonth() {
+        $scope.calendarMatrix = [];
+
         dataServerService.getMeals().then(function(data) {
-            $scope.weeks = [];
+            var numberOfWeeks = Math.ceil(($scope.month.end - $scope.month.start) / (1000*60*60*24)) / 7; //ceil to adjust number of days
+            var tmp = new Date($scope.month.start);
+            for (var weekIndex = 0; weekIndex < numberOfWeeks; weekIndex++) {
+                var weekDaysWithFoods = [];
 
-            // Magic here. Do not touch.
-            // Update 2015.13.07: don't know how this works... Please don't hurt me
-            for (var j = 0; j < weekCount(); j++) {
-                var week = [];
-                var weekDuration = 5;
+                for (var dayIndex = 0; dayIndex < 7; dayIndex++) {
+                    var day = new Date(tmp);
+                    var allFoodsToday = getMealPerDay(day, data);
 
-                for (var i = 0; i < weekDuration; i++) {
-                    var dayFromBegin = $scope.month.start.format('DDD');
-                    var day = $scope.month.start.date();
-
-                    // Find food for today
-                    var mealToday = getMealPerDay($scope.month.startOf, data);
-                    var food = mealToday.lunch;
-                    if (mealToday.break) {
-                        food = food.concat(mealToday.break);
+                    var foods = {
+                        lunch: divideFoodsInCols(allFoodsToday.lunch),
+                        break: divideFoodsInCols(allFoodsToday.break)
                     }
+                    console.log();
 
-                    week.push({
-                        value: day,
-                        dayFromBegin: dayFromBegin,
-                        food: food
-                    });
-
-                    $scope.month.start = $scope.month.start.add(1, 'day');
+                    var dayWithFoods = {
+                        day: day,
+                        foods: foods
+                    }
+                    tmp.setDate(tmp.getDate() + 1);
+                    weekDaysWithFoods.push(dayWithFoods);
                 }
-
-                // Check if all days of weeks are = 0 (worse way to fix a bug)
-                // Please don't kill me
-                if (week[0].value == 0 && week[1].value == 0 && week[2].value == 0 && week[3].value == 0 && week[4].value == 0) {
-                    // Remove, empty week
-                    week = week.slice(0, 0);
-                }
-
-                $scope.weeks.push(week);
-                $scope.month.start = $scope.month.start.add(2, 'day');
+                $scope.calendarMatrix.push(weekDaysWithFoods);
             }
 
-            console.log($scope.weeks);
         });
     }
     // end month

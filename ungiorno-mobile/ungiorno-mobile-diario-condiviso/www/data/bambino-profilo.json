@@ -8,36 +8,7 @@
             "lastName": "Rossi",
             "firstName": "Mario",
             "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg",
-            "section": {
 
-                "sectionID": "sectionID1",
-                "title": "classe A",
-                "level": "piccoli"
-
-            },
-            "services": {
-                "anticipo": {
-                    "enabled": true
-                },
-                "posticipo": {
-                    "enabled": true
-                },
-                "bus": {
-                    "enabled": true,
-                    "stops": [{
-                        "stopId": "idstop1",
-                        "address": "Via boh, Trento TN",
-                        "default": false
-                    }, {
-                        "stopId": "idstop2",
-                        "address": "Via S.Margherita, Povo TN",
-                        "default": true
-                    }]
-                },
-                "mensa": {
-                    "enabled": true
-                }
-            },
             "persons": [{
                     "personId": "personId1",
                     "fullName": "fullName1",
@@ -66,14 +37,9 @@
                     "authorizationUrl": "url1",
                     "adult": true
                 }],
-            "allergies": [{
-                    "name": "insalata",
-                    "type": "veg"
-                },
-                {
-                    "name": "insalata",
-                    "type": "veg"
-                }
+            "authorizedPeople": [
+            ],
+            "notes":[
             ]
         }]
 }

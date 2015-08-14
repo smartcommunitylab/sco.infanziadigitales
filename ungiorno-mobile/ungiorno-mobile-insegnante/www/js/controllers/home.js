@@ -59,7 +59,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         $scope.newNote = false;
     }
 
-    $scope.openTeachersNotes = function () {
+    $scope.openTeacherNotes = function () {
         $scope.parentsNote = false;
         $scope.teachersNote = true;
         $scope.newNote = false;

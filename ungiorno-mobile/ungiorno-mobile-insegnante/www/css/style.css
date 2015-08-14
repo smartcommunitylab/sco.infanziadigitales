@@ -1313,10 +1313,6 @@ select {
     cursor: pointer;
 }
 
-.section-tabs {
-    width: 100%;
-}
-
 .babyProfile.detailsTitle {
     color: #0028b8;
 }
@@ -1497,5 +1493,22 @@ select {
 }
 
 .teacher-notes {
+    width: 100%;
+}
+
+.section-row {
+    padding: 0px;
+}
+
+.tabs.section-tabs {
+    top: 0px;
+    padding: 0px;
+}
+
+.home-section-space {
+    padding-top: 40px !important;
+}
+
+.create-note {
     width: 100%;
 }

@@ -290,7 +290,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
         catch_the_bus: "salgono",
         baby_on_the: "bambini sul",
         buses: 'Bus',
-        parent_communicatons: 'Comunicazione per genitori'
+        parent_communications: 'Comunicazione per genitori',
+        communication_type: 'Tipo di comunicazione',
+        communication_of: 'Comunicazione del',
+        deadline: 'Scadenza',
+        deadline_time: 'Data di scadenza'
+
 
     });
 

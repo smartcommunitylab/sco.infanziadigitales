@@ -134,6 +134,7 @@ body {
 input[type=text] {
     border-bottom: 1px solid #B0B0B0;
     width: 100%;
+    font-size: 20px;
 }
 
 .icon.ion-image.gallery {
@@ -1464,7 +1465,7 @@ select {
 }
 
 .communication-selected {
-    background-color: red;
+    background-color: hotpink;
 }
 
 .home-side {
@@ -1492,7 +1493,7 @@ select {
     right: 15px;
 }
 
-.teacher-notes {
+<<<<<<< HEAD .teacher-notes {
     width: 100%;
 }
 
@@ -1511,4 +1512,8 @@ select {
 
 .create-note {
     width: 100%;
+}
+
+.communication-modify {
+    background-color: default;
 }

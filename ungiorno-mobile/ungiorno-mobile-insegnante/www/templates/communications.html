@@ -14,10 +14,10 @@
                 <button class="button" ng-click="deleteCommunication()" ng-if="isCommunicationSelectedMode()">
                     <i class="icon ion-trash-b"></i>
                 </button>
-                 <button class="button" ng-click="editCom()" ng-if="editState()">
+                 <button class="button" ng-click="editCom()" ng-if="showEditButton()">
                     <i class="icon ion-checkmark-round"></i>
                 </button>
-                <button class="button" ng-click="deleteCom()" ng-if="checkNewCommunication()">
+                <button class="button" ng-click="cancCom()" ng-if="checkNewCommunication()">
                     <i class="icon ion-close-round"></i>
                 </button>
                 <button class="button" ng-click="sendCom()" ng-if="checkNewCommunication()">
@@ -52,22 +52,15 @@
                    <input type="text" id="description" placeholder="Descrizione">
                 </label>
         </div>
-        <div class="communication card" ng-repeat="communication in communications track by $index" class="new-communication" ng-show="modifyDescription($index) && !editState()" >
-               <label >
-                   <span class="input-label communication-text">Descrizione</span>
-                   <input type="text" id="modifyDescription" value="{{communication.description}}">
-               </label>
-                <label >
-                    <span class="input-label communication-text">Data di scadenza</span>
-                   <input type="date" id="modifyDateToCheck" value="{{communication.dateToCheck | date}}">
-               </label>
-            </div>
-        <div class="communication card" ng-repeat="communication in communications track by $index" ng-click="selectCommunication($index)" ng-class="{'communication-selected': isCommunicationSelected($index)}"  ng-if="communication.doCheck && !modifyDescription($index) ">
+
+        <div class="communication card" ng-repeat="communication in communications track by $index" ng-click="selectCommunication($index)" ng-class="{'communication-selected': isCommunicationSelected($index) && !showEditButton(), 'communication-not-selected-in-edit-mode': !isCommunicationSelected($index) && showEditButton()}"  ng-if="communication.doCheck">
             <div >
-                <a class="communication-text">{{communication.description}}</a>
-                <a class="communication-date">{{'communication_of' | translate}} {{communication.creationDate * 1000 | date}}</a>
-                <p ng-if="controlDateToCheck($index)">{{'deadline' | translate}} {{communication.dateToCheck * 1000 | date}}</p>
-                <button ng-if="buttonShow(communication.deadline)" ng-click="selectCommunication($index)">
+                <a ng-if="!modifyDescription($index)" class="communication-text">{{communication.description}}</a>
+                <input  ng-if="modifyDescription($index)" ng-model="communication.description" type="text" id="modifyDescription" value="{{communication.description}}">
+                <a ng-if="!modifyDescription($index)" class="communication-date">{{'communication_of' | translate}} {{communication.creationDate * 1000 | date}}</a>
+                <input ng-if="modifyDescription($index)" ng-model="communication.dateToCheck" type="date" value="{{communication.dateToCheck * 1000 | date:'yyyy-MM-dd'}}" >
+                <p  ng-if="!modifyDescription($index)" ng-if="controlDateToCheck($index)">{{'deadline' | translate}} {{communication.dateToCheck * 1000 | date}}</p>
+                <button ng-if="buttonShow(communication)" ng-click="selectCommunication($index)">
                      Controlla Consegne
                 </button>
             </div>

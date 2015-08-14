@@ -108,6 +108,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
     })
 
     .state('app.section', {
+            cache: false,
             url: '/section/:id',
             views: {
                 'section': {

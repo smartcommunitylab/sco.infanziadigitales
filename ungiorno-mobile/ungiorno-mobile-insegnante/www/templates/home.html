@@ -68,7 +68,7 @@
                         <!--                <div section></div>-->
                     </div>
                 </div>
-                <div class="children-home" ng-repeat="child in childrenProfiles[selectedPeriod] track by $index" ng-click="openDetail($index)">
+                <div class="children-home" ng-repeat="child in childrenProfiles[selectedPeriod] track by $index" ng-click="detailOrCommunication(child.childrenId)">
                     <img ng-src="{{child.image}}" ng-class="{'child-assente' : (child.exitTime == null  || child.exitTime <= getNowDate()), 'child-presente' :  (child.exitTime != null && child.exitTime>getNowDate())}">
                     <!--            <img ng-src="{{child.image}}">-->
                     <div class="children-assente" ng-if="child.exitTime == null"><span>Assente</span>
@@ -77,16 +77,38 @@
                     </div>
                     <div class="children-presente" ng-if="(child.exitTime != null && child.exitTime>getNowDate())"><span>Presente</span>
                     </div>
-                    <!--
-<div class="delivery-done" ng-if="communicationDone(child.childrenId)"><span>Done</span>
-</div>
--->
+
                     <span class="comunication-done" ng-if="getChildrenDeliveryByID(child.childrenId)"></span>
 
                 </div>
             </div>
             <div class="col col-25" ng-hide="!noteExpanded">
-                note maestra e note genitori e creazione di nuova nota
+                <div class="row">
+                    <div class="col">
+                        <button class="button section-tabs" ng-click="openTeacherNotes()"> note maestra </button>
+                    </div>
+                    <div class="col">
+                        <button class="button section-tabs" ng-click="openParentsNotes()"> note genitori </button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div ng-hide="!teachersNote" class="teacher-notes">
+                        <div class="list">
+                            <ion-item>nota maestra 1 </ion-item>
+                            <ion-item>nota maestra 2 </ion-item>
+                        </div>
+                        <button class="button section-tabs" ng-click="createNotes()">Crea Nota </button>
+
+                    </div>
+                    <div ng-hide="!parentsNote">
+                        <div class="list">
+                            <ion-item>nota genitore 1 </ion-item>
+                            <ion-item>nota genitore 2 </ion-item>
+                        </div>
+                    </div>
+                    <div ng-hide="!newNote">crea nuova nota</div>
+
+                </div>
             </div>
             <div class="col col-25" ng-hide="!communicationExpanded">
                 <div class="list">

@@ -1486,10 +1486,16 @@ select {
     right: 0;
     cursor: pointer;
 }
+
 .communication-text {
     font-size: 22px;
 }
-.communication-date{
+
+.communication-date {
     position: absolute;
     right: 15px;
+}
+
+.teacher-notes {
+    width: 100%;
 }

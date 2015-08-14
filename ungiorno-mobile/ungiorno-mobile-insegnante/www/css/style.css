@@ -1514,6 +1514,7 @@ select {
     width: 100%;
 }
 
-.communication-modify {
-    background-color: default;
+
+.communication-not-selected-in-edit-mode {
+    background-color: grey;
 }

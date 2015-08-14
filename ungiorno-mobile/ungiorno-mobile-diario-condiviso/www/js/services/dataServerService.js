@@ -63,6 +63,24 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
         return deferred.promise;
     };
 
+    dataServerService.getPostsByBabyId = function (babyId) {
+        var posts = null;
+        var deferred = $q.defer();
+
+        // temp
+        if (posts == null) {
+            $http.get('data/calendario-diario.json').success(function (data) {
+                posts = data.data;
+                deferred.resolve(posts);
+            }).error(function (data, status, headers, config) {
+                console.log(data + status + headers + config);
+            });
+        } else {
+            deferred.resolve(posts);
+        }
+        return deferred.promise;
+    };
+
 
     return dataServerService;
 })

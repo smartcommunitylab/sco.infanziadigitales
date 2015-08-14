@@ -12,6 +12,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
     'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.directives',
     'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.controllers.common',
     'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.controllers.home',
+    'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.controllers.dettaglidiario',
     'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.services.babyConfigurationService',
     'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.services.dataServerService',
     'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.services.profileService',
@@ -108,12 +109,43 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
 
     })
 
+        .state('app.dettaglidiario', {
+        cache: false,
+        url: "/dettaglidiario",
+        views: {
+            'menuContent': {
+                templateUrl: "templates/dettagliDiario.html",
+                controller: 'dettaglidiarioCtrl'
+            }
+        }
+
+    })
+
 
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/app/home');
 
     $translateProvider.translations('it', {
-        menu_home: 'Home'
+        menu_home: 'Home',
+        diary_details: 'Dettagli diario',
+        data_baby_m: 'Dati bambino:',
+        name_baby_m: 'Nome del bambino',
+        lastname_baby_m: 'Cognome del bambino',
+        date_birth_baby_m: 'Data di nascita del bambino',
+        data_baby_f: 'Dati bambina:',
+        name_baby_f: 'Nome della bambina',
+        lastname_baby_f: 'Cognome della bambina',
+        date_birth_baby_f: 'Data di nascita della bambina',
+        data_family: 'Dati famiglia:',
+        name_of_m: 'Nome del',
+        name_of_f: 'Nome della',
+        surname_of_m: 'Cognome del',
+        surname_of_f: 'Cognome della',
+        date_birth_m: 'Data di nascita del',
+        date_birth_f: 'Data di nascita della',
+        acces_diary: 'Hanno accesso al diario:',
+        has: 'ha',
+        name_parents: 'Nome del genitore'
     });
 
     $translateProvider.preferredLanguage("it");

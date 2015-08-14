@@ -1,2 +1,80 @@
 /* Empty. Add your own CSS if you like */
 
+.stream.post-tag {
+    display: inline-block;
+    margin: 5px;
+    font-style: italic;
+}
+
+.stream.card {
+    padding: 16px;
+}
+
+.stream.post-text {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.stream.post-author {
+    font-size: 16px;
+    text-align: right;
+}
+
+.stream.post-action-container {
+    display: inline-block;
+    float: right;
+}
+.stream.post-creation-details {
+    display: inline-block;
+}
+
+.stream.post-photo {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+.stream.post-photo-more {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 24px;
+}
+
+.stream.photo-big-size {
+    max-height: 300px;
+}
+
+.stream.photo-small-size {
+    max-height: 150px;
+}
+
+.stream.fab {
+    background-color: #F44336;
+    color: #fff;
+    height: 54px;
+    width: 54px;
+    -moz-border-radius: 54px;
+    -webkit-border-radius: 54px;
+    border-radius: 54px;
+
+    vertical-align: middle;
+    text-align: center;
+
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    box-shadow: 0px 0px 10px #888888;
+
+}
+
+.stream.fab:hover {
+    box-shadow: 0px 5px 20px #888888;
+
+}
+
+.stream.fab-icon {
+}
+.person-details {
+    display: inline-block;
+    vertical-align: middle;
+}

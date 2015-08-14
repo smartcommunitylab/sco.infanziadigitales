@@ -1,5 +1,11 @@
 <ion-view id="home">
     <ion-content>
-         home
+        <div ng-repeat="post in posts">
+            <baby-post post="post" baby="baby"></baby-post>
+        </div>
+
     </ion-content>
+    <div class="button stream fab">
+        <i class="icon stream fab-icon ion-android-add"></i>
+    </div>
 </ion-view>

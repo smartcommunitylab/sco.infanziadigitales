@@ -1,0 +1,56 @@
+{
+    "data": [
+        {
+            "appId": "a",
+            "schoolId": "a",
+            "kidId": "a",
+            "services": {
+                "anticipo": {
+                    "active": false
+                },
+                "posticipo": {
+                    "active": true
+                },
+                "bus": {
+                    "active": true,
+                    "defaultIdGo": "idstop1",
+                    "defaultIdBack": "idstop1"
+                },
+                "mensa": {
+                    "active": true
+                }
+            },
+            "exitTime": 1034964475576,
+            "defaultPerson": "personId2",
+            "receiveNotification": true,
+            "extraPerson": {
+                "personId": "personId3",
+                "fullName": "fullName3",
+                "lastName": "lastName3",
+                "firstName": "firstName3",
+                "phone": ["12345", "67890"],
+                "email": ["email1", "email2"],
+                "relation": "Zio",
+                "isParent": false,
+                "default": true,
+                "authorizationDeadline": 1534964475576,
+                "authorizationUrl": "url1",
+                "adult": true
+            },
+            "personWhoRetireBaby": {
+                "personId": "personId3",
+                "fullName": "fullName3",
+                "lastName": "lastName3",
+                "firstName": "firstName3",
+                "phone": ["12345", "67890"],
+                "email": ["email1", "email2"],
+                "relation": "Zio",
+                "isParent": false,
+                "default": true,
+                "authorizationDeadline": 1534964475576,
+                "authorizationUrl": "url1",
+                "adult": true
+            }
+
+        }]
+}

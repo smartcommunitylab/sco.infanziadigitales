@@ -1,17 +1,9 @@
-<ion-view id="communications" title="{{'parent_communicatons' | translate}}">
+<ion-view id="communications" title="{{'parent_communications' | translate}}">
     <ion-nav-bar class="bar bar-ungiorno">
-        <!--
-        questa e' la navigation bar. Ci serve un pulsante di back.
-        -> ionic back button
-        Ci servono inoltre un blocco di pulsanti sulla destra per aggiungere cancellare e modificare una comunicazione
-        ->creare un set di ionic buttons e allinearli a dx e dentro aggiungere singoli pulsanti con le varie icone
-        -->
-
         <ion-nav-back-button>
         </ion-nav-back-button>
-
             <ion-nav-buttons side="right">
-                <button class="button" ng-click="addCom()" ng-if="!isCommunicationSelectedMode()">
+                <button class="button" ng-click="addCom()" ng-if="!isCommunicationSelectedMode() && !newCommunicationMode()">
                     <i class="icon ion-plus-round"></i>
                 </button>
 
@@ -19,38 +11,60 @@
                     <i class="icon ion-android-create"></i>
                 </button>
 
-                <button class="button" ng-click="deleteCom()" ng-if="isCommunicationSelectedMode()">
+                <button class="button" ng-click="deleteCommunication()" ng-if="isCommunicationSelectedMode()">
                     <i class="icon ion-trash-b"></i>
                 </button>
+                 <button class="button" ng-click="editCom()" ng-if="showEditButton()">
+                    <i class="icon ion-checkmark-round"></i>
+                </button>
+                <button class="button" ng-click="cancCom()" ng-if="checkNewCommunication()">
+                    <i class="icon ion-close-round"></i>
+                </button>
+                <button class="button" ng-click="sendCom()" ng-if="checkNewCommunication()">
+                    <i class="icon ion-checkmark-round"></i>
+                </button>
             </ion-nav-buttons>
-
     </ion-nav-bar>
 
-
     <ion-content has-header="true">
-        <!--
-        Nel contenuto della pagina vogliamo inserira una lista di elementi
+        <div class="communication card" ng-if="checkNewCommunication() " >
+            <a class="communication-text" > {{ 'communication_type' | translate}} </a>
 
-        ->lista di elementi di ionic. Associare la lista ad un elemento di $scope del controllore e ripetere il contenuto per il numero di elementi (ng-repeat)
+            <ion-list class="padlist" >
+                <ion-checkbox  ng-repeat="communicationType in communicationTypes" ng-model="communicationType.checked" ng-checked="communicationType.checked" ng-change="selectType(communicationType)">
+                      {{communicationType.typeId}}
+                </ion-checkbox>
 
-        Ognuno di questi riporta descrizione e data della comunicazione Se uno viene selezionato, evidenziarlo e visualizzare i pulsanti di cancellazione e modifica, se cliccato ancora deselezionarlo e visualizzare il menu con la creazione di una nuova comunicazione
+            </ion-list>
+            <div ng-if="communicationTypes[1].checked">
+               <a style="display: inline-block;" class=" input-label communication-text" >{{ 'deadline_time' | translate}} : </a>
 
-        ->creare una funzione del controller che gestisce la selezione in base all'index (ng-click). Per l'evidenziazione utilizzare ng-class che permette di impostare una classe del css in base al verificarsi di una variabile (Es. funzione che verifica se l'indice attuale e' quello selezionato)
--->
+               <label style="display: inline-block">
+                   <input type="text" id="deadlineDate" placeholder="28/08/2015">
+                </label>
 
+               <ion-checkbox style="display: inline-block; " ng-model="deliveryCheck.checked" ng-checked="deliveryCheck.checked" >
+                    Controlla consegna
+               </ion-checkbox>
 
+            </div>
+                <label >
+                   <input type="text" id="description" placeholder="Descrizione">
+                </label>
+        </div>
 
-        <div class="communication card" ng-repeat="communication in communications track by $index" ng-click="selectCommunication($index)" ng-class="{'communication-selected': isCommunicationSelected($index)}"  ng-if="communication.doCheck">
-            <div>
-                <a class="communication-text">{{communication.description}}</a>
-                <a class="communication-date">Comunicazione del {{communication.creationDate * 1000 | date}}</a>
-                <p ng-if="controlDateToCheck($index)">Scadenza {{communication.dateToCheck * 1000 | date}}</p>
+        <div class="communication card" ng-repeat="communication in communications track by $index" ng-click="selectCommunication($index)" ng-class="{'communication-selected': isCommunicationSelected($index) && !showEditButton(), 'communication-not-selected-in-edit-mode': !isCommunicationSelected($index) && showEditButton()}"  ng-if="communication.doCheck">
+            <div >
+                <a ng-if="!modifyDescription($index)" class="communication-text">{{communication.description}}</a>
+                <input  ng-if="modifyDescription($index)" ng-model="communication.description" type="text" id="modifyDescription" value="{{communication.description}}">
+                <a ng-if="!modifyDescription($index)" class="communication-date">{{'communication_of' | translate}} {{communication.creationDate * 1000 | date}}</a>
+                <input ng-if="modifyDescription($index)" ng-model="communication.dateToCheck" type="date" value="{{communication.dateToCheck * 1000 | date:'yyyy-MM-dd'}}" >
+                <p  ng-if="!modifyDescription($index)" ng-if="controlDateToCheck($index)">{{'deadline' | translate}} {{communication.dateToCheck * 1000 | date}}</p>
+                <button ng-if="buttonShow(communication)" ng-click="selectCommunication($index)">
+                     Controlla Consegne
+                </button>
             </div>
         </div>
 
-
-
-
-        </div>
     </ion-content>
 </ion-view>

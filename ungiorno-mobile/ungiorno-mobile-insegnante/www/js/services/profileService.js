@@ -27,7 +27,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
     profileService.getBabyProfileById = function (babyId) {
         var deferred = $q.defer();
         /*tmp*/
-        dataServerService.getBabyProfile().then(function (data) {
+        dataServerService.getBabyProfileById(babyId).then(function (data) {
             deferred.resolve(data);
         });
         return deferred.promise;

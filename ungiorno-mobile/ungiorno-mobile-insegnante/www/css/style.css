@@ -134,6 +134,7 @@ body {
 input[type=text] {
     border-bottom: 1px solid #B0B0B0;
     width: 100%;
+    font-size: 20px;
 }
 
 .icon.ion-image.gallery {
@@ -1313,10 +1314,6 @@ select {
     cursor: pointer;
 }
 
-.section-tabs {
-    width: 100%;
-}
-
 .babyProfile.detailsTitle {
     color: #0028b8;
 }
@@ -1468,7 +1465,7 @@ select {
 }
 
 .communication-selected {
-    background-color: red;
+    background-color: hotpink;
 }
 
 .home-side {
@@ -1486,10 +1483,38 @@ select {
     right: 0;
     cursor: pointer;
 }
+
 .communication-text {
     font-size: 22px;
 }
-.communication-date{
+
+.communication-date {
     position: absolute;
     right: 15px;
+}
+
+.teacher-notes {
+    width: 100%;
+}
+
+.section-row {
+    padding: 0px;
+}
+
+.tabs.section-tabs {
+    top: 0px;
+    padding: 0px;
+}
+
+.home-section-space {
+    padding-top: 40px !important;
+}
+
+.create-note {
+    width: 100%;
+}
+
+
+.communication-not-selected-in-edit-mode {
+    background-color: grey;
 }

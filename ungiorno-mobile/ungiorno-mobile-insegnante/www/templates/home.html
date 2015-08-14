@@ -8,21 +8,17 @@
         </button>
     </ion-nav-buttons>
     <ion-content has-header="true">
-        <div class="row">
-            <div class="col">
-                <div class="row">
-                    <div ng-repeat="section in sections track by $index" class="col">
-                        <button class="button section-tabs" ng-click="changeSection($index)" ng-class="{'section-tab-notpressed' : (!isThisSection($index)), 'section-tab-pressed' :  (isThisSection($index))}">
-                            {{section.sectionName}}
-                        </button>
-                    </div>
-                    <div class="col">
-                        <button class="button section-tabs" ng-click="changeSection('all')" ng-class="{'section-tab-notpressed' : (!isThisSection('all')), 'section-tab-pressed' :  (isThisSection('all'))}">
-                            {{'all_section' | translate}}
-                        </button>
+        <div class="row section-row">
+            <div class="col section-row">
+                <div class="row section-row">
+                    <div class="tabs-striped tabs-top tabs-background-dark tabs-color-light">
+                        <div class="tabs section-tabs">
+                            <a class="tab-item" ng-repeat="section in sections track by $index" class="col" ng-click="changeSection($index)" ng-class="{'active' :  (isThisSection($index))}"> {{section.sectionName}} </a>
+                            <a class="tab-item" class="col" ng-click="changeSection('all')" ng-class="{'active' :  (isThisSection($index))}">  {{'all_section' | translate}} </a>
+                        </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row home-section-space">
                     <div class="col">
                         <div class="sectionPeriod" ng-click="changeSectionPeriod('anticipo')">
                             <svg id="svg" viewbox="0 0 100 100">
@@ -68,7 +64,7 @@
                         <!--                <div section></div>-->
                     </div>
                 </div>
-                <div class="children-home" ng-repeat="child in childrenProfiles[selectedPeriod] track by $index" ng-click="openDetail($index)">
+                <div class="children-home" ng-repeat="child in childrenProfiles[selectedPeriod] track by $index" ng-click="detailOrCommunication(child.childrenId)">
                     <img ng-src="{{child.image}}" ng-class="{'child-assente' : (child.exitTime == null  || child.exitTime <= getNowDate()), 'child-presente' :  (child.exitTime != null && child.exitTime>getNowDate())}">
                     <!--            <img ng-src="{{child.image}}">-->
                     <div class="children-assente" ng-if="child.exitTime == null"><span>Assente</span>
@@ -77,19 +73,57 @@
                     </div>
                     <div class="children-presente" ng-if="(child.exitTime != null && child.exitTime>getNowDate())"><span>Presente</span>
                     </div>
-                    <!--
-<div class="delivery-done" ng-if="communicationDone(child.childrenId)"><span>Done</span>
-</div>
--->
+
                     <span class="comunication-done" ng-if="getChildrenDeliveryByID(child.childrenId)"></span>
 
                 </div>
             </div>
-            <div class="col col-25" ng-hide="!noteExpanded">
-                note maestra e note genitori e creazione di nuova nota
+            <div class="col col-25 home-section-space" ng-hide="!noteExpanded">
+                <div class="row">
+                    <div class="col">
+                        <button class="button section-tabs" ng-click="openTeacherNotes()"> note maestra </button>
+                    </div>
+                    <div class="col">
+                        <button class="button section-tabs" ng-click="openParentsNotes()"> note genitori </button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div ng-hide="!teachersNote" class="teacher-notes">
+                        <div class="list list-inset">
+                            <ion-item>nota maestra 1 </ion-item>
+                            <ion-item>nota maestra 2 </ion-item>
+                        </div>
+                        <button class="button create-note section-tabs" ng-click="createNotes()">Crea Nota </button>
+
+                    </div>
+                    <div ng-hide="!parentsNote" class="teacher-notes">
+                        <div class="list list-inset">
+                            <ion-item>nota genitore 1 </ion-item>
+                            <ion-item>nota genitore 2 </ion-item>
+                        </div>
+                    </div>
+                    <div ng-hide="!newNote">
+                        <div class="list list-inset">
+                            <span class="input-label">Crea nota</span>
+                            <label class="item item-input">
+                                <input type="text" placeholder="Inserisci Testo">
+                            </label>
+                            <li class="item item-checkbox">
+                                <label class="checkbox">
+                                    <input type="checkbox">
+                                </label>
+                                Associa ad un bambino
+                            </li>
+                            <label class="item item-input">
+                                <input type="text" placeholder="Nome Bambino">
+                            </label>
+                        </div>
+                    </div>
+
+                </div>
             </div>
-            <div class="col col-25" ng-hide="!communicationExpanded">
-                <div class="list">
+            <div class="col col-25 home-section-space" ng-hide="!communicationExpanded">
+                <div class="list list-inset">
                     <ion-radio ng-repeat="item in communications" ng-if="item.dateToCheck != null" ng-value="item.communicationId" ng-model="data.communication" ng-click="changeCommunication(item.communicationId)">
                         {{ item.description }}
                     </ion-radio>

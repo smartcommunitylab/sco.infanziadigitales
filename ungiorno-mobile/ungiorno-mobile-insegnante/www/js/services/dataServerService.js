@@ -43,7 +43,23 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
         return deferred.promise;
         /*temp*/
     }
+    dataServerService.getBabyProfileById = function (babyId) {
+        var deferred = $q.defer();
 
+        /*temp*/
+        if (babyProfile == null) {
+            $http.get('data/bambino-profilo.json').success(function (data) {
+                babyProfile = data.data[0];
+                babyProfile.kidId = babyId;
+                deferred.resolve(babyProfile);
+            }).error(function (data, status, headers, config) {
+                console.log(data + status + headers + config);
+                //deferred.reject(err);
+            })
+        } else deferred.resolve(babyProfile);
+        return deferred.promise;
+        /*temp*/
+    }
     dataServerService.getSchoolProfile = function () {
         var deferred = $q.defer();
 

@@ -10,11 +10,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     $scope.totalChildrenNumber = [];
     $scope.colors = [];
     $scope.noteExpanded = false;
+    $scope.teachersNote = true;
+    $scope.parentsNote = false;
+    $scope.newNote = false;
     $scope.communicationExpanded = false;
     $scope.schoolProfile = null;
     $scope.numberOfChildren = 0;
     $scope.communications = null;
     $scope.childrenCommunicationDelivery = null;
+
+
     $scope.data = {
         communication: null
     };
@@ -47,6 +52,26 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
             $scope.changeCommunication($scope.data.communication);
         });
     };
+
+    $scope.openParentsNotes = function () {
+        $scope.parentsNote = true;
+        $scope.teachersNote = false;
+        $scope.newNote = false;
+    }
+
+    $scope.openTeacherNotes = function () {
+        $scope.parentsNote = false;
+        $scope.teachersNote = true;
+        $scope.newNote = false;
+    }
+
+    $scope.createNotes = function () {
+        $scope.parentsNote = false;
+        $scope.teachersNote = false;
+        $scope.newNote = true;
+    }
+
+
     //when select is clicked
     $scope.changeCommunication = function (communicationId) {
         communicationService.setCommunication(communicationId);
@@ -59,6 +84,31 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
             return false
         }
         return false
+    }
+    $scope.switchChildrenDeliveryByID = function (childId) {
+        // if ($scope.childrenCommunicationDelivery.indexOf(id) >= 0) {
+        //se presente rimuovi, se assente aggiungi
+        //var childrenID = $scope.childrenProfiles[id].kidId
+        var index = -1;
+        index = $scope.childrenCommunicationDelivery.indexOf(childId);
+        if (index > -1) {
+            $scope.childrenCommunicationDelivery.splice(index, 1);
+        } else {
+            $scope.childrenCommunicationDelivery.push(childId);
+        }
+        //$scope.childrenCommunicationDelivery[id] = !$scope.childrenCommunicationDelivery[id]
+        //}
+
+    }
+
+    $scope.detailOrCommunication = function (childId) {
+        //se modalita' communication, modifico lista consegne e poi confermo
+        //altrimenti openDetail(index)
+        if ($scope.communicationExpanded) {
+            $scope.switchChildrenDeliveryByID(childId)
+        } else {
+            $scope.openDetail(childId);
+        }
     }
     $scope.communicationDone = function (childId) {
         //se sono in modalita' communication e id contenuto nella lista attuale return true
@@ -128,8 +178,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
             $scope.getChildrenByCurrentSection();
         }
     }
-    $scope.openDetail = function (index) {
-        profileService.setCurrentBabyID($scope.childrenProfiles[index].kidId);
+    $scope.openDetail = function (childId) {
+        profileService.setCurrentBabyID(childId);
         window.location.assign('#/app/babyprofile');
     }
 

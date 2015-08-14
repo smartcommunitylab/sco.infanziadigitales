@@ -1469,7 +1469,7 @@ select {
 }
 
 .communication-selected {
-    background-color: red;
+    background-color: hotpink;
 }
 
 .home-side {
@@ -1493,4 +1493,7 @@ select {
 .communication-date{
     position: absolute;
     right: 15px;
+}
+.communication-modify {
+    background-color: default;
 }

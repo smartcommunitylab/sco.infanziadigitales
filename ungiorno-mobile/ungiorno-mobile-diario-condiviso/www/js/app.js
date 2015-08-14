@@ -145,7 +145,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
         date_birth_f: 'Data di nascita della',
         acces_diary: 'Hanno accesso al diario:',
         has: 'ha',
-        name_parents: 'Nome del genitore'
+        name_parents: 'Nome del genitore',
+        create_post: 'Crea un elemento',
+        description: 'Descrizione',
+        add_photo: 'Aggiungi foto'
     });
 
     $translateProvider.preferredLanguage("it");

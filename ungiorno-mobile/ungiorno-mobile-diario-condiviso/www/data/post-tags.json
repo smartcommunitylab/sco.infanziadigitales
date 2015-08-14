@@ -1,0 +1,28 @@
+{
+    "data": [
+        {
+            "tagId": 1,
+            "value": "Gioco"
+        },
+        {
+            "tagId": 2,
+            "value": "Gruppo"
+        },
+        {
+            "tagId": 3,
+            "value": "Parco"
+        },
+        {
+            "tagId": 4,
+            "value": "Amici"
+        },
+        {
+            "tagId": 5,
+            "value": "Merenda"
+        },
+        {
+            "tagId": 6,
+            "value": "Giardino"
+        }
+    ]
+}

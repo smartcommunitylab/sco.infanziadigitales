@@ -65,15 +65,39 @@
     bottom: 16px;
     box-shadow: 0px 0px 10px #888888;
 
+
+    -webkit-transition: bottom 0.2s; /* For Safari 3.1 to 6.0 */
+    transition: bottom 0.2s;
+
+
 }
 
 .stream.fab:hover {
     box-shadow: 0px 5px 20px #888888;
+}
 
+.stream.fab.hidden {
+    bottom: -60px;
 }
 
 .stream.fab-icon {
 }
+
+.post-create-element {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 16px;
+}
+
+.post-create-element.icon {
+    font-size: 24px;
+}
+
+.post-create-element-row {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
 .person-details {
     display: inline-block;
     vertical-align: middle;

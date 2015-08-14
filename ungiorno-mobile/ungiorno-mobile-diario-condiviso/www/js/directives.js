@@ -86,26 +86,72 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.di
             };
         }
     }
-});
+})
 
-;
-//    .directive('preventDrag', function ($ionicGesture, $ionicSlideBoxDelegate) {
-//        return {
-//            restrict: 'A',
-//
-//            link: function (scope, elem, attrs, e) {
-//                var reportEvent = function (e) {
-//
-//                    if (e.target.tagName.toLowerCase() == 'div') {
-//                        $ionicSlideBoxDelegate.enableSlide(false);
-//                    } else {
-//                        $ionicSlideBoxDelegate.enableSlide(true);
-//                    }
-//                };
-//
-//
-//                $ionicGesture.on('drag', reportEvent, elem);
-//            }
-//        };
-//    })
-//;
+.directive('fabButton', function($document) {
+    return {
+        restrict: 'E',
+        template: '<i class="icon stream fab-icon ion-android-add"></i>',
+        scope: {
+            attachedTo: "@"
+        },
+        link: function(scope, element, attrs) {
+            var scrollView = angular.element(document.querySelector('#' + scope.attachedTo));
+            element.addClass("button");
+            element.addClass("stream");
+            element.addClass("fab");
+
+            var start = 0;
+            var lastDirection = -1; //0 = bottom, 1 = top
+            scrollView.bind('scroll', function(e) {
+                if(e.detail.scrollTop > start) {
+                    if (lastDirection !== 0) {
+                        element.addClass("hidden");
+                        //element.style.display = "hidden";
+                    }
+                    lastDirection = 0;
+                } else if (e.detail.scrollTop < start){
+                    if (lastDirection !== 1) {
+                        element.removeClass("hidden");
+                    }
+                    lastDirection = 1;
+                }
+                start = e.detail.scrollTop;
+            });
+        }
+    }
+})
+
+.directive('autocompleteTags', function($document, $ionicModal) {
+    return {
+        restrict: 'E',
+        template: '<label class="item item-input post-create-element"><input type="text" ng-model="tagsInserted" ng-change="inputChanged()"></input></label>',
+        scope: {
+            tags: "=",
+        },
+        link: function(scope, element, attrs) {
+            //This is not working! Work in progress!
+            var alreadyOpen = false;
+            var tagsModal;
+
+            scope.tagsa = ["Gruppo", "Giovane", "Bambino"];
+
+            scope.inputChanged = function () {
+                console.log(scope.tagsInserted);
+                if (!alreadyOpen) {
+                    tagsModal.show();
+                }
+                alreadyOpen = true;
+            }
+
+            $ionicModal.fromTemplateUrl('templates/tagsModal.html', {
+                scope: scope,
+                animation: 'slide-in-up'
+            }).then(function(modal) {
+                tagsModal = modal;
+            })
+
+
+        }
+    }
+});

@@ -43,7 +43,36 @@
                     "authorizationUrl": "url1",
                     "adult": true
                 }],
-            "authorizedPeople": [
+            "authorizedPeople": [{
+                    "personId": "personId1",
+                    "fullName": "fullName1",
+                    "lastName": "lastName1",
+                    "firstName": "firstName1",
+                    "phone": ["12345", "67890"],
+                    "email": ["email1", "email2"],
+                    "relation": "maestra",
+                    "gender": "F",
+                    "notes": "notesnotesnotes"
+                },
+                {
+                    "personId": "personId1",
+                    "fullName": "fullName1",
+                    "lastName": "lastName1",
+                    "firstName": "firstName1",
+                    "phone": ["12345", "67890"],
+                    "email": ["email1", "email2"],
+                    "relation": "papà",
+                    "gender": "M"
+                },
+                {
+                    "personId": "personId1",
+                    "fullName": "fullName1",
+                    "lastName": "lastName1",
+                    "firstName": "firstName1",
+                    "phone": ["12345", "67890"],
+                    "relation": "zio",
+                    "gender": "M"
+                }
             ],
             "notes":[
             ]

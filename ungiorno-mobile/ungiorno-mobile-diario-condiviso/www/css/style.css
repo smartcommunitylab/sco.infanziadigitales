@@ -78,3 +78,33 @@
     display: inline-block;
     vertical-align: middle;
 }
+.separator {
+    height: 1px;
+    background-color: gray;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.headerdata{
+    color: mediumvioletred;
+    font-size: 20px;
+    margin-left: 10px;
+}
+.topdata{
+    color: darkgrey;
+    font-size: 13px;
+    margin-left: 10px;
+}
+.textdata{
+    color: black;
+    font-size: 15px;
+    margin-left: 10px;
+}
+.sizeImage{
+    width: 150px;
+    height: auto;
+    margin-left: 10px;
+}
+.sizeIcon{
+    font-size: 30px;
+    margin-left: 10px;
+}

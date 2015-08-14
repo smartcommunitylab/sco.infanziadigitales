@@ -13,42 +13,64 @@
             </ion-nav-buttons>
     </ion-nav-bar>
     <ion-content>
-        <div>{{isMale(baby.gender) ? 'data_baby_m' : 'data_baby_f'  | translate}}</div>
-        <div>{{isMale(baby.gender) ? 'name_baby_m' : 'name_baby_f' | translate}}</div>
-        <div ng-if="isViewMode()"> {{baby.firstName}} </div>
-        <input type="text" ng-if="!isViewMode()" value="{{baby.firstName}}">
+        <div class="headerdata">{{getString('data', baby.gender)}} {{isMale(baby.gender) ? 'name_m' : 'name_f' | translate}}</div>
+        <div class="topdata">{{getString('name', baby.gender)}} {{isMale(baby.gender) ? 'name_m' : 'name_f' | translate}}</div>
+        <div ng-if="isViewMode()" class="textdata"> {{baby.firstName}} </div>
+        <input type="text" ng-if="!isViewMode()" value="{{baby.firstName}}" class="textdata">
 
-        <div>{{isMale(baby.gender) ? 'lastname_baby_m' : 'lastname_baby_f' | translate | translate}}</div>
-        <div ng-if="isViewMode()"> {{baby.lastName}} </div>
-        <input type="text" ng-if="!isViewMode()" value="{{baby.lastName}}">
+        <div class="topdata">{{getString('surname', baby.gender)}} {{isMale(baby.gender) ? 'name_m' : 'name_f' | translate}}</div>
+        <div ng-if="isViewMode()" class="textdata"> {{baby.lastName}} </div>
+        <input type="text" ng-if="!isViewMode()" value="{{baby.lastName}}" class="textdata">
 
-        <div>{{isMale(baby.gender) ? 'date_birth_baby_m' : 'date_birth_baby_f' | translate}}</div>
-        <div ng-if="isViewMode()"> {{baby.birthday*1000 | date:"d MMMM yyyy"}} </div>
-        <input type="text" ng-if="!isViewMode()" value="{{baby.birthday*1000 | date:'d MMMM yyyy'}}">
+        <div class="topdata">{{getString('date_birth', baby.gender)}} {{isMale(baby.gender) ? 'name_m' : 'name_f' | translate}}</div>
+        <div ng-if="isViewMode()" class="textdata"> {{baby.birthday*1000 | date:"d MMMM yyyy"}} </div>
+        <input type="date" ng-if="!isViewMode()" value="{{baby.birthday*1000 | date:'yyyy-MM-dd'}}" class="textdata">
 
-        <img ng-src="{{baby.image}}" style="width: 200px; height: 200px;">
+        <img ng-src="{{baby.image}}" class="sizeImage">
 
-        <div>{{'data_family' | translate}}</div>
+        <div class="headerdata">{{'data_family' | translate}}</div>
         <div ng-repeat="data in baby.persons track by $index">
-            <div>{{isMale(data.gender) ? 'name_of_m' : 'name_of_f' | translate}} {{data.relation}}</div>
-            <div>{{data.fullName}}</div>
-            <div>{{isMale(data.gender) ? 'surname_of_m' : 'surname_of_f' | translate}} {{data.relation}}</div>
-            <div>{{data.lastName}}</div>
-            <div>{{isMale(data.gender) ? 'date_birth_m' : 'date_birth_f' | translate}} {{data.relation}}</div>
-            <div>{{data.birthday*1000 | date:"d MMMM yyyy"}}</div>
+            <div class="topdata">{{'name' | translate}} {{getPreposition(data.gender, data.relation)}} {{data.relation}}</div>
+            <div class="textdata"  ng-if="isViewMode()">{{data.fullName}}</div>
+            <input type="text" ng-if="!isViewMode()" value="{{data.fullName}}" class="textdata">
+            <div class="topdata">{{'surname' | translate}} {{getPreposition(data.gender, data.relation)}} {{data.relation}}</div>
+            <div class="textdata" ng-if="isViewMode()">{{data.lastName}}</div>
+            <input type="text" ng-if="!isViewMode()" value="{{data.lastName}}" class="textdata">
+            <div class="topdata">{{'date_birth' | translate}} {{getPreposition(data.gender, data.relation)}} {{data.relation}}</div>
+            <div class="textdata" ng-if="isViewMode()">{{data.birthday*1000 | date:"d MMMM yyyy"}}</div>
+            <input type= "date" ng-if="!isViewMode()"{{value="data.birthday*1000 | date:'yyyy-MM-dd'}}" class="textdata">
+            <div class="separator"></div>
         </div>
 
-        <div>{{'acces_diary' | translate}}</div>
+        <div class="headerdata">{{'acces_diary' | translate}}</div>
 
-        <div>{{'name_parents' | translate}}</div>
-        <div>
-            <i class="person-details icon ion-android-call"></i>
-            <div class="person-details">
-                <div>asdasd</div>
-                <div>asda2sd</div>
+        <div ng-repeat="data in baby.authorizedPeople track by $index">
+            <div class="topdata">{{getString('name', data.gender, data.relation)}} {{data.relation}}</div>
+            <div class="textdata" ng-if="isViewMode()">{{data.firstName}}</div>
+            <input type="text" ng-if="!isViewMode()" value="{{data.firstName}}" class="textdata">
+            <div ng-if="data.phone" class="textdata">
+                <i class="sizeIcon icon ion-android-call"></i>
+                <div class="person-details">
+                    <div class="topdata">{{getString('number_parents', data.gender, data.relation)}} {{data.relation}}</div>
+                    <a href="tel:{{phone}}"  ng-repeat="phone in data.phone track by $index">
+                        <div class="textdata" ng-if="isViewMode()">{{phone}}</div>
+                        <input type="text" ng-if="!isViewMode()" value="{{phone}}" class="textdata">
+                    </a>
+                </div>
             </div>
+            <div ng-if="data.email" class="textdata">
+                <i class="sizeIcon icon ion-email"></i>
+                <div class="person-details">
+                    <div class="topdata">{{getString('mail_parents', data.gender, data.relation)}} {{data.relation}}</div>
+                    <a href="mailto:{{mail}}"  ng-repeat="mail in data.email track by $index">
+                        <div class="textdata" ng-if="isViewMode()">{{mail}}</div>
+                        <input type="text" ng-if="!isViewMode()" value="{{mail}}" class="textdata">
+                    </a>
+                </div>
+            </div>
+            <div class="headerdata" ng-if="isTeacher(data.relation)" >{{'notesTeacher' | translate}}</div>
+            <input ng-if="isTeacher(data.relation)" type="text" ng-if="!isViewMode()" value="{{'notes' | translate}}" class="textdata">
+            <div class="separator"></div>
         </div>
-
-
     </ion-content>
 </ion-view>

@@ -6,7 +6,7 @@
         <button class="button" ng-if="!close()" ng-click="openCommunications()">
             <i class="icon ion-android-alarm-clock"></i>
         </button>
-        <button style="color:black"class="button" ng-if="close()" ng-click="closeNotesAndComm()">{{'close' | translate | uppercase}}</button>
+        <button style="color:black" class="button" ng-if="close()" ng-click="closeNotesAndComm()">{{'close' | translate | uppercase}}</button>
     </ion-nav-buttons>
     <ion-content has-header="true">
         <div class="row section-row">
@@ -79,11 +79,13 @@
 
                 </div>
             </div>
-            <div style="background-color:lightgrey" class="col col-25 home-section-space " ng-hide="!noteExpanded">
-                <div class=" tabs section-tabs tabs-background-dark tabs-color-light" ng-if="!newNote">
-                     <div class="tabs section-tabs">
-                        <a class="tab-item" ng-click="openTeacherNotes()">{{'teachers_notes' | translate}}</a>
-                        <a class="tab-item" ng-click="openParentsNotes()">{{'parents_notes' | translate}}</a>
+            <div class="col col-25 home-section-space" ng-hide="!noteExpanded">
+                <div class="row" ng-if="!newNote">
+                    <div class="col note-button">
+                        <button class="button section-tabs " ng-class="{'button-note-selected' :teachersNote , 'button-note-not-selected' :!teachersNote}" ng-click="openTeacherNotes()">{{'teachers_notes' | translate}}</button>
+                    </div>
+                    <div class="col note-button">
+                        <button class="button section-tabs" ng-class="{'button-note-selected' :parentsNote , 'button-note-not-selected' :!parentsNote}" ng-click="openParentsNotes()">{{'parents_notes' | translate}}</button>
                     </div>
                 </div>
                 <div class="row">

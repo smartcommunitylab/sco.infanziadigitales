@@ -1473,7 +1473,7 @@ select {
 }
 
 .comunication-done:before {
-    content: url(/www/img/check.png);
+    content: url(../img/check.png);
     color: green;
 }
 
@@ -1516,4 +1516,13 @@ select {
 
 .communication-not-selected-in-edit-mode {
     background-color: grey;
+}
+
+.children-search {
+    position: absolute;
+    width: 100%;
+}
+
+.child-search {
+    background-color: white !important;
 }

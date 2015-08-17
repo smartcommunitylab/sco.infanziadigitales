@@ -1,6 +1,9 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.controllers.home', [])
 
-.controller('HomeCtrl', function ($scope, dataServerService) {
+.controller('HomeCtrl', function ($scope, dataServerService, $ionicModal) {
+
+    var newPostModal;
+    $scope.today = new Date();
 
     dataServerService.getBabyProfile("a").then(function (baby) {
         $scope.baby = baby;
@@ -10,6 +13,19 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         $scope.posts = posts;
     });
 
+    $ionicModal.fromTemplateUrl('templates/newPostModal.html', {
+		scope: $scope,
+		animation: 'slide-in-up'
+	}).then(function(modal) {
+		newPostModal = modal
+	})
 
+	$scope.createPost = function() {
+		newPostModal.show()
+	}
+
+	$scope.newPost = function(post) {
+        newPostModal.hide();
+	}
 
 });

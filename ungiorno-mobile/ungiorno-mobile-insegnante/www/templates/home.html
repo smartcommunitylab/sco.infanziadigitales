@@ -1,11 +1,12 @@
 <ion-view id="home" ng-init="initialize()">
     <ion-nav-buttons side="right">
-        <button class="button" ng-click="openNotes()">
+        <button class="button" ng-if="!close()" ng-click="openNotes()">
             <i class="icon ion-document-text"></i>
         </button>
-        <button class="button" ng-click="openCommunications()">
+        <button class="button" ng-if="!close()" ng-click="openCommunications()">
             <i class="icon ion-android-alarm-clock"></i>
         </button>
+        <button class="button" ng-if="close()" ng-click="closeNotesAndComm()">{{'close' | translate | uppercase}}</button>
     </ion-nav-buttons>
     <ion-content has-header="true">
         <div class="row section-row">
@@ -16,6 +17,9 @@
                             <a class="tab-item" ng-repeat="section in sections track by $index" class="col" ng-click="changeSection($index)" ng-class="{'active' :  (isThisSection($index))}"> {{section.sectionName}} </a>
                             <a class="tab-item" class="col" ng-click="changeSection('all')" ng-class="{'active' :  (isThisSection($index))}">  {{'all_section' | translate}} </a>
                         </div>
+
+
+
                     </div>
                 </div>
                 <div class="row home-section-space">
@@ -67,11 +71,11 @@
                 <div class="children-home" ng-repeat="child in childrenProfiles[selectedPeriod] track by $index" ng-click="detailOrCommunication(child.childrenId)">
                     <img ng-src="{{child.image}}" ng-class="{'child-assente' : (child.exitTime == null  || child.exitTime <= getNowDate()), 'child-presente' :  (child.exitTime != null && child.exitTime>getNowDate())}">
                     <!--            <img ng-src="{{child.image}}">-->
-                    <div class="children-assente" ng-if="child.exitTime == null"><span>Assente</span>
+                    <div class="children-assente" ng-if="child.exitTime == null"><span>{{'absent' | translate}}</span>
                     </div>
-                    <div class="children-uscito" ng-if="(child.exitTime != null && child.exitTime<=getNowDate())"><span>Uscito</span>
+                    <div class="children-uscito" ng-if="(child.exitTime != null && child.exitTime<=getNowDate())"><span>{{'exit' | translate}}</span>
                     </div>
-                    <div class="children-presente" ng-if="(child.exitTime != null && child.exitTime>getNowDate())"><span>Presente</span>
+                    <div class="children-presente" ng-if="(child.exitTime != null && child.exitTime>getNowDate())"><span>{{'present' | translate}}</span>
                     </div>
 
                     <span class="comunication-done" ng-if="getChildrenDeliveryByID(child.childrenId)"></span>
@@ -79,12 +83,12 @@
                 </div>
             </div>
             <div class="col col-25 home-section-space" ng-hide="!noteExpanded">
-                <div class="row">
+                <div class="row" ng-if="!newNote">
                     <div class="col">
-                        <button class="button section-tabs" ng-click="openTeacherNotes()"> note maestra </button>
+                        <button class="button section-tabs" ng-click="openTeacherNotes()">{{'teachers_notes' | translate}}</button>
                     </div>
                     <div class="col">
-                        <button class="button section-tabs" ng-click="openParentsNotes()"> note genitori </button>
+                        <button class="button section-tabs" ng-click="openParentsNotes()">{{'parents_notes' | translate}}</button>
                     </div>
                 </div>
                 <div class="row">
@@ -93,7 +97,7 @@
                             <ion-item>nota maestra 1 </ion-item>
                             <ion-item>nota maestra 2 </ion-item>
                         </div>
-                        <button class="button create-note section-tabs" ng-click="createNotes()">Crea Nota </button>
+                        <button style="background-color:red; color:white" class="button create-note section-tabs" ng-click="createNotes()">{{'new_note' | translate}}</button>
 
                     </div>
                     <div ng-hide="!parentsNote" class="teacher-notes">
@@ -104,7 +108,7 @@
                     </div>
                     <div ng-hide="!newNote">
                         <div class="list list-inset">
-                            <span class="input-label">Crea nota</span>
+                            <span class="">{{'create_new_note' | translate | uppercase}}</span>
                             <label class="item item-input">
                                 <input type="text" placeholder="Inserisci Testo">
                             </label>
@@ -112,11 +116,14 @@
                                 <label class="checkbox">
                                     <input type="checkbox">
                                 </label>
-                                Associa ad un bambino
+                                {{'associated_a_child' | translate}}
                             </li>
                             <label class="item item-input">
-                                <input type="text" placeholder="Nome Bambino">
+                                <input type="text" placeholder="Nome Bambino"><br>
                             </label>
+                            <br>
+                            <button style="background-color:grey; color:white; width:150px"class="button section-tabs" ng-click="cancelNewNote()">{{'cancel' | translate}}</button>
+                            <button style="background-color:red; color:white; width:150px" class="button section-tabs">{{'create_note' | translate}}</button>
                         </div>
                     </div>
 

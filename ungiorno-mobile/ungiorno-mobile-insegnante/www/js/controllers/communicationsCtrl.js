@@ -9,6 +9,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     var modifyState = false;
     var editClose = false;
     var selectedComIndex = null;
+
     $scope.communicationTypes = [
         { typeId : "Generica",
           checked : false},
@@ -24,7 +25,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     $scope.selectCommunication = function(index){
 
         if (selectedCommunicationIndex === index) {
-            selectedCommunicationIndex=-1;
+            selectedCommunicationIndex = -1;
         }
         else {
             selectedCommunicationIndex = index;
@@ -66,7 +67,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
 
     }
     $scope.deleteCom = function (){
-        deleteCommunication = true;
+        selectedNewCommunication = false;
     }
 
     $scope.checkNewCommunication = function() {
@@ -76,10 +77,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         } else {
         return false}
     }
-     $scope.deleteNewCommunication = function() {
-      return deleteCommunication === false;
-    }
-
+     $scope.deleteCommunication = function() {
+        $scope.communications.splice(selectedCommunicationIndex, 1);
+         selectedCommunicationIndex = -1;
+     }
 
      $scope.selectType = function (newType) {
             for (var i = 0; i < $scope.communicationTypes.length; i++) {

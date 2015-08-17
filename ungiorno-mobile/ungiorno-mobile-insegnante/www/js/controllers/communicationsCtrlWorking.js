@@ -39,6 +39,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     $scope.deleteCommunication = function () {
         //delete selected comunication from array and from server
 
+
     }
     $scope.modifyCommunication = function () {
         //show the part of the item with preloaded element

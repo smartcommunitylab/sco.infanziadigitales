@@ -43,7 +43,7 @@
                    <input type="text" id="deadlineDate" placeholder="28/08/2015">
                 </label>
 
-               <ion-checkbox style="display: inline-block; " ng-model="deliveryCheck.checked" ng-checked="deliveryCheck.checked" >
+               <ion-checkbox style="display: inline-block" ng-model="deliveryCheck.checked" ng-checked="deliveryCheck.checked" >
                     Controlla consegna
                </ion-checkbox>
 
@@ -54,11 +54,11 @@
         </div>
         <div class="communication card" ng-repeat="communication in communications track by $index" class="new-communication" ng-show="modifyDescription($index) && !editState()" >
                <label >
-                   <span class="input-label communication-text">Descrizione</span>
+                   <span style="display: inline-block" class="input-label communication-text"><br>Descrizione</span>
                    <input type="text" id="modifyDescription" value="{{communication.description}}">
                </label>
                 <label >
-                    <span class="input-label communication-text">Data di scadenza</span>
+                    <span style="display: inline-block" class="input-label communication-text">Data di scadenza</span>
                    <input type="date" id="modifyDateToCheck" value="{{communication.dateToCheck | date}}">
                </label>
             </div>

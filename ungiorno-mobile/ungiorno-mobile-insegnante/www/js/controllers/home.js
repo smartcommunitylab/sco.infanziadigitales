@@ -18,6 +18,18 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     $scope.numberOfChildren = 0;
     $scope.communications = null;
     $scope.childrenCommunicationDelivery = null;
+    $scope.selectedNote = false;
+
+
+    $scope.close = function () {
+        return $scope.noteExpanded || $scope.communicationExpanded;
+    }
+
+    $scope.closeNotesAndComm = function () {
+        $scope.noteExpanded = false;
+        $scope.communicationExpanded = false;
+    }
+
 
 
     $scope.data = {
@@ -69,6 +81,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         $scope.parentsNote = false;
         $scope.teachersNote = false;
         $scope.newNote = true;
+    }
+
+    $scope.cancelNewNote = function () {
+        $scope.newNote = false;
+        $scope.parentsNote = false;
+        $scope.teachersNote = true;
     }
 
 

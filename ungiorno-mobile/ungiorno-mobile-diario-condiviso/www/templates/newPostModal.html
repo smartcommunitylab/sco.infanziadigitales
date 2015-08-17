@@ -16,12 +16,14 @@
         </div>
         <div class="post-create-element-row">
             <i class="icon ion-android-camera post-create-element"></i>
-            <button class="button post-create-add-photo post-create-element" id="new_post_photo">{{'add_photo' | translate}}</input>
+            <button class="button post-create-add-photo post-create-element" id="new_post_photo" ng-click="addPhoto()">{{'add_photo' | translate}}</input>
         </div>
         <div class="post-create-element-row">
             <i class="icon ion-android-time post-create-element"></i>
             <div class="post-create-element">
-                <input class="post-create-element" type="date" value="2015-08-14" ng-model="newPost.date"></input>
+            <label class="item-input">
+                <input class="post-create-element" type="date" ng-model="newPost.date">
+            </label>
             </div>
         </div>
         <div class="post-create-element-row mood-container">

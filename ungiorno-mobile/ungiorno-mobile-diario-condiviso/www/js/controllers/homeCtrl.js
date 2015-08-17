@@ -31,7 +31,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
 	$scope.createPost = function() {
         postToCreate = new Object();
         $scope.setMood(0);
-		newPostModal.show()
+        $scope.newPost.date = new Date();
+        $scope.newPost.description = "";
+        //$scope.newPost.photos = "";
+        $scope.attachedTags = [];
+		newPostModal.show();
 	}
 
 	$scope.newPost = function(post) {
@@ -40,8 +44,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
             delete obj["$$hashKey"];
         });
         postToCreate.tags = $scope.attachedTags;
-        //postToCreate.photos = newPostModal.newPost.photos;
-        //postToCreate.date = newPostModal.newPost.date;
+        //postToCreate.photos = $scope.newPost.photos;
+        postToCreate.date = $scope.newPost.date;
         console.log(JSON.stringify(postToCreate));
         newPostModal.hide();
 	}

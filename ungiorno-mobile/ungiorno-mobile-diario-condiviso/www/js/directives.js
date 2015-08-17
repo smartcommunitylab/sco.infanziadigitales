@@ -144,7 +144,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.di
             scope.completeTag = function ( index) {
                 if (scope.attachedTags.indexOf(scope.tags[index]) === -1) { //check if tag is already added
                     scope.attachedTags.push(scope.tags[index]);
-                    console.log(JSON.stringify(scope.attachedTags));
                 }
                 scope.tagsInserted = "";
                 scope.filteredTags = scope.tags.slice(); //workaround for a bug on android, after adding a tag the input text is empty but the tagsInserted is badly filtered
@@ -165,7 +164,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.di
                     alreadyOpen = true;
                 }
                 scope.filteredTags = scope.tags.filter(inputTagsFilter);
-                console.log(JSON.stringify(scope.filteredTags));
             }
 
             scope.addTag = function (name) {

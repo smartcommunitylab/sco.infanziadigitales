@@ -1473,7 +1473,7 @@ select {
 }
 
 .comunication-done:before {
-    content: url(/www/img/checked.png);
+    content: url(/www/img/check.png);
     color: green;
 }
 
@@ -1513,7 +1513,6 @@ select {
 .create-note {
     width: 100%;
 }
-
 
 .communication-not-selected-in-edit-mode {
     background-color: grey;

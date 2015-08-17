@@ -144,7 +144,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
         number_parents: 'n° di telefono ',
         mail_parents: 'Indirizzo email ',
         notesTeacher: 'Note personali insegnante',
-        notes: 'Aggiungi delle note personali al diario'
+        notes: 'Aggiungi delle note personali al diario',
+        add_tag: 'Aggiungi',
+        add_tag_title: 'Aggiungi etichetta',
+        add_tag_description: 'non è presente nell\'elenco delle etichette. Scegli Aggiungi per inserire la nuova etichetta nell\'elenco'
     });
 
     $translateProvider.preferredLanguage("it");

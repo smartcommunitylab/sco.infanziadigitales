@@ -23,7 +23,20 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     $scope.data = {
         communication: null
     };
-    //dovrebbe essere in base all'ora
+    $scope.data = {
+        "children": [],
+        "search": ''
+    };
+
+    $scope.search = function () {
+
+            profileService.searchChildrenBySection($scope.data.search, $scope.section.sectionId).then(
+                function (children) {
+                    $scope.data.children = children;
+                }
+            )
+        }
+        //dovrebbe essere in base all'ora
     $scope.selectedPeriod = 'anticipo';
 
     $scope.title = moment().locale('it').format("dddd, D MMMM gggg");

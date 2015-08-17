@@ -122,34 +122,80 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.di
     }
 })
 
-.directive('autocompleteTags', function($document, $ionicModal) {
+.directive('autocompleteTags', function($document, $ionicPopover, dataServerService, $ionicPopup, $filter) {
     return {
         restrict: 'E',
-        template: '<label class="item item-input post-create-element"><input type="text" ng-model="tagsInserted" ng-change="inputChanged()"></input></label>',
+        templateUrl: 'templates/autocompleteTags.html',
         scope: {
             tags: "=",
+            attachedTags: "="
         },
         link: function(scope, element, attrs) {
             //This is not working! Work in progress!
             var alreadyOpen = false;
-            var tagsModal;
+            var tagsPopover;
 
-            scope.tagsa = ["Gruppo", "Giovane", "Bambino"];
-
-            scope.inputChanged = function () {
-                console.log(scope.tagsInserted);
-                if (!alreadyOpen) {
-                    tagsModal.show();
-                }
-                alreadyOpen = true;
+            var inputTagsFilter = function (value) {
+                var lastTag = scope.tagsInserted.split(",");
+                lastTag = scope.tagsInserted.trim().toLowerCase();
+                return value.value.toLowerCase().indexOf(lastTag) > -1;
             }
 
-            $ionicModal.fromTemplateUrl('templates/tagsModal.html', {
-                scope: scope,
-                animation: 'slide-in-up'
-            }).then(function(modal) {
-                tagsModal = modal;
-            })
+            scope.completeTag = function ( index) {
+                if (scope.attachedTags.indexOf(scope.tags[index]) === -1) { //check if tag is already added
+                    scope.attachedTags.push(scope.tags[index]);
+                }
+                scope.tagsInserted = "";
+                scope.filteredTags = scope.tags.slice(); //workaround for a bug on android, after adding a tag the input text is empty but the tagsInserted is badly filtered
+                //scope.closePopover();
+            }
+
+            scope.removeTag = function (tag) {
+                scope.attachedTags.splice(scope.attachedTags.indexOf(tag), 1);
+            }
+
+
+            scope.filteredTags = scope.tags.slice();
+
+
+            scope.inputChanged = function ($event) {
+                if (!alreadyOpen) {
+                    scope.openPopover($event);
+                    alreadyOpen = true;
+                }
+                scope.filteredTags = scope.tags.filter(inputTagsFilter);
+            }
+
+            scope.addTag = function (name) {
+                var addTagPopup = $ionicPopup.confirm({
+                    title: $filter('translate')('add_tag_title'),
+                    template: name + ' ' + $filter('translate')('add_tag_description')
+                });
+                addTagPopup.then(function(result) {
+                    if(result) {
+                        //TODO: add tag to the server list of tags
+                        scope.closePopover();
+                        scope.tagsInserted = "";
+                        scope.filteredTags = scope.tags.slice(); //workaround for a bug on android, after adding a tag the input text is empty but the tagsInserted is badly filtered
+                    } else {
+                    }
+                });
+            }
+
+
+            $ionicPopover.fromTemplateUrl('templates/tagsPopup.html', {
+                scope: scope
+            }).then(function (popover) {
+                tagsPopover = popover;
+            });
+
+            scope.openPopover = function ($event) {
+                tagsPopover.show($event);
+            };
+            scope.closePopover = function () {
+                tagsPopover.hide();
+                alreadyOpen = false;
+            };
 
 
         }

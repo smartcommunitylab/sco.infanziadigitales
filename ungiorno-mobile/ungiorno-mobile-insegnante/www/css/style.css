@@ -1517,3 +1517,12 @@ select {
 .communication-not-selected-in-edit-mode {
     background-color: grey;
 }
+
+.children-search {
+    position: absolute;
+    width: 100%;
+}
+
+.child-search {
+    background-color: white !important;
+}

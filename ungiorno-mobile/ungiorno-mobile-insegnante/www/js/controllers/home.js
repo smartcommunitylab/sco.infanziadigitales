@@ -40,6 +40,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         "search": ''
     };
 
+    $scope.selectChildrenForNote = function (children) {
+        $scope.data.search = children.childrenName;
+        $scope.data.children = [];
+    }
     $scope.search = function () {
 
             profileService.searchChildrenBySection($scope.data.search, $scope.section.sectionId).then(

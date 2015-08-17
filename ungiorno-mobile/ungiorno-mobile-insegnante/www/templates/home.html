@@ -121,13 +121,16 @@
                             <label class="item item-input">
                                 <input type="text" placeholder="Nome Bambino" ng-change="search()" ng-model="data.search">
                             </label>
-<!--
+                            <!--
                             <label class="item item-input">
     <input type="text" placeholder="Nome Bambino">
     <br>
 </label>
 -->
-                            <br>
+                            <!--                            <br>-->
+                            <div class="list children-search">
+                                <li class="item child-search" ng-repeat="children in data.children" ng-click="selectChildrenForNote(children)">{{children.childrenName}}</li>
+                            </div>
                             <button style="background-color:grey; color:white; width:150px" class="button section-tabs" ng-click="cancelNewNote()">{{'cancel' | translate}}</button>
                             <button style="background-color:red; color:white; width:150px" class="button section-tabs">{{'create_note' | translate}}</button>
                         </div>

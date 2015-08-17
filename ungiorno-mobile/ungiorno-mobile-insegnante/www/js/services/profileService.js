@@ -4,6 +4,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
     var babyProfile = null;
     var schoolProfile = null;
     var currentBabyID = null;
+    var childrenProfiles = [];
     var profileService = {};
 
     //not used anymore by babyProfile!
@@ -60,7 +61,36 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
         return schoolProfile;
     }
 
+    profileService.searchChildrenBySection = function (childrenName, section) {
 
+        var deferred = $q.defer();
+        if (childrenProfiles.length == 0) {
+            dataServerService.getSections().then(function (data) {
+                //indicizza profili per sezione
+                for (var i = 0; i < data.length; i++) {
+                    childrenProfiles[data[i].sectionId] = data[i].children;
+                }
+                var matches = childrenProfiles[section].filter(function (children) {
+                    if (children.childrenName.toLowerCase().indexOf(childrenName.toLowerCase()) !== -1) return true;
+                })
+
+
+                deferred.resolve(matches);
+
+            });
+        } else {
+            var matches = childrenProfiles.filter(function (children) {
+                if (children.name.toLowerCase().indexOf(childrenName.toLowerCase()) !== -1) return true;
+            })
+
+
+            deferred.resolve(matches);
+
+        }
+
+        return deferred.promise;
+
+    };
 
 
     return profileService;

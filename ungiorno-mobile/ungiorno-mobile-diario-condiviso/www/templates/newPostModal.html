@@ -16,7 +16,15 @@
         </div>
         <div class="post-create-element-row">
             <i class="icon ion-android-camera post-create-element"></i>
-            <button class="button post-create-add-photo post-create-element" id="new_post_photo" ng-click="addPhoto()">{{'add_photo' | translate}}</input>
+            <button class="button post-create-add-photo post-create-element" id="new_post_photo" ng-click="addPhoto($event)">{{'add_photo' | translate}}</input>
+        </div>
+        <div class="post-create-gallery">
+            <div ng-repeat="img in postToCreate.photos track by $index" class="post-create-photo-container inline">
+                <img class="post-create-photo" data-ng-src="{{img}}">
+                <button class="button post-create-photo-remove" ng-click="removePhoto($index)">
+                    <i class="icon ion-android-close"></i>
+                </button>
+            </div>
         </div>
         <div class="post-create-element-row">
             <i class="icon ion-android-time post-create-element"></i>

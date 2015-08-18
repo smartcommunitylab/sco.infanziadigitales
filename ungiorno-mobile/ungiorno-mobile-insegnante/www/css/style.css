@@ -1516,5 +1516,32 @@ select {
 
 
 .communication-not-selected-in-edit-mode {
-    background-color: grey;
+    background-color: lightgray;
+}
+.newComItems {
+    position: relative;
+    float:left;
+     }
+.item.item-checkbox.newCom {
+    font-size: 18px;
+    border-color: transparent;
+    margin-top: -12px;
+}
+.button-control {
+	background-color:lightgray;
+	border:1px solid lightgray;
+	display:inline-block;
+	cursor:pointer;
+	color:black;
+	font-family:Arial;
+	font-size:15px;
+	padding:10px 25px;
+    margin-top: 10px;
+}
+.button-control:active {
+	position:relative;
+	top:1px;
+}
+.button-control:hover {
+	background-color:#e6e6e6;
 }

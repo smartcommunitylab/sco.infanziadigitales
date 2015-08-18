@@ -7,11 +7,11 @@
                     <i class="icon ion-plus-round"></i>
                 </button>
 
-                <button class="button" ng-click="modifyCom()" ng-if="isCommunicationSelectedMode()">
+                <button class="button" ng-click="modifyCom()" ng-if="isCommunicationSelectedMode() && editShowButton()">
                     <i class="icon ion-android-create"></i>
                 </button>
 
-                <button class="button" ng-click="deleteCommunication()" ng-if="isCommunicationSelectedMode()">
+                <button class="button" ng-click="deleteCommunication()" ng-if="isCommunicationSelectedMode() && editShowButton()">
                     <i class="icon ion-trash-b"></i>
                 </button>
                  <button class="button" ng-click="editCom()" ng-if="showEditButton()">
@@ -36,14 +36,14 @@
                 </ion-checkbox>
 
             </ion-list>
-            <div ng-if="communicationTypes[1].checked">
-               <a style="display: inline-block;" class=" input-label communication-text" >{{ 'deadline_time' | translate}} : </a>
+            <div >
+               <a  class=" input-label newComItems communication-text" >{{ 'deadline_time' | translate}} : </a>
 
-               <label style="display: inline-block">
-                   <input type="text" id="deadlineDate" placeholder="28/08/2015">
-                </label>
+               <label class="item-input">
+                    <input class="newComItems" id="deadlineDate" type="date" ng-model="communication.dateToCheck" >
+               </label>
 
-               <ion-checkbox style="display: inline-block; " ng-model="deliveryCheck.checked" ng-checked="deliveryCheck.checked" >
+               <ion-checkbox class="item item-checkbox newCom newComItems" ng-click="check()" >
                     Controlla consegna
                </ion-checkbox>
 
@@ -53,15 +53,17 @@
                 </label>
         </div>
 
-        <div class="communication card" ng-repeat="communication in communications track by $index" ng-click="selectCommunication($index)" ng-class="{'communication-selected': isCommunicationSelected($index) && !showEditButton(), 'communication-not-selected-in-edit-mode': !isCommunicationSelected($index) && showEditButton()}"  ng-if="communication.doCheck">
+        <div class="communication card" ng-repeat="communication in communications track by $index" ng-click="selectCommunication($index)" ng-class="{'communication-selected': isCommunicationSelected($index) && !showEditButton(), 'communication-not-selected-in-edit-mode': !isCommunicationSelected($index) && showEditButton()}"  >
             <div >
                 <a ng-if="!modifyDescription($index)" class="communication-text">{{communication.description}}</a>
                 <input  ng-if="modifyDescription($index)" ng-model="communication.description" type="text" id="modifyDescription" value="{{communication.description}}">
-                <a ng-if="!modifyDescription($index)" class="communication-date">{{'communication_of' | translate}} {{communication.creationDate * 1000 | date}}</a>
-                <input ng-if="modifyDescription($index)" ng-model="communication.dateToCheck" type="date" value="{{communication.dateToCheck * 1000 | date:'yyyy-MM-dd'}}" >
-                <p  ng-if="!modifyDescription($index)" ng-if="controlDateToCheck($index)">{{'deadline' | translate}} {{communication.dateToCheck * 1000 | date}}</p>
-                <button ng-if="buttonShow(communication)" ng-click="selectCommunication($index)">
-                     Controlla Consegne
+                <a ng-if="!modifyDescription($index)" class="communication-date">{{'communication_of' | translate}} {{communication.creationDate | date}}</a>
+                <label class="item-input" ng-if="modifyDescription($index) && controlDateToCheck($index)">
+                    <input type="date" ng-model="communication.dateToCheck" >
+                </label>
+                <p ng-if="!modifyDescription($index) && controlDateToCheck($index)" >{{'deadline' | translate}}: {{communication.dateToCheck | date}}</p>
+                <button class="button-control" ng-if="controlDateToCheck($index)" ng-click="selectCommunication($index)">
+                     CONTROLLA CONSEGNE
                 </button>
             </div>
         </div>

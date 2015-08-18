@@ -65,7 +65,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.di
         }
     })
 
-.directive('babyPost', function () {
+.directive('babyPost', function (galleryService, $state) {
     return {
         restrict: 'E',
         templateUrl: "templates/babyPost.html",
@@ -84,6 +84,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.di
 
                 return toRtn;
             };
+
+            scope.viewPhotos = function (photos) {
+                galleryService.setSelectedGallery(photos);
+                $state.go("app.postgallery");
+            }
         }
     }
 })

@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.controllers.home', [])
 
-.controller('HomeCtrl', function ($scope, dataServerService, $ionicModal, $cordovaCamera, $ionicPopover) {
+.controller('HomeCtrl', function ($scope, dataServerService, $ionicModal, $cordovaCamera, $ionicPopover, galleryService, $state) {
 
     var newPostModal;
     var photoSrcSelect;
@@ -107,5 +107,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
     $scope.removePhoto = function (index) {
         $scope.postToCreate.photos.splice(index, 1);
     }
+
 
 });

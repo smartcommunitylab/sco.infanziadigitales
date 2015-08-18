@@ -13,10 +13,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
     'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.controllers.common',
     'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.controllers.home',
     'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.controllers.dettaglidiario',
+    'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.controllers.postgallery',
     'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.services.babyConfigurationService',
     'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.services.dataServerService',
     'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.services.profileService',
     'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.services.teachersService',
+    'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.services.galleryService',
     'angularMoment'
 ])
 
@@ -97,9 +99,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
 
     })
 
-    .state('app.asd', {
+    .state('app.login', {
         cache: false,
-        url: "/asd",
+        url: "/login",
         views: {
             'menuContent': {
                 templateUrl: "templates/login.html",
@@ -116,6 +118,18 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
             'menuContent': {
                 templateUrl: "templates/dettagliDiario.html",
                 controller: 'dettaglidiarioCtrl'
+            }
+        }
+
+    })
+
+    .state('app.postgallery', {
+        cache: false,
+        url: "/postgallery",
+        views: {
+            'menuContent': {
+                templateUrl: "templates/postGallery.html",
+                controller: 'PostGalleryCtrl'
             }
         }
 

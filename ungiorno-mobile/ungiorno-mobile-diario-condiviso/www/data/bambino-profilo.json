@@ -25,7 +25,8 @@
                     "default": true,
                     "authorizationDeadline": 1534964475576,
                     "authorizationUrl": "url1",
-                    "adult": true
+                    "adult": true,
+                    "authorized": true
                 },
                 {
                     "personId": "personId2",
@@ -34,46 +35,17 @@
                     "firstName": "firstName2",
                     "phone": ["12345", "67890"],
                     "email": ["email3", "email4"],
-                    "relation": "sorella",
+                    "relation": "maestra",
                     "gender": "F",
                     "isParent": false,
                     "birthday": 1308967200,
                     "default": false,
                     "authorizationDeadline": 1534964475576,
                     "authorizationUrl": "url1",
-                    "adult": true
+                    "adult": true,
+                    "notes": "notesnotesnotes",
+                    "authorized": true
                 }],
-            "authorizedPeople": [{
-                    "personId": "personId1",
-                    "fullName": "fullName1",
-                    "lastName": "lastName1",
-                    "firstName": "firstName1",
-                    "phone": ["12345", "67890"],
-                    "email": ["email1", "email2"],
-                    "relation": "maestra",
-                    "gender": "F",
-                    "notes": "notesnotesnotes"
-                },
-                {
-                    "personId": "personId1",
-                    "fullName": "fullName1",
-                    "lastName": "lastName1",
-                    "firstName": "firstName1",
-                    "phone": ["12345", "67890"],
-                    "email": ["email1", "email2"],
-                    "relation": "papà",
-                    "gender": "M"
-                },
-                {
-                    "personId": "personId1",
-                    "fullName": "fullName1",
-                    "lastName": "lastName1",
-                    "firstName": "firstName1",
-                    "phone": ["12345", "67890"],
-                    "relation": "zio",
-                    "gender": "M"
-                }
-            ],
             "notes":[
             ]
         }]

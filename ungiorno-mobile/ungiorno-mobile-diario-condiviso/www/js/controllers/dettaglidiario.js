@@ -26,8 +26,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
     $scope.isTeacher = function (relation){
         return relation === "maestra";
     }
-    $scope.isParent = function (relation){
-        return relation === "mamma" || relation === "papà";
+    $scope.isFamily = function (relation){
+        return relation === "mamma" || relation === "papà" || relation === "sorella" || relation === "fratello";
     }
 
     $scope.getBaby = function(gender){

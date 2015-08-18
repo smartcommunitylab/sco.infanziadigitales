@@ -1,12 +1,12 @@
 <ion-view id="home" ng-init="initialize()">
     <ion-nav-buttons side="right">
-        <button class="button" ng-if="!close()" ng-click="openNotes()">
+        <button class="button" ng-if="!viewClose()" ng-click="openNotes()">
             <i class="icon ion-document-text"></i>
         </button>
-        <button class="button" ng-if="!close()" ng-click="openCommunications()">
+        <button class="button" ng-if="!viewClose()" ng-click="openCommunications()">
             <i class="icon ion-android-alarm-clock"></i>
         </button>
-        <button style="color:black" class="button" ng-if="close()" ng-click="closeNotesAndComm()">{{'close' | translate | uppercase}}</button>
+        <button style="color:black" class="button" ng-if="viewClose()" ng-click="closeNotesAndComm()">{{'close' | translate | uppercase}}</button>
     </ion-nav-buttons>
     <ion-content has-header="true">
         <div class="row section-row">
@@ -83,8 +83,6 @@
                 <div class="row" ng-if="!newNote">
                     <div class="col note-button">
                         <button class="button section-tabs " ng-class="{'button-note-selected' :teachersNote , 'button-note-not-selected' :!teachersNote}" ng-click="openTeacherNotes()">{{'teachers_notes' | translate}}</button>
-                    </div>
-                    <div class="col note-button">
                         <button class="button section-tabs" ng-class="{'button-note-selected' :parentsNote , 'button-note-not-selected' :!parentsNote}" ng-click="openParentsNotes()">{{'parents_notes' | translate}}</button>
                     </div>
                 </div>
@@ -105,18 +103,18 @@
                     </div>
                     <div ng-hide="!newNote">
                         <div class="list list-inset">
-                            <span class="">{{'create_new_note' | translate | uppercase}}</span>
+                            <span style="font-weight:bolder">{{'create_new_note' | translate | uppercase}}</span>
                             <label class="item item-input">
-                                <input type="text" placeholder="Inserisci Testo">
+                                <input style="margin-top:25px" type="text" placeholder="Inserisci Testo">
                             </label>
-                            <li class="item item-checkbox">
+                            <li style="margin-top:25px" class="item item-checkbox">
                                 <label class="checkbox">
-                                    <input type="checkbox">
+                                    <input type="checkbox" ng-model="myCheckbox">
                                 </label>
                                 {{'associated_a_child' | translate}}
                             </li>
                             <label class="item item-input">
-                                <input type="text" placeholder="Nome Bambino" ng-change="search()" ng-model="data.search">
+                                <input style="margin-top:25px" type="text" ng-disabled="!myCheckbox" placeholder="Nome Bambino" ng-change="search()" ng-model="data.search">
                             </label>
                             <!--
                             <label class="item item-input">
@@ -128,8 +126,8 @@
                             <div class="list children-search">
                                 <li class="item child-search" ng-repeat="children in data.children" ng-click="selectChildrenForNote(children)">{{children.childrenName}}</li>
                             </div>
-                            <button style="background-color:grey; color:white; width:150px" class="button section-tabs" ng-click="cancelNewNote()">{{'cancel' | translate}}</button>
-                            <button style="background-color:red; color:white; width:150px" class="button section-tabs">{{'create_note' | translate}}</button>
+                            <button style="background-color:grey; color:white; width:150px; margin-top:100px" class="button section-tabs" ng-click="cancelNewNote()">{{'cancel' | translate}}</button>
+                            <button style="background-color:red; color:white; width:150px; margin-top:100px" class="button section-tabs">{{'create_note' | translate}}</button>
                         </div>
                     </div>
 

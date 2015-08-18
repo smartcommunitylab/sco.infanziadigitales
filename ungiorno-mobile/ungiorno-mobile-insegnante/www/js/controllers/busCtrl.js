@@ -2,7 +2,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
 
 .controller('busCtrl', function ($scope, $location, dataServerService, profileService, $ionicLoading, $timeout, $cordovaPrinter) {
 
-    $scope.showLoader = function() {
+    $scope.showLoader = function () {
         return $ionicLoading.show({
             content: 'Loading',
             animation: 'fade-in',
@@ -16,7 +16,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     $scope.myLoader = $scope.showLoader();
 
     $scope.nowDate = new Date();
-    $scope.changeSelectedBus = function(bus) {
+    $scope.changeSelectedBus = function (bus) {
         $scope.selectedBus = bus;
         $scope.realBabyNumer = $scope.selectedBus.children.length;
         if ($scope.selectedBus.lastChildIsFake) {
@@ -30,7 +30,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
             $scope.selectedBus.children.push(fakeBaby);
         }
     }
+    $scope.isThisBus = function (busId) {
+        if ($scope.selectedBus.busName == busId)
+            return true;
+        return false;
 
+
+    }
     dataServerService.getBuses().then(function (data) {
         $timeout(function () {
             $scope.buses = data.buses;
@@ -41,13 +47,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
 
     });
 
-    $scope.getBabiesByRow = function(rowIndex) {
+    $scope.getBabiesByRow = function (rowIndex) {
         if ($scope.selectedBus !== undefined) {
             return $scope.selectedBus.children.slice(rowIndex * 2, rowIndex * 2 + 2);
         }
     }
 
-    $scope.totalNumRow = function() {
+    $scope.totalNumRow = function () {
         var ar = []; //workaround to repeat n times with ng-repeat
         if ($scope.selectedBus !== undefined) {
             for (var i = 0; i < Math.round($scope.selectedBus.children.length / 2); i++) {
@@ -57,12 +63,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         return ar;
     }
 
-    $scope.openBabyDetails = function(baby) {
+    $scope.openBabyDetails = function (baby) {
         profileService.setCurrentBabyID(baby.childrenId);
         window.location.assign('#/app/babyprofile');
     }
 
-    $scope.print = function() {
+    $scope.print = function () {
 
         var doc = "<html><body>";
         for (var busIndex = 0; busIndex < $scope.buses.length; busIndex++) {

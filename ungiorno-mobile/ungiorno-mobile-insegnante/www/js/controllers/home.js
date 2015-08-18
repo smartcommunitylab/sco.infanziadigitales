@@ -21,15 +21,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     $scope.selectedNote = false;
 
 
-    $scope.close = function () {
+    $scope.viewClose = function () {
         return $scope.noteExpanded || $scope.communicationExpanded;
     }
 
     $scope.closeNotesAndComm = function () {
         $scope.noteExpanded = false;
         $scope.communicationExpanded = false;
+        $scope.teachersNote = true;
+        $scope.parentsNote = false;
+        $scope.newNote = false;
     }
-
 
 
     $scope.data = {

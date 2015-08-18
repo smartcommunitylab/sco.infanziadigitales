@@ -9,7 +9,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     var modifyState = false;
     var editClose = false;
     var selectedComIndex = null;
-    var selectedComIndexCopy = null;
+
     $scope.communicationTypes = [
         { typeId : "Generica",
           checked : false},
@@ -23,14 +23,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
      });
 
     $scope.selectCommunication = function(index){
-        if (!modifyState) {
 
-            if (selectedCommunicationIndex === index) {
-                selectedCommunicationIndex=-1;
-            }
-            else {
-                selectedCommunicationIndex = index;
-            }
+        if (selectedCommunicationIndex === index) {
+            selectedCommunicationIndex = -1;
+        }
+        else {
+            selectedCommunicationIndex = index;
         }
 
     }
@@ -40,14 +38,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
        selectedComIndex = selectedCommunicationIndex;
 
     }
-    $scope.showEditButton = function () {
-        return modifyState;
+    $scope.editState = function () {
+    return editClose === true;
     }
-
     $scope.modifyDescription = function (index) {
 
         if (selectedComIndex == index && modifyState){
-            return true;
+        return true;
         } else {
         return false;}
     }
@@ -69,7 +66,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         selectedNewCommunication = true;
 
     }
-    $scope.cancCom = function (){
+    $scope.deleteCom = function (){
         selectedNewCommunication = false;
     }
 
@@ -78,12 +75,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         {
         return true;
         } else {
-        return false;}
+        return false}
     }
-     $scope.deleteNewCommunication = function() {
-      return deleteCommunication === false;
-    }
-
+     $scope.deleteCommunication = function() {
+        $scope.communications.splice(selectedCommunicationIndex, 1);
+         selectedCommunicationIndex = -1;
+     }
 
      $scope.selectType = function (newType) {
             for (var i = 0; i < $scope.communicationTypes.length; i++) {
@@ -100,12 +97,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     }
 
     $scope.editCom = function (){
-
-      $scope.communications[selectedComIndex].dateToCheck /= 1000;
-
-      modifyState = false;
-      selectedCommunicationIndex = -1;
-
+      $scope.communications[selectedComIndex].description = document.getElementById("modifyDescription").value;
+      $scope.communications[selectedComIndex].dateToCheck = document.getElementById("modifyDateToCheck").value;
+      editClose = true;
     }
 
 
@@ -116,7 +110,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
             }
             var noteTypeID = document.getElementById("deadlineDate").value;
             var noteTypeID = document.getElementById("note_type").value
-        } id="modifyDateToCheck"
+        }
         return null;
 
     }*/
@@ -124,6 +118,4 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     //    chiamare la funzione che scarica le comunicazioni dal server e associarle alla lista creata
     //    creare una funzione che gestisca la memorizzazione della comunicazione selezionata
     //    (memorizzo tutta la comunicazione? o solo l'indice dell'array?)
-    //  <input type="date" id="modifyDateToCheck" value="{{communication.dateToCheck}}">
-
 });

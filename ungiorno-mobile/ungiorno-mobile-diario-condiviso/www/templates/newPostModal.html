@@ -7,22 +7,29 @@
 	</ion-header-bar>
 	<ion-content style="margin-left:10px; margin-right:10px;">
         <label class="item item-input post-create-element-row">
-            <input class="input" type="text" id="new_post_description0" placeholder="{{'description' | translate}}"></input>
+            <input class="input" type="text" ng-model="newPost.description" placeholder="{{'description' | translate}}"></input>
         </label>
 
         <div class="post-create-element-row">
             <i class="icon ion-pricetags post-create-element"></i>
-            <autocomplete-tags tags="" class="post-create-element"></autocomplete-tags>
+            <autocomplete-tags tags="tagsFromServer" attached-tags="attachedTags" class="post-create-element"></autocomplete-tags>
         </div>
         <div class="post-create-element-row">
             <i class="icon ion-android-camera post-create-element"></i>
-            <button class="button post-create-add-photo post-create-element" id="new_post_photo">{{'add_photo' | translate}}</input>
+            <button class="button post-create-add-photo post-create-element" id="new_post_photo" ng-click="addPhoto()">{{'add_photo' | translate}}</input>
         </div>
         <div class="post-create-element-row">
             <i class="icon ion-android-time post-create-element"></i>
             <div class="post-create-element">
-                <input class="input post-create-element" type="date" value="{{today | date:'yyyy-MM-dd'}}" id="new_post_date"></input>
+            <label class="item-input">
+                <input class="post-create-element" type="date" ng-model="newPost.date">
+            </label>
             </div>
+        </div>
+        <div class="post-create-element-row mood-container">
+            <i class="icon post-create-mood" ng-click="setMood(0)">Triste</i>
+            <i class="icon post-create-mood" ng-click="setMood(1)">Moderato</i>
+            <i class="icon post-create-mood" ng-click="setMood(2)">Felice</i>
         </div>
 
 	</ion-content>

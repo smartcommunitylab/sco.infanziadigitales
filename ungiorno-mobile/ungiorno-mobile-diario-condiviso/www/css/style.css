@@ -98,6 +98,30 @@
     margin-bottom: 8px;
 }
 
+.post-create-mood {
+    font-size: 72px;
+}
+
+.inline {
+    display: inline-block;
+}
+
+.vertical-middle {
+    vertical-align: middle;
+}
+
+
+.tag-element.card {
+    padding: 12px;
+    vertical-align: middle;
+    margin: 5px 10px;
+}
+
+.tag-element-remove {
+    font-size: 24px;
+    margin-left: 8px;
+}
+
 .person-details {
     display: inline-block;
     vertical-align: middle;

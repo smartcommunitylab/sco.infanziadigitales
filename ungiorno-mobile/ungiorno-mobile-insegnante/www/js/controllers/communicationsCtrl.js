@@ -33,6 +33,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         $scope.communications = data;
             for (var i = 0; i < $scope.communications.length; i++){
                 $scope.communications[i].dateToCheck *= 1000;
+                $scope.communications[i].creationDate *= 1000;
             }
      });
 
@@ -118,7 +119,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
 
     $scope.editCom = function (){
 
-      $scope.communications[selectedComIndex].dateToCheck /= 1000;
       modifyState = false;
       selectedCommunicationIndex = -1;
       editShowButton = true;

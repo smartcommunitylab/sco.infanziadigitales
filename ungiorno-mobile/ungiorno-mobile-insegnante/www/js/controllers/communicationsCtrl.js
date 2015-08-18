@@ -38,16 +38,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
      });
 
     $scope.selectCommunication = function(index){
+
         if (!modifyState && !selectedNewCommunication) {
-
             if (selectedCommunicationIndex === index) {
-                selectedCommunicationIndex=-1;
-            }
-            else {
-                selectedCommunicationIndex = index;
-            }
+            selectedCommunicationIndex = -1;
+            }else {
+            selectedCommunicationIndex = index;
+                    }
         }
-
     }
 
     $scope.modifyCom = function (){
@@ -55,13 +53,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
        selectedComIndex = selectedCommunicationIndex;
 
     }
-    $scope.showEditButton = function () {
-        return modifyState;
+    $scope.editState = function () {
+    return editClose === true;
     }
-
     $scope.modifyDescription = function (index) {
 
         if (selectedComIndex == index && modifyState){
+
             editShowButton = false;
             return true;
         } else {
@@ -85,7 +83,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         selectedNewCommunication = true;
 
     }
-    $scope.cancCom = function (){
+    $scope.deleteCom = function (){
         selectedNewCommunication = false;
     }
 
@@ -94,8 +92,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         {
         return true;
         } else {
-        return false;}
+        return false}
     }
+
      $scope.deleteNewCommunication = function() {
       return deleteCommunication ;
     }
@@ -118,7 +117,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     }
 
     $scope.editCom = function (){
-
       modifyState = false;
       selectedCommunicationIndex = -1;
       editShowButton = true;
@@ -148,12 +146,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
             } else {
               $scope.docCheck = true;
             }
+
     }
+
 
     //    creare un oggetto che memorizza la lista di comunicazioni a livello di scope
     //    chiamare la funzione che scarica le comunicazioni dal server e associarle alla lista creata
     //    creare una funzione che gestisca la memorizzazione della comunicazione selezionata
     //    (memorizzo tutta la comunicazione? o solo l'indice dell'array?)
-    //  <input type="date" id="modifyDateToCheck" value="{{communication.dateToCheck}}">
-
 });

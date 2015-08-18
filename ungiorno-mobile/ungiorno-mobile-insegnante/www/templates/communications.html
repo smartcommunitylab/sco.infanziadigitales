@@ -14,10 +14,10 @@
                 <button class="button" ng-click="deleteCommunication()" ng-if="isCommunicationSelectedMode() && editShowButton()">
                     <i class="icon ion-trash-b"></i>
                 </button>
-                 <button class="button" ng-click="editCom()" ng-if="showEditButton()">
+                 <button class="button" ng-click="editCom()" ng-if="editState()">
                     <i class="icon ion-checkmark-round"></i>
                 </button>
-                <button class="button" ng-click="cancCom()" ng-if="checkNewCommunication()">
+                <button class="button" ng-click="deleteCom()" ng-if="checkNewCommunication()">
                     <i class="icon ion-close-round"></i>
                 </button>
                 <button class="button" ng-click="sendCom()" ng-if="checkNewCommunication()">
@@ -42,7 +42,6 @@
                <label class="item-input">
                     <input class="newComItems" id="deadlineDate" type="date" ng-model="communication.dateToCheck" >
                </label>
-
                <ion-checkbox class="item item-checkbox newCom newComItems" ng-click="check()" >
                     Controlla consegna
                </ion-checkbox>
@@ -52,6 +51,7 @@
                    <input type="text" id="description" placeholder="Descrizione">
                 </label>
         </div>
+
 
         <div class="communication card" ng-repeat="communication in communications track by $index" ng-click="selectCommunication($index)" ng-class="{'communication-selected': isCommunicationSelected($index) && !showEditButton(), 'communication-not-selected-in-edit-mode': !isCommunicationSelected($index) && showEditButton()}"  >
             <div >
@@ -64,6 +64,7 @@
                 <p ng-if="!modifyDescription($index) && controlDateToCheck($index)" >{{'deadline' | translate}}: {{communication.dateToCheck | date}}</p>
                 <button class="button-control" ng-if="controlDateToCheck($index)" ng-click="selectCommunication($index)">
                      CONTROLLA CONSEGNE
+
                 </button>
             </div>
         </div>

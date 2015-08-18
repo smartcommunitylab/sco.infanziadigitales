@@ -12,11 +12,12 @@
 
     <ion-content has-header="true">
         <div ng-if="dataLoaded">
-            <div class="row">
-                <div ng-repeat="bus in buses" class="col">
-                    <button class="button bus-tabs" ng-click="changeSelectedBus(bus)">
-                        {{bus.busName}}
-                    </button>
+            <div class="row section-row">
+
+                <div class="tabs-striped tabs-top tabs-background-dark tabs-color-light">
+                    <div class="tabs section-tabs">
+                        <a class="tab-item" ng-repeat="bus in buses track by $index" class="col" ng-click="changeSelectedBus(bus)" ng-class="{'active' :  (isThisBus(bus.busName))}">  {{bus.busName}} </a>
+                    </div>
                 </div>
             </div>
             <h3>{{'today' | translate}}, {{nowDate | date:'EEEE dd MMMM y'}} {{'catch_the_bus' | translate}} {{realBabyNumer}} {{'baby_on_the' | translate}} {{selectedBus.busName}}</h3>

@@ -293,7 +293,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
         parent_communications: 'Comunicazione per genitori',
         communication_type: 'Tipo di comunicazione',
         communication_of: 'Comunicazione del',
-        deadline: 'Scadenza',
+        deadline: 'Scadenza consegna',
         deadline_time: 'Data di scadenza',
         cancel: 'Annulla',
         absent: 'Assente',
@@ -302,7 +302,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
         associated_a_child: 'Associa ad un bambino',
         create_note: 'Crea nota',
         close: 'Chiudi'
-
 
     });
 

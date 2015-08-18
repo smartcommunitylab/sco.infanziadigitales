@@ -1522,7 +1522,90 @@ select {
 }
 
 .communication-not-selected-in-edit-mode {
-    background-color: grey;
+    background-color: lightgray;
+}
+.newComItems {
+    position: relative;
+    float:left;
+     }
+.item.item-checkbox.newCom {
+    font-size: 18px;
+    border-color: transparent;
+    margin-top: -12px;
+}
+.button-control {
+	background-color:lightgray;
+	border:1px solid lightgray;
+	display:inline-block;
+	cursor:pointer;
+	color:black;
+	font-family:Arial;
+	font-size:15px;
+	padding:10px 25px;
+    margin-top: 10px;
+}
+.button-control:active {
+	position:relative;
+	top:1px;
+}
+.button-control:hover {
+	background-color:#e6e6e6;
+}
+
+.children-search {
+    position: absolute;
+    width: 100%;
+}
+
+.child-search {
+    background-color: white !important;
+}
+
+.button-note-selected {
+    background-color: #444444;
+    color: white;
+    border-width: 0px;
+    border-width: 0 0 2px!important;
+    border-style: solid;
+    border-bottom-color: #d4145a;
+}
+
+.button-note-not-selected {
+    background-color: #444444;
+    color: darkgrey;
+    border-width: 0px;
+}
+
+.note-button {
+    padding: 0px;
+}
+
+.children-search {
+    position: absolute;
+    width: 100%;
+}
+
+.child-search {
+    background-color: white !important;
+}
+
+.button-note-selected {
+    background-color: #444444;
+    color: white;
+    border-width: 0px;
+    border-width: 0 0 2px!important;
+    border-style: solid;
+    border-bottom-color: #d4145a;
+}
+
+.button-note-not-selected {
+    background-color: #444444;
+    color: darkgrey;
+    border-width: 0px;
+}
+
+.note-button {
+    padding: 0px;
 }
 
 .children-search {

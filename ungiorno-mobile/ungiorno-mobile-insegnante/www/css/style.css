@@ -1607,3 +1607,31 @@ select {
 .note-button {
     padding: 0px;
 }
+
+.children-search {
+    position: absolute;
+    width: 100%;
+}
+
+.child-search {
+    background-color: white !important;
+}
+
+.button-note-selected {
+    background-color: #444444;
+    color: white;
+    border-width: 0px;
+    border-width: 0 0 2px!important;
+    border-style: solid;
+    border-bottom-color: #d4145a;
+}
+
+.button-note-not-selected {
+    background-color: #444444;
+    color: darkgrey;
+    border-width: 0px;
+}
+
+.note-button {
+    padding: 0px;
+}

@@ -294,13 +294,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
         communication_type: 'Tipo di comunicazione',
         communication_of: 'Comunicazione del',
         deadline: 'Scadenza consegna',
-        deadline_time: 'Data di scadenza',cancel: 'Annulla',
+        deadline_time: 'Data di scadenza',
+        cancel: 'Annulla',
         absent: 'Assente',
         new_note: 'Nuova nota',
         create_new_note: 'Crea una nuova nota',
         associated_a_child: 'Associa ad un bambino',
         create_note: 'Crea nota',
         close: 'Chiudi'
+
     });
 
     $translateProvider.preferredLanguage("it");

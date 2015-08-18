@@ -65,16 +65,94 @@
     bottom: 16px;
     box-shadow: 0px 0px 10px #888888;
 
+
+    -webkit-transition: bottom 0.2s; /* For Safari 3.1 to 6.0 */
+    transition: bottom 0.2s;
+
+
 }
 
 .stream.fab:hover {
     box-shadow: 0px 5px 20px #888888;
+}
 
+.stream.fab.hidden {
+    bottom: -60px;
 }
 
 .stream.fab-icon {
 }
+
+.post-create-element {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 16px;
+}
+
+.post-create-element.icon {
+    font-size: 24px;
+}
+
+.post-create-element-row {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.post-create-mood {
+    font-size: 72px;
+}
+
+.inline {
+    display: inline-block;
+}
+
+.vertical-middle {
+    vertical-align: middle;
+}
+
+
+.tag-element.card {
+    padding: 12px;
+    vertical-align: middle;
+    margin: 5px 10px;
+}
+
+.tag-element-remove {
+    font-size: 24px;
+    margin-left: 8px;
+}
+
 .person-details {
     display: inline-block;
     vertical-align: middle;
+}
+.separator {
+    height: 1px;
+    background-color: gray;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.headerdata{
+    color: mediumvioletred;
+    font-size: 20px;
+    margin-left: 10px;
+}
+.topdata{
+    color: darkgrey;
+    font-size: 13px;
+    margin-left: 10px;
+}
+.textdata{
+    color: black;
+    font-size: 15px;
+    margin-left: 10px;
+}
+.sizeImage{
+    width: 150px;
+    height: auto;
+    margin-left: 10px;
+}
+.sizeIcon{
+    font-size: 30px;
+    margin-left: 10px;
 }

@@ -109,7 +109,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
 
     })
 
-        .state('app.dettaglidiario', {
+    .state('app.dettaglidiario', {
         cache: false,
         url: "/dettaglidiario",
         views: {
@@ -122,30 +122,35 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
     })
 
 
+
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/app/home');
 
     $translateProvider.translations('it', {
         menu_home: 'Home',
         diary_details: 'Dettagli diario',
-        data_baby_m: 'Dati bambino:',
-        name_baby_m: 'Nome del bambino',
-        lastname_baby_m: 'Cognome del bambino',
-        date_birth_baby_m: 'Data di nascita del bambino',
-        data_baby_f: 'Dati bambina:',
-        name_baby_f: 'Nome della bambina',
-        lastname_baby_f: 'Cognome della bambina',
-        date_birth_baby_f: 'Data di nascita della bambina',
-        data_family: 'Dati famiglia:',
-        name_of_m: 'Nome del',
-        name_of_f: 'Nome della',
-        surname_of_m: 'Cognome del',
-        surname_of_f: 'Cognome della',
-        date_birth_m: 'Data di nascita del',
-        date_birth_f: 'Data di nascita della',
-        acces_diary: 'Hanno accesso al diario:',
+        diary_create: 'Crea un diario',
+        data: 'Dati ',
+        name_m: 'bambino',
+        name_f: 'bambina',
+        data_family: 'Dati famiglia',
+        name: 'Nome ',
+        surname: 'Cognome ',
+        date_birth: 'Data di nascita ',
+        acces_diary: 'Hanno accesso al diario',
         has: 'ha',
-        name_parents: 'Nome del genitore'
+        name_parents: 'Nome del genitore',
+        create_post: 'Crea un elemento',
+        description: 'Descrizione',
+        add_photo: 'Aggiungi foto',
+        number_parents: 'n° di telefono ',
+        mail_parents: 'Indirizzo email ',
+        notesTeacher: 'Note personali insegnante',
+        notes: 'Aggiungi delle note personali al diario',
+        new_component: 'Aggiungi un componente',
+        add_tag: 'Aggiungi',
+        add_tag_title: 'Aggiungi etichetta',
+        add_tag_description: 'non è presente nell\'elenco delle etichette. Scegli Aggiungi per inserire la nuova etichetta nell\'elenco'
     });
 
     $translateProvider.preferredLanguage("it");

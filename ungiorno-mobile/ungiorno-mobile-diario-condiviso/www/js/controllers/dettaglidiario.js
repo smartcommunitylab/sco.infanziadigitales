@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.controllers.dettaglidiario', [])
 
-.controller('dettaglidiarioCtrl', function ($scope, profileService) {
+.controller('dettaglidiarioCtrl', function ($scope, profileService,$filter) {
     var mode = "view";
 
 
@@ -20,7 +20,48 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         return mode === "view";
     }
 
-    $scope.isMale = function (gender) {
+    $scope.isMale = function (gender){
         return gender === "M";
+    }
+    $scope.isTeacher = function (relation){
+        return relation === "maestra";
+    }
+    $scope.isFamily = function (relation){
+        return relation === "mamma" || relation === "papà" || relation === "sorella" || relation === "fratello";
+    }
+
+    $scope.getBaby = function(gender){
+        var baby;
+        if (gender === "M"){
+            baby = "bambino";
+        }
+        else{
+            baby = "bambina";
+        }
+        return baby;
+    }
+
+    $scope.getPreposition = function (gender, relation) {
+        var toRtn;
+
+        switch (gender) {
+            case 'M':
+                toRtn = "del";
+                break;
+            case 'F':
+                toRtn = "della";
+                break;
+            default:
+                toRtn = "del";
+        }
+        if (relation === "zio") {
+            toRtn = "dello";
+        }
+        return toRtn;
+    }
+    $scope.getString = function (firstString, gender, relation){
+        var string;
+        string = $filter('translate')(firstString) + $scope.getPreposition(gender, relation);
+        return string;
     }
 });

@@ -18,12 +18,44 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     $scope.numberOfChildren = 0;
     $scope.communications = null;
     $scope.childrenCommunicationDelivery = null;
+    $scope.selectedNote = false;
+
+
+    $scope.close = function () {
+        return $scope.noteExpanded || $scope.communicationExpanded;
+    }
+
+    $scope.closeNotesAndComm = function () {
+        $scope.noteExpanded = false;
+        $scope.communicationExpanded = false;
+    }
+
 
 
     $scope.data = {
         communication: null
     };
-    //dovrebbe essere in base all'ora
+    $scope.data = {
+        "children": [],
+        "search": ''
+    };
+
+    $scope.selectChildrenForNote = function (children) {
+        $scope.data.search = children.childrenName;
+        $scope.data.children = [];
+    }
+    $scope.search = function () {
+            if ($scope.data.search != "") {
+                profileService.searchChildrenBySection($scope.data.search, $scope.section.sectionId).then(
+                    function (children) {
+                        $scope.data.children = children;
+                    }
+                )
+            } else {
+                $scope.data.children = [];
+            }
+        }
+        //dovrebbe essere in base all'ora
     $scope.selectedPeriod = 'anticipo';
 
     $scope.title = moment().locale('it').format("dddd, D MMMM gggg");
@@ -69,6 +101,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         $scope.parentsNote = false;
         $scope.teachersNote = false;
         $scope.newNote = true;
+    }
+
+    $scope.cancelNewNote = function () {
+        $scope.newNote = false;
+        $scope.parentsNote = false;
+        $scope.teachersNote = true;
     }
 
 

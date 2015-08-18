@@ -1473,7 +1473,7 @@ select {
 }
 
 .comunication-done:before {
-    content: url(/www/img/checked.png);
+    content: url(../img/check.png);
     color: green;
 }
 
@@ -1506,6 +1506,13 @@ select {
     padding: 0px;
 }
 
+.section-tabs.activated {
+    background-color: #444444;
+    color: white;
+    border-width: 0 0 2px!important;
+    border-style: solid;
+}
+
 .home-section-space {
     padding-top: 40px !important;
 }
@@ -1513,7 +1520,6 @@ select {
 .create-note {
     width: 100%;
 }
-
 
 .communication-not-selected-in-edit-mode {
     background-color: lightgray;
@@ -1544,4 +1550,32 @@ select {
 }
 .button-control:hover {
 	background-color:#e6e6e6;
+}
+
+.children-search {
+    position: absolute;
+    width: 100%;
+}
+
+.child-search {
+    background-color: white !important;
+}
+
+.button-note-selected {
+    background-color: #444444;
+    color: white;
+    border-width: 0px;
+    border-width: 0 0 2px!important;
+    border-style: solid;
+    border-bottom-color: #d4145a;
+}
+
+.button-note-not-selected {
+    background-color: #444444;
+    color: darkgrey;
+    border-width: 0px;
+}
+
+.note-button {
+    padding: 0px;
 }

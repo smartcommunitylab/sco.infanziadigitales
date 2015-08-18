@@ -86,26 +86,118 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.di
             };
         }
     }
-});
+})
 
-;
-//    .directive('preventDrag', function ($ionicGesture, $ionicSlideBoxDelegate) {
-//        return {
-//            restrict: 'A',
-//
-//            link: function (scope, elem, attrs, e) {
-//                var reportEvent = function (e) {
-//
-//                    if (e.target.tagName.toLowerCase() == 'div') {
-//                        $ionicSlideBoxDelegate.enableSlide(false);
-//                    } else {
-//                        $ionicSlideBoxDelegate.enableSlide(true);
-//                    }
-//                };
-//
-//
-//                $ionicGesture.on('drag', reportEvent, elem);
-//            }
-//        };
-//    })
-//;
+.directive('fabButton', function($document) {
+    return {
+        restrict: 'E',
+        template: '<i class="icon stream fab-icon ion-android-add"></i>',
+        scope: {
+            attachedTo: "@"
+        },
+        link: function(scope, element, attrs) {
+            var scrollView = angular.element(document.querySelector('#' + scope.attachedTo));
+            element.addClass("button");
+            element.addClass("stream");
+            element.addClass("fab");
+
+            var start = 0;
+            var lastDirection = -1; //0 = bottom, 1 = top
+            scrollView.bind('scroll', function(e) {
+                if(e.detail.scrollTop > start) {
+                    if (lastDirection !== 0) {
+                        element.addClass("hidden");
+                        //element.style.display = "hidden";
+                    }
+                    lastDirection = 0;
+                } else if (e.detail.scrollTop < start){
+                    if (lastDirection !== 1) {
+                        element.removeClass("hidden");
+                    }
+                    lastDirection = 1;
+                }
+                start = e.detail.scrollTop;
+            });
+        }
+    }
+})
+
+.directive('autocompleteTags', function($document, $ionicPopover, dataServerService, $ionicPopup, $filter) {
+    return {
+        restrict: 'E',
+        templateUrl: 'templates/autocompleteTags.html',
+        scope: {
+            tags: "=",
+            attachedTags: "="
+        },
+        link: function(scope, element, attrs) {
+            //This is not working! Work in progress!
+            var alreadyOpen = false;
+            var tagsPopover;
+
+            var inputTagsFilter = function (value) {
+                var lastTag = scope.tagsInserted.split(",");
+                lastTag = scope.tagsInserted.trim().toLowerCase();
+                return value.value.toLowerCase().indexOf(lastTag) > -1;
+            }
+
+            scope.completeTag = function ( index) {
+                if (scope.attachedTags.indexOf(scope.tags[index]) === -1) { //check if tag is already added
+                    scope.attachedTags.push(scope.tags[index]);
+                }
+                scope.tagsInserted = "";
+                scope.filteredTags = scope.tags.slice(); //workaround for a bug on android, after adding a tag the input text is empty but the tagsInserted is badly filtered
+                //scope.closePopover();
+            }
+
+            scope.removeTag = function (tag) {
+                scope.attachedTags.splice(scope.attachedTags.indexOf(tag), 1);
+            }
+
+
+            scope.filteredTags = scope.tags.slice();
+
+
+            scope.inputChanged = function ($event) {
+                if (!alreadyOpen) {
+                    scope.openPopover($event);
+                    alreadyOpen = true;
+                }
+                scope.filteredTags = scope.tags.filter(inputTagsFilter);
+            }
+
+            scope.addTag = function (name) {
+                var addTagPopup = $ionicPopup.confirm({
+                    title: $filter('translate')('add_tag_title'),
+                    template: name + ' ' + $filter('translate')('add_tag_description')
+                });
+                addTagPopup.then(function(result) {
+                    if(result) {
+                        //TODO: add tag to the server list of tags
+                        scope.closePopover();
+                        scope.tagsInserted = "";
+                        scope.filteredTags = scope.tags.slice(); //workaround for a bug on android, after adding a tag the input text is empty but the tagsInserted is badly filtered
+                    } else {
+                    }
+                });
+            }
+
+
+            $ionicPopover.fromTemplateUrl('templates/tagsPopup.html', {
+                scope: scope
+            }).then(function (popover) {
+                tagsPopover = popover;
+            });
+
+            scope.openPopover = function ($event) {
+                tagsPopover.show($event);
+            };
+            scope.closePopover = function () {
+                tagsPopover.hide();
+                alreadyOpen = false;
+            };
+
+
+        }
+    }
+});

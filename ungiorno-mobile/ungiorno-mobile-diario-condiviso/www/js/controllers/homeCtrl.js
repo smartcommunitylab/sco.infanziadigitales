@@ -1,6 +1,12 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.controllers.home', [])
 
-.controller('HomeCtrl', function ($scope, dataServerService) {
+.controller('HomeCtrl', function ($scope, dataServerService, $ionicModal) {
+
+    var newPostModal;
+    $scope.today = new Date();
+    var postToCreate;
+
+    $scope.attachedTags = [];
 
     dataServerService.getBabyProfile("a").then(function (baby) {
         $scope.baby = baby;
@@ -10,6 +16,42 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         $scope.posts = posts;
     });
 
+    $ionicModal.fromTemplateUrl('templates/newPostModal.html', {
+		scope: $scope,
+		animation: 'slide-in-up'
+	}).then(function(modal) {
+		newPostModal = modal;
+	})
 
+
+    dataServerService.getTags().then(function (data) {
+        $scope.tagsFromServer = data.data;
+    });
+
+	$scope.createPost = function() {
+        postToCreate = new Object();
+        $scope.setMood(0);
+        $scope.newPost.date = new Date();
+        $scope.newPost.description = "";
+        //$scope.newPost.photos = "";
+        $scope.attachedTags = [];
+		newPostModal.show();
+	}
+
+	$scope.newPost = function(post) {
+        postToCreate.description = $scope.newPost.description;
+        $scope.attachedTags.forEach(function (obj) { //hashkey generated for some random reason, remove it!
+            delete obj["$$hashKey"];
+        });
+        postToCreate.tags = $scope.attachedTags;
+        //postToCreate.photos = $scope.newPost.photos;
+        postToCreate.date = $scope.newPost.date;
+        console.log(JSON.stringify(postToCreate));
+        newPostModal.hide();
+	}
+
+    $scope.setMood = function (moodCode) {
+       postToCreate.mood = moodCode;
+    }
 
 });

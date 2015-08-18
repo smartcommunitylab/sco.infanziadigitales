@@ -40,7 +40,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         }
         return baby;
     }
-
+    $scope.addedComponents = [];
+    $scope.addComponent = function(){
+        $scope.addedComponents.push(
+            {
+                relation: "",
+                fullName: "",
+                lastName: "",
+                birthday: new Date()
+            }
+        );
+    }
     $scope.getPreposition = function (gender, relation) {
         var toRtn;
 

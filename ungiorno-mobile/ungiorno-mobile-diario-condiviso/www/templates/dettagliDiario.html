@@ -29,7 +29,7 @@
         <img ng-src="{{baby.image}}" class="sizeImage">
 
         <div class="headerdata">{{'data_family' | translate}}</div>
-        <div ng-repeat="data in baby.persons track by $index">
+        <div ng-repeat="data in baby.persons track by $index" ng-if="isFamily(data.relation)">
             <div class="topdata">{{'name' | translate}} {{getPreposition(data.gender, data.relation)}} {{data.relation}}</div>
             <div class="textdata"  ng-if="isViewMode()">{{data.fullName}}</div>
             <input type="text" ng-if="!isViewMode()" value="{{data.fullName}}" class="textdata">
@@ -41,10 +41,12 @@
             <input type= "date" ng-if="!isViewMode()"{{value="data.birthday*1000 | date:'yyyy-MM-dd'}}" class="textdata">
             <div class="separator"></div>
         </div>
-
+        <button class="button">
+            <div class="textdata">{{'new_component' | translate}}</div>
+        </button>
         <div class="headerdata">{{'acces_diary' | translate}}</div>
 
-        <div ng-repeat="data in baby.authorizedPeople track by $index">
+        <div ng-repeat="data in baby.persons track by $index" ng-if="data.authorized">
             <div class="topdata">{{getString('name', data.gender, data.relation)}} {{data.relation}}</div>
             <div class="textdata" ng-if="isViewMode()">{{data.firstName}}</div>
             <input type="text" ng-if="!isViewMode()" value="{{data.firstName}}" class="textdata">

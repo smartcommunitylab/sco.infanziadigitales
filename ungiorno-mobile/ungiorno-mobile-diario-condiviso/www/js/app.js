@@ -109,7 +109,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
 
     })
 
-        .state('app.dettaglidiario', {
+    .state('app.dettaglidiario', {
         cache: false,
         url: "/dettaglidiario",
         views: {
@@ -122,20 +122,22 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
     })
 
 
+
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/app/home');
 
     $translateProvider.translations('it', {
         menu_home: 'Home',
         diary_details: 'Dettagli diario',
+        diary_create: 'Crea un diario',
         data: 'Dati ',
         name_m: 'bambino',
         name_f: 'bambina',
-        data_family: 'Dati famiglia:',
+        data_family: 'Dati famiglia',
         name: 'Nome ',
         surname: 'Cognome ',
         date_birth: 'Data di nascita ',
-        acces_diary: 'Hanno accesso al diario:',
+        acces_diary: 'Hanno accesso al diario',
         has: 'ha',
         name_parents: 'Nome del genitore',
         create_post: 'Crea un elemento',
@@ -145,6 +147,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
         mail_parents: 'Indirizzo email ',
         notesTeacher: 'Note personali insegnante',
         notes: 'Aggiungi delle note personali al diario',
+        new_component: 'Aggiungi un componente',
         add_tag: 'Aggiungi',
         add_tag_title: 'Aggiungi etichetta',
         add_tag_description: 'non è presente nell\'elenco delle etichette. Scegli Aggiungi per inserire la nuova etichetta nell\'elenco'

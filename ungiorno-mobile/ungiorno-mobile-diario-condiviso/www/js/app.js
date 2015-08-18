@@ -164,7 +164,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
         new_component: 'Aggiungi un componente',
         add_tag: 'Aggiungi',
         add_tag_title: 'Aggiungi etichetta',
-        add_tag_description: 'non è presente nell\'elenco delle etichette. Scegli Aggiungi per inserire la nuova etichetta nell\'elenco'
+        add_tag_description: 'non è presente nell\'elenco delle etichette. Scegli Aggiungi per inserire la nuova etichetta nell\'elenco',
+        role: 'ruolo',
+        mom: 'mamma',
+        dad: 'papà',
+        brother: 'fratello',
+        sister: 'sorella',
+        asterisk: '* indica che i campi sono obbligatori.'
     });
 
     $translateProvider.preferredLanguage("it");

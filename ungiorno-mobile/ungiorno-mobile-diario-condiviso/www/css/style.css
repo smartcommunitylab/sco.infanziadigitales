@@ -156,21 +156,25 @@
     background-color: gray;
     margin-left: 10px;
     margin-right: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 .headerdata{
     color: mediumvioletred;
     font-size: 20px;
     margin-left: 10px;
+    margin-bottom: 5px;
+    margin-top: 5px;
 }
 .topdata{
     color: darkgrey;
     font-size: 13px;
     margin-left: 10px;
+    clear: right;
+    margin-top: 5px;
 }
 .textdata{
-    color: black;
-    font-size: 15px;
-    margin-left: 10px;
+    font-size: 14px;
 }
 .sizeImage{
     width: 150px;
@@ -178,6 +182,45 @@
     margin-left: 10px;
 }
 .sizeIcon{
-    font-size: 30px;
+    font-size: 40px;
     margin-left: 10px;
+}
+.alignRight{
+   padding-right: 10px;
+}
+.selectrole{
+    margin-right: 10px;
+    margin-left: 10px;
+}
+.addComponent{
+    margin-right: 10px;
+    margin-left: 10px;
+}
+.asterisk{
+    color: mediumvioletred;
+    font-size: 13px;
+    margin-left: 10px;
+}
+
+#children-content {
+  display: inline-block;
+}
+img {
+  vertical-align: middle;
+}
+span {
+  display: inline-block;
+  vertical-align: middle;
+}
+.children-edit{
+    width: 100%;
+    border: 0;
+     height: 40px;
+    padding-right: 0px;
+}
+.input-children {
+    border: 0;
+    padding-right: 30px;
+
+
 }

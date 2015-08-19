@@ -52,7 +52,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
     };
 })
 
-.controller('AppCtrl', function ($scope, $rootScope, $cordovaDevice, $ionicModal, $ionicHistory, $timeout, $filter, $ionicPopover, $state, $ionicSideMenuDelegate) {
+.controller('AppCtrl', function ($scope, $rootScope, $cordovaDevice, $ionicModal, $ionicHistory, $timeout, $filter, $ionicPopover, $state, $ionicSideMenuDelegate, diaryService) {
 
 
     $scope.isToday = function (date) {
@@ -100,6 +100,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
 
     $scope.goto = function (state) {
         $state.go(state);
+    }
+    $scope.gotodiary = function (createMode) {
+        diaryService.setCreateDiaryMode(createMode);
+        $state.go('app.dettaglidiario');
     }
     $scope.bringmethere = function (loc) {
         if (device != undefined && device.platform == "Android") {

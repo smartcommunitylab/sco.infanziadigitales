@@ -60,7 +60,7 @@
     vertical-align: middle;
     text-align: center;
 
-    position: fixed;
+    position: absolute;
     right: 16px;
     bottom: 16px;
     box-shadow: 0px 0px 10px #888888;
@@ -134,6 +134,42 @@
 .vertical-middle {
     vertical-align: middle;
 }
+
+ion-content#gallery-container .scroll {
+    height: 100%;
+}
+
+ion-content#gallery-container {
+    background-color: #000;
+}
+
+.gallery-slider {
+    height: 100%;
+}
+
+.gallery-photo-container {
+    height: 100%;
+    width: 100%;
+    max-height: 100%;
+    max-width: 100%;
+    background-color: #000;
+    display: -webkit-flexbox;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.gallery-photo-view {
+
+    max-height: 100%;
+    max-width: 100%;
+}
+
 
 
 .tag-element.card {

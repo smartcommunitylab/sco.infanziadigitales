@@ -85,8 +85,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.di
                 return toRtn;
             };
 
-            scope.viewPhotos = function (photos) {
-                galleryService.setSelectedGallery(photos);
+            scope.viewPhotos = function (photos, index) {
+                galleryService.setSelectedGallery(photos, index);
                 $state.go("app.postgallery");
             }
         }

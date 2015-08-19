@@ -224,6 +224,10 @@ ion-content#gallery-container {
 .alignRight{
    padding-right: 10px;
 }
+.alignRightIcon{
+    margin-right: 10px;
+    float: right;
+}
 .selectrole{
     margin-right: 10px;
     margin-left: 10px;
@@ -257,6 +261,4 @@ span {
 .input-children {
     border: 0;
     padding-right: 30px;
-
-
 }

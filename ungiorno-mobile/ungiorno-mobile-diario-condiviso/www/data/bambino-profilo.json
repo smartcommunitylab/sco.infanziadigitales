@@ -10,6 +10,7 @@
             "firstName": "Mario",
             "birthday": 1308967200,
             "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg",
+            "personalNotes": "gaw",
 
             "persons": [{
                     "personId": "personId1",
@@ -17,7 +18,7 @@
                     "lastName": "lastName1",
                     "firstName": "firstName1",
                     "phone": ["12345", "67890"],
-                    "email": ["email1", "email2"],
+                    "email": ["regfsea@ef.it", "serge@ger.it"],
                     "relation": "papà",
                     "gender": "M",
                     "isParent": true,
@@ -34,7 +35,7 @@
                     "lastName": "lastName2",
                     "firstName": "firstName2",
                     "phone": ["12345", "67890"],
-                    "email": ["email3", "email4"],
+                    "email": ["ergfer@fwe.it", "wegfw@daw.it"],
                     "relation": "maestra",
                     "gender": "F",
                     "isParent": false,

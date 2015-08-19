@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.controllers.dettaglidiario', [])
 
-.controller('dettaglidiarioCtrl', function ($scope, profileService,$filter) {
+.controller('dettaglidiarioCtrl', function ($scope, profileService,$filter,$location,$ionicScrollDelegate) {
     var mode = "view";
 
 
@@ -42,14 +42,33 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
     }
     $scope.addedComponents = [];
     $scope.addComponent = function(){
-        $scope.addedComponents.push(
-            {
-                relation: "",
-                fullName: "",
-                lastName: "",
-                birthday: new Date()
-            }
-        );
+        $scope.scrollTo("selezion-button");
+        $scope.addedComponents.push({});
+    }
+    $scope.addedPeople = [];
+
+    $scope.addPeople = function(){
+        $scope.scrollTo("selezion-button");
+        $scope.addedPeople.push({})
+    }
+    $scope.deleteComponent = function(index){
+        $scope.addedComponents.splice(index, 1);
+    }
+    $scope.deletePeople = function(index){
+        $scope.addedPeople.splice(index, 1);
+        $ionicScrollDelegate.scrollBottom("bottom-button");
+    }
+    $scope.scrollTo = function (id) {
+        $location.hash(id)
+        $ionicScrollDelegate.anchorScroll(true);
+    };
+    $scope.isEmptyNote = function(note){
+        if (note === ""){
+            return true
+        }
+        else{
+            return false
+        }
     }
     $scope.getPreposition = function (gender, relation) {
         var toRtn;

@@ -309,3 +309,16 @@ span {
 .step-indicator-done {
     background-color: #000;
 }
+
+.enter_credentials {
+    margin-top: 75px;
+    text-align: center;
+    font-family: Arial;
+}
+
+input[type=text] {
+    border-bottom: 1px solid #B0B0B0;
+    width: 100%;
+    font-size: 20px;
+}
+

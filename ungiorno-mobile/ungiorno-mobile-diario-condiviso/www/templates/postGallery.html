@@ -3,17 +3,14 @@
         <ion-nav-back-button>
         </ion-nav-back-button>
     </ion-nav-bar>
-    <ion-content class="padding" has-bouncing="false" >
-        <ion-slide-box active-slide="1">
-          <ion-slide>
-            <div class="box blue"><h1>BLUE</h1></div>
-          </ion-slide>
-          <ion-slide>
-            <div class="box yellow"><h1>YELLOW</h1></div>
-          </ion-slide>
-          <ion-slide>
-            <div class="box pink"><h1>PINK</h1></div>
-          </ion-slide>
+    <ion-content id="gallery-container" has-bouncing="false">
+        <ion-slide-box class="gallery-slider" active-slide="galleryDefaultPhotoIndex" show-pager="false">
+
+            <ion-slide ng-repeat="photo in photos">
+                <div class="gallery-photo-container">
+                    <img ng-src="{{photo.url}}" class="gallery-photo-view">
+                </div>
+            </ion-slide>
         </ion-slide-box>
     </ion-content>
 </ion-view>

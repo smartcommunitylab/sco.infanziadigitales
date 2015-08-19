@@ -57,7 +57,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
     $scope.addPhoto = function ($event, photoSrc) {
 
         if (photoSrc === undefined) {
-
+            //Maybe is better a ActionSheet? http://codepen.io/mhartington/pen/KwBpRq
             var template = '<ion-popover-view><ion-content><ion-list><ion-item ng-click="addPhoto($event, \'Camera\')">Camera</ion-item><ion-item ng-click="addPhoto($event, \'Gallery\')">Gallery</ion-item></ion-list></ion-content></ion-popover-view>';
 
             if (photoSrcSelect === undefined) {

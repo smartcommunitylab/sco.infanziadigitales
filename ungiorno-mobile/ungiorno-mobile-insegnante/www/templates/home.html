@@ -137,7 +137,7 @@
             </div>
             <div class="col col-25 home-section-space" ng-hide="!communicationExpanded">
                 <div class="list list-inset">
-                    <ion-radio ng-repeat="item in communications" ng-if="item.dateToCheck != null" ng-value="item.communicationId" ng-model="data.communication" ng-click="changeCommunication(item.communicationId)">
+                    <ion-radio ng-repeat="item in communications" ng-if="item.doCheck != null" ng-value="item.communicationId" ng-model="data.communication" ng-click="changeCommunication(item.communicationId)">
                         {{ item.description }}
                     </ion-radio>
                 </div>

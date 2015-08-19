@@ -3,7 +3,7 @@
         <ion-nav-back-button>
         </ion-nav-back-button>
     </ion-nav-bar>
-    <ion-content id="login-container" has-header="true" class="page-padding login-container"  style="background-color:#DCDCDC">
+    <ion-content id="login-container" has-header="true" class="page-padding login-container"  style="background-color:#DDD">
         <!--<h1>Diario Condiviso</h1>
         <h3 style="margin-top:100px; text-align:center">Accedi con:</h3>
         <p class="button login-buttons">Vivoscuola</p>
@@ -11,16 +11,16 @@
         <div class="steps-indicator-container">
             <div ng-repeat="step in steps" class="step-indicator" ng-class="{'step-indicator-done': step.done}"></div>
         </div>-->
-        <h1>Diario Condiviso</h1>
-        <h3 style="margin-top:100px; text-align:center;">Inserisci le tue credenziali:</h3>
+        <h1 style="text-align:center; font-family:Arial">Diario Condiviso</h1>
+        <h3 class="enter_credentials">Inserisci le tue credenziali:</h3>
 
-        <label class="item item-input">
-            <input type="text" placeholder="Inserisci nome utente o email">
+        <label class="item item-input" style="background-color:#DDD; margin-top:50px">
+            <input type="text" placeholder="Inserisci nome utente o e-mail">
         </label>
-        <label class="item item-input">
-            <input type="text" placeholder="inserisci password">
+        <label class="item item-input" style="background-color:#DDD">
+            <input type="text" placeholder="Inserisci password">
         </label>
 
-        <p class="button login-buttons">Entra</p>
+        <p class="button login-buttons" style="">Entra</p>
     </ion-content>
 </ion-view>

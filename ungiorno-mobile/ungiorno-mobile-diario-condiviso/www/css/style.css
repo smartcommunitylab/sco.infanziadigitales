@@ -271,6 +271,7 @@ span {
     -webkit-flex-align: center;
     -ms-flex-align: center;
     justify-content: center;
+    background-color:#DDD;
 
 }
 
@@ -282,6 +283,22 @@ span {
     color: #000000;
     margin-left: 10px;
     margin-right: 10px;
+}
+
+.login-title {
+    text-align:center;
+    font-family:Arial;
+    margin-top:30px;
+    font-size: 40px;
+}
+
+.id-container {
+    background-color:#DDD;
+    margin-top:50px;
+}
+
+.password-container {
+    background-color:#DDD;
 }
 
 .steps-indicator-container {

@@ -189,7 +189,7 @@ ion-content#gallery-container {
 }
 .separator {
     height: 1px;
-    background-color: gray;
+    background-color: #CECECE;
     margin-left: 10px;
     margin-right: 10px;
     margin-top: 5px;
@@ -203,7 +203,7 @@ ion-content#gallery-container {
     margin-top: 5px;
 }
 .topdata{
-    color: darkgrey;
+    color: #DDD;
     font-size: 13px;
     margin-left: 10px;
     clear: right;
@@ -262,3 +262,83 @@ span {
     border: 0;
     padding-right: 30px;
 }
+
+.login-container {
+    display: -webkit-flexbox;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-align: center;
+    -ms-flex-align: center;
+    justify-content: center;
+    background-color:#DDD;
+
+}
+
+.login-buttons {
+    margin-top: 50px;
+    height: 50px;
+    background-color: #A9A9A9;
+    display: block;
+    color: #000000;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.login-title {
+    text-align:center;
+    font-family:Arial;
+    margin-top:30px;
+    font-size: 40px;
+}
+
+.id-container {
+    background-color:#DDD;
+    margin-top:50px;
+}
+
+.password-container {
+    background-color:#DDD;
+}
+
+.steps-indicator-container {
+    width: 100%;
+    display: -webkit-flexbox;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-align: center;
+    -ms-flex-align: center;
+    justify-content: center;
+    position: fixed;
+    bottom: 8px;
+}
+
+.step-indicator {
+    width: 25px;
+    height: 25px;
+    background-color: transparent;
+    display: inline-block;
+    margin: 2px;
+    border-radius: 25px;
+    border: 2px solid #000;
+
+}
+
+.step-indicator-done {
+    background-color: #000;
+}
+
+.enter_credentials {
+    margin-top: 75px;
+    text-align: center;
+    font-family: Arial;
+}
+
+input[type=text] {
+    border-bottom: 1px solid #CECECE;
+    width: 100%;
+    font-size: 14px;
+    margin-right: 10px;
+}
+

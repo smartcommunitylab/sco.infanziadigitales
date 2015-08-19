@@ -20,6 +20,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
     'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.services.profileService',
     'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.services.teachersService',
     'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.services.galleryService',
+    'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.controllers.gallery',
     'angularMoment'
 ])
 
@@ -131,6 +132,18 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
             'menuContent': {
                 templateUrl: "templates/postGallery.html",
                 controller: 'PostGalleryCtrl'
+            }
+        }
+
+    })
+
+    .state('app.gallery', {
+        cache: false,
+        url: "/gallery",
+        views: {
+            'menuContent': {
+                templateUrl: "templates/gallery.html",
+                controller: 'GalleryCtrl'
             }
         }
 

@@ -319,6 +319,10 @@ span {
 input[type=text] {
     border-bottom: 1px solid #DDD;
     width: 100%;
+<<<<<<< HEAD
     font-size: 14px;
+=======
+    font-size: 13px;
+>>>>>>> origin/master
 }
 

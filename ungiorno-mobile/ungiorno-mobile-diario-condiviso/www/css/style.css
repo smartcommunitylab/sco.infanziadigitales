@@ -317,7 +317,7 @@ span {
 }
 
 input[type=text] {
-    border-bottom: 1px solid #DDD;
+    border-bottom: 1px solid #CECECE;
     width: 100%;
     font-size: 14px;
 }

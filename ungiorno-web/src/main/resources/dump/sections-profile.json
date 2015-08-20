@@ -1,0 +1,301 @@
+[
+    {
+        "appId": "a",
+        "schoolId": "a",
+        "sectionId": "section1",
+        "sectionName": "Section 1",
+        "children": [
+            {
+                "kidId": "a",
+                "childrenName": "asdrubale",
+                "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg",
+                "exitTime": 128970260000,
+                "anticipo": {
+                    "active": true,
+                    "enabled": true
+                },
+                "posticipo": {
+                    "active": false,
+                    "enabled": true
+                },
+                "mensa": {
+                    "active": false,
+                    "enabled": true
+                }
+            },
+            {
+                "kidId": "b",
+                "childrenName": "animale",
+                "image": "http://tipnut.com/wp-content/uploads/2010/12/happychild.jpg",
+                "exitTime": 1538970260000,
+                "anticipo": {
+                    "active": true,
+                    "enabled": true
+                },
+                "posticipo": {
+                    "active": true,
+                    "enabled": true
+                },
+                "mensa": {
+                    "active": false,
+                    "enabled": false
+                }
+            },
+            {
+                "kidId": "c",
+                "childrenName": "c",
+                "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg",
+                "exitTime": null,
+                "anticipo": {
+                    "active": false,
+                    "enabled": true
+                },
+                "posticipo": {
+                    "active": true,
+                    "enabled": true
+                },
+                "mensa": {
+                    "active": true,
+                    "enabled": true
+                }
+            },
+            {
+                "kidId": "d",
+                "childrenName": "d",
+
+                "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg",
+                "exitTime": null,
+                "anticipo": {
+                    "active": false,
+                    "enabled": false
+                },
+                "posticipo": {
+                    "active": false,
+                    "enabled": true
+                },
+                "mensa": {
+                    "active": true,
+                    "enabled": true
+                }
+            }]
+ },
+    {
+        "sectionId": "section2",
+        "sectionName": "Section 2",
+        "children": [
+            {
+                "kidId": "e",
+                "childrenName": "e",
+
+                "image": "http://tipnut.com/wp-content/uploads/2010/12/happychild.jpg",
+                "exitTime": 128970260000,
+                "anticipo": {
+                    "active": true,
+                    "enabled": true
+                },
+                "posticipo": {
+                    "active": false,
+                    "enabled": true
+                },
+                "mensa": {
+                    "active": false,
+                    "enabled": true
+                }
+            },
+            {
+                "kidId": "f",
+                "childrenName": "f",
+
+                "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg",
+                "exitTime": 1438970260000,
+                "anticipo": {
+                    "active": true,
+                    "enabled": true
+                },
+                "posticipo": {
+                    "active": true,
+                    "enabled": true
+                },
+                "mensa": {
+                    "active": false,
+                    "enabled": false
+                }
+            },
+            {
+                "kidId": "g",
+                "childrenName": "g",
+
+                "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg",
+                "exitTime": null,
+                "anticipo": {
+                    "active": false,
+                    "enabled": true
+                },
+                "posticipo": {
+                    "active": true,
+                    "enabled": true
+                },
+                "mensa": {
+                    "active": true,
+                    "enabled": true
+                }
+            },
+            {
+                "kidId": "h",
+                "childrenName": "a",
+
+                "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg",
+                "exitTime": 1438970260000,
+                "anticipo": {
+                    "active": true,
+                    "enabled": true
+                },
+                "posticipo": {
+                    "active": true,
+                    "enabled": true
+                },
+                "mensa": {
+                    "active": true,
+                    "enabled": true
+                }
+            }]
+ },
+    {
+        "sectionId": "section3",
+        "sectionName": "Section 3",
+        "children": [
+            {
+                "kidId": "i",
+                "childrenName": "i",
+
+                "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg",
+                "exitTime": 1438970260000,
+                "anticipo": {
+                    "active": true,
+                    "enabled": true
+                },
+                "posticipo": {
+                    "active": true,
+                    "enabled": true
+                },
+                "mensa": {
+                    "active": true,
+                    "enabled": true
+                }
+            },
+            {
+                "kidId": "l",
+                "childrenName": "l",
+
+                "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg",
+                "exitTime": 1438970260000,
+                "anticipo": {
+                    "active": true,
+                    "enabled": true
+                },
+                "posticipo": {
+                    "active": true,
+                    "enabled": true
+                },
+                "mensa": {
+                    "active": true,
+                    "enabled": true
+                }
+            },
+            {
+                "kidId": "m",
+                "childrenName": "a",
+
+                "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg",
+                "exitTime": 1438970260000,
+                "anticipo": {
+                    "active": false,
+                    "enabled": false
+                },
+                "posticipo": {
+                    "active": false,
+                    "enabled": false
+                },
+                "mensa": {
+                    "active": false,
+                    "enabled": false
+                }
+            },
+            {
+                "kidId": "n",
+                "childrenName": "a",
+
+                "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg",
+                "exitTime": 1438970260000,
+                "anticipo": {
+                    "active": true,
+                    "enabled": true
+                },
+                "posticipo": {
+                    "active": true,
+                    "enabled": true
+                },
+                "mensa": {
+                    "active": true,
+                    "enabled": true
+                }
+            },
+            {
+                "kidId": "h",
+                "childrenName": "a",
+
+                "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg",
+                "exitTime": null,
+                "anticipo": {
+                    "active": true,
+                    "enabled": true
+                },
+                "posticipo": {
+                    "active": true,
+                    "enabled": true
+                },
+                "mensa": {
+                    "active": true,
+                    "enabled": true
+                }
+            },
+            {
+                "kidId": "o",
+                "childrenName": "a",
+
+                "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg",
+                "exitTime": null,
+                "anticipo": {
+                    "active": true,
+                    "enabled": true
+                },
+                "posticipo": {
+                    "active": false,
+                    "enabled": true
+                },
+                "mensa": {
+                    "active": false,
+                    "enabled": true
+                }
+            },
+            {
+                "kidId": "p",
+                "childrenName": "a",
+
+                "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg",
+                "exitTime": 1438970260000,
+                "anticipo": {
+                    "active": true,
+                    "enabled": true
+                },
+                "posticipo": {
+                    "active": true,
+                    "enabled": true
+                },
+                "mensa": {
+                    "active": true,
+                    "enabled": true
+                }
+            }]
+ }
+]

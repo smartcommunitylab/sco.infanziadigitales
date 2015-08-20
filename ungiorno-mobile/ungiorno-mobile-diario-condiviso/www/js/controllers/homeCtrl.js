@@ -4,6 +4,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
 
     var newPostModal;
     var photoSrcSelect;
+
+    var editPostMode;
+
     $scope.today = new Date();
 
     $scope.attachedTags = [];
@@ -28,30 +31,36 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         $scope.tagsFromServer = data.data;
     });
 
-	$scope.createPost = function() {
-        $scope.postToCreate = new Object();
-        $scope.postToCreate.photos = [];
+	$scope.openCreatePost = function() {
+        editPostMode = false;
+
+        $scope.currentPost = {};
+        $scope.currentPost.date = new Date();
+        $scope.currentPost.description = "";
+        $scope.currentPost.photos = [];
+        $scope.currentPost.attachedTags = [];
         $scope.setMood(0);
-        $scope.newPost.date = new Date();
-        $scope.newPost.description = "";
-        $scope.newPost.photos = [];
-        $scope.attachedTags = [];
 		newPostModal.show();
 	}
 
-	$scope.newPost = function(post) {
-        $scope.postToCreate.description = $scope.newPost.description;
-        $scope.attachedTags.forEach(function (obj) { //hashkey generated for some random reason, remove it!
-            delete obj["$$hashKey"];
-        });
-        $scope.postToCreate.tags = $scope.attachedTags;
-        $scope.postToCreate.date = $scope.newPost.date;
-        console.log(JSON.stringify($scope.postToCreate));
-        newPostModal.hide();
+	$scope.newPost = function(post) { //function called when a new post is submitted and also when a post is edited
+
+        if (editPostMode) {
+            //TODO: update server
+        } else {
+            $scope.currentPost.attachedTags.forEach(function (obj) { //hashkey generated for some random reason, remove it!
+                delete obj["$$hashKey"];
+            });
+            console.log(JSON.stringify($scope.currentPost));
+            //TODO: update server
+
+            newPostModal.hide();
+        }
+
 	}
 
     $scope.setMood = function (moodCode) {
-       $scope.postToCreate.mood = moodCode;
+       $scope.currentPost.mood = moodCode;
     }
 
     $scope.addPhoto = function ($event, photoSrc) {
@@ -108,5 +117,20 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         $scope.postToCreate.photos.splice(index, 1);
     }
 
+    $scope.openEditPost = function (post) {
+        editPostMode = true;
+
+        $scope.currentPost = {};
+        $scope.currentPost.date = new Date(post.date * 1000);
+        $scope.currentPost.description = post.text;
+        $scope.currentPost.photos = post.pictures;
+        $scope.currentPost.attachedTags = post.tags;
+        $scope.setMood(post.mood);
+		newPostModal.show();
+    }
+
+    $scope.sharePost = function (post) {
+        //TODO: have to define what to share
+    }
 
 });

@@ -1,0 +1,17 @@
+{
+    "data": [
+        {
+            "appId": "a",
+            "schoolId": "a",
+            "kidId": "a",
+            "dateFrom": "23/06/2015",
+            "dateTo": "23/06/2015",
+            "reason": {
+                "type": "malattia",
+                "subtype": "morbillo"
+            },
+            "note": "nota1"
+
+
+        }]
+}

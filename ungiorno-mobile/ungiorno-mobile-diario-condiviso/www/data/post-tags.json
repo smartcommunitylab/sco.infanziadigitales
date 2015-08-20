@@ -2,27 +2,27 @@
     "data": [
         {
             "tagId": 1,
-            "value": "Gioco"
+            "name": "Gioco"
         },
         {
             "tagId": 2,
-            "value": "Gruppo"
+            "name": "Gruppo"
         },
         {
             "tagId": 3,
-            "value": "Parco"
+            "name": "Parco"
         },
         {
             "tagId": 4,
-            "value": "Amici"
+            "name": "Amici"
         },
         {
             "tagId": 5,
-            "value": "Merenda"
+            "name": "Merenda"
         },
         {
             "tagId": 6,
-            "value": "Giardino"
+            "name": "Giardino"
         }
     ]
 }

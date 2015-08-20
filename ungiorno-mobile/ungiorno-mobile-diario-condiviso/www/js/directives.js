@@ -65,13 +65,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.di
         }
     })
 
-.directive('babyPost', function () {
+.directive('babyPost', function (galleryService, $state) {
     return {
         restrict: 'E',
         templateUrl: "templates/babyPost.html",
         scope: {
             post: '=',
             baby: '=',
+            shareCallback: '&',
+            editCallback: '&'
         },
         link: function (scope, elem, attrs) {
             scope.getBabyAgeString = function (birthday, postDate) {
@@ -84,6 +86,43 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.di
 
                 return toRtn;
             };
+
+            scope.viewPhotos = function (photos, index) {
+                galleryService.setSelectedGallery(photos, index);
+                $state.go("app.postgallery");
+            }
+
+            scope.shareCallback = scope.shareCallback();
+            scope.editCallback = scope.editCallback();
+
+            scope.editPost = function (post) {
+                scope.editCallback(post);
+            }
+            scope.sharePost = function (post) {
+                scope.shareCallback();
+            }
+
+        }
+    }
+})
+
+.directive("myDirective", function() {
+
+    return {
+        restrict: "E",
+        scope: {
+            callback: "&"
+        },
+        template: "<div style='width: 200px; height: 200px; background-color: black;' ng-click='callCallback()'></div>", // call function this way...
+        link: function(scope, element, attrs) {
+            // unwrap the function
+            scope.callback = scope.callback();
+
+            scope.data = "data from somewhere";
+
+            scope.callCallback = function() {
+                scope.callback(scope.data);
+            }
         }
     }
 })

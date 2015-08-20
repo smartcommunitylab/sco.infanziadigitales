@@ -7,14 +7,14 @@
                     <i class="icon ion-plus-round"></i>
                 </button>
 
-                <button class="button" ng-click="modifyCom()" ng-if="isCommunicationSelectedMode()">
+                <button class="button" ng-click="modifyCom()" ng-if="isCommunicationSelectedMode() && editShowButton()">
                     <i class="icon ion-android-create"></i>
                 </button>
 
-                <button class="button" ng-click="deleteCommunication()" ng-if="isCommunicationSelectedMode()">
+                <button class="button" ng-click="deleteCommunication()" ng-if="isCommunicationSelectedMode() && editShowButton()">
                     <i class="icon ion-trash-b"></i>
                 </button>
-                 <button class="button" ng-click="editCom()" ng-if="editState()">
+                 <button class="button" ng-click="editCom()" ng-if="showEditButton()">
                     <i class="icon ion-checkmark-round"></i>
                 </button>
                 <button class="button" ng-click="deleteCom()" ng-if="checkNewCommunication()">
@@ -27,48 +27,37 @@
     </ion-nav-bar>
 
     <ion-content has-header="true">
-        <div class="communication card" ng-if="checkNewCommunication() " >
+        <div class="communication card" ng-if="checkNewCommunication()" >
             <a class="communication-text" > {{ 'communication_type' | translate}} </a>
-
             <ion-list class="padlist" >
                 <ion-checkbox  ng-repeat="communicationType in communicationTypes" ng-model="communicationType.checked" ng-checked="communicationType.checked" ng-change="selectType(communicationType)">
                       {{communicationType.typeId}}
                 </ion-checkbox>
-
             </ion-list>
-            <div ng-if="communicationTypes[1].checked">
-               <a style="display: inline-block;" class=" input-label communication-text" >{{ 'deadline_time' | translate}} : </a>
-
-               <label style="display: inline-block">
-                   <input type="text" id="deadlineDate" placeholder="28/08/2015">
-                </label>
-
-               <ion-checkbox style="display: inline-block" ng-model="deliveryCheck.checked" ng-checked="deliveryCheck.checked" >
-                    Controlla consegna
-               </ion-checkbox>
-
-            </div>
-                <label >
-                   <input type="text" id="description" placeholder="Descrizione">
-                </label>
-        </div>
-        <div class="communication card" ng-repeat="communication in communications track by $index" class="new-communication" ng-show="modifyDescription($index) && !editState()" >
-               <label >
-                   <span style="display: inline-block" class="input-label communication-text"><br>Descrizione</span>
-                   <input type="text" id="modifyDescription" value="{{communication.description}}">
-               </label>
-                <label >
-                    <span style="display: inline-block" class="input-label communication-text">Data di scadenza</span>
-                   <input type="date" id="modifyDateToCheck" value="{{communication.dateToCheck | date}}">
-               </label>
-            </div>
-        <div class="communication card" ng-repeat="communication in communications track by $index" ng-click="selectCommunication($index)" ng-class="{'communication-selected': isCommunicationSelected($index)}"  ng-if="communication.doCheck && !modifyDescription($index) ">
             <div >
-                <a class="communication-text">{{communication.description}}</a>
-                <a class="communication-date">{{'communication_of' | translate}} {{communication.creationDate * 1000 | date}}</a>
-                <p ng-if="controlDateToCheck($index)">{{'deadline' | translate}} {{communication.dateToCheck * 1000 | date}}</p>
-                <button ng-if="buttonShow(communication.deadline)" ng-click="selectCommunication($index)">
-                     Controlla Consegne
+                <a  class=" input-label newComItems communication-text" >{{ 'deadline_time' | translate}} : </a>
+                <label class="item-input">
+                    <input class="newComItems" id="deadlineDate" type="date" >
+                </label>
+                <ion-checkbox class="item item-checkbox newCom newComItems" ng-click="check()">Controlla consegna</ion-checkbox>
+            </div>
+               <label >
+                   <input type="text" id="description" placeholder="Descrizione">
+               </label>
+        </div>
+
+
+<div class="communication card" ng-repeat="communication in communications track by $index" ng-click="selectCommunication($index)" ng-class="{'communication-selected': isCommunicationSelected($index) && !showEditButton(), 'communication-not-selected-in-edit-mode': !isCommunicationSelected($index) && showEditButton()}"  >
+            <div >
+                <a ng-if="!modifyDescription($index)" class="communication-text">{{communication.description}}</a>
+                <input  ng-if="modifyDescription($index)" ng-model="communication.description" type="text" id="modifyDescription" value="{{communication.description}}">
+                <a ng-if="!modifyDescription($index)" class="communication-date">{{'communication_of' | translate}} {{communication.creationDate | date}}</a>
+                <label class="item-input" ng-if="modifyDescription($index) && controlDateToCheck($index)">
+                    <input type="date" ng-model="communication.dateToCheck" >
+                </label>
+                <p ng-if="!modifyDescription($index) && controlDateToCheck($index)" >{{'deadline' | translate}}: {{communication.dateToCheck | date}}</p>
+                <button class="button-control" ng-if="controlDateToCheck($index)" ng-click="homeRedirect($index)">
+                     CONTROLLA CONSEGNE
                 </button>
             </div>
         </div>

@@ -1,0 +1,30 @@
+{
+	"specific": [
+		{
+			"type": "open",
+			"value": "#46AC63"
+		},
+		{
+			"type": "close",
+			"value": "#DD2B22"
+		},
+		{
+			"type": "holiday",
+			"value": "#E04C06"
+		},
+		{
+			"type": "meeting",
+			"value": "#FBDC00"
+		},
+		{
+			"type": "trip",
+			"value": "#DC007E"
+		},
+		{
+			"type": "events",
+			"value": "#49ABE3"
+		}
+	],
+	"multiple": "#C8C8CD",
+	"general": "#FFCBA4"
+}

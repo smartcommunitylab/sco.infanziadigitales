@@ -13,10 +13,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
     'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.controllers.common',
     'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.controllers.home',
     'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.controllers.dettaglidiario',
+    'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.controllers.postgallery',
+    'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.controllers.login',
+    'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.controllers.register',
+    'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.controllers.gallery',
     'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.services.babyConfigurationService',
     'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.services.dataServerService',
     'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.services.profileService',
     'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.services.teachersService',
+    'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.services.galleryService',
+    'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.services.diaryservice',
     'angularMoment'
 ])
 
@@ -97,13 +103,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
 
     })
 
-    .state('app.asd', {
+    .state('app.login', {
         cache: false,
-        url: "/asd",
+        url: "/login",
         views: {
             'menuContent': {
                 templateUrl: "templates/login.html",
-                controller: 'HomeCtrl'
+                controller: 'LoginCtrl'
             }
         }
 
@@ -116,6 +122,42 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
             'menuContent': {
                 templateUrl: "templates/dettagliDiario.html",
                 controller: 'dettaglidiarioCtrl'
+            }
+        }
+
+    })
+
+    .state('app.postgallery', {
+        cache: false,
+        url: "/postgallery",
+        views: {
+            'menuContent': {
+                templateUrl: "templates/postGallery.html",
+                controller: 'PostGalleryCtrl'
+            }
+        }
+
+    })
+
+    .state('app.gallery', {
+        cache: false,
+        url: "/gallery",
+        views: {
+            'menuContent': {
+                templateUrl: "templates/gallery.html",
+                controller: 'GalleryCtrl'
+            }
+        }
+
+    })
+
+    .state('app.register', {
+        cache: false,
+        url: "/register",
+        views: {
+            'menuContent': {
+                templateUrl: "templates/register.html",
+                controller: 'RegisterCtrl'
             }
         }
 
@@ -145,18 +187,24 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
         add_photo: 'Aggiungi foto',
         number_parents: 'n° di telefono ',
         mail_parents: 'Indirizzo email ',
-        notesTeacher: 'Note personali insegnante',
-        notes: 'Aggiungi delle note personali al diario',
+        notes: 'Note',
+        insert_note: 'Aggiungi ulteriori dettagli o note personali',
         new_component: 'Aggiungi un componente',
         add_tag: 'Aggiungi',
         add_tag_title: 'Aggiungi etichetta',
         add_tag_description: 'non è presente nell\'elenco delle etichette. Scegli Aggiungi per inserire la nuova etichetta nell\'elenco',
-        role: 'ruolo',
-        mom: 'mamma',
-        dad: 'papà',
-        brother: 'fratello',
-        sister: 'sorella',
-        asterisk: '* indica che i campi sono obbligatori.'
+        role: 'Ruolo',
+        mom: 'Mamma',
+        dad: 'Papà',
+        brother: 'Fratello',
+        sister: 'Sorella',
+        asterisk: '* Indica che i campi sono obbligatori.',
+        new_people: 'Aggiungi una persona',
+        email: 'Email',
+        fullName: 'Nome completo',
+        parents: 'Genitore',
+        teacher: 'Insegnante',
+        nothing_note: 'Nessuna nota presente'
     });
 
     $translateProvider.preferredLanguage("it");

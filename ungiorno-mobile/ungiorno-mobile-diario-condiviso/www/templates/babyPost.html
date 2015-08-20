@@ -4,10 +4,10 @@
         <div class="stream post-baby-age">{{baby.firstName}} {{'has' | translate}} {{getBabyAgeString(baby.birthday, post.date)}}</div>
     </div>
     <div class="stream post-action-container">
-        <button class="button" ng-click="sharePost()">
+        <button class="button" ng-click="sharePost(post)">
             <i class="icon ion-android-share-alt"></i>
         </button>
-        <button class="button" ng-click="editPost()">
+        <button class="button" ng-click="editPost(post)">
             <i class="icon ion-android-create"></i>
         </button>
     </div>
@@ -20,7 +20,7 @@
     </div>
 
     <div class="stream post-photos-container">
-        <img class="stream post-photo" ng-class="{'photo-big-size': post.pictures.length === 1, 'photo-small-size': post.pictures.length > 1}" ng-src="{{photo.url}}" ng-repeat="photo in post.pictures | limitTo:2 ">
+        <img class="stream post-photo" ng-class="{'photo-big-size': post.pictures.length === 1, 'photo-small-size': post.pictures.length > 1}" ng-src="{{photo.url}}" ng-repeat="photo in post.pictures | limitTo:2 track by $index" ng-click="viewPhotos(post.pictures, $index)">
         <button class="button stream post-photo-more" ng-click="viewPhotos(post.pictures)" ng-if="post.pictures.length > 2">
         <i class="stream icon ion-android-more-horizontal" ></i>
         </button>

@@ -8,9 +8,11 @@
             "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris suscipit arcu aliquet, tincidunt tellus eu, pharetra lacus. Mauris in tortor nulla. Duis fermentum, diam eget elementum ullamcorper, orci massa pharetra risus, quis varius massa tortor eget tellus. Vivamus metus ipsum, efficitur vitae elementum ut, aliquam vitae sem.",
             "tags": [
                 {
+                    "tagId": 1,
                     "name": "Gioco"
                 },
                 {
+                    "tagId": 2,
                     "name": "Gruppo"
                 }
             ],
@@ -29,12 +31,15 @@
             "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris suscipit arcu aliquet, tincidunt tellus eu, pharetra lacus. Mauris in tortor nulla. Duis fermentum, diam eget elementum ullamcorper, orci massa pharetra risus, quis varius massa tortor eget tellus. Vivamus metus ipsum, efficitur vitae elementum ut, aliquam vitae sem.",
             "tags": [
                 {
+                    "tagId": 3,
                     "name": "Parco"
                 },
                 {
+                    "tagId": 4,
                     "name": "Amici"
                 },
                 {
+                    "tagId": 5,
                     "name": "Merenda"
                 }
             ],

@@ -1,13 +1,13 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.communications', [])
 
-.controller('communicationsCtrl', function ($scope, $location, $ionicHistory, dataServerService, $ionicPopup, $timeout) {
+.controller('communicationsCtrl', function ($scope, $location, $ionicHistory, dataServerService, $ionicPopup, $timeout, communicationService) {
 
     var selectedCommunicationIndex = -1;
     var selectedNewCommunication = false;
     var deleteCommunication = false;
     var deliveryCheck = false;
     var modifyState = false;
-    var editClose = false;
+    var editClose = true;
     var selectedComIndex = null;
     var selectedComIndexCopy = null;
     var editShowButton = true;
@@ -50,15 +50,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
 
     $scope.modifyCom = function (){
        modifyState = true;
-       selectedComIndex = selectedCommunicationIndex;
-
     }
-    $scope.editState = function () {
-    return editClose === true;
+    $scope.showEditButton = function () {
+        return modifyState;
     }
     $scope.modifyDescription = function (index) {
 
-        if (selectedComIndex == index && modifyState){
+        if (selectedCommunicationIndex == index && modifyState){
 
             editShowButton = false;
             return true;
@@ -139,6 +137,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
             $ionicPopup.alert({
                  template: 'Comunicazione inviata'
                });
+            selectedNewCommunication = false;
         }
     $scope.check = function (){
         if ($scope.docCheck === true){
@@ -148,7 +147,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
             }
 
     }
-
+    $scope.homeRedirect = function (index){
+        selectedCommunicationIndex = -1;
+        communicationService.setCommunication($scope.communications[index].communicationId);
+        window.location.assign('#/app/home');
+    }
 
     //    creare un oggetto che memorizza la lista di comunicazioni a livello di scope
     //    chiamare la funzione che scarica le comunicazioni dal server e associarle alla lista creata

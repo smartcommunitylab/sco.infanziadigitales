@@ -34,12 +34,20 @@
                 <ion-item menu-close item-icon-left ng-click="goto('app.home')">
                     <i class="icon voice-menu  inf_digaccount"></i>Home
                 </ion-item>
-                <ion-item menu-close item-icon-left ng-click="goto('app.asd')">
+                <ion-item menu-close item-icon-left ng-click="goto('app.login')">
                     <i class="icon voice-menu  inf_digaccount"></i>Esci
                    </ion-item>
-                <ion-item menu-close item-icon-left ng-click="goto('app.dettaglidiario')">
-                    <i class="icon voice-menu  inf_digaccount"></i>dettaglidiario
-
+                <ion-item menu-close item-icon-left ng-click="gotodiary(false)">
+                    <i class="icon voice-menu  inf_digaccount"></i>Dettaglidiario
+                </ion-item>
+                <ion-item menu-close item-icon-left ng-click="gotodiary(true)">
+                    <i class="icon voice-menu  inf_digaccount"></i>CreaDiario
+                </ion-item>
+                <ion-item menu-close item-icon-left ng-click="goto('app.gallery')">
+                    <i class="icon voice-menu  inf_digaccount"></i>Gallery
+                </ion-item>
+                <ion-item menu-close item-icon-left ng-click="goto('app.register')">
+                    <i class="icon voice-menu  inf_digaccount"></i>Registrati
                 </ion-item>
             </ion-list>
         </ion-content>

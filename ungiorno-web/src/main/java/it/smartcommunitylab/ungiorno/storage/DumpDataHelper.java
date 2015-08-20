@@ -80,7 +80,7 @@ public class DumpDataHelper {
 	public static List<KidCalNote> dummyKidNotes(String appId, String schoolId, String kidId) {
 		return readList("calendario-note.json", KidCalNote.class);
 	}
-	public static List<Communication> dummyKidComms(String appId, String schoolId, String kidId) {
+	public static List<Communication> dummyComms(String appId, String schoolId) {
 		return readList("calendario-comunicazioni.json", Communication.class);
 	}
 	public static List<Menu> dummyMenu(String appId, String schoolId) {

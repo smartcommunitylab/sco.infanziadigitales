@@ -87,6 +87,16 @@ public class SchoolController {
 			return new Response<>(e.getMessage());
 		}
 	}
+	@RequestMapping(method = RequestMethod.GET, value = "/school/{appId}/{schoolId}/communications")
+	public @ResponseBody Response<List<Communication>> getComms(@PathVariable String appId, @PathVariable String schoolId) {
+	
+		try {
+			List<Communication> list = storage.getCommunications(appId, schoolId);
+			return new Response<>(list);
+		} catch (Exception e) {
+			return new Response<>(e.getMessage());
+		}
+	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/school/{appId}/{schoolId}/{kidId}/notes")
 	public @ResponseBody Response<KidCalNote> sendNote(@RequestBody KidCalNote comm, @PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId) {
@@ -102,7 +112,16 @@ public class SchoolController {
 		}
 	}
 
+	@RequestMapping(method = RequestMethod.GET, value = "/school/{appId}/{schoolId}/{kidId}/notes")
+	public @ResponseBody Response<List<KidCalNote>> getNotes(@RequestBody KidCalNote comm, @PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId) {
 	
+		try {
+			List<KidCalNote> list = storage.getKidInternalNotes(appId, schoolId, kidId);
+			return new Response<>(list);
+		} catch (Exception e) {
+			return new Response<>(e.getMessage());
+		}
+	}
 	
 	@RequestMapping(method = RequestMethod.DELETE, value = "/school/{appId}/{schoolId}/communications/{commId}")
 	public @ResponseBody Response<Void> deleteCommunication(@PathVariable String appId, @PathVariable String schoolId, @PathVariable String commId) {

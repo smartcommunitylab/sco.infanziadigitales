@@ -73,7 +73,7 @@ public class TestDummyDataReader {
 	}
 	@Test
 	public void testKidComms() {
-		List<Communication> obj = DumpDataHelper.dummyKidComms("", "", "");
+		List<Communication> obj = DumpDataHelper.dummyComms("", "");
 		System.err.println(obj.toString());
 		assertNotNull(obj);
 	}

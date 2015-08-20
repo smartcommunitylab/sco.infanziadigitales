@@ -40,7 +40,6 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Component
 public class RepositoryManager {
@@ -196,12 +195,21 @@ public class RepositoryManager {
 	/**
 	 * @param appId
 	 * @param schoolId
+	 * @return
+	 */
+	public List<Communication> getCommunications(String appId, String schoolId) {
+		// TODO 
+		return DumpDataHelper.dummyComms(appId, schoolId);
+	}
+	/**
+	 * @param appId
+	 * @param schoolId
 	 * @param kidId
 	 * @return
 	 */
 	public List<Communication> getKidCommunications(String appId, String schoolId, String kidId) {
 		// TODO 
-		return DumpDataHelper.dummyKidComms(appId, schoolId, kidId);
+		return DumpDataHelper.dummyComms(appId, schoolId);
 	}
 
 	/**
@@ -230,6 +238,17 @@ public class RepositoryManager {
 	public KidCalNote saveInternalNote(KidCalNote comm) {
 		// TODO 
 		return comm;
+	}
+
+	/**
+	 * @param appId
+	 * @param schoolId
+	 * @param kidId
+	 * @return
+	 */
+	public List<KidCalNote> getKidInternalNotes(String appId, String schoolId, String kidId) {
+		// TODO
+		return DumpDataHelper.dummyKidNotes(appId, schoolId, kidId);
 	}
 
 	/**
@@ -286,5 +305,6 @@ public class RepositoryManager {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 
 }

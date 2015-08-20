@@ -214,8 +214,9 @@ ion-content#gallery-container {
 }
 .sizeImage{
     width: 150px;
-    height: auto;
+    height: 150px;
     margin-left: 10px;
+    margin-top: 5px;
 }
 .sizeIcon{
     font-size: 40px;

@@ -112,11 +112,11 @@ public class SchoolController {
 		}
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/school/{appId}/{schoolId}/{kidId}/notes")
-	public @ResponseBody Response<List<KidCalNote>> getNotes(@RequestBody KidCalNote comm, @PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId) {
+	@RequestMapping(method = RequestMethod.GET, value = "/school/{appId}/{schoolId}/{sectionId}/notes")
+	public @ResponseBody Response<List<KidCalNote>> getNotes(@RequestBody KidCalNote comm, @PathVariable String appId, @PathVariable String schoolId, @PathVariable String sectionId, @RequestParam long date) {
 	
 		try {
-			List<KidCalNote> list = storage.getKidInternalNotes(appId, schoolId, kidId);
+			List<KidCalNote> list = storage.getInternalNotes(appId, schoolId, sectionId, date);
 			return new Response<>(list);
 		} catch (Exception e) {
 			return new Response<>(e.getMessage());

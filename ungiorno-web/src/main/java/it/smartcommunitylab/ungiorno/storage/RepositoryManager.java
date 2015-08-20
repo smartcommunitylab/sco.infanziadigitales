@@ -177,9 +177,10 @@ public class RepositoryManager {
 	 * @param appId
 	 * @param schoolId
 	 * @param kidId
+	 * @param date 
 	 * @return
 	 */
-	public List<KidCalNote> getKidCalNotes(String appId, String schoolId, String kidId) {
+	public List<KidCalNote> getKidCalNotes(String appId, String schoolId, String kidId, long date) {
 		// TODO 
 		return DumpDataHelper.dummyKidNotes(appId, schoolId, kidId);
 	}
@@ -246,9 +247,9 @@ public class RepositoryManager {
 	 * @param kidId
 	 * @return
 	 */
-	public List<KidCalNote> getKidInternalNotes(String appId, String schoolId, String kidId) {
+	public List<KidCalNote> getInternalNotes(String appId, String schoolId, String sectionId, long date) {
 		// TODO
-		return DumpDataHelper.dummyKidNotes(appId, schoolId, kidId);
+		return DumpDataHelper.dummyKidNotes(appId, schoolId, sectionId);
 	}
 
 	/**

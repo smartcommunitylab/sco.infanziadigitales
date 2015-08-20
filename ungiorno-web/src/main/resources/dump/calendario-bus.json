@@ -1,0 +1,83 @@
+
+        {
+            "appId": "a",
+            "schoolId": "a",
+            "date": 1435075887150,
+            "buses": [{
+                "busId": "a",
+                "busName": "Bus 1",
+                "children": [
+                {
+                    "kidId": "a",
+                    "personWhoWaitName": "fullName2",
+                    "personWhoWaitRelation": "papà",
+                    "fullName": "Mario Rossi",
+                    "busStop": "Via S.Margherita, Povo TN",
+                    "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg"
+                },
+                {
+                    "kidId": "b",
+                    "personWhoWaitName": "Mara Rossi",
+                    "personWhoWaitRelation": "mamma",
+                    "fullName": "Chiara Bianchi",
+                    "busStop": "Via S.Margherita, Povo TN",
+                    "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg"
+                },
+                {
+                    "kidId": "c",
+                    "personWhoWaitName": "fullName2",
+                    "personWhoWaitRelation": "papà",
+                    "fullName": "Mario Rossi",
+                    "busStop": "Via S.Margherita, Povo TN",
+                    "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg"
+                },
+                {
+                    "kidId": "d",
+                    "personWhoWaitName": "fullName2",
+                    "personWhoWaitRelation": "papà",
+                    "fullName": "Mario Rossi",
+                    "busStop": "Via S.Margherita, Povo TN",
+                    "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg"
+                },
+                {
+                    "kidId": "e",
+                    "personWhoWaitName": "fullName2",
+                    "personWhoWaitRelation": "papà",
+                    "fullName": "Mario Rossi",
+                    "busStop": "Via S.Margherita, Povo TN",
+                    "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg"
+                }
+                ]
+            },
+            {
+                "busId": "b",
+                "busName": "Bus 2",
+                "children": [
+                {
+                    "kidId": "f",
+                    "personWhoWaitName": "fullName2",
+                    "personWhoWaitRelation": "papà",
+                    "fullName": "Mario Rossi",
+                    "busStop": "Via S.Margherita, Povo TN",
+                    "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg"
+                },
+                {
+                    "kidId": "g",
+                    "personWhoWaitName": "fullName2",
+                    "personWhoWaitRelation": "papà",
+                    "fullName": "Mario Rossi",
+                    "busStop": "Via S.Margherita, Povo TN",
+                    "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg"
+                },
+                {
+                    "kidId": "h",
+                    "personWhoWaitName": "fullName2",
+                    "personWhoWaitRelation": "papà",
+                    "fullName": "Mario Rossi",
+                    "busStop": "Via S.Margherita, Povo TN",
+                    "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg"
+                }
+                ]
+            }
+        ]
+    }

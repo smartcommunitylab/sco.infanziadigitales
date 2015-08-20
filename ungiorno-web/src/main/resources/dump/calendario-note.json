@@ -1,0 +1,34 @@
+[
+        {
+            "appId": "a",
+            "schoolId": "a",
+            "kidId": "a",
+            "date": 123,
+            "parentNotes": [
+                {
+                    "personId": "a",
+                    "note": "parentNote1"
+                },
+                {
+                    "personId": "a",
+                    "note": "parentNote2"
+                },
+                {
+                    "personId": "a",
+                    "note": "Il bambino lamentava mal di pancia"
+                }
+            ],
+            "schoolNotes": [
+                {
+                    "personId": "teacherId1",
+                    "note": "teacherNote1",
+                    "type": "typeNoteId1"
+                },
+                {
+                    "personId": "teacherId1",
+                    "note": "teacherNote2",
+                    "type": "typeNoteId2"
+                }
+            ]
+        }
+]

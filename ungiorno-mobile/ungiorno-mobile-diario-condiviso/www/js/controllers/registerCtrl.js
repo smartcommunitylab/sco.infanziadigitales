@@ -2,10 +2,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
 
 .controller('RegisterCtrl', function ($scope, dataServerService) {
 
-        $scope.steps = [
-        {
-            done: true
-        },
+    $scope.enterEmail = false;
+    $scope.steps = [
         {
             done: false
         },
@@ -15,6 +13,34 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         {
             done: false
         },
-        ];
+        {
+            done: false
+        },
+    ];
+
+    var updateToStep = function (toStep) {
+        for (var i = 0; i < toStep; i++) {
+            $scope.steps[i].done = true;
+        }
+    }
+
+    var currentStep = 1;
+    updateToStep(currentStep);
+
+    $scope.openEnterEmail = function () {
+        return $scope.enterEmail;
+    }
+
+    $scope.loginVia = function (via) {
+        $scope.enterEmail = true;
+        currentStep++;
+        updateToStep(currentStep);
+
+        if (via === "facebook") {
+
+        } else if (via === "gmail") {
+
+        }
+    }
 
 });

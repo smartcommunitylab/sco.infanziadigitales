@@ -58,7 +58,7 @@ public class KidController {
 		
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/student/{appId}/{schoolId}/profiles")
+	@RequestMapping(method = RequestMethod.GET, value = "/student/{appId}/profiles")
 	public @ResponseBody Response<List<KidProfile>> getProfiles(@PathVariable String appId) {
 	
 		try {

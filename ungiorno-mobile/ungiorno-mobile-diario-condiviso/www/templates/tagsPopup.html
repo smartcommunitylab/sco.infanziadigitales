@@ -2,7 +2,7 @@
     <ion-content>
         <ion-list>
             <ion-item ng-repeat="tag in filteredTags track by $index" ng-click="completeTag($index)">
-                {{tag.value}}
+                {{tag.name}}
             </ion-item>
             <ion-item ng-click="addTag(tagsInserted)" ng-if="tagsInserted">
                 {{'add_tag' | translate}} {{tagsInserted}}

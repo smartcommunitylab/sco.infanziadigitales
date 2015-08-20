@@ -3,14 +3,27 @@
         <ion-nav-back-button>
         </ion-nav-back-button>
     </ion-nav-bar>
+
         <ion-content id="register-container" has-header="true" class="page-padding register-container">
-        <div class="register-title">Diario Condiviso</div>
-        <div class="sub-title-register">Registrati con:</div>
-        <p class="button register-buttons">Facebook</p>
-        <p class="button register-buttons" style="margin-top:20px;">Gmail</p>
-        <div class="steps-indicator-container">
-            <div ng-repeat="step in steps" class="step-indicator" ng-class="{'step-indicator-done': step.done}"></div>
-        </div>
+            <div class="register-title">Diario Condiviso</div>
+                <div class="sub-title-register" ng-if="!openEnterEmail()">Registrati con:
+                    <p class="button register-buttons" ng-if="!openEnterEmail()" ng-click="mailFb()">Facebook</p>
+                    <p class="button register-buttons" style="margin-top:20px;" ng-if="!openEnterEmail()" ng-click="mailGm()">Gmail</p>
+                </div>
+
+                    <div class="enter-mail" ng-if="openEnterEmail()">
+                        <div class="sub-title-register">inserisci la tua mail:
+                            <label class="item item-input id-container">
+                                <input type="text" placeholder="email@gmail.com">
+                            </label>
+                            <p class="button register-buttons" style="margin-top:20px">Entra</p>
+
+                        </div>
+                    </div>
+
+                        <div class="steps-indicator-container">
+                            <div ng-repeat="step in steps" class="step-indicator" ng-class="{'step-indicator-done': step.done}"></div>
+                        </div>
 
         </ion-content>
 

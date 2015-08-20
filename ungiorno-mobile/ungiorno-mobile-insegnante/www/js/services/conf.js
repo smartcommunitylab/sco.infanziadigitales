@@ -3,37 +3,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
 .factory('Config', function ($q, $http, $window, $filter, $rootScope) {
 
     var DEVELOPMENT = true;
-
     var URL = 'https://' + (DEVELOPMENT ? 'dev' : 'tn') + '.smartcommunitylab.it';
-    var app = 'percorsi'
-    var userdata = 'userdata/paths';
+    var app = 'ungiorno'
+    var appId = 'testAppId'
 
     var APP_BUILD = '';
 
-    /** CUSTOM PROPERTIES FOR THE APP */
-    //    var appId = 'ComuneRovereto';
-    //    var APP_VERSION = '1.0.0RC1';
-    //    var cityName = {
-    //        'it': 'Rovereto Percorsi',
-    //        'en': 'Rovereto Paths',
-    //        'de': 'Rovereto Paths'
-    //    };
-    //    var credits = 'credits.html';
-    var appId = 'Ingarda';
-    var APP_VERSION = '1.0.0RC1';
-    var cityName = {
-        'it': 'Tesori Nascosti',
-        'en': 'Hidden Treasures',
-        'de': 'Geheime Shätze'
-    };
-    var credits = 'credits_riva.html';
 
-    var SCHEMA_VERSION = 3;
-    var contentTypes = {
-        'path': 'it.smartcommunitylab.percorsi.model.Path',
-        'categories': 'it.smartcommunitylab.percorsi.model.Categories',
-    };
-    var dbName = appId;
+    //    var credits = 'credits.html';
+    var APP_VERSION = '1.0.0RC1';
+
     return {
 
         getVersion: function () {
@@ -74,36 +53,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
         app: function () {
             return app;
         },
-        userdata: function () {
-            return userdata;
+        appId: function () {
+            return appId;
         },
         service: function () {
             return service;
-        },
-        appId: function () {
-            return appId;
         },
         schemaVersion: function () {
             return SCHEMA_VERSION;
         },
         savedImagesDirName: function () {
-            return 'Percorsi-ImagesCache';
-        },
-        syncUrl: function () {
-            //console.log('$rootScope.TEST_CONNECTION: '+(!!$rootScope.TEST_CONNECTION));
-            var SYNC_MODE = (!!$rootScope.TEST_CONNECTION ? 'syncdraft' : 'sync');
-            //console.log('SYNC_MODE: '+SYNC_MODE);
-            return URL + '/' + app + '/sync/' + appId + '?since=';
-            // /sync/{appId}?since={version}
-        },
-        syncTimeoutSeconds: function () {
-            //return 60 * 60; /* 60 times 60 seconds = EVERY HOUR */
-            return 60 * 60 * 8; /* 60 times 60 seconds = 1 HOUR --> x8 = THREE TIMES A DAY */
-            //return 60 * 60 * 24; /* 60 times 60 seconds = 1 HOUR --> x24 = ONCE A DAY */
-            //return 60 * 60 * 24 * 10; /* 60 times 60 seconds = 1 HOUR --> x24 = 1 DAY x10 */
-        },
-        syncingOverlayTimeoutMillis: function () {
-            return 50 * 1000; /* seconds before automatically hiding syncing overlay */
+            return 'Ungiorno-ImagesCache';
         },
         loadingOverlayTimeoutMillis: function () {
             return 20 * 1000; /* seconds before automatically hiding loading overlay */
@@ -117,28 +77,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
         fileCleanupOverlayTimeoutMillis: function () {
             return 20 * 1000; /* seconds before automatically hiding cleaning overlay */
         },
-        contentTypesList: function () {
-            return contentTypes;
-        },
-        contentKeyFromDbType: function (dbtype) {
-            for (var contentType in contentTypes) {
-                if (contentTypes.hasOwnProperty(contentType)) {
-                    if (contentTypes[contentType] == dbtype) return contentType;
-                }
-            }
-            return '';
-        },
         textTypesList: function () {
             return textTypes;
         },
-
-        cityName: cityName,
-        credits: credits,
         imagePath: function () {
             return imagePath;
-        },
-        dbName: function () {
-            return dbName;
         },
         doProfiling: function () {
             return false;

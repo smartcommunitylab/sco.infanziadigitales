@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.communications', [])
 
-.controller('communicationsCtrl', function ($scope, $location, $ionicHistory, dataServerService) {
+.controller('communicationsCtrl', function ($scope, $location, $ionicHistory, dataServerService, communicationService, profileService) {
 
     var selectedCommunicationIndex = -1;
     var selectedNewCommunication = false;
@@ -11,99 +11,120 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     var selectedComIndex = null;
 
     $scope.communicationTypes = [
-        { typeId : "Generica",
-          checked : false},
+        {
+            typeId: "Generica",
+            checked: false
+        },
 
-        { typeId : "Consegna Documenti",
-          checked : false}
+        {
+            typeId: "Consegna Documenti",
+            checked: false
+        }
     ];
 
-     dataServerService.getCommunications().then(function(data){
+    dataServerService.getCommunications().then(function (data) {
         $scope.communications = data;
-     });
+    });
 
-    $scope.selectCommunication = function(index){
+    $scope.selectCommunication = function (index) {
 
         if (selectedCommunicationIndex === index) {
             selectedCommunicationIndex = -1;
-        }
-        else {
+        } else {
             selectedCommunicationIndex = index;
         }
 
     }
 
-    $scope.modifyCom = function (){
-       modifyState = true;
-       selectedComIndex = selectedCommunicationIndex;
+    $scope.modifyCom = function () {
+        modifyState = true;
+        selectedComIndex = selectedCommunicationIndex;
 
     }
     $scope.editState = function () {
-    return editClose === true;
+        return editClose === true;
     }
     $scope.modifyDescription = function (index) {
 
-        if (selectedComIndex == index && modifyState){
-        return true;
+        if (selectedComIndex == index && modifyState) {
+            return true;
         } else {
-        return false;}
+            return false;
+        }
     }
-    $scope.isCommunicationSelected = function(index){
+    $scope.isCommunicationSelected = function (index) {
         return selectedCommunicationIndex === index;
     }
 
-    $scope.controlDateToCheck = function(index){
+    $scope.controlDateToCheck = function (index) {
         return $scope.communications[index].dateToCheck !== null;
     }
 
-    $scope.isCommunicationSelectedMode = function() {
+    $scope.isCommunicationSelectedMode = function () {
         return selectedCommunicationIndex !== -1;
     }
-     $scope.newCommunicationMode = function() {
+    $scope.newCommunicationMode = function () {
         return selectedNewCommunication === true;
     }
-    $scope.addCom = function(){
+    $scope.addCom = function () {
         selectedNewCommunication = true;
 
     }
-    $scope.deleteCom = function (){
+    $scope.deleteCom = function () {
         selectedNewCommunication = false;
     }
 
-    $scope.checkNewCommunication = function() {
-        if (selectedNewCommunication === true && deleteCommunication === false)
-        {
-        return true;
+    $scope.checkNewCommunication = function () {
+        if (selectedNewCommunication === true && deleteCommunication === false) {
+            return true;
         } else {
-        return false}
+            return false
+        }
     }
-     $scope.deleteCommunication = function() {
+    $scope.deleteCommunication = function () {
         $scope.communications.splice(selectedCommunicationIndex, 1);
-         selectedCommunicationIndex = -1;
-     }
+        selectedCommunicationIndex = -1;
+    }
 
-     $scope.selectType = function (newType) {
-            for (var i = 0; i < $scope.communicationTypes.length; i++) {
-                if ($scope.communicationTypes[i].typeId === newType.typeId) {
-                    $scope.communicationTypes[i].checked = true;
-                } else {
-                    $scope.communicationTypes[i].checked = false;
-                }
+    $scope.selectType = function (newType) {
+        for (var i = 0; i < $scope.communicationTypes.length; i++) {
+            if ($scope.communicationTypes[i].typeId === newType.typeId) {
+                $scope.communicationTypes[i].checked = true;
+            } else {
+                $scope.communicationTypes[i].checked = false;
             }
         }
+    }
 
     $scope.buttonShow = function (communication) {
         return communication !== null;
     }
 
-    $scope.editCom = function (){
-      $scope.communications[selectedComIndex].description = document.getElementById("modifyDescription").value;
-      $scope.communications[selectedComIndex].dateToCheck = document.getElementById("modifyDateToCheck").value;
-      editClose = true;
+    $scope.editCom = function () {
+        $scope.communications[selectedComIndex].description = document.getElementById("modifyDescription").value;
+        $scope.communications[selectedComIndex].dateToCheck = document.getElementById("modifyDateToCheck").value;
+        editClose = true;
+    }
+
+    $scope.sendCom = function () {
+        //manca ng-model negli input sull'html
+        var communication = {
+            "appId": "a",
+            "schoolId": "a",
+            "communicationId": "commId2",
+            "dateToCheck": null,
+            "creationDate": 1439296618,
+            "description": "Questa comunicazione è per la mamma di Marco!",
+            "doCheck": false,
+            "children": null
+        }
+        communicationService.addCommunication(profileService.getSchoolProfile().schoolId, communication).then(function (data) {
+            var data = data
+        });
     }
 
 
-      /*function sendCom() {
+    /*function sendCom() {
         for (var i = 0; i < $scope.retirePersons.length; i++) {
             if ($scope.communicationType[i].checked == true) {
                 return $scope.communicationType[i].typeId;

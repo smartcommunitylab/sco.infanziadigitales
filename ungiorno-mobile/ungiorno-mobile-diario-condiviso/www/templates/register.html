@@ -1,0 +1,18 @@
+<ion-view id="register">
+    <ion-nav-bar class="bar bar-ungiorno">
+        <ion-nav-back-button>
+        </ion-nav-back-button>
+    </ion-nav-bar>
+        <ion-content id="register-container" has-header="true" class="page-padding register-container">
+        <div class="register-title">Diario Condiviso</div>
+        <div class="sub-title-register">Registrati con:</div>
+        <p class="button register-buttons">Facebook</p>
+        <p class="button register-buttons" style="margin-top:20px;">Gmail</p>
+        <div class="steps-indicator-container">
+            <div ng-repeat="step in steps" class="step-indicator" ng-class="{'step-indicator-done': step.done}"></div>
+        </div>
+
+        </ion-content>
+
+
+</ion-view>

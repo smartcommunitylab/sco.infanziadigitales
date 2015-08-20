@@ -7,12 +7,12 @@
         <ion-content id="register-container" has-header="true" class="page-padding register-container">
             <div class="register-title">Diario Condiviso</div>
                 <div class="sub-title-register" ng-if="!openEnterEmail()">Registrati con:
-                    <p class="button register-buttons" ng-if="!openEnterEmail()" ng-click="mailFb()">Facebook</p>
-                    <p class="button register-buttons" style="margin-top:20px;" ng-if="!openEnterEmail()" ng-click="mailGm()">Gmail</p>
+                    <p class="button register-buttons" ng-if="!openEnterEmail()" ng-click="loginVia('facebook')">Facebook</p>
+                    <p class="button register-buttons" style="margin-top:20px;" ng-if="!openEnterEmail()" ng-click="loginVia('gmail')">Gmail</p>
                 </div>
 
                     <div class="enter-mail" ng-if="openEnterEmail()">
-                        <div class="sub-title-register">inserisci la tua mail:
+                        <div class="sub-title-register">Inserisci la tua mail:
                             <label class="item item-input id-container">
                                 <input type="text" placeholder="email@gmail.com">
                             </label>
@@ -21,8 +21,9 @@
                         </div>
                     </div>
 
+
                         <div class="steps-indicator-container">
-                            <div ng-repeat="step in steps" class="step-indicator" ng-class="{'step-indicator-done': step.done}"></div>
+                            <div ng-repeat="step in steps track by $index" class="step-indicator" ng-class="{'step-indicator-done': step.done}"></div>
                         </div>
 
         </ion-content>

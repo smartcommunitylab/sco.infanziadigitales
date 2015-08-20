@@ -273,7 +273,6 @@ span {
     -ms-flex-align: center;
     justify-content: center;
     background-color:#DDD;
-
 }
 
 .login-buttons {
@@ -292,6 +291,50 @@ span {
     margin-top:30px;
     font-size: 40px;
 }
+
+.enter_credentials {
+    margin-top: 75px;
+    text-align: center;
+    font-family: Arial;
+    font-size: 25px;
+}
+
+.register-container {
+    display: -webkit-flexbox;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-align: center;
+    -ms-flex-align: center;
+    justify-content: center;
+    background-color:#DDD;
+}
+
+.register-title {
+    text-align:center;
+    font-family:Arial;
+    margin-top:30px;
+    font-size: 40px;
+}
+
+.sub-title-register {
+    margin-top: 90px;
+    text-align: center;
+    font-family: Arial;
+    font-size: 25px;
+}
+
+.register-buttons {
+    margin-top: 40px;
+    height: 50px;
+    background-color: #A9A9A9;
+    display: block;
+    color: #000000;
+    margin-left: 10px;
+    margin-right: 10px;
+
+}
+
 
 .id-container {
     background-color:#DDD;
@@ -328,12 +371,6 @@ span {
 
 .step-indicator-done {
     background-color: #000;
-}
-
-.enter_credentials {
-    margin-top: 75px;
-    text-align: center;
-    font-family: Arial;
 }
 
 input[type=text] {

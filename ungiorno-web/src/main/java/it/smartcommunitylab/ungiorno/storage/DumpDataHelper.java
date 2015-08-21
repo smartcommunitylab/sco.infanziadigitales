@@ -25,6 +25,7 @@ import it.smartcommunitylab.ungiorno.model.Menu;
 import it.smartcommunitylab.ungiorno.model.SchoolProfile;
 import it.smartcommunitylab.ungiorno.model.SectionData;
 import it.smartcommunitylab.ungiorno.model.Teacher;
+import it.smartcommunitylab.ungiorno.model.TeacherCalendar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,5 +96,7 @@ public class DumpDataHelper {
 	public static List<SectionData> dummySections(String appId, String schoolId) {
 		return readList("sections-profile.json", SectionData.class);
 	}
-
+	public static List<TeacherCalendar> dummyTecherCalendar(String appId, String schoolId) {
+		return readList("calendario-docenti.json", TeacherCalendar.class);
+	}
 }

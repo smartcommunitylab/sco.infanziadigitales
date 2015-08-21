@@ -3,7 +3,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
 .controller('busCtrl', function ($scope, $location, dataServerService, profileService, $ionicLoading, $timeout, $cordovaPrinter) {
 
     $scope.showLoader = function () {
-        return $ionicLoading.show({
+        $ionicLoading.show({
             content: 'Loading',
             animation: 'fade-in',
             showBackdrop: false,
@@ -13,7 +13,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         $scope.dataLoaded = false;
     };
 
-    $scope.myLoader = $scope.showLoader();
+    $scope.showLoader();
 
     $scope.nowDate = new Date();
     $scope.changeSelectedBus = function (bus) {
@@ -37,14 +37,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
 
 
     }
-    dataServerService.getBuses().then(function (data) {
-        $timeout(function () {
+    dataServerService.getBuses(profileService.getSchoolProfile().schoolId, Math.floor(new Date().getTime() / 1000)).then(function (data) {
             $scope.buses = data.buses;
             $scope.changeSelectedBus($scope.buses[0]);
-            $scope.myLoader.hide();
+            $ionicLoading.hide();
             $scope.dataLoaded = true;
-        }, 500); //delay to emulate response time from the server.
-
     });
 
     $scope.getBabiesByRow = function (rowIndex) {

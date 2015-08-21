@@ -385,13 +385,24 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
     };
 
 
-    dataServerService.getBuses = function () {
+    dataServerService.getBuses = function (schoolId, date) {
         var deferred = $q.defer();
-
-        $http.get('data/calendario-bus.json').success(function (data) {
-            deferred.resolve(data.data[0]);
-        }).error(function (data, status, headers, config) {
+        $http({
+            method: 'GET',
+            url: Config.URL() + '/' + Config.app() + '/school/' + Config.appId() + '/' + schoolId + '/' + 'buses',
+            params: {
+                date: date
+            },
+            headers: {
+                'Accept': 'application/json'
+            }
+        }).
+        success(function (data, status, headers, config) {
+            deferred.resolve(data.data);
+        }).
+        error(function (data, status, headers, config) {
             console.log(data + status + headers + config);
+            deferred.reject(data.errorCode + ' ' + data.errorMessage);
         });
         return deferred.promise;
     };

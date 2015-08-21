@@ -265,6 +265,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
         is: "è",
         bus_stop_go: "Fermata bus andata: ",
         bus_stop_back: "Fermata bus ritorno: ",
+        bus_stop_drops_off: "Scende in:",
+        bus_stop_person_wait: "Ad aspettare c'è:",
         person_who_retire: "Persona incaricata del ritiro: ",
         parents_notes: "Note del genitore: ",
         teachers_notes: "Note della maestra: ",

@@ -204,7 +204,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
         fullName: 'Nome completo',
         parents: 'Genitore',
         teacher: 'Insegnante',
-        nothing_note: 'Nessuna nota presente'
+        nothing_note: 'Nessuna nota presente',
+        gender: 'Sesso',
+        male: 'Maschio',
+        female: 'Femmina'
     });
 
     $translateProvider.preferredLanguage("it");

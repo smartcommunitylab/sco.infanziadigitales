@@ -29,11 +29,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     }
     var babyProfileLoaded = false;
     var babyConfigLoaded = false;
-    var schoolProfileLoaded = false;
     var notesLoaded = false;
     $scope.dataLoaded = false;
     var checkAllDataLoaded = function() {
-        if (babyProfileLoaded && babyConfigLoaded && schoolProfileLoaded && notesLoaded) {
+        if (babyProfileLoaded && babyConfigLoaded && notesLoaded) {
             $scope.calculateOtherData();
             $scope.dataLoaded = true;
             $scope.myLoader.hide();
@@ -41,18 +40,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     }
 
 
-    //Acquiring data from service
+    $scope.schoolProfile = profileService.getSchoolProfile();
     var babyProfileID = profileService.getCurrentBabyID();
+
     //Acquiring data from server
-    profileService.getBabyProfileById(babyProfileID).then(function (data) {
-        $timeout(function () {
-            $scope.babyProfile = data;
-            babyProfileLoaded = true;
-            checkAllDataLoaded();
-        }, 500); //delay to emulate response time from the server.
+    profileService.getBabyProfileById($scope.schoolProfile.schoolId, babyProfileID).then(function (data) {
+        $scope.babyProfile = data;
+        babyProfileLoaded = true;
+        checkAllDataLoaded();
 
     });
-    babyConfigurationService.getBabyConfigurationById(babyProfileID).then(function (data) {
+    babyConfigurationService.getBabyConfigurationById($scope.schoolProfile.schoolId, babyProfileID).then(function (data) {
         $scope.babyConfig = data;
         babyConfigLoaded = true;
         checkAllDataLoaded();
@@ -65,18 +63,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     });
 
     var loadSchoolProfile = function () {
-        $scope.schoolProfile = profileService.getSchoolProfile();
-        schoolProfileLoaded = true;
         checkAllDataLoaded();
     }
     loadSchoolProfile();
-
-    /*
-    $scope.babyProfile = profileService.getBabyProfile();
-    $scope.schoolProfile = profileService.getSchoolProfile();
-    $scope.babyConfig = babyConfigurationService.getBabyConfiguration();
-    $scope.notes = babyConfigurationService.getBabyNotes();*/
-
 
     $scope.calculateOtherData = function () {
 

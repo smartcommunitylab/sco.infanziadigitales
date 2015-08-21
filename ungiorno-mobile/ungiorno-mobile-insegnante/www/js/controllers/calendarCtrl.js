@@ -177,10 +177,18 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     $scope.initCalendarForCurrentSettings = function () {
         $scope.showLoader();
 
+        var currentCalendar = {
+            from: 0,
+            to: 0
+        }
+
         $scope.today = new Date();
         if (currentCalendarMode === CALENDAR_MODE_WEEKLY) {
             $scope.days = getWeekDays($scope.today.valueOf() + timePadding * 60*60*1000*24*7); //+- 1 week
             $scope.currentMonth = $scope.days[0];
+
+            currentCalendar.from = Math.floor($scope.days[0].getTime() / 1000);
+            currentCalendar.to = Math.floor($scope.days[6].getTime() / 1000);
         } else {
             $scope.month = {
                 start: moment().locale('it').startOf('month').add(timePadding, 'month'),
@@ -196,10 +204,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
 
             $scope.currentMonth = moment().locale('it').startOf('month').add(timePadding, 'month')._d;
 
+            currentCalendar.from = Math.floor($scope.month.start.getTime() / 1000);
+            currentCalendar.to = Math.floor($scope.month.end.getTime() / 1000);
         }
 
-
-        dataServerService.getTeachersCalendar().then(function (data) {
+        dataServerService.getTeachersCalendar(profileService.getSchoolProfile().schoolId, currentCalendar.from, currentCalendar.to).then(function (data) {
             $scope.events = data[0].events;
             $scope.timeInterval = data[0].timeDivisionInterval;
             var schoolProfile = profileService.getSchoolProfile();

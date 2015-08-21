@@ -7,17 +7,30 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
 
 
 
-    communicationService.getCommunicationsFromServer = function () {
+    communicationService.getCommunicationsFromServer = function (schoolId) {
         //get the new communication
         var deferred = $q.defer();
 
-        dataServerService.getCommunications().then(function (data) {
+        dataServerService.getCommunications(schoolId).then(function (data) {
             communications = data;
             deferred.resolve(data);
         });
         return deferred.promise;
 
     }
+
+    communicationService.addCommunication = function (schoolId, communication) {
+        //get the new communication
+        var deferred = $q.defer();
+
+        dataServerService.addCommunication(schoolId, communication).then(function (data) {
+            communications = data;
+            deferred.resolve(data);
+        });
+        return deferred.promise;
+
+    }
+
     communicationService.setCommunication = function (communicationId) {
         //get the new communication by id
         for (var i = 0; i < communications.length; i++) {

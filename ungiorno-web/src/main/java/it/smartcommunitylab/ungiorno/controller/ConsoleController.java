@@ -42,37 +42,37 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class ConsoleController {
 
 	@Autowired
-	private ServletContext context;		
-	
+	private ServletContext context;
+
 	@Autowired
 	private RepositoryManager storage;
-	
+
 	@Autowired
 	private Importer importer;
-	
+
 	@Autowired
-	private AppSetup appSetup;	
-	
+	private AppSetup appSetup;
+
 	@RequestMapping(value = "/")
 	public String root() {
 		return "index";
-	}		
-	
+	}
+
 	@RequestMapping(value = "/login")
 	public String login() {
 		return "login";
-	}		
-	
+	}
+
 	@RequestMapping(value = "/console/data")
 	public @ResponseBody App data() {
 		return storage.getApp(getAppId());
-	}		
-	
+	}
+
 	@RequestMapping(value = "/savefiles", method = RequestMethod.POST)
 	public @ResponseBody String upload(MultipartHttpServletRequest req) throws Exception {
 		MultiValueMap<String, MultipartFile> multiFileMap = req.getMultiFileMap();
 		String res = "";
-		
+
 		try {
 			String appId = getAppId();
 			for (String key : multiFileMap.keySet()) {
@@ -83,12 +83,12 @@ public class ConsoleController {
 		}
 		return res;
 	}
-	
+
 	private String getAppId() {
 		AppDetails details = (AppDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String app = details.getUsername();
 		return app;
-	}	
-	
-	
+	}
+
+
 }

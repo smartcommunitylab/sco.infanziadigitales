@@ -8,9 +8,9 @@
 			         <h4>Published version: {{profile.publishState.version}}</h4>
                      <h4>Draft version: {{profile.draftState.version}}</h4>
                      <button ng-click="publishApp()" ng-show="profile.draftState.version > profile.publishState.version" type="button" class="form-group btn btn-primary">Publish</button>
-                     <div>&nbsp;</div> 
+                     <div>&nbsp;</div>
     			 </div>
-			  </div> 
+			  </div>
               <div class="row">
                 <div class="col-md-8 alert alert-danger" role="alert" ng-if="errorTexts.length > 0">
                    <span ng-repeat="errorText in errorTexts track by $index">{{errorText}}<br/></span>
@@ -24,9 +24,9 @@
                 <div class="col-md-8">
 	              <div class="panel panel-default">
 	                <div class="row">
-		              <div class="col-md-12">   
+		              <div class="col-md-12">
 		                <form class="col-md-12" action="savefiles" method="post" enctype="multipart/form-data" ng-upload="uploadComplete(content)">
-                          <h4>Model upload</h4> 
+                          <h4>Model upload</h4>
 		                  <div class="form-group" ng-repeat="elem in profile.appInfo.modelElements">
 		                    <label for="{{$index}}">{{elem}}</label>
 		                    <input id="{{$index}}" name="{{elem}}" type="file" />
@@ -38,7 +38,7 @@
 	                </div>
 	              </div>
                 </div>
-              </div> 
+              </div>
 			</div>
 		</div>
 	</div>

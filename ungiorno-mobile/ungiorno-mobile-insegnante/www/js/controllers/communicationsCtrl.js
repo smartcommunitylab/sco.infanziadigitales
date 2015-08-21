@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.communications', [])
 
-.controller('communicationsCtrl', function ($scope, $location, $ionicHistory, dataServerService, $ionicPopup, $timeout, communicationService) {
+.controller('communicationsCtrl', function ($scope, $location, $ionicHistory, dataServerService, $ionicPopup, $timeout, communicationService, profileService) {
 
     var selectedCommunicationIndex = -1;
     var selectedNewCommunication = false;
@@ -13,141 +13,151 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     var editShowButton = true;
     $scope.docCheck = false;
     $scope.communicationTypes = [
-        { typeId : "Generica",
-          checked : false},
+        {
+            typeId: "Generica",
+            checked: false
+        },
 
-        { typeId : "Consegna Documenti",
-          checked : false}
+        {
+            typeId: "Consegna Documenti",
+            checked: false
+        }
     ];
     $scope.newCommunication = {
-            appId : "a",
-            schoolId : "a",
-            dateToCheck : 0,
-            creationDate : 0,
-            description : "",
-            doCheck : false,
-            children : []
-     },
+            appId: "a",
+            schoolId: "a",
+            dateToCheck: 0,
+            creationDate: 0,
+            description: "",
+            doCheck: false,
+            children: []
+        },
 
-        dataServerService.getCommunications().then(function(data){
-        $scope.communications = data;
-            for (var i = 0; i < $scope.communications.length; i++){
+        dataServerService.getCommunications().then(function (data) {
+            $scope.communications = data;
+            for (var i = 0; i < $scope.communications.length; i++) {
                 $scope.communications[i].dateToCheck *= 1000;
                 $scope.communications[i].creationDate *= 1000;
             }
-     });
+        });
 
-    $scope.selectCommunication = function(index){
+    $scope.selectCommunication = function (index) {
 
         if (!modifyState && !selectedNewCommunication) {
             if (selectedCommunicationIndex === index) {
-            selectedCommunicationIndex = -1;
-            }else {
-            selectedCommunicationIndex = index;
-                    }
+                selectedCommunicationIndex = -1;
+            } else {
+                selectedCommunicationIndex = index;
+            }
         }
     }
 
-    $scope.modifyCom = function (){
-       modifyState = true;
+    $scope.modifyCom = function () {
+        modifyState = true;
     }
     $scope.showEditButton = function () {
         return modifyState;
     }
     $scope.modifyDescription = function (index) {
 
-        if (selectedCommunicationIndex == index && modifyState){
+        if (selectedCommunicationIndex == index && modifyState) {
 
             editShowButton = false;
             return true;
         } else {
-        return false;}
+            return false;
+        }
     }
-    $scope.isCommunicationSelected = function(index){
+    $scope.isCommunicationSelected = function (index) {
         return selectedCommunicationIndex === index;
     }
 
-    $scope.controlDateToCheck = function(index){
-        return $scope.communications[index].doCheck ;
+    $scope.controlDateToCheck = function (index) {
+        return $scope.communications[index].doCheck;
     }
 
-    $scope.isCommunicationSelectedMode = function() {
+    $scope.isCommunicationSelectedMode = function () {
         return selectedCommunicationIndex !== -1;
     }
-     $scope.newCommunicationMode = function() {
+    $scope.newCommunicationMode = function () {
         return selectedNewCommunication === true;
     }
-    $scope.addCom = function(){
+    $scope.addCom = function () {
         selectedNewCommunication = true;
 
     }
-    $scope.deleteCom = function (){
+    $scope.deleteCom = function () {
         selectedNewCommunication = false;
     }
 
-    $scope.checkNewCommunication = function() {
-        if (selectedNewCommunication === true && deleteCommunication === false)
-        {
-        return true;
+    $scope.checkNewCommunication = function () {
+        if (selectedNewCommunication === true && deleteCommunication === false) {
+            return true;
         } else {
-        return false}
+            return false
+        }
     }
 
-     $scope.deleteNewCommunication = function() {
-      return deleteCommunication ;
+    $scope.deleteNewCommunication = function () {
+        return deleteCommunication;
     }
 
 
-     $scope.selectType = function (newType) {
-            for (var i = 0; i < $scope.communicationTypes.length; i++) {
-                if ($scope.communicationTypes[i].typeId === newType.typeId) {
-                    $scope.communicationTypes[i].checked = true;
-                } else {
-                    $scope.communicationTypes[i].checked = false;
-                }
+    $scope.selectType = function (newType) {
+        for (var i = 0; i < $scope.communicationTypes.length; i++) {
+            if ($scope.communicationTypes[i].typeId === newType.typeId) {
+                $scope.communicationTypes[i].checked = true;
+            } else {
+                $scope.communicationTypes[i].checked = false;
             }
         }
+    }
 
     $scope.buttonShow = function (communication) {
-        if (!modifyState){
-        return communication !== null;
+        if (!modifyState) {
+            return communication !== null;
         }
     }
 
-    $scope.editCom = function (){
-      modifyState = false;
-      selectedCommunicationIndex = -1;
-      editShowButton = true;
+    $scope.editCom = function () {
+        modifyState = false;
+        selectedCommunicationIndex = -1;
+        editShowButton = true;
     }
 
     $scope.editShowButton = function () {
         return editShowButton;
     }
 
-    $scope.deleteCommunication = function() {
+    $scope.deleteCommunication = function () {
         $scope.communications.splice(selectedCommunicationIndex, 1);
-         selectedCommunicationIndex = -1;
-     }
+        selectedCommunicationIndex = -1;
+    }
 
-    $scope.sendCom = function() {
-            $scope.newCommunication.dateToCheck = document.getElementById("deadlineDate").value;
-            $scope.newCommunication.description = document.getElementById("description").value;
-            $scope.newCommunication.creationDate = new Date();
-            $scope.newCommunication.doCheck = $scope.docCheck;
-            $ionicPopup.alert({
-                 template: 'Comunicazione inviata'
-               });
-            selectedNewCommunication = false;
+    $scope.sendCom = function () {
+        //        $scope.newCommunication.dateToCheck = document.getElementById("deadlineDate").value;
+        $scope.newCommunication.dateToCheck = 0;
+        $scope.newCommunication.description = document.getElementById("description").value;
+        //        $scope.newCommunication.creationDate = new Date();
+        $scope.newCommunication.creationDate = 0;
+        $scope.newCommunication.doCheck = $scope.docCheck;
+        communicationService.addCommunication(profileService.getSchoolProfile().schoolId, $scope.newCommunication).then(function (data) {
+            var data = data
+        });
+        $ionicPopup.alert({
+            template: 'Comunicazione inviata'
+        });
+        selectedNewCommunication = false;
+    }
+    $scope.check = function () {
+        if ($scope.docCheck === true) {
+            $scope.docCheck = false;
+        } else {
+            $scope.docCheck = true;
         }
-    $scope.check = function (){
-        if ($scope.docCheck === true){
-              $scope.docCheck = false;
-            } else {
-              $scope.docCheck = true;
-            }
 
     }
-    $scope.homeRedirect = function (index){
+    $scope.homeRedirect = function (index) {
         selectedCommunicationIndex = -1;
         communicationService.setCommunication($scope.communications[index].communicationId);
         window.location.assign('#/app/home');

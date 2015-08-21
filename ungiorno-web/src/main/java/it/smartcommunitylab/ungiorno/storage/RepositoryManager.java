@@ -46,7 +46,7 @@ public class RepositoryManager {
 
 	@Autowired
 	private AppSetup appSetup;
-	
+
 	@Autowired
 	private MongoTemplate template;
 
@@ -60,7 +60,7 @@ public class RepositoryManager {
 			appDescr.setAppInfo(info);
 			template.save(appDescr);
 		}
-	
+
 	}
 
 	public App getApp(String appId) {
@@ -102,7 +102,7 @@ public class RepositoryManager {
 	 * @return
 	 */
 	public KidProfile getKidProfile(String appId, String schoolId, String kidId) {
-		// TODO 
+		// TODO
 		return DumpDataHelper.dummyKidProfile(appId, schoolId, kidId);
 	}
 
@@ -113,7 +113,7 @@ public class RepositoryManager {
 	 * @return
 	 */
 	public KidConfig getKidConfig(String appId, String schoolId, String kidId) {
-		// TODO 
+		// TODO
 		return DumpDataHelper.dummyKidConfig(appId, schoolId, kidId);
 	}
 
@@ -150,7 +150,7 @@ public class RepositoryManager {
 	 * @return
 	 */
 	public KidConfig saveAbsence(KidCalAssenza absence) {
-		// TODO 
+		// TODO
 		return DumpDataHelper.dummyKidConfig(absence.getAppId(), absence.getSchoolId(), absence.getKidId());
 	}
 
@@ -159,7 +159,7 @@ public class RepositoryManager {
 	 * @return
 	 */
 	public KidConfig saveReturn(KidCalRitiro ritiro) {
-		// TODO 
+		// TODO
 		return DumpDataHelper.dummyKidConfig(ritiro.getAppId(), ritiro.getSchoolId(), ritiro.getKidId());
 	}
 
@@ -177,11 +177,11 @@ public class RepositoryManager {
 	 * @param appId
 	 * @param schoolId
 	 * @param kidId
-	 * @param date 
+	 * @param date
 	 * @return
 	 */
 	public List<KidCalNote> getKidCalNotes(String appId, String schoolId, String kidId, long date) {
-		// TODO 
+		// TODO
 		return DumpDataHelper.dummyKidNotes(appId, schoolId, kidId);
 	}
 
@@ -189,7 +189,7 @@ public class RepositoryManager {
 	 * @param note
 	 */
 	public KidCalNote saveNote(KidCalNote note) {
-		// TODO 
+		// TODO
 		return note;
 	}
 
@@ -199,7 +199,7 @@ public class RepositoryManager {
 	 * @return
 	 */
 	public List<Communication> getCommunications(String appId, String schoolId) {
-		// TODO 
+		// TODO
 		return DumpDataHelper.dummyComms(appId, schoolId);
 	}
 	/**
@@ -209,7 +209,7 @@ public class RepositoryManager {
 	 * @return
 	 */
 	public List<Communication> getKidCommunications(String appId, String schoolId, String kidId) {
-		// TODO 
+		// TODO
 		return DumpDataHelper.dummyComms(appId, schoolId);
 	}
 
@@ -218,7 +218,7 @@ public class RepositoryManager {
 	 * @return
 	 */
 	public Communication saveCommunication(Communication comm) {
-		// TODO 
+		// TODO
 		return comm;
 	}
 
@@ -229,7 +229,7 @@ public class RepositoryManager {
 	 */
 	public void deleteCommunication(String appId, String schoolId, String commId) {
 		// TODO
-		
+
 	}
 
 	/**
@@ -237,7 +237,7 @@ public class RepositoryManager {
 	 * @return
 	 */
 	public KidCalNote saveInternalNote(KidCalNote comm) {
-		// TODO 
+		// TODO
 		return comm;
 	}
 
@@ -260,7 +260,7 @@ public class RepositoryManager {
 	 * @return
 	 */
 	public List<Menu> getMeals(String appId, String schoolId, long from, long to) {
-		// TODO 		
+		// TODO
 		return DumpDataHelper.dummyMenu(appId, schoolId);
 
 	}
@@ -271,14 +271,14 @@ public class RepositoryManager {
 	 * @return
 	 */
 	public List<Teacher> getTeachers(String appId, String schoolId) {
-		// TODO 
+		// TODO
 		return DumpDataHelper.dummyTeachers(appId, schoolId);
 	}
 
 	/**
 	 * @param appId
 	 * @param schoolId
-	 * @param date 
+	 * @param date
 	 * @return
 	 */
 	public BusData getBusData(String appId, String schoolId, long date) {

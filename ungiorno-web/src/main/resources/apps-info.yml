@@ -3,5 +3,4 @@ apps:
     password: trento
     schools:
     - schoolId: scuola
-    - schoolId: scuola2  
-    
+    - schoolId: scuola2

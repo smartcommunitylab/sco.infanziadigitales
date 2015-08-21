@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.dataServerService', [])
 
-.factory('dataServerService', function ($http, $q) {
+.factory('dataServerService', function ($http, $q, Config) {
     var babyConfiguration = null; //static info
     var babyProfile = null;
     var assenza = null;
@@ -8,40 +8,49 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
     var dataServerService = {};
 
 
-    dataServerService.getBabyConfiguration = function () {
-        var deferred = $q.defer();
+    dataServerService.getBabyConfiguration = function (schoolId, kidId) {
+            var deferred = $q.defer();
 
-        /*temp*/
-        if (babyConfiguration == null) {
-            $http.get('data/bambino-configurazione.json').success(function (data) {
-                babyConfiguration = data.data;
-                deferred.resolve(babyConfiguration);
-            }).error(function (data, status, headers, config) {
-                console.log(data + status + headers + config);
-                //deferred.reject(err);
-            });
-
-            /*temp*/
-        } else deferred.resolve(babyConfiguration);
-        return deferred.promise;
-    }
-
-
+            if (babyConfiguration == null) {
+                $http({
+                    method: 'GET',
+                    url: Config.URL() + '/' + Config.app() + '/student/' + Config.appId() + '/' + schoolId + '/' + kidId + '/config',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                }).
+                success(function (data, status, headers, config) {
+                    deferred.resolve(data.data);
+                }).
+                error(function (data, status, headers, config) {
+                    console.log(data + status + headers + config);
+                    deferred.reject(data.errorCode + ' ' + data.errorMessage);
+                });
+            } else deferred.resolve(babyConfiguration);
+            return deferred.promise;
+        }
+        //
+        //getBabyProfiles(appId)
+        //  GET /student/{appId}/profiles
     dataServerService.getBabyProfile = function () {
         var deferred = $q.defer();
-
-        /*temp*/
         if (babyProfile == null) {
-            $http.get('data/bambino-profilo.json').success(function (data) {
-                babyProfile = data.data[0];
-                deferred.resolve(babyProfile);
-            }).error(function (data, status, headers, config) {
+            $http({
+                method: 'GET',
+                url: Config.URL() + '/' + Config.app() + '/student/' + Config.appId() + '/profiles',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            }).
+            success(function (data, status, headers, config) {
+                deferred.resolve(data.data);
+            }).
+            error(function (data, status, headers, config) {
                 console.log(data + status + headers + config);
-                //deferred.reject(err);
-            })
+                deferred.reject(data.errorCode + ' ' + data.errorMessage);
+            });
         } else deferred.resolve(babyProfile);
         return deferred.promise;
-        /*temp*/
     }
     dataServerService.getBabyProfileById = function (babyId) {
         var deferred = $q.defer();
@@ -77,6 +86,30 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
         /*temp*/
     }
 
+
+    dataServerService.getSchoolProfileForTeacher = function () {
+        var deferred = $q.defer();
+
+        if (schoolProfile == null) {
+            $http({
+                method: 'GET',
+                url: Config.URL() + '/' + Config.app() + '/school/' + Config.appId() + '/profile',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            }).
+            success(function (data, status, headers, config) {
+                schoolProfile = data.data;
+                deferred.resolve(schoolProfile);
+            }).
+            error(function (data, status, headers, config) {
+                console.log(data + status + headers + config);
+                deferred.reject(data.errorCode + ' ' + data.errorMessage);
+            });
+        } else deferred.resolve(schoolProfile);
+        return deferred.promise;
+    }
+
     dataServerService.getNotes = function () {
         var calendarioNote = null;
         var deferred = $q.defer();
@@ -94,23 +127,57 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
         return deferred.promise;
         /*temp*/
     }
-    dataServerService.getCommunications = function () {
+
+
+
+
+    dataServerService.addCommunication = function (schoolId, communication) {
+        var updatedCommunications = null;
+        var deferred = $q.defer();
+        $http({
+            method: 'POST',
+            url: Config.URL() + '/' + Config.app() + '/school/' + Config.appId() + '/' + schoolId + '/communications',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            data: communication,
+        }).
+        success(function (data, status, headers, config) {
+            updatedCommunications = data;
+            deferred.resolve(updatedCommunications);
+        }).
+        error(function (data, status, headers, config) {
+            console.log(data + status + headers + config);
+            deferred.reject(data.errorCode + ' ' + data.errorMessage);
+        });
+        return deferred.promise;
+    }
+
+    dataServerService.getCommunications = function (schoolId) {
         var calendarioCommunications = null;
         var deferred = $q.defer();
-
-        /*temp*/
-        //if (calendarioCommunications == null) {
-        $http.get('data/calendario-comunicazioni.json').success(function (data) {
+        if (calendarioCommunications == null) {
+            $http({
+                method: 'GET',
+                url: Config.URL() + '/' + Config.app() + '/school/' + Config.appId() + '/' + schoolId + '/communications',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            }).
+            success(function (data, status, headers, config) {
                 calendarioCommunications = data.data;
                 deferred.resolve(calendarioCommunications);
-            }).error(function (data, status, headers, config) {
+            }).
+            error(function (data, status, headers, config) {
                 console.log(data + status + headers + config);
-                //deferred.reject(err);
-            })
-            //} else deferred.resolve(calendarioCommunications);
+                deferred.reject(data.errorCode + ' ' + data.errorMessage);
+            });
+        } else deferred.resolve(calendarioCommunications);
         return deferred.promise;
-        /*temp*/
     }
+
+
     dataServerService.getAssenza = function (babyID) {
         var deferred = $q.defer();
 
@@ -216,17 +283,26 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
         return deferred.promise;
     };
 
-    dataServerService.getTeachers = function () {
+
+    dataServerService.getTeachers = function (schoolId) {
         var teachers = null;
         var deferred = $q.defer();
 
-        // temp
         if (teachers == null) {
-            $http.get('data/teacher-profile.json').success(function (data) {
+            $http({
+                method: 'GET',
+                url: Config.URL() + '/' + Config.app() + '/school/' + Config.appId() + '/' + schoolId + '/teachers',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            }).
+            success(function (data, status, headers, config) {
                 teachers = data;
                 deferred.resolve(teachers);
-            }).error(function (data, status, headers, config) {
+            }).
+            error(function (data, status, headers, config) {
                 console.log(data + status + headers + config);
+                deferred.reject(data.errorCode + ' ' + data.errorMessage);
             });
         } else {
             deferred.resolve(teachers);

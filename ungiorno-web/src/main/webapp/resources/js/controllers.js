@@ -1,6 +1,6 @@
 var consoleControllers = angular.module('consoleControllers', [])
 
-.controller('MainCtrl', ['$scope', '$rootScope', '$location', 'DataService', 
+.controller('MainCtrl', ['$scope', '$rootScope', '$location', 'DataService',
   function ($scope, $rootScope, $location, DataService) {
     DataService.getProfile().then(function(p){
     	$scope.profile = p;
@@ -25,7 +25,7 @@ var consoleControllers = angular.module('consoleControllers', [])
     		$scope.errorTexts = txt;
     	}
     };
-    
+
     $scope.publishApp = function() {
     	$scope.errorTexts = [];
     	$scope.successText = '';
@@ -39,6 +39,5 @@ var consoleControllers = angular.module('consoleControllers', [])
         	$scope.successText = '';
     	});
     };
-  
+
   }]);
-  

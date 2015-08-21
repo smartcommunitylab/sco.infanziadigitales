@@ -12,7 +12,7 @@ angular.module('DataService', [])
       });
       return data.promise;
     };
-    
+
     return {
        getProfile : function() {
           var deferred = $q.defer();

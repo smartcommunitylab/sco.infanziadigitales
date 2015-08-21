@@ -21,21 +21,21 @@ public class AppSetup {
 
 	@Value("classpath:/apps-info.yml")
 	private Resource resource;
-	
+
 	@Autowired
-	private RepositoryManager storage;	
+	private RepositoryManager storage;
 
 	@PostConstruct
 	public void init() throws IOException {
 		Yaml yaml = new Yaml(new Constructor(AppSetup.class));
 		AppSetup data = (AppSetup) yaml.load(resource.getInputStream());
 		this.apps = data.apps;
-		
+
 		for (AppInfo cred: data.getApps()) {
 			storage.createApp(cred);
 		}
 	}
-	
+
 
 	private List<AppInfo> apps;
 	private Map<String,AppInfo> appsMap;

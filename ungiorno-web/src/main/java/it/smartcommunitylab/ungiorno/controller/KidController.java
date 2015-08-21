@@ -43,55 +43,55 @@ public class KidController {
 
 	@Autowired
 	private RepositoryManager storage;
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "/student/{appId}/{schoolId}/{kidId}/calendar")
 	public @ResponseBody Response<List<CalendarItem>> getCalendar(@PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId, @RequestParam long from, @RequestParam long to) {
-	
+
 		try {
 			checkKid(appId, schoolId, kidId);
-			
+
 			List<CalendarItem> list = storage.getCalendar(appId, schoolId, kidId, from, to);
 			return new Response<>(list);
 		} catch (Exception e) {
 			return new Response<>(e.getMessage());
 		}
-		
+
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/student/{appId}/profiles")
 	public @ResponseBody Response<List<KidProfile>> getProfiles(@PathVariable String appId) {
-	
+
 		try {
 			String userId = getUserId();
-			
+
 			List<KidProfile> profiles = storage.getKidProfilesByParent(appId, userId);
 			return new Response<>(profiles);
 		} catch (Exception e) {
 			return new Response<>(e.getMessage());
 		}
-		
+
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "/student/{appId}/{schoolId}/{kidId}/profile")
 	public @ResponseBody Response<KidProfile> getProfile(@PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId) {
-	
+
 		try {
 			checkKid(appId, schoolId, kidId);
-			
+
 			KidProfile profile = storage.getKidProfile(appId, schoolId, kidId);
 			return new Response<>(profile);
 		} catch (Exception e) {
 			return new Response<>(e.getMessage());
 		}
-		
+
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "/student/{appId}/{schoolId}/{kidId}/config")
 	public @ResponseBody Response<KidConfig> getConfig(@PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId) {
-	
+
 		try {
 			checkKid(appId, schoolId, kidId);
-			
+
 			KidConfig profile = storage.getKidConfig(appId, schoolId, kidId);
 			return new Response<>(profile);
 		} catch (Exception e) {
@@ -101,13 +101,13 @@ public class KidController {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/student/{appId}/{schoolId}/{kidId}/config")
 	public @ResponseBody Response<KidConfig> sendConfig(@RequestBody KidConfig config, @PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId) {
-	
+
 		try {
 			checkKid(appId, schoolId, kidId);
 			config.setAppId(appId);
 			config.setKidId(kidId);
 			config.setSchoolId(schoolId);
-			
+
 			config = storage.saveConfig(config);
 			return new Response<>(config);
 		} catch (Exception e) {
@@ -117,29 +117,29 @@ public class KidController {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/student/{appId}/{schoolId}/{kidId}/stop")
 	public @ResponseBody Response<KidConfig> sendStop(@RequestBody KidCalFermata stop, @PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId) {
-	
+
 		try {
 			checkKid(appId, schoolId, kidId);
 			stop.setAppId(appId);
 			stop.setKidId(kidId);
 			stop.setSchoolId(schoolId);
-			
+
 			KidConfig config = storage.saveStop(stop);
 			return new Response<>(config);
 		} catch (Exception e) {
 			return new Response<>(e.getMessage());
 		}
 	}
-	
+
 	@RequestMapping(method = RequestMethod.POST, value = "/student/{appId}/{schoolId}/{kidId}/absence")
 	public @ResponseBody Response<KidConfig> sendAssenza(@RequestBody KidCalAssenza absence, @PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId) {
-	
+
 		try {
 			checkKid(appId, schoolId, kidId);
 			absence.setAppId(appId);
 			absence.setKidId(kidId);
 			absence.setSchoolId(schoolId);
-			
+
 			KidConfig config = storage.saveAbsence(absence);
 			return new Response<>(config);
 		} catch (Exception e) {
@@ -149,13 +149,13 @@ public class KidController {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/student/{appId}/{schoolId}/{kidId}/return")
 	public @ResponseBody Response<KidConfig> sendRitiro(@RequestBody KidCalRitiro ritiro, @PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId) {
-	
+
 		try {
 			checkKid(appId, schoolId, kidId);
 			ritiro.setAppId(appId);
 			ritiro.setKidId(kidId);
 			ritiro.setSchoolId(schoolId);
-			
+
 			KidConfig config = storage.saveReturn(ritiro);
 			return new Response<>(config);
 		} catch (Exception e) {
@@ -165,40 +165,40 @@ public class KidController {
 
 	@RequestMapping(method = RequestMethod.GET, value = "/student/{appId}/{schoolId}/{kidId}/notes")
 	public @ResponseBody Response<List<KidCalNote>> getNotes(@PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId, @RequestParam long date) {
-	
+
 		try {
 			checkKid(appId, schoolId, kidId);
-			
+
 			List<KidCalNote> list = storage.getKidCalNotes(appId, schoolId, kidId, date);
 			return new Response<>(list);
 		} catch (Exception e) {
 			return new Response<>(e.getMessage());
 		}
-		
+
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/student/{appId}/{schoolId}/{kidId}/notes")
 	public @ResponseBody Response<KidCalNote> saveNote(@RequestBody KidCalNote note, @PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId) {
-	
+
 		try {
 			checkKid(appId, schoolId, kidId);
 			note.setAppId(appId);
 			note.setKidId(kidId);
 			note.setSchoolId(schoolId);
-			
+
 			return new Response<>(storage.saveNote(note));
 		} catch (Exception e) {
 			return new Response<>(e.getMessage());
 		}
-		
+
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "/student/{appId}/{schoolId}/{kidId}/communications")
 	public @ResponseBody Response<List<Communication>> getComms(@PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId) {
-	
+
 		try {
 			checkKid(appId, schoolId, kidId);
-			
+
 			List<Communication> list = storage.getKidCommunications(appId, schoolId, kidId);
 			return new Response<>(list);
 		} catch (Exception e) {
@@ -206,7 +206,7 @@ public class KidController {
 		}
 	}
 
-	
+
 	/**
 	 * @param appId
 	 * @param schoolId
@@ -215,8 +215,8 @@ public class KidController {
 	private void checkKid(String appId, String schoolId, String studentId) throws SecurityException {
 		// TODO Auto-generated method stub
 	}
-	
-	
+
+
 	/**
 	 * @return
 	 */

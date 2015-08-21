@@ -1,8 +1,6 @@
 {
     "jscodehints.detectedExclusions": [
         "C:/Users/Smart Community/Documents/GitHub/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-insegnante/www/js/controllers/communicationsCtrlWorking.js",
-        "C:/Users/Smart Community/Documents/GitHub/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-insegnante/www/js/controllers/communicationsCtrl.js",
-        "C:/Users/Smart Community/Documents/GitHub/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-diario-condiviso/www/js/controllers/homeCtrl.js",
-        "C:/Users/Smart Community/Documents/GitHub/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-diario-condiviso/www/js/app.js"
+        "C:/Users/Smart Community/Documents/GitHub/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-insegnante/www/js/controllers/communicationsCtrl.js"
     ]
 }

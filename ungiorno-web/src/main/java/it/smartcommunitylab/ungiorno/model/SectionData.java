@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2015 Fondazione Bruno Kessler
- * 
+ *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
  *    You may obtain a copy of the License at
- * 
+ *
  *        http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *    Unless required by applicable law or agreed to in writing, software
  *    distributed under the License is distributed on an "AS IS" BASIS,
  *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,7 +22,7 @@ import java.util.List;
  *
  */
 public class SectionData extends SchoolObject{
-	
+
 	public static class ServiceProfile {
 		private boolean enabled, active;
 
@@ -42,7 +42,7 @@ public class SectionData extends SchoolObject{
 			this.active = active;
 		}
 	}
-	
+
 	public static class KidProfile {
 		private String kidId, childrenName, image;
 		private ServiceProfile anticipo, posticipo, mensa;
@@ -90,7 +90,7 @@ public class SectionData extends SchoolObject{
 			this.exitTime = exitTime;
 		}
 	}
-	
+
 	private String sectionId, sectionName;
 	private List<KidProfile> children;
 	public String getSectionId() {
@@ -111,6 +111,6 @@ public class SectionData extends SchoolObject{
 	public void setChildren(List<KidProfile> children) {
 		this.children = children;
 	}
-	
-	
+
+
 }

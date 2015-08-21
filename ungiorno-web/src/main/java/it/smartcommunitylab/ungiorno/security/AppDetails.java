@@ -13,7 +13,7 @@ public class AppDetails implements UserDetails {
 	private static final long serialVersionUID = 1970015369860723085L;
 
 	private AppInfo app;
-	
+
 	public AppDetails() {
 		super();
 	}

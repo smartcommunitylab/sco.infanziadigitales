@@ -47,7 +47,7 @@ public class SchoolController {
 
 	@Autowired
 	private RepositoryManager storage;
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "/ping")
 	public @ResponseBody
 	String ping(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
@@ -78,7 +78,7 @@ public class SchoolController {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/school/{appId}/{schoolId}/communications")
 	public @ResponseBody Response<Communication> sendCommunication(@RequestBody Communication comm, @PathVariable String appId, @PathVariable String schoolId) {
-	
+
 		try {
 			comm.setAppId(appId);
 			comm.setSchoolId(schoolId);
@@ -89,7 +89,7 @@ public class SchoolController {
 	}
 	@RequestMapping(method = RequestMethod.GET, value = "/school/{appId}/{schoolId}/communications")
 	public @ResponseBody Response<List<Communication>> getComms(@PathVariable String appId, @PathVariable String schoolId) {
-	
+
 		try {
 			List<Communication> list = storage.getCommunications(appId, schoolId);
 			return new Response<>(list);
@@ -100,12 +100,12 @@ public class SchoolController {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/school/{appId}/{schoolId}/{kidId}/notes")
 	public @ResponseBody Response<KidCalNote> sendNote(@RequestBody KidCalNote comm, @PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId) {
-	
+
 		try {
 			comm.setAppId(appId);
 			comm.setSchoolId(schoolId);
 			comm.setKidId(kidId);
-			
+
 			return new Response<>(storage.saveInternalNote(comm));
 		} catch (Exception e) {
 			return new Response<>(e.getMessage());
@@ -114,7 +114,7 @@ public class SchoolController {
 
 	@RequestMapping(method = RequestMethod.GET, value = "/school/{appId}/{schoolId}/{sectionId}/notes")
 	public @ResponseBody Response<List<KidCalNote>> getNotes(@RequestBody KidCalNote comm, @PathVariable String appId, @PathVariable String schoolId, @PathVariable String sectionId, @RequestParam long date) {
-	
+
 		try {
 			List<KidCalNote> list = storage.getInternalNotes(appId, schoolId, sectionId, date);
 			return new Response<>(list);
@@ -122,10 +122,10 @@ public class SchoolController {
 			return new Response<>(e.getMessage());
 		}
 	}
-	
+
 	@RequestMapping(method = RequestMethod.DELETE, value = "/school/{appId}/{schoolId}/communications/{commId}")
 	public @ResponseBody Response<Void> deleteCommunication(@PathVariable String appId, @PathVariable String schoolId, @PathVariable String commId) {
-	
+
 		try {
 			storage.deleteCommunication(appId, schoolId, commId);
 			return new Response<>((Void)null);
@@ -137,7 +137,7 @@ public class SchoolController {
 
 	@RequestMapping(method = RequestMethod.GET, value = "/school/{appId}/{schoolId}/menu")
 	public @ResponseBody Response<List<Menu>> getMeals(@PathVariable String appId, @PathVariable String schoolId, @RequestParam long from, @RequestParam long to) {
-	
+
 		try {
 			List<Menu> list = storage.getMeals(appId, schoolId, from, to);
 			return new Response<>(list);
@@ -148,7 +148,7 @@ public class SchoolController {
 
 	@RequestMapping(method = RequestMethod.GET, value = "/school/{appId}/{schoolId}/teachers")
 	public @ResponseBody Response<List<Teacher>> getTeachers(@PathVariable String appId, @PathVariable String schoolId) {
-	
+
 		try {
 			List<Teacher> list = storage.getTeachers(appId, schoolId);
 			return new Response<>(list);
@@ -158,7 +158,7 @@ public class SchoolController {
 	}
 	@RequestMapping(method = RequestMethod.GET, value = "/school/{appId}/{schoolId}/teachercalendar")
 	public @ResponseBody Response<List<TeacherCalendar>> getTeacherCalendar(@PathVariable String appId, @PathVariable String schoolId, @RequestParam long from, @RequestParam long to) {
-	
+
 		try {
 			List<TeacherCalendar> list = storage.getTeacherCalendar(appId, schoolId, from, to);
 			return new Response<>(list);
@@ -169,7 +169,7 @@ public class SchoolController {
 
 	@RequestMapping(method = RequestMethod.GET, value = "/school/{appId}/{schoolId}/buses")
 	public @ResponseBody Response<BusData> getBuses(@PathVariable String appId, @PathVariable String schoolId, @RequestParam long date) {
-	
+
 		try {
 			BusData buses = storage.getBusData(appId, schoolId, date);
 			return new Response<>(buses);
@@ -177,10 +177,10 @@ public class SchoolController {
 			return new Response<>(e.getMessage());
 		}
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "/school/{appId}/{schoolId}/sections")
 	public @ResponseBody Response<List<SectionData>> getSections(@PathVariable String appId, @PathVariable String schoolId, @RequestParam long date) {
-	
+
 		try {
 			List<SectionData> list = storage.getSections(appId, schoolId, date);
 			return new Response<>(list);

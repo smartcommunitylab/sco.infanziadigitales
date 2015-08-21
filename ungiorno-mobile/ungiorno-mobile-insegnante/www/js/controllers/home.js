@@ -62,15 +62,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
 
     $scope.title = moment().locale('it').format("dddd, D MMMM gggg");
     $scope.initialize = function () {
-        dataServerService.getTeachers().then(function (data) {
-            teachersService.setTeachers(data.data);
-            // temp
-            $scope.selectedTeacher = data.data[0];
-            teachersService.setSelectedTeacher($scope.selectedTeacher);
-            console.log($scope.selectedTeacher);
-        });
-        dataServerService.getSchoolProfile().then(function (schoolProfile) {
-            $scope.schoolProfile = schoolProfile.data[0];
+        dataServerService.getSchoolProfileForTeacher().then(function (schoolProfile) {
+            $scope.schoolProfile = schoolProfile;
             profileService.setSchoolProfile($scope.schoolProfile);
             dataServerService.getSections().then(function (data) {
                 $scope.sections = data;
@@ -78,13 +71,23 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
                 sectionService.setSection(0);
                 $scope.getChildrenByCurrentSection();
             })
+            dataServerService.getTeachers($scope.schoolProfile.schoolId).then(function (data) {
+                teachersService.setTeachers(data);
+                // temp
+                $scope.selectedTeacher = data[0];
+                teachersService.setSelectedTeacher($scope.selectedTeacher);
+                console.log($scope.selectedTeacher);
+            });
+            communicationService.getCommunicationsFromServer($scope.schoolProfile.schoolId).then(function (data) {
+                $scope.communications = data;
+                //check if parameter is sent otherwise take the first
+                $scope.data.communication = $scope.communications[0].communicationId;
+                $scope.changeCommunication($scope.data.communication);
+            });
         });
-        communicationService.getCommunicationsFromServer().then(function (data) {
-            $scope.communications = data;
-            //check if parameter is sent otherwise take the first
-            $scope.data.communication = $scope.communications[0].communicationId;
-            $scope.changeCommunication($scope.data.communication);
-        });
+
+
+
     };
 
     $scope.openParentsNotes = function () {

@@ -7,7 +7,7 @@ var consoleApp = angular.module('console', [,'ui.bootstrap',
 
 consoleApp.run([ '$rootScope', '$q', '$modal', '$location', 'DataService',
   function($localize, $rootScope, $q, $modal, $location, DataService, CodeProcessor, ValidationService){
-    
+
     $rootScope.logout = function(url) {
       DataService.logout().then(function(){
         window.location.reload();

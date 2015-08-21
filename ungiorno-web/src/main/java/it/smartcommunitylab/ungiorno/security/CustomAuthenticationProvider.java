@@ -17,11 +17,11 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
 
 	@Autowired
 	private AppSetup appSetup;
-	
+
 	@Override
 	protected void additionalAuthenticationChecks(UserDetails userDetails, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
 	}
-	
+
 	@Override
 	protected UserDetails retrieveUser(String username, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
 		AppInfo app = appSetup.findAppById(username);

@@ -23,7 +23,7 @@ import java.util.List;
  */
 public class TeacherCalendar {
 
-	public static class TeacherEvent {
+	public static class TeacherEvent extends SchoolObject {
 		private List<String> teachers;
 		private String what;
 		private long from, to;

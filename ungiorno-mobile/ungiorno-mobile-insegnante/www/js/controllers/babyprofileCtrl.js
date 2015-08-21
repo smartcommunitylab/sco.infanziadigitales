@@ -4,7 +4,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
 
 
     $scope.showLoader = function() {
-        return $ionicLoading.show({
+        $ionicLoading.show({
             content: 'Loading',
             animation: 'fade-in',
             showBackdrop: false,
@@ -14,7 +14,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         $scope.dataLoaded = false;
     };
 
-    $scope.myLoader = $scope.showLoader();
+    $scope.showLoader();
 
     $scope.checkBusServiceActive = function() {
         return $scope.babyConfig.services.bus.active && $scope.babyProfile.services.bus.enabled;
@@ -35,7 +35,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         if (babyProfileLoaded && babyConfigLoaded && notesLoaded) {
             $scope.calculateOtherData();
             $scope.dataLoaded = true;
-            $scope.myLoader.hide();
+            $ionicLoading.hide();
         }
     }
 
@@ -56,16 +56,33 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         checkAllDataLoaded();
     });
 
-    babyConfigurationService.getBabyNotesById(babyProfileID).then(function (data) {
+    babyConfigurationService.getBabyNotesById($scope.schoolProfile.schoolId, babyProfileID).then(function (data) {
         $scope.notes = data;
         notesLoaded = true;
         checkAllDataLoaded();
     });
 
-    var loadSchoolProfile = function () {
-        checkAllDataLoaded();
+    var loadPersonWhoRetire = function () {
+        var found = false;
+        $scope.personWhoRetire = null;
+        var i = 0;
+        while (!found && i < $scope.babyConfig.extraPersons.length) {
+            if ($scope.babyConfig.extraPersons[i].personId == $scope.babyConfig.defaultPerson) {
+                found = true;
+                $scope.personWhoRetire = $scope.babyConfig.extraPersons[i];
+                $scope.personWhoRetire.isDelegate = true;
+            }
+            i++;
+        }
+        while (!found && i < $scope.babyProfile.persons.length) {
+            if ($scope.babyProfile.persons[i].personId == $scope.babyConfig.defaultPerson) {
+                found = true;
+                $scope.personWhoRetire = $scope.babyProfile.persons[i];
+                $scope.personWhoRetire.isDelegate = false;
+            }
+            i++;
+        }
     }
-    loadSchoolProfile();
 
     $scope.calculateOtherData = function () {
 
@@ -81,6 +98,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
 
 
         $scope.babyStatus = today.getTime() > exitDayWithHour.getTime() ? $filter('translate')('exit') : $filter('translate')('present');
+        loadPersonWhoRetire();
 
         if ($scope.checkBusServiceActive()) {
             $scope.babyBusStopGoName = getBusStopAddressByID($scope.babyConfig.services.bus.defaultIdGo);
@@ -88,14 +106,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         }
 
     }
+
+
     //Custom methods
     $scope.callPhone = function(number) {
         console.log("Calling " + number);
         document.location.href = 'tel:' + number;
-    }
-
-    $scope.isDelegation = function() {
-        return $scope.babyConfig.extraPerson.personId === $scope.babyConfig.personWhoRetireBaby.personId;
     }
 
     $scope.sendTeacherNote = function() {

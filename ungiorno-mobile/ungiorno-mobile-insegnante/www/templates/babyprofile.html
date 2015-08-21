@@ -17,9 +17,9 @@
                             <h3 class="babyProfile detailItem" ng-if="checkBusServiceActive()">{{'bus_stop_go' | translate}} {{babyBusStopGoName}}</h3>
                             <h3 class="babyProfile detailItem" ng-if="checkBusServiceActive()">{{'bus_stop_back' | translate}} {{babyBusStopBackName}}</h3>
                             <h3 class="babyProfile detailItem" >{{'exit_at' | translate}}{{babyExitHour | date:'hh:mm'}}</h3>
-                            <h3 class="babyProfile detailItem" >{{'person_who_retire' | translate}}{{babyConfig.personWhoRetireBaby.fullName}}</h3>
-                            <h4 class="babyProfile detailItem" style="color: #ff0000;" ng-if="isDelegation()">{{'extra_delegation' | translate}}</h3>
-                            <a href="http://www.google.it" class="babyProfile detailItem" ng-if="isDelegation()">{{'view_delegation' | translate}}</a>
+                            <h3 class="babyProfile detailItem" >{{'person_who_retire' | translate}}{{personWhoRetire.fullName}} ({{personWhoRetire.relation}})</h3>
+                            <h4 class="babyProfile detailItem" style="color: #ff0000;" ng-if="personWhoRetire.isDelegate">{{'extra_delegation' | translate}}</h3>
+                            <a href="http://www.google.it" class="babyProfile detailItem" ng-if="personWhoRetire.isDelegate">{{'view_delegation' | translate}}</a>
                         </div>
                     </div>
                     <h2 class="babyProfile detailsTitle" id="parentsNotes" style="margin-top: 24px;">{{'parents_notes' | translate}}</h2>

@@ -287,6 +287,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
         select_argument: "Seleziona un argomento",
         type_description: "Immetti una descrizione",
         note_sent_success: "Nota registrata con successo",
+        note_sent_fail: "Nota non mandata correttamente",
         catch_the_bus: "salgono",
         baby_on_the: "bambini sul",
         buses: 'Bus',

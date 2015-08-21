@@ -25,11 +25,11 @@
                     <h2 class="babyProfile detailsTitle" id="parentsNotes" style="margin-top: 24px;">{{'parents_notes' | translate}}</h2>
                     <h3 class="babyProfile detailItem"  ng-repeat="note in notes.parentNotes">{{note.note}}</h2>
                     <h2 class="babyProfile detailsTitle" id="teachersNotes" style="margin-top: 24px;">{{'teachers_notes' | translate}}</h2>
-                    <select id="note_type">
+                    <select id="note_type" ng-model="newNote.argument">
                         <option value="" disabled selected>{{'arguments' | translate}}</option>
-                        <option value="{{arg.typeid}}" ng-repeat="arg in schoolProfile.teacherNoteTypes">{{arg.type}}</option>
+                        <option value="{{arg.typeId}" ng-repeat="arg in schoolProfile.teacherNoteTypes">{{arg.type}}</option>
                     </select>
-                    <input id="note_description" type="text" placeholder="{{'description' | translate}}">
+                    <input id="note_description" type="text" placeholder="{{'description' | translate}}" ng-model="newNote.description">
                     <button ng-click="sendTeacherNote()">{{'send' | translate}}</button>
                 </div>
                 <div class="col-25 col-offset-10 babyProfile card">

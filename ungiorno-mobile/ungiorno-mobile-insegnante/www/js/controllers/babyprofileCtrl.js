@@ -2,7 +2,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
 
 .controller('babyprofileCtrl', function ($scope, $location, dataServerService, profileService, babyConfigurationService, $filter, Toast, $ionicLoading, $timeout) {
 
-
+    $scope.newNote = {
+        argument: "",
+        description: ""
+    }
     $scope.showLoader = function() {
         $ionicLoading.show({
             content: 'Loading',
@@ -115,16 +118,23 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     }
 
     $scope.sendTeacherNote = function() {
-        var noteTypeID = document.getElementById("note_type").value;
-        var noteDescription = document.getElementById("note_description").value;
 
-        if (noteTypeID === "") {
+        if ($scope.newNote.argument === "") {
             Toast.show($filter('translate')('select_argument'));
-        } else if (noteDescription === "") {
+        } else if ($scope.newNote.description === "") {
             Toast.show($filter('translate')('type_description'));
         } else {    //all data are correct
-            console.log("Note typeID: " + noteTypeID + " description: " + noteDescription);
-            Toast.show($filter('translate')('note_sent_success'));
+            var note = {
+
+            }
+
+            dataServerService.addNewNoteForParents($scope.schoolProfile.schoolId, $scope.babyProfile.kidId, note).then(function (data) {
+                Toast.show($filter('translate')('note_sent_success'));
+                $scope.newNote.argument = "";
+                $scope.newNote.description = "";
+            }, function (data) {
+                Toast.show($filter('translate')('note_sent_fail'));
+            });
             //TODO: http post with data
         }
 

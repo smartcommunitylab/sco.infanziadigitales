@@ -25,20 +25,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
     }
 
 
-    profileService.getBabyProfileById = function (babyId) {
+    profileService.getBabyProfileById = function (schoolId, babyId) {
         var deferred = $q.defer();
-        /*tmp*/
-        dataServerService.getBabyProfileById(babyId).then(function (data) {
+        dataServerService.getBabyProfileById(schoolId, babyId).then(function (data) {
             deferred.resolve(data);
         });
         return deferred.promise;
-        /*tmp*/
     }
 
-    profileService.getTeacherProfileById = function (teacherId) {
+    profileService.getTeacherProfileById = function (schoolId, teacherId) {
         var deferred = $q.defer();
-        /*tmp*/
-        dataServerService.getTeachers().then(function (data) {
+        dataServerService.getTeachers(schoolId).then(function (data) {
             var found = false;
             var i = 0;
             while (!found && i < data.data.length) {
@@ -50,7 +47,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
             }
         });
         return deferred.promise;
-        /*tmp*/
     }
 
     profileService.setSchoolProfile = function (input) {

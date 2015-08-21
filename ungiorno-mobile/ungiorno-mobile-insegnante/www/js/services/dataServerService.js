@@ -111,7 +111,51 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
         /*temp*/
     }
 
+    dataServerService.getNotesForTeachers = function (schoolId, sectionId) {
+        var deferred = $q.defer();
 
+        $http({
+            method: 'GET',
+            url: Config.URL() + '/' + Config.app() + '/school/' + Config.appId() + '/' + schoolId + '/' + sectionId + '/notes',
+            params: {
+                date: new Date().getTime()
+            },
+            headers: {
+                'Accept': 'application/json'
+            }
+        }).
+        success(function (data, status, headers, config) {
+            deferred.resolve(data.data);
+        }).
+        error(function (data, status, headers, config) {
+            console.log(data + status + headers + config);
+            deferred.reject(data.errorCode + ' ' + data.errorMessage);
+        });
+        return deferred.promise;
+    }
+
+    dataServerService.getNotesForParents = function (schoolId, kidId) {
+        var deferred = $q.defer();
+
+        $http({
+            method: 'GET',
+            url: Config.URL() + '/' + Config.app() + '/student/' + Config.appId() + '/' + schoolId + '/' + kidId + '/notes',
+            params: {
+                date: new Date().getTime()
+            },
+            headers: {
+                'Accept': 'application/json'
+            }
+        }).
+        success(function (data, status, headers, config) {
+            deferred.resolve(data.data);
+        }).
+        error(function (data, status, headers, config) {
+            console.log(data + status + headers + config);
+            deferred.reject(data.errorCode + ' ' + data.errorMessage);
+        });
+        return deferred.promise;
+    }
 
 
     dataServerService.addCommunication = function (schoolId, communication) {
@@ -145,8 +189,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
             }
         }).
         success(function (data, status, headers, config) {
-            calendarioCommunications = data.data;
-            deferred.resolve(calendarioCommunications);
+            deferred.resolve(data.data);
         }).
         error(function (data, status, headers, config) {
             console.log(data + status + headers + config);
@@ -275,7 +318,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
     };
 
     dataServerService.getTeachersCalendar = function (schoolId, from, to) {
-        //GET /school/{appId}/{schoolId}/teachercalendar?from=<timestamp>&to=timestamp
         var deferred = $q.defer();
 
         $http({
@@ -290,8 +332,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
            }
         }).
         success(function (data, status, headers, config) {
-            console.log("Troiaaa: " + data);
-            deferred.resolve(data.data);
+            deferred.resolve(data.data[0]);
         }).
         error(function (data, status, headers, config) {
             console.log(data + status + headers + config);

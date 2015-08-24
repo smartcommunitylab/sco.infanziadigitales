@@ -3,37 +3,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.c
 .factory('Config', function ($q, $http, $window, $filter, $rootScope) {
 
     var DEVELOPMENT = true;
-
     var URL = 'https://' + (DEVELOPMENT ? 'dev' : 'tn') + '.smartcommunitylab.it';
-    var app = 'percorsi'
-    var userdata = 'userdata/paths';
+    var app = 'ungiorno'
+    var appId = 'testAppId'
 
     var APP_BUILD = '';
 
-    /** CUSTOM PROPERTIES FOR THE APP */
-    //    var appId = 'ComuneRovereto';
-    //    var APP_VERSION = '1.0.0RC1';
-    //    var cityName = {
-    //        'it': 'Rovereto Percorsi',
-    //        'en': 'Rovereto Paths',
-    //        'de': 'Rovereto Paths'
-    //    };
-    //    var credits = 'credits.html';
-    var appId = 'Ingarda';
     var APP_VERSION = '1.0.0RC1';
-    var cityName = {
-        'it': 'Tesori Nascosti',
-        'en': 'Hidden Treasures',
-        'de': 'Geheime Shätze'
-    };
-    var credits = 'credits_riva.html';
 
-    var SCHEMA_VERSION = 3;
-    var contentTypes = {
-        'path': 'it.smartcommunitylab.percorsi.model.Path',
-        'categories': 'it.smartcommunitylab.percorsi.model.Categories',
-    };
-    var dbName = appId;
+
     return {
 
         getVersion: function () {
@@ -73,9 +51,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.c
         },
         app: function () {
             return app;
-        },
-        userdata: function () {
-            return userdata;
         },
         service: function () {
             return service;
@@ -131,14 +106,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.c
         textTypesList: function () {
             return textTypes;
         },
-
-        cityName: cityName,
-        credits: credits,
         imagePath: function () {
             return imagePath;
-        },
-        dbName: function () {
-            return dbName;
         },
         doProfiling: function () {
             return false;
@@ -147,42 +116,41 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.c
 })
 
 .factory('Profiling', function (Config) {
-    var reallyDoProfiling = Config.doProfiling();
-    var startTimes = {};
-    return {
-        start2: function (label) {
-            startTimes[label] = (new Date).getTime();
-        },
-        start: function (label) {
-            if (reallyDoProfiling) this.start2(label);
-        },
+        var reallyDoProfiling = Config.doProfiling();
+        var startTimes = {};
+        return {
+            start2: function (label) {
+                startTimes[label] = (new Date).getTime();
+            },
+            start: function (label) {
+                if (reallyDoProfiling) this.start2(label);
+            },
 
-        _do2: function (label, details, info) {
-            var startTime = startTimes[label] || -1;
-            if (startTime != -1) {
-                var nowTime = (new Date).getTime();
-                console.log('PROFILING: ' + label + (details ? '(' + details + ')' : '') + '=' + (nowTime - startTime));
-                //if (details) startTimes[label]=nowTime;
-                if (!!info) console.log(info);
+            _do2: function (label, details, info) {
+                var startTime = startTimes[label] || -1;
+                if (startTime != -1) {
+                    var nowTime = (new Date).getTime();
+                    console.log('PROFILING: ' + label + (details ? '(' + details + ')' : '') + '=' + (nowTime - startTime));
+                    //if (details) startTimes[label]=nowTime;
+                    if (!!info) console.log(info);
+                }
+            },
+            _do: function (label, details, info) {
+                if (reallyDoProfiling) this._do2(label, details);
             }
-        },
-        _do: function (label, details, info) {
-            if (reallyDoProfiling) this._do2(label, details);
-        }
-    };
-})
-.factory('addingDelegateService',function(){
-    var delegate=null;
-    var addingDelegateService={}
-     addingDelegateService.insert= function(InputObj) {
-        delegate=InputObj;
-    },
-    addingDelegateService.estract=function()
-        {
-            return delegate;
+        };
+    })
+    .factory('addingDelegateService', function () {
+            var delegate = null;
+            var addingDelegateService = {}
+            addingDelegateService.insert = function (InputObj) {
+                    delegate = InputObj;
+                },
+                addingDelegateService.estract = function () {
+                    return delegate;
+                }
+
+            return addingDelegateService;
         }
 
-         return addingDelegateService;
-     }
-
-)
+    )

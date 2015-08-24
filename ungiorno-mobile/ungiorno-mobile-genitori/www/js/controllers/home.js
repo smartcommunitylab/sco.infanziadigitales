@@ -121,75 +121,79 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         $ionicModal.fromTemplateUrl('templates/contacts.html', {
             scope: $scope,
             animation: 'slide-in-up'
-        }).then(function(modal) {
-             $scope.modal = modal;
-             $scope.modal.show();
+        }).then(function (modal) {
+            $scope.modal = modal;
+            $scope.modal.show();
         })
     }
 
-    $scope.call = function(number) {
-        window.plugins.CallNumber.callNumber(function(){
+    $scope.call = function (number) {
+        window.plugins.CallNumber.callNumber(function () {
             alert("call swap");
-        }, function(err){
+        }, function (err) {
             alert(err);
         }, number);
     }
     $scope.execute = function (element) {
-            if (element.class != "button-stable") {
-                if (typeof element.click == "string") {
-                    $state.go(element.click);
-                } else {
-                    element.click();
-                }
+        if (element.class != "button-stable") {
+            if (typeof element.click == "string") {
+                $state.go(element.click);
             } else {
-                Toast.show($filter('translate')('home_disabledbutton'), 'short', 'bottom');
+                element.click();
             }
+        } else {
+            Toast.show($filter('translate')('home_disabledbutton'), 'short', 'bottom');
         }
-        //corretto tutte e tre annidate? cosa succede se una salta? ma come faccio a settare il profilo temporaneo senza avere conf, prof????
-    $scope.getConfiguration = function () {
-        dataServerService.getBabyConfiguration().then(function (data) {
-                configurationService.setBabyConfiguration(data[0]);
-                $scope.kidConfiguration = data[0];
-                dataServerService.getBabyProfile().then(function (data) {
-                        profileService.setBabyProfile(data[0]);
-                        $scope.kidProfile = data[0];
-                        dataServerService.getSchoolProfile().then(function (data) {
-                                profileService.setSchoolProfile(data.data[0]);
-                                $scope.school = data.data[0];
-                                if ($scope.kidProfile.services.anticipo.enabled && $scope.kidConfiguration.services.anticipo.active) {
-                                    $scope.fromTime = $scope.school.anticipoTiming.fromTime;
-                                } else {
-                                    $scope.fromTime = $scope.school.regularTiming.fromTime;
-                                }
-                                if ($scope.kidProfile.services.posticipo.enabled && $scope.kidConfiguration.services.posticipo.active) {
-                                    $scope.toTime = $scope.school.posticipoTiming.toTime;
-                                } else {
-                                    $scope.toTime = $scope.school.regularTiming.fromTime;
+    }
 
-                                }
-                                buildHome();
-                            },
-                            function (error) {
-                                console.log("ERROR -> " + error);
-                            });
-                    },
-                    function (error) {
-                        console.log("ERROR -> " + error);
-                    });
-                dataServerService.getNotes().then(function (data) {
-                    $scope.notes = data.data[0];
+
+    //corretto tutte e tre annidate? cosa succede se una salta? ma come faccio a settare il profilo temporaneo senza avere conf, prof????
+    $scope.getConfiguration = function () {
+        //parto da getBabyProfiles()(appid incluso nel server e qui ottengo schoolId e kidId
+        dataServerService.getBabyProfiles().then(function (data) {
+            //in data ho tutti i profili dei kids: memorizzo in locale e ottengo le configurazioni
+            //tmp default $scope.kidConfiguration = data[0]; poi dovro' gestire un refresh delle informazioni quando switcho da profilo ad un altro
+            $scope.kidProfile = data[0];
+            profileService.setBabyProfile(data[0]);
+            dataServerService.getBabyConfigurationById($scope.kidProfile.schoolId, $scope.kidProfile.kidId).then(function (data) {
+                var data = data;
+                $scope.kidConfiguration = data;
+                configurationService.setBabyConfiguration(data);
+                //getSchoolProfile(appId, schoolId) puo' essere diversa in base al bambino
+                //ottengo
+                //ottengo la scuola in base alla schoolId del bambino
+                dataServerService.getSchoolProfile($scope.kidProfile.schoolId, $scope.kidProfile.kidId).then(function (data) {
+                    var data = data;
+                    profileService.setSchoolProfile(data);
+                    $scope.school = data;
+                    if ($scope.kidProfile.services.anticipo.enabled && $scope.kidConfiguration.services.anticipo.active) {
+                        $scope.fromTime = $scope.school.anticipoTiming.fromTime;
+                    } else {
+                        $scope.fromTime = $scope.school.regularTiming.fromTime;
+                    }
+                    if ($scope.kidProfile.services.posticipo.enabled && $scope.kidConfiguration.services.posticipo.active) {
+                        $scope.toTime = $scope.school.posticipoTiming.toTime;
+                    } else {
+                        $scope.toTime = $scope.school.regularTiming.fromTime;
+
+                    }
+                    buildHome();
+                });
+                //recupero le note
+                dataServerService.getNotes($scope.kidProfile.schoolId, $scope.kidProfile.kidId, new Date().getTime()).then(function (data) {
+                    $scope.notes = data[0];
                 }, function (error) {
                     console.log("ERROR -> " + error);
                 });
-            },
-            function (error) {
-                console.log("ERROR -> " + error);
             });
 
-
+        });
 
 
     }
+
+
+
     $scope.getConfiguration();
 
 });

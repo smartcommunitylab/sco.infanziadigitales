@@ -14,6 +14,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
         dataServerService.getCommunications(schoolId).then(function (data) {
             communications = data;
             deferred.resolve(data);
+        }, function (data) {
+            deferred.reject(data.errorCode + ' ' + data.errorMessage);
         });
         return deferred.promise;
 
@@ -26,6 +28,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
         dataServerService.addCommunication(schoolId, communication).then(function (data) {
             communications = data;
             deferred.resolve(data);
+        }, function (data) {
+            deferred.reject(data.errorCode + ' ' + data.errorMessage);
         });
         return deferred.promise;
 

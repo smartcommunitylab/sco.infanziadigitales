@@ -303,8 +303,8 @@ public class RepositoryManager {
 	 * @return
 	 */
 	public List<TeacherCalendar> getTeacherCalendar(String appId, String schoolId, long from, long to) {
-		// TODO Auto-generated method stub
-		return null;
+		// TODO 
+		return DumpDataHelper.dummyTecherCalendar(appId, schoolId);
 	}
 
 

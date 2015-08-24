@@ -21,25 +21,23 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
         babyNotes = newBabyNotes;
     }
 
-     configurationService.getBabyNotesById = function (babyId) {
+     configurationService.getBabyNotesById = function (schoolId, babyId) {
         var deferred = $q.defer();
         /*tmp*/
-        dataServerService.getNotes().then(function (data) {
-            deferred.resolve(data[0]);
+        dataServerService.getNotesForParents(schoolId, babyId).then(function (data) {
+            deferred.resolve(data);
         });
         return deferred.promise;
         /*tmp*/
     }
 
 
-    configurationService.getBabyConfigurationById = function (babyId) {
+    configurationService.getBabyConfigurationById = function (schoolId, babyId) {
         var deferred = $q.defer();
-        /*tmp*/
-        dataServerService.getBabyConfiguration().then(function (data) {
-            deferred.resolve(data[0]);
+        dataServerService.getBabyConfiguration(schoolId, babyId).then(function (data) {
+            deferred.resolve(data);
         });
         return deferred.promise;
-        /*tmp*/
     }
     return configurationService;
 })

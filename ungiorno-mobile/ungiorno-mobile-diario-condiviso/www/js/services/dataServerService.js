@@ -31,15 +31,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
         var deferred = $q.defer();
 
         /*temp*/
-        if (babyProfile == null) {
-            $http.get('data/bambino-profilo.json').success(function (data) {
-                babyProfile = data.data[0];
-                deferred.resolve(babyProfile);
-            }).error(function (data, status, headers, config) {
-                console.log(data + status + headers + config);
-                //deferred.reject(err);
-            })
-        } else deferred.resolve(babyProfile);
+        $http.get('data/bambino-profilo.json').success(function (data) {
+            babyProfile = data.data[0];
+            deferred.resolve(babyProfile);
+        }).error(function (data, status, headers, config) {
+            console.log(data + status + headers + config);
+            //deferred.reject(err);
+        })
         return deferred.promise;
         /*temp*/
     }

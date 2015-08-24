@@ -51,29 +51,24 @@
             <i class="ion-asterisk alignRight inline vertical-middle" ng-if="!isViewMode()"></i>
         </div>
         <label class="item item-input item-select selectrole">
-            <div class="input-label">{{ 'role' | translate}}</div>
-            <select ng-model="data.relation">
-                <option>{{ 'mom' | translate}}</option>
-                <option>{{ 'dad' | translate}}</option>
-                <option>{{ 'brother' | translate}}</option>
-                <option>{{ 'sister' | translate}}</option>
+            <div class="input-label">{{ 'gender' | translate}}</div>
+            <select ng-model="babyCopy.gender">
+                <option>{{ 'male' | translate}}</option>
+                <option>{{ 'female' | translate}}</option>
             </select>
         </label>
-
-
-
         <img ng-src="{{babyCopy.image}}" class="sizeImage">
         <div class="headerdata">{{'data_family' | translate}}</div>
         <div ng-repeat="data in babyCopy.persons track by $index" ng-if="isFamily(data.relation)">
             <div class="topdata">{{'name' | translate}} {{getPreposition(data.gender, data.relation)}} {{data.relation}}</div>
             <div class="item item-input-inset input-children" ng-if="isViewMode()">
             <label class="item item-input children-edit">
-                <span class="textdata">{{data.fullName}}</span>
+                <span class="textdata">{{data.firstName}}</span>
             </label>
             </div>
             <div class="item item-input-inset input-children" ng-if="!isViewMode()">
             <label class="item item-input children-edit">
-                <input type="text"  ng-model="data.fullName">
+                <input type="text"  ng-model="data.firstName">
             </label>
             <i class="ion-asterisk alignRight inline vertical-middle" ng-if="!isViewMode()"></i>
             </div>

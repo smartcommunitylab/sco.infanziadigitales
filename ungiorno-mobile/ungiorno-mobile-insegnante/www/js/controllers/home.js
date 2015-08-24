@@ -21,6 +21,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     $scope.selectedNote = false;
 
 
+
     $scope.viewClose = function () {
         return $scope.noteExpanded || $scope.communicationExpanded;
     }
@@ -70,6 +71,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
                 $scope.section = $scope.sections[0];
                 sectionService.setSection(0);
                 $scope.getChildrenByCurrentSection();
+                $scope.loadTeacherNotes();
+                $scope.loadTeParentNotes();
             })
             dataServerService.getTeachers($scope.schoolProfile.schoolId).then(function (data) {
                 teachersService.setTeachers(data);
@@ -207,6 +210,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         if (sectionId != 'all') {
             $scope.section = $scope.sections[sectionId];
             $scope.getChildrenByCurrentSection();
+            $scope.loadNotes();
         } else {
             //section == allchildren
             sectionService.setSection(-1);
@@ -220,7 +224,23 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
             }
             $scope.getChildrenByCurrentSection();
         }
+
     }
+
+    $scope.loadTeacherNotes = function () {
+        dataServerService.getNotesForTeachers($scope.schoolProfile.schoolId, $scope.section.sectionId).then(function (data) {
+            // temp
+            $scope.teacherNotes = data[0].schoolNotes;
+        });
+    }
+
+    $scope.loadTeParentNotes = function () {
+        dataServerService.getNotesForTeachers($scope.schoolProfile.schoolId, $scope.section.kidId).then(function (data) {
+            // temp
+            $scope.parentNotes = data[0].parentNotes;
+        });
+    }
+
     $scope.openDetail = function (childId) {
         profileService.setCurrentBabyID(childId);
         window.location.assign('#/app/babyprofile');

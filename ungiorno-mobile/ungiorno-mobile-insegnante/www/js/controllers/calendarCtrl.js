@@ -5,7 +5,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     var timePadding = 0; //used to move through weeks, months
     var CALENDAR_MODE_WEEKLY = "weekly";
     var CALENDAR_MODE_MONTHLY = "monthly";
-    var currentCalendarMode = CALENDAR_MODE_WEEKLY;
+    var currentCalendarMode = CALENDAR_MODE_MONTHLY;
     var changeCalendarModeModal;
 
     $scope.showLoader = function() {
@@ -18,6 +18,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         });
         $scope.dataLoaded = false;
     };
+
+    $scope.schoolProfile = profileService.getSchoolProfile();
 
     var getMonday = function (d) {
         d = new Date(d);
@@ -43,23 +45,24 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         var remainingCalls = 0;
         //counts the number of profile calls to do, necessary to notify when all the teachers array is popolated.
         $scope.events.forEach(function(event) {
-            event.teachers.forEach(function (teacher) {
-                if ($scope.teachers[teacher.teacherId] == undefined) {//not already present in the teachers array, get it
-                    $scope.teachers[teacher.teacherId] = true;
+            event.teachers.forEach(function (teacherId) {
+                if ($scope.teachers[teacherId] == undefined) {//not already present in the teachers array, get it
+                    $scope.teachers[teacherId] = true;
                     remainingCalls++;
                 }
             });
         });
         $scope.teachers = [];
         $scope.events.forEach(function(event) {
-            event.teachers.forEach(function (teacher) {
-                if ($scope.teachers[teacher.teacherId] == undefined) {//not already present in the teachers array, get it
-                    profileService.getTeacherProfileById(teacher.teacherId).then(function (data) {
-                        $scope.teachers[teacher.teacherId] = data;
+            event.teachers.forEach(function (teacherId) {
+                if ($scope.teachers[teacherId] == undefined) {//not already present in the teachers array, get it
+                    profileService.getTeacherProfileById($scope.schoolProfile.schoolId, teacherId).then(function (data) {
+                        $scope.teachers[teacherId] = data;
                         remainingCalls--;
                         if (remainingCalls === 0) {
                             deferred.resolve();
                         }
+                        //TODO: resolve also when teacher getting fails!
                     });
                 }
             });
@@ -107,14 +110,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
             var eventToDate = new Date(event.to * 1000);
             if (isEventInDayHour(realDateWithHour, realDateWithHourEnd, eventFromDate, eventToDate, hour !== undefined))
             {
-
-
                 if (event.teachers.length === 0) { //event for all
                     eventHere.eventForAll = true;
                     eventHere.eventName = event.what;
                 } else {
-                    event.teachers.forEach(function (teacher) {
-                        eventHere.teachers.push($scope.teachers[teacher.teacherId]);
+                    event.teachers.forEach(function (teacherId) {
+                        eventHere.teachers.push($scope.teachers[teacherId]);
                     });
                 }
             }
@@ -204,23 +205,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
 
             $scope.currentMonth = moment().locale('it').startOf('month').add(timePadding, 'month')._d;
 
-            currentCalendar.from = Math.floor($scope.month.start.getTime() / 1000);
-            currentCalendar.to = Math.floor($scope.month.end.getTime() / 1000);
+            currentCalendar.from = Math.floor($scope.month.start / 1000);
+            currentCalendar.to = Math.floor($scope.month.end / 1000);
         }
 
-        dataServerService.getTeachersCalendar(profileService.getSchoolProfile().schoolId, currentCalendar.from, currentCalendar.to).then(function (data) {
-            $scope.events = data[0].events;
-            $scope.timeInterval = data[0].timeDivisionInterval;
-            var schoolProfile = profileService.getSchoolProfile();
+        dataServerService.getTeachersCalendar($scope.schoolProfile.schoolId, currentCalendar.from, currentCalendar.to).then(function (data) {
+            $scope.events = data.events;
+            $scope.timeInterval = data.timeDivisionInterval;
 
             if (currentCalendarMode === CALENDAR_MODE_WEEKLY) {
-                //tmp, useful to refresh the page instead of coming back to the home page and then go to calendar page
-                //beacuse schoolProfile is null
-                if (schoolProfile === null) {
-                    createHoursDivisionsArray("7:00:00", "18:00:00");
-                } else {
-                    createHoursDivisionsArray(schoolProfile.anticipoTiming.fromTime, schoolProfile.posticipoTiming.toTime);
-                }
+
+                createHoursDivisionsArray($scope.schoolProfile.anticipoTiming.fromTime, $scope.schoolProfile.posticipoTiming.toTime);
             }
             insertAllTeachers().then(function (data) {
                 createCalendarMatrix();
@@ -258,6 +253,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
 	}
 
 	$scope.changeView = function(view) {
+        $scope.dataLoaded = false;
 		currentCalendarMode = view;
         timePadding = 0;
 		$scope.initCalendarForCurrentSettings();

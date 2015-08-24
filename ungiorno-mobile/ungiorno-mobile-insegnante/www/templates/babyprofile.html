@@ -17,19 +17,19 @@
                             <h3 class="babyProfile detailItem" ng-if="checkBusServiceActive()">{{'bus_stop_go' | translate}} {{babyBusStopGoName}}</h3>
                             <h3 class="babyProfile detailItem" ng-if="checkBusServiceActive()">{{'bus_stop_back' | translate}} {{babyBusStopBackName}}</h3>
                             <h3 class="babyProfile detailItem" >{{'exit_at' | translate}}{{babyExitHour | date:'hh:mm'}}</h3>
-                            <h3 class="babyProfile detailItem" >{{'person_who_retire' | translate}}{{babyConfig.personWhoRetireBaby.fullName}}</h3>
-                            <h4 class="babyProfile detailItem" style="color: #ff0000;" ng-if="isDelegation()">{{'extra_delegation' | translate}}</h3>
-                            <a href="http://www.google.it" class="babyProfile detailItem" ng-if="isDelegation()">{{'view_delegation' | translate}}</a>
+                            <h3 class="babyProfile detailItem" >{{'person_who_retire' | translate}}{{personWhoRetire.fullName}} ({{personWhoRetire.relation}})</h3>
+                            <h4 class="babyProfile detailItem" style="color: #ff0000;" ng-if="personWhoRetire.isDelegate">{{'extra_delegation' | translate}}</h3>
+                            <a href="http://www.google.it" class="babyProfile detailItem" ng-if="personWhoRetire.isDelegate">{{'view_delegation' | translate}}</a>
                         </div>
                     </div>
                     <h2 class="babyProfile detailsTitle" id="parentsNotes" style="margin-top: 24px;">{{'parents_notes' | translate}}</h2>
                     <h3 class="babyProfile detailItem"  ng-repeat="note in notes.parentNotes">{{note.note}}</h2>
                     <h2 class="babyProfile detailsTitle" id="teachersNotes" style="margin-top: 24px;">{{'teachers_notes' | translate}}</h2>
-                    <select id="note_type">
+                    <select id="note_type" ng-model="newNote.argument">
                         <option value="" disabled selected>{{'arguments' | translate}}</option>
-                        <option value="{{arg.typeid}}" ng-repeat="arg in schoolProfile.teacherNoteTypes">{{arg.type}}</option>
+                        <option value="{{arg.typeId}" ng-repeat="arg in schoolProfile.teacherNoteTypes">{{arg.type}}</option>
                     </select>
-                    <input id="note_description" type="text" placeholder="{{'description' | translate}}">
+                    <input id="note_description" type="text" placeholder="{{'description' | translate}}" ng-model="newNote.description">
                     <button ng-click="sendTeacherNote()">{{'send' | translate}}</button>
                 </div>
                 <div class="col-25 col-offset-10 babyProfile card">

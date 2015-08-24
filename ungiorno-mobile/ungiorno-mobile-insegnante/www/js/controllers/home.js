@@ -65,7 +65,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         dataServerService.getSchoolProfileForTeacher().then(function (schoolProfile) {
             $scope.schoolProfile = schoolProfile;
             profileService.setSchoolProfile($scope.schoolProfile);
-            dataServerService.getSections().then(function (data) {
+            dataServerService.getSections($scope.schoolProfile.schoolId).then(function (data) {
                 $scope.sections = data;
                 $scope.section = $scope.sections[0];
                 sectionService.setSection(0);
@@ -172,13 +172,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
 
         $scope.numberOfChildren = $scope.section.children.length;
         for (var i = 0; i < $scope.numberOfChildren; i++) {
-            profileService.getBabyProfileById($scope.section.children[i].childrenId).then(function (profile) {
+            profileService.getBabyProfileById($scope.schoolProfile.schoolId, $scope.section.children[i].childrenId).then(function (profile) {
                 $scope.childrenProfiles.push(profile);
             });
-            babyConfigurationService.getBabyConfigurationById($scope.section.children[i].childrenId).then(function (configuration) {
+            babyConfigurationService.getBabyConfigurationById($scope.schoolProfile.schoolId, $scope.section.children[i].childrenId).then(function (configuration) {
                 $scope.childrenConfigurations.push(configuration);
             });
-            babyConfigurationService.getBabyNotesById($scope.section.children[i].childrenId).then(function (notes) {
+            babyConfigurationService.getBabyNotesById($scope.schoolProfile.schoolId, $scope.section.children[i].childrenId).then(function (notes) {
                 $scope.childrenNotes.push(notes);
             });
         };

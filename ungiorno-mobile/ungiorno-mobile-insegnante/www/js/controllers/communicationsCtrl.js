@@ -3,14 +3,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
 .controller('communicationsCtrl', function ($scope, dataServerService, $ionicPopup, communicationService, profileService, Toast, $filter) {
 
     var selectedCommunicationIndex = -1;
-    var selectedNewCommunication = false;
-    var deleteCommunication = false;
-    var deliveryCheck = false;
-    var modifyState = false;
-    var editClose = true;
-    var selectedComIndex = null;
-    var selectedComIndexCopy = null;
-    var editShowButton = true;
 
     var MODE_NORMAL_LIST = "normal";
     var MODE_EDIT = "edit";
@@ -98,9 +90,27 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     }
 
     $scope.deleteCommunication = function () {
-        //TODO: how on the server?
-        $scope.communications.splice(selectedCommunicationIndex, 1);
-        selectedCommunicationIndex = -1;
+        dataServerService.deleteCommunication(profileService.getSchoolProfile().schoolId, $scope.communications[selectedCommunicationIndex].communicationId).then(function (data) {
+            $scope.communications.splice(selectedCommunicationIndex, 1);
+            selectedCommunicationIndex = -1;
+        });
+    }
+
+    var updateCurrentCommunicationList = function (response) {
+        var found = false;
+        var i = 0;
+
+        while (i < $scope.communications.length && !found) {
+            if (response.data.communicationId === $scope.communications[i].communicationId) {
+                $scope.communications[i] = response.data;
+                found = true;
+            }
+            i++;
+        }
+        if (!found) { //new communication
+            $scope.communications.push(response.data);
+        }
+
     }
 
     $scope.submitCommunication = function () { //edit or new
@@ -122,25 +132,35 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
             });
         }
 
-        var requestSuccess = function () {
-            Toast.show($filter('translate')('communication_sent'), 'bottom', 'short');
-            //TODO: update communications list.
+        var requestSuccess = function (data) {
+            if ($scope.isMode(MODE_EDIT)) {
+                Toast.show($filter('translate')('communication_updated'), 'bottom', 'short');
+            } else {
+                Toast.show($filter('translate')('communication_sent'), 'bottom', 'short');
+            }
+            updateCurrentCommunicationList(data);
+
             currentMode = MODE_NORMAL_LIST;
         }
 
-        if ($scope.isMode(MODE_EDIT)) {
-            Toast.show("TODO! :(", 'bottom', 'short');
-            //TODO: how???
-        } else if ($scope.isMode(MODE_NEW)) {
-            communicationService.addCommunication(profileService.getSchoolProfile().schoolId, $scope.newCommunication).then(function (data) {
-                var data = data;
-                requestSuccess();
+        if ($scope.isMode(MODE_EDIT) || $scope.isMode(MODE_NEW)) {
+            if ($scope.isMode(MODE_EDIT)) {
+                var tmp = JSON.parse(JSON.stringify($scope.editedCommunication));
+            } else {
+                var tmp = JSON.parse(JSON.stringify($scope.newCommunication));
+            }
+            tmp.creationDate = new Date(tmp.creationDate).getTime();
+            tmp.dateToCheck = new Date(tmp.dateToCheck).getTime();
+            communicationService.addCommunication(profileService.getSchoolProfile().schoolId, tmp).then(function (data) {
+                requestSuccess(data);
             }, function (data) {
                 requestFail();
             });
         }
 
     }
+
+
 
     $scope.homeRedirect = function (index) {
         selectedCommunicationIndex = -1;

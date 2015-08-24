@@ -46,7 +46,7 @@
         </div>
 
 
-        <div class="communication card" ng-repeat="communication in communications track by $index" ng-click="selectCommunication($index)" ng-class="{'communication-selected': isCommunicationSelected($index), 'communication-disabled': !isCommunicationSelected($index) && !isMode('normal'), 'communication-active': isCommunicationSelected($index) && isMode('edit')}">
+        <div class="communication card" ng-repeat="communication in communications | orderBy:'+creationDate' track by $index" ng-click="selectCommunication($index)" ng-class="{'communication-selected': isCommunicationSelected($index), 'communication-disabled': !isCommunicationSelected($index) && !isMode('normal'), 'communication-active': isCommunicationSelected($index) && isMode('edit')}">
             <div >
                 <a ng-if="!(isCommunicationSelected($index) && isMode('edit'))" class="communication-text">{{communication.description}}</a>
                 <input  ng-if="isCommunicationSelected($index) && isMode('edit')" ng-model="editedCommunication.description" type="text" id="modifyDescription" value="{{editedCommunication.description}}">

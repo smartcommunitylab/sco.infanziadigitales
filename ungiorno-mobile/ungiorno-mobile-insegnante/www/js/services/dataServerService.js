@@ -197,7 +197,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
     }
 
 
-
+    //add and update an existing communication,
+    //to update make communication have an existing communicationId
     dataServerService.addCommunication = function (schoolId, communication) {
         var deferred = $q.defer();
         $http({
@@ -207,7 +208,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            data: communication,
+            data: communication
         }).
         success(function (data, status, headers, config) {
             deferred.resolve(data);
@@ -224,6 +225,25 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
         $http({
             method: 'GET',
             url: Config.URL() + '/' + Config.app() + '/school/' + Config.appId() + '/' + schoolId + '/communications',
+            headers: {
+                'Accept': 'application/json'
+            }
+        }).
+        success(function (data, status, headers, config) {
+            deferred.resolve(data.data);
+        }).
+        error(function (data, status, headers, config) {
+            console.log(data + status + headers + config);
+            deferred.reject(data.errorCode + ' ' + data.errorMessage);
+        });
+        return deferred.promise;
+    }
+
+    dataServerService.deleteCommunication = function (schoolId, communicationId) {
+        var deferred = $q.defer();
+        $http({
+            method: 'DELETE',
+            url: Config.URL() + '/' + Config.app() + '/school/' + Config.appId() + '/' + schoolId + '/communications/' + communicationId,
             headers: {
                 'Accept': 'application/json'
             }

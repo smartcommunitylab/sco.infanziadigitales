@@ -65,15 +65,25 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
         });
         return deferred.promise;
     }
-    dataServerService.getSchoolProfile = function () {
+    dataServerService.getSchoolProfile = function (schoolId) {
         var deferred = $q.defer();
-
-        $http.get('data/scuola-profilo.json').success(function (data) {
-            deferred.resolve(data);
-        }).error(function (data, status, headers, config) {
+        $http({
+            method: 'GET',
+            url: Config.URL() + '/' + Config.app() + '/school/' + Config.appId() + '/' + schoolId + '/profile',
+            params: {
+                date: new Date().getTime()
+            },
+            headers: {
+                'Accept': 'application/json'
+            }
+        }).
+        success(function (data, status, headers, config) {
+            deferred.resolve(data.data);
+        }).
+        error(function (data, status, headers, config) {
             console.log(data + status + headers + config);
-            //deferred.reject(err);
-        })
+            deferred.reject(data.errorCode + ' ' + data.errorMessage);
+        });
         return deferred.promise;
     }
 
@@ -96,19 +106,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
             deferred.reject(data.errorCode + ' ' + data.errorMessage);
         });
         return deferred.promise;
-    }
-
-    dataServerService.getNotes = function () {
-        var deferred = $q.defer();
-
-        $http.get('data/calendario-note.json').success(function (data) {
-            deferred.resolve(data.data);
-        }).error(function (data, status, headers, config) {
-            console.log(data + status + headers + config);
-            //deferred.reject(err);
-        })
-        return deferred.promise;
-        /*temp*/
     }
 
     dataServerService.getNotesForTeachers = function (schoolId, sectionId) {
@@ -241,54 +238,92 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
         return deferred.promise;
     }
 
-
-    dataServerService.getAssenza = function (babyID) {
+    dataServerService.sendAssenza = function (schoolId, kidId, assenza) {
         var deferred = $q.defer();
-
-        //TODO: get assenza for babyID
-        $http.get('data/calendario-assenza.json').success(function (data) {
+        $http({
+            method: 'POST',
+            url: Config.URL() + '/' + Config.app() + '/student/' + Config.appId() + '/' + schoolId + '/' + kidId + '/absence',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            data: assenza,
+        }).
+        success(function (data, status, headers, config) {
             deferred.resolve(data);
-        }).error(function (data, status, headers, config) {
+        }).
+        error(function (data, status, headers, config) {
             console.log(data + status + headers + config);
-            //deferred.reject(err);
-        })
+            deferred.reject(data.errorCode + ' ' + data.errorMessage);
+        });
         return deferred.promise;
-        /*temp*/
     }
 
-
-    dataServerService.sendAssenza = function (assenza) {
+    dataServerService.sendRitiro = function (schoolId, kidId, ritiro) {
         var deferred = $q.defer();
-
-        /*temp*/
-        deferred.resolve(true);
+        $http({
+            method: 'POST',
+            url: Config.URL() + '/' + Config.app() + '/student/' + Config.appId() + '/' + schoolId + '/' + kidId + '/return',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            data: ritiro,
+        }).
+        success(function (data, status, headers, config) {
+            deferred.resolve(data);
+        }).
+        error(function (data, status, headers, config) {
+            console.log(data + status + headers + config);
+            deferred.reject(data.errorCode + ' ' + data.errorMessage);
+        });
         return deferred.promise;
-        /*temp*/
+
     }
-    dataServerService.sendRitiro = function (ritiro) {
+
+    dataServerService.sendBabySetting = function (schoolId, kidId, babysetting) {
         var deferred = $q.defer();
-
-
-        /*temp*/
-        deferred.resolve(true);
+        $http({
+            method: 'POST',
+            url: Config.URL() + '/' + Config.app() + '/student/' + Config.appId() + '/' + schoolId + '/' + kidId + '/config',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            data: babysetting,
+        }).
+        success(function (data, status, headers, config) {
+            deferred.resolve(data);
+        }).
+        error(function (data, status, headers, config) {
+            console.log(data + status + headers + config);
+            deferred.reject(data.errorCode + ' ' + data.errorMessage);
+        });
         return deferred.promise;
-        /*temp*/
 
     }
-    dataServerService.sendBabySetting = function (babysetting) {
+
+    dataServerService.sendFermata = function (schoolId, kidId, fermata) {
         var deferred = $q.defer();
-        /*temp*/
-        deferred.resolve(true);
+        $http({
+            method: 'POST',
+            url: Config.URL() + '/' + Config.app() + '/student/' + Config.appId() + '/' + schoolId + '/' + kidId + '/stop',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            data: fermata,
+        }).
+        success(function (data, status, headers, config) {
+            deferred.resolve(data);
+        }).
+        error(function (data, status, headers, config) {
+            console.log(data + status + headers + config);
+            deferred.reject(data.errorCode + ' ' + data.errorMessage);
+        });
         return deferred.promise;
-        /*temp*/
-
     }
-    dataServerService.sendFermata = function (fermata) {
-        var deferred = $q.defer();
 
-        deferred.resolve(true);
-        return deferred.promise;
-    }
     dataServerService.getCalendars = function (from, to, schoolId, kidId) {
         var deferred = $q.defer();
 
@@ -311,30 +346,51 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
             deferred.reject(data.errorCode + ' ' + data.errorMessage);
         });
         return deferred.promise;
-        /*temp*/
     }
 
-    dataServerService.getMeals = function () {
+    dataServerService.getMeals = function (schoolId, from, to) {
         var deferred = $q.defer();
 
-        /*temp*/
-        $http.get('data/calendario-mensa.json').success(function (data) {
-            deferred.resolve(data);
-        }).error(function (data, status, headers, config) {
+        $http({
+           method: 'GET',
+           url: Config.URL() + '/' + Config.app() + '/school/' + Config.appId() + '/' + schoolId + '/menu',
+           params: {
+               from: from,
+               to: to
+           },
+           headers: {
+                'Accept': 'application/json'
+           }
+        }).
+        success(function (data, status, headers, config) {
+            deferred.resolve(data.data);
+        }).
+        error(function (data, status, headers, config) {
             console.log(data + status + headers + config);
-            //deferred.reject(err);
-        })
+            deferred.reject(data.errorCode + ' ' + data.errorMessage);
+        });
         return deferred.promise;
-        /*temp*/
     }
 
-    dataServerService.getSections = function () {
+    dataServerService.getSections = function (schoolId) {
         var deferred = $q.defer();
 
-        $http.get('data/sections-profile.json').success(function (data) {
-            deferred.resolve(data);
-        }).error(function (data, status, headers, config) {
+        $http({
+            method: 'GET',
+            url: Config.URL() + '/' + Config.app() + '/school/' + Config.appId() + '/' + schoolId + '/sections',
+            params: {
+                date: new Date().getTime()
+            },
+            headers: {
+                'Accept': 'application/json'
+            }
+        }).
+        success(function (data, status, headers, config) {
+            deferred.resolve(data.data);
+        }).
+        error(function (data, status, headers, config) {
             console.log(data + status + headers + config);
+            deferred.reject(data.errorCode + ' ' + data.errorMessage);
         });
         return deferred.promise;
     };

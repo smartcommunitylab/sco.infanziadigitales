@@ -65,7 +65,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         dataServerService.getSchoolProfileForTeacher().then(function (schoolProfile) {
             $scope.schoolProfile = schoolProfile;
             profileService.setSchoolProfile($scope.schoolProfile);
-            dataServerService.getSections().then(function (data) {
+            dataServerService.getSections($scope.schoolProfile.schoolId).then(function (data) {
                 $scope.sections = data;
                 $scope.section = $scope.sections[0];
                 sectionService.setSection(0);

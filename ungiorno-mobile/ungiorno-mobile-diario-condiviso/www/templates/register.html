@@ -7,20 +7,37 @@
         <ion-content id="register-container" has-header="true" class="page-padding register-container">
             <div class="register-title">Diario Condiviso</div>
                 <div class="sub-title-register" ng-if="!openEnterEmail()">Registrati con:
-                    <p class="button register-buttons" ng-if="!openEnterEmail()" ng-click="loginVia('facebook')">Facebook</p>
-                    <p class="button register-buttons" style="margin-top:20px;" ng-if="!openEnterEmail()" ng-click="loginVia('gmail')">Gmail</p>
+                    <p class="button register-buttons" ng-if="!openEnterEmail()" ng-click="registerVia('facebook')">Facebook</p>
+                    <p class="button register-buttons" style="margin-top:20px;" ng-if="!openEnterEmail()" ng-click="registerVia('gmail')">Gmail</p>
                 </div>
 
                     <div class="enter-mail" ng-if="openEnterEmail()">
-                        <div class="sub-title-register">Inserisci la tua mail:
+                        <div class="sub-title-register" ng-if="!openRegisterHow()">Inserisci la tua mail:
                             <label class="item item-input id-container">
                                 <input type="text" placeholder="email@gmail.com">
                             </label>
-                            <p class="button register-buttons" style="margin-top:20px">Entra</p>
-
+                            <p class="button register-buttons" style="margin-top:20px" ng-if="!openRegisterHow()" ng-click="registerHow()">Entra</p>
                         </div>
                     </div>
 
+                    <div class="register-how" ng-if="openRegisterHow()">
+                        <div class="sub-title-register" ng-if="!openCreateDiary() && !openShowDiary()">Ti registri come:
+                            <p class="button register-buttons" ng-if="!openCreateDiary()" ng-click="registredAsParent()">Genitore</p>
+                            <p class="button register-buttons" style="margin-top:20px;" ng-if="!openCreateDiary()" ng-click="registeredAsTeacher()">Insegnate</p>
+                        </div>
+                    </div>
+
+                    <div class="registered-as-teacher" ng-if="openCreateDiary()">
+                        <div class="sub-title-register">Per utilizzare l'app:
+                            <p class="button register-buttons">Crea un diario</p>
+                        </div>
+                    </div>
+
+                    <div class="registered-as-parent" ng-if="openShowDiary()">
+                        <div class="sub-title-register">Sono stati condivisi con te due diari:
+                            <p class="button register-buttons">Vedi</p>
+                        </div>
+                    </div>
 
                         <div class="steps-indicator-container">
                             <div ng-repeat="step in steps track by $index" class="step-indicator" ng-class="{'step-indicator-done': step.done}"></div>

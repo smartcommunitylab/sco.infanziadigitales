@@ -107,15 +107,28 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
         });
         return deferred.promise;
     }
+/*student/{appId}/{schoolId}/notes?sectionIds=<comma-separated list of sectionIds, may be null>
 
-    dataServerService.getNotesForTeachers = function (schoolId, sectionId) {
+/school/{appId}/{schoolId}/notes?sectionIds=<comma-separated list of sectionIds, may be null>*/
+
+    dataServerService.getKidsNotesByKidIds = function (schoolId, kidIds) {
         var deferred = $q.defer();
+
+        var commaSeparatedIds = '';
+
+        if (kidIds !== undefined) {
+            for (var i = 0; i < kidIds.length - 1; i++) {
+                commaSeparatedIds += kidIds[i] + ',';
+            }
+            commaSeparatedIds += kidIds[kidIds.length - 1];
+        }
 
         $http({
             method: 'GET',
-            url: Config.URL() + '/' + Config.app() + '/school/' + Config.appId() + '/' + schoolId + '/' + sectionId + '/notes',
+            url: Config.URL() + '/' + Config.app() + '/student/' + Config.appId() + '/' + schoolId + '/notes',
             params: {
-                date: new Date().getTime()
+                date: new Date().getTime(),
+                kidIds: commaSeparatedIds
             },
             headers: {
                 'Accept': 'application/json'
@@ -131,14 +144,58 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
         return deferred.promise;
     }
 
-    dataServerService.getNotesForParents = function (schoolId, kidId) {
+    dataServerService.getKidsNotesBySectionIds = function (schoolId, sectionIds) {
         var deferred = $q.defer();
+
+        var commaSeparatedIds = '';
+
+        if (sectionIds !== undefined) {
+            for (var i = 0; i < sectionIds.length - 1; i++) {
+                commaSeparatedIds += kidIds[i] + ',';
+            }
+            commaSeparatedIds += sectionIds[sectionIds.length - 1];
+        }
 
         $http({
             method: 'GET',
-            url: Config.URL() + '/' + Config.app() + '/student/' + Config.appId() + '/' + schoolId + '/' + kidId + '/notes',
+            url: Config.URL() + '/' + Config.app() + '/student/' + Config.appId() + '/' + schoolId + '/notes',
             params: {
-                date: new Date().getTime()
+                date: new Date().getTime(),
+                sectionIds: commaSeparatedIds
+            },
+            headers: {
+                'Accept': 'application/json'
+            }
+        }).
+        success(function (data, status, headers, config) {
+            deferred.resolve(data.data);
+        }).
+        error(function (data, status, headers, config) {
+            console.log(data + status + headers + config);
+            deferred.reject(data.errorCode + ' ' + data.errorMessage);
+        });
+        return deferred.promise;
+    }
+
+
+    dataServerService.getInternalNotesBySections = function (schoolId, sectionIds) {
+        var deferred = $q.defer();
+
+        var commaSeparatedIds = '';
+
+        if (sectionIds !== undefined) {
+            for (var i = 0; i < sectionIds.length - 1; i++) {
+                commaSeparatedIds += sectionIds[i] + ',';
+            }
+            commaSeparatedIds += sectionIds[sectionIds.length - 1];
+        }
+
+        $http({
+            method: 'GET',
+            url: Config.URL() + '/' + Config.app() + '/school/' + Config.appId() + '/' + schoolId + '/notes',
+            params: {
+                date: new Date().getTime(),
+                sectionIds: commaSeparatedIds
             },
             headers: {
                 'Accept': 'application/json'

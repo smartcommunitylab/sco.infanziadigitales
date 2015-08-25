@@ -24,7 +24,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
      configurationService.getBabyNotesById = function (schoolId, babyId) {
         var deferred = $q.defer();
         /*tmp*/
-        dataServerService.getNotesForParents(schoolId, babyId).then(function (data) {
+        dataServerService.getKidsNotesByKidIds(schoolId, [babyId]).then(function (data) {
             deferred.resolve(data);
         });
         return deferred.promise;

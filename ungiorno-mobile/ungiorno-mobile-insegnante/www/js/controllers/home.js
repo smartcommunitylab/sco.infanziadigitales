@@ -179,10 +179,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
             });
             babyConfigurationService.getBabyConfigurationById($scope.schoolProfile.schoolId, $scope.section.children[i].childrenId).then(function (configuration) {
                 $scope.childrenConfigurations.push(configuration);
-            });
+            });/*
             babyConfigurationService.getBabyNotesById($scope.schoolProfile.schoolId, $scope.section.children[i].childrenId).then(function (notes) {
                 $scope.childrenNotes.push(notes);
-            });
+            });*/
         };
     }
     var getAllChildren = function () {
@@ -227,14 +227,66 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     }
 
     $scope.loadNotes = function () {
-        dataServerService.getNotesForTeachers($scope.schoolProfile.schoolId, $scope.section.sectionId).then(function (data) {
-            // temp
-            $scope.teacherNotes = data[0].schoolNotes;
+        var sectionsIdsArray = [];
+        if ($scope.section.sectionId === "all") {
+            $scope.sections.forEach(function (section) {
+                sectionsIdsArray.push(section.sectionId);
+            });
+        } else {
+            sectionsIdsArray.push($scope.section.sectionId);
+        }
+        dataServerService.getInternalNotesBySections($scope.schoolProfile.schoolId, sectionsIdsArray).then(function (data) {
+            $scope.teacherNotes = data;
+
+            //insert babys photos and name into notes
+            //O(n^3)... for some images and names
+            $scope.teacherNotes.forEach(function (note) {
+                if (note.kidIds !== null) {
+                    note.kids = [];
+
+                    var kidToFind = note.kidIds.length;
+                    var sectionChildrenIndex = 0;
+                    while (kidToFind !== 0 && sectionChildrenIndex < $scope.section.children.length) {
+                        for (var i = 0; i < note.kidIds.length; i++) {
+                            if ($scope.section.children[sectionChildrenIndex].kidId === note.kidIds[i]) {
+                                var baby = {
+                                    image: $scope.section.children[sectionChildrenIndex].image,
+                                    name: $scope.section.children[sectionChildrenIndex].childrenName
+                                }
+                                note.kids.push(baby);
+                                kidToFind--;
+                            }
+                        }
+                        sectionChildrenIndex++;
+                    }
+                }
+            });
+
+
+
         });
-        dataServerService.getNotesForParents($scope.schoolProfile.schoolId, $scope.section.kidId).then(function (data) {
-            // temp
-            $scope.parentNotes = data[0].parentNotes;
+        dataServerService.getKidsNotesBySectionIds($scope.schoolProfile.schoolId, sectionsIdsArray).then(function (data) {
+            $scope.parentNotes = data;
+            $scope.parentNotes.forEach(function (note) {
+                    var found = false;
+                    var sectionChildrenIndex = 0;
+                    while (!found && sectionChildrenIndex < $scope.section.children.length) {
+                        if ($scope.section.children[sectionChildrenIndex].kidId === note.kidId) {
+                            var baby = {
+                                image: $scope.section.children[sectionChildrenIndex].image,
+                                name: $scope.section.children[sectionChildrenIndex].childrenName
+                            }
+                            note.kid = baby;
+                        }
+                        sectionChildrenIndex++;
+                    }
+            });
         });
+    }
+
+    $scope.isBabyAssignedToNote = function (note) {
+        var asd = note.kidIds !== null;
+        return note.kidIds !== null;
     }
 
     $scope.openDetail = function (childId) {

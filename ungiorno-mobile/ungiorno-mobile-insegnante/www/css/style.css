@@ -1640,3 +1640,51 @@ select {
 .note-button {
     padding: 0px;
 }
+
+
+.notes-baby-image {
+    max-width: 80px;
+    max-height: 80px;
+}
+
+ion-content .scroll {
+    height: 100%;
+}
+
+.notes-baby-name {
+    text-decoration: underline;
+    margin-right: 6px;
+    vertical-align: top;
+}
+
+.right-side-fake-menu {
+    box-shadow: 0px 0px 20px #000;
+    background-color: #EEEEEE;
+    height: 100%;
+    right: 0%;
+    position: absolute;
+
+}
+.home-container {
+    height: 100%;
+}
+
+.sections-displayer-full {
+    max-width: 100%;
+    transition: max-width ease 200ms;
+}
+
+.sections-displayer-short {
+    max-width: 75%;
+    transition: max-width ease 200ms;
+}
+
+.right-side-fake-menu.ng-hide {
+    right: -25%;
+}
+
+.right-side-fake-menu.ng-hide-remove,
+.right-side-fake-menu.ng-hide-add {
+  display: block !important;
+  transition: all ease 200ms;
+}

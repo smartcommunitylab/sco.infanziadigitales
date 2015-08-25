@@ -16,7 +16,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
     'it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.bus',
     'it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.babyprofile',
     'it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.calendar',
-    'it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.notes',
     'it.smartcommunitylab.infanziadigitales.diario.teachers.services.conf',
     'it.smartcommunitylab.infanziadigitales.diario.teachers.services.babyConfigurationService',
     'it.smartcommunitylab.infanziadigitales.diario.teachers.services.dataServerService',
@@ -158,16 +157,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
                 }
             }
         })
-        .state('app.notes', {
-            cache: false,
-            url: "/notes",
-            views: {
-                'menuContent': {
-                    templateUrl: "templates/notes.html",
-                    controller: 'notesCtrl'
-                }
-            }
-        })
 
 
     // if none of the above states are matched, use this as the fallback
@@ -293,7 +282,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
         catch_the_bus: "salgono",
         baby_on_the: "bambini sul",
         buses: 'Bus',
-        parent_communications: 'Comunicazione per genitori',
+        parent_communications: 'Comunicazioni per genitori',
         communication_type: 'Tipo di comunicazione',
         communication_of: 'Comunicazione del',
         communication_sent: 'Comunicazione inviata correttamente',

@@ -23,7 +23,11 @@
                         </div>
                     </div>
                     <h2 class="babyProfile detailsTitle" id="parentsNotes" style="margin-top: 24px;">{{'parents_notes' | translate}}</h2>
-                    <h3 class="babyProfile detailItem"  ng-repeat="note in notes.parentNotes">{{note.note}}</h2>
+                    <ion-list>
+                        <ion-item ng-repeat="note in notes[0].parentNotes">
+                            <div class="babyProfile detailItem">{{note.note}}</div>
+                        </ion-item>
+                    </ion-list>
                     <h2 class="babyProfile detailsTitle" id="teachersNotes" style="margin-top: 24px;">{{'teachers_notes' | translate}}</h2>
                     <select id="note_type" ng-model="newNote.argument">
                         <option value="" disabled selected>{{'arguments' | translate}}</option>

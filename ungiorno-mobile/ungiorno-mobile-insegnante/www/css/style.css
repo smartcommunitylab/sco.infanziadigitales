@@ -1521,13 +1521,18 @@ select {
     width: 100%;
 }
 
-.communication-not-selected-in-edit-mode {
+.communication-disabled {
     background-color: lightgray;
 }
+
+.communication-active {
+    background-color: #fff;
+}
+
 .newComItems {
     position: relative;
     float:left;
-     }
+}
 .item.item-checkbox.newCom {
     font-size: 18px;
     border-color: transparent;

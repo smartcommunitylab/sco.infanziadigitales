@@ -91,16 +91,14 @@
                 <div class="row">
                     <div ng-hide="!teachersNote" class="teacher-notes">
                         <div class="list list-inset">
-                            <ion-item>nota maestra 1 </ion-item>
-                            <ion-item>nota maestra 2 </ion-item>
+                            <ion-item ng-repeat="note in teacherNotes track by $index">{{note.note}}</ion-item>
                         </div>
                         <button style="background-color:red; color:white" class="button create-note section-tabs" ng-click="createNotes()">{{'new_note' | translate}}</button>
 
                     </div>
                     <div ng-hide="!parentsNote" class="teacher-notes">
                         <div class="list list-inset">
-                            <ion-item>nota genitore 1 </ion-item>
-                            <ion-item>nota genitore 2 </ion-item>
+                            <ion-item ng-repeat="note in parentNotes track by $index">{{note.note}}</ion-item>
                         </div>
                     </div>
                     <div ng-hide="!newNote">
@@ -128,8 +126,8 @@
                             <div class="list children-search">
                                 <li class="item child-search" ng-repeat="children in data.children" ng-click="selectChildrenForNote(children)">{{children.childrenName}}</li>
                             </div>
-                            <button style="background-color:grey; color:white; width:150px; margin-top:100px" class="button section-tabs" ng-click="cancelNewNote()">{{'cancel' | translate}}</button>
-                            <button style="background-color:red; color:white; width:150px; margin-top:100px" class="button section-tabs">{{'create_note' | translate}}</button>
+                            <button style="background-color:grey; color:white; width:130px; margin-top:100px" class="button section-tabs" ng-click="cancelNewNote()">{{'cancel' | translate}}</button>
+                            <button style="background-color:red; color:white; width:130px; margin-top:100px" class="button section-tabs">{{'create_note' | translate}}</button>
                         </div>
                     </div>
 

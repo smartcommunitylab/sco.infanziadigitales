@@ -3,6 +3,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
 .controller('RegisterCtrl', function ($scope, dataServerService) {
 
     $scope.enterEmail = false;
+    $scope.parentOrTeacher = false;
+    $scope.createNewDiary = false;
+    $scope.showDiary = false;
     $scope.steps = [
         {
             done: false
@@ -31,7 +34,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         return $scope.enterEmail;
     }
 
-    $scope.loginVia = function (via) {
+    $scope.registerVia = function (via) {
         $scope.enterEmail = true;
         currentStep++;
         updateToStep(currentStep);
@@ -43,4 +46,42 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         }
     }
 
+
+    $scope.openRegisterHow = function () {
+        return $scope.parentOrTeacher;
+    }
+
+    $scope.registerHow = function (how) {
+        $scope.parentOrTeacher = true;
+        currentStep++;
+        updateToStep(currentStep);
+
+        if (how === "genitore") {
+
+        } else if (how === "insegnate") {
+
+        }
+    }
+
+
+    $scope.openCreateDiary = function () {
+        return $scope.createNewDiary;
+    }
+
+    $scope.registeredAsTeacher = function () {
+        $scope.createNewDiary = true;
+        currentStep++;
+        updateToStep(currentStep);
+    }
+
+
+    $scope.openShowDiary = function () {
+        return $scope.showDiary;
+    }
+
+    $scope.registredAsParent = function () {
+        $scope.showDiary = true;
+        currentStep++;
+        updateToStep(currentStep);
+    }
 });

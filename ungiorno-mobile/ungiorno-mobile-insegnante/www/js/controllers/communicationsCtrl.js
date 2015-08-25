@@ -23,6 +23,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         }
     ];
 
+    var sortCommunications = function() {
+        $scope.communications = $filter('orderBy')($scope.communications, '+creationDate');
+    }
+
 
     dataServerService.getCommunications(profileService.getSchoolProfile().schoolId).then(function (data) {
         $scope.communications = data;
@@ -30,6 +34,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
             $scope.communications[i].dateToCheck = new Date($scope.communications[i].dateToCheck * 1000);
             $scope.communications[i].creationDate = new Date($scope.communications[i].creationDate * 1000);
         }
+        sortCommunications();
     });
 
     $scope.selectCommunication = function (index) {
@@ -110,7 +115,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         if (!found) { //new communication
             $scope.communications.push(response.data);
         }
-
+        sortCommunications();
     }
 
     $scope.submitCommunication = function () { //edit or new

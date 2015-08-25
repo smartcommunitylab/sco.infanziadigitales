@@ -71,8 +71,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
                 $scope.section = $scope.sections[0];
                 sectionService.setSection(0);
                 $scope.getChildrenByCurrentSection();
-                $scope.loadTeacherNotes();
-                $scope.loadTeParentNotes();
+                $scope.loadNotes();
             })
             dataServerService.getTeachers($scope.schoolProfile.schoolId).then(function (data) {
                 teachersService.setTeachers(data);
@@ -227,15 +226,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
 
     }
 
-    $scope.loadTeacherNotes = function () {
+    $scope.loadNotes = function () {
         dataServerService.getNotesForTeachers($scope.schoolProfile.schoolId, $scope.section.sectionId).then(function (data) {
             // temp
             $scope.teacherNotes = data[0].schoolNotes;
         });
-    }
-
-    $scope.loadTeParentNotes = function () {
-        dataServerService.getNotesForTeachers($scope.schoolProfile.schoolId, $scope.section.kidId).then(function (data) {
+        dataServerService.getNotesForParents($scope.schoolProfile.schoolId, $scope.section.kidId).then(function (data) {
             // temp
             $scope.parentNotes = data[0].parentNotes;
         });

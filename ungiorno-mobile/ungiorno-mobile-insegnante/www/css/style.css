@@ -1493,10 +1493,6 @@ select {
     right: 15px;
 }
 
-.teacher-notes {
-    width: 100%;
-}
-
 .section-row {
     padding: 0px;
 }
@@ -1506,11 +1502,9 @@ select {
     padding: 0px;
 }
 
-.section-tabs.activated {
-    background-color: #444444;
-    color: white;
-    border-width: 0 0 2px!important;
-    border-style: solid;
+.tabs.notes-tabs {
+    top: 0px;
+    padding: 0px;
 }
 
 .home-section-space {
@@ -1566,25 +1560,6 @@ select {
     background-color: white !important;
 }
 
-.button-note-selected {
-    background-color: #444444;
-    color: white;
-    border-width: 0px;
-    border-width: 0 0 2px!important;
-    border-style: solid;
-    border-bottom-color: #d4145a;
-}
-
-.button-note-not-selected {
-    background-color: #444444;
-    color: darkgrey;
-    border-width: 0px;
-}
-
-.note-button {
-    padding: 0px;
-}
-
 .children-search {
     position: absolute;
     width: 100%;
@@ -1594,25 +1569,6 @@ select {
     background-color: white !important;
 }
 
-.button-note-selected {
-    background-color: #444444;
-    color: white;
-    border-width: 0px;
-    border-width: 0 0 2px!important;
-    border-style: solid;
-    border-bottom-color: #d4145a;
-}
-
-.button-note-not-selected {
-    background-color: #444444;
-    color: darkgrey;
-    border-width: 0px;
-}
-
-.note-button {
-    padding: 0px;
-}
-
 .children-search {
     position: absolute;
     width: 100%;
@@ -1620,25 +1576,6 @@ select {
 
 .child-search {
     background-color: white !important;
-}
-
-.button-note-selected {
-    background-color: #444444;
-    color: white;
-    border-width: 0px;
-    border-width: 0 0 2px!important;
-    border-style: solid;
-    border-bottom-color: #d4145a;
-}
-
-.button-note-not-selected {
-    background-color: #444444;
-    color: darkgrey;
-    border-width: 0px;
-}
-
-.note-button {
-    padding: 0px;
 }
 
 
@@ -1658,13 +1595,36 @@ ion-content .scroll {
 }
 
 .right-side-fake-menu {
-    box-shadow: 0px 0px 20px #000;
     background-color: #EEEEEE;
     height: 100%;
     right: 0%;
     position: absolute;
-
+    padding: 0;
 }
+
+.side-fake-menu-shadow {
+    -webkit-box-shadow: -10px 0 30px -10px #000;
+    box-shadow: -10px 0 30px -10px #000;
+}
+
+.right-side-fake-menu.ng-hide {
+    right: -25%;
+}
+
+.right-side-fake-menu.ng-hide-remove,
+.right-side-fake-menu.ng-hide-add {
+  display: block !important;
+  transition: all ease 200ms;
+}
+
+.note-tabs-container {
+    padding: 0;
+}
+
+.tabs.notes-tabs {
+    background-color: #455A64 !important;
+}
+
 .home-container {
     height: 100%;
 }
@@ -1679,12 +1639,54 @@ ion-content .scroll {
     transition: max-width ease 200ms;
 }
 
-.right-side-fake-menu.ng-hide {
-    right: -25%;
+.teacher-notes {
+    width: 100%;
+    position: relative;
+}
+.parents-notes {
+    width: 100%;
+    position: relative;
 }
 
-.right-side-fake-menu.ng-hide-remove,
-.right-side-fake-menu.ng-hide-add {
-  display: block !important;
-  transition: all ease 200ms;
+.new-note-panel {
+    width: 100%;
+    padding-top: 8px;
+}
+
+.new-note-actions {
+    width: 100%;
+}
+
+.cancel-button {
+    background-color: #78909C;
+    color: #fff;
+    display: table-cell;
+    margin-right: 3px;
+}
+.cancel-button.activated {
+    background-color: #607D8B;
+}
+
+.create-button {
+    background-color: #E91E63;
+    color: #fff;
+    display: table-cell;
+    margin-left: 3px;
+}
+
+.create-button.activated {
+    background-color: #D81B60;
+}
+
+.new-note-title {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.new-note-description {
+    margin-top: 24px;
+}
+
+.new-note-assign-container {
+    margin-top: 24px;
 }

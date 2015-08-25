@@ -12,7 +12,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     $scope.noteExpanded = false;
     $scope.teachersNote = true;
     $scope.parentsNote = false;
-    $scope.newNote = false;
+    $scope.newNoteExpandend = false;
     $scope.communicationExpanded = false;
     $scope.schoolProfile = null;
     $scope.numberOfChildren = 0;
@@ -31,31 +31,35 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         $scope.communicationExpanded = false;
         $scope.teachersNote = true;
         $scope.parentsNote = false;
-        $scope.newNote = false;
+        $scope.newNoteExpandend = false;
     }
 
 
     $scope.data = {
         communication: null
     };
-    $scope.data = {
-        "children": [],
-        "search": ''
+    $scope.newNote = {
+        possibleChildrens: [],
+        search: '',
+        kidIds: []
     };
 
     $scope.selectChildrenForNote = function (children) {
-        $scope.data.search = children.childrenName;
-        $scope.data.children = [];
+        $scope.newNote.search = children.childrenName;
+        $scope.newNote.kidIds.push(children.kidId);
+        $scope.newNote.possibleChildrens = [];
+        //TODO: possible childrens list design have to have: image and name of the kid
+        //TODO: multiple baby list with delete option (like tags in diario-condiviso)
     }
     $scope.search = function () {
-            if ($scope.data.search != "") {
-                profileService.searchChildrenBySection($scope.data.search, $scope.section.sectionId).then(
+            if ($scope.newNote.search != "") {
+                profileService.searchChildrenBySection($scope.newNote.search, $scope.section.sectionId).then(
                     function (children) {
-                        $scope.data.children = children;
+                        $scope.newNote.possibleChildrens = children;
                     }
                 )
             } else {
-                $scope.data.children = [];
+                $scope.newNote.possibleChildrens = [];
             }
         }
         //dovrebbe essere in base all'ora
@@ -95,23 +99,23 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     $scope.openParentsNotes = function () {
         $scope.parentsNote = true;
         $scope.teachersNote = false;
-        $scope.newNote = false;
+        $scope.newNoteExpandend = false;
     }
 
     $scope.openTeacherNotes = function () {
         $scope.parentsNote = false;
         $scope.teachersNote = true;
-        $scope.newNote = false;
+        $scope.newNoteExpandend = false;
     }
 
     $scope.createNotes = function () {
         $scope.parentsNote = false;
         $scope.teachersNote = false;
-        $scope.newNote = true;
+        $scope.newNoteExpandend = true;
     }
 
     $scope.cancelNewNote = function () {
-        $scope.newNote = false;
+        $scope.newNoteExpandend = false;
         $scope.parentsNote = false;
         $scope.teachersNote = true;
     }

@@ -1,0 +1,24 @@
+[
+        {
+            "appId": "a",
+            "schoolId": "a",
+            "kidIds": ["a","b"],
+            "date": 123,
+            "note": "nota 1"
+        },
+        {
+            "appId": "a",
+            "schoolId": "a",
+            "sectionIds": ["section1","section2"],
+            "date": 123,
+            "note": "nota 2"
+        },
+        {
+            "appId": "a",
+            "schoolId": "a",
+            "sectionIds": ["section2"],
+            "date": 123,
+            "note": "nota 3"
+        }
+        
+]

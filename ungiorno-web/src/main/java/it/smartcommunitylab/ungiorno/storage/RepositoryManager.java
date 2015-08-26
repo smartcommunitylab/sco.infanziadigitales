@@ -104,7 +104,9 @@ public class RepositoryManager {
 	 */
 	public void storeSchoolProfile(SchoolProfile profile) {
 		SchoolProfile old = template.findOne(schoolQuery(profile.getAppId(), profile.getSchoolId()), SchoolProfile.class);
-		profile.set_id(old.get_id());
+		if (old != null) { 
+			profile.set_id(old.get_id());
+		}
 		template.save(profile);
 	}
 

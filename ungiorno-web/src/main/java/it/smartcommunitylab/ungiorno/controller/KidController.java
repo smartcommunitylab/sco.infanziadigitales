@@ -235,7 +235,7 @@ public class KidController {
 	 */
 	private String getUserId() {
 		// TODO Auto-generated method stub
-		return null;
+		return "marco@gmail.com";
 	}
 
 

@@ -207,7 +207,7 @@ public class SchoolController {
 	 */
 	private String getUserId() {
 		// TODO Auto-generated method stub
-		return null;
+		return "giulia.puccini@gmail.com";
 	}
 
 }

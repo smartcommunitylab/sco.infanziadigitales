@@ -65,11 +65,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
         });
         return deferred.promise;
     }
-    dataServerService.getSchoolProfile = function () {
+    dataServerService.getSchoolProfile = function (appId, schoolId) {
         var deferred = $q.defer();
 
-        $http.get('data/scuola-profilo.json').success(function (data) {
-            deferred.resolve(data);
+        $http({
+            method: 'GET',
+            url: Config.URL() + '/' + Config.app() + '/school/' + Config.appId() + '/' + schoolId + '/' + '/profile',
+            headers: {
+                'Accept': 'application/json'
+            }
         }).error(function (data, status, headers, config) {
             console.log(data + status + headers + config);
             //deferred.reject(err);

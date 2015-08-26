@@ -12,11 +12,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         error = checkDataError($scope.babyCopy);
         if (!error) {
             $scope.baby = $scope.babyCopy;
+            if ($scope.createMode){
+                $state.go('app.home')
+            }
+            else{
             mode = "view";
-        }else{
-        if ($scope.createMode){
-            $state.go('app.home')
-        }
+            }
         }
     }
     var checkDataError = function(objectToCheck){

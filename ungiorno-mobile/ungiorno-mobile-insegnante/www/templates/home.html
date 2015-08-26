@@ -10,8 +10,8 @@
 
     </ion-nav-buttons>
     <ion-content has-header="true">
-        <div class="row section-row">
-            <div class="col section-row">
+        <div class="row section-row home-container">
+            <div class="col section-row" ng-class="{'sections-displayer-short': noteExpanded || communicationExpanded, 'sections-displayer-full': !(noteExpanded || communicationExpanded)}">
                 <div class="row section-row">
                     <div class="tabs-striped tabs-top tabs-background-dark tabs-color-light">
                         <div class="tabs section-tabs">
@@ -80,62 +80,67 @@
 
                 </div>
             </div>
-            <div class="col col-25 home-section-space" ng-hide="!noteExpanded">
+            <div class="col col-25 home-section-space right-side-fake-menu side-fake-menu-shadow " ng-hide="!noteExpanded">
 
-                <div class="row" ng-if="!newNote">
-                    <div class="col note-button">
-                        <button class="button section-tabs " ng-class="{'button-note-selected' :teachersNote , 'button-note-not-selected' :!teachersNote}" ng-click="openTeacherNotes()">{{'teachers_notes' | translate}}</button>
-                        <button class="button section-tabs" ng-class="{'button-note-selected' :parentsNote , 'button-note-not-selected' :!parentsNote}" ng-click="openParentsNotes()">{{'parents_notes' | translate}}</button>
+                <div class="row note-tabs-container" ng-if="!newNoteExpandend">
+                    <div class="tabs-striped tabs-top tabs-background-dark tabs-color-light">
+                        <div class="tabs notes-tabs side-fake-menu-shadow">
+                            <a class="tab-item" class="col" ng-click="openTeacherNotes()" ng-class="{'active': teachersNote}">{{'teachers_notes' | translate}}</a>
+                            <a class="tab-item" class="col" ng-click="openParentsNotes()" ng-class="{'active': parentsNote}">{{'parents_notes' | translate}}</a>
+                        </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div ng-hide="!teachersNote" class="teacher-notes">
+                    <div ng-hide="!teachersNote" class="teacher-notes" ng-class="{'changing-notes-teachers-to-parents': (parentsNote && !teachersNote)}">
                         <div class="list list-inset">
-                            <ion-item>nota maestra 1 </ion-item>
-                            <ion-item>nota maestra 2 </ion-item>
+                            <ion-item ng-repeat="note in teacherNotes track by $index">
+                                <div class="babyNames" ng-if="isBabyAssignedToNote(note)">
+                                    <img class="notes-baby-image" ng-if="note.kids.lenghth === 1" ng-src="{{note.kids[1].image}}"></img>
+                                    <div class="notes-baby-name inline" ng-repeat="baby in note.kids" ng-click="openDetail(baby.kidId)">{{baby.name}}</div>
+                                </div>
+                                {{note.note}}
+                            </ion-item>
                         </div>
                         <button style="background-color:red; color:white" class="button create-note section-tabs" ng-click="createNotes()">{{'new_note' | translate}}</button>
 
                     </div>
-                    <div ng-hide="!parentsNote" class="teacher-notes">
+                    <div ng-hide="!parentsNote" class="parents-notes" ng-class="{'changing-notes-parents-to-teachers': (!parentsNote && teachersNote)}">
                         <div class="list list-inset">
-                            <ion-item>nota genitore 1 </ion-item>
-                            <ion-item>nota genitore 2 </ion-item>
+                            <ion-item ng-repeat="babyWithNotes in parentNotes track by $index">
+                                <img class="notes-baby-image" ng-src="{{babyWithNotes.kid.image}}"></img>
+                                <div class="notes-baby-name inline" ng-click="openDetail(babyWithNotes.kidId)">{{babyWithNotes.kid.name}}</div>
+                                <ion-item ng-repeat="note in babyWithNotes.parentNotes">{{note.note}}</ion-item>
+                            </ion-item>
                         </div>
                     </div>
-                    <div ng-hide="!newNote">
-                        <div class="list list-inset">
-                            <span style="font-weight:bolder">{{'create_new_note' | translate | uppercase}}</span>
-                            <label class="item item-input">
-                                <input style="margin-top:25px" type="text" placeholder="Inserisci Testo">
+                    <div ng-hide="!newNoteExpandend" class="new-note-panel">
+                        <div class="list">
+                            <div class="new-note-title">{{'create_new_note' | translate | uppercase}}</div>
+                            <label class="item item-input new-note-description">
+                                <input type="text" placeholder="Inserisci Testo" ng-model="newNote.description">
                             </label>
-                            <li style="margin-top:25px" class="item item-checkbox">
+                            <div class="item item-checkbox new-note-assign-container">
                                 <label class="checkbox">
-                                    <input type="checkbox" ng-model="myCheckbox">
+                                    <input type="checkbox"ng-model="newNote.assignedBaby">
                                 </label>
                                 {{'associated_a_child' | translate}}
-                            </li>
-                            <label class="item item-input">
-                                <input style="margin-top:25px" type="text" ng-disabled="!myCheckbox" placeholder="Nome Bambino" ng-change="search()" ng-model="data.search">
-                            </label>
-                            <!--
-                            <label class="item item-input">
-    <input type="text" placeholder="Nome Bambino">
-    <br>
-</label>
--->
-                            <!--                            <br>-->
-                            <div class="list children-search">
-                                <li class="item child-search" ng-repeat="children in data.children" ng-click="selectChildrenForNote(children)">{{children.childrenName}}</li>
                             </div>
-                            <button style="background-color:grey; color:white; width:150px; margin-top:100px" class="button section-tabs" ng-click="cancelNewNote()">{{'cancel' | translate}}</button>
-                            <button style="background-color:red; color:white; width:150px; margin-top:100px" class="button section-tabs">{{'create_note' | translate}}</button>
+                            <label class="item item-input">
+                                <input type="text" ng-disabled="!newNote.assignedBaby" placeholder="Nome Bambino" ng-change="search()" ng-model="newNote.search">
+                            </label>
+                            <div class="list children-search">
+                                <div class="item child-search" ng-repeat="children in newNote.possibleChildrens" ng-click="selectChildrenForNote(children)">{{children.childrenName}}</div>
+                            </div>
+                            <div class="new-note-actions row">
+                                <button class="button cancel-button col" ng-click="cancelNewNote()">{{'cancel' | translate}}</button>
+                                <button class="button create-button col" ng-click="sendNewNote()">{{'create_note' | translate}}</button>
+                            </div>
                         </div>
                     </div>
 
                 </div>
             </div>
-            <div class="col col-25 home-section-space" ng-hide="!communicationExpanded">
+            <div class="col col-25 home-section-space right-side-fake-menu" ng-hide="!communicationExpanded">
                 <div class="list list-inset">
                     <ion-radio ng-repeat="item in communications" ng-if="item.doCheck != null" ng-value="item.communicationId" ng-model="data.communication" ng-click="changeCommunication(item.communicationId)">
                         {{ item.description }}

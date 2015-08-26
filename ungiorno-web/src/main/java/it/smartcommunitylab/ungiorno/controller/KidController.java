@@ -177,6 +177,19 @@ public class KidController {
 
 	}
 
+	@RequestMapping(method = RequestMethod.GET, value = "/student/{appId}/{schoolId}/notes")
+	public @ResponseBody Response<List<KidCalNote>> getSectionNotes(@PathVariable String appId, @PathVariable String schoolId, @RequestParam(required=false) String[] sectionIds, @RequestParam long date) {
+
+		try {
+			List<KidCalNote> list = storage.getKidCalNotesForSection(appId, schoolId, sectionIds, date);
+			return new Response<>(list);
+		} catch (Exception e) {
+			return new Response<>(e.getMessage());
+		}
+
+	}
+
+
 	@RequestMapping(method = RequestMethod.POST, value = "/student/{appId}/{schoolId}/{kidId}/notes")
 	public @ResponseBody Response<KidCalNote> saveNote(@RequestBody KidCalNote note, @PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId) {
 

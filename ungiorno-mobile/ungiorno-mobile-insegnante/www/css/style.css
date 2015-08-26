@@ -1493,10 +1493,6 @@ select {
     right: 15px;
 }
 
-.teacher-notes {
-    width: 100%;
-}
-
 .section-row {
     padding: 0px;
 }
@@ -1506,11 +1502,9 @@ select {
     padding: 0px;
 }
 
-.section-tabs.activated {
-    background-color: #444444;
-    color: white;
-    border-width: 0 0 2px!important;
-    border-style: solid;
+.tabs.notes-tabs {
+    top: 0px;
+    padding: 0px;
 }
 
 .home-section-space {
@@ -1521,13 +1515,18 @@ select {
     width: 100%;
 }
 
-.communication-not-selected-in-edit-mode {
+.communication-disabled {
     background-color: lightgray;
 }
+
+.communication-active {
+    background-color: #fff;
+}
+
 .newComItems {
     position: relative;
     float:left;
-     }
+}
 .item.item-checkbox.newCom {
     font-size: 18px;
     border-color: transparent;
@@ -1561,23 +1560,13 @@ select {
     background-color: white !important;
 }
 
-.button-note-selected {
-    background-color: #444444;
-    color: white;
-    border-width: 0px;
-    border-width: 0 0 2px!important;
-    border-style: solid;
-    border-bottom-color: #d4145a;
+.children-search {
+    position: absolute;
+    width: 100%;
 }
 
-.button-note-not-selected {
-    background-color: #444444;
-    color: darkgrey;
-    border-width: 0px;
-}
-
-.note-button {
-    padding: 0px;
+.child-search {
+    background-color: white !important;
 }
 
 .children-search {
@@ -1589,49 +1578,115 @@ select {
     background-color: white !important;
 }
 
-.button-note-selected {
-    background-color: #444444;
-    color: white;
-    border-width: 0px;
-    border-width: 0 0 2px!important;
-    border-style: solid;
-    border-bottom-color: #d4145a;
+
+.notes-baby-image {
+    max-width: 80px;
+    max-height: 80px;
 }
 
-.button-note-not-selected {
-    background-color: #444444;
-    color: darkgrey;
-    border-width: 0px;
+ion-content .scroll {
+    height: 100%;
 }
 
-.note-button {
-    padding: 0px;
+.notes-baby-name {
+    text-decoration: underline;
+    margin-right: 6px;
+    vertical-align: top;
 }
 
-.children-search {
+.right-side-fake-menu {
+    background-color: #EEEEEE;
+    height: 100%;
+    right: 0%;
     position: absolute;
+    padding: 0;
+}
+
+.side-fake-menu-shadow {
+    -webkit-box-shadow: -10px 0 30px -10px #000;
+    box-shadow: -10px 0 30px -10px #000;
+}
+
+.right-side-fake-menu.ng-hide {
+    right: -25%;
+}
+
+.right-side-fake-menu.ng-hide-remove,
+.right-side-fake-menu.ng-hide-add {
+  display: block !important;
+  transition: all ease 200ms;
+}
+
+.note-tabs-container {
+    padding: 0;
+}
+
+.tabs.notes-tabs {
+    background-color: #455A64 !important;
+}
+
+.home-container {
+    height: 100%;
+}
+
+.sections-displayer-full {
+    max-width: 100%;
+    transition: max-width ease 200ms;
+}
+
+.sections-displayer-short {
+    max-width: 75%;
+    transition: max-width ease 200ms;
+}
+
+.teacher-notes {
+    width: 100%;
+    position: relative;
+}
+.parents-notes {
+    width: 100%;
+    position: relative;
+}
+
+.new-note-panel {
+    width: 100%;
+    padding-top: 8px;
+}
+
+.new-note-actions {
     width: 100%;
 }
 
-.child-search {
-    background-color: white !important;
+.cancel-button {
+    background-color: #78909C;
+    color: #fff;
+    display: table-cell;
+    margin-right: 3px;
+}
+.cancel-button.activated {
+    background-color: #607D8B;
 }
 
-.button-note-selected {
-    background-color: #444444;
-    color: white;
-    border-width: 0px;
-    border-width: 0 0 2px!important;
-    border-style: solid;
-    border-bottom-color: #d4145a;
+.create-button {
+    background-color: #E91E63;
+    color: #fff;
+    display: table-cell;
+    margin-left: 3px;
 }
 
-.button-note-not-selected {
-    background-color: #444444;
-    color: darkgrey;
-    border-width: 0px;
+.create-button.activated {
+    background-color: #D81B60;
 }
 
-.note-button {
-    padding: 0px;
+.new-note-title {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.new-note-description {
+    margin-top: 24px;
+}
+
+.new-note-assign-container {
+    margin-top: 24px;
 }

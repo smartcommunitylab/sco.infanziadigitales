@@ -20,6 +20,7 @@ import it.smartcommunitylab.ungiorno.model.AppInfo;
 import it.smartcommunitylab.ungiorno.model.BusData;
 import it.smartcommunitylab.ungiorno.model.CalendarItem;
 import it.smartcommunitylab.ungiorno.model.Communication;
+import it.smartcommunitylab.ungiorno.model.InternalNote;
 import it.smartcommunitylab.ungiorno.model.KidCalAssenza;
 import it.smartcommunitylab.ungiorno.model.KidCalFermata;
 import it.smartcommunitylab.ungiorno.model.KidCalNote;
@@ -186,6 +187,18 @@ public class RepositoryManager {
 	}
 
 	/**
+	 * @param appId
+	 * @param schoolId
+	 * @param sectionIds
+	 * @param date
+	 * @return
+	 */
+	public List<KidCalNote> getKidCalNotesForSection(String appId, String schoolId, String[] sectionIds, long date) {
+		// TODO
+		return DumpDataHelper.dummyKidNotes(appId, schoolId, null);
+	}
+
+	/**
 	 * @param note
 	 */
 	public KidCalNote saveNote(KidCalNote note) {
@@ -247,9 +260,9 @@ public class RepositoryManager {
 	 * @param kidId
 	 * @return
 	 */
-	public List<KidCalNote> getInternalNotes(String appId, String schoolId, String sectionId, long date) {
+	public List<InternalNote> getInternalNotes(String appId, String schoolId, String[] sectionIds, long date) {
 		// TODO
-		return DumpDataHelper.dummyKidNotes(appId, schoolId, sectionId);
+		return DumpDataHelper.dummyInternalNotes(appId, schoolId, sectionIds);
 	}
 
 	/**
@@ -303,9 +316,10 @@ public class RepositoryManager {
 	 * @return
 	 */
 	public List<TeacherCalendar> getTeacherCalendar(String appId, String schoolId, long from, long to) {
-		// TODO Auto-generated method stub
-		return null;
+		// TODO
+		return DumpDataHelper.dummyTecherCalendar(appId, schoolId);
 	}
+
 
 
 }

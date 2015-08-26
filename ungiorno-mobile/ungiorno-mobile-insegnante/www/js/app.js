@@ -16,7 +16,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
     'it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.bus',
     'it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.babyprofile',
     'it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.calendar',
-    'it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.notes',
     'it.smartcommunitylab.infanziadigitales.diario.teachers.services.conf',
     'it.smartcommunitylab.infanziadigitales.diario.teachers.services.babyConfigurationService',
     'it.smartcommunitylab.infanziadigitales.diario.teachers.services.dataServerService',
@@ -158,16 +157,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
                 }
             }
         })
-        .state('app.notes', {
-            cache: false,
-            url: "/notes",
-            views: {
-                'menuContent': {
-                    templateUrl: "templates/notes.html",
-                    controller: 'notesCtrl'
-                }
-            }
-        })
 
 
     // if none of the above states are matched, use this as the fallback
@@ -265,9 +254,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
         is: "è",
         bus_stop_go: "Fermata bus andata: ",
         bus_stop_back: "Fermata bus ritorno: ",
+        bus_stop_drops_off: "Scende in:",
+        bus_stop_person_wait: "Ad aspettare c'è:",
         person_who_retire: "Persona incaricata del ritiro: ",
-        parents_notes: "Note del genitore: ",
-        teachers_notes: "Note della maestra: ",
+        parents_notes: "Note genitori",
+        teachers_notes: "Note maestre",
         arguments: "Argomento",
         description: "Descrizione",
         send: "Invia",
@@ -287,12 +278,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
         select_argument: "Seleziona un argomento",
         type_description: "Immetti una descrizione",
         note_sent_success: "Nota registrata con successo",
+        note_sent_fail: "Nota non mandata correttamente",
         catch_the_bus: "salgono",
         baby_on_the: "bambini sul",
         buses: 'Bus',
-        parent_communications: 'Comunicazione per genitori',
+        parent_communications: 'Comunicazioni per genitori',
         communication_type: 'Tipo di comunicazione',
         communication_of: 'Comunicazione del',
+        communication_sent: 'Comunicazione inviata correttamente',
+        communication_updated: 'Comunicazione aggiornata correttamente',
+        communication_fail: 'Comunicazione non inviata',
+        retry: 'Riprova',
         deadline: 'Scadenza consegna',
         deadline_time: 'Data di scadenza',
         cancel: 'Annulla',

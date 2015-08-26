@@ -18,6 +18,7 @@ package it.smartcommunitylab.ungiorno.controller;
 
 import it.smartcommunitylab.ungiorno.model.BusData;
 import it.smartcommunitylab.ungiorno.model.Communication;
+import it.smartcommunitylab.ungiorno.model.InternalNote;
 import it.smartcommunitylab.ungiorno.model.KidCalNote;
 import it.smartcommunitylab.ungiorno.model.Menu;
 import it.smartcommunitylab.ungiorno.model.Response;
@@ -112,11 +113,11 @@ public class SchoolController {
 		}
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/school/{appId}/{schoolId}/{sectionId}/notes")
-	public @ResponseBody Response<List<KidCalNote>> getNotes(@RequestBody KidCalNote comm, @PathVariable String appId, @PathVariable String schoolId, @PathVariable String sectionId, @RequestParam long date) {
+	@RequestMapping(method = RequestMethod.GET, value = "/school/{appId}/{schoolId}/notes")
+	public @ResponseBody Response<List<InternalNote>> getNotes(@PathVariable String appId, @PathVariable String schoolId, @RequestParam(required=false) String[] sectionIds, @RequestParam long date) {
 
 		try {
-			List<KidCalNote> list = storage.getInternalNotes(appId, schoolId, sectionId, date);
+			List<InternalNote> list = storage.getInternalNotes(appId, schoolId, sectionIds, date);
 			return new Response<>(list);
 		} catch (Exception e) {
 			return new Response<>(e.getMessage());

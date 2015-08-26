@@ -19,6 +19,7 @@ import static org.junit.Assert.assertNotNull;
 import it.smartcommunitylab.ungiorno.model.BusData;
 import it.smartcommunitylab.ungiorno.model.CalendarItem;
 import it.smartcommunitylab.ungiorno.model.Communication;
+import it.smartcommunitylab.ungiorno.model.InternalNote;
 import it.smartcommunitylab.ungiorno.model.KidCalNote;
 import it.smartcommunitylab.ungiorno.model.KidConfig;
 import it.smartcommunitylab.ungiorno.model.KidProfile;
@@ -26,6 +27,7 @@ import it.smartcommunitylab.ungiorno.model.Menu;
 import it.smartcommunitylab.ungiorno.model.SchoolProfile;
 import it.smartcommunitylab.ungiorno.model.SectionData;
 import it.smartcommunitylab.ungiorno.model.Teacher;
+import it.smartcommunitylab.ungiorno.model.TeacherCalendar;
 import it.smartcommunitylab.ungiorno.storage.DumpDataHelper;
 
 import java.util.List;
@@ -72,6 +74,12 @@ public class TestDummyDataReader {
 		assertNotNull(obj);
 	}
 	@Test
+	public void testInternalNotes() {
+		List<InternalNote> obj = DumpDataHelper.dummyInternalNotes("", "", null);
+		System.err.println(obj.toString());
+		assertNotNull(obj);
+	}
+	@Test
 	public void testKidComms() {
 		List<Communication> obj = DumpDataHelper.dummyComms("", "");
 		System.err.println(obj.toString());
@@ -98,6 +106,12 @@ public class TestDummyDataReader {
 	@Test
 	public void testSections() {
 		List<SectionData> obj = DumpDataHelper.dummySections("", "");
+		System.err.println(obj.toString());
+		assertNotNull(obj);
+	}
+	@Test
+	public void testTeacherCalendar() {
+		List<TeacherCalendar> obj = DumpDataHelper.dummyTecherCalendar("", "");
 		System.err.println(obj.toString());
 		assertNotNull(obj);
 	}

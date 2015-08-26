@@ -1,21 +1,10 @@
-{
-    "data": [
+[
         {
             "timeDivisionInterval": 1800,
             "events": [{
                 "appId": "a",
                 "schoolId": "a",
-                "teachers": [
-                    {
-                        "teacherId": "a"
-                    },
-                    {
-                        "teacherId": "b"
-                    },
-                    {
-                        "teacherId": "c"
-                    }
-                ],
+                "teachers": ["a","b","c"],
                 "from": 1439370000,
                 "to": 1439373600,
                 "what": "class"
@@ -31,14 +20,7 @@
             {
                 "appId": "a",
                 "schoolId": "a",
-                "teachers": [
-                    {
-                        "teacherId": "b"
-                    },
-                    {
-                        "teacherId": "c"
-                    }
-                ],
+                "teachers": ["a","c"],
                 "from": 1439535600,
                 "to": 1439542800,
                 "what": "visita oculistica"
@@ -46,14 +28,7 @@
             {
                 "appId": "a",
                 "schoolId": "a",
-                "teachers": [
-                    {
-                        "teacherId": "a"
-                    },
-                    {
-                        "teacherId": "c"
-                    }
-                ],
+                "teachers": ["a","c"],
                 "from": 1440151200,
                 "to": 1440165600,
                 "what": "class"
@@ -61,4 +36,3 @@
             ]
         }
     ]
-}

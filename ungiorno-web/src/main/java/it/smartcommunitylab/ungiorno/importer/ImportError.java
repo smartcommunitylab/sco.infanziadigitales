@@ -15,11 +15,32 @@
  ******************************************************************************/
 package it.smartcommunitylab.ungiorno.importer;
 
+import java.util.List;
+
 /**
  * @author raman
  *
  */
 public class ImportError extends Exception {
+	
 	private static final long serialVersionUID = -7497867347766723663L;
 
+	private List<String> validationResults;
+
+	public ImportError() {
+		super();
+	}
+	public ImportError(List<String> validationResults) {
+		this.validationResults = validationResults;
+	}
+
+	public ImportError(String error) {
+		super(error);
+	}
+	public List<String> getValidationResults() {
+		return validationResults;
+	}
+	public void setValidationResults(List<String> validationResults) {
+		this.validationResults = validationResults;
+	}
 }

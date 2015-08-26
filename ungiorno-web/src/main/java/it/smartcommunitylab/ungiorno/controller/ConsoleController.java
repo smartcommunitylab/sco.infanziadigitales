@@ -18,10 +18,14 @@ package it.smartcommunitylab.ungiorno.controller;
 
 import it.smartcommunitylab.ungiorno.importer.ImportError;
 import it.smartcommunitylab.ungiorno.importer.Importer;
+import it.smartcommunitylab.ungiorno.model.SchoolProfile;
+import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.security.AppDetails;
 import it.smartcommunitylab.ungiorno.storage.App;
 import it.smartcommunitylab.ungiorno.storage.AppSetup;
 import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
+
+import java.util.List;
 
 import javax.servlet.ServletContext;
 
@@ -48,9 +52,6 @@ public class ConsoleController {
 	private RepositoryManager storage;
 
 	@Autowired
-	private Importer importer;
-
-	@Autowired
 	private AppSetup appSetup;
 
 	@RequestMapping(value = "/")
@@ -74,10 +75,25 @@ public class ConsoleController {
 		String res = "";
 
 		try {
+			String schoolId = req.getParameter("schoolId");
 			String appId = getAppId();
-			for (String key : multiFileMap.keySet()) {
-				importer.importData(appId, key, multiFileMap.getFirst(key));
+			
+			Importer importer = new Importer();
+			
+			if (multiFileMap.containsKey("schoolData")) {
+				importer.importSchoolData(appId, schoolId, multiFileMap.getFirst("schoolData").getInputStream());
+				SchoolProfile profile = importer.getSchoolProfile();
+				storage.storeSchoolProfile(profile);
+				List<Teacher> teachers = importer.getTeachers();
+				storage.updateTeachers(appId, schoolId, teachers);
 			}
+			if (multiFileMap.containsKey("childrenData")) {
+				importer.importChildrenData(appId, schoolId, multiFileMap.getFirst("childrenData").getInputStream());
+				storage.updateChildren(appId, schoolId, importer.getChildren());
+				storage.updateParents(appId, importer.getParents());
+				storage.updateKidBusData(appId, schoolId, importer.getBusData());
+			}
+			res = new ObjectMapper().writeValueAsString(storage.getApp(appId));
 		} catch (ImportError e) {
 			res = new ObjectMapper().writeValueAsString(e);
 		}

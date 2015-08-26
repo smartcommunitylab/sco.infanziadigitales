@@ -26,6 +26,16 @@ public class SectionData extends SchoolObject{
 	public static class ServiceProfile {
 		private boolean enabled, active;
 
+		public ServiceProfile() {
+			super();
+		}
+
+		public ServiceProfile(boolean enabled, boolean active) {
+			super();
+			this.enabled = enabled;
+			this.active = active;
+		}
+
 		public boolean isEnabled() {
 			return enabled;
 		}
@@ -45,8 +55,15 @@ public class SectionData extends SchoolObject{
 
 	public static class KidProfile {
 		private String kidId, childrenName, image;
-		private ServiceProfile anticipo, posticipo, mensa;
+		private ServiceProfile anticipo, posticipo, mensa, bus;
 		private Long exitTime;
+		
+		private String personId;
+		private String personName;
+		private boolean personException;
+		private String note;
+		private String stopId;
+		
 		public String getKidId() {
 			return kidId;
 		}
@@ -88,6 +105,42 @@ public class SectionData extends SchoolObject{
 		}
 		public void setExitTime(Long exitTime) {
 			this.exitTime = exitTime;
+		}
+		public ServiceProfile getBus() {
+			return bus;
+		}
+		public void setBus(ServiceProfile bus) {
+			this.bus = bus;
+		}
+		public String getPersonId() {
+			return personId;
+		}
+		public void setPersonId(String personId) {
+			this.personId = personId;
+		}
+		public boolean isPersonException() {
+			return personException;
+		}
+		public void setPersonException(boolean personException) {
+			this.personException = personException;
+		}
+		public String getPersonName() {
+			return personName;
+		}
+		public void setPersonName(String personName) {
+			this.personName = personName;
+		}
+		public String getStopId() {
+			return stopId;
+		}
+		public void setStopId(String stopId) {
+			this.stopId = stopId;
+		}
+		public String getNote() {
+			return note;
+		}
+		public void setNote(String note) {
+			this.note = note;
 		}
 	}
 

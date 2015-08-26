@@ -15,6 +15,7 @@
  ******************************************************************************/
 package it.smartcommunitylab.ungiorno.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -97,10 +98,19 @@ public class KidProfile extends SchoolObject {
 		this.persons = persons;
 	}
 	public List<Allergy> getAllergies() {
+		if (allergies == null) allergies = new ArrayList<KidProfile.Allergy>();
 		return allergies;
 	}
 	public void setAllergies(List<Allergy> allergies) {
 		this.allergies = allergies;
 	}
 
+	private String _id;
+	public String get_id() {
+		return _id;
+	}
+	public void set_id(String _id) {
+		this._id = _id;
+	}
+	
 }

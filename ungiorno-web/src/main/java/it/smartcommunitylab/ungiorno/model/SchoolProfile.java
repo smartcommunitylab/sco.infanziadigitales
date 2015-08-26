@@ -39,12 +39,58 @@ public class SchoolProfile extends SchoolObject {
 		}
 	}
 
+	public static class SectionProfile {
+		private String sectionId, name;
+
+		public String getSectionId() {
+			return sectionId;
+		}
+
+		public void setSectionId(String sectionId) {
+			this.sectionId = sectionId;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+	}
+	
+	public static class BusProfile {
+		private String busId, name;
+		private int capacity;
+		public String getBusId() {
+			return busId;
+		}
+		public void setBusId(String busId) {
+			this.busId = busId;
+		}
+		public String getName() {
+			return name;
+		}
+		public void setName(String name) {
+			this.name = name;
+		}
+		public int getCapacity() {
+			return capacity;
+		}
+		public void setCapacity(int capacity) {
+			this.capacity = capacity;
+		}
+	}
+	
 	private Timing regularTiming, anticipoTiming, posticipoTiming;
 	private Contact contacts;
 	private List<TypeDef> absenceTypes;
 	private List<TypeDef> frequentIllnesses;
 	private List<TypeDef> teacherNoteTypes;
 	private List<TypeDef> foodTypes;
+	private List<SectionProfile> sections;
+	private List<BusProfile> buses;
+	
 	public Timing getRegularTiming() {
 		return regularTiming;
 	}
@@ -93,6 +139,24 @@ public class SchoolProfile extends SchoolObject {
 	public void setPosticipoTiming(Timing posticipoTiming) {
 		this.posticipoTiming = posticipoTiming;
 	}
+	public List<SectionProfile> getSections() {
+		return sections;
+	}
+	public void setSections(List<SectionProfile> sections) {
+		this.sections = sections;
+	}
+	public List<BusProfile> getBuses() {
+		return buses;
+	}
+	public void setBuses(List<BusProfile> buses) {
+		this.buses = buses;
+	}
 
-
+	private String _id;
+	public String get_id() {
+		return _id;
+	}
+	public void set_id(String _id) {
+		this._id = _id;
+	}
 }

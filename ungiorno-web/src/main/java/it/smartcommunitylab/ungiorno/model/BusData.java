@@ -24,7 +24,8 @@ import java.util.List;
 public class BusData extends SchoolObject{
 
 	public static class KidProfile {
-		private String kidId, personWhoWaitName, personWhoWaitRelation, fullName, busStop, image;
+		private String kidId, personWhoWaitId, personWhoWaitName, personWhoWaitRelation, fullName, busStop, image;
+		private boolean variation;
 
 		public String getKidId() {
 			return kidId;
@@ -50,6 +51,14 @@ public class BusData extends SchoolObject{
 			this.personWhoWaitRelation = personWhoWaitRelation;
 		}
 
+		public String getPersonWhoWaitId() {
+			return personWhoWaitId;
+		}
+
+		public void setPersonWhoWaitId(String personWhoWaitId) {
+			this.personWhoWaitId = personWhoWaitId;
+		}
+
 		public String getFullName() {
 			return fullName;
 		}
@@ -72,6 +81,14 @@ public class BusData extends SchoolObject{
 
 		public void setImage(String image) {
 			this.image = image;
+		}
+
+		public boolean isVariation() {
+			return variation;
+		}
+
+		public void setVariation(boolean variation) {
+			this.variation = variation;
 		}
 	}
 

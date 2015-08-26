@@ -15,12 +15,15 @@
  ******************************************************************************/
 package it.smartcommunitylab.ungiorno.model;
 
+import java.util.List;
+
 /**
  * @author raman
  *
  */
 public class Teacher extends SchoolObject {
-	private String teacherId, sectionId, teacherFullname, teacherSurname, teacherName, colorToDisplay;
+	private String teacherId, username, teacherFullname, teacherSurname, teacherName, colorToDisplay;
+	private List<String> sectionIds;
 
 	public String getTeacherId() {
 		return teacherId;
@@ -30,12 +33,12 @@ public class Teacher extends SchoolObject {
 		this.teacherId = teacherId;
 	}
 
-	public String getSectionId() {
-		return sectionId;
+	public List<String> getSectionIds() {
+		return sectionIds;
 	}
 
-	public void setSectionId(String sectionId) {
-		this.sectionId = sectionId;
+	public void setSectionIds(List<String> sectionIds) {
+		this.sectionIds = sectionIds;
 	}
 
 	public String getTeacherFullname() {
@@ -68,5 +71,13 @@ public class Teacher extends SchoolObject {
 
 	public void setColorToDisplay(String colorToDisplay) {
 		this.colorToDisplay = colorToDisplay;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 }

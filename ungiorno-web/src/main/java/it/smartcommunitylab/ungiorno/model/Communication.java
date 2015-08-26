@@ -64,4 +64,13 @@ public class Communication extends SchoolObject {
 	public void setDoCheck(boolean doCheck) {
 		this.doCheck = doCheck;
 	}
+	
+	private String _id;
+
+	public String get_id() {
+		return _id;
+	}
+	public void set_id(String _id) {
+		this._id = _id;
+	}
 }

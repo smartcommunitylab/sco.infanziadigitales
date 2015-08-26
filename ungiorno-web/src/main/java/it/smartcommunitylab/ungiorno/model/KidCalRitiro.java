@@ -23,6 +23,7 @@ public class KidCalRitiro extends SchoolObject {
 
 	private String kidId, personId, note;
 	private long date;
+	private boolean exceptional;
 
 	public String getKidId() {
 		return kidId;
@@ -50,5 +51,21 @@ public class KidCalRitiro extends SchoolObject {
 	}
 
 
+	public boolean isExceptional() {
+		return exceptional;
+	}
+	public void setExceptional(boolean exceptional) {
+		this.exceptional = exceptional;
+	}
+
+
+	private String _id;
+
+	public String get_id() {
+		return _id;
+	}
+	public void set_id(String _id) {
+		this._id = _id;
+	}
 
 }

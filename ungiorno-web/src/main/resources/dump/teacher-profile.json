@@ -2,7 +2,7 @@
         {
             "appId": "a",
             "schoolId": "a",
-            "sectionId": "a",
+            "sectionIds": ["a"],
             "teacherId": "a",
             "teacherFullname": "Chiara Rossi",
             "teacherName": "Chiara",
@@ -12,7 +12,7 @@
         {
             "appId": "a",
             "schoolId": "a",
-            "sectionId": "a",
+            "sectionIds": ["a"],
             "teacherId": "b",
             "teacherFullname": "Maria Verdi",
             "teacherName": "Maria",
@@ -22,7 +22,7 @@
         {
             "appId": "a",
             "schoolId": "a",
-            "sectionId": "a",
+            "sectionIds": ["a"],
             "teacherId": "c",
             "teacherFullname": "Giulia Gelsomino",
             "teacherName": "Giulia",

@@ -27,6 +27,16 @@ public class AuthPerson {
 	private List<String> phone, email;
 	private long authorizationDeadline;
 	boolean adult, parent, _default;
+
+	public AuthPerson() {
+		super();
+	}
+	public AuthPerson(String id, String rel,  boolean _default) {
+		this.personId = id;
+		this._default = _default;
+		this.parent = true;
+		this.relation = rel;
+	}
 	public String getPersonId() {
 		return personId;
 	}

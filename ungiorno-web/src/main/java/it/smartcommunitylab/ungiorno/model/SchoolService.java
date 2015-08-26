@@ -24,6 +24,19 @@ public class SchoolService {
 	private boolean enabled;
 	private String note;
 
+	public SchoolService(boolean enabled) {
+		super();
+		this.enabled = enabled;
+	}
+	public SchoolService() {
+		super();
+	}
+
+	public SchoolService(boolean enabled, String note) {
+		super();
+		this.enabled = enabled;
+		this.note = note;
+	}
 	public boolean isEnabled() {
 		return enabled;
 	}

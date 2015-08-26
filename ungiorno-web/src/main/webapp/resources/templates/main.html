@@ -1,16 +1,16 @@
 <div>
 	<div class="container-fluid">
+        <nav class="navbar navbar-inverse">
+            <div class="navbar-header">
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav navbar-right">
+                <li><a href="logout">Logout</a></li>
+              </ul>
+            </div>
+        </nav>   
 		<div class="row">
 			<div class="col-md-10 col-md-offset-2 main">
-			  <div class="row">
-			     <div class="col-md-12">
-                     <h3>{{profile.appInfo.appId}}</h3>
-			         <h4>Published version: {{profile.publishState.version}}</h4>
-                     <h4>Draft version: {{profile.draftState.version}}</h4>
-                     <button ng-click="publishApp()" ng-show="profile.draftState.version > profile.publishState.version" type="button" class="form-group btn btn-primary">Publish</button>
-                     <div>&nbsp;</div>
-    			 </div>
-			  </div>
               <div class="row">
                 <div class="col-md-8 alert alert-danger" role="alert" ng-if="errorTexts.length > 0">
                    <span ng-repeat="errorText in errorTexts track by $index">{{errorText}}<br/></span>
@@ -25,13 +25,24 @@
 	              <div class="panel panel-default">
 	                <div class="row">
 		              <div class="col-md-12">
-		                <form class="col-md-12" action="savefiles" method="post" enctype="multipart/form-data" ng-upload="uploadComplete(content)">
-                          <h4>Model upload</h4>
-		                  <div class="form-group" ng-repeat="elem in profile.appInfo.modelElements">
-		                    <label for="{{$index}}">{{elem}}</label>
-		                    <input id="{{$index}}" name="{{elem}}" type="file" />
+		                <form name="dataForm" class="col-md-12" action="savefiles" method="post" enctype="multipart/form-data" ng-upload="uploadComplete(content)">
+                          <div class="form-group">
+                            <label for="schoolId">School</label>
+                            <select id="schoolId" name="schoolId" ng-required="true" ng-model="schoolId">
+                                <option ng-repeat="option in profile.schools" value="{{option.schoolId}}">{{option.schoolId}}</option>
+                            </select>
+                          </div>
+		                
+                          <h4>Data upload</h4>
+		                  <div class="form-group">
+		                    <label for="schoolData">School data</label>
+		                    <input id="schoolData" name="schoolData" type="file" />
 		                  </div>
-		                  <button type="submit" class="form-group btn btn-default">Submit</button>
+                          <div class="form-group">
+                            <label for="childrenData">Children data</label>
+                            <input id="childrenData" name="childrenData" type="file" />
+                          </div>
+		                  <button ng-disabled="!dataForm.$valid" type="submit" class="form-group btn btn-default">Submit</button>
 		                  <div>&nbsp;</div>
 		                </form>
 		              </div>

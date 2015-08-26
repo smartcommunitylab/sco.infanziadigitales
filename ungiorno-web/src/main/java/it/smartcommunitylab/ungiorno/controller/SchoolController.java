@@ -19,7 +19,6 @@ package it.smartcommunitylab.ungiorno.controller;
 import it.smartcommunitylab.ungiorno.model.BusData;
 import it.smartcommunitylab.ungiorno.model.Communication;
 import it.smartcommunitylab.ungiorno.model.InternalNote;
-import it.smartcommunitylab.ungiorno.model.KidCalNote;
 import it.smartcommunitylab.ungiorno.model.Menu;
 import it.smartcommunitylab.ungiorno.model.Response;
 import it.smartcommunitylab.ungiorno.model.SchoolProfile;
@@ -28,6 +27,7 @@ import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.model.TeacherCalendar;
 import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -99,13 +99,20 @@ public class SchoolController {
 		}
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "/school/{appId}/{schoolId}/{kidId}/notes")
-	public @ResponseBody Response<KidCalNote> sendNote(@RequestBody KidCalNote comm, @PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId) {
+	@RequestMapping(method = RequestMethod.POST, value = "/school/{appId}/{schoolId}/notes")
+	public @ResponseBody Response<InternalNote> sendNote(@RequestBody InternalNote comm, @PathVariable String appId, @PathVariable String schoolId, @RequestParam(required=false) String[] kidIds, @RequestParam(required=false) String[] sectionIds) {
 
 		try {
 			comm.setAppId(appId);
 			comm.setSchoolId(schoolId);
-			comm.setKidId(kidId);
+			if (kidIds != null && kidIds.length > 0) {
+				comm.setKidIds(kidIds);
+			}
+			else if (sectionIds != null && sectionIds.length > 0) {
+				comm.setSectionIds(sectionIds);
+			} else {
+				comm.setSectionIds((String[])storage.getTeacher(getUserId(), appId, schoolId).getSectionIds().toArray());
+			}
 
 			return new Response<>(storage.saveInternalNote(comm));
 		} catch (Exception e) {
@@ -117,6 +124,9 @@ public class SchoolController {
 	public @ResponseBody Response<List<InternalNote>> getNotes(@PathVariable String appId, @PathVariable String schoolId, @RequestParam(required=false) String[] sectionIds, @RequestParam long date) {
 
 		try {
+			if (sectionIds == null || sectionIds.length == 0) {
+				sectionIds = (String[])storage.getTeacher(getUserId(), appId, schoolId).getSectionIds().toArray();
+			}
 			List<InternalNote> list = storage.getInternalNotes(appId, schoolId, sectionIds, date);
 			return new Response<>(list);
 		} catch (Exception e) {
@@ -183,7 +193,9 @@ public class SchoolController {
 	public @ResponseBody Response<List<SectionData>> getSections(@PathVariable String appId, @PathVariable String schoolId, @RequestParam long date) {
 
 		try {
-			List<SectionData> list = storage.getSections(appId, schoolId, date);
+
+			Collection<String> sections = storage.getTeacher(getUserId(), appId, schoolId).getSectionIds();
+			List<SectionData> list = storage.getSections(appId, schoolId, sections , date);
 			return new Response<>(list);
 		} catch (Exception e) {
 			return new Response<>(e.getMessage());

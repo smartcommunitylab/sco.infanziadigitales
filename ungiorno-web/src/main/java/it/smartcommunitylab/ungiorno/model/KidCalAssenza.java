@@ -73,4 +73,27 @@ public class KidCalAssenza extends SchoolObject {
 	public void setReason(Reason reason) {
 		this.reason = reason;
 	}
+
+	private String _id;
+
+	public String get_id() {
+		return _id;
+	}
+	public void set_id(String _id) {
+		this._id = _id;
+	}
+	/**
+	 * @return
+	 */
+	public KidCalAssenza copy() {
+		KidCalAssenza copy = new KidCalAssenza();
+		copy.kidId = kidId;
+		copy.setAppId(getAppId());
+		copy.setSchoolId(getSchoolId());
+		copy.dateFrom = dateFrom;
+		copy.dateTo = dateTo;
+		copy.note = note;
+		copy.reason = reason;
+		return copy;
+	}
 }

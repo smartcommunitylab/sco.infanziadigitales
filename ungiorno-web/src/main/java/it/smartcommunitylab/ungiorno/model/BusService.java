@@ -15,6 +15,7 @@
  ******************************************************************************/
 package it.smartcommunitylab.ungiorno.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -54,6 +55,17 @@ public class BusService extends SchoolService {
 
 	}
 
+	public BusService() {
+		super();
+	}
+	public BusService(boolean enabled, String stopId) {
+		super(enabled);
+		this.stops = new ArrayList<BusService.Stop>();
+		Stop s = new Stop();
+		s.setStopId(stopId);
+		s.setDefault(true);
+		stops.add(s);
+	}
 	private List<Stop> stops;
 
 	public List<Stop> getStops() {

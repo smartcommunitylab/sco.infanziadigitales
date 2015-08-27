@@ -213,7 +213,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         if (sectionId != 'all') {
             $scope.section = $scope.sections[sectionId];
             $scope.getChildrenByCurrentSection();
-            $scope.loadNotes();
         } else {
             //section == allchildren
             sectionService.setSection(-1);
@@ -227,7 +226,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
             }
             $scope.getChildrenByCurrentSection();
         }
-
+        $scope.loadNotes();
     }
 
     $scope.loadNotes = function () {
@@ -256,6 +255,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
                                 var baby = {
                                     image: $scope.section.children[sectionChildrenIndex].image,
                                     name: $scope.section.children[sectionChildrenIndex].childrenName
+
                                 }
                                 note.kids.push(baby);
                                 kidToFind--;

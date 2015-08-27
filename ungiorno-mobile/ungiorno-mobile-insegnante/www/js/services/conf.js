@@ -4,8 +4,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
 
     var DEVELOPMENT = true;
     var URL = 'https://' + (DEVELOPMENT ? 'dev' : 'tn') + '.smartcommunitylab.it';
-    var app = 'ungiorno'
-    var appId = 'testAppId'
+    var app = 'ungiorno2'
+    var appId = 'trento'
 
     var APP_BUILD = '';
 

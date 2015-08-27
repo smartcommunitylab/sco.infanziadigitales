@@ -13,12 +13,11 @@
                         </div>
                         <div style="display:inline-block; vertical-align:top; margin-left: 32px; margin-top: 8px;">
                             <h3 class="babyProfile detailItem">{{babyProfile.firstName}} {{'is' | translate}} {{babyStatus | uppercase}}</h3>
-                            <h3 class="babyProfile detailItem" ng-if="babyConfig.exitTime !== null">{{'enter_at' | translate}} {{babyEnterHour}}</h3>
-                            <h3 class="babyProfile detailItem" ng-if="checkBusServiceActive()">{{'bus_stop_go' | translate}} {{babyBusStopGoName}}</h3>
+                            <h3 class="babyProfile detailItem" ng-if="babyInformations.exitTime !== null">{{'enter_at' | translate}} {{babyEnterHour}}</h3>
                             <h3 class="babyProfile detailItem" ng-if="checkBusServiceActive()">{{'bus_stop_back' | translate}} {{babyBusStopBackName}}</h3>
-                            <h3 class="babyProfile detailItem" ng-if="babyConfig.exitTime !== null">{{'exit_at' | translate}}{{babyConfig.exitTime | date:'hh:mm'}}</h3>
-                            <h3 class="babyProfile detailItem" >{{'person_who_retire' | translate}}{{personWhoRetire.fullName}} ({{personWhoRetire.relation}})</h3>
-                            <h4 class="babyProfile detailItem" style="color: #ff0000;" ng-if="personWhoRetire.isDelegate">{{'extra_delegation' | translate}}</h3>
+                            <h3 class="babyProfile detailItem" ng-if="babyInformations.exitTime !== null">{{'exit_at' | translate}}{{babyInformations.exitTime | date:'hh:mm'}}</h3>
+                            <h3 class="babyProfile detailItem" >{{'person_who_retire' | translate}}{{babyInformations.personName}} ({{babyInformations.relation}})</h3>
+                            <h4 class="babyProfile detailItem" style="color: #ff0000;" ng-if="babyInformations.personException">{{'extra_delegation' | translate}}</h3>
                             <a href="http://www.google.it" class="babyProfile detailItem" ng-if="personWhoRetire.isDelegate">{{'view_delegation' | translate}}</a>
                         </div>
                     </div>

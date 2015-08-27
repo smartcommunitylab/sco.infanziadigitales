@@ -48,7 +48,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
 
     dataServerService.getBabyProfileById = function (schoolId, kidId) {
         var deferred = $q.defer();
-
         $http({
             method: 'GET',
             url: Config.URL() + '/' + Config.app() + '/student/' + Config.appId() + '/' + schoolId + '/' + kidId + '/profile',
@@ -109,24 +108,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
 
 /school/{appId}/{schoolId}/notes?sectionIds=<comma-separated list of sectionIds, may be null>*/
 
-    dataServerService.getKidsNotesByKidIds = function (schoolId, kidIds) {
+    dataServerService.getKidsNotesByKidId = function (schoolId, kidId) {
         var deferred = $q.defer();
-
-        var commaSeparatedIds = '';
-
-        if (kidIds !== undefined) {
-            for (var i = 0; i < kidIds.length - 1; i++) {
-                commaSeparatedIds += kidIds[i] + ',';
-            }
-            commaSeparatedIds += kidIds[kidIds.length - 1];
-        }
 
         $http({
             method: 'GET',
-            url: Config.URL() + '/' + Config.app() + '/student/' + Config.appId() + '/' + schoolId + '/notes',
+            url: Config.URL() + '/' + Config.app() + '/student/' + Config.appId() + '/' + schoolId + '/' + kidId + '/notes',
             params: {
-                date: new Date().getTime(),
-                kidIds: commaSeparatedIds
+                date: new Date().getTime()
             },
             headers: {
                 'Accept': 'application/json'

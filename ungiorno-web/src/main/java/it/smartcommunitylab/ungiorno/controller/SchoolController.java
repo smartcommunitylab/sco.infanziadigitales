@@ -111,7 +111,7 @@ public class SchoolController {
 			else if (sectionIds != null && sectionIds.length > 0) {
 				comm.setSectionIds(sectionIds);
 			} else {
-				comm.setSectionIds((String[])storage.getTeacher(getUserId(), appId, schoolId).getSectionIds().toArray());
+				comm.setSectionIds(storage.getTeacher(getUserId(), appId, schoolId).getSectionIds().toArray(new String[0]));
 			}
 
 			return new Response<>(storage.saveInternalNote(comm));
@@ -125,7 +125,7 @@ public class SchoolController {
 
 		try {
 			if (sectionIds == null || sectionIds.length == 0) {
-				sectionIds = (String[])storage.getTeacher(getUserId(), appId, schoolId).getSectionIds().toArray();
+				sectionIds = (String[])storage.getTeacher(getUserId(), appId, schoolId).getSectionIds().toArray(new String[0]);
 			}
 			List<InternalNote> list = storage.getInternalNotes(appId, schoolId, sectionIds, date);
 			return new Response<>(list);

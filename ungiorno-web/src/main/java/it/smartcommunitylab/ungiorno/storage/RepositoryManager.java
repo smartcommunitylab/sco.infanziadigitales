@@ -727,7 +727,7 @@ public class RepositoryManager {
 	/**
 	 * @return
 	 */
-	public Teacher getTeacher(String appId, String schoolId, String username) {
+	public Teacher getTeacher(String username, String appId, String schoolId) {
 		Query q = schoolQuery(appId, schoolId);
 		q.addCriteria(new Criteria("username").is(username));
 		return template.findOne(q, Teacher.class);

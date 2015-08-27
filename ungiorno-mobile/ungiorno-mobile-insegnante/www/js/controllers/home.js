@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.home', [])
 
-.controller('HomeCtrl', function ($scope, $location, dataServerService, profileService, babyConfigurationService, $filter, $state, Toast, $ionicModal, moment, teachersService, sectionService, communicationService, $ionicSideMenuDelegate) {
+.controller('HomeCtrl', function ($scope, $location, dataServerService, profileService, babyConfigurationService, $filter, $state, Toast, $ionicModal, moment, teachersService, sectionService, communicationService, $ionicSideMenuDelegate, $ionicPopup) {
     $scope.sections = null;
     $scope.section = null;
     $scope.childrenConfigurations = [];
@@ -40,36 +40,118 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     };
     $scope.newNote = {
         possibleChildrens: [],
+        associatedKids: [],
         search: '',
-        kidIds: []
+        kidIds: [],
+        showHints: false
     };
 
-    $scope.selectChildrenForNote = function (children) {
-        $scope.newNote.search = children.childrenName;
-        $scope.newNote.kidIds.push(children.kidId);
-        $scope.newNote.possibleChildrens = [];
-        //TODO: possible childrens list design have to have: image and name of the kid
-        //TODO: multiple baby list with delete option (like tags in diario-condiviso)
-    }
-    $scope.search = function () {
-            if ($scope.newNote.search != "") {
-                profileService.searchChildrenBySection($scope.newNote.search, $scope.section.sectionId).then(
-                    function (children) {
-                        $scope.newNote.possibleChildrens = children;
-                    }
-                )
-            } else {
-                $scope.newNote.possibleChildrens = [];
+    $scope.sendNewNote = function () {
+        var noteToSend = {
+            date: new Date(),
+            note: $scope.newNote.description
+        };
+        var ids;
+        if ($scope.newNote.assignedBaby) {
+            ids = $scope.newNote.kidIds;
+        } else {
+            if ($scope.section.sectionId !== "all") {
+                ids = [$scope.section.sectionId];
             }
         }
-        //dovrebbe essere in base all'ora
-    $scope.selectedPeriod = 'anticipo';
+
+        var requestFail = function () {
+            var myPopup = $ionicPopup.show({
+                title: $filter('translate')('new_note_fail'),
+                scope: $scope,
+                buttons: [
+                    { text: $filter('translate')('cancel') },
+                    {
+                        text: '<b>' + $filter('translate')('retry') + '</b>',
+                        type: 'button-positive',
+                        onTap: function(e) {
+                            $scope.sendNewNote();
+                        }
+                    }
+                ]
+            });
+        }
+
+        var requestSuccess = function (data) {
+            Toast.show($filter('translate')('new_note_sent'), 'bottom', 'short');
+            $scope.newNote = {
+                possibleChildrens: [],
+                associatedKids: [],
+                search: '',
+                kidIds: [],
+                showHints: false
+            };
+        }
+
+        dataServerService.addNewInternalNote($scope.schoolProfile.schoolId, $scope.newNote.assignedBaby, ids, noteToSend).then(function (data) {
+            requestSuccess();
+        }, function (data) {
+            requestFail();
+        });
+    }
+
+    $scope.selectChildrenForNote = function (children) {
+        if ($scope.newNote.kidIds.indexOf(children.kidId) === -1) {
+            $scope.newNote.kidIds.push(children.kidId);
+            $scope.newNote.associatedKids.push(children);
+        }
+        $scope.newNote.search = "";
+        $scope.newNote.possibleChildrens = [];
+    }
+
+    $scope.deleteChildrenFromNewNote = function (children) {
+        var index = $scope.newNote.kidIds.indexOf(children.kidId);
+        $scope.newNote.kidIds.splice(index, 1);
+        $scope.newNote.associatedKids.splice($scope.newNote.associatedKids.indexOf(children), 1);
+    }
+
+    $scope.openHint = function () {
+        $scope.newNote.showHints = true;
+        console.log($scope.newNote.showHints);
+    }
+    $scope.closeHint = function () {
+        $scope.newNote.showHints = false;
+        console.log($scope.newNote.showHints);
+    }
+
+
+    $scope.search = function () {
+        if ($scope.newNote.search != "") {
+            profileService.searchChildrenBySection($scope.newNote.search, $scope.section.sectionId).then(
+                function (children) {
+                    $scope.newNote.possibleChildrens = children;
+                }
+            )
+        } else {
+            $scope.newNote.possibleChildrens = [];
+        }
+    }
+
+    var getPeriodToNow = function () {
+        var period;
+        var now = $filter('date')(new Date(), 'H:mm'); //bad workaround, but current schoolprofile timings aren't timestamps!
+        if (now >= $scope.schoolProfile.regularTiming.fromTime && now < $scope.schoolProfile.regularTiming.toTime) {
+            period = 'pranzo';
+        } else if (now >= $scope.schoolProfile.posticipoTiming.fromTime && now < $scope.schoolProfile.posticipoTiming.toTime) {
+            period = 'posticipo';
+        } else {
+            period = 'anticipo';
+        }
+        return period;
+    }
 
     $scope.title = moment().locale('it').format("dddd, D MMMM gggg");
     $scope.initialize = function () {
         dataServerService.getSchoolProfileForTeacher().then(function (schoolProfile) {
             $scope.schoolProfile = schoolProfile;
             profileService.setSchoolProfile($scope.schoolProfile);
+            $scope.selectedPeriod = getPeriodToNow();
+
             dataServerService.getSections($scope.schoolProfile.schoolId).then(function (data) {
                 $scope.sections = data;
                 $scope.section = $scope.sections[0];
@@ -91,9 +173,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
                 $scope.changeCommunication($scope.data.communication);
             });
         });
-
-
-
     };
 
     $scope.openParentsNotes = function () {

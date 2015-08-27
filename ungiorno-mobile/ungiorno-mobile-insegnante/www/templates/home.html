@@ -123,14 +123,29 @@
                                 <label class="checkbox">
                                     <input type="checkbox"ng-model="newNote.assignedBaby">
                                 </label>
-                                {{'associated_a_child' | translate}}
+                                {{'associate_to_childs' | translate}}
                             </div>
                             <label class="item item-input">
-                                <input type="text" ng-disabled="!newNote.assignedBaby" placeholder="Nome Bambino" ng-change="search()" ng-model="newNote.search">
+                                <input type="text" ng-disabled="!newNote.assignedBaby" placeholder="{{'baby_name' | translate}}" ng-change="search()" ng-focus="openHint()" ng-blur="closeHint()" ng-model="newNote.search">
                             </label>
-                            <div class="list children-search">
-                                <div class="item child-search" ng-repeat="children in newNote.possibleChildrens" ng-click="selectChildrenForNote(children)">{{children.childrenName}}</div>
+                            <ion-list class="list children-search" ng-if="newNote.showHints">
+                                <ion-item ng-repeat="children in newNote.possibleChildrens" class="child-search" ng-click="selectChildrenForNote(children)">
+                                    <img class="inline new-note-kid-image" ng-src="{{children.image}}"></img>
+                                    <div class="inline new-note-kid-name">{{children.childrenName}}</div>
+                                </ion-item>
+                            </ion-list>
+                            <div ng-if="newNote.assignedBaby">
+                                {{'associated_kids' | translate}}
                             </div>
+                            <ion-list ng-if="newNote.assignedBaby">
+                                <ion-item class="associated-kid-container" ng-repeat="children in newNote.associatedKids">
+                                    <img class="inline associated-kid-image" ng-src="{{children.image}}"></img>
+                                    <div class="inline associated-kid-name">{{children.childrenName}}</div>
+                                    <button class="button associated-kid-delete-btn" ng-click="deleteChildrenFromNewNote(children)">
+                                        <i class="icon ion-android-close"></i>
+                                    </button>
+                                </ion-item>
+                            </ion-list>
                             <div class="new-note-actions row">
                                 <button class="button cancel-button col" ng-click="cancelNewNote()">{{'cancel' | translate}}</button>
                                 <button class="button create-button col" ng-click="sendNewNote()">{{'create_note' | translate}}</button>

@@ -1551,11 +1551,6 @@ select {
 	background-color:#e6e6e6;
 }
 
-.children-search {
-    position: absolute;
-    width: 100%;
-}
-
 .child-search {
     background-color: white !important;
 }
@@ -1563,21 +1558,8 @@ select {
 .children-search {
     position: absolute;
     width: 100%;
+    z-index: 3;
 }
-
-.child-search {
-    background-color: white !important;
-}
-
-.children-search {
-    position: absolute;
-    width: 100%;
-}
-
-.child-search {
-    background-color: white !important;
-}
-
 
 .notes-baby-image {
     max-width: 80px;
@@ -1689,4 +1671,29 @@ ion-content .scroll {
 
 .new-note-assign-container {
     margin-top: 24px;
+}
+
+.new-note-kid-image {
+    max-width: 64px;
+    max-height: 64px;
+}
+
+.new-note-kid-name {
+    vertical-align: top;
+}
+
+.associated-kid-container {
+}
+
+.associated-kid-name {
+    margin-left: 8px;
+    vertical-align: middle;
+}
+.associated-kid-image {
+    vertical-align: middle;
+    max-height: 64px;
+    max-width: 64px;
+}
+.associated-kid-delete-btn {
+    float: right;
 }

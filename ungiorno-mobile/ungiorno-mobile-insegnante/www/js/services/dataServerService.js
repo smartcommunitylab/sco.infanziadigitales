@@ -230,15 +230,33 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
         return deferred.promise;
     }
 
-    dataServerService.addNewNoteForTeacher = function (schoolId, kidId, note) {
+    dataServerService.addNewInternalNote = function (schoolId, isAssignedToChilds, ids, note) { //ids could be kidIds or sectionIds
         var deferred = $q.defer();
+
+        var commaSeparatedIds = '';
+
+        if (ids !== undefined) {
+            for (var i = 0; i < ids.length - 1; i++) {
+                commaSeparatedIds += ids[i] + ',';
+            }
+            commaSeparatedIds += ids[ids.length - 1];
+        }
+
+        var params = {};
+        if (isAssignedToChilds) {
+            params.kidIds = ids;
+        } else {
+            params.sectionIds = ids;
+        }
+
         $http({
             method: 'POST',
-            url: Config.URL() + '/' + Config.app() + '/school/' + Config.appId() + '/' + schoolId + '/' + kidId + '/notes',
+            url: Config.URL() + '/' + Config.app() + '/school/' + Config.appId() + '/' + schoolId + '/notes',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
+            params: params,
             data: note,
         }).
         success(function (data, status, headers, config) {

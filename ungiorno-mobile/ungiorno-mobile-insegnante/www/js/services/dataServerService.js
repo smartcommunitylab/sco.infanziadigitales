@@ -65,26 +65,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
         });
         return deferred.promise;
     }
-<<<<<<< HEAD
-    dataServerService.getSchoolProfile = function (appId, schoolId) {
-        var deferred = $q.defer();
 
-        $http({
-            method: 'GET',
-            url: Config.URL() + '/' + Config.app() + '/school/' + Config.appId() + '/' + schoolId + '/' + '/profile',
-            headers: {
-                'Accept': 'application/json'
-            }
-        }).error(function (data, status, headers, config) {
-=======
     dataServerService.getSchoolProfile = function (schoolId) {
         var deferred = $q.defer();
         $http({
             method: 'GET',
             url: Config.URL() + '/' + Config.app() + '/school/' + Config.appId() + '/' + schoolId + '/profile',
-            params: {
-                date: new Date().getTime()
-            },
             headers: {
                 'Accept': 'application/json'
             }
@@ -93,7 +79,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
             deferred.resolve(data.data);
         }).
         error(function (data, status, headers, config) {
->>>>>>> origin/master
             console.log(data + status + headers + config);
             deferred.reject(data.errorCode + ' ' + data.errorMessage);
         });

@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.home', [])
 
-.controller('HomeCtrl', function ($scope, $location, dataServerService, profileService, babyConfigurationService, $filter, $state, Toast, $ionicModal, moment, teachersService, sectionService, communicationService, $ionicSideMenuDelegate) {
+.controller('HomeCtrl', function ($scope, $location, dataServerService, profileService, babyConfigurationService, $filter, $state, Toast, $ionicModal, moment, teachersService, sectionService, communicationService, $ionicSideMenuDelegate, $ionicPopup) {
     $scope.sections = null;
     $scope.section = null;
     $scope.childrenConfigurations = [];
@@ -40,36 +40,119 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     };
     $scope.newNote = {
         possibleChildrens: [],
+        associatedKids: [],
         search: '',
-        kidIds: []
+        kidIds: [],
+        showHints: false
     };
 
-    $scope.selectChildrenForNote = function (children) {
-        $scope.newNote.search = children.childrenName;
-        $scope.newNote.kidIds.push(children.kidId);
-        $scope.newNote.possibleChildrens = [];
-        //TODO: possible childrens list design have to have: image and name of the kid
-        //TODO: multiple baby list with delete option (like tags in diario-condiviso)
-    }
-    $scope.search = function () {
-            if ($scope.newNote.search != "") {
-                profileService.searchChildrenBySection($scope.newNote.search, $scope.section.sectionId).then(
-                    function (children) {
-                        $scope.newNote.possibleChildrens = children;
-                    }
-                )
-            } else {
-                $scope.newNote.possibleChildrens = [];
+    $scope.sendNewNote = function () {
+        var noteToSend = {
+            date: new Date().getTime(),
+            note: $scope.newNote.description
+        };
+        var ids;
+        if ($scope.newNote.assignedBaby) {
+            ids = $scope.newNote.kidIds;
+        } else {
+            if ($scope.section.sectionId !== "all") {
+                ids = [$scope.section.sectionId];
             }
         }
-        //dovrebbe essere in base all'ora
-    $scope.selectedPeriod = 'anticipo';
+
+        var requestFail = function () {
+            var myPopup = $ionicPopup.show({
+                title: $filter('translate')('new_note_fail'),
+                scope: $scope,
+                buttons: [
+                    { text: $filter('translate')('cancel') },
+                    {
+                        text: '<b>' + $filter('translate')('retry') + '</b>',
+                        type: 'button-positive',
+                        onTap: function(e) {
+                            $scope.sendNewNote();
+                        }
+                    }
+                ]
+            });
+        }
+
+        var requestSuccess = function (data) {
+            Toast.show($filter('translate')('new_note_sent'), 'bottom', 'short');
+            $scope.newNote = {
+                possibleChildrens: [],
+                associatedKids: [],
+                search: '',
+                kidIds: [],
+                showHints: false
+            };
+            $scope.teacherNotes.push(data.data);
+        }
+
+        dataServerService.addNewInternalNote($scope.schoolProfile.schoolId, $scope.newNote.assignedBaby, ids, noteToSend).then(function (data) {
+            requestSuccess(data);
+        }, function (data) {
+            requestFail(data);
+        });
+    }
+
+    $scope.selectChildrenForNote = function (children) {
+        if ($scope.newNote.kidIds.indexOf(children.kidId) === -1) {
+            $scope.newNote.kidIds.push(children.kidId);
+            $scope.newNote.associatedKids.push(children);
+        }
+        $scope.newNote.search = "";
+        $scope.newNote.possibleChildrens = [];
+    }
+
+    $scope.deleteChildrenFromNewNote = function (children) {
+        var index = $scope.newNote.kidIds.indexOf(children.kidId);
+        $scope.newNote.kidIds.splice(index, 1);
+        $scope.newNote.associatedKids.splice($scope.newNote.associatedKids.indexOf(children), 1);
+    }
+
+    $scope.openHint = function () {
+        $scope.newNote.showHints = true;
+        console.log($scope.newNote.showHints);
+    }
+    $scope.closeHint = function () {
+        $scope.newNote.showHints = false;
+        console.log($scope.newNote.showHints);
+    }
+
+
+    $scope.search = function () {
+        if ($scope.newNote.search != "") {
+            profileService.searchChildrenBySection($scope.newNote.search, $scope.section).then(
+                function (children) {
+                    $scope.newNote.possibleChildrens = children;
+                }
+            )
+        } else {
+            $scope.newNote.possibleChildrens = [];
+        }
+    }
+
+    var getPeriodToNow = function () {
+        var period;
+        var now = $filter('date')(new Date(), 'H:mm'); //bad workaround, but current schoolprofile timings aren't timestamps!
+        if (now >= $scope.schoolProfile.regularTiming.fromTime && now < $scope.schoolProfile.regularTiming.toTime) {
+            period = 'mensa';
+        } else if (now >= $scope.schoolProfile.posticipoTiming.fromTime && now < $scope.schoolProfile.posticipoTiming.toTime) {
+            period = 'posticipo';
+        } else {
+            period = 'anticipo';
+        }
+        return period;
+    }
 
     $scope.title = moment().locale('it').format("dddd, D MMMM gggg");
     $scope.initialize = function () {
         dataServerService.getSchoolProfileForTeacher().then(function (schoolProfile) {
             $scope.schoolProfile = schoolProfile;
             profileService.setSchoolProfile($scope.schoolProfile);
+            $scope.selectedPeriod = getPeriodToNow();
+
             dataServerService.getSections($scope.schoolProfile.schoolId).then(function (data) {
                 $scope.sections = data;
                 $scope.section = $scope.sections[0];
@@ -87,13 +170,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
             communicationService.getCommunicationsFromServer($scope.schoolProfile.schoolId).then(function (data) {
                 $scope.communications = data;
                 //check if parameter is sent otherwise take the first
-                $scope.data.communication = $scope.communications[0].communicationId;
-                $scope.changeCommunication($scope.data.communication);
+                /*$scope.data.communication = $scope.communications[0].communicationId;
+                $scope.changeCommunication($scope.data.communication);*/
             });
         });
-
-
-
     };
 
     $scope.openParentsNotes = function () {
@@ -150,13 +230,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
 
     }
 
-    $scope.detailOrCommunication = function (childId) {
+    $scope.detailOrCommunication = function (child) {
         //se modalita' communication, modifico lista consegne e poi confermo
         //altrimenti openDetail(index)
         if ($scope.communicationExpanded) {
-            $scope.switchChildrenDeliveryByID(childId)
+            $scope.switchChildrenDeliveryByID(child.kidId)
         } else {
-            $scope.openDetail(childId);
+            $scope.openDetail(child);
         }
     }
     $scope.communicationDone = function (childId) {
@@ -178,10 +258,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
 
         $scope.numberOfChildren = $scope.section.children.length;
         for (var i = 0; i < $scope.numberOfChildren; i++) {
-            profileService.getBabyProfileById($scope.schoolProfile.schoolId, $scope.section.children[i].childrenId).then(function (profile) {
+            profileService.getBabyProfileById($scope.schoolProfile.schoolId, $scope.section.children[i].kidId).then(function (profile) {
                 $scope.childrenProfiles.push(profile);
             });
-            babyConfigurationService.getBabyConfigurationById($scope.schoolProfile.schoolId, $scope.section.children[i].childrenId).then(function (configuration) {
+            babyConfigurationService.getBabyConfigurationById($scope.schoolProfile.schoolId, $scope.section.children[i].kidId).then(function (configuration) {
                 $scope.childrenConfigurations.push(configuration);
             });/*
             babyConfigurationService.getBabyNotesById($scope.schoolProfile.schoolId, $scope.section.children[i].childrenId).then(function (notes) {
@@ -293,8 +373,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         return note.kidIds !== null;
     }
 
-    $scope.openDetail = function (childId) {
-        profileService.setCurrentBabyID(childId);
+    $scope.openDetail = function (child) {
+        profileService.setCurrentBaby(child);
         window.location.assign('#/app/babyprofile');
     }
 
@@ -327,7 +407,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
 
         if ($scope.section != null) {
             for (var i = 0; i < $scope.section.children.length; i++) {
-                if ($scope.section.children[i][periodOfTheDay].enabled) {
+                if ($scope.section.children[i][periodOfTheDay].active) {
                     //totalNumber++;
                     $scope.childrenProfiles[periodOfTheDay].push($scope.section.children[i]);
                 }
@@ -343,11 +423,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
 
         if ($scope.section != null) {
             for (var i = 0; i < $scope.section.children.length; i++) {
-                if ($scope.section.children[i][periodOfTheDay].enabled) {
+                if ($scope.section.children[i][periodOfTheDay].active) {
                     //totalNumber++;
                     $scope.totalChildrenNumber[periodOfTheDay] ++;
                 }
-                if ($scope.section.children[i].exitTime != null && $scope.section.children[i].exitTime > Date.now() && $scope.section.children[i][periodOfTheDay].active) {
+                if ($scope.section.children[i].exitTime != null && $scope.section.children[i].exitTime > Date.now() && $scope.section.children[i][periodOfTheDay].enabled) {
                     //totalNumber++;
                     $scope.availableChildren[periodOfTheDay] ++;
                 }

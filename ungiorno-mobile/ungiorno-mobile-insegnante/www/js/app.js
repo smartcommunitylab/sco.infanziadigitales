@@ -295,7 +295,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
         absent: 'Assente',
         new_note: 'Nuova nota',
         create_new_note: 'Crea una nuova nota',
-        associated_a_child: 'Associa ad un bambino',
+        associate_to_childs: 'Associa a dei bambini',
+        new_note_fail: 'Nuova nota non inviata',
+        new_note_sent: 'Nuova nota inviata',
+        associated_kids: 'Bambini associati:',
+        baby_name: 'Nome bambino',
         create_note: 'Crea nota',
         close: 'Chiudi'
 

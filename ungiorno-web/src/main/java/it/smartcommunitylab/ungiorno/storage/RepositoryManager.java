@@ -46,9 +46,12 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -365,6 +368,10 @@ public class RepositoryManager {
 		Communication old = template.findOne(q, Communication.class);
 		if (old != null) {
 			comm.set_id(old.get_id());
+			comm.setCommunicationId(comm.getCommunicationId());
+		} else {
+			comm.set_id(ObjectId.get().toString());
+			comm.setCommunicationId(comm.get_id());
 		}
 		template.save(comm);
 		return comm;
@@ -399,11 +406,23 @@ public class RepositoryManager {
 	 */
 	public List<InternalNote> getInternalNotes(String appId, String schoolId, String[] sectionIds, long date) {
 		Query q = schoolQuery(appId, schoolId);
-		q.addCriteria(new Criteria("date").is(timestampToDate(date)));
 		if (sectionIds != null && sectionIds.length > 0) {
-			q.addCriteria(new Criteria("sectionIds").in((Object[])sectionIds));
+			q.addCriteria(new Criteria("section.sectionId").in((Object[])sectionIds));
+			q.fields().include("kidId");
+			List<KidProfile> profiles = template.find(q, KidProfile.class);
+			Set<String> ids = new HashSet<String>();
+			for (KidProfile kp : profiles) ids.add(kp.getKidId());
+			
+			q = schoolQuery(appId, schoolId);
+			q.addCriteria(new Criteria("date").is(timestampToDate(date)));
+			q.addCriteria(new Criteria().orOperator(
+					new Criteria("sectionIds").in((Object[])sectionIds), 
+					new Criteria("kidIds").in(ids)));
+			return template.find(q, InternalNote.class);
+		} else {
+			q.addCriteria(new Criteria("date").is(timestampToDate(date)));
+			return template.find(q, InternalNote.class);
 		}
-		return template.find(q, InternalNote.class);
 	}
 
 	/**
@@ -727,7 +746,7 @@ public class RepositoryManager {
 	/**
 	 * @return
 	 */
-	public Teacher getTeacher(String appId, String schoolId, String username) {
+	public Teacher getTeacher(String username, String appId, String schoolId) {
 		Query q = schoolQuery(appId, schoolId);
 		q.addCriteria(new Criteria("username").is(username));
 		return template.findOne(q, Teacher.class);

@@ -4,26 +4,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
     var babyProfile = null;
     var schoolProfile = null;
     var currentBabyID = null;
-    var childrenProfiles = [];
     var profileService = {};
 
-    //not used anymore by babyProfile!
-    profileService.setBabyProfile = function (input) {
+    profileService.setCurrentBaby = function (input) {
         babyProfile = input;
     }
 
-    profileService.getBabyProfile = function () {
+    profileService.getCurrentBaby = function () {
         return babyProfile;
     }
-
-    //usefull to pass babyID to the babyProfileCtrl
-    profileService.setCurrentBabyID = function (babyId) {
-        currentBabyID = babyId;
-    }
-    profileService.getCurrentBabyID = function () {
-        return currentBabyID;
-    }
-
 
     profileService.getBabyProfileById = function (schoolId, babyId) {
         var deferred = $q.defer();
@@ -60,29 +49,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
     profileService.searchChildrenBySection = function (childrenName, section) {
 
         var deferred = $q.defer();
-        if (childrenProfiles.length == 0) {
-            dataServerService.getSections().then(function (data) {
-                //indicizza profili per sezione
-                for (var i = 0; i < data.length; i++) {
-                    childrenProfiles[data[i].sectionId] = data[i].children;
-                }
-                var matches = childrenProfiles[section].filter(function (children) {
-                    if (children.childrenName.toLowerCase().indexOf(childrenName.toLowerCase()) !== -1) return true;
-                })
+
+        var matches = section.children.filter(function (children) {
+            return children.childrenName.toLowerCase().indexOf(childrenName.toLowerCase()) !== -1;
+        })
 
 
-                deferred.resolve(matches);
-
-            });
-        } else {
-            var matches = childrenProfiles.filter(function (children) {
-                if (children.name.toLowerCase().indexOf(childrenName.toLowerCase()) !== -1) return true;
-            })
-
-
-            deferred.resolve(matches);
-
-        }
+        deferred.resolve(matches);
 
         return deferred.promise;
 

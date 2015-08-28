@@ -1726,3 +1726,10 @@ ion-content .scroll {
     text-align: center;
     font-size: 1.4em;
 }
+.item-text-complete {
+    white-space: normal;
+}
+
+.under-bar {
+    margin-top: 60px;
+}

@@ -61,7 +61,7 @@
             </div>
         </div>
         <div class="nothing-to-show-placeholder-wrapper">
-            <div class="nothing-to-show-placeholder" ng-if="communications.length === 0">
+            <div class="nothing-to-show-placeholder" ng-if="communications.length === 0 && !isMode('new')">
                 {{'no_communications' | translate}}
             </div>
         </div>

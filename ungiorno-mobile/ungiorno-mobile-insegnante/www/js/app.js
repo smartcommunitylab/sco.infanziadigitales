@@ -308,6 +308,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
         close: 'Chiudi',
         no_baby_bus: 'Nessun bambino su questo autobus',
         no_communications: "Nessuna comunicazione",
+        no_notes_today: "Nessuna nota oggi"
 
 
     });

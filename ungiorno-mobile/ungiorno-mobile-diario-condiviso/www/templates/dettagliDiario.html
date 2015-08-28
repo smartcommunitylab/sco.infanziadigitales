@@ -50,7 +50,7 @@
             </label>
             <i class="ion-asterisk alignRight inline vertical-middle" ng-if="!isViewMode()"></i>
         </div>
-        <label class="item item-input item-select selectrole">
+        <label class="item item-input item-select selectrole" ng-if="!isViewMode()">
             <div class="input-label">{{ 'gender' | translate}}</div>
             <select ng-model="babyCopy.gender">
                 <option>{{ 'male' | translate}}</option>
@@ -240,7 +240,7 @@
             </div>
             <div class="item item-input-inset input-children" ng-if="!isViewMode()">
             <label class="item item-input children-edit">
-                <input type="text"  ng-model="isEmptyNote(babyCopy.personalNotes) ? 'insert_note' : babyCopy.personalNotes  | translate">
+                <input type="text" ng-model="babyCopy.personalNotes" placeholder="{{'insert_note' | translate}}">
             </label>
             </div>
         <div class="asterisk">{{'asterisk' | translate}}</div>

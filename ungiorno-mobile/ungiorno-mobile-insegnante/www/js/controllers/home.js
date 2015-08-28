@@ -289,13 +289,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     }
     $scope.isThisSection = function (sectionId) {
         if (sectionId != 'all') {
-            if (sectionService.getSection() == sectionId)
-                return true;
-            return false;
+            return sectionService.getSection() === sectionId;
         } else {
-            if (sectionService.getSection() == -1)
-                return true;
-            return false;
+            return sectionService.getSection() === -1;
         }
 
     }

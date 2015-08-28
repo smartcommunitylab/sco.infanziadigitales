@@ -369,6 +369,7 @@ public class RepositoryManager {
 			comm.set_id(old.get_id());
 		}
 		template.save(comm);
+		comm.setCommunicationId(comm.get_id());
 		return comm;
 	}
 

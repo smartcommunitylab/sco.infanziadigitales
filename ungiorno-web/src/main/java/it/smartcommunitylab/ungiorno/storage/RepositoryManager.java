@@ -51,6 +51,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -367,9 +368,12 @@ public class RepositoryManager {
 		Communication old = template.findOne(q, Communication.class);
 		if (old != null) {
 			comm.set_id(old.get_id());
+			comm.setCommunicationId(comm.getCommunicationId());
+		} else {
+			comm.set_id(ObjectId.get().toString());
+			comm.setCommunicationId(comm.get_id());
 		}
 		template.save(comm);
-		comm.setCommunicationId(comm.get_id());
 		return comm;
 	}
 

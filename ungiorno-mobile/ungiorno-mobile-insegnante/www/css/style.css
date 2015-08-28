@@ -1713,3 +1713,16 @@ ion-content .scroll {
 .associated-kid-delete-btn {
     float: right;
 }
+
+.nothing-to-show-placeholder-wrapper {
+   position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%)
+}
+
+.nothing-to-show-placeholder {
+    text-align: center;
+    font-size: 1.4em;
+}

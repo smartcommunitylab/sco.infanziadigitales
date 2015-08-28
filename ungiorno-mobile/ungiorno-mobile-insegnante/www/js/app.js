@@ -289,10 +289,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
         communication_updated: 'Comunicazione aggiornata correttamente',
         communication_fail: 'Comunicazione non inviata',
         communication_check: 'Controlla consegne',
+        communication_delete_confirm: 'Eliminare questa comunicazione?',
+        communication_delete_fail: 'Comunicazione non eliminata',
         retry: 'Riprova',
         deadline: 'Scadenza consegna',
         deadline_time: 'Data di scadenza',
         cancel: 'Annulla',
+        ok: 'OK',
         absent: 'Assente',
         new_note: 'Nuova nota',
         create_new_note: 'Crea una nuova nota',
@@ -303,6 +306,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
         baby_name: 'Nome bambino',
         create_note: 'Crea nota',
         close: 'Chiudi',
+        no_baby_bus: 'Nessun bambino su questo autobus',
+        no_communications: "Nessuna comunicazione",
 
 
     });

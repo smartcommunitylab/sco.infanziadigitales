@@ -95,10 +95,52 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     }
 
     $scope.deleteCommunication = function () {
-        dataServerService.deleteCommunication(profileService.getSchoolProfile().schoolId, $scope.communications[selectedCommunicationIndex].communicationId).then(function (data) {
-            $scope.communications.splice(selectedCommunicationIndex, 1);
-            selectedCommunicationIndex = -1;
-        });
+
+        var communicationFail = function () {
+            var communicationFailPopup = $ionicPopup.show({
+                title: $filter('translate')('communication_delete_fail'),
+                scope: $scope,
+                buttons: [
+                    { text: $filter('translate')('cancel') },
+                    {
+                        text: '<b>' + $filter('translate')('retry') + '</b>',
+                        type: 'button-positive',
+                        onTap: function(e) {
+                            deleteFromServer();
+                        }
+                    }
+                ]
+            });
+        }
+        var deleteFromServer = function () {
+            dataServerService.deleteCommunication(profileService.getSchoolProfile().schoolId, $scope.communications[selectedCommunicationIndex].communicationId).then(function (data) {
+                $scope.communications.splice(selectedCommunicationIndex, 1);
+                selectedCommunicationIndex = -1;
+            }, function (data) {
+                communicationFail();
+            });
+        }
+
+
+        var deleteConfirm = function () {
+            var deleteConfirmPopup = $ionicPopup.show({
+                title: $filter('translate')('communication_delete_confirm'),
+                scope: $scope,
+                buttons: [
+                    { text: $filter('translate')('cancel') },
+                    {
+                        text: '<b>' + $filter('translate')('ok') + '</b>',
+                        type: 'button-positive',
+                        onTap: function(e) {
+                            deleteFromServer();
+                        }
+                    }
+                ]
+            });
+        }
+
+        deleteConfirm();
+
     }
 
     var updateCurrentCommunicationList = function (response) {

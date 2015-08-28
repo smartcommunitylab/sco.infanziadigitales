@@ -37,7 +37,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
 
 
     }
-    dataServerService.getBuses(profileService.getSchoolProfile().schoolId, Math.floor(new Date().getTime() / 1000)).then(function (data) {
+    dataServerService.getBuses(profileService.getSchoolProfile().schoolId, new Date().getTime()).then(function (data) {
             $scope.buses = data.buses;
             $scope.changeSelectedBus($scope.buses[0]);
             $ionicLoading.hide();

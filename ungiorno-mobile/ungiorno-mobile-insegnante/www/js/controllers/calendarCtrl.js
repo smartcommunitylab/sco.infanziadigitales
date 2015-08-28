@@ -106,8 +106,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
             eventName: ""
         }
         $scope.events.forEach(function(event) {
-            var eventFromDate = new Date(event.from * 1000);
-            var eventToDate = new Date(event.to * 1000);
+            var eventFromDate = new Date(event.from);
+            var eventToDate = new Date(event.to);
             if (isEventInDayHour(realDateWithHour, realDateWithHourEnd, eventFromDate, eventToDate, hour !== undefined))
             {
                 if (event.teachers.length === 0) { //event for all

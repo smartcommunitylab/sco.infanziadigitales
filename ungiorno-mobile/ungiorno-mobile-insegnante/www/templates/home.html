@@ -66,7 +66,7 @@
                         <!--                <div section></div>-->
                     </div>
                 </div>
-                <div class="children-home" ng-repeat="child in childrenProfiles[selectedPeriod] track by $index" ng-click="detailOrCommunication(child.childrenId)">
+                <div class="children-home" ng-repeat="child in childrenProfiles[selectedPeriod] track by $index" ng-click="detailOrCommunication(child)">
                     <img ng-src="{{child.image}}" ng-class="{'child-assente' : (child.exitTime == null  || child.exitTime <= getNowDate()), 'child-presente' :  (child.exitTime != null && child.exitTime>getNowDate())}">
                     <!--            <img ng-src="{{child.image}}">-->
                     <div class="children-assente" ng-if="child.exitTime == null"><span>{{'absent' | translate}}</span>
@@ -76,7 +76,7 @@
                     <div class="children-presente" ng-if="(child.exitTime != null && child.exitTime>getNowDate())"><span>{{'present' | translate}}</span>
                     </div>
 
-                    <span class="comunication-done" ng-if="getChildrenDeliveryByID(child.childrenId)"></span>
+                    <span class="comunication-done" ng-if="getChildrenDeliveryByID(child.kidId)"></span>
 
                 </div>
             </div>
@@ -96,7 +96,7 @@
                             <ion-item ng-repeat="note in teacherNotes track by $index">
                                 <div class="babyNames" ng-if="isBabyAssignedToNote(note)">
                                     <img class="notes-baby-image" ng-if="note.kids.lenghth === 1" ng-src="{{note.kids[1].image}}"></img>
-                                    <div class="notes-baby-name inline" ng-repeat="baby in note.kids" ng-click="openDetail(baby.kidId)">{{baby.name}}</div>
+                                    <div class="notes-baby-name inline" ng-repeat="baby in note.kids" ng-click="openDetail(baby)">{{baby.name}}</div>
                                 </div>
                                 {{note.note}}
                             </ion-item>
@@ -108,7 +108,7 @@
                         <div class="list list-inset">
                             <ion-item ng-repeat="babyWithNotes in parentNotes track by $index">
                                 <img class="notes-baby-image" ng-src="{{babyWithNotes.kid.image}}"></img>
-                                <div class="notes-baby-name inline" ng-click="openDetail(babyWithNotes.kidId)">{{babyWithNotes.kid.name}}</div>
+                                <div class="notes-baby-name inline" ng-click="openDetail(babyWithNotes)">{{babyWithNotes.kid.name}}</div>
                                 <ion-item ng-repeat="note in babyWithNotes.parentNotes">{{note.note}}</ion-item>
                             </ion-item>
                         </div>
@@ -123,14 +123,29 @@
                                 <label class="checkbox">
                                     <input type="checkbox"ng-model="newNote.assignedBaby">
                                 </label>
-                                {{'associated_a_child' | translate}}
+                                {{'associate_to_childs' | translate}}
                             </div>
                             <label class="item item-input">
-                                <input type="text" ng-disabled="!newNote.assignedBaby" placeholder="Nome Bambino" ng-change="search()" ng-model="newNote.search">
+                                <input type="text" ng-disabled="!newNote.assignedBaby" placeholder="{{'baby_name' | translate}}" ng-change="search()" ng-focus="openHint()" ng-blur="closeHint()" ng-model="newNote.search">
                             </label>
-                            <div class="list children-search">
-                                <div class="item child-search" ng-repeat="children in newNote.possibleChildrens" ng-click="selectChildrenForNote(children)">{{children.childrenName}}</div>
+                            <ion-list class="list children-search" ng-if="newNote.showHints">
+                                <ion-item ng-repeat="children in newNote.possibleChildrens" class="child-search" ng-click="selectChildrenForNote(children)">
+                                    <img class="inline new-note-kid-image" ng-src="{{children.image}}"></img>
+                                    <div class="inline new-note-kid-name">{{children.childrenName}}</div>
+                                </ion-item>
+                            </ion-list>
+                            <div ng-if="newNote.assignedBaby">
+                                {{'associated_kids' | translate}}
                             </div>
+                            <ion-list ng-if="newNote.assignedBaby">
+                                <ion-item class="associated-kid-container" ng-repeat="children in newNote.associatedKids">
+                                    <img class="inline associated-kid-image" ng-src="{{children.image}}"></img>
+                                    <div class="inline associated-kid-name">{{children.childrenName}}</div>
+                                    <button class="button associated-kid-delete-btn" ng-click="deleteChildrenFromNewNote(children)">
+                                        <i class="icon ion-android-close"></i>
+                                    </button>
+                                </ion-item>
+                            </ion-list>
                             <div class="new-note-actions row">
                                 <button class="button cancel-button col" ng-click="cancelNewNote()">{{'cancel' | translate}}</button>
                                 <button class="button create-button col" ng-click="sendNewNote()">{{'create_note' | translate}}</button>

@@ -31,8 +31,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     dataServerService.getCommunications(profileService.getSchoolProfile().schoolId).then(function (data) {
         $scope.communications = data;
         for (var i = 0; i < $scope.communications.length; i++) {
-            $scope.communications[i].dateToCheck = new Date($scope.communications[i].dateToCheck * 1000);
-            $scope.communications[i].creationDate = new Date($scope.communications[i].creationDate * 1000);
+            $scope.communications[i].dateToCheck = new Date($scope.communications[i].dateToCheck);
+            $scope.communications[i].creationDate = new Date($scope.communications[i].creationDate);
         }
         sortCommunications();
     });

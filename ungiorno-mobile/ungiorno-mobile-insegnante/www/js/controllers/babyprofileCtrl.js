@@ -20,7 +20,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     $scope.showLoader();
 
     $scope.checkBusServiceActive = function() {
-        return $scope.babyConfig.services.bus.active && $scope.babyProfile.services.bus.enabled;
+        return $scope.babyInformations.bus.active && $scope.babyInformations.bus.enabled;
     }
     var getBusStopAddressByID = function(busStopID) {
         for (var i = 0; i < $scope.babyProfile.services.bus.stops.length; i++) {
@@ -31,11 +31,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
 
     }
     var babyProfileLoaded = false;
-    var babyConfigLoaded = false;
     var notesLoaded = false;
     $scope.dataLoaded = false;
     var checkAllDataLoaded = function() {
-        if (babyProfileLoaded && babyConfigLoaded && notesLoaded) {
+        if (babyProfileLoaded  && notesLoaded) {
             $scope.calculateOtherData();
             $scope.dataLoaded = true;
             $ionicLoading.hide();
@@ -44,7 +43,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
 
 
     $scope.schoolProfile = profileService.getSchoolProfile();
-    var babyProfileID = profileService.getCurrentBabyID();
+    $scope.babyInformations = profileService.getCurrentBaby();
+    var babyProfileID = $scope.babyInformations.kidId;
 
     //Acquiring data from server
     profileService.getBabyProfileById($scope.schoolProfile.schoolId, babyProfileID).then(function (data) {
@@ -53,60 +53,28 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         checkAllDataLoaded();
 
     });
-    babyConfigurationService.getBabyConfigurationById($scope.schoolProfile.schoolId, babyProfileID).then(function (data) {
-        $scope.babyConfig = data;
-        babyConfigLoaded = true;
-        checkAllDataLoaded();
-    });
-
     babyConfigurationService.getBabyNotesById($scope.schoolProfile.schoolId, babyProfileID).then(function (data) {
-        $scope.notes = data[0];
+        $scope.notes = data;
         notesLoaded = true;
         checkAllDataLoaded();
     });
 
-    var loadPersonWhoRetire = function () {
-        var found = false;
-        $scope.personWhoRetire = null;
-        var i = 0;
-        while (!found && i < $scope.babyConfig.extraPersons.length) {
-            if ($scope.babyConfig.extraPersons[i].personId == $scope.babyConfig.defaultPerson) {
-                found = true;
-                $scope.personWhoRetire = $scope.babyConfig.extraPersons[i];
-                $scope.personWhoRetire.isDelegate = true;
-            }
-            i++;
-        }
-        while (!found && i < $scope.babyProfile.persons.length) {
-            if ($scope.babyProfile.persons[i].personId == $scope.babyConfig.defaultPerson) {
-                found = true;
-                $scope.personWhoRetire = $scope.babyProfile.persons[i];
-                $scope.personWhoRetire.isDelegate = false;
-            }
-            i++;
-        }
-    }
-
     $scope.calculateOtherData = function () {
 
-        $scope.babyEnterHour = $scope.babyConfig.services.anticipo ? $scope.schoolProfile.anticipoTiming.fromTime : $scope.schoolProfile.regularTiming.fromTime;
+        $scope.babyEnterHour = $scope.babyInformations.anticipo.active ? $scope.schoolProfile.anticipoTiming.fromTime : $scope.schoolProfile.regularTiming.fromTime;
 
         //used to get if the baby is present
         var now = new Date();
-        if ($scope.babyConfig.exitTime == null) {
+        if ($scope.babyInformations.exitTime == null) {
             $scope.babyStatus = $filter('translate')('absent');
         } else {
-            var exitDayWithHour = new Date($scope.babyConfig.exitTime); //TODO: make a decision on server, timestamp in seconds or milliseconds?!?
+            var exitDayWithHour = new Date($scope.babyInformations.exitTime); //TODO: make a decision on server, timestamp in seconds or milliseconds?!?
 
             $scope.babyStatus = now > exitDayWithHour ? $filter('translate')('exit') : $filter('translate')('present');
         }
 
-
-        loadPersonWhoRetire();
-
         if ($scope.checkBusServiceActive()) {
-            $scope.babyBusStopGoName = getBusStopAddressByID($scope.babyConfig.services.bus.defaultIdGo);
-            $scope.babyBusStopBackName = getBusStopAddressByID($scope.babyConfig.services.bus.defaultIdBack);
+            $scope.babyBusStopBackName = getBusStopAddressByID($scope.babyInformations.stopId);
         }
 
     }

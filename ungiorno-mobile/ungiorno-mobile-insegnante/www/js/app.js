@@ -288,6 +288,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
         communication_sent: 'Comunicazione inviata correttamente',
         communication_updated: 'Comunicazione aggiornata correttamente',
         communication_fail: 'Comunicazione non inviata',
+        communication_check: 'Controlla consegne',
         retry: 'Riprova',
         deadline: 'Scadenza consegna',
         deadline_time: 'Data di scadenza',
@@ -301,7 +302,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
         associated_kids: 'Bambini associati:',
         baby_name: 'Nome bambino',
         create_note: 'Crea nota',
-        close: 'Chiudi'
+        close: 'Chiudi',
+
 
     });
 

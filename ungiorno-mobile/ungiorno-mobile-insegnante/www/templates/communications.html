@@ -56,7 +56,7 @@
                 </label>
                 <p ng-if="!(isCommunicationSelected($index) && isMode('edit')) && controlDateToCheck($index)" >{{'deadline' | translate}}: {{communication.dateToCheck | date}}</p>
                 <button class="button-control" ng-if="controlDateToCheck($index)" ng-click="homeRedirect($index)">
-                     CONTROLLA CONSEGNE
+                     {{'communication_check' | translate | uppercase}}
                 </button>
             </div>
         </div>

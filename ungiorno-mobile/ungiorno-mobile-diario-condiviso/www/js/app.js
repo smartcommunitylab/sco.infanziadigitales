@@ -207,7 +207,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
         nothing_note: 'Nessuna nota presente',
         gender: 'Sesso',
         male: 'Maschio',
-        female: 'Femmina'
+        female: 'Femmina',
+        register: 'Registrazione'
     });
 
     $translateProvider.preferredLanguage("it");

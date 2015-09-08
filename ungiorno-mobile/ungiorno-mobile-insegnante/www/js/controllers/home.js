@@ -86,7 +86,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
                 kidIds: [],
                 showHints: false
             };
-            $scope.teacherNotes.push(data.data);
+            var note = data.data;
+            injectBabyInformationsInNote(note);
+            $scope.teacherNotes.push(note);
         }
 
         dataServerService.addNewInternalNote($scope.schoolProfile.schoolId, $scope.newNote.assignedBaby, ids, noteToSend).then(function (data) {
@@ -111,13 +113,19 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         $scope.newNote.associatedKids.splice($scope.newNote.associatedKids.indexOf(children), 1);
     }
 
-    $scope.openHint = function () {
-        $scope.newNote.showHints = true;
-        console.log($scope.newNote.showHints);
+    $scope.hintSearchBoxFocus = false;
+    $scope.hintPanelFocus = false;
+
+    $scope.focused = function (searchbox, state) {
+        if (searchbox) {
+            $scope.hintSearchBoxFocus = state;
+        } else {
+            $scope.hintPanelFocus = state;
+        }
     }
-    $scope.closeHint = function () {
-        $scope.newNote.showHints = false;
-        console.log($scope.newNote.showHints);
+
+    $scope.displayHint = function () {
+        return $scope.hintSearchBoxFocus || $scope.hintPanelFocus;
     }
 
 
@@ -148,6 +156,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
 
     $scope.title = moment().locale('it').format("dddd, D MMMM gggg");
     $scope.initialize = function () {
+
+        $scope.title = $filter('date')(new Date(), 'EEEE, dd MMMM yyyy') + " - Maestra Chiara"; //TODO: real teacher name
+
         dataServerService.getSchoolProfileForTeacher().then(function (schoolProfile) {
             $scope.schoolProfile = schoolProfile;
             profileService.setSchoolProfile($scope.schoolProfile);
@@ -278,13 +289,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     }
     $scope.isThisSection = function (sectionId) {
         if (sectionId != 'all') {
-            if (sectionService.getSection() == sectionId)
-                return true;
-            return false;
+            return sectionService.getSection() === sectionId;
         } else {
-            if (sectionService.getSection() == -1)
-                return true;
-            return false;
+            return sectionService.getSection() === -1;
         }
 
     }
@@ -309,6 +316,29 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         $scope.loadNotes();
     }
 
+    var injectBabyInformationsInNote = function (note) {
+        if (note.kidIds !== null) {
+            note.kids = [];
+
+            var kidToFind = note.kidIds.length;
+            var sectionChildrenIndex = 0;
+            while (kidToFind !== 0 && sectionChildrenIndex < $scope.section.children.length) {
+                for (var i = 0; i < note.kidIds.length; i++) {
+                    if ($scope.section.children[sectionChildrenIndex].kidId === note.kidIds[i]) {
+                        var baby = {
+                            image: $scope.section.children[sectionChildrenIndex].image,
+                            name: $scope.section.children[sectionChildrenIndex].childrenName
+
+                        }
+                        note.kids.push(baby);
+                        kidToFind--;
+                    }
+                }
+                sectionChildrenIndex++;
+            }
+        }
+    }
+
     $scope.loadNotes = function () {
         var sectionsIdsArray = [];
         if ($scope.section.sectionId === "all") {
@@ -324,26 +354,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
             //insert babys photos and name into notes
             //O(n^3)... for some images and names
             $scope.teacherNotes.forEach(function (note) {
-                if (note.kidIds !== null) {
-                    note.kids = [];
-
-                    var kidToFind = note.kidIds.length;
-                    var sectionChildrenIndex = 0;
-                    while (kidToFind !== 0 && sectionChildrenIndex < $scope.section.children.length) {
-                        for (var i = 0; i < note.kidIds.length; i++) {
-                            if ($scope.section.children[sectionChildrenIndex].kidId === note.kidIds[i]) {
-                                var baby = {
-                                    image: $scope.section.children[sectionChildrenIndex].image,
-                                    name: $scope.section.children[sectionChildrenIndex].childrenName
-
-                                }
-                                note.kids.push(baby);
-                                kidToFind--;
-                            }
-                        }
-                        sectionChildrenIndex++;
-                    }
-                }
+                injectBabyInformationsInNote(note);
             });
 
 
@@ -371,6 +382,20 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     $scope.isBabyAssignedToNote = function (note) {
         var asd = note.kidIds !== null;
         return note.kidIds !== null;
+    }
+
+    $scope.openDetailById = function (childId) {
+        var found = false;
+        var i = 0;
+        var child;
+        while (!found && i < $scope.section.children.length) {
+            if ($scope.section.children[i].kidId === childId) {
+                child = $scope.section.children[i];
+                found = true;
+            }
+            i++;
+        }
+        $scope.openDetail(child);
     }
 
     $scope.openDetail = function (child) {

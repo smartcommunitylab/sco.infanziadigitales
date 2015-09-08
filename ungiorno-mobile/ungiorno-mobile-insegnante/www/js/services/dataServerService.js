@@ -138,7 +138,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
 
         if (sectionIds !== undefined) {
             for (var i = 0; i < sectionIds.length - 1; i++) {
-                commaSeparatedIds += kidIds[i] + ',';
+                commaSeparatedIds += sectionIds[i] + ',';
             }
             commaSeparatedIds += sectionIds[sectionIds.length - 1];
         }

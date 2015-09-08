@@ -41,7 +41,7 @@
                 <ion-checkbox class="item item-checkbox newCom newComItems" ng-model="newCommunication.doCheck">Controlla consegna</ion-checkbox>
             </div>
                <label >
-                   <input type="text" id="description" placeholder="Descrizione" ng-model="newCommunication.description">
+                   <input type="text" id="description" placeholder="{{'description' | translate}}" ng-model="newCommunication.description">
                </label>
         </div>
 
@@ -56,10 +56,16 @@
                 </label>
                 <p ng-if="!(isCommunicationSelected($index) && isMode('edit')) && controlDateToCheck($index)" >{{'deadline' | translate}}: {{communication.dateToCheck | date}}</p>
                 <button class="button-control" ng-if="controlDateToCheck($index)" ng-click="homeRedirect($index)">
-                     CONTROLLA CONSEGNE
+                     {{'communication_check' | translate | uppercase}}
                 </button>
             </div>
         </div>
+        <div class="nothing-to-show-placeholder-wrapper">
+            <div class="nothing-to-show-placeholder" ng-if="communications.length === 0 && !isMode('new')">
+                {{'no_communications' | translate}}
+            </div>
+        </div>
+
 
     </ion-content>
 </ion-view>

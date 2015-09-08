@@ -23,6 +23,7 @@
 .stream.post-action-container {
     display: inline-block;
     float: right;
+    min-width: 130px;
 }
 .stream.post-creation-details {
     display: inline-block;

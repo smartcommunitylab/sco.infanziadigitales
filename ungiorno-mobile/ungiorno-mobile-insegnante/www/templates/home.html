@@ -9,21 +9,21 @@
         <button style="color:black" class="button" ng-if="viewClose()" ng-click="closeNotesAndComm()">{{'close' | translate | uppercase}}</button>
 
     </ion-nav-buttons>
-    <ion-content has-header="true">
+    <ion-content has-header="true" >
         <div class="row section-row home-container">
             <div class="col section-row" ng-class="{'sections-displayer-short': noteExpanded || communicationExpanded, 'sections-displayer-full': !(noteExpanded || communicationExpanded)}">
                 <div class="row section-row">
                     <div class="tabs-striped tabs-top tabs-background-dark tabs-color-light">
                         <div class="tabs section-tabs">
                             <a class="tab-item" ng-repeat="section in sections track by $index" class="col" ng-click="changeSection($index)" ng-class="{'active' :  (isThisSection($index))}"> {{section.sectionName}} </a>
-                            <a class="tab-item" class="col" ng-click="changeSection('all')" ng-class="{'active' :  (isThisSection($index))}">  {{'all_section' | translate}} </a>
+                            <a class="tab-item" class="col" ng-click="changeSection('all')" ng-class="{'active' :  (isThisSection('all'))}">  {{'all_section' | translate}} </a>
                         </div>
                     </div>
                 </div>
                 <div class="row home-section-space">
                     <div class="col">
                         <div class="sectionPeriod" ng-click="changeSectionPeriod('anticipo')">
-                            <svg id="svg" viewbox="0 0 100 100">
+                            <svg class="sectionBabyIndicator" id="svg" viewbox="0 0 100 100">
                                 <circle cx="50" cy="50" r="45" fill="{{colors['anticipo']}}" />
                                 <path fill="none" stroke-linecap="round" stroke-width="5" stroke="#d4145a" stroke-dasharray="{{getLineStroke(availableChildren['anticipo'],totalChildrenNumber['anticipo'])}}" d="M50 10
            a 40 40 0 0 1 0 80
@@ -38,7 +38,7 @@
                     <div class="col">
                         <div class="sectionPeriod" ng-click="changeSectionPeriod('mensa')">
 
-                            <svg id="svg" viewbox="0 0 100 100">
+                            <svg class="sectionBabyIndicator" id="svg" viewbox="0 0 100 100">
                                 <circle cx="50" cy="50" r="45" fill="{{colors['mensa']}}" />
                                 <path fill="none" stroke-linecap="round" stroke-width="5" stroke="#d4145a" stroke-dasharray="{{getLineStroke(availableChildren['mensa'],totalChildrenNumber['mensa'])}}" d="M50 10
            a 40 40 0 0 1 0 80
@@ -52,7 +52,7 @@
                     </div>
                     <div class="col">
                         <div class="sectionPeriod" ng-click="changeSectionPeriod('posticipo')">
-                            <svg id="svg" viewbox="0 0 100 100">
+                            <svg class="sectionBabyIndicator" id="svg" viewbox="0 0 100 100">
                                 <circle cx="50" cy="50" r="45" fill="{{colors['posticipo']}}" />
                                 <path fill="none" stroke-linecap="round" stroke-width="5" stroke="#d4145a" stroke-dasharray="{{getLineStroke(availableChildren['posticipo'],totalChildrenNumber['posticipo'])}}" d="M50 10
            a 40 40 0 0 1 0 80
@@ -66,6 +66,7 @@
                         <!--                <div section></div>-->
                     </div>
                 </div>
+                <div class="home-separator"></div>
                 <div class="children-home" ng-repeat="child in childrenProfiles[selectedPeriod] track by $index" ng-click="detailOrCommunication(child)">
                     <img ng-src="{{child.image}}" ng-class="{'child-assente' : (child.exitTime == null  || child.exitTime <= getNowDate()), 'child-presente' :  (child.exitTime != null && child.exitTime>getNowDate())}">
                     <!--            <img ng-src="{{child.image}}">-->
@@ -92,25 +93,35 @@
                 </div>
                 <div class="row">
                     <div ng-hide="!teachersNote" class="teacher-notes" ng-class="{'changing-notes-teachers-to-parents': (parentsNote && !teachersNote)}">
-                        <div class="list list-inset">
-                            <ion-item ng-repeat="note in teacherNotes track by $index">
+                        <ion-list>
+                            <ion-item class="item-text-complete" ng-repeat="note in teacherNotes track by $index">
                                 <div class="babyNames" ng-if="isBabyAssignedToNote(note)">
-                                    <img class="notes-baby-image" ng-if="note.kids.lenghth === 1" ng-src="{{note.kids[1].image}}"></img>
-                                    <div class="notes-baby-name inline" ng-repeat="baby in note.kids" ng-click="openDetail(baby)">{{baby.name}}</div>
+                                    <img class="notes-baby-image" ng-if="note.kids.length === 1" ng-src="{{note.kids[0].image}}"></img>
+                                    <div class="notes-baby-name inline" ng-repeat="baby in note.kids track by $index" ng-click="openDetailById(note.kidIds[$index])">{{baby.name}}</div>
                                 </div>
                                 {{note.note}}
                             </ion-item>
+                        </ion-list>
+                        <div class="nothing-to-show-placeholder-wrapper">
+                            <div class="nothing-to-show-placeholder" ng-if="teacherNotes.length === 0">
+                                {{'no_notes_today' | translate}}
+                            </div>
                         </div>
                         <button style="background-color:red; color:white" class="button create-note section-tabs" ng-click="createNotes()">{{'new_note' | translate}}</button>
 
                     </div>
                     <div ng-hide="!parentsNote" class="parents-notes" ng-class="{'changing-notes-parents-to-teachers': (!parentsNote && teachersNote)}">
-                        <div class="list list-inset">
-                            <ion-item ng-repeat="babyWithNotes in parentNotes track by $index">
+                        <ion-list>
+                            <ion-item class="item-text-complete" ng-repeat="babyWithNotes in parentNotes track by $index">
                                 <img class="notes-baby-image" ng-src="{{babyWithNotes.kid.image}}"></img>
                                 <div class="notes-baby-name inline" ng-click="openDetail(babyWithNotes)">{{babyWithNotes.kid.name}}</div>
-                                <ion-item ng-repeat="note in babyWithNotes.parentNotes">{{note.note}}</ion-item>
+                                <ion-item class="item-text-complete" ng-repeat="note in babyWithNotes.parentNotes">{{note.note}}</ion-item>
                             </ion-item>
+                        </ion-list>
+                        <div class="nothing-to-show-placeholder-wrapper">
+                            <div class="nothing-to-show-placeholder" ng-if="parentNotes.length === 0">
+                                {{'no_notes_today' | translate}}
+                            </div>
                         </div>
                     </div>
                     <div ng-hide="!newNoteExpandend" class="new-note-panel">
@@ -126,10 +137,10 @@
                                 {{'associate_to_childs' | translate}}
                             </div>
                             <label class="item item-input">
-                                <input type="text" ng-disabled="!newNote.assignedBaby" placeholder="{{'baby_name' | translate}}" ng-change="search()" ng-focus="openHint()" ng-blur="closeHint()" ng-model="newNote.search">
+                                <input type="text" ng-disabled="!newNote.assignedBaby" placeholder="{{'baby_name' | translate}}" ng-change="search()" ng-focus="focused(true, true)" ng-blur="focused(true, false)" ng-model="newNote.search">
                             </label>
-                            <ion-list class="list children-search" ng-if="newNote.showHints">
-                                <ion-item ng-repeat="children in newNote.possibleChildrens" class="child-search" ng-click="selectChildrenForNote(children)">
+                            <ion-list class="list children-search" ng-if="displayHint()" ng-focus="focused(false, true)" ng-blur="focused(false, false)" >
+                                <ion-item class="item-text-complete" ng-repeat="children in newNote.possibleChildrens" class="child-search" ng-click="selectChildrenForNote(children)">
                                     <img class="inline new-note-kid-image" ng-src="{{children.image}}"></img>
                                     <div class="inline new-note-kid-name">{{children.childrenName}}</div>
                                 </ion-item>
@@ -138,7 +149,7 @@
                                 {{'associated_kids' | translate}}
                             </div>
                             <ion-list ng-if="newNote.assignedBaby">
-                                <ion-item class="associated-kid-container" ng-repeat="children in newNote.associatedKids">
+                                <ion-item class="item-text-complete" class="associated-kid-container" ng-repeat="children in newNote.associatedKids">
                                     <img class="inline associated-kid-image" ng-src="{{children.image}}"></img>
                                     <div class="inline associated-kid-name">{{children.childrenName}}</div>
                                     <button class="button associated-kid-delete-btn" ng-click="deleteChildrenFromNewNote(children)">
@@ -155,12 +166,20 @@
 
                 </div>
             </div>
-            <div class="col col-25 home-section-space right-side-fake-menu" ng-hide="!communicationExpanded">
-                <div class="list list-inset">
-                    <ion-radio ng-repeat="item in communications" ng-if="item.doCheck != null" ng-value="item.communicationId" ng-model="data.communication" ng-click="changeCommunication(item.communicationId)">
-                        {{ item.description }}
-                    </ion-radio>
-                </div>
+            <div class="col col-25 home-section-space right-side-fake-menu side-fake-menu-shadow" ng-hide="!communicationExpanded">
+                <ion-content class="under-bar">
+                    <div class="list list-inset" ng-if="communications.length > 0">
+                        <ion-radio ng-repeat="item in communications" ng-if="item.doCheck != null" ng-value="item.communicationId" ng-model="data.communication" ng-click="changeCommunication(item.communicationId)">
+                            {{ item.description }}
+                        </ion-radio>
+                    </div>
+                    <div class="nothing-to-show-placeholder-wrapper">
+                        <div class="nothing-to-show-placeholder" ng-if="communications.length === 0">
+                            {{'no_communications' | translate}}
+                        </div>
+                    </div>
+                </ion-content>
+
             </div>
 
     </ion-content>

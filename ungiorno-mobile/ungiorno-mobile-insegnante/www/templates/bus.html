@@ -38,6 +38,11 @@
                 </div>
             </div>
         </div>
+        <div class="nothing-to-show-placeholder-wrapper">
+            <div class="nothing-to-show-placeholder" ng-if="dataLoaded && totalNumRow().length === 0">
+                {{'no_baby_bus' | translate}}
+            </div>
+        </div>
 
     </ion-content>
 </ion-view>

@@ -983,7 +983,22 @@ ul.rating {
 }
 
 .sectionPeriod {
-    position: relative
+    position: relative;
+    text-align: center;
+}
+
+.sectionBabyIndicator {
+    max-height: 200px;
+    max-width: 200px;
+}
+
+.home-separator {
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    height: 1px;
+    background-color: #000;
 }
 
 .audio-title {
@@ -1390,6 +1405,7 @@ select {
     height: 100px;
     position: relative;
     text-align: center;
+    margin: 10px
 }
 
 .children-home span {
@@ -1508,7 +1524,7 @@ select {
 }
 
 .home-section-space {
-    padding-top: 40px !important;
+    padding-top: 70px !important;
 }
 
 .create-note {
@@ -1696,4 +1712,24 @@ ion-content .scroll {
 }
 .associated-kid-delete-btn {
     float: right;
+}
+
+.nothing-to-show-placeholder-wrapper {
+   position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%)
+}
+
+.nothing-to-show-placeholder {
+    text-align: center;
+    font-size: 1.4em;
+}
+.item-text-complete {
+    white-space: normal;
+}
+
+.under-bar {
+    margin-top: 60px;
 }

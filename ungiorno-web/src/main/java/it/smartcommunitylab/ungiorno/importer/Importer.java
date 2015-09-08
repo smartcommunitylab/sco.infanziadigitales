@@ -274,7 +274,7 @@ public class Importer {
 			KidServices services = new KidServices();
 			services.setAnticipo(new SchoolService(map.get("ANTICIPO").equals("1")));
 			services.setPosticipo(new SchoolService(map.get("POSTICIPO").equals("1")));
-			services.setBus(new BusService(map.get("ANTICIPO").equals("1"),map.get("FERMATA")));
+			services.setBus(new BusService(map.get("BUS").equals("1"),map.get("FERMATA")));
 			services.setMensa(new SchoolService(map.get("MENSA").equals("1")));
 			p.setServices(services);
 			

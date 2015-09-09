@@ -4,8 +4,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.p
     var babyProfile = null;
     var schoolProfile = null;
     var profileService = {};
+    var babiesProfiles = [];
 
+    profileService.setBabiesProfiles = function (input) {
+        babiesProfiles = input;
+    }
 
+    profileService.getBabiesProfiles = function () {
+        return babiesProfiles;
+    }
     profileService.setBabyProfile = function (input) {
         babyProfile = input;
     }

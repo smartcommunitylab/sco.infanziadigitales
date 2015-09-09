@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.babysetting', [])
 
-.controller('BabySettingCtrl', function ($scope, configurationService, profileService, $ionicNavBarDelegate, $ionicHistory, dataServerService, Toast, $filter) {
+.controller('BabySettingCtrl', function ($scope, $rootScope, configurationService, profileService, $ionicNavBarDelegate, $ionicHistory, dataServerService, Toast, $filter) {
     $ionicNavBarDelegate.showBackButton(true);
     $ionicHistory.backView();
     $scope.babyConfiguration = configurationService.getBabyConfiguration();
@@ -8,8 +8,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.babyServices = [];
     $scope.busEnabled = true;
     $scope.busStops = [];
-    $scope.retireDefault = null;
-    $scope.time = new Date();
+
+    $scope.time = {
+        value: new Date()
+    }
 
     for (var k in $scope.babyProfile.services) {
         if ($scope.babyProfile.services.hasOwnProperty(k)) {
@@ -23,15 +25,19 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     //set hour
     var exitTime = new Date($scope.babyConfiguration.exitTime);
     exitTime.setHours(exitTime.getHours(), exitTime.getMinutes(), 0, 0);
-    $scope.time = exitTime;
+    $scope.time.value = exitTime;
 
     //set who get child
-    $scope.retireDefault = $scope.babyConfiguration.defaultPerson;
+    $scope.retireDefault = {
+        value: $scope.babyConfiguration.defaultPerson
+    };
+
     //if bus set stop
     for (var i = 0; i < $scope.babyProfile.services.bus.stops.length; i++) {
         $scope.busStops.push({
             id: $scope.babyProfile.services.bus.stops[i].stopId,
-            name: $scope.babyProfile.services.bus.stops[i].address
+            //tmp I have only stopId
+            name: $scope.babyProfile.services.bus.stops[i].stopId
         });
     }
     $scope.selectedBusGo = $scope.busStops[0];
@@ -70,8 +76,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             schoolId: $scope.babyConfiguration.schoolId,
             kidId: $scope.babyConfiguration.kidId,
             services: newServices,
-            exitTime: $scope.time,
-            defaultPerson: $scope.retireDefault,
+            exitTime: $scope.time.value,
+            defaultPerson: $scope.retireDefault.value,
             receiveNotification: $scope.babyConfiguration.receiveNotification,
             extraPersons: $scope.babyConfiguration.extraPerson
         };
@@ -80,10 +86,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
 
     $scope.saveNewSetting = function () {
+        //set new data
         $scope.setBabyConfiguration();
-
-        dataServerService.sendBabySetting($scope.babyConfiguration).then(function (data) {
+        dataServerService.sendBabySetting($scope.babyConfiguration.schoolId, $scope.babyConfiguration.kidId, $scope.babyConfiguration).then(function (data) {
             Toast.show($filter('translate')('setting_sendok'), 'short', 'bottom');
+            $scope.setBabyConfiguration();
             console.log("SENDING OK -> " + data);
             $ionicHistory.goBack();
         }, function (error) {

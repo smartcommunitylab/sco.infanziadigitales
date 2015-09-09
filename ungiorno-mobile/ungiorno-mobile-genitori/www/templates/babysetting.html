@@ -27,13 +27,13 @@
             </li>
             <div>
                 {{'babysetting_hours' | translate}}
-                <input type="time" ng-model="time" />
+                <input type="time" ng-model="time.value" />
             </div>
             <div>
                 {{'babysetting_who' | translate}}
             </div>
             <ion-list class="padlist">
-                <ion-radio ng-repeat="person in babyProfile.persons" ng-model="retireDefault" ng-value="person.personId">{{person.fullName}}</ion-radio>
+                <ion-radio ng-repeat="person in babyProfile.persons" ng-model="retireDefault.value" ng-value="person.personId">{{person.fullName}}</ion-radio>
             </ion-list>
         </div>
         <div ng-show="busEnabled">

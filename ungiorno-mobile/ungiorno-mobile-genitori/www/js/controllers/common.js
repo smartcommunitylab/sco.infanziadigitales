@@ -52,7 +52,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
 })
 
-.controller('AppCtrl', function ($scope, $rootScope, $cordovaDevice, $ionicModal, $ionicHistory, $timeout, $filter, $ionicPopover, $state, Toast, Config) {
+.controller('AppCtrl', function ($scope, $rootScope, $cordovaDevice, $ionicModal, $ionicHistory, $timeout, $filter, $ionicPopover, $state, Toast, Config, profileService) {
+    $scope.babyselected = null;
+    $scope.babies = [];
     // Categories submenu
     $scope.categoriesSubmenu = false;
     $scope.version = Config.getVersion();
@@ -61,6 +63,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
 
 
+    $scope.getProfiles = function () {
+        $scope.babyselected = profileService.getBabyProfile();
+        $scope.babies = profileService.getBabiesProfiles();
+    }
     $scope.isToday = function (date) {
             var today = new Date();
             today.setHours(0);
@@ -124,36 +130,22 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         return false;
     };
 
-    //tmp, cosa mi faccio arrivare? array di bambini?
-    $scope.babies = [
-        {
-            id: "a",
-            img: "http://ionicframework.com/img/docs/venkman.jpg",
-            name: "Venkman",
-            checked: true
-        },
-        {
-            id: "b",
-            img: "http://ionicframework.com/img/docs/stantz.jpg",
-            name: "Ray",
-            checked: false
-
-        }
-    ];
-    $scope.babyselected = {
-        id: "a",
-        img: "http://ionicframework.com/img/docs/venkman.jpg",
-        name: "Venkman",
-        checked: true
-    }
-
-    $scope.selectBaby = function (item) {
-        $scope.babyselected = item;
+    updateRadiobutton = function () {
         for (var index = 0; index < $scope.babies.length; index++) {
-            if ($scope.babyselected.id != $scope.babies[index].id) {
+            if ($scope.babyselected.kidId != $scope.babies[index].kidId) {
                 $scope.babies[index].checked = false;
+            } else {
+                $scope.babies[index].checked = true;
             }
         }
+    }
+    $scope.selectBaby = function (item) {
+        //changeNewProfile
+        $scope.babyselected = item;
+        profileService.setBabyProfile(item);
+        $rootScope.loadConfiguration($scope.babyselected.schoolId, $scope.babyselected.kidId);
+
+        updateRadiobutton();
         setTimeout(function () {
             $scope.closePopover();
         }, 500);
@@ -163,7 +155,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     }).then(function (popover) {
         $scope.popover = popover;
     });
-
+    $scope.selectActualKid = function () {
+        updateRadiobutton();
+    }
 
     $scope.openPopover = function ($event) {
         $scope.popover.show($event);

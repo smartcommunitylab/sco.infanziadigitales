@@ -1,10 +1,11 @@
 #!/usr/bin/env node
-var fs = require( "fs" );
+
+var fs = require("fs");
 var et = require('elementtree');
 var rootdir = process.argv[2];
 console.log(rootdir);
 fs.open(rootdir + '/platforms/android/AndroidManifest.xml', 'r+',
-    function (err, fd)  {
+    function (err, fd) {
         if (err) {
             exitError(err);
         }
@@ -28,11 +29,12 @@ fs.open(rootdir + '/platforms/android/AndroidManifest.xml', 'r+',
             console.log(outputBuffer.toString());
             fs.closeSync(fd);
             fs.open(rootdir + '/platforms/android/AndroidManifest.xml', 'w', writeFile);
+
             function writeFile(error, fd) {
                 if (error) {
                     exitError(error);
                 }
-                fs.write(fd, outputBuffer, 0, outputBuffer.length, 0, function( errw, written, str) {
+                fs.write(fd, outputBuffer, 0, outputBuffer.length, 0, function (errw, written, str) {
                     if (errw) {
                         exitError(errw);
                     }
@@ -50,8 +52,8 @@ function exitError(error) {
 }
 
 
-if (!fs.existsSync(rootdir + '/platforms/android/res/values-v21/')) {
-    fs.mkdirSync(rootdir + '/platforms/android/res/values-v21/');
-}
+//if (!fs.existsSync(rootdir + '/platforms/android/res/values-v21/')) {
+//    fs.mkdirSync(rootdir + '/platforms/android/res/values-v21/');
+//}
 fs.writeFile(rootdir + '/platforms/android/res/values/styles.xml', '<resources><style name="AppTheme" parent="android:Theme.Holo.Light"></style></resources>');
-fs.writeFile(rootdir + '/platforms/android/res/values-v21/styles.xml', '<resources><style name="AppTheme" parent="android:Theme.Material.Light"></style></resources>');
+//fs.writeFile(rootdir + '/platforms/android/res/values-v21/styles.xml', '<resources><style name="AppTheme" parent="android:Theme.Material.Light"></style></resources>');

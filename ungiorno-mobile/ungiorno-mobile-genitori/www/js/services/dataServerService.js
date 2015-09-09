@@ -108,31 +108,67 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
     }
 
 
-    dataServerService.sendAssenza = function (assenza) {
+    dataServerService.sendAssenza = function (schoolId, kidId, assenza) {
         var deferred = $q.defer();
-
-        /*temp*/
-        deferred.resolve(true);
+        $http({
+            method: 'POST',
+            url: Config.URL() + '/' + Config.app() + '/student/' + Config.appId() + '/' + schoolId + '/' + kidId + '/absence',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            data: note,
+        }).
+        success(function (data, status, headers, config) {
+            deferred.resolve(assenza);
+        }).
+        error(function (data, status, headers, config) {
+            console.log(data + status + headers + config);
+            deferred.reject(data.errorCode + ' ' + data.errorMessage);
+        });
         return deferred.promise;
-        /*temp*/
     }
-    dataServerService.sendRitiro = function (ritiro) {
+    dataServerService.sendRitiro = function (schoolId, kidId, ritiro) {
+
         var deferred = $q.defer();
-
-
-        /*temp*/
-        deferred.resolve(true);
+        $http({
+            method: 'POST',
+            url: Config.URL() + '/' + Config.app() + '/student/' + Config.appId() + '/' + schoolId + '/' + kidId + '/return',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            data: ritiro,
+        }).
+        success(function (data, status, headers, config) {
+            deferred.resolve(ritiro);
+        }).
+        error(function (data, status, headers, config) {
+            console.log(data + status + headers + config);
+            deferred.reject(data.errorCode + ' ' + data.errorMessage);
+        });
         return deferred.promise;
-        /*temp*/
 
     }
-    dataServerService.sendBabySetting = function (babysetting) {
+    dataServerService.sendBabySetting = function (schoolId, kidId, babysetting) {
         var deferred = $q.defer();
-        /*temp*/
-        deferred.resolve(true);
+        $http({
+            method: 'POST',
+            url: Config.URL() + '/' + Config.app() + '/student/' + Config.appId() + '/' + schoolId + '/' + kidId + '/config',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            data: babysetting,
+        }).
+        success(function (data, status, headers, config) {
+            deferred.resolve(babysetting);
+        }).
+        error(function (data, status, headers, config) {
+            console.log(data + status + headers + config);
+            deferred.reject(data.errorCode + ' ' + data.errorMessage);
+        });
         return deferred.promise;
-        /*temp*/
-
     }
     dataServerService.sendFermata = function (fermata) {
         var deferred = $q.defer();

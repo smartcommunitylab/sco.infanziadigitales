@@ -3,7 +3,7 @@
         <ion-nav-bar class="bar bar-ungiorno">
             <ion-nav-buttons side="left">
                 <!-- O: button-clear or button-icon -->
-                <button class="button button-percorsi button-clear" menu-toggle="left">
+                <button class="button button-percorsi button-clear" menu-toggle="left" ng-click="getProfiles()">
                     <i class="icon ion-navicon"></i>
                 </button>
             </ion-nav-buttons>
@@ -21,8 +21,8 @@
                     <div class="row">
                         <div class="col col-80">
                             <div class="item item-avatar slected-baby" ng-click="openPopover($event)">
-                                <img ng-src="{{babyselected.img}}">
-                                <h2>{{babyselected.name}}</h2>
+                                <img ng-src="{{babyselected.image}}">
+                                <h2>{{babyselected.fullName}}</h2>
                             </div>
                         </div>
                         <div class="col col-20" id="babysettingcell">
@@ -32,15 +32,7 @@
 
                 </p>
 
-                <!--</ion-item>-->
-                <!--
-<ion-item nav-clear menu-close item-icon-left ui-sref="app.ritiro">
-    {{'menu_exit' | translate}}
-</ion-item>
-<ion-item nav-clear menu-close item-icon-left ui-sref="app.ritiro">
-    {{'menu_enter' | translate}}
-</ion-item>
--->
+
                 <ion-item nav-clear menu-close item-icon-left ng-click="logout()" ng-if="userIsLogged">
                     <i class="icon voice-menu  inf_digaccount"></i>{{'menu_exit' | translate}}
                 </ion-item>

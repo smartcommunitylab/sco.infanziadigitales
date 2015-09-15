@@ -131,6 +131,18 @@ public class KidController {
 		}
 	}
 
+	@RequestMapping(method = RequestMethod.GET, value = "/student/{appId}/{schoolId}/{kidId}/stop")
+	public @ResponseBody Response<KidCalFermata> getStop(@PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId, @RequestParam long date) {
+
+		try {
+			checkKid(appId, schoolId, kidId);
+			KidCalFermata obj = storage.getStop(appId, schoolId, kidId, date);
+			return new Response<>(obj);
+		} catch (Exception e) {
+			return new Response<>(e.getMessage());
+		}
+	}
+
 	@RequestMapping(method = RequestMethod.POST, value = "/student/{appId}/{schoolId}/{kidId}/absence")
 	public @ResponseBody Response<KidConfig> sendAssenza(@RequestBody KidCalAssenza absence, @PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId) {
 
@@ -147,6 +159,19 @@ public class KidController {
 		}
 	}
 
+	@RequestMapping(method = RequestMethod.GET, value = "/student/{appId}/{schoolId}/{kidId}/absence")
+	public @ResponseBody Response<KidCalAssenza> getAssenza(@PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId, @RequestParam long date) {
+
+		try {
+			checkKid(appId, schoolId, kidId);
+			KidCalAssenza obj = storage.getAbsence(appId, schoolId, kidId, date);
+			return new Response<>(obj);
+		} catch (Exception e) {
+			return new Response<>(e.getMessage());
+		}
+	}
+	
+
 	@RequestMapping(method = RequestMethod.POST, value = "/student/{appId}/{schoolId}/{kidId}/return")
 	public @ResponseBody Response<KidConfig> sendRitiro(@RequestBody KidCalRitiro ritiro, @PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId) {
 
@@ -162,6 +187,19 @@ public class KidController {
 			return new Response<>(e.getMessage());
 		}
 	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/student/{appId}/{schoolId}/{kidId}/return")
+	public @ResponseBody Response<KidCalRitiro> getRitiro(@PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId, @RequestParam long date) {
+
+		try {
+			checkKid(appId, schoolId, kidId);
+			KidCalRitiro obj = storage.getReturn(appId, schoolId, kidId, date);
+			return new Response<>(obj);
+		} catch (Exception e) {
+			return new Response<>(e.getMessage());
+		}
+	}
+
 
 	@RequestMapping(method = RequestMethod.GET, value = "/student/{appId}/{schoolId}/{kidId}/notes")
 	public @ResponseBody Response<List<KidCalNote>> getNotes(@PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId, @RequestParam long date) {

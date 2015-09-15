@@ -252,6 +252,45 @@ public class RepositoryManager {
 	}
 
 	/**
+	 * @param appId
+	 * @param schoolId
+	 * @param kidId
+	 * @param date
+	 * @return
+	 */
+	public KidCalFermata getStop(String appId, String schoolId, String kidId, long date) {
+		Query q = kidQuery(appId, schoolId, kidId);
+		q.addCriteria(new Criteria("date").is(timestampToDate(date)));
+		return template.findOne(q, KidCalFermata.class);
+	}
+
+	/**
+	 * @param appId
+	 * @param schoolId
+	 * @param kidId
+	 * @param date
+	 * @return
+	 */
+	public KidCalAssenza getAbsence(String appId, String schoolId, String kidId, long date) {
+		Query q = kidQuery(appId, schoolId, kidId);
+		q.addCriteria(new Criteria("date").is(timestampToDate(date)));
+		return template.findOne(q, KidCalAssenza.class);
+	}
+
+	/**
+	 * @param appId
+	 * @param schoolId
+	 * @param kidId
+	 * @param date
+	 * @return
+	 */
+	public KidCalRitiro getReturn(String appId, String schoolId, String kidId, long date) {
+		Query q = kidQuery(appId, schoolId, kidId);
+		q.addCriteria(new Criteria("date").is(timestampToDate(date)));
+		return template.findOne(q, KidCalRitiro.class);
+	}
+
+	/**
 	 * @param absence
 	 * @return
 	 */
@@ -751,4 +790,5 @@ public class RepositoryManager {
 		q.addCriteria(new Criteria("username").is(username));
 		return template.findOne(q, Teacher.class);
 	}
+
 }

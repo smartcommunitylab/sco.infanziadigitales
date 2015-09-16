@@ -329,8 +329,9 @@ public class RepositoryManager {
 
 	private void addDayCriteria(long date, Query q) {
 		long dateTimestamp = timestampToDate(date); 
-		q.addCriteria(new Criteria("date").gte(dateTimestamp));
-		q.addCriteria(new Criteria("date").lt(dateTimestamp+1000*60*60*24));
+		q.addCriteria(new Criteria().andOperator(
+				new Criteria("date").gte(dateTimestamp),
+				new Criteria("date").lt(dateTimestamp+1000*60*60*24)));
 	}
 
 	/**

@@ -717,11 +717,16 @@ public class RepositoryManager {
 		for (AuthPerson ap: kp.getPersons()) {
 			if (ap.getPersonId().equals(personId)) return ap;
 		}
-		if (conf != null) {
+		if (conf != null && conf.getExtraPersons() != null) {
 			for (AuthPerson ap : conf.getExtraPersons()) {
 				if (ap.getPersonId().equals(personId)) return ap;
 			}
 		}
+		personId = conf != null ? conf.getDefaultPerson() : findDefaultPerson(kp);
+		for (AuthPerson ap: kp.getPersons()) {
+			if (ap.getPersonId().equals(personId)) return ap;
+		}
+
 		return null;
 	}
 

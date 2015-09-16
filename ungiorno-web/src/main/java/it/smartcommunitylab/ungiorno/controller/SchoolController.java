@@ -198,6 +198,7 @@ public class SchoolController {
 			List<SectionData> list = storage.getSections(appId, schoolId, sections , date);
 			return new Response<>(list);
 		} catch (Exception e) {
+			e.printStackTrace();
 			return new Response<>(e.getMessage());
 		}
 	}

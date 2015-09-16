@@ -319,9 +319,10 @@ public class RepositoryManager {
 	 * @return
 	 */
 	public KidConfig saveReturn(KidCalRitiro ritiro) {
-		ritiro.setDate(timestampToDate(ritiro.getDate()));
+		long dateTimestamp = timestampToDate(ritiro.getDate()); 
 		Query q = kidQuery(ritiro.getAppId(), ritiro.getSchoolId(), ritiro.getKidId());
-		q.addCriteria(new Criteria("date").is(ritiro.getDate()));
+		q.addCriteria(new Criteria("date").gte(dateTimestamp));
+		q.addCriteria(new Criteria("date").lt(dateTimestamp+1000*60*60*24));
 		template.remove(q, KidCalRitiro.class);
 		template.save(ritiro);
 		return getKidConfig(ritiro.getAppId(), ritiro.getSchoolId(), ritiro.getKidId());

@@ -286,7 +286,7 @@ public class RepositoryManager {
 	 */
 	public KidCalRitiro getReturn(String appId, String schoolId, String kidId, long date) {
 		Query q = kidQuery(appId, schoolId, kidId);
-		q.addCriteria(new Criteria("date").is(timestampToDate(date)));
+		addDayCriteria(date, q);
 		return template.findOne(q, KidCalRitiro.class);
 	}
 
@@ -319,13 +319,18 @@ public class RepositoryManager {
 	 * @return
 	 */
 	public KidConfig saveReturn(KidCalRitiro ritiro) {
-		long dateTimestamp = timestampToDate(ritiro.getDate()); 
 		Query q = kidQuery(ritiro.getAppId(), ritiro.getSchoolId(), ritiro.getKidId());
-		q.addCriteria(new Criteria("date").gte(dateTimestamp));
-		q.addCriteria(new Criteria("date").lt(dateTimestamp+1000*60*60*24));
+
+		addDayCriteria(ritiro.getDate(), q);
 		template.remove(q, KidCalRitiro.class);
 		template.save(ritiro);
 		return getKidConfig(ritiro.getAppId(), ritiro.getSchoolId(), ritiro.getKidId());
+	}
+
+	private void addDayCriteria(long date, Query q) {
+		long dateTimestamp = timestampToDate(date); 
+		q.addCriteria(new Criteria("date").gte(dateTimestamp));
+		q.addCriteria(new Criteria("date").lt(dateTimestamp+1000*60*60*24));
 	}
 
 	/**
@@ -661,7 +666,8 @@ public class RepositoryManager {
 	private Map<String, KidCalRitiro> readRitiri(String appId, String schoolId,
 			long date) {
 		Query q = schoolQuery(appId, schoolId);
-		q.addCriteria(new Criteria("date").is(timestampToDate(date)));
+		addDayCriteria(date, q);
+		
 		List<KidCalRitiro> ritiri = template.find(q, KidCalRitiro.class);
 		Map<String, KidCalRitiro> ritiriMap = new HashMap<String, KidCalRitiro>();
 		for (KidCalRitiro r : ritiri) {

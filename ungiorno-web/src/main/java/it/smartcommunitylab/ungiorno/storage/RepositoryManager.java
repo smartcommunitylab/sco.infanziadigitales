@@ -247,7 +247,11 @@ public class RepositoryManager {
 		Query q = kidQuery(stop.getAppId(), stop.getSchoolId(), stop.getKidId());
 		q.addCriteria(new Criteria("date").is(stop.getDate()));
 		template.remove(q, KidCalFermata.class);
+		
+		q = kidQuery(stop.getAppId(), stop.getSchoolId(), stop.getKidId());
+		addDayCriteria(stop.getDate(), q);
 		template.remove(q, KidCalRitiro.class);
+		
 		template.save(stop);
 		return getKidConfig(stop.getAppId(), stop.getSchoolId(), stop.getKidId());
 	}
@@ -324,7 +328,11 @@ public class RepositoryManager {
 
 		addDayCriteria(ritiro.getDate(), q);
 		template.remove(q, KidCalRitiro.class);
+
+		q = kidQuery(ritiro.getAppId(), ritiro.getSchoolId(), ritiro.getKidId());
+		q.addCriteria(new Criteria("date").is(ritiro.getDate()));
 		template.remove(q, KidCalFermata.class);
+		
 		template.save(ritiro);
 		return getKidConfig(ritiro.getAppId(), ritiro.getSchoolId(), ritiro.getKidId());
 	}

@@ -603,6 +603,9 @@ public class RepositoryManager {
 				KidCalAssenza a = assenzeMap.get(kp.getKidId());
 				skp.setExitTime(null);
 				skp.setNote(a.getNote());
+			} else if (ritiriMap.containsKey(kp.getKidId())){
+				KidCalRitiro r = ritiriMap.get(kp.getKidId());
+				skp.setExitTime(r.getDate());
 			} else {
 				skp.setExitTime(computeTime(date, conf,kp, profile));
 			}
@@ -611,7 +614,7 @@ public class RepositoryManager {
 			String personId = null;
 			if (ritiriMap.containsKey(kp.getKidId())) {
 				KidCalRitiro r = ritiriMap.get(kp.getKidId());
-				skp.setPersonException(r.isExceptional());
+				skp.setPersonException(true);
 				skp.setNote(r.getNote());
 				personId = r.getPersonId();
 			} else {

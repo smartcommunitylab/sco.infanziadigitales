@@ -60,7 +60,7 @@ public class SectionData extends SchoolObject{
 		
 		private String personId;
 		private String personName;
-		private boolean personException;
+		private boolean personException, stopException;
 		private String note;
 		private String stopId;
 		
@@ -142,6 +142,12 @@ public class SectionData extends SchoolObject{
 		public void setNote(String note) {
 			this.note = note;
 		}
+		public boolean isStopException() {
+			return stopException;
+		}
+		public void setStopException(boolean stopException) {
+			this.stopException = stopException;
+		}
 	}
 
 	private String sectionId, sectionName;
@@ -165,5 +171,6 @@ public class SectionData extends SchoolObject{
 		this.children = children;
 	}
 
+	
 
 }

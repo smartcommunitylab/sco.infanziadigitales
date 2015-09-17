@@ -247,6 +247,7 @@ public class RepositoryManager {
 		Query q = kidQuery(stop.getAppId(), stop.getSchoolId(), stop.getKidId());
 		q.addCriteria(new Criteria("date").is(stop.getDate()));
 		template.remove(q, KidCalFermata.class);
+		template.remove(q, KidCalRitiro.class);
 		template.save(stop);
 		return getKidConfig(stop.getAppId(), stop.getSchoolId(), stop.getKidId());
 	}
@@ -323,6 +324,7 @@ public class RepositoryManager {
 
 		addDayCriteria(ritiro.getDate(), q);
 		template.remove(q, KidCalRitiro.class);
+		template.remove(q, KidCalFermata.class);
 		template.save(ritiro);
 		return getKidConfig(ritiro.getAppId(), ritiro.getSchoolId(), ritiro.getKidId());
 	}
@@ -617,11 +619,7 @@ public class RepositoryManager {
 				skp.setPersonException(r.isExceptional());
 				skp.setNote(r.getNote());
 				personId = r.getPersonId();
-			} else {
-				personId = conf != null ? conf.getDefaultPerson() : findDefaultPerson(kp);
 			}
-			skp.setPersonId(personId);
-			skp.setPersonName(getPerson(personId, conf, kp).getFullName());
 
 			// read stop from stop object, otherwise from config, otherwise from profile
 			if (skp.getBus().isActive()) {
@@ -629,14 +627,18 @@ public class RepositoryManager {
 					KidCalFermata fermata = stopsMap.get(kp.getKidId());
 					skp.setNote(fermata.getNote());
 					skp.setStopId(fermata.getStopId());
+					skp.setStopException(true);
 					personId = fermata.getPersonId();
 				} else {
-					personId = conf != null ? conf.getDefaultPerson() : findDefaultPerson(kp);
 					skp.setStopId(conf != null ? conf.getServices().getBus().getDefaultIdBack() : kp.getServices().getBus().getStops().get(0).getStopId());
 				}
-				skp.setPersonId(personId);
-				skp.setPersonName(getPerson(personId, conf, kp).getFullName());
 			}
+			if (personId == null) {
+				personId = conf != null ? conf.getDefaultPerson() : findDefaultPerson(kp);
+			}
+			
+			skp.setPersonId(personId);
+			skp.setPersonName(getPerson(personId, conf, kp).getFullName());
 			
 			map.get(kp.getSection().getSectionId()).getChildren().add(skp);
 		}

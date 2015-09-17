@@ -614,7 +614,7 @@ public class RepositoryManager {
 			String personId = null;
 			if (ritiriMap.containsKey(kp.getKidId())) {
 				KidCalRitiro r = ritiriMap.get(kp.getKidId());
-				skp.setPersonException(true);
+				skp.setPersonException(r.isExceptional());
 				skp.setNote(r.getNote());
 				personId = r.getPersonId();
 			} else {

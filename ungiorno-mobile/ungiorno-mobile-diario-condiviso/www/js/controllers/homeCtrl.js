@@ -1,29 +1,45 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.controllers.home', [])
 
-.controller('HomeCtrl', function ($scope, dataServerService, $ionicModal, $cordovaCamera, $ionicPopover, galleryService, $state) {
+.controller('HomeCtrl', function ($scope, $rootScope, $ionicModal, $cordovaCamera, $ionicPopover, $state, galleryService, profileService, dataServerService) {
+    if (!dataServerService.userIsLogged()) {
+        $state.go('app.login');
+        return;
+    }
 
-    var newPostModal;
+    var init = function() {
+        profileService.init().then(function(data) {
+            $rootScope.kidProfiles = data;
+            profileService.getCurrentBaby().then(function(data) {
+                if ($rootScope.selectedKid) {
+                    $scope.baby = data;
+                    dataServerService.getPostsByBabyId($scope.baby.kidId).then(function (posts) {
+                        $scope.posts = posts;
+                    });
+                }
+            });
+        });
+    }
+    init();
+
+    $rootScope.$watch('selectedKid', function (a, b) {
+        if (b == null || a.kidId != b.kidId) {
+            init();
+        }
+    });
+
+    $scope.newPostModal;
     var photoSrcSelect;
-
     var editPostMode;
 
     $scope.today = new Date();
 
     $scope.attachedTags = [];
 
-    dataServerService.getBabyProfile("a").then(function (baby) {
-        $scope.baby = baby;
-    });
-
-    dataServerService.getPostsByBabyId("a").then(function (posts) {
-        $scope.posts = posts;
-    });
-
     $ionicModal.fromTemplateUrl('templates/newPostModal.html', {
 		scope: $scope,
 		animation: 'slide-in-up'
 	}).then(function(modal) {
-		newPostModal = modal;
+		$scope.newPostModal = modal;
 	})
 
 
@@ -40,27 +56,37 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         $scope.currentPost.photos = [];
         $scope.currentPost.attachedTags = [];
         $scope.setMood(0);
-		newPostModal.show();
+		$scope.newPostModal.show();
 	}
+    $scope.cancel = function() {
+        $scope.newPostModal.hide();
+    }
 
-	$scope.newPost = function(post) { //function called when a new post is submitted and also when a post is edited
-
-        if (editPostMode) {
-            //TODO: update server
-        } else {
-            $scope.currentPost.attachedTags.forEach(function (obj) { //hashkey generated for some random reason, remove it!
-                delete obj["$$hashKey"];
-            });
-            console.log(JSON.stringify($scope.currentPost));
-            //TODO: update server
-
-            newPostModal.hide();
-        }
+	$scope.save = function(post) { //function called when a new post is submitted and also when a post is edited
+        dataServerService.save(post).then(
+            function(posts) {
+                $scope.posts = posts;
+                $scope.newPostModal.hide();
+            },
+            function(err) {
+                console.log(err);
+            }
+        );
+//        if (editPostMode) {
+//            //TODO: update server
+//        } else {
+//            $scope.currentPost.attachedTags.forEach(function (obj) { //hashkey generated for some random reason, remove it!
+//                delete obj["$$hashKey"];
+//            });
+//            console.log(JSON.stringify($scope.currentPost));
+//            //TODO: update server
+//        }
 
 	}
 
     $scope.setMood = function (moodCode) {
-       $scope.currentPost.mood = moodCode;
+       if ($scope.currentPost.mood == moodCode) $scope.currentPost.mood = 0;
+       else $scope.currentPost.mood = moodCode;
     }
 
     $scope.addPhoto = function ($event, photoSrc) {
@@ -126,7 +152,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         $scope.currentPost.photos = post.pictures;
         $scope.currentPost.attachedTags = post.tags;
         $scope.setMood(post.mood);
-		newPostModal.show();
+		$scope.newPostModal.show();
     }
 
     $scope.sharePost = function (post) {

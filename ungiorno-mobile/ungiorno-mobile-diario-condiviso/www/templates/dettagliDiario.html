@@ -1,248 +1,156 @@
 <ion-view id="dettaglidiario" title="{{'diary_details' | translate}}">
-     <ion-nav-bar class="bar bar-ungiorno">
+    <ion-nav-bar class="bar bar-ungiorno">
         <ion-nav-back-button>
         </ion-nav-back-button>
-          <ion-nav-buttons side="right">
-                <button class="button" ng-click="modify()" ng-if="isViewMode()">
-                    <i class="icon ion-android-create"></i>
-                </button>
-                <button class="button" ng-click="save()" ng-if="!isViewMode()">
-                    <i class="icon ion-checkmark-round"></i>
-                </button>
-                </button>
-            </ion-nav-buttons>
+        <ion-nav-buttons side="right">
+            <button class="button button-clear" ng-click="modify()" ng-if="isViewMode()">
+                <i class="icon ion-android-create"></i>
+            </button>
+            <button class="button button-clear" ng-click="save()" ng-if="!isViewMode()">
+                <i class="icon ion-checkmark-round"></i>
+            </button>
+            </button>
+        </ion-nav-buttons>
     </ion-nav-bar>
     <ion-content>
-        <div class="headerdata">{{getString('data', babyCopy.gender)}} {{isMale(babyCopy.gender) ? 'name_m' : 'name_f' | translate}}</div>
-        <div class="topdata">{{getString('name', babyCopy.gender)}} {{isMale(babyCopy.gender) ? 'name_m' : 'name_f' | translate}}</div>
-        <div class="item item-input-inset input-children" ng-if="isViewMode()">
-        <label class="item item-input children-edit">
-            <span class="textdata">{{babyCopy.firstName}}</span>
-        </label>
-            </div>
-        <div class="item item-input-inset input-children" ng-if="!isViewMode()">
-        <label class="item item-input children-edit">
-            <input type="text"  ng-model="babyCopy.firstName">
-        </label>
-        <i class="ion-asterisk alignRight inline vertical-middle" ng-if="!isViewMode()"></i>
-        </div>
-        <div class="topdata">{{getString('surname', babyCopy.gender)}} {{isMale(babyCopy.gender) ? 'name_m' : 'name_f' | translate}}</div>
-        <div class="item item-input-inset input-children" ng-if="isViewMode()">
-        <label class="item item-input children-edit">
-            <span class="textdata">{{babyCopy.lastName}}</span>
-        </label>
-            </div>
-        <div class="item item-input-inset input-children" ng-if="!isViewMode()">
-        <label class="item item-input children-edit">
-            <input type="text"  ng-model="babyCopy.lastName">
-        </label>
-        <i class="ion-asterisk alignRight inline vertical-middle" ng-if="!isViewMode()"></i>
-        </div>
-        <div class="topdata">{{getString('date_birth', babyCopy.gender)}} {{isMale(babyCopy.gender) ? 'name_m' : 'name_f' | translate}}</div>
-        <div class="item item-input-inset input-children" ng-if="isViewMode()">
-            <label class="item item-input children-edit">
+        <div class="list diary-form">
+            <div class="item item-divider">{{'data' | translate}}:</div>
+
+            <label class="item item-input"  ng-if="!isViewMode()">
+                <input type="text" placeholder="{{'name'|translate}}" ng-model="babyCopy.firstName"/>
+                <i class="ion-asterisk alignRight inline vertical-middle"></i>
+            </label>
+            <label class="item item-input item-stacked-label"  ng-if="isViewMode()">
+                <span class="input-label">{{'name'|translate}}</span>
+                <span class="textdata">{{babyCopy.firstName}}</span>
+            </label>
+
+            <label class="item item-input"  ng-if="!isViewMode()">
+                <input type="text" placeholder="{{'surname'|translate}}" ng-model="babyCopy.lastName"/>
+                <i class="ion-asterisk alignRight inline vertical-middle"></i>
+            </label>
+            <label class="item item-input item-stacked-label"  ng-if="isViewMode()">
+                <span class="input-label">{{'surname'|translate}}</span>
+                <span class="textdata">{{babyCopy.lastName}}</span>
+            </label>
+
+            <label class="item item-input"  ng-if="!isViewMode()">
+                <input type="date" ng-model="babyCopy.birthday"/>
+                <i class="ion-asterisk alignRight inline vertical-middle"></i>
+            </label>
+            <label class="item item-input item-stacked-label"  ng-if="isViewMode()">
+                <span class="input-label">{{'date_birth'|translate}}</span>
                 <span class="textdata">{{babyCopy.birthday | date:"d MMMM yyyy"}}</span>
             </label>
-        </div>
-        <div class="item item-input-inset input-children" ng-if="!isViewMode()">
-            <label class="item item-input children-edit">
-                <input type="date" ng-model="babyCopy.birthday">
+
+            <label class="item item-input item-select"  ng-if="!isViewMode()">
+                <select ng-model="babyCopy.gender">
+                    <option>{{ 'male' | translate}}</option>
+                    <option>{{ 'female' | translate}}</option>
+                </select>
+                <i class="ion-asterisk alignRight inline vertical-middle" style="float:right;"></i>
             </label>
-            <i class="ion-asterisk alignRight inline vertical-middle" ng-if="!isViewMode()"></i>
-        </div>
-        <label class="item item-input item-select selectrole" ng-if="!isViewMode()">
-            <div class="input-label">{{ 'gender' | translate}}</div>
-            <select ng-model="babyCopy.gender">
-                <option>{{ 'male' | translate}}</option>
-                <option>{{ 'female' | translate}}</option>
-            </select>
-        </label>
-        <img ng-src="{{babyCopy.image}}" class="sizeImage">
-        <div class="headerdata">{{'data_family' | translate}}</div>
-        <div ng-repeat="data in babyCopy.persons track by $index" ng-if="isFamily(data.relation)">
-            <div class="topdata">{{'name' | translate}} {{getPreposition(data.gender, data.relation)}} {{data.relation}}</div>
-            <div class="item item-input-inset input-children" ng-if="isViewMode()">
-            <label class="item item-input children-edit">
-                <span class="textdata">{{data.firstName}}</span>
-            </label>
-            </div>
-            <div class="item item-input-inset input-children" ng-if="!isViewMode()">
-            <label class="item item-input children-edit">
-                <input type="text"  ng-model="data.firstName">
-            </label>
-            <i class="ion-asterisk alignRight inline vertical-middle" ng-if="!isViewMode()"></i>
-            </div>
-            <div class="topdata">{{'surname' | translate}} {{getPreposition(data.gender, data.relation)}} {{data.relation}}</div>
-            <div class="item item-input-inset input-children" ng-if="isViewMode()">
-            <label class="item item-input children-edit">
-                <span class="textdata">{{data.lastName}}</span>
-            </label>
-            </div>
-            <div class="item item-input-inset input-children" ng-if="!isViewMode()">
-            <label class="item item-input children-edit">
-                <input type="text"  ng-model="data.lastName">
-            </label>
-            <i class="ion-asterisk alignRight inline vertical-middle" ng-if="!isViewMode()"></i>
-            </div>
-            <div class="topdata">{{'date_birth' | translate}} {{getPreposition(data.gender, data.relation)}} {{data.relation}}</div>
-            <div class="item item-input-inset input-children" ng-if="isViewMode()">
-            <label class="item item-input children-edit">
-                <span class="textdata">{{data.birthday | date:"d MMMM yyyy"}}</span>
-            </label>
-            </div>
-            <div class="item item-input-inset input-children" ng-if="!isViewMode()">
-            <label class="item item-input children-edit">
-                <input type="date" ng-model="data.birthday">
-            </label>
-            <i class="ion-asterisk alignRight inline vertical-middle" ng-if="!isViewMode()"></i>
-            </div>
-            <div class="separator"></div>
-        </div>
-        <div>
-            <div ng-repeat="data in addedComponents track by $index" ng-if="!isViewMode()">
-                <button id="selezion-button" class="button alignRightIcon" ng-click="deleteComponent($index)">
-                    <i class="icon ion-trash-b"></i>
-                </button>
-                <div class="topdata">{{'name' | translate}}</div>
-                <div class="item item-input-inset input-children">
-                    <label class="item item-input children-edit">
-                        <input type="text" ng-model="data.firstName">
-                    </label>
-                    <i class="ion-asterisk alignRight inline vertical-middle"></i>
-                </div>
-                <div class="topdata">{{'surname' | translate}}</div>
-                <div class="item item-input-inset input-children">
-                    <label class="item item-input children-edit">
-                        <input type="text" ng-model="data.lastName">
-                    </label>
-                    <i class="ion-asterisk alignRight inline vertical-middle"></i>
-                </div>
-                <div class="topdata">{{'date_birth' | translate}}</div>
-                <div class="item item-input-inset input-children">
-                    <label class="item item-input children-edit">
-                        <input type="date" ng-model="data.birthday">
-                    </label>
-                    <i class="ion-asterisk alignRight inline vertical-middle"></i>
-                </div>
-                <label class="item item-input item-select selectrole">
-                    <div class="input-label">{{ 'role' | translate}}</div>
-                    <select ng-model="data.relation">
-                        <option>{{ 'mom' | translate}}</option>
-                        <option>{{ 'dad' | translate}}</option>
-                        <option>{{ 'brother' | translate}}</option>
-                        <option>{{ 'sister' | translate}}</option>
-                    </select>
+
+            <img ng-src="{{babyCopy.image}}" class="sizeImage" ng-click="changeImage()">
+
+            <div class="item item-divider">{{'data_family' | translate}}:</div>
+
+            <div ng-repeat="data in babyCopy.persons track by $index" ng-if="isFamily(data.relation)">
+<!--                <div class="separator" ng-if="$index > 0"></div>-->
+                <label class="item item-input item-stacked-label" ng-if="!isViewMode(data)">
+                    <span class="input-label">{{data.relation}}:</span>
+                    <button class="button button-clear alignRightIcon" ng-click="deleteComponent($index)" ng-if="!readOnly(data)">
+                        <i class="icon ion-trash-b"></i>
+                    </button>
                 </label>
-                <div class="separator"></div>
-            </div>
-            <button class="button addComponent" ng-click="addComponent()" ng-if="!isViewMode()">
-                <div class="textdata" >{{'new_component' | translate}}</div>
-            </button>
-        </div>
-        <div class="headerdata">{{'acces_diary' | translate}}</div>
-        <div ng-repeat="data in babyCopy.persons track by $index" ng-if="data.authorized">
-            <div class="topdata">{{getString('name', data.gender, data.relation)}} {{data.relation}}</div>
-            <div class="item item-input-inset input-children" ng-if="isViewMode()">
-            <label class="item item-input children-edit">
-                <span class="textdata">{{data.firstName}}</span>
-            </label>
-            </div>
-            <div class="item item-input-inset input-children" ng-if="!isViewMode()">
-            <label class="item item-input children-edit">
-                <input type="text"  ng-model="data.firstName">
-            </label>
-            <i class="ion-asterisk alignRight inline vertical-middle" ng-if="!isViewMode()"></i>
-            </div>
-            <div ng-if="data.phone" class="textdata">
-                <i class="sizeIcon icon ion-android-call" ng-if="isViewMode()"></i>
-                <div class="person-details">
-                    <div class="topdata">{{getString('number_parents', data.gender, data.relation)}} {{data.relation}}</div>
-                    <a href="tel:{{phone}}"  ng-repeat="phone in data.phone track by $index">
-                        <div class="item item-input-inset input-children" ng-if="isViewMode()">
-                            <label class="item item-input children-edit">
-                                <span class="textdata">{{phone}}</span>
-                            </label>
-                        </div>
-                        <div class="item item-input-inset input-children" ng-if="!isViewMode()">
-                            <label class="item item-input children-edit">
-                                <input type="text"  ng-model="phone">
-                            </label>
-                            <i class="ion-asterisk alignRight inline vertical-middle" ng-if="!isViewMode()"></i>
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <div ng-if="data.email" class="textdata">
-                <i class="sizeIcon icon ion-email" ng-if="isViewMode()"></i>
-                <div class="person-details">
-                    <div class="topdata">{{getString('mail_parents', data.gender, data.relation)}} {{data.relation}}</div>
-                    <a href="mailto:{{mail}}" ng-repeat="mail in data.email track by $index">
-                        <div class="item item-input-inset input-children" ng-if="isViewMode()">
-                            <label class="item item-input children-edit">
-                                <span class="textdata">{{mail}}</span>
-                            </label>
-                        </div>
-                        <div class="item item-input-inset input-children" ng-if="!isViewMode()">
-                            <label class="item item-input children-edit">
-                                <input type="text"  ng-model="mail">
-                            </label>
-                            <i class="ion-asterisk alignRight inline vertical-middle" ng-if="!isViewMode()"></i>
-                        </div>
-                    </a>
-                </div>
-                <div class="separator"></div>
-            </div>
-        </div>
-         <div>
-            <div ng-repeat="data in addedPeople track by $index" ng-if="!isViewMode()">
-                <button id="bottom-button" class="button alignRightIcon" ng-click="deletePeople($index)">
-                    <i class="icon ion-trash-b"></i>
-                </button>
-                <div class="topdata">{{'fullName' | translate}}</div>
-                <div class="item item-input-inset input-children">
-                    <label class="item item-input children-edit">
-                        <input type="text"  ng-model="data.fullName">
-                    </label>
+                <label class="item item-input"  ng-if="!isViewMode(data)">
+                    <input type="text" placeholder="{{'name'|translate}}" ng-model="data.firstName"/>
                     <i class="ion-asterisk alignRight inline vertical-middle"></i>
-                </div>
-                <div class="topdata">{{'number_parents' | translate}}</div>
-                <div class="item item-input-inset input-children">
-                    <label class="item item-input children-edit">
-                        <input type="text"  ng-model="data.phone">
-                    </label>
-                    <i class="ion-asterisk alignRight inline vertical-middle"></i>
-                </div>
-                <div class="topdata">{{'email' | translate}}</div>
-                <div class="item item-input-inset input-children">
-                    <label class="item item-input children-edit">
-                        <input type="text"  ng-model="data.email">
-                    </label>
-                    <i class="ion-asterisk alignRight inline vertical-middle"></i>
-                </div>
-                <label class="item item-input item-select selectrole">
-                    <div class="input-label">{{ 'role' | translate}}</div>
-                    <select  ng-model="data.role">
-                        <option>{{'parents' | translate}}</option>
-                        <option>{{'teacher' | translate}}</option>
-                    </select>
                 </label>
-                <div class="separator"></div>
+                <label class="item item-input"  ng-if="!isViewMode(data)">
+                    <input type="text" placeholder="{{'surname'|translate}}" ng-model="data.lastName"/>
+                    <i class="ion-asterisk alignRight inline vertical-middle"></i>
+                </label>
+                <label class="item item-input"  ng-if="!isViewMode(data)">
+                    <input type="date" ng-model="babyCopy.birthday"/>
+                    <i class="ion-asterisk alignRight inline vertical-middle"></i>
+                </label>
+
+                <label class="item item-input item-stacked-label"  ng-if="isViewMode(data)">
+                    <span class="input-label">{{data.relation}}:</span>
+                    <span class="textdata">{{data.firstName}} {{data.lastName}} ({{babyCopy.birthday | date:"d MMMM yyyy"}})</span>
+                </label>
             </div>
-            <button id="selezion-button" class="button addComponent" ng-click="addPeople()" ng-if="!isViewMode()">
-                <div class="textdata" >{{'new_people' | translate}}</div>
-            </button>
+            <label class="item item-input item-select"  ng-if="!isViewMode()">
+                <div class="input-label">{{ 'add_family_component' | translate}}</div>
+                <select ng-model="data.relation">
+                    <option>{{ 'parent1' | translate}}</option>
+                    <option>{{ 'parent2' | translate}}</option>
+                    <option>{{ 'brother' | translate}}</option>
+                    <option>{{ 'sister' | translate}}</option>
+                </select>
+            </label>
+
+            <div class="item item-divider">{{'acces_diary' | translate}}:</div>
+
+            <div ng-repeat="data in babyCopy.persons track by $index" ng-if="data.authorized">
+<!--                <div class="separator" ng-if="$index > 0"></div>-->
+                <label class="item item-input item-stacked-label" ng-if="!isViewMode(data, true)">
+                    <span class="input-label">{{data.relation}}:</span>
+                    <button class="button button-clear alignRightIcon" ng-click="deleteComponent($index)" ng-if="!readOnly(data, true)">
+                        <i class="icon ion-trash-b"></i>
+                    </button>
+                </label>
+                <label class="item item-input"  ng-if="!isViewMode(data, true)">
+                    <input type="text" placeholder="{{'name'|translate}}" ng-model="data.firstName"/>
+                    <i class="ion-asterisk alignRight inline vertical-middle"></i>
+                </label>
+                <label class="item item-input"  ng-if="!isViewMode(data, true)">
+                    <input type="text" placeholder="{{'surname'|translate}}" ng-model="data.lastName"/>
+                    <i class="ion-asterisk alignRight inline vertical-middle"></i>
+                </label>
+                <label class="item item-input"  ng-if="!isViewMode(data, true)">
+                    <i class="form-icon icon ion-android-call"></i>
+                    <input type="text" placeholder="{{'number_parents'|translate}}" ng-model="data.phone"/>
+                    <i class="ion-asterisk alignRight inline vertical-middle"></i>
+                </label>
+                <label class="item item-input"  ng-if="!isViewMode(data, true)">
+                    <i class="form-icon icon ion-email"></i>
+                    <input type="text" placeholder="{{'mail_parents'|translate}}" ng-model="data.email"/>
+                    <i class="ion-asterisk alignRight inline vertical-middle"></i>
+                </label>
+
+                <label class="item item-input item-stacked-label"  ng-if="isViewMode(data, true)">
+                    <span class="input-label">{{data.relation}}:</span>
+                    <span class="textdata">{{data.firstName}} {{data.lastName}}</span>
+                </label>
+                <div ng-if="isViewMode(data, true)">
+                <a class="item item-contact item-icon-left" href="{{'tel:'+p}}" ng-repeat="p in data.phone">
+                    <i class="icon ion-android-call"></i><span class="textdata">{{p}}</span>
+                </a>
+                <a class="item item-contact item-icon-left" href="{{'mailto:'+p}}" ng-repeat="p in data.email">
+                    <i class="icon ion-email"></i><span class="textdata">{{p}}</span>
+                </a>
+                </div>
+            </div>
+            <label class="item item-input item-select"  ng-if="!isViewMode(null, true)">
+                <div class="input-label">{{ 'add_authorized' | translate}}</div>
+                <select ng-model="data.relation">
+                    <option>{{ 'parent' | translate}}</option>
+                    <option>{{ 'teacher' | translate}}</option>
+                </select>
+            </label>
+
+            <div class="item item-divider">{{'notes' | translate}}:</div>
+            <label class="item item-input item-stacked-label"  ng-if="isViewMode()">
+                <span class="textdata" ng-if="isEmptyNote(babyCopy.personalNotes)">{{'nothing_note'| translate}}</span>
+                <span class="textdata" ng-if="!isEmptyNote(babyCopy.personalNotes)">{{babyCopy.personalNotes}}</span>
+            </label>
+            <label class="item item-input"  ng-if="!isViewMode()">
+                <textarea placeholder="{{'insert_note' | translate}}" ng-model="babyCopy.personalNotes"></textarea>
+            </label>
+            <div class="item item-divider text-center" ng-if="!isViewMode()">{{'asterisk' | translate}}</div>
+
         </div>
-        <div class="headerdata">{{'notes' | translate}}</div>
-            <div class="item item-input-inset input-children" ng-if="isViewMode()">
-            <label class="item item-input children-edit">
-                <span class="textdata">{{isEmptyNote(babyCopy.personalNotes) ? 'nothing_note' : babyCopy.personalNotes  | translate}}</span>
-            </label>
-            </div>
-            <div class="item item-input-inset input-children" ng-if="!isViewMode()">
-            <label class="item item-input children-edit">
-                <input type="text" ng-model="babyCopy.personalNotes" placeholder="{{'insert_note' | translate}}">
-            </label>
-            </div>
-        <div class="asterisk">{{'asterisk' | translate}}</div>
     </ion-content>
 </ion-view>

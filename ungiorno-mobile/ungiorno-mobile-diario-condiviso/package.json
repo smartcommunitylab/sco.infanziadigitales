@@ -15,9 +15,19 @@
     "gulp-util": "^2.2.14",
     "shelljs": "^0.3.0"
   },
-  "cordovaPlugins": [],
+  "cordovaPlugins": [
+    "org.apache.cordova.inappbrowser",
+    "org.apache.cordova.file",
+    "org.apache.cordova.device",
+    "org.apache.cordova.console",
+    "com.ionic.keyboard",
+    "org.apache.cordova.statusbar",
+    "org.apache.cordova.splashscreen",
+    "org.apache.cordova.camera",
+    "de.appplant.cordova.plugin.email-composer"
+  ],
   "cordovaPlatforms": [
-    "android",
-    "ios"
+    "ios",
+    "android"
   ]
 }

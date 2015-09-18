@@ -1,6 +1,4 @@
 <ion-view id="login">
-    <ion-nav-bar class="bar bar-ungiorno">
-    </ion-nav-bar>
     <ion-content id="login-container" has-header="true" class="page-padding login-container">
         <!--<h1>Diario Condiviso</h1>
         <h3 style="margin-top:100px; text-align:center">Accedi con:</h3>
@@ -11,6 +9,10 @@
         </div>-->
 
         <div class="login-title">Diario Condiviso</div>
+        <h3 style="margin-top:100px; text-align:center">Accedi con:</h3>
+        <p class="button login-buttons" ng-click="login('facebook')">Facebook</p>
+        <p class="button login-buttons" ng-click="login('gmail')">Gmail</p>
+<!--
         <div class="enter_credentials">Inserisci le tue credenziali:</div>
 
         <label class="item item-input id-container">
@@ -21,5 +23,6 @@
         </label>
 
         <p class="button login-buttons">Entra</p>
+-->
     </ion-content>
 </ion-view>

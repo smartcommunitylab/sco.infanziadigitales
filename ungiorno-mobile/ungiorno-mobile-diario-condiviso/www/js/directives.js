@@ -1,69 +1,69 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.directives', [])
 
-.directive('backImg', function () {
-    return function (scope, element, attrs) {
-        var url = attrs.backImg;
-        var content = element.find('a');
-        content.css({
-            'background-image': 'url(' + url + ')',
-            'background-size': 'cover'
-        });
-    };
-})
-
-.directive('coverImg', function () {
-        return function (scope, element, attrs) {
-            attrs.$observe('coverImg', function (value) {
-                element.css({
-                    'background-image': 'url(' + value + ')',
-                    'background-size': 'cover'
-                });
-            });
-        };
-    })
-    .directive('backImg', function () {
-        return function (scope, element, attrs) {
-            var url = attrs.backImg;
-            element.css({
-                'background-image': 'url(' + url + ')',
-                'background-size': 'cover'
-            });
-        };
-    })
-    .directive('starRating', function () {
-        return {
-            restrict: 'A',
-            template: '<ul class="rating">' +
-                '<li ng-repeat="starType in stars track by $index" ng-click="toggle($index)">' +
-                '<i class="icon vote-star" ng-class="{\'ion-android-star\': starType == \'full\', \'ion-android-star-half\': starType == \'half\', \'ion-android-star-outline\': starType == \'empty\'}"></i>' +
-                '</li>' +
-                '</ul>',
-            scope: {
-                ratingValue: '=',
-                max: '=',
-                onRatingSelected: '&',
-                getRating: '&'
-            },
-            link: function (scope, elem, attrs) {
-                var updateStars = function () {
-                    scope.stars = scope.getRating();
-                };
-
-                scope.toggle = function (index) {
-                    scope.ratingValue = index + 1;
-                    scope.onRatingSelected({
-                        rating: index + 1
-                    });
-                };
-
-                scope.$watch('ratingValue', function (oldVal, newVal) {
-                    /*if (newVal) {*/
-                    updateStars();
-                    /*}*/
-                });
-            }
-        }
-    })
+//.directive('backImg', function () {
+//    return function (scope, element, attrs) {
+//        var url = attrs.backImg;
+//        var content = element.find('a');
+//        content.css({
+//            'background-image': 'url(' + url + ')',
+//            'background-size': 'cover'
+//        });
+//    };
+//})
+//
+//.directive('coverImg', function () {
+//        return function (scope, element, attrs) {
+//            attrs.$observe('coverImg', function (value) {
+//                element.css({
+//                    'background-image': 'url(' + value + ')',
+//                    'background-size': 'cover'
+//                });
+//            });
+//        };
+//    })
+//    .directive('backImg', function () {
+//        return function (scope, element, attrs) {
+//            var url = attrs.backImg;
+//            element.css({
+//                'background-image': 'url(' + url + ')',
+//                'background-size': 'cover'
+//            });
+//        };
+//    })
+//    .directive('starRating', function () {
+//        return {
+//            restrict: 'A',
+//            template: '<ul class="rating">' +
+//                '<li ng-repeat="starType in stars track by $index" ng-click="toggle($index)">' +
+//                '<i class="icon vote-star" ng-class="{\'ion-android-star\': starType == \'full\', \'ion-android-star-half\': starType == \'half\', \'ion-android-star-outline\': starType == \'empty\'}"></i>' +
+//                '</li>' +
+//                '</ul>',
+//            scope: {
+//                ratingValue: '=',
+//                max: '=',
+//                onRatingSelected: '&',
+//                getRating: '&'
+//            },
+//            link: function (scope, elem, attrs) {
+//                var updateStars = function () {
+//                    scope.stars = scope.getRating();
+//                };
+//
+//                scope.toggle = function (index) {
+//                    scope.ratingValue = index + 1;
+//                    scope.onRatingSelected({
+//                        rating: index + 1
+//                    });
+//                };
+//
+//                scope.$watch('ratingValue', function (oldVal, newVal) {
+//                    /*if (newVal) {*/
+//                    updateStars();
+//                    /*}*/
+//                });
+//            }
+//        }
+//    })
 
 .directive('babyPost', function (galleryService, $state) {
     return {
@@ -106,26 +106,26 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.di
     }
 })
 
-.directive("myDirective", function() {
-
-    return {
-        restrict: "E",
-        scope: {
-            callback: "&"
-        },
-        template: "<div style='width: 200px; height: 200px; background-color: black;' ng-click='callCallback()'></div>", // call function this way...
-        link: function(scope, element, attrs) {
-            // unwrap the function
-            scope.callback = scope.callback();
-
-            scope.data = "data from somewhere";
-
-            scope.callCallback = function() {
-                scope.callback(scope.data);
-            }
-        }
-    }
-})
+//.directive("myDirective", function() {
+//
+//    return {
+//        restrict: "E",
+//        scope: {
+//            callback: "&"
+//        },
+//        template: "<div style='width: 200px; height: 200px; background-color: black;' ng-click='callCallback()'></div>", // call function this way...
+//        link: function(scope, element, attrs) {
+//            // unwrap the function
+//            scope.callback = scope.callback();
+//
+//            scope.data = "data from somewhere";
+//
+//            scope.callCallback = function() {
+//                scope.callback(scope.data);
+//            }
+//        }
+//    }
+//})
 
 .directive('fabButton', function($document) {
     return {
@@ -194,7 +194,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.di
             }
 
 
-            scope.filteredTags = scope.tags.slice();
+            if (scope.tags) {
+                scope.filteredTags = scope.tags.slice();
+            }
 
 
             scope.inputChanged = function ($event) {

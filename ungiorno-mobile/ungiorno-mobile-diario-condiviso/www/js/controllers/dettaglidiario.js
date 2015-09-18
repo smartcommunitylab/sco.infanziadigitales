@@ -119,12 +119,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         return string;
     }
     $scope.babyCopy = {}
+
     if ($scope.createMode){
         $scope.modify();
     }
     else{
 
-        profileService.getBabyProfileById().then( function(data){
+        profileService.getCurrentBaby().then( function(data){
             $scope.baby = data;
             $scope.baby.birthday = new Date($scope.baby.birthday * 1000);
             for (var i = 0; i < $scope.baby.persons.length; i++){

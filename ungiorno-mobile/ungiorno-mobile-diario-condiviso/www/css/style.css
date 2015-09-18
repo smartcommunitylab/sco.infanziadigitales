@@ -1,23 +1,67 @@
 /* Empty. Add your own CSS if you like */
-
-.stream.post-tag {
-    display: inline-block;
-    margin: 5px;
-    font-style: italic;
+.login-bar {
+    background-color: #DDD;
 }
 
-.stream.card {
-    padding: 16px;
+.bar-ungiorno {
+    background-color: #DDD;
 }
 
-.stream.post-text {
+.menu-profile {
+    background-color: #8E8E8C !important;
+}
+.menu-profile h2 {
+    color: white !important;
+    line-height: 40px;
+}
+
+.menu-profile-open {
+    background-color: #8E8E8C !important;
+}
+.menu-profile-open button {
+    color: white !important;
+    padding-right: 16px;
+    min-height: 16px !important;
+   line-height: 18px !important;
+}}
+.menu-profile-open button .icon::before{
+    line-height: 18px !important;
+}
+
+
+.menu-profile button {
+    min-height: 40px !important;
+    top: 16px !important;
+    color: white !important;
+
+}
+.leftmenu {
+    background-color: #DDD;
+}
+
+a.item-content {
+    background-color: #DDD !important;
+}
+.leftmenu .item {
+    background-color: #DDD;
+    border: 0;
+}
+
+.leftmenu .icon-light::before {
+    color: #DDD !important;
+}
+
+.button-clear .icon::before {
+    color: #8E8E8C;
+}
+
+.stream-item {
+    padding: 4px 16px;
+    white-space: inherit;
+    text-align: justify;
+}
+.stream.post-baby-age {
     margin-top: 8px;
-    margin-bottom: 8px;
-}
-
-.stream.post-author {
-    font-size: 16px;
-    text-align: right;
 }
 
 .stream.post-action-container {
@@ -25,14 +69,47 @@
     float: right;
     min-width: 130px;
 }
+.stream.post-action-container button, .post-create-photo-remove, .diary-form button{
+    float: right;
+    line-height: 24px !important;
+    min-height: 24px;
+    min-width: 32px;
+    padding: 0;
+}
+.stream.post-action-container button i::before, .post-create-photo-remove i::before, .diary-form button i::before{
+    line-height: 24px !important;
+}
+
+.stream.post-text {
+    margin-top: 16px;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.stream.post-author {
+    text-align: right;
+    font-style: italic;
+}
+
+.stream.post-tag {
+    display: inline-block;
+    margin: 5px;
+    font-style: italic;
+    font-size: 14px;
+}
+
 .stream.post-creation-details {
     display: inline-block;
 }
 
 .stream.post-photo {
+/*
     display: inline-block;
     vertical-align: middle;
     margin-right: 8px;
+*/
+    max-height: 100%;
+    max-width: 100%;
 }
 
 .stream.post-photo-more {
@@ -99,8 +176,12 @@
     margin-left: 16px;
 }
 
-.post-create-element.icon {
+.post-create-element.icon, .post-create-element .icon{
     font-size: 24px;
+}
+
+.item-input {
+    border: 0;
 }
 
 .post-create-element-row {
@@ -108,8 +189,14 @@
     margin-bottom: 8px;
 }
 
+.mood-container {
+    text-align: center;
+}
+
 .post-create-mood {
-    font-size: 72px;
+    font-size: 60px;
+    padding: 0px 16px;
+    color: #8E8E8C;
 }
 
 .post-create-photo-container {
@@ -128,6 +215,12 @@
     right: 8px;
 }
 
+.post-create-add-photo {
+    border: 0;
+    background-color: #DDD;
+    margin-left: 32px;
+    padding: 4px 64px;
+}
 .inline {
     display: inline-block;
 }
@@ -173,15 +266,10 @@ ion-content#gallery-container {
 
 
 
-.tag-element.card {
-    padding: 12px;
-    vertical-align: middle;
-    margin: 5px 10px;
-}
-
 .tag-element-remove {
     font-size: 24px;
-    margin-left: 8px;
+    margin-left: 4px;
+    margin-right: 16px;
 }
 
 .person-details {
@@ -374,10 +462,41 @@ span {
     background-color: #000;
 }
 
-input[type=text] {
+input[type=text], textarea, input[type=date] {
     border-bottom: 1px solid #CECECE;
     width: 100%;
     font-size: 14px;
     margin-right: 10px;
+}
+
+
+.diary-form .item {
+    border: 0;
+}
+
+.diary-form .item-divider {
+    background-color: transparent;
+    color: mediumvioletred;
+}
+
+.diary-form .input-label {
+    font-size: 14px;
+    color: #8E8E8C;
+}
+.diary-form .textdata {
+    display: block;
+}
+
+.diary-form .form-icon::before {
+    font-size: 24px;
+    margin-right: 8px;
+}
+
+.diary-form .item-contact {
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+.diary-form .item-contact i{
+    font-size: 24px;
 }
 

@@ -7,8 +7,42 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
     var schoolProfile = null; //static info
     var dataServerService = {};
 
+    /**
+     * Whether the user is logged
+     */
+    dataServerService.userIsLogged = function() {
+        return (localStorage.userId != null && localStorage.userId != "null");
+    }
 
-    dataServerService.getBabyConfiguration = function () {
+    /**
+     * return userId of the logged user, or null if not logged in
+     */
+    dataServerService.getUserId = function () {
+        if (dataServerService.userIsLogged()) {
+            return localStorage.userId;
+        }
+        return null;
+    };
+
+    /**
+     * Logout user
+     */
+    dataServerService.logout = function () {
+        localStorage.userId = null;
+    }
+
+    /**
+     * Mock login
+     */
+    dataServerService.login = function (provider, cb, err) {
+        localStorage.userId = 'userId';
+        cb(localStorage.userId);
+    }
+
+    /**
+     * Retrieve configuration of a specific child
+     */
+    dataServerService.getBabyConfiguration = function (babyId) {
         var deferred = $q.defer();
 
         /*temp*/
@@ -27,13 +61,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
     }
 
 
-    dataServerService.getBabyProfile = function () {
+    /**
+     * Retrieve profiles of the logged parent/teacher
+     */
+    dataServerService.getBabyProfiles = function () {
         var deferred = $q.defer();
 
         /*temp*/
         $http.get('data/bambino-profilo.json').success(function (data) {
-            babyProfile = data.data[0];
-            deferred.resolve(babyProfile);
+            deferred.resolve(data);
         }).error(function (data, status, headers, config) {
             console.log(data + status + headers + config);
             //deferred.reject(err);
@@ -42,6 +78,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
         /*temp*/
     }
 
+    dataServerService.save = function(post) {
+        return dataServerService.getPostsByBabyId();
+    }
 
     dataServerService.getTeachers = function () {
         var teachers = null;
@@ -61,6 +100,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
         return deferred.promise;
     };
 
+    /**
+     * Retrieve tags to be used
+     */
     dataServerService.getTags = function () {
         var tags = null;
         var deferred = $q.defer();
@@ -79,7 +121,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
         return deferred.promise;
     };
 
-    dataServerService.getPostsByBabyId = function (babyId) {
+    /**
+     * Retrieve child posts
+     */
+    dataServerService.getPostsByBabyId = function (babyId, start, count) {
         var posts = null;
         var deferred = $q.defer();
 
@@ -96,6 +141,21 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
         }
         return deferred.promise;
     };
+
+        /**
+     * Retrieve child posts
+     */
+    dataServerService.getGalleryByBabyId = function (babyId, start, count) {
+        var deferred = $q.defer();
+        dataServerService.getPostsByBabyId(babyId, start, count).then(function(posts){
+            var res = [];
+            for (var i = 0; i < posts.length; i++) {
+                res = res.concat(posts[i].pictures);
+            }
+            deferred.resolve(res);
+        });
+        return deferred.promise;
+    }
 
 
     return dataServerService;

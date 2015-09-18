@@ -1,28 +1,51 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.services.profileService', [])
 
-.factory('profileService', function ($http, $q, dataServerService) {
-    var babyProfile = null;
+.factory('profileService', function ($http, $q, dataServerService, $rootScope) {
+    var babyProfiles = null;
     var schoolProfile = null;
-    var currentBabyID = null;
+
     var profileService = {};
 
-    //usefull to pass babyID to the babyProfileCtrl
-    profileService.setCurrentBabyID = function (babyId) {
-        currentBabyID = babyId;
-    }
-    profileService.getCurrentBabyID = function () {
-        return currentBabyID;
-    }
-
-
-    profileService.getBabyProfileById = function (babyId) {
+    /**
+     * Prepare the data downloading from server the kid profies of the current parent/teacher
+     */
+    profileService.init = function() {
         var deferred = $q.defer();
-        /*tmp*/
-        dataServerService.getBabyProfile().then(function (data) {
+        dataServerService.getBabyProfiles().then(function (data) {
+            babyProfiles = {};
+            if (data == null || data.length == 0) return;
+            for (var i = 0; i < data.length; i++) {
+                babyProfiles[data[i].kidId] = data[i];
+            }
+            if (!localStorage.currentBabyID) profileService.setCurrentBabyID(data[0].kidId);
+            else profileService.setCurrentBabyID(localStorage.currentBabyID);
             deferred.resolve(data);
         });
         return deferred.promise;
-        /*tmp*/
+    };
+
+    profileService.setCurrentBabyID = function (babyId) {
+        localStorage.currentBabyID = babyId;
+        $rootScope.selectedKid = babyProfiles[babyId];
+    }
+    profileService.getCurrentBabyID = function () {
+        return localStorage.currentBabyID;
+    }
+
+    profileService.getCurrentBaby = function () {
+        var deferred = $q.defer();
+        if (babyProfiles == null) {
+            profileService.init().then(function(){
+                deferred.resolve(babyProfiles[localStorage.currentBabyID]);
+            });
+        } else {
+            deferred.resolve(babyProfiles[localStorage.currentBabyID]);
+        }
+        return deferred.promise;
+    }
+
+    profileService.getBabyProfileById = function (babyId) {
+        return babyProfiles[babyId];
     }
 
     profileService.getTeacherProfileById = function (teacherId) {

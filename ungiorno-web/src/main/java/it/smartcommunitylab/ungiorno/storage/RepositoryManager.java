@@ -506,7 +506,7 @@ public class RepositoryManager {
 	 */
 	public BusData getBusData(String appId, String schoolId, long date) {
 		Query q = schoolQuery(appId, schoolId);
-		q.addCriteria(new Criteria("dateFrom").is(timestampToDate(date)));
+//		q.addCriteria(new Criteria("dateFrom").is(timestampToDate(date)));
 		List<KidBusData> kidBusData = template.find(q, KidBusData.class);
 		ListMultimap<String, BusData.KidProfile> mm = ArrayListMultimap.create();
 		
@@ -537,19 +537,19 @@ public class RepositoryManager {
 				} else {
 					KidCalRitiro ritiro = ritiriMap.get(kp.getKidId());
 					if (ritiro != null) {
-						personId = ritiro.getPersonId();
 						busKidProfile.setVariation(true);
+						busKidProfile.setBusStop(null);
 					} else {
 						personId = conf != null ? conf.getDefaultPerson() : findDefaultPerson(kp);
+						busKidProfile.setBusStop(conf != null ? conf.getServices().getBus().getDefaultIdBack() : kp.getServices().getBus().getStops().get(0).getStopId());
 					}
-					busKidProfile.setBusStop(conf != null ? conf.getServices().getBus().getDefaultIdBack() : kp.getServices().getBus().getStops().get(0).getStopId());
 				}
-				
-				busKidProfile.setPersonWhoWaitId(personId);
-				AuthPerson ap = getPerson(personId, conf, kp);
-				busKidProfile.setPersonWhoWaitName(ap.getFullName());
-				busKidProfile.setPersonWhoWaitRelation(ap.getRelation());
-				
+				if (personId != null) {
+					busKidProfile.setPersonWhoWaitId(personId);
+					AuthPerson ap = getPerson(personId, conf, kp);
+					busKidProfile.setPersonWhoWaitName(ap.getFullName());
+					busKidProfile.setPersonWhoWaitRelation(ap.getRelation());
+				}
 			}
 			mm.put(kbd.getBusId(), busKidProfile);
 		}

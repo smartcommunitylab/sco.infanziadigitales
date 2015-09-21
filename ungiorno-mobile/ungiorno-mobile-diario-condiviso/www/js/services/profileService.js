@@ -48,23 +48,37 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
         return babyProfiles[babyId];
     }
 
-    profileService.getTeacherProfileById = function (teacherId) {
-        var deferred = $q.defer();
-        /*tmp*/
-        dataServerService.getTeachers().then(function (data) {
-            var found = false;
-            var i = 0;
-            while (!found && i < data.data.length) {
-                if (data.data[i].teacherId == teacherId) {
-                    found = true;
-                    deferred.resolve(data.data[i]);
+    profileService.isParentProfile = function() {
+        var storedProfile = localStorage.currentProfile;
+        if (storedProfile && storedProfile != 'null') {
+            return storedProfile == 'parent';
+        } else {
+            var user = dataServerService.getUser();
+            if (user) {
+                if (user.parent && user.parent.userId) {
+                    localStorage.currentProfile = 'parent';
+                    return true;
+                } else {
+                    localStorage.currentProfile = 'teacher';
+                    return false;
                 }
-                i++;
             }
-        });
-        return deferred.promise;
-        /*tmp*/
+            return null;
+        }
+    };
+
+    profileService.isMultiProfile = function() {
+        var user = dataServerService.getUser();
+        return user && user.parent && user.parent.userId && user.teacher && user.teacher.userId;
     }
+
+    profileService.toggleUserProfile = function() {
+        if (profileService.isParentProfile()) {
+            localStorage.currentProfile = 'teacher';
+        } else {
+            localStorage.currentProfile = 'parent';
+        }
+    };
 
     return profileService;
 })

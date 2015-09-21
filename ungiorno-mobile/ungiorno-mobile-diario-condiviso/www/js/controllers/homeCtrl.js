@@ -32,6 +32,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
     var editPostMode;
 
     $scope.today = new Date();
+    $scope.calendarOpen = false;
+    $scope.showCalButton = true;
+    $scope.toggleCalendar = function() {
+        $scope.calendarOpen = !$scope.calendarOpen;
+        if ($scope.calendarOpen) $scope.showCalButton = false;
+        else setTimeout(function(){
+            $scope.showCalButton = true;
+            $scope.$apply();
+        },300);
+    }
+
 
     $scope.attachedTags = [];
 

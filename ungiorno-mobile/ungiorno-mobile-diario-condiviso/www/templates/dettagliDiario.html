@@ -4,10 +4,10 @@
         </ion-nav-back-button>
         <ion-nav-buttons side="right">
             <button class="button button-clear" ng-click="modify()" ng-if="isViewMode()">
-                <i class="icon ion-android-create"></i>
+                <i class="icon inf_digedit"></i>
             </button>
             <button class="button button-clear" ng-click="save()" ng-if="!isViewMode()">
-                <i class="icon ion-checkmark-round"></i>
+                <i class="icon inf_digcheck"></i>
             </button>
             </button>
         </ion-nav-buttons>
@@ -43,6 +43,7 @@
                 <span class="textdata">{{babyCopy.birthday | date:"d MMMM yyyy"}}</span>
             </label>
 
+<!--
             <label class="item item-input item-select"  ng-if="!isViewMode()">
                 <select ng-model="babyCopy.gender">
                     <option>{{ 'male' | translate}}</option>
@@ -50,6 +51,7 @@
                 </select>
                 <i class="ion-asterisk alignRight inline vertical-middle" style="float:right;"></i>
             </label>
+-->
 
             <img ng-src="{{babyCopy.image}}" class="sizeImage" ng-click="changeImage()">
 
@@ -110,12 +112,12 @@
                     <i class="ion-asterisk alignRight inline vertical-middle"></i>
                 </label>
                 <label class="item item-input"  ng-if="!isViewMode(data, true)">
-                    <i class="form-icon icon ion-android-call"></i>
+                    <i class="form-icon icon inf_digcall "></i>
                     <input type="text" placeholder="{{'number_parents'|translate}}" ng-model="data.phone"/>
                     <i class="ion-asterisk alignRight inline vertical-middle"></i>
                 </label>
                 <label class="item item-input"  ng-if="!isViewMode(data, true)">
-                    <i class="form-icon icon ion-email"></i>
+                    <i class="form-icon icon ion-android-mail"></i>
                     <input type="text" placeholder="{{'mail_parents'|translate}}" ng-model="data.email"/>
                     <i class="ion-asterisk alignRight inline vertical-middle"></i>
                 </label>
@@ -126,10 +128,10 @@
                 </label>
                 <div ng-if="isViewMode(data, true)">
                 <a class="item item-contact item-icon-left" href="{{'tel:'+p}}" ng-repeat="p in data.phone">
-                    <i class="icon ion-android-call"></i><span class="textdata">{{p}}</span>
+                    <i class="icon inf_digcall"></i><span class="textdata">{{p}}</span>
                 </a>
                 <a class="item item-contact item-icon-left" href="{{'mailto:'+p}}" ng-repeat="p in data.email">
-                    <i class="icon ion-email"></i><span class="textdata">{{p}}</span>
+                    <i class="icon ion-android-mail"></i><span class="textdata">{{p}}</span>
                 </a>
                 </div>
             </div>
@@ -149,7 +151,7 @@
             <label class="item item-input"  ng-if="!isViewMode()">
                 <textarea placeholder="{{'insert_note' | translate}}" ng-model="babyCopy.personalNotes"></textarea>
             </label>
-            <div class="item item-divider text-center" ng-if="!isViewMode()">{{'asterisk' | translate}}</div>
+            <div class="item item-divider text-center" ng-if="!isViewMode()"><i class="icon ion-asterisk"></i> {{'asterisk' | translate}}</div>
 
         </div>
     </ion-content>

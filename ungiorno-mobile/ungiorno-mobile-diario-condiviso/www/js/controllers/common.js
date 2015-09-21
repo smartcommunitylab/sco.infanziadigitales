@@ -69,6 +69,18 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         $state.go('app.login');
     };
 
+    $scope.isParent = function() {
+        return profileService.isParentProfile();
+    }
+
+    $scope.changeProfileType = function() {
+        profileService.toggleUserProfile();
+    };
+
+    $scope.isMultiProfile = function() {
+        return profileService.isMultiProfile();
+    }
+
     $scope.isToday = function (date) {
             var today = new Date();
             today.setHours(0);

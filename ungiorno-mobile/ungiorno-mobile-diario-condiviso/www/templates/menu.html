@@ -18,7 +18,7 @@
                     <img ng-src="{{selectedKid.image}}">
                     <h2>{{selectedKid.fullName}}</h2>
                     <button menu-close class="button button-clear" id="babysetting" ng-click="gotodiary(false)">
-                        <i class="icon ion-gear-a icon-light"></i>
+                        <i class="icon inf_digsettings icon-light"></i>
                     </button>
                 </ion-item>
                 <div class="menu-profile-open text-right"  ng-if="kidProfiles && kidProfiles.length > 1">
@@ -32,10 +32,10 @@
                 </ion-item>
 
                 <ion-item menu-close class="item item-icon-left" href="#/app/home">
-                    <i class="icon ion-home"></i>{{'home'|translate}}
+                    <i class="icon inf_dighome "></i>{{'home'|translate}}
                 </ion-item>
-                <ion-item menu-close class="item item-icon-left" ng-click="changeProfileType()">
-                    <i class="icon ion-ios-people"></i>{{'change_profile'|translate}}<p style="font-size:12px;">{{isParentProfile() ? 'profile_parent_used':'profile_teacher_used'|translate}}</p>
+                <ion-item menu-close class="item item-icon-left" ng-click="changeProfileType()" ng-if="isMultiProfile()">
+                    <i class="icon inf_digchildren_list "></i>{{'change_profile'|translate}}<p style="font-size:12px;">{{isParent() ? 'profile_parent_used':'profile_teacher_used'|translate}}</p>
                 </ion-item>
 <!--
                 <ion-item menu-close item-icon-left ng-click="gotodiary(false)">
@@ -47,8 +47,8 @@
                     <i class="icon voice-menu  inf_digaccount"></i>{{'create_diary'|translate}}
                 </ion-item>
 -->
-                <ion-item menu-close class="item item-icon-left" href="#/app/gallery">
-                    <i class="icon voice-menu  ion-images"></i>{{'gallery'|translate}}
+                <ion-item menu-close class="item item-icon-left" href="#/app/gallery" ng-if="isParent()">
+                    <i class="icon voice-menu  inf_digimage "></i>{{'gallery'|translate}}
                 </ion-item>
 <!--
                 <ion-item menu-close item-icon-left ng-click="goto('app.register')">
@@ -56,7 +56,7 @@
                 </ion-item>
 -->
                 <ion-item menu-close class="item item-icon-left" ng-click="logout()">
-                    <i class="icon voice-menu  ion-log-out"></i>{{'logout'|translate}}
+                    <i class="icon voice-menu  inf_digaccount "></i>{{'logout'|translate}}
                 </ion-item>
             </ion-list>
         </ion-content>

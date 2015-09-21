@@ -1,34 +1,14 @@
 {
-    "data": [
-        {
-            "appId": "a",
-            "schoolId": "a",
-            "sectionId": "a",
-            "teacherId": "a",
-            "teacherFullname": "Chiara Rossi",
-            "teacherName": "Chiara",
-            "teacherSurname": "Rossi",
-            "colorToDisplay": "#ff0000"
-        },
-        {
-            "appId": "a",
-            "schoolId": "a",
-            "sectionId": "a",
-            "teacherId": "b",
-            "teacherFullname": "Maria Verdi",
-            "teacherName": "Maria",
-            "teacherSurname": "Verdi",
-            "colorToDisplay": "#00ff00"
-        },
-        {
-            "appId": "a",
-            "schoolId": "a",
-            "sectionId": "a",
-            "teacherId": "c",
-            "teacherFullname": "Giulia Gelsomino",
-            "teacherName": "Giulia",
-            "teacherSurname": "Gelsomino",
-            "colorToDisplay": "#0000ff"
-        }
-    ]
+    "appId": "a",
+    "fullname": "Chiara Rossi",
+    "name": "Chiara",
+    "surname": "Rossi",
+    "teacher": {
+        "schoolId": "a",
+        "sectionIds": ["azzura"],
+        "userId": "a"
+    },
+    "parent": {
+        "userId": "b"
+    }
 }

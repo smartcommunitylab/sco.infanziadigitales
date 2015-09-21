@@ -23,6 +23,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
     'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.services.teachersService',
     'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.services.galleryService',
     'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.services.diaryservice',
+    'pickadate',
     'angularMoment'
 ])
 
@@ -71,9 +72,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
 
 })
 
-.config(function ($stateProvider, $urlRouterProvider, $translateProvider, $ionicConfigProvider) {
+.config(function ($stateProvider, $urlRouterProvider, $translateProvider, $ionicConfigProvider, pickadateI18nProvider) {
     $ionicConfigProvider.tabs.position('top');
     $ionicConfigProvider.backButton.text('').previousTitleText(false);
+
+        pickadateI18nProvider.translations = {
+            prev: '<i class="icon ion-chevron-left"></i>',
+            next: '<i class="icon ion-chevron-right"></i>'
+        }
 
     $stateProvider.state('app', {
         url: "/app",
@@ -175,7 +181,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
         has: 'ha',
         name_parents: 'Nome del genitore',
         create_post: 'Crea un elemento',
-        description: 'Descrizione',
+        description: 'Inserisci il testo',
         add_photo: 'Aggiungi foto',
         number_parents: 'n° di telefono ',
         mail_parents: 'Indirizzo email ',
@@ -190,13 +196,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
         parent2: 'Genitore 2',
         brother: 'Fratello',
         sister: 'Sorella',
-        asterisk: '* Indica che i campi sono obbligatori.',
+        asterisk: 'Indica che i campi sono obbligatori.',
         new_people: 'Aggiungi una persona',
         email: 'Email',
         fullName: 'Nome completo',
         parent: 'Genitore',
         teacher: 'Insegnante',
-        nothing_note: 'Nessuna nota presente',
+        nothing_note: 'Clicca su + in basso per aggiungere un elemento.',
         gender: 'Sesso',
         male: 'Maschio',
         female: 'Femmina',
@@ -207,9 +213,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
         home: 'Home',
         create_diary: 'Crea diario',
         change_profile: 'Cambia profilo',
-        profile_teacher_used: 'Stai utilizzando il profilo isegnante',
+        profile_teacher_used: 'Stai utilizzando il profilo insegnante',
         profile_parent_used: 'Stai utilizzando il profilo genitore',
-        no_profiles: 'Nessun profilo presente'
+        no_profiles: 'Nessun profilo presente',
+        access_with: 'Accedi con:'
     });
 
     $translateProvider.preferredLanguage("it");

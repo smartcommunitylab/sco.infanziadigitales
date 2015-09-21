@@ -6,20 +6,39 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
     var assenza = null;
     var schoolProfile = null; //static info
     var dataServerService = {};
+    var user = null;
+
+    var retrieveUser = function () {
+        var deferred = $q.defer();
+
+        // temp
+        if (user == null) {
+            $http.get('data/teacher-profile.json').success(function (data) {
+                deferred.resolve(data);
+            }).error(function (data, status, headers, config) {
+                console.log(data + status + headers + config);
+            });
+        } else {
+            deferred.resolve(user);
+        }
+        return deferred.promise;
+    };
+
+
 
     /**
      * Whether the user is logged
      */
     dataServerService.userIsLogged = function() {
-        return (localStorage.userId != null && localStorage.userId != "null");
+        return (localStorage.user != null && localStorage.user != "null");
     }
 
     /**
-     * return userId of the logged user, or null if not logged in
+     * return profile of the logged user, or null if not logged in
      */
-    dataServerService.getUserId = function () {
+    dataServerService.getUser = function () {
         if (dataServerService.userIsLogged()) {
-            return localStorage.userId;
+            return JSON.parse(localStorage.user);
         }
         return null;
     };
@@ -28,15 +47,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
      * Logout user
      */
     dataServerService.logout = function () {
-        localStorage.userId = null;
+        localStorage.user = null;
     }
 
     /**
      * Mock login
      */
     dataServerService.login = function (provider, cb, err) {
-        localStorage.userId = 'userId';
-        cb(localStorage.userId);
+        retrieveUser().then(function(user) {
+            localStorage.user = JSON.stringify(user);
+            cb(localStorage.user);
+        });
     }
 
     /**
@@ -81,24 +102,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
     dataServerService.save = function(post) {
         return dataServerService.getPostsByBabyId();
     }
-
-    dataServerService.getTeachers = function () {
-        var teachers = null;
-        var deferred = $q.defer();
-
-        // temp
-        if (teachers == null) {
-            $http.get('data/teacher-profile.json').success(function (data) {
-                teachers = data;
-                deferred.resolve(teachers);
-            }).error(function (data, status, headers, config) {
-                console.log(data + status + headers + config);
-            });
-        } else {
-            deferred.resolve(teachers);
-        }
-        return deferred.promise;
-    };
 
     /**
      * Retrieve tags to be used
@@ -150,7 +153,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
         dataServerService.getPostsByBabyId(babyId, start, count).then(function(posts){
             var res = [];
             for (var i = 0; i < posts.length; i++) {
-                res = res.concat(posts[i].pictures);
+                if (posts[i].pictures) {
+                    for (var j = 0; j < posts[i].pictures.length; j++) {
+                        res.push({url:posts[i].pictures[j].url, date: posts[i].date});
+                    }
+                }
             }
             deferred.resolve(res);
         });

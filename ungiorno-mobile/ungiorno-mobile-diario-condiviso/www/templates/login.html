@@ -9,9 +9,13 @@
         </div>-->
 
         <div class="login-title">Diario Condiviso</div>
-        <h3 style="margin-top:100px; text-align:center">Accedi con:</h3>
-        <p class="button login-buttons" ng-click="login('facebook')">Facebook</p>
-        <p class="button login-buttons" ng-click="login('gmail')">Gmail</p>
+        <h3 style="margin-top:100px; text-align:center">{{'access_with'|translate}}</h3>
+        <div class="text-center">
+            <button class="button login-buttons" ng-click="login('facebook')">Facebook</button>
+        </div>
+        <div class="text-center">
+            <button class="button login-buttons" ng-click="login('gmail')">Gmail</button>
+        </div>
 <!--
         <div class="enter_credentials">Inserisci le tue credenziali:</div>
 

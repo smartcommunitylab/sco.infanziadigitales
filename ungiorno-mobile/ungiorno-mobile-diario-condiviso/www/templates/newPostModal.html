@@ -1,10 +1,10 @@
 <div class="modal">
 	<ion-header-bar class="bar-ungiorno">
         <button class="button back-button button-clear" ng-click="cancel()">
-            <i class="icon" ng-class="{'ion-android-arrow-back': platform.isAndroid(), 'ion-ios-arrow-back': !platform.isAndroid()}"></i>
+            <i class="icon inf_digarrow_back "></i>
         </button>
 		<h1 class="title">{{'create_post' | translate}}</h1>
-        <button class="button button-clear" ng-click="save()"><i class="icon ion-android-done"></i></button>
+        <button class="button button-clear" ng-click="save()"><i class="icon inf_digcheck "></i></button>
 	</ion-header-bar>
 	<ion-content style="margin-left:10px; margin-right:10px;">
         <label class="item item-input post-create-element-row">
@@ -15,7 +15,7 @@
             <autocomplete-tags tags="tagsFromServer" attached-tags="currentPost.attachedTags" class="post-create-element"></autocomplete-tags>
         </div>
         <div class="post-create-element-row">
-            <i class="icon ion-android-camera post-create-element"></i>
+            <i class="icon inf_digimage post-create-element"></i>
             <button class="button post-create-add-photo post-create-element" id="new_post_photo" ng-click="addPhoto($event)">{{'add_photo' | translate}}</input>
         </div>
         <div class="post-create-gallery">
@@ -27,18 +27,19 @@
             </div>
         </div>
         <div class="post-create-element-row">
-            <i class="icon ion-android-time post-create-element"></i>
+            <i class="icon inf_digclock post-create-element"></i>
             <div class="post-create-element">
             <label class="item-input">
                 <input class="post-create-element" type="date" ng-model="currentPost.date">
             </label>
             </div>
         </div>
+<!--
         <div class="post-create-element-row mood-container">
             <i ng-class="{'ion-sad':currentPost.mood==-1, 'ion-sad-outline':currentPost.mood != -1}" class="post-create-mood icon" ng-click="setMood(-1)"></i>
-<!--            <i class="icon post-create-mood" ng-click="setMood(1)">{{'mood_moderate' | translate}}</i>-->
             <i ng-class="{'ion-happy':currentPost.mood==1, 'ion-happy-outline':currentPost.mood != 1}" class="post-create-mood icon" ng-click="setMood(1)"></i>
         </div>
+-->
 
 	</ion-content>
 </div>

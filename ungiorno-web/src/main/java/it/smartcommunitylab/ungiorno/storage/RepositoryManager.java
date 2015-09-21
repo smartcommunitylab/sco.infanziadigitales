@@ -366,7 +366,9 @@ public class RepositoryManager {
 	 */
 	public List<KidCalNote> getKidCalNotesForSection(String appId, String schoolId, String[] sectionIds, long date) {
 		Query q = schoolQuery(appId, schoolId);
-		q.addCriteria(new Criteria("section.sectionId").in((Object[])sectionIds));
+		if (sectionIds != null) {
+			q.addCriteria(new Criteria("section.sectionId").in((Object[])sectionIds));
+		}
 		q.fields().include("kidId");
 		List<KidProfile> profiles = template.find(q, KidProfile.class);
 		List<String> kids = new ArrayList<String>();

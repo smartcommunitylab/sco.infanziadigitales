@@ -524,7 +524,7 @@ public class RepositoryManager {
 			busKidProfile.setKidId(kbd.getKidId());
 
 			KidCalAssenza assenza = assenzeMap.get(kbd.getKidId());
-			if (!conf.getServices().getBus().isActive() || assenza != null) {
+			if (conf != null && !conf.getServices().getBus().isActive() || assenza != null) {
 				busKidProfile.setVariation(true);
 				busKidProfile.setBusStop(null);
 			} else {

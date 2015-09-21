@@ -817,4 +817,14 @@ public class RepositoryManager {
 		return template.findOne(q, Teacher.class);
 	}
 
+	/**
+	 * @return
+	 */
+	public Parent getParent(String username, String appId, String schoolId) {
+		Query q = appQuery(appId);
+		q.addCriteria(new Criteria("username").is(username));
+		Parent p = template.findOne(q, Parent.class);
+		return p;
+	}
+
 }

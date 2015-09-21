@@ -21,10 +21,13 @@ import it.smartcommunitylab.ungiorno.model.Communication;
 import it.smartcommunitylab.ungiorno.model.KidCalAssenza;
 import it.smartcommunitylab.ungiorno.model.KidCalFermata;
 import it.smartcommunitylab.ungiorno.model.KidCalNote;
+import it.smartcommunitylab.ungiorno.model.KidCalNote.Note;
 import it.smartcommunitylab.ungiorno.model.KidCalRitiro;
 import it.smartcommunitylab.ungiorno.model.KidConfig;
 import it.smartcommunitylab.ungiorno.model.KidProfile;
+import it.smartcommunitylab.ungiorno.model.Parent;
 import it.smartcommunitylab.ungiorno.model.Response;
+import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
 
 import java.util.List;
@@ -236,6 +239,21 @@ public class KidController {
 			note.setAppId(appId);
 			note.setKidId(kidId);
 			note.setSchoolId(schoolId);
+			if (note.getParentNotes() != null && !note.getParentNotes().isEmpty()) {
+				Parent parent = storage.getParent(getUserId(), appId, schoolId);
+				if (parent == null) throw new IllegalArgumentException("No person registered");
+				for (Note n : note.getParentNotes()) {
+					n.setPersonId(parent.getPersonId());
+				}
+			} else if (note.getSchoolNotes() != null && !note.getSchoolNotes().isEmpty()) {
+				Teacher teacher = storage.getTeacher(getUserId(), appId, schoolId);
+				if (teacher == null) throw new IllegalArgumentException("No teacher registered");
+				for (Note n : note.getSchoolNotes()) {
+					n.setPersonId(teacher.getTeacherId());
+				}
+			} else {
+				throw new IllegalArgumentException("Incorrect note");
+			}
 
 			return new Response<>(storage.saveNote(note));
 		} catch (Exception e) {

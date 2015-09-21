@@ -330,7 +330,7 @@ public class RepositoryManager {
 		template.remove(q, KidCalRitiro.class);
 
 		q = kidQuery(ritiro.getAppId(), ritiro.getSchoolId(), ritiro.getKidId());
-		q.addCriteria(new Criteria("date").is(ritiro.getDate()));
+		q.addCriteria(new Criteria("date").is(timestampToDate(ritiro.getDate())));
 		template.remove(q, KidCalFermata.class);
 		
 		template.save(ritiro);

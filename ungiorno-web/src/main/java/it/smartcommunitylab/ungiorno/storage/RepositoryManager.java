@@ -624,7 +624,7 @@ public class RepositoryManager {
 				skp.setExitTime(computeTime(date, conf,kp, profile));
 			}
 			
-			// read from ritiro object, otherwise from config, otherwise from profile
+			// read from ritiro object
 			String personId = null;
 			if (ritiriMap.containsKey(kp.getKidId())) {
 				KidCalRitiro r = ritiriMap.get(kp.getKidId());
@@ -632,9 +632,8 @@ public class RepositoryManager {
 				skp.setNote(r.getNote());
 				personId = r.getPersonId();
 			}
-
-			// read stop from stop object, otherwise from config, otherwise from profile
-			if (skp.getBus().isActive()) {
+			// if no explicit return, read stop from stop object, otherwise from config, otherwise from profile
+			else if (skp.getBus().isActive()) {
 				if (stopsMap.containsKey(kp.getKidId())) {
 					KidCalFermata fermata = stopsMap.get(kp.getKidId());
 					skp.setNote(fermata.getNote());
@@ -645,6 +644,7 @@ public class RepositoryManager {
 					skp.setStopId(conf != null ? conf.getServices().getBus().getDefaultIdBack() : kp.getServices().getBus().getStops().get(0).getStopId());
 				}
 			}
+			
 			if (personId == null) {
 				personId = conf != null ? conf.getDefaultPerson() : findDefaultPerson(kp);
 			}

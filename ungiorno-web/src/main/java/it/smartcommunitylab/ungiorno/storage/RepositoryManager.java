@@ -387,11 +387,13 @@ public class RepositoryManager {
 		KidCalNote old = template.findOne(q, KidCalNote.class);
 		if (old != null) {
 			old.merge(note);
+			template.save(old);
+			return old;
 		} else {
 			note.setDate(timestampToDate(note.getDate()));
 			template.save(note);
+			return note;
 		}
-		return note;
 	}
 
 	/**

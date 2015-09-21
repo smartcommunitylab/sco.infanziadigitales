@@ -185,6 +185,7 @@ public class Importer {
 	private void parseDeleghe(String appId, String schoolId, List<Map<String, String>> result, Map<String, KidProfile> kidMap) throws ImportError {
 		for (Map<String,String> m : result) {
 			AuthPerson p = new AuthPerson();
+			p.setPersonId(m.get("ID"));
 			p.setFirstName(m.get("NOME"));
 			p.setLastName(m.get("COGNOME"));
 			p.setFullName(p.getFirstName() + " " + p.getLastName());

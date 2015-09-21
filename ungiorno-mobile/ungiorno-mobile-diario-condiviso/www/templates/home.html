@@ -1,11 +1,39 @@
-<ion-view id="home">
-    <ion-content id="postsScrollView">
-        <div ng-repeat="post in posts">
-            <baby-post post="post" baby="baby" edit-callback="openEditPost" share-callback="sharePost"></baby-post>
+<ion-view id="home" >
+    <ion-nav-title>{{baby.fullName}}</ion-nav-title>
+    <ion-content id="postsScrollView" scroll="false">
+        <div ng-if="calendarOpen" class="slide-animation">
+            <div class="calendar">&nbsp;
+                <div pickadate no-extra-rows week-starts-on="1" default-date="today" ng-model="today">
+                </div>
+            </div>
+            <div id="calendar-button-div">
+                <div class="calendar-button-container">
+                    <div class="calendar-button-inner">
+                        <i ng-click="toggleCalendar()" class="icon calendar-button" ng-class="{'ion-calendar':!calendarOpen, 'ion-arrow-up-c':calendarOpen}"></i>
+                    </div>
+                </div>
+            </div>
         </div>
+        <div id="calendar-button-div" ng-if="showCalButton">
+            <div class="calendar-button-container">
+                <div ng-click="toggleCalendar()" class="calendar-button-inner">
+                    <i class="icon calendar-button ion-calendar"></i>
+                </div>
+            </div>
+        </div>
+
+        <ion-scroll style="height:100%">
+        <ul class="list"  ng-if="baby">
+            <li class="item stream-item" ng-repeat="post in posts">
+                <baby-post post="post" baby="baby" edit-callback="openEditPost" share-callback="sharePost"></baby-post>
+            </li>
+        </ul>
+        <h4 class="text-center" ng-if="!baby">{{'no_profiles'|translate}}</h4>
+        <h4 class="text-center" ng-if="baby && !posts">{{'nothing_note'|translate}}</h4>
+        </ion-scroll>
     </ion-content>
 
 
-    <fab-button attached-to="postsScrollView" ng-click="openCreatePost()"></fab-button>
+    <fab-button attached-to="postsScrollView" ng-click="openCreatePost()" ng-if="baby"></fab-button>
 
 </ion-view>

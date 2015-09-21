@@ -247,8 +247,52 @@ public class RepositoryManager {
 		Query q = kidQuery(stop.getAppId(), stop.getSchoolId(), stop.getKidId());
 		q.addCriteria(new Criteria("date").is(stop.getDate()));
 		template.remove(q, KidCalFermata.class);
+		
+		q = kidQuery(stop.getAppId(), stop.getSchoolId(), stop.getKidId());
+		addDayCriteria(stop.getDate(), q);
+		template.remove(q, KidCalRitiro.class);
+		
 		template.save(stop);
 		return getKidConfig(stop.getAppId(), stop.getSchoolId(), stop.getKidId());
+	}
+
+	/**
+	 * @param appId
+	 * @param schoolId
+	 * @param kidId
+	 * @param date
+	 * @return
+	 */
+	public KidCalFermata getStop(String appId, String schoolId, String kidId, long date) {
+		Query q = kidQuery(appId, schoolId, kidId);
+		q.addCriteria(new Criteria("date").is(timestampToDate(date)));
+		return template.findOne(q, KidCalFermata.class);
+	}
+
+	/**
+	 * @param appId
+	 * @param schoolId
+	 * @param kidId
+	 * @param date
+	 * @return
+	 */
+	public KidCalAssenza getAbsence(String appId, String schoolId, String kidId, long date) {
+		Query q = kidQuery(appId, schoolId, kidId);
+		q.addCriteria(new Criteria("date").is(timestampToDate(date)));
+		return template.findOne(q, KidCalAssenza.class);
+	}
+
+	/**
+	 * @param appId
+	 * @param schoolId
+	 * @param kidId
+	 * @param date
+	 * @return
+	 */
+	public KidCalRitiro getReturn(String appId, String schoolId, String kidId, long date) {
+		Query q = kidQuery(appId, schoolId, kidId);
+		addDayCriteria(date, q);
+		return template.findOne(q, KidCalRitiro.class);
 	}
 
 	/**
@@ -280,12 +324,24 @@ public class RepositoryManager {
 	 * @return
 	 */
 	public KidConfig saveReturn(KidCalRitiro ritiro) {
-		ritiro.setDate(timestampToDate(ritiro.getDate()));
 		Query q = kidQuery(ritiro.getAppId(), ritiro.getSchoolId(), ritiro.getKidId());
-		q.addCriteria(new Criteria("date").is(ritiro.getDate()));
+
+		addDayCriteria(ritiro.getDate(), q);
 		template.remove(q, KidCalRitiro.class);
+
+		q = kidQuery(ritiro.getAppId(), ritiro.getSchoolId(), ritiro.getKidId());
+		q.addCriteria(new Criteria("date").is(timestampToDate(ritiro.getDate())));
+		template.remove(q, KidCalFermata.class);
+		
 		template.save(ritiro);
 		return getKidConfig(ritiro.getAppId(), ritiro.getSchoolId(), ritiro.getKidId());
+	}
+
+	private void addDayCriteria(long date, Query q) {
+		long dateTimestamp = timestampToDate(date); 
+		q.addCriteria(new Criteria().andOperator(
+				new Criteria("date").gte(dateTimestamp),
+				new Criteria("date").lt(dateTimestamp+1000*60*60*24)));
 	}
 
 	/**
@@ -310,7 +366,9 @@ public class RepositoryManager {
 	 */
 	public List<KidCalNote> getKidCalNotesForSection(String appId, String schoolId, String[] sectionIds, long date) {
 		Query q = schoolQuery(appId, schoolId);
-		q.addCriteria(new Criteria("section.sectionId").in((Object[])sectionIds));
+		if (sectionIds != null) {
+			q.addCriteria(new Criteria("section.sectionId").in((Object[])sectionIds));
+		}
 		q.fields().include("kidId");
 		List<KidProfile> profiles = template.find(q, KidProfile.class);
 		List<String> kids = new ArrayList<String>();
@@ -331,11 +389,13 @@ public class RepositoryManager {
 		KidCalNote old = template.findOne(q, KidCalNote.class);
 		if (old != null) {
 			old.merge(note);
+			template.save(old);
+			return old;
 		} else {
 			note.setDate(timestampToDate(note.getDate()));
 			template.save(note);
+			return note;
 		}
-		return note;
 	}
 
 	/**
@@ -446,7 +506,7 @@ public class RepositoryManager {
 	 */
 	public BusData getBusData(String appId, String schoolId, long date) {
 		Query q = schoolQuery(appId, schoolId);
-		q.addCriteria(new Criteria("dateFrom").is(timestampToDate(date)));
+//		q.addCriteria(new Criteria("dateFrom").is(timestampToDate(date)));
 		List<KidBusData> kidBusData = template.find(q, KidBusData.class);
 		ListMultimap<String, BusData.KidProfile> mm = ArrayListMultimap.create();
 		
@@ -464,7 +524,7 @@ public class RepositoryManager {
 			busKidProfile.setKidId(kbd.getKidId());
 
 			KidCalAssenza assenza = assenzeMap.get(kbd.getKidId());
-			if (!conf.getServices().getBus().isActive() || assenza != null) {
+			if (conf != null && !conf.getServices().getBus().isActive() || assenza != null) {
 				busKidProfile.setVariation(true);
 				busKidProfile.setBusStop(null);
 			} else {
@@ -477,19 +537,19 @@ public class RepositoryManager {
 				} else {
 					KidCalRitiro ritiro = ritiriMap.get(kp.getKidId());
 					if (ritiro != null) {
-						personId = ritiro.getPersonId();
 						busKidProfile.setVariation(true);
+						busKidProfile.setBusStop(null);
 					} else {
 						personId = conf != null ? conf.getDefaultPerson() : findDefaultPerson(kp);
+						busKidProfile.setBusStop(conf != null ? conf.getServices().getBus().getDefaultIdBack() : kp.getServices().getBus().getStops().get(0).getStopId());
 					}
-					busKidProfile.setBusStop(conf != null ? conf.getServices().getBus().getDefaultIdBack() : kp.getServices().getBus().getStops().get(0).getStopId());
 				}
-				
-				busKidProfile.setPersonWhoWaitId(personId);
-				AuthPerson ap = getPerson(personId, conf, kp);
-				busKidProfile.setPersonWhoWaitName(ap.getFullName());
-				busKidProfile.setPersonWhoWaitRelation(ap.getRelation());
-				
+				if (personId != null) {
+					busKidProfile.setPersonWhoWaitId(personId);
+					AuthPerson ap = getPerson(personId, conf, kp);
+					busKidProfile.setPersonWhoWaitName(ap.getFullName());
+					busKidProfile.setPersonWhoWaitRelation(ap.getRelation());
+				}
 			}
 			mm.put(kbd.getBusId(), busKidProfile);
 		}
@@ -557,37 +617,40 @@ public class RepositoryManager {
 				KidCalAssenza a = assenzeMap.get(kp.getKidId());
 				skp.setExitTime(null);
 				skp.setNote(a.getNote());
+			} else if (ritiriMap.containsKey(kp.getKidId())){
+				KidCalRitiro r = ritiriMap.get(kp.getKidId());
+				skp.setExitTime(r.getDate());
 			} else {
 				skp.setExitTime(computeTime(date, conf,kp, profile));
 			}
 			
-			// read from ritiro object, otherwise from config, otherwise from profile
+			// read from ritiro object
 			String personId = null;
 			if (ritiriMap.containsKey(kp.getKidId())) {
 				KidCalRitiro r = ritiriMap.get(kp.getKidId());
 				skp.setPersonException(r.isExceptional());
 				skp.setNote(r.getNote());
 				personId = r.getPersonId();
-			} else {
-				personId = conf != null ? conf.getDefaultPerson() : findDefaultPerson(kp);
 			}
-			skp.setPersonId(personId);
-			skp.setPersonName(getPerson(personId, conf, kp).getFullName());
-
-			// read stop from stop object, otherwise from config, otherwise from profile
-			if (skp.getBus().isActive()) {
+			// if no explicit return, read stop from stop object, otherwise from config, otherwise from profile
+			else if (skp.getBus().isActive()) {
 				if (stopsMap.containsKey(kp.getKidId())) {
 					KidCalFermata fermata = stopsMap.get(kp.getKidId());
 					skp.setNote(fermata.getNote());
 					skp.setStopId(fermata.getStopId());
+					skp.setStopException(true);
 					personId = fermata.getPersonId();
 				} else {
-					personId = conf != null ? conf.getDefaultPerson() : findDefaultPerson(kp);
 					skp.setStopId(conf != null ? conf.getServices().getBus().getDefaultIdBack() : kp.getServices().getBus().getStops().get(0).getStopId());
 				}
-				skp.setPersonId(personId);
-				skp.setPersonName(getPerson(personId, conf, kp).getFullName());
 			}
+			
+			if (personId == null) {
+				personId = conf != null ? conf.getDefaultPerson() : findDefaultPerson(kp);
+			}
+			
+			skp.setPersonId(personId);
+			skp.setPersonName(getPerson(personId, conf, kp).getFullName());
 			
 			map.get(kp.getSection().getSectionId()).getChildren().add(skp);
 		}
@@ -621,7 +684,8 @@ public class RepositoryManager {
 	private Map<String, KidCalRitiro> readRitiri(String appId, String schoolId,
 			long date) {
 		Query q = schoolQuery(appId, schoolId);
-		q.addCriteria(new Criteria("date").is(timestampToDate(date)));
+		addDayCriteria(date, q);
+		
 		List<KidCalRitiro> ritiri = template.find(q, KidCalRitiro.class);
 		Map<String, KidCalRitiro> ritiriMap = new HashMap<String, KidCalRitiro>();
 		for (KidCalRitiro r : ritiri) {
@@ -670,11 +734,16 @@ public class RepositoryManager {
 		for (AuthPerson ap: kp.getPersons()) {
 			if (ap.getPersonId().equals(personId)) return ap;
 		}
-		if (conf != null) {
+		if (conf != null && conf.getExtraPersons() != null) {
 			for (AuthPerson ap : conf.getExtraPersons()) {
 				if (ap.getPersonId().equals(personId)) return ap;
 			}
 		}
+		personId = conf != null ? conf.getDefaultPerson() : findDefaultPerson(kp);
+		for (AuthPerson ap: kp.getPersons()) {
+			if (ap.getPersonId().equals(personId)) return ap;
+		}
+
 		return null;
 	}
 
@@ -751,4 +820,15 @@ public class RepositoryManager {
 		q.addCriteria(new Criteria("username").is(username));
 		return template.findOne(q, Teacher.class);
 	}
+
+	/**
+	 * @return
+	 */
+	public Parent getParent(String username, String appId, String schoolId) {
+		Query q = appQuery(appId);
+		q.addCriteria(new Criteria("username").is(username));
+		Parent p = template.findOne(q, Parent.class);
+		return p;
+	}
+
 }

@@ -52,8 +52,34 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
     };
 })
 
-.controller('AppCtrl', function ($scope, $rootScope, $cordovaDevice, $ionicModal, $ionicHistory, $timeout, $filter, $ionicPopover, $state, $ionicSideMenuDelegate, diaryService) {
+.controller('AppCtrl', function ($scope, $rootScope, $location, $cordovaDevice, $ionicModal, $ionicHistory, $timeout, $filter, $ionicPopover, $state, $ionicSideMenuDelegate, diaryService, dataServerService, profileService) {
 
+    $scope.profilesOpen = false;
+    $scope.toggleProfile = function() {
+        $scope.profilesOpen = !$scope.profilesOpen;
+    }
+    $scope.changeKid = function(kidId) {
+        profileService.setCurrentBabyID(kidId);
+        $scope.toggleProfile();
+        $ionicSideMenuDelegate.toggleLeft();
+    }
+
+    $scope.logout = function() {
+        dataServerService.logout();
+        $state.go('app.login');
+    };
+
+    $scope.isParent = function() {
+        return profileService.isParentProfile();
+    }
+
+    $scope.changeProfileType = function() {
+        profileService.toggleUserProfile();
+    };
+
+    $scope.isMultiProfile = function() {
+        return profileService.isMultiProfile();
+    }
 
     $scope.isToday = function (date) {
             var today = new Date();
@@ -124,32 +150,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         }
         return false;
     };
-
-    $scope.popover = $ionicPopover.fromTemplateUrl('templates/dropdown.html', {
-        scope: $scope
-    }).then(function (popover) {
-        $scope.popover = popover;
-    });
-
-
-    $scope.openPopover = function ($event) {
-        $scope.popover.show($event);
-    };
-    $scope.closePopover = function () {
-        $scope.popover.hide();
-    };
-    //Cleanup the popover when we're done with it!
-    $scope.$on('$destroy', function () {
-        $scope.popover.remove();
-    });
-    // Execute action on hide popover
-    $scope.$on('popover.hidden', function () {
-        // Execute action
-    });
-    // Execute action on remove popover
-    $scope.$on('popover.removed', function () {
-        // Execute action
-    });
 });
 
 function showNoPlace() {

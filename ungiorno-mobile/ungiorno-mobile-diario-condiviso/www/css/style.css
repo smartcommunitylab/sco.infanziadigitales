@@ -1,23 +1,114 @@
+/*
+    #BD0F34
+    #9A0122
+    #239B77
+*/
 /* Empty. Add your own CSS if you like */
-
-.stream.post-tag {
-    display: inline-block;
-    margin: 5px;
-    font-style: italic;
+.login-bar {
+    background-color: #BD0F34;
 }
 
-.stream.card {
-    padding: 16px;
+.bar-ungiorno, .bar-ungiorno h1 {
+    background-color: #BD0F34 !important;
+    color: #ffffff;
 }
 
-.stream.post-text {
+.bar-ungiorno .button-clear .icon::before{
+    color: #ffffff;
+}
+
+.menu-profile {
+    background-color: #9A0122 !important;
+}
+.menu-profile h2 {
+    color: white !important;
+    line-height: 40px;
+}
+
+.menu-profile-open {
+    background-color: #9A0122 !important;
+    padding-right: 8px;
+}
+.menu-profile-open button {
+    color: white !important;
+    min-height: 16px !important;
+   line-height: 18px !important;
+}}
+.menu-profile-open button .icon::before{
+    line-height: 18px !important;
+}
+
+
+.menu-profile button {
+    min-height: 40px !important;
+    top: 16px !important;
+    color: white !important;
+
+}
+.leftmenu {
+    background-color: #BD0F34;
+}
+.leftmenu .item-icon-left i::before {
+    font-size: 24px;
+}
+
+a.item-content {
+    background-color: #BD0F34 !important;
+}
+.leftmenu .item, .leftmenu .item p {
+    background-color: #BD0F34;
+    color: #ffffff;
+    border: 0;
+}
+
+.leftmenu .icon-light::before {
+    color: #ffffff !important;
+}
+
+.calendar {
+    padding-left: 16px;
+    padding-right: 16px;
+    background-color: #BD0F34;
+}
+
+.calendar-button {
+    color: #ffffff;
+    font-size: 20px;
+}
+
+#calendar-button-div {
+    height: 25px;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 4px;
+}
+.calendar-button-container {
+    position: absolute;
+    top: -75px;
+    height: 100px;
+    overflow: hidden;
+    width: 100%;
+}
+.calendar-button-inner {
+    width:100px;
+    height:100px;
+    background-color: #BD0F34;
+    border-radius: 50px;
+    text-align: center;
+    padding-top:75px;
+    margin: auto;
+}
+
+.stream-item {
+    padding: 4px 16px;
+    white-space: inherit;
+    text-align: justify;
+    border-top: 0px;
+    margin-top: 1px;
+}
+.stream.post-baby-age {
     margin-top: 8px;
-    margin-bottom: 8px;
-}
-
-.stream.post-author {
-    font-size: 16px;
-    text-align: right;
 }
 
 .stream.post-action-container {
@@ -25,14 +116,65 @@
     float: right;
     min-width: 130px;
 }
+.stream.post-action-container button, .post-create-photo-remove, .diary-form button{
+    float: right;
+    line-height: 24px !important;
+    min-height: 24px;
+    min-width: 32px;
+    padding: 0;
+}
+.stream.post-action-container button i::before {
+    color: #239B77;
+}
+.stream.post-action-container button i::before, .post-create-photo-remove i::before, .diary-form button i::before{
+    line-height: 24px !important;
+}
+
+.stream.post-text {
+    margin-top: 16px;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.stream.post-author {
+    text-align: right;
+    font-style: italic;
+}
+
+.stream.post-tag {
+    display: inline-block;
+    margin-left: 5px;
+    font-style: italic;
+    font-size: 14px;
+}
+
 .stream.post-creation-details {
     display: inline-block;
 }
 
-.stream.post-photo {
+.stream.post-photo, .gallery-square {
+/*
     display: inline-block;
     vertical-align: middle;
     margin-right: 8px;
+*/
+    max-height: 100%;
+    max-width: 100%;
+}
+
+.gallery-tile {
+    position: relative;
+}
+
+.gallery-tile span {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    background-color: white;
+    width: 100%;
+    text-align: right;
+    padding-right: 8px;
+    opacity: 0.4;
 }
 
 .stream.post-photo-more {
@@ -49,8 +191,13 @@
     max-height: 150px;
 }
 
+.stream.icon::before {
+    color: #9A0122;
+    font-size: 18px;
+}
+
 .stream.fab {
-    background-color: #F44336;
+    background-color: #239B77;
     color: #fff;
     height: 54px;
     width: 54px;
@@ -65,7 +212,8 @@
     right: 16px;
     bottom: 16px;
     box-shadow: 0px 0px 10px #888888;
-
+    padding-left: 20px;
+    padding-right: 20px;
 
     -webkit-transition: bottom 0.2s; /* For Safari 3.1 to 6.0 */
     transition: bottom 0.2s;
@@ -90,7 +238,8 @@
     bottom: -60px;
 }
 
-.stream.fab-icon {
+.stream.fab-icon::before {
+    color: #ffffff;
 }
 
 .post-create-element {
@@ -99,8 +248,12 @@
     margin-left: 16px;
 }
 
-.post-create-element.icon {
+.post-create-element.icon, .post-create-element .icon{
     font-size: 24px;
+}
+
+.item-input {
+    border: 0;
 }
 
 .post-create-element-row {
@@ -108,8 +261,18 @@
     margin-bottom: 8px;
 }
 
+.post-create-element-row i {
+    color: #9A0122;
+}
+
+.mood-container {
+    text-align: center;
+}
+
 .post-create-mood {
-    font-size: 72px;
+    font-size: 60px;
+    padding: 0px 16px;
+    color: #9A0122;
 }
 
 .post-create-photo-container {
@@ -128,6 +291,14 @@
     right: 8px;
 }
 
+.post-create-add-photo {
+    border: 0;
+    margin-left: 32px;
+    padding: 4px 64px;
+    background-color: #239B77;
+    color: #ffffff;
+    border-radius: 0;
+}
 .inline {
     display: inline-block;
 }
@@ -173,15 +344,10 @@ ion-content#gallery-container {
 
 
 
-.tag-element.card {
-    padding: 12px;
-    vertical-align: middle;
-    margin: 5px 10px;
-}
-
 .tag-element-remove {
     font-size: 24px;
-    margin-left: 8px;
+    margin-left: 4px;
+    margin-right: 16px;
 }
 
 .person-details {
@@ -204,7 +370,7 @@ ion-content#gallery-container {
     margin-top: 5px;
 }
 .topdata{
-    color: #DDD;
+    color: #BD0F34;
     font-size: 13px;
     margin-left: 10px;
     clear: right;
@@ -227,8 +393,10 @@ ion-content#gallery-container {
    padding-right: 10px;
 }
 .alignRightIcon{
-    margin-right: 10px;
     float: right;
+}
+.alignRightIcon i{
+    color: #239B77;
 }
 .selectrole{
     margin-right: 10px;
@@ -266,24 +434,24 @@ span {
 }
 
 .login-container {
-    display: -webkit-flexbox;
-    display: -ms-flexbox;
-    display: -webkit-flex;
-    display: flex;
-    -webkit-flex-align: center;
-    -ms-flex-align: center;
-    justify-content: center;
-    background-color:#DDD;
+    margin: auto;
+    background-color:#BD0F34;
+}
+
+.login-container h3, .login-container .login-title {
+    color: #ffffff;
 }
 
 .login-buttons {
     margin-top: 50px;
-    height: 50px;
-    background-color: #A9A9A9;
-    display: block;
-    color: #000000;
-    margin-left: 10px;
-    margin-right: 10px;
+/*    height: 50px;*/
+    background-color: #239B77;
+/*    display: block;*/
+    color: #ffffff;
+    width: 60%;
+    border: 0;
+    line-height: 47px;
+    border-radius: 0;
 }
 
 .login-title {
@@ -308,7 +476,7 @@ span {
     -webkit-flex-align: center;
     -ms-flex-align: center;
     justify-content: center;
-    background-color:#DDD;
+    background-color:#BD0F34;
 }
 
 .register-title {
@@ -338,12 +506,12 @@ span {
 
 
 .id-container {
-    background-color:#DDD;
+    background-color:#BD0F34;
     margin-top:50px;
 }
 
 .password-container {
-    background-color:#DDD;
+    background-color:#BD0F34;
 }
 
 .steps-indicator-container {
@@ -374,10 +542,94 @@ span {
     background-color: #000;
 }
 
-input[type=text] {
+input[type=text], textarea, input[type=date] {
     border-bottom: 1px solid #CECECE;
     width: 100%;
     font-size: 14px;
     margin-right: 10px;
 }
 
+
+.diary-form .item {
+    border: 0;
+}
+
+.diary-form .item-divider {
+    background-color: transparent;
+    color: #9A0122;
+}
+
+.diary-form .input-label {
+    font-size: 12px;
+    color: grey;
+}
+.diary-form .textdata {
+    display: block;
+}
+
+.diary-form .form-icon::before {
+    font-size: 24px;
+    margin-right: 8px;
+}
+
+.diary-form .item-contact.item-icon-left i, .form-icon {
+    color: #9A0122;
+    width: 52px;
+}
+.diary-form .item-contact.item-icon-left .textdata {
+    padding-left: 10px;
+}
+.diary-form .item-contact {
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+.diary-form .item-contact i{
+    font-size: 24px;
+}
+
+.slide-animation.ng-enter, .slide-animation.ng-leave {
+    -webkit-transition: 0.3s linear all;
+    -moz-transition: 0.3s linear all;
+    -o-transition: 0.3s linear all;
+    transition: 0.3s linear all;
+    position:relative;
+}
+
+.slide-animation.ng-enter {
+  z-index:100;
+  top:-100px;
+  opacity:0;
+}
+
+.slide-animation.ng-enter.ng-enter-active {
+  top:0;
+  opacity:1;
+}
+
+.slide-animation.ng-leave {
+  z-index:101;
+  opacity:1;
+  top:0;
+}
+
+.slide-animation.ng-leave.ng-leave-active {
+  top:-100px;
+  opacity:0;
+}
+
+.ion-asterisk {
+    font-size: 10px;
+    color: #9A0122;
+}
+
+.gallery-modal-container {
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    vertical-align: middle;
+}
+
+.gallery-modal-container img {
+    max-width: 100%;
+    margin: auto;
+}

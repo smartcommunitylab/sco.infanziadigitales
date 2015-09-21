@@ -6,9 +6,64 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
     var assenza = null;
     var schoolProfile = null; //static info
     var dataServerService = {};
+    var user = null;
+
+    var retrieveUser = function () {
+        var deferred = $q.defer();
+
+        // temp
+        if (user == null) {
+            $http.get('data/teacher-profile.json').success(function (data) {
+                deferred.resolve(data);
+            }).error(function (data, status, headers, config) {
+                console.log(data + status + headers + config);
+            });
+        } else {
+            deferred.resolve(user);
+        }
+        return deferred.promise;
+    };
 
 
-    dataServerService.getBabyConfiguration = function () {
+
+    /**
+     * Whether the user is logged
+     */
+    dataServerService.userIsLogged = function() {
+        return (localStorage.user != null && localStorage.user != "null");
+    }
+
+    /**
+     * return profile of the logged user, or null if not logged in
+     */
+    dataServerService.getUser = function () {
+        if (dataServerService.userIsLogged()) {
+            return JSON.parse(localStorage.user);
+        }
+        return null;
+    };
+
+    /**
+     * Logout user
+     */
+    dataServerService.logout = function () {
+        localStorage.user = null;
+    }
+
+    /**
+     * Mock login
+     */
+    dataServerService.login = function (provider, cb, err) {
+        retrieveUser().then(function(user) {
+            localStorage.user = JSON.stringify(user);
+            cb(localStorage.user);
+        });
+    }
+
+    /**
+     * Retrieve configuration of a specific child
+     */
+    dataServerService.getBabyConfiguration = function (babyId) {
         var deferred = $q.defer();
 
         /*temp*/
@@ -27,13 +82,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
     }
 
 
-    dataServerService.getBabyProfile = function () {
+    /**
+     * Retrieve profiles of the logged parent/teacher
+     */
+    dataServerService.getBabyProfiles = function () {
         var deferred = $q.defer();
 
         /*temp*/
         $http.get('data/bambino-profilo.json').success(function (data) {
-            babyProfile = data.data[0];
-            deferred.resolve(babyProfile);
+            deferred.resolve(data);
         }).error(function (data, status, headers, config) {
             console.log(data + status + headers + config);
             //deferred.reject(err);
@@ -42,25 +99,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
         /*temp*/
     }
 
+    dataServerService.save = function(post) {
+        return dataServerService.getPostsByBabyId();
+    }
 
-    dataServerService.getTeachers = function () {
-        var teachers = null;
-        var deferred = $q.defer();
-
-        // temp
-        if (teachers == null) {
-            $http.get('data/teacher-profile.json').success(function (data) {
-                teachers = data;
-                deferred.resolve(teachers);
-            }).error(function (data, status, headers, config) {
-                console.log(data + status + headers + config);
-            });
-        } else {
-            deferred.resolve(teachers);
-        }
-        return deferred.promise;
-    };
-
+    /**
+     * Retrieve tags to be used
+     */
     dataServerService.getTags = function () {
         var tags = null;
         var deferred = $q.defer();
@@ -79,7 +124,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
         return deferred.promise;
     };
 
-    dataServerService.getPostsByBabyId = function (babyId) {
+    /**
+     * Retrieve child posts
+     */
+    dataServerService.getPostsByBabyId = function (babyId, start, count) {
         var posts = null;
         var deferred = $q.defer();
 
@@ -96,6 +144,25 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
         }
         return deferred.promise;
     };
+
+        /**
+     * Retrieve child posts
+     */
+    dataServerService.getGalleryByBabyId = function (babyId, start, count) {
+        var deferred = $q.defer();
+        dataServerService.getPostsByBabyId(babyId, start, count).then(function(posts){
+            var res = [];
+            for (var i = 0; i < posts.length; i++) {
+                if (posts[i].pictures) {
+                    for (var j = 0; j < posts[i].pictures.length; j++) {
+                        res.push({url:posts[i].pictures[j].url, date: posts[i].date});
+                    }
+                }
+            }
+            deferred.resolve(res);
+        });
+        return deferred.promise;
+    }
 
 
     return dataServerService;

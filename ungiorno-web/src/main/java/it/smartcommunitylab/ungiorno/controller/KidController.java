@@ -21,10 +21,13 @@ import it.smartcommunitylab.ungiorno.model.Communication;
 import it.smartcommunitylab.ungiorno.model.KidCalAssenza;
 import it.smartcommunitylab.ungiorno.model.KidCalFermata;
 import it.smartcommunitylab.ungiorno.model.KidCalNote;
+import it.smartcommunitylab.ungiorno.model.KidCalNote.Note;
 import it.smartcommunitylab.ungiorno.model.KidCalRitiro;
 import it.smartcommunitylab.ungiorno.model.KidConfig;
 import it.smartcommunitylab.ungiorno.model.KidProfile;
+import it.smartcommunitylab.ungiorno.model.Parent;
 import it.smartcommunitylab.ungiorno.model.Response;
+import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
 
 import java.util.List;
@@ -131,6 +134,18 @@ public class KidController {
 		}
 	}
 
+	@RequestMapping(method = RequestMethod.GET, value = "/student/{appId}/{schoolId}/{kidId}/stop")
+	public @ResponseBody Response<KidCalFermata> getStop(@PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId, @RequestParam long date) {
+
+		try {
+			checkKid(appId, schoolId, kidId);
+			KidCalFermata obj = storage.getStop(appId, schoolId, kidId, date);
+			return new Response<>(obj);
+		} catch (Exception e) {
+			return new Response<>(e.getMessage());
+		}
+	}
+
 	@RequestMapping(method = RequestMethod.POST, value = "/student/{appId}/{schoolId}/{kidId}/absence")
 	public @ResponseBody Response<KidConfig> sendAssenza(@RequestBody KidCalAssenza absence, @PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId) {
 
@@ -147,6 +162,19 @@ public class KidController {
 		}
 	}
 
+	@RequestMapping(method = RequestMethod.GET, value = "/student/{appId}/{schoolId}/{kidId}/absence")
+	public @ResponseBody Response<KidCalAssenza> getAssenza(@PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId, @RequestParam long date) {
+
+		try {
+			checkKid(appId, schoolId, kidId);
+			KidCalAssenza obj = storage.getAbsence(appId, schoolId, kidId, date);
+			return new Response<>(obj);
+		} catch (Exception e) {
+			return new Response<>(e.getMessage());
+		}
+	}
+	
+
 	@RequestMapping(method = RequestMethod.POST, value = "/student/{appId}/{schoolId}/{kidId}/return")
 	public @ResponseBody Response<KidConfig> sendRitiro(@RequestBody KidCalRitiro ritiro, @PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId) {
 
@@ -162,6 +190,19 @@ public class KidController {
 			return new Response<>(e.getMessage());
 		}
 	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/student/{appId}/{schoolId}/{kidId}/return")
+	public @ResponseBody Response<KidCalRitiro> getRitiro(@PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId, @RequestParam long date) {
+
+		try {
+			checkKid(appId, schoolId, kidId);
+			KidCalRitiro obj = storage.getReturn(appId, schoolId, kidId, date);
+			return new Response<>(obj);
+		} catch (Exception e) {
+			return new Response<>(e.getMessage());
+		}
+	}
+
 
 	@RequestMapping(method = RequestMethod.GET, value = "/student/{appId}/{schoolId}/{kidId}/notes")
 	public @ResponseBody Response<List<KidCalNote>> getNotes(@PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId, @RequestParam long date) {
@@ -198,6 +239,21 @@ public class KidController {
 			note.setAppId(appId);
 			note.setKidId(kidId);
 			note.setSchoolId(schoolId);
+			if (note.getParentNotes() != null && !note.getParentNotes().isEmpty()) {
+				Parent parent = storage.getParent(getUserId(), appId, schoolId);
+				if (parent == null) throw new IllegalArgumentException("No person registered");
+				for (Note n : note.getParentNotes()) {
+					n.setPersonId(parent.getPersonId());
+				}
+			} else if (note.getSchoolNotes() != null && !note.getSchoolNotes().isEmpty()) {
+				Teacher teacher = storage.getTeacher(getUserId(), appId, schoolId);
+				if (teacher == null) throw new IllegalArgumentException("No teacher registered");
+				for (Note n : note.getSchoolNotes()) {
+					n.setPersonId(teacher.getTeacherId());
+				}
+			} else {
+				throw new IllegalArgumentException("Incorrect note");
+			}
 
 			return new Response<>(storage.saveNote(note));
 		} catch (Exception e) {

@@ -1,8 +1,33 @@
 <ion-view id="gallery">
-    <ion-nav-bar class="bar bar-ungiorno">
-        <ion-nav-back-button>
-        </ion-nav-back-button>
-    </ion-nav-bar>
+    <ion-nav-title>{{'gallery'|translate}}</ion-nav-title>
+    <ion-content id="gallery-container" has-bouncing="false">
+        <div class="row" ng-repeat="image in photos" ng-if="$index % 2 === 0">
+            <div class="col col-50 col-center" ng-if="$index < photos.length">
+                <div class="gallery-tile" ng-click="getImageAction($index)">
+                    <img src="{{photos[$index].url}}" class="gallery-square"/>
+                    <span>{{photos[$index].date * 1000 | date:"d MMMM yyyy"}}</span>
+                </div>
+            </div>
+            <div class="col col-50 col-center" ng-if="$index + 1 < photos.length">
+                <div class="gallery-tile" ng-click="getImageAction($index+1)">
+                    <img src="{{photos[$index+1].url}}" class="gallery-square"/>
+                    <span>{{photos[$index+1].date * 1000 | date:"d MMMM yyyy"}}</span>
+                </div>
+            </div>
+        </div>
+
+
+<!--
+        <ion-slide-box class="gallery-slider" active-slide="galleryDefaultPhotoIndex" show-pager="false">
+
+            <ion-slide ng-repeat="photo in photos">
+                <div class="gallery-photo-container">
+                    <img ng-src="{{photo.url}}" class="gallery-photo-view">
+                </div>
+            </ion-slide>
+        </ion-slide-box>
+-->
+    </ion-content>
 
 
 

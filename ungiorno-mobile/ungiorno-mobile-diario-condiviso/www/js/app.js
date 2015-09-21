@@ -23,19 +23,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
     'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.services.teachersService',
     'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.services.galleryService',
     'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.services.diaryservice',
+    'pickadate',
     'angularMoment'
 ])
 
 .run(function ($ionicPlatform, $rootScope, $cordovaSplashscreen, $state, $translate, $q, $ionicHistory, $ionicConfig, $ionicSideMenuDelegate) {
-    $rootScope.userIsLogged = (localStorage.userId != null && localStorage.userId != "null");
-
-    $rootScope.getUserId = function () {
-        if ($rootScope.userIsLogged) {
-            return localStorage.userId;
-        }
-        return null;
-    };
-
     $ionicPlatform.ready(function () {
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
         // for form inputs)
@@ -80,8 +72,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
 
 })
 
-.config(function ($stateProvider, $urlRouterProvider, $translateProvider, $ionicConfigProvider) {
+.config(function ($stateProvider, $urlRouterProvider, $translateProvider, $ionicConfigProvider, pickadateI18nProvider) {
     $ionicConfigProvider.tabs.position('top');
+    $ionicConfigProvider.backButton.text('').previousTitleText(false);
+
+        pickadateI18nProvider.translations = {
+            prev: '<i class="icon ion-chevron-left"></i>',
+            next: '<i class="icon ion-chevron-right"></i>'
+        }
 
     $stateProvider.state('app', {
         url: "/app",
@@ -172,18 +170,18 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
         menu_home: 'Home',
         diary_details: 'Dettagli diario',
         diary_create: 'Crea un diario',
-        data: 'Dati ',
-        name_m: 'bambino',
-        name_f: 'bambina',
+        data: 'Dati del bambino',
         data_family: 'Dati famiglia',
-        name: 'Nome ',
-        surname: 'Cognome ',
-        date_birth: 'Data di nascita ',
+        name: 'Nome del bambino',
+        surname: 'Cognome del mambino',
+        date_birth: 'Data di nascita',
+        add_family_component: 'Aggiungi un componente',
+        add_authorized: 'Aggiungi una persona',
         acces_diary: 'Hanno accesso al diario',
         has: 'ha',
         name_parents: 'Nome del genitore',
         create_post: 'Crea un elemento',
-        description: 'Descrizione',
+        description: 'Inserisci il testo',
         add_photo: 'Aggiungi foto',
         number_parents: 'n° di telefono ',
         mail_parents: 'Indirizzo email ',
@@ -194,21 +192,31 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
         add_tag_title: 'Aggiungi etichetta',
         add_tag_description: 'non è presente nell\'elenco delle etichette. Scegli Aggiungi per inserire la nuova etichetta nell\'elenco',
         role: 'Ruolo',
-        mom: 'Mamma',
-        dad: 'Papà',
+        parent1: 'Genitore 1',
+        parent2: 'Genitore 2',
         brother: 'Fratello',
         sister: 'Sorella',
-        asterisk: '* Indica che i campi sono obbligatori.',
+        asterisk: 'Indica che i campi sono obbligatori.',
         new_people: 'Aggiungi una persona',
         email: 'Email',
         fullName: 'Nome completo',
-        parents: 'Genitore',
+        parent: 'Genitore',
         teacher: 'Insegnante',
-        nothing_note: 'Nessuna nota presente',
+        nothing_note: 'Clicca su + in basso per aggiungere un elemento.',
         gender: 'Sesso',
         male: 'Maschio',
         female: 'Femmina',
-        register: 'Registrazione'
+
+        register: 'Registrazione',
+        gallery: 'Galleria',
+        logout: 'Esci',
+        home: 'Home',
+        create_diary: 'Crea diario',
+        change_profile: 'Cambia profilo',
+        profile_teacher_used: 'Stai utilizzando il profilo insegnante',
+        profile_parent_used: 'Stai utilizzando il profilo genitore',
+        no_profiles: 'Nessun profilo presente',
+        access_with: 'Accedi con:'
     });
 
     $translateProvider.preferredLanguage("it");

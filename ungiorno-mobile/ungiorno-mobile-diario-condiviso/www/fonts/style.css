@@ -1,8 +1,13 @@
 @font-face {
 	font-family: 'infanzia_digitales';
-	src: url('infanzia_digitales.eot');
+	src:url('fonts/infanzia_digitales.eot?wetekr');
+	src:url('fonts/infanzia_digitales.eot?#iefixwetekr') format('embedded-opentype'),
+		url('fonts/infanzia_digitales.ttf?wetekr') format('truetype'),
+		url('fonts/infanzia_digitales.woff?wetekr') format('woff'),
+		url('fonts/infanzia_digitales.svg?wetekr#infanzia_digitales') format('svg');
+	font-weight: normal;
+	font-style: normal;
 }
-
 
 [class^="inf_dig"], [class*=" inf_dig"] {
 	font-family: 'infanzia_digitales';
@@ -18,11 +23,71 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
+.inf_digtags:before {
+	content: "\e60a";
+}
+.inf_digclock:before {
+	content: "\e60b";
+}
+.inf_digalarm:before {
+	content: "\e60c";
+}
+.inf_digsearch:before {
+	content: "\e60d";
+}
+.inf_digfilter:before {
+	content: "\e60f";
+}
+.inf_digshare:before {
+	content: "\e610";
+}
+.inf_digmail:before {
+	content: "\e60e";
+}
+.inf_diglog-out:before {
+	content: "\e612";
+}
+.inf_digbus_48px:before {
+	content: "\e613";
+}
+.inf_dignote:before {
+	content: "\e614";
+}
+.inf_digimage:before {
+	content: "\e615";
+}
+.inf_digverdura:before {
+	content: "\e600";
+}
+.inf_digfrutta:before {
+	content: "\e601";
+}
+.inf_digpesce:before {
+	content: "\e602";
+}
+.inf_digdolce:before {
+	content: "\e603";
+}
+.inf_digpizza:before {
+	content: "\e604";
+}
+.inf_digcarne-rossa:before {
+	content: "\e605";
+}
+.inf_diglatticini:before {
+	content: "\e606";
+}
+.inf_digriso:before {
+	content: "\e607";
+}
+.inf_digpasta:before {
+	content: "\e608";
+}
+.inf_digcarne-bianca:before {
+	content: "\e609";
+}
 .inf_digalert:before {
 	content: "\e000";
-}
-.inf_digcall:before {
-	content: "\e03f";
 }
 .inf_digedit:before {
 	content: "\e0ee";
@@ -45,7 +110,7 @@
 .inf_digcalendar:before {
 	content: "\e21c";
 }
-.inf_digphone:before {
+.inf_digcall:before {
 	content: "\e223";
 }
 .inf_digchildren_list:before {

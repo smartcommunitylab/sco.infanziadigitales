@@ -55,7 +55,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
 
     });
     babyConfigurationService.getBabyNotesById($scope.schoolProfile.schoolId, babyProfileID).then(function (data) {
-        $scope.notes = data;
+        $scope.notes = data[0];
         notesLoaded = true;
         checkAllDataLoaded();
     });

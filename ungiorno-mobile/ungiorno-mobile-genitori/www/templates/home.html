@@ -29,17 +29,21 @@
             <p>{{'home_personal_information' | translate}} {{kidProfile.firstName}}</p>
             <div class="separator"></div>
             <p>
-                <div ng-repeat="parentNote in notes.parentNotes">
-                    {{parentNote.note}}
+                <div ng-repeat="schoolNotes in notes.schoolNotes">
+                    {{schoolNotes.note}}
                 </div>
+
             </p>
             <p>{{'home_school_information' | translate}}</p>
             <div class="separator"></div>
             <p>
-                <div ng-repeat="schoolNotes in notes.schoolNotes">
-                    {{schoolNotes.note}}
+                <div ng-repeat="communication in communications">
+                    <p class="home-communications-desc alignleft ">{{communication.description}}</p>
+                    <p class="home-communications-check alignright" ng-show="communication.doCheck">{{communication.dateToCheck | date:'EEEE, d MMMM yyyy'}}</p>
+
                 </div>
             </p>
+
         </div>
     </ion-content>
 </ion-view>

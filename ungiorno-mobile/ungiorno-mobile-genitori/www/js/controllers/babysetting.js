@@ -23,8 +23,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         }
     }
     //set hour
-    var exitTime = new Date($scope.babyConfiguration.exitTime);
-    exitTime.setHours(exitTime.getHours(), exitTime.getMinutes(), 0, 0);
+    var exitTime = new Date();
+    if ($scope.babyConfiguration.exitTime) {
+        exitTime.setHours($scope.babyConfiguration.exitTime.substr(0, 2), $scope.babyConfiguration.exitTime.substr(3, 2), 0, 0);
+    }
     $scope.time.value = exitTime;
 
     //set who get child
@@ -76,10 +78,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             schoolId: $scope.babyConfiguration.schoolId,
             kidId: $scope.babyConfiguration.kidId,
             services: newServices,
-            exitTime: $scope.time.value,
+            exitTime: new Date($scope.time.value).toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1").substr(0, 5),
             defaultPerson: $scope.retireDefault.value,
             receiveNotification: $scope.babyConfiguration.receiveNotification,
-            extraPersons: $scope.babyConfiguration.extraPerson
+            extraPersons: $scope.babyConfiguration.extraPersons
         };
 
         configurationService.setBabyConfiguration($scope.babyConfiguration);

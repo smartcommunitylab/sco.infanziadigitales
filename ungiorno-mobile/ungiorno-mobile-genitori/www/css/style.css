@@ -179,7 +179,6 @@ input[type=text] {
     background: #FFFFFF;
 }
 
-
 .canteen.col-description {
     text-align: center;
     font-size: 16px;
@@ -208,6 +207,7 @@ input[type=text] {
 .canteen.food-image-parent {
     text-align: center;
 }
+
 .canteen.food-image {
     font-size: 32px;
 }
@@ -215,7 +215,6 @@ input[type=text] {
 .canteen.day-container {
     text-align: center;
     background: #93DAF2;
-
     border-right: 3px solid #2DAAE1;
     border-left: 3px solid #2DAAE1;
 }
@@ -240,13 +239,10 @@ input[type=text] {
     color: #606060;
 }
 
-
 p {
     -webkit-margin-before: 0em;
     -webkit-margin-after: 0em;
 }
-
-
 /*
 #map {
     position: absolute;
@@ -1297,4 +1293,18 @@ select {
     top: 0;
     right: 0;
     cursor: pointer;
+}
+
+.home-communications-check {}
+
+.home-communications-desc {
+    width: 60%
+}
+
+.alignleft {
+    float: left;
+}
+
+.alignright {
+    float: right;
 }

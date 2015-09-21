@@ -23,7 +23,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         }
     ];
 
-    var sortCommunications = function() {
+    var sortCommunications = function () {
         $scope.communications = $filter('orderBy')($scope.communications, '+creationDate');
     }
 
@@ -101,11 +101,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
                 title: $filter('translate')('communication_delete_fail'),
                 scope: $scope,
                 buttons: [
-                    { text: $filter('translate')('cancel') },
+                    {
+                        text: $filter('translate')('cancel')
+                    },
                     {
                         text: '<b>' + $filter('translate')('retry') + '</b>',
                         type: 'button-positive',
-                        onTap: function(e) {
+                        onTap: function (e) {
                             deleteFromServer();
                         }
                     }
@@ -127,11 +129,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
                 title: $filter('translate')('communication_delete_confirm'),
                 scope: $scope,
                 buttons: [
-                    { text: $filter('translate')('cancel') },
+                    {
+                        text: $filter('translate')('cancel')
+                    },
                     {
                         text: '<b>' + $filter('translate')('ok') + '</b>',
                         type: 'button-positive',
-                        onTap: function(e) {
+                        onTap: function (e) {
                             deleteFromServer();
                         }
                     }
@@ -167,11 +171,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
                 title: $filter('translate')('communication_fail'),
                 scope: $scope,
                 buttons: [
-                    { text: $filter('translate')('cancel') },
+                    {
+                        text: $filter('translate')('cancel')
+                    },
                     {
                         text: '<b>' + $filter('translate')('retry') + '</b>',
                         type: 'button-positive',
-                        onTap: function(e) {
+                        onTap: function (e) {
                             $scope.submitCommunication();
                         }
                     }
@@ -212,6 +218,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     $scope.homeRedirect = function (index) {
         selectedCommunicationIndex = -1;
         communicationService.setCommunication($scope.communications[index].communicationId);
+        communicationService.setToCheck(true);
         window.location.assign('#/app/home');
     }
 });

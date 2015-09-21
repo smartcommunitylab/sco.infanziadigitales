@@ -4,7 +4,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
     var communications = null;
     var selectedCommunication = null;
     var communicationService = {};
-
+    var toCheck = false;
 
 
     communicationService.getCommunicationsFromServer = function (schoolId) {
@@ -58,6 +58,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
             return false;
         }
 
+    }
+    communicationService.setToCheck = function (value) {
+        toCheck = value;
+    }
+
+    communicationService.getToCheck = function () {
+        return toCheck;
     }
     return communicationService;
 })

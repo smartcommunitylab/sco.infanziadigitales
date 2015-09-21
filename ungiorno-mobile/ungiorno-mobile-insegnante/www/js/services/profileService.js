@@ -27,10 +27,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
         dataServerService.getTeachers(schoolId).then(function (data) {
             var found = false;
             var i = 0;
-            while (!found && i < data.data.length) {
-                if (data.data[i].teacherId == teacherId) {
+            while (!found && i < data.length) {
+                if (data[i].teacherId == teacherId) {
                     found = true;
-                    deferred.resolve(data.data[i]);
+                    deferred.resolve(data[i]);
                 }
                 i++;
             }

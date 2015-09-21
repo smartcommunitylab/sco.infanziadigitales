@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.authorization', [])
 
-.controller('AuthorizationCtrl', function ($scope, $ionicHistory, configurationService, $q, $filter, $cordovaCamera) {
+.controller('AuthorizationCtrl', function ($scope, $ionicHistory, configurationService, $q, $filter, $cordovaCamera, dataServerService) {
     var currentBaby = configurationService.getBabyConfiguration();
     var authorizationUrl;
     $scope.image = [];
@@ -15,20 +15,38 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             alert("Alcuni campi non sono stati completati");
             return false;
         }
+        extraPerson = {};
 
-        currentBaby.extraPersons.firstName = $scope.person.firstName;
-        currentBaby.extraPersons.lastName = $scope.person.lastName;
-        currentBaby.extraPersons.fullName = $scope.person.firstName + " " + $scope.person.lastName;
-        currentBaby.extraPersons.authorizationDeadline = (new Date()).getTime();
-        currentBaby.extraPersons.authorizationUrl = authorizationUrl;
+        extraPerson.personId = currentBaby.kidId + "_" + new Date().getTime();
+        extraPerson.firstName = $scope.person.firstName;
+        extraPerson.lastName = $scope.person.lastName;
+        extraPerson.fullName = $scope.person.firstName + " " + $scope.person.lastName;
+        extraPerson.authorizationDeadline = (new Date()).getTime();
+        extraPerson.authorizationUrl = authorizationUrl;
+        if (!currentBaby.extraPersons) {
+            currentBaby.extraPersons = [];
+        }
+        currentBaby.extraPersons.push(extraPerson);
         return true;
     }
 
 
     $scope.send = function () {
         if (setDelegation()) {
-            configurationService.setBabyConfiguration(currentBaby);
-            $ionicHistory.goBack();
+            //update configuration
+            dataServerService.getBabyConfigurationById(currentBaby.schoolId, currentBaby.kidId).then(function (data) {
+                //se nuova configurazione aggiornala
+                currentBaby = data;
+                //currentBaby.exitTime = new Date(currentBaby.exitTime).getTime();
+                //se diversi parametri=>sovrascrivo
+                setDelegation();
+                dataServerService.sendBabySetting(currentBaby.schoolId, currentBaby.kidId, currentBaby).then(function (data) {
+                    configurationService.setBabyConfiguration(currentBaby);
+                    $ionicHistory.goBack();
+                });
+
+
+            });
         }
     }
     $scope.removeImage = function (index) {

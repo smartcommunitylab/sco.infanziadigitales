@@ -7,11 +7,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.kidConfiguration = {};
     $scope.school = {};
     $scope.notes = {};
+    $scope.communications = {};
     $scope.fromTime = "";
     $scope.toTime = "";
     //build options
     $scope.elements = [];
-
+    $scope.dailyFermata = null;
+    $scope.dailyRitiro = null;
 
     $scope.goTo = function (location) {
         window.location.assign(location);
@@ -23,7 +25,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     }
 
     var isRetireSet = function () {
-        if (retireService.getDailyRetire()) {
+        if ($scope.dailyFermata || $scope.dailyRitiro) {
             return true
         }
         return false
@@ -55,7 +57,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             if (isBusDisabled()) {
                 return "button-stable";
             }
-            if (isBusSet() || isRetireSet()) {
+            if (isRetireSet()) {
                 return "button-positive";
             }
             return "button-assertive";
@@ -162,60 +164,78 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                     var profile = data;
                     profileService.setSchoolProfile(profile);
                     $scope.school = profile;
-                    if (config == null) {
-                        //use default data from profile to create config
-                        var exitTime = null;
-                        if (!$scope.kidProfile.services.posticipo.enabled) {
-                            exitTime = $filter('date')(new Date(profileService.getSchoolProfile().regularTiming.toTime), 'H:mm');
-                        } else {
-                            exitTime = $filter('date')(new Date(profileService.getSchoolProfile().posticipoTiming.toTime), 'H:mm');
-                        }
-                        config = {
-                            "appId": Config.appId(),
-                            "schoolId": schoolId,
-                            "kidId": kidId,
-                            "services": {
-                                "anticipo": {
-                                    "active": $scope.kidProfile.services.anticipo.enabled
-                                },
-                                "posticipo": {
-                                    "active": $scope.kidProfile.services.posticipo.enabled
-                                },
-                                "bus": {
-                                    "active": $scope.kidProfile.services.bus.enabled,
-                                    "defaultIdGo": $scope.kidProfile.services.bus.stops[0].stopId,
-                                    "defaultIdBack": $scope.kidProfile.services.bus.stops[0].stopId
-                                },
-                                "mensa": {
-                                    "active": $scope.kidProfile.services.mensa.enabled
+                    dataServerService.getRitiro($scope.kidProfile.schoolId, $scope.kidProfile.kidId, new Date().getTime()).then(function (data) {
+                        $scope.dailyRitiro = data;
+                        dataServerService.getFermata($scope.kidProfile.schoolId, $scope.kidProfile.kidId, new Date().getTime()).then(function (data) {
+                            $scope.dailyFermata = data;
+                            if (config == null) {
+                                //use default data from profile to create config
+                                var exitTime = null;
+                                if (!$scope.kidProfile.services.posticipo.enabled) {
+                                    exitTime = $filter('date')(new Date(profileService.getSchoolProfile().regularTiming.toTime), 'H:mm');
+                                } else {
+                                    exitTime = $filter('date')(new Date(profileService.getSchoolProfile().posticipoTiming.toTime), 'H:mm');
                                 }
-                            },
-                            "exitTime": exitTime,
-                            "defaultPerson": $scope.kidProfile.persons[0].personId,
-                            "receiveNotification": true,
-                            "extraPersons": null
-                        }
-                        $scope.kidConfiguration = config;
-                        configurationService.setBabyConfiguration(config);
-                    }
+                                config = {
+                                    "appId": Config.appId(),
+                                    "schoolId": schoolId,
+                                    "kidId": kidId,
+                                    "services": {
+                                        "anticipo": {
+                                            "active": $scope.kidProfile.services.anticipo.enabled
+                                        },
+                                        "posticipo": {
+                                            "active": $scope.kidProfile.services.posticipo.enabled
+                                        },
+                                        "bus": {
+                                            "active": $scope.kidProfile.services.bus.enabled,
+                                            "defaultIdGo": $scope.kidProfile.services.bus.stops[0].stopId,
+                                            "defaultIdBack": $scope.kidProfile.services.bus.stops[0].stopId
+                                        },
+                                        "mensa": {
+                                            "active": $scope.kidProfile.services.mensa.enabled
+                                        }
+                                    },
+                                    "exitTime": exitTime,
+                                    "defaultPerson": $scope.kidProfile.persons[0].personId,
+                                    "receiveNotification": true,
+                                    "extraPersons": null
+                                }
+                                $scope.kidConfiguration = config;
+                                configurationService.setBabyConfiguration(config);
+                            }
 
-                    if (($scope.kidProfile.services.anticipo.enabled && !$scope.kidConfiguration) || ($scope.kidProfile.services.anticipo.enabled && $scope.kidConfiguration.services.anticipo.active)) {
-                        $scope.fromTime = $scope.school.anticipoTiming.fromTime;
-                    } else {
-                        $scope.fromTime = $scope.school.regularTiming.fromTime;
-                    }
-                    if (($scope.kidProfile.services.posticipo.enabled && !$scope.kidConfiguration) || ($scope.kidProfile.services.posticipo.enabled && $scope.kidConfiguration.services.posticipo.active)) {
-                        //tmp setto a ora precisa se impostata per il giorno
-                        $scope.toTime = $scope.school.posticipoTiming.toTime;
-                    } else {
-                        $scope.toTime = $scope.school.regularTiming.toTime;
+                            if (($scope.kidProfile.services.anticipo.enabled && !$scope.kidConfiguration) || ($scope.kidProfile.services.anticipo.enabled && $scope.kidConfiguration.services.anticipo.active)) {
+                                $scope.fromTime = $scope.school.anticipoTiming.fromTime;
+                            } else {
+                                $scope.fromTime = $scope.school.regularTiming.fromTime;
+                            }
 
-                    }
-                    buildHome();
+                            if ($scope.dailyRitiro) {
+                                $scope.toTime = new Date($scope.dailyRitiro.date).toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1").substr(0, 5);
+                            } else {
+                                if (!$scope.kidProfile.services.posticipo.enabled) {
+                                    $scope.toTime = profileService.getSchoolProfile().regularTiming.toTime;
+                                } else {
+                                    $scope.toTime = profileService.getSchoolProfile().posticipoTiming.toTime;
+                                }
+                                if ($scope.dailyFermata) {
+                                    $scope.toTime = $scope.toTime + " con il servizio bus";
+                                }
+                            }
+
+                            buildHome();
+                        });
+                    });
                 });
                 //recupero le note
                 dataServerService.getNotes(schoolId, kidId, new Date().getTime()).then(function (data) {
                     $scope.notes = data[0];
+                }, function (error) {
+                    console.log("ERROR -> " + error);
+                });
+                dataServerService.getCommunications(schoolId, kidId).then(function (data) {
+                    $scope.communications = data;
                 }, function (error) {
                     console.log("ERROR -> " + error);
                 });

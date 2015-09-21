@@ -7,9 +7,10 @@
             <i class="icon ion-android-alarm-clock"></i>
         </button>
         <button style="color:black" class="button" ng-if="viewClose()" ng-click="closeNotesAndComm()">{{'close' | translate | uppercase}}</button>
+        <button style="color:black" class="button" ng-if="viewClose()" ng-click="saveNotesAndComm()">{{'save' | translate | uppercase}}</button>
 
     </ion-nav-buttons>
-    <ion-content has-header="true" >
+    <ion-content has-header="true">
         <div class="row section-row home-container">
             <div class="col section-row" ng-class="{'sections-displayer-short': noteExpanded || communicationExpanded, 'sections-displayer-full': !(noteExpanded || communicationExpanded)}">
                 <div class="row section-row">
@@ -132,14 +133,14 @@
                             </label>
                             <div class="item item-checkbox new-note-assign-container">
                                 <label class="checkbox">
-                                    <input type="checkbox"ng-model="newNote.assignedBaby">
+                                    <input type="checkbox" ng-model="newNote.assignedBaby">
                                 </label>
                                 {{'associate_to_childs' | translate}}
                             </div>
                             <label class="item item-input">
                                 <input type="text" ng-disabled="!newNote.assignedBaby" placeholder="{{'baby_name' | translate}}" ng-change="search()" ng-focus="focused(true, true)" ng-blur="focused(true, false)" ng-model="newNote.search">
                             </label>
-                            <ion-list class="list children-search" ng-if="displayHint()" ng-focus="focused(false, true)" ng-blur="focused(false, false)" >
+                            <ion-list class="list children-search" ng-if="displayHint()" ng-focus="focused(false, true)" ng-blur="focused(false, false)">
                                 <ion-item class="item-text-complete" ng-repeat="children in newNote.possibleChildrens" class="child-search" ng-click="selectChildrenForNote(children)">
                                     <img class="inline new-note-kid-image" ng-src="{{children.image}}"></img>
                                     <div class="inline new-note-kid-name">{{children.childrenName}}</div>

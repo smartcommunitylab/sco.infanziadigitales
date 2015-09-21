@@ -6,7 +6,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         argument: "",
         description: ""
     }
-    $scope.showLoader = function() {
+    $scope.showLoader = function () {
         $ionicLoading.show({
             content: 'Loading',
             animation: 'fade-in',
@@ -19,10 +19,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
 
     $scope.showLoader();
 
-    $scope.checkBusServiceActive = function() {
+    $scope.checkBusServiceActive = function () {
         return $scope.babyInformations.bus.active && $scope.babyInformations.bus.enabled;
     }
-    var getBusStopAddressByID = function(busStopID) {
+    var getBusStopAddressByID = function (busStopID) {
         for (var i = 0; i < $scope.babyProfile.services.bus.stops.length; i++) {
             if ($scope.babyProfile.services.bus.stops[i].stopId === busStopID) {
                 return $scope.babyProfile.services.bus.stops[i].address;
@@ -33,8 +33,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     var babyProfileLoaded = false;
     var notesLoaded = false;
     $scope.dataLoaded = false;
-    var checkAllDataLoaded = function() {
-        if (babyProfileLoaded  && notesLoaded) {
+    var checkAllDataLoaded = function () {
+        if (babyProfileLoaded && notesLoaded) {
             $scope.calculateOtherData();
             $scope.dataLoaded = true;
             $ionicLoading.hide();
@@ -44,6 +44,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
 
     $scope.schoolProfile = profileService.getSchoolProfile();
     $scope.babyInformations = profileService.getCurrentBaby();
+    $scope.relation = "";
     var babyProfileID = $scope.babyInformations.kidId;
 
     //Acquiring data from server
@@ -74,25 +75,30 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         }
 
         if ($scope.checkBusServiceActive()) {
-            $scope.babyBusStopBackName = getBusStopAddressByID($scope.babyInformations.stopId);
+            //$scope.babyBusStopBackName = getBusStopAddressByID($scope.babyInformations.stopId);
+            //tmp because stops have no data for address
+            $scope.babyBusStopBackName = $scope.babyInformations.stopId;
         }
-
+        for (var i = 0; i < $scope.babyProfile.persons.length; i++) {
+            if ($scope.babyProfile.persons[i].personId == $scope.babyInformations.personId)
+                $scope.relation = $scope.babyProfile.persons[i].relation;
+        }
     }
 
 
     //Custom methods
-    $scope.callPhone = function(number) {
+    $scope.callPhone = function (number) {
         console.log("Calling " + number);
         document.location.href = 'tel:' + number;
     }
 
-    $scope.sendTeacherNote = function() {
+    $scope.sendTeacherNote = function () {
 
         if ($scope.newNote.argument === "") {
             Toast.show($filter('translate')('select_argument'));
         } else if ($scope.newNote.description === "") {
             Toast.show($filter('translate')('type_description'));
-        } else {    //all data are correct
+        } else { //all data are correct
             var note = {
                 date: new Date().getTime(),
                 schoolNotes: [
@@ -108,11 +114,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
                     title: $filter('translate')('note_sent_fail'),
                     scope: $scope,
                     buttons: [
-                        { text: $filter('translate')('cancel') },
+                        {
+                            text: $filter('translate')('cancel')
+                        },
                         {
                             text: '<b>' + $filter('translate')('retry') + '</b>',
                             type: 'button-positive',
-                            onTap: function(e) {
+                            onTap: function (e) {
                                 $scope.sendTeacherNote();
                             }
                         }

@@ -16,10 +16,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     $scope.communicationExpanded = false;
     $scope.schoolProfile = null;
     $scope.numberOfChildren = 0;
-    $scope.communications = null;
+    $scope.communications = [];
     $scope.childrenCommunicationDelivery = null;
     $scope.selectedNote = false;
-
+    $scope.data = {
+        communication: ""
+    };
 
 
     $scope.viewClose = function () {
@@ -32,9 +34,25 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         $scope.teachersNote = true;
         $scope.parentsNote = false;
         $scope.newNoteExpandend = false;
+        //put the same list of children on the check
     }
 
+    $scope.saveNotesAndComm = function () {
+        $scope.noteExpanded = false;
+        $scope.communicationExpanded = false;
+        $scope.teachersNote = true;
+        $scope.parentsNote = false;
+        $scope.newNoteExpandend = false;
+        //save the new list
+        var communication = communicationService.getCommunication();
+        communication.children = $scope.childrenCommunicationDelivery;
+        dataServerService.modifyCommunication($scope.schoolProfile.schoolId, communicationService.getCommunication().coomunicationId, communication).then(function (data) {
+            Toast.show($filter('translate')('communication_modified'), 'bottom', 'short');
+        }, function (data) {
+            Toast.show($filter('translate')('communication_not_modified'), 'bottom', 'short');
 
+        });
+    }
     $scope.data = {
         communication: null
     };
@@ -65,11 +83,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
                 title: $filter('translate')('new_note_fail'),
                 scope: $scope,
                 buttons: [
-                    { text: $filter('translate')('cancel') },
+                    {
+                        text: $filter('translate')('cancel')
+                    },
                     {
                         text: '<b>' + $filter('translate')('retry') + '</b>',
                         type: 'button-positive',
-                        onTap: function(e) {
+                        onTap: function (e) {
                             $scope.sendNewNote();
                         }
                     }
@@ -165,11 +185,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
             $scope.selectedPeriod = getPeriodToNow();
 
             dataServerService.getSections($scope.schoolProfile.schoolId).then(function (data) {
-                $scope.sections = data;
-                $scope.section = $scope.sections[0];
-                sectionService.setSection(0);
-                $scope.getChildrenByCurrentSection();
-                $scope.loadNotes();
+                if (data != null) {
+                    $scope.sections = data;
+                    $scope.section = $scope.sections[0];
+                    sectionService.setSection(0);
+                    $scope.getChildrenByCurrentSection();
+                    $scope.loadNotes();
+                }
             })
             dataServerService.getTeachers($scope.schoolProfile.schoolId).then(function (data) {
                 teachersService.setTeachers(data);
@@ -179,12 +201,24 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
                 console.log($scope.selectedTeacher);
             });
             communicationService.getCommunicationsFromServer($scope.schoolProfile.schoolId).then(function (data) {
-                $scope.communications = data;
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].doCheck) {
+                        $scope.communications.push(data[i]);
+                    }
+                }
                 //check if parameter is sent otherwise take the first
                 /*$scope.data.communication = $scope.communications[0].communicationId;
                 $scope.changeCommunication($scope.data.communication);*/
             });
         });
+        if (communicationService.getToCheck()) {
+            //expand side menu on communication
+            $scope.openCommunications();
+            $scope.data = {
+                communication: communicationService.getCommunication().communicationId
+            };
+            $scope.childrenCommunicationDelivery = communicationService.getCommunication().children;
+        }
     };
 
     $scope.openParentsNotes = function () {
@@ -274,10 +308,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
             });
             babyConfigurationService.getBabyConfigurationById($scope.schoolProfile.schoolId, $scope.section.children[i].kidId).then(function (configuration) {
                 $scope.childrenConfigurations.push(configuration);
-            });/*
-            babyConfigurationService.getBabyNotesById($scope.schoolProfile.schoolId, $scope.section.children[i].childrenId).then(function (notes) {
-                $scope.childrenNotes.push(notes);
-            });*/
+            });
+            /*
+                        babyConfigurationService.getBabyNotesById($scope.schoolProfile.schoolId, $scope.section.children[i].childrenId).then(function (notes) {
+                            $scope.childrenNotes.push(notes);
+                        });*/
         };
     }
     var getAllChildren = function () {
@@ -363,18 +398,18 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         dataServerService.getKidsNotesBySectionIds($scope.schoolProfile.schoolId, sectionsIdsArray).then(function (data) {
             $scope.parentNotes = data;
             $scope.parentNotes.forEach(function (note) {
-                    var found = false;
-                    var sectionChildrenIndex = 0;
-                    while (!found && sectionChildrenIndex < $scope.section.children.length) {
-                        if ($scope.section.children[sectionChildrenIndex].kidId === note.kidId) {
-                            var baby = {
-                                image: $scope.section.children[sectionChildrenIndex].image,
-                                name: $scope.section.children[sectionChildrenIndex].childrenName
-                            }
-                            note.kid = baby;
+                var found = false;
+                var sectionChildrenIndex = 0;
+                while (!found && sectionChildrenIndex < $scope.section.children.length) {
+                    if ($scope.section.children[sectionChildrenIndex].kidId === note.kidId) {
+                        var baby = {
+                            image: $scope.section.children[sectionChildrenIndex].image,
+                            name: $scope.section.children[sectionChildrenIndex].childrenName
                         }
-                        sectionChildrenIndex++;
+                        note.kid = baby;
                     }
+                    sectionChildrenIndex++;
+                }
             });
         });
     }

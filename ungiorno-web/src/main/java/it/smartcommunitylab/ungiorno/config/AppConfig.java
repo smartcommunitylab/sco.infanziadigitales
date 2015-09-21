@@ -53,7 +53,7 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 
 	@Bean
 	public MongoTemplate getMongo() throws UnknownHostException, MongoException {
-		return new MongoTemplate(new MongoClient("localhost",37017), dbName);
+		return new MongoTemplate(new MongoClient(), dbName);
 	}
 
 	@Bean

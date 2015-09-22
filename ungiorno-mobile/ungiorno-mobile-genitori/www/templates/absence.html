@@ -1,18 +1,16 @@
-<ion-view id="absence">
+<ion-view id="absence" title="{{'absence' | translate}}" >
     <ion-nav-bar class="bar bar-ungiorno">
         <ion-nav-back-button>
         </ion-nav-back-button>
         <ion-nav-buttons side="right">
-            <button class="button" ng-click="">
-                invia
-            </button>
+            <button class="button icon button-clear inf_digcheck" ng-click="send()"></button>
         </ion-nav-buttons>
     </ion-nav-bar>
     <ion-content has-header="true" class="page-padding">
-        <h5 class="accent-color input-description-padding"><b>Periodo:</b></h5>
+        <h5 class="accent-color input-description-padding">{{'period' | translate}}:</h5>
         <div class="row">
             <div class="col col-20">
-                <h5>Da:</h5>
+                <h5>{{'period_from' | translate}}:</h5>
             </div>
             <div class="col">
                 <input type="date" ng-model="illness.dateFrom"/>
@@ -21,19 +19,19 @@
 
         <div class="row">
             <div class="col col-20">
-                <h5>A:</h5>
+                <h5>{{'period_to' | translate}}:</h5>
             </div>
             <div class="col">
                 <input type="date" ng-model="illness.dateTo"/>
             </div>
         </div>
 
-        <h5 class="accent-color input-description-padding"><b>Motivazione:</b></h5>
+        <h5 class="accent-color input-description-padding"><b>{{'reason' | translate}}:</b></h5>
 
         <ion-list>
             <ion-checkbox class="item item-checkbox delegate" ng-value="illness" name="radio" ng-click="openModal(false)">{{selectedIllness}}</ion-checkbox>
             <ion-checkbox class="item item-checkbox delegate" ng-value="{{item.typeid}}" ng-repeat="item in babyProfile.absenceTypes" name="radio" ng-click="setIllness(false, item)">{{item.type}}</ion-checkbox>
-            <ion-checkbox class="item item-checkbox delegate" ng-value="other" name="radio" ng-click="setIllness(true)">Altro...</ion-checkbox>
+            <ion-checkbox class="item item-checkbox delegate" ng-value="other" name="radio" ng-click="setIllness(true)">{{'reason_other' | translate}}</ion-checkbox>
         </ion-list>
 
         <label class="item item-input">

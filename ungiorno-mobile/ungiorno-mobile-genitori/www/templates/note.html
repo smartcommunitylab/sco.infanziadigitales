@@ -10,11 +10,11 @@
 
 	<ion-content class="page-padding" has-header="true">
 		<div>
-			<h5 class="accent-color input-description-padding"><b>{{'date' | translate}}:</b></h5>
-            	<input type="date" ng-model="note.date" class="input-padding" required>
+			<div class="accent-color input-description-padding">{{'date' | translate}}:</div>
+            <input type="date" ng-model="note.date" class="input-padding" required>
 
-            	<h5 class="accent-color input-description-padding"><b>{{'text' | translate}}:</b></h5>
-            		<input type="text" ng-model="note.description" class="input-padding" required>
+            <div class="accent-color input-description-padding">{{'text' | translate}}:</div>
+            <textarea ng-model="note.description" class="input-padding" required/>
 		</div>
 	</ion-content>
 </ion-view>

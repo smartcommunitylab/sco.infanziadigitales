@@ -4,3 +4,7 @@ Aqua light: #B2DFDB
 
 ActionBar e TabBar e Icon Gallery BG: #009688
 CurrentTab e Buttons: #01B2C4
+
+#009AA8 
+#5FC3DF
+#F8AB11 

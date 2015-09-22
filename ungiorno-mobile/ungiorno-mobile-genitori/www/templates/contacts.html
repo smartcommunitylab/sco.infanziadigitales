@@ -1,10 +1,4 @@
-<div class="modal">
-    <ion-header-bar>
-        <h1 class="title" class="row responsive-sm" class="row row-center">{{'contact_school' | translate}}</h1>
-    </ion-header-bar>
-    <ion-content style="margin-left:10px; margin-right:10px;">
-        <a class="button row row-center button button-positive" ng-click="call(34343434)">{{'call' | translate}}</a>
-        <br/>
-        <button class="row row-center button button-positive" ng-click="modal.hide()" ui-sref="app.addnote">{{'send_note' | translate}}</button>
-    </ion-content>
+<div>
+    <button class="button button-block button-norm" ng-click="call()">{{'call' | translate}}</button>
+    <button class="button button-block button-norm" ng-click="createNote()">{{'send_note' | translate}}</button>
 </div>

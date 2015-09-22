@@ -1,12 +1,323 @@
 /* Empty. Add your own CSS if you like */
 
-body {
-    /*padding: 0;
-    margin: 0;
-    height: 100%;
-    width: 100%;*/
-    /*font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;*/
+.leftmenu {
+    background-color: #5FC3DF;
 }
+
+.menu-profile {
+    background-color: #009BA9 !important;
+}
+.menu-profile h2 {
+    color: white !important;
+    line-height: 40px;
+}
+
+.menu-profile-open {
+    background-color: #009BA9 !important;
+    padding-right: 8px;
+}
+.menu-profile-open button {
+    color: white !important;
+    min-height: 16px !important;
+   line-height: 18px !important;
+}}
+.menu-profile-open button .icon::before{
+    line-height: 18px !important;
+}
+
+
+.menu-profile button {
+    min-height: 40px !important;
+    top: 16px !important;
+    color: white !important;
+
+}
+.leftmenu .item-icon-left i::before {
+    font-size: 24px;
+}
+
+a.item-content {
+    background-color: #5FC3DF !important;
+}
+.leftmenu .item, .leftmenu .item p {
+    background-color: #5FC3DF;
+    color: #ffffff;
+    border: 0;
+}
+
+.leftmenu .icon-light::before {
+    color: #ffffff !important;
+}
+
+.bar-ungiorno, .bar-ungiorno h1 {
+    background-color: #009BA9 !important;
+    color: #ffffff;
+}
+
+.bar-ungiorno .button-clear .icon::before{
+    color: #ffffff;
+}
+
+.home-area {
+    padding: 8px 16px;
+}
+
+.home-info {
+    background-color: #009BA9;
+    color: #ffffff;
+    padding: 0px 16px;
+}
+
+.button-home {
+    min-height: 150px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: auto;
+    margin-bottom: 0px !important;
+    border: 0px;
+    background-color: transparent;
+}
+
+.button-home-wrapper span {
+    text-transform: uppercase;
+    text-align: center;
+    display: block;
+    color: #ffffff;
+    font-size: 22px;
+    padding-bottom: 8px;
+}
+
+.button-norm {
+    background-color: #5FC3DF;
+    color: #ffffff;
+    border: 0;
+}
+.button-norm:hover {
+    color: #ffffff;
+}
+
+.button-alrt {
+    background-color: #FFAD00;
+}
+
+.home-comm {
+    padding-bottom: 8px;
+}
+
+.home-info-title {
+    font-size: 24px;
+    color: #FFAD00;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: #FFAD00;
+    padding-bottom: 4px;
+    margin-bottom: 16px;
+}
+
+.home-info-content {
+    margin-bottom: 16px;
+}
+
+.popup-head {
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: #FFAD00;
+}
+.popup-head .popup-title {
+    color: #FFAD00;
+}
+
+input[type=text], textarea {
+    border-bottom: 1px solid #B0B0B0;
+    width: 100%;
+}
+
+input[type=date], input[type=time]{
+    border-bottom: 1px solid #B0B0B0;
+}
+
+.input-description-padding {
+    margin-top: 24px;
+    color: #FFAD00;
+    font-weight: bold;
+
+}
+
+.input-description-padding i {
+    color: #000000;
+}
+
+.form-container {
+    padding: 16px;
+}
+
+.padlist .item {
+    border: 0px;
+    background-color: transparent;
+}
+
+input:checked+.checkbox-icon:before {
+    background-color: #5FC3DF !important;
+    border-color: #5FC3DF !important;
+}
+
+.item-radio input:checked~.item-content {
+    background: none;
+}
+
+.delegate-label, .delegate-field {
+    color: #A5A5A5;
+    text-align: right;
+    font-size: 14px;
+}
+.delegate-label.description {
+    padding-right: 16px;
+}
+
+.delegate-field.add-image {
+    margin-left: 15px;
+    color: #5FC3DF;
+    font-weight: normal;
+}
+
+.item.item-checkbox.delegate {
+    font-size: 14px;
+    border-color: transparent;
+    margin-top: -5px;
+}
+
+.item.item-checkbox.delegate.no-bold {
+    font-weight: normal;
+}
+
+.item-input {
+    border-width: 0px;
+}
+
+.calendar-background {
+    background: #ededed;
+}
+
+.canteen-header {
+    background: #009AA8;
+    color: #ffffff !important;
+}
+
+.canteen-header i{
+    color: #ffffff !important;
+}
+.canteen.daily-description {
+    background: #F8AB11;
+    width: 100%;
+    padding: 8px;
+    display: block;
+}
+
+.canteen.item {
+    margin: 0;
+    border: 0;
+}
+
+.canteen.item p {
+    color: #000;
+}
+
+.canteen.form-container .input-description-padding {
+    border-top: 1px solid #B0B0B0;
+    padding-top: 8px;
+}
+
+.calendar-monthly-day-text {
+    text-align: center;
+    background-color: #F8AB11;
+}
+
+.canteen.day {
+    border: 0;
+    padding: 0;
+}
+
+.calendar-monthly-day-foods {
+    min-height: 40px;
+}
+
+.calendar-day-not-current-month .calendar-monthly-day-text{
+    color: #fff;
+}
+.calendar-day-not-current-month {
+    background-color: transparent;
+}
+
+.calendar-today-cell .calendar-monthly-day-text {
+    font-weight: bold;
+}
+
+.row .calendar.day {
+    border-right-style: solid;
+    border-right-width: 2px;
+    border-right-color: #F8AB11;
+}
+
+
+.canteen-weekly-data-container {
+    border-left: 3px solid #F8AB11;
+
+}
+
+
+
+
+.canteen.col-description {
+    text-align: center;
+    font-size: 16px;
+    height: 25px;
+    margin-top: 5px;
+}
+
+.canteen.food-description {
+    text-align: center;
+}
+
+.canteen.weekly-date {
+    margin-left: 10px;
+}
+
+.canteen.daily-text {
+    margin-left: 10px;
+}
+
+.canteen.food-image-parent {
+    text-align: center;
+}
+
+.canteen.food-image {
+    font-size: 32px;
+}
+
+/*
+.canteen.day-container {
+    text-align: center;
+    background: #93DAF2;
+    border-right: 3px solid #2DAAE1;
+    border-left: 3px solid #2DAAE1;
+}
+*/
+.canteen.foods-separator {
+    width: 100%;
+    height: 2px;
+    background-color: pink;
+}
+
+.canteen.food-container {
+    min-height: 40px;
+}
+
+
+
+
+
+
+
 
 .modal-backdrop .modal-backdrop-bg {
     -webkit-transition: opacity 300ms ease-in-out;
@@ -34,10 +345,6 @@ body {
     margin-bottom: 20px;
 }
 
-.input-description-padding {
-    margin-top: 24px;
-}
-
 .input-padding {
     padding-left: 0;
     padding-right: 0;
@@ -49,28 +356,6 @@ body {
     width: 50px;
 }
 
-.delegate-label {
-    color: #A5A5A5;
-    text-align: right;
-    width: 75%;
-}
-
-.delegate-field {
-    color: #A5A5A5;
-    text-align: right;
-    width: 80%;
-}
-
-.delegate-field.description {
-    font-size: 12px;
-    margin-top: 0px;
-    margin-bottom: -10px;
-}
-
-.delegate-field.add-image {
-    margin-top: 0px;
-    margin-left: 15px;
-}
 
 .delegate-input {
     text-align: center;
@@ -82,21 +367,6 @@ body {
     padding-right: 0;
 }
 
-.item.item-checkbox.delegate {
-    font-size: 12px;
-    font-weight: bold;
-    border-color: transparent;
-    margin-top: -5px;
-}
-
-.item.item-checkbox.delegate.no-bold {
-    font-weight: normal;
-}
-
-input[type=text] {
-    border-bottom: 1px solid #B0B0B0;
-    width: 100%;
-}
 
 .icon.ion-image.gallery {
     margin-left: 15px;
@@ -171,73 +441,6 @@ input[type=text] {
     display: inline-block;
 }
 
-.calendar-background {
-    background: #C8C8CD;
-}
-
-.calendar-day-background {
-    background: #FFFFFF;
-}
-
-.canteen.col-description {
-    text-align: center;
-    font-size: 16px;
-    height: 25px;
-    margin-top: 5px;
-}
-
-.canteen.food-description {
-    text-align: center;
-}
-
-.canteen.weekly-date {
-    margin-left: 10px;
-}
-
-.canteen.daily-description {
-    background: #93DAF2;
-    font-weight: bold;
-    width: 100vh;
-}
-
-.canteen.daily-text {
-    margin-left: 10px;
-}
-
-.canteen.food-image-parent {
-    text-align: center;
-}
-
-.canteen.food-image {
-    font-size: 32px;
-}
-
-.canteen.day-container {
-    text-align: center;
-    background: #93DAF2;
-    border-right: 3px solid #2DAAE1;
-    border-left: 3px solid #2DAAE1;
-}
-
-.canteen.foods-separator {
-    width: 100%;
-    height: 2px;
-    background-color: pink;
-}
-
-.canteen.day {
-    border: 1px solid;
-}
-
-.calendar-today-cell {
-    background-color: #DBE2E5;
-    border: 2px solid !important;
-}
-
-.calendar-day-not-current-month {
-    background-color: #e3e3e3;
-    color: #606060;
-}
 
 p {
     -webkit-margin-before: 0em;
@@ -1119,14 +1322,6 @@ ul.rating {
     padding-left: 126px;
 }
 
-.menu,
-.view,
-.item,
-.item > a {
-    background: transparent;
-    background-color: transparent !important;
-}
-
 .social-numbers i {
     font-size: 24px;
     /*2em;*/
@@ -1157,10 +1352,6 @@ ul.rating {
 .title.vote-title {
     text-align: center;
     margin: 15px;
-}
-
-.item-input {
-    border-width: 0px 0px 1px 0px;
 }
 
 .credits_title {
@@ -1221,9 +1412,6 @@ ul.rating {
     height: 50px;
 }
 
-.button-home {
-    height: 100px;
-}
 
 .home_informations {
     margin: 10px;
@@ -1252,17 +1440,6 @@ select {
     padding: .5rem 0;
 }
 
-#babysettingcell {
-    padding: 5% 0;
-}
-
-#babysetting {
-    padding: 10% 0;
-}
-
-.padlist>.list {
-    padding: 10px;
-}
 
 .item-select.setting {
     border-bottom-width: 0px;

@@ -1,21 +1,13 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.calendar', [])
 
-.controller('CalendarCtrl', function ($scope, moment, dataServerService, profileService, $http, $ionicModal) {
+.controller('CalendarCtrl', function ($scope, moment, dataServerService, profileService, $http, $ionicPopup, $filter) {
     var counter = 1;
     var month = moment().locale('it');
-    var displayParentsCalendar = true;
+    $scope.displayParentsCalendar = true;
     // Note: when an appointment "forWhom" field is set as "all", that will be added to both parents and kid calendar
     var babyProfile = profileService.getBabyProfile();
     var parentsAppointments = [];
     var kidAppointments = [];
-
-    // change view modal
-    $ionicModal.fromTemplateUrl('templates/changeCalendarViewModal.html', {
-        scope: $scope,
-        animation: 'slide-in-up'
-    }).then(function (modal) {
-        $scope.modal = modal
-    })
 
     function getMonthDateRange(year, month) {
         var startDate = moment([year, month - 1]);
@@ -56,8 +48,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 for (var i = 0; i < paddingFirstWeek; i++) {
                     week.push({
                         dayDate: 0,
-                        background: "#C8C8CD",
-                        color: "#C8C8CD"
+                        background: "#ededed",
+                        color: "#ededed"
                     });
                 }
 
@@ -97,8 +89,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 for (var i = 0; i < daysMissing; i++) {
                     week.push({
                         dayDate: 0,
-                        background: "#C8C8CD",
-                        color: "#C8C8CD"
+                        background: "#ededed",
+                        color: "#ededed"
                     });
                 }
             }
@@ -153,7 +145,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 for (var j = 0; j < $scope.month[i].length; j++) {
                     var thisDay = $scope.month[i][j];
 
-                    if (displayParentsCalendar) {
+                    if ($scope.displayParentsCalendar) {
                         // Find appointments on parents calendar
                         var appointmentsForToday = getAppointmentsPerDay(thisDay, parentsAppointments);
                     } else {
@@ -249,7 +241,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
     $scope.getBorderColor = function (day) {
         var today = new Date();
-        if (day.dayDate === 0) return false;
+        if (day.dayDate === 0) return 'transparent';
         return today.getDate() === day.dayDate.getDate() &&
             today.getMonth() === day.dayDate.getMonth() &&
             today.getFullYear() === day.dayDate.getFullYear() ? '#000000' : 'transparent';
@@ -264,7 +256,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         }
         if (day.dayDate === 0) return false; //workaround, blank cells are 0 dayEvent.
         $scope.selectedDay = day;
-        if (displayParentsCalendar) {
+        if ($scope.displayParentsCalendar) {
             $scope.daysAppointments = getAppointmentsPerDay(day, parentsAppointments);
         } else {
             $scope.daysAppointments = getAppointmentsPerDay(day, kidAppointments);
@@ -274,21 +266,24 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
     $scope.openModal = function () {
         $scope.options = [
-   'parents',
-   'kid'
-  ];
-
-        $scope.modal.show();
-    };
+           'parents',
+           'kid'
+        ];
+        $scope.typePopup = $ionicPopup.show({
+            templateUrl: 'templates/changeCalendarViewModal.html',
+            title: $filter('translate')('show_type'),
+            scope: $scope
+          });
+    }
 
     $scope.changeView = function (item) {
         if (item == $scope.options[0]) {
-            displayParentsCalendar = true;
+            $scope.displayParentsCalendar = true;
         } else {
-            displayParentsCalendar = false;
+            $scope.displayParentsCalendar = false;
         }
         $scope.viewAppointmentsPerDay($scope.selectedDay);
         $scope.initialize();
-        $scope.modal.hide();
+        $scope.typePopup.close();
     };
 });

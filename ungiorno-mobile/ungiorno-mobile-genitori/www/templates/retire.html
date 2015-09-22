@@ -5,15 +5,13 @@
 
         <!-- Send server button -->
         <ion-nav-buttons side="right">
-            <button class="button" ng-click="send()">
-                <i class="icon ion-android-done"></i>
-            </button>
+            <button class="button icon button-clear inf_digcheck" ng-click="send()"></button>
         </ion-nav-buttons>
     </ion-nav-bar>
 
     <ion-content class="page-padding" has-header="true">
         <div>
-
+            <div class="form-container">
             <!-- Date -->
             <h5 class="accent-color input-description-padding"><b>{{'date' | translate}}:</b></h5>
             <input type="date" ng-model="temporary.date" class="input-padding" required>
@@ -25,7 +23,7 @@
 
             <!-- Who takes baby -->
             <h5 class="accent-color input-description-padding"><b>{{'who_takes_baby' | translate}}</b></h5>
-            <p class="delegate-label description">{{'delegate_status' | translate}}</p>
+            <p class="delegate-label description">{{'delegate_status' | translate}}:</p>
             <ion-list>
                 <ion-list class="padlist">
                     <ion-checkbox ng-repeat="item in retirePersons" ng-model="item.checked" ng-checked="item.checked" ng-change="selectPerson(item)">
@@ -39,11 +37,12 @@
             </ion-list>
 
             <div class="delegate-input">
-                <button ng-click="setRetire()" ui-sref="app.authorization">{{'nav_delegate' | translate}}</button>
+                <button class="button button-norm" ng-click="setRetire()" ui-sref="app.authorization">{{'nav_delegate' | translate}}</button>
             </div>
 
             <h5 class="accent-color input-description-padding"><b>{{'note' | translate}}:</b></h4>
-            <input id="note" ng-model="temporary.note" type="text" placeholder="{{'note_description' | translate}}">
+            <textarea id="note" ng-model="temporary.note" placeholder="{{'note_description' | translate}}"/>
+            </div>
         </div>
 
     </ion-content>

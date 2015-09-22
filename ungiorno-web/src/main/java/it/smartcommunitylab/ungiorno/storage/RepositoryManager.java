@@ -304,7 +304,9 @@ public class RepositoryManager {
 		absence.setDateTo(timestampToDate(absence.getDateTo()));
 
 		Query q = kidQuery(absence.getAppId(), absence.getSchoolId(), absence.getKidId());
-		q.addCriteria(new Criteria("dateFrom").gte(absence.getDateFrom()).and("dateFrom").lte(absence.getDateTo()));
+		q.addCriteria(new Criteria().andOperator(
+				new Criteria("dateFrom").gte(absence.getDateFrom()),
+				new Criteria("dateFrom").lte(absence.getDateTo())));
 		template.remove(q, KidCalFermata.class);
 		
 		Calendar c = Calendar.getInstance();

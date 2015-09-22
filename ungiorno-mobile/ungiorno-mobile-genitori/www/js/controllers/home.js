@@ -204,27 +204,35 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                                 $scope.kidConfiguration = config;
                                 configurationService.setBabyConfiguration(config);
                             }
+                            dataServerService.getAbsence($scope.kidProfile.schoolId, $scope.kidProfile.kidId, new Date().getTime()).then(function (data) {
+                                if (data.data == null) {
+                                    $scope.isPresent = true;
 
-                            if (($scope.kidProfile.services.anticipo.enabled && !$scope.kidConfiguration) || ($scope.kidProfile.services.anticipo.enabled && $scope.kidConfiguration.services.anticipo.active)) {
-                                $scope.fromTime = $scope.school.anticipoTiming.fromTime;
-                            } else {
-                                $scope.fromTime = $scope.school.regularTiming.fromTime;
-                            }
+                                    if (($scope.kidProfile.services.anticipo.enabled && !$scope.kidConfiguration) || ($scope.kidProfile.services.anticipo.enabled && $scope.kidConfiguration.services.anticipo.active)) {
+                                        $scope.fromTime = $scope.school.anticipoTiming.fromTime;
+                                    } else {
+                                        $scope.fromTime = $scope.school.regularTiming.fromTime;
+                                    }
 
-                            if ($scope.dailyRitiro) {
-                                $scope.toTime = new Date($scope.dailyRitiro.date).toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1").substr(0, 5);
-                            } else {
-                                if (!$scope.kidProfile.services.posticipo.enabled) {
-                                    $scope.toTime = profileService.getSchoolProfile().regularTiming.toTime;
+                                    if ($scope.dailyRitiro) {
+                                        $scope.toTime = new Date($scope.dailyRitiro.date).toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1").substr(0, 5);
+                                    } else {
+                                        if (!$scope.kidProfile.services.posticipo.enabled) {
+                                            $scope.toTime = profileService.getSchoolProfile().regularTiming.toTime;
+                                        } else {
+                                            $scope.toTime = profileService.getSchoolProfile().posticipoTiming.toTime;
+                                        }
+                                        if ($scope.dailyFermata) {
+                                            $scope.toTime = $scope.toTime + " con il servizio bus";
+                                        }
+                                    }
                                 } else {
-                                    $scope.toTime = profileService.getSchoolProfile().posticipoTiming.toTime;
-                                }
-                                if ($scope.dailyFermata) {
-                                    $scope.toTime = $scope.toTime + " con il servizio bus";
-                                }
-                            }
+                                    //il ragazzo e' assente
+                                    $scope.isPresent = false;
 
-                            buildHome();
+                                }
+                                buildHome();
+                            });
                         });
                     });
                 });

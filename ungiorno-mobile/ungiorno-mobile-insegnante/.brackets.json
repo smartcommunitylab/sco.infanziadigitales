@@ -19,6 +19,16 @@
         "/home/chin8/Documents/work/InfanziaDigitales/code/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-genitori/www/js/controllers/home.js",
         "/home/chin8/Documents/work/InfanziaDigitales/code/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-genitori/platforms/android/cordova/lib/build.js",
         "/home/chin8/Documents/work/InfanziaDigitales/code/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-genitori/www/js/services/profileService.js",
-        "/home/chin8/Documents/work/InfanziaDigitales/code/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-genitori/www/js/services/configurazionService.js"
+        "/home/chin8/Documents/work/InfanziaDigitales/code/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-genitori/www/js/services/configurazionService.js",
+        "/home/chin8/Documents/work/InfanziaDigitales/code/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-insegnante/www/js/services/schoolService.js",
+        "/home/chin8/Documents/work/InfanziaDigitales/code/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-insegnante/platforms/android/cordova/lib/android_sdk_version.js",
+        "/home/chin8/Documents/work/InfanziaDigitales/code/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-insegnante/www/js/controllers/login.js",
+        "/home/chin8/Documents/work/InfanziaDigitales/code/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-insegnante/www/js/controllers/home.js",
+        "/home/chin8/Documents/work/InfanziaDigitales/code/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-insegnante/www/js/services/dataServerService.js",
+        "/home/chin8/Documents/work/InfanziaDigitales/code/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-insegnante/www/js/controllers/notesCtrl.js",
+        "/home/chin8/Documents/work/InfanziaDigitales/code/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-insegnante/www/js/controllers/busCtrl.js",
+        "/home/chin8/Documents/work/InfanziaDigitales/code/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-insegnante/www/js/controllers/communicationsCtrl.js",
+        "/home/chin8/Documents/work/InfanziaDigitales/code/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-insegnante/gulpfile.js",
+        "/home/chin8/Documents/work/InfanziaDigitales/code/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-insegnante/platforms/android/cordova/lib/emulator.js"
     ]
 }

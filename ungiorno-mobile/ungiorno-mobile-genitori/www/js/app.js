@@ -290,7 +290,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         show_type: "Tipo visualizzazione",
         daily: "Giornaliera",
         weekly: "Settimanale",
-        monthly: "Mensile"
+        monthly: "Mensile",
+        absence_date_wrong: "La data d'inizio dell'assenza succede quella della fine. Modificare le date.",
+        assenza_sendok: 'Assenza inviata con successo',
+        assenza_sendno: 'Assenza non inviata',
+        absence_choose: 'Selezionare un motivo dell\'assenza'
     });
 
     $translateProvider.translations('en', {
@@ -374,7 +378,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         show_type: "Tipo visualizzazione",
         daily: "Giornaliera",
         weekly: "Settimanale",
-        monthly: "Mensile"
+        monthly: "Mensile",
+        absence_date_wrong: "La data d'inizio dell'assenza succede quella della fine. Modificare le date.",
+        assenza_sendok: 'Assenza inviata con successo',
+        assenza_sendno: 'Assenza non inviata',
+        absence_choose: 'Selezionare un motivo dell\'assenza'
     });
 
     $translateProvider.translations('de', {
@@ -458,7 +466,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         show_type: "Tipo visualizzazione",
         daily: "Giornaliera",
         weekly: "Settimanale",
-        monthly: "Mensile"
+        monthly: "Mensile",
+        absence_date_wrong: "La data d'inizio dell'assenza succede quella della fine. Modificare le date.",
+        assenza_sendok: 'Assenza inviata con successo',
+        assenza_sendno: 'Assenza non inviata',
+        absence_choose: 'Selezionare un motivo dell\'assenza'
+
     });
 
     $translateProvider.preferredLanguage("it");

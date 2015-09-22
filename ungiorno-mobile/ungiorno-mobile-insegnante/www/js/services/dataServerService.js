@@ -110,12 +110,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
 
     dataServerService.getKidsNotesByKidId = function (schoolId, kidId) {
         var deferred = $q.defer();
+        var date = new Date().setHours(0, 0, 0, 0);
 
         $http({
             method: 'GET',
             url: Config.URL() + '/' + Config.app() + '/student/' + Config.appId() + '/' + schoolId + '/' + kidId + '/notes',
             params: {
-                date: new Date().getTime()
+                date: date
             },
             headers: {
                 'Accept': 'application/json'
@@ -142,12 +143,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
             }
             commaSeparatedIds += sectionIds[sectionIds.length - 1];
         }
-
+        var date = new Date().setHours(0, 0, 0, 0);
         $http({
             method: 'GET',
             url: Config.URL() + '/' + Config.app() + '/student/' + Config.appId() + '/' + schoolId + '/notes',
             params: {
-                date: new Date().getTime(),
+                date: date,
                 sectionIds: commaSeparatedIds
             },
             headers: {

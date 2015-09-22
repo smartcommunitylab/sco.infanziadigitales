@@ -246,7 +246,7 @@ public class KidController {
 					n.setPersonId(parent.getPersonId());
 				}
 			} else if (note.getSchoolNotes() != null && !note.getSchoolNotes().isEmpty()) {
-				Teacher teacher = storage.getTeacher(getUserId(), appId, schoolId);
+				Teacher teacher = storage.getTeacher(getTeacherUserId(), appId, schoolId);
 				if (teacher == null) throw new IllegalArgumentException("No teacher registered");
 				for (Note n : note.getSchoolNotes()) {
 					n.setPersonId(teacher.getTeacherId());
@@ -294,5 +294,12 @@ public class KidController {
 		return "marco@gmail.com";
 	}
 
+	/**
+	 * @return
+	 */
+	private String getTeacherUserId() {
+		// TODO Auto-generated method stub
+		return "giulia.puccini@gmail.com";
+	}
 
 }

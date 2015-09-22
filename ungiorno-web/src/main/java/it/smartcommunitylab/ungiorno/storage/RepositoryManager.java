@@ -316,7 +316,7 @@ public class RepositoryManager {
 		
 		Calendar c = Calendar.getInstance();
 		c.setTimeInMillis(absence.getDateFrom());
-		while (c.getTimeInMillis() < absence.getDateTo()) {
+		while (c.getTimeInMillis() <= absence.getDateTo()) {
 			// delete bus stop and ritiro for that day
 			q = kidQuery(absence.getAppId(), absence.getSchoolId(), absence.getKidId());
 			q.addCriteria(new Criteria("date").is(c.getTimeInMillis()));

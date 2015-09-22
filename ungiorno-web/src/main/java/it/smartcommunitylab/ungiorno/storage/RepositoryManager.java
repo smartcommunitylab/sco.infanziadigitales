@@ -248,9 +248,14 @@ public class RepositoryManager {
 		q.addCriteria(new Criteria("date").is(stop.getDate()));
 		template.remove(q, KidCalFermata.class);
 		
+		// delete direct ritiro
 		q = kidQuery(stop.getAppId(), stop.getSchoolId(), stop.getKidId());
 		addDayCriteria(stop.getDate(), q);
 		template.remove(q, KidCalRitiro.class);
+		// delete absence for that date
+		q = kidQuery(stop.getAppId(), stop.getSchoolId(), stop.getKidId());
+		q.addCriteria(new Criteria("dateFrom").is(stop.getDate()));
+		template.remove(q, KidCalAssenza.class);
 		
 		template.save(stop);
 		return getKidConfig(stop.getAppId(), stop.getSchoolId(), stop.getKidId());
@@ -312,6 +317,13 @@ public class RepositoryManager {
 		Calendar c = Calendar.getInstance();
 		c.setTimeInMillis(absence.getDateFrom());
 		while (c.getTimeInMillis() < absence.getDateTo()) {
+			// delete bus stop and ritiro for that day
+			q = kidQuery(absence.getAppId(), absence.getSchoolId(), absence.getKidId());
+			q.addCriteria(new Criteria("date").is(c.getTimeInMillis()));
+			template.remove(q, KidCalFermata.class);
+			template.remove(q, KidCalRitiro.class);
+
+			
 			KidCalAssenza copy = absence.copy();
 			copy.setDateFrom(c.getTimeInMillis());
 			copy.setDateTo(c.getTimeInMillis());
@@ -331,10 +343,15 @@ public class RepositoryManager {
 		addDayCriteria(ritiro.getDate(), q);
 		template.remove(q, KidCalRitiro.class);
 
+		// delete bus stop for that day
 		q = kidQuery(ritiro.getAppId(), ritiro.getSchoolId(), ritiro.getKidId());
 		q.addCriteria(new Criteria("date").is(timestampToDate(ritiro.getDate())));
 		template.remove(q, KidCalFermata.class);
-		
+		// delete ansence for that date
+		q = kidQuery(ritiro.getAppId(), ritiro.getSchoolId(), ritiro.getKidId());
+		q.addCriteria(new Criteria("dateFrom").is(timestampToDate(ritiro.getDate())));
+		template.remove(q, KidCalAssenza.class);
+
 		template.save(ritiro);
 		return getKidConfig(ritiro.getAppId(), ritiro.getSchoolId(), ritiro.getKidId());
 	}

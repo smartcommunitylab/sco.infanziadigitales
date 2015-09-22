@@ -278,7 +278,7 @@ public class RepositoryManager {
 	 */
 	public KidCalAssenza getAbsence(String appId, String schoolId, String kidId, long date) {
 		Query q = kidQuery(appId, schoolId, kidId);
-		q.addCriteria(new Criteria("date").is(timestampToDate(date)));
+		q.addCriteria(new Criteria("dateFrom").is(timestampToDate(date)));
 		return template.findOne(q, KidCalAssenza.class);
 	}
 
@@ -307,7 +307,7 @@ public class RepositoryManager {
 		q.addCriteria(new Criteria().andOperator(
 				new Criteria("dateFrom").gte(absence.getDateFrom()),
 				new Criteria("dateFrom").lte(absence.getDateTo())));
-		template.remove(q, KidCalFermata.class);
+		template.remove(q, KidCalAssenza.class);
 		
 		Calendar c = Calendar.getInstance();
 		c.setTimeInMillis(absence.getDateFrom());

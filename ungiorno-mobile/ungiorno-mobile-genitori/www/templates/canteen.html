@@ -4,19 +4,17 @@
         </ion-nav-back-button>
 
         <ion-nav-buttons side="right">
-            <button class="button" ng-click="openChangeViewModal()">
-                <i class="icon ion-calendar"></i>
-            </button>
+	    	<button class="button button-outline icon-right ion-arrow-down-b" ng-click="openChangeViewModal()">{{displayMode  |translate}}</button>
 
             <button class="button" ng-click="openInfoModal()">
-                <i class="icon ion-information"></i>
+                <i class="icon inf_diginfo"></i>
             </button>
         </ion-nav-buttons>
     </ion-nav-bar>
 
     <ion-content has-header="true">
         <div>
-            <div class="row calendar-date calendar-background">
+            <div class="row calendar-date canteen-header">
                 <div class="col col-10 calendar-arrow">
                     <button class="calendar-arrow left" ng-click="previous()">
                         <i class="icon ion-ios-arrow-back"></i>
@@ -56,17 +54,17 @@
 
             <div style="background: {{day.background}}" class="row" ng-repeat="day in week" ng-show="displayMode == 'weekly'">
                 <div class="col col-25">
-                    <h4 class="canteen weekly-date">{{day.value | date:"EEEE dd"}}</h4>
+                    <h4 class="canteen weekly-date">{{day.value | date:"dd"}}</h4>
                 </div>
 
-                <div class="col">
+                <div class="col canteen-weekly-data-container">
                     <div ng-repeat="food in day.lunch">
                         <div class="canteen food-description">{{food.name}}</div>
                         <i class="col canteen food-description food-image icon {{food.icon}}"></i>
                     </div>
                 </div>
 
-                <div class="col">
+                <div class="col canteen-weekly-data-container">
                     <div ng-repeat="food in day.break">
                         <div class="canteen food-description">{{food.name}}</div>
                         <i class="col canteen food-description food-image icon {{food.icon}}"></i>
@@ -75,50 +73,63 @@
             </div>
 
             <!-- DAILY -->
-            <div class="row no-padding" ng-show="displayMode == 'daily'">
+            <div class="no-padding" ng-show="displayMode == 'daily'">
                 <ion-list>
-                    <div class="canteen daily-description">
+                    <div class="item canteen daily-description">
                         <p class="canteen daily-text">{{'lunch' | translate | uppercase}}</p>
                     </div>
-                    <div ng-repeat="food in day.lunch">
-                        <div class="canteen daily-text">{{food.name}}</div>
-                        <i class="col canteen food-image icon {{food.icon}}"></i>
+                    <div class="canteen food-container">
+                        <div ng-repeat="food in day.lunch">
+                            <div class="canteen daily-text">{{food.name}}</div>
+                            <i class="col canteen food-image icon {{food.icon}}"></i>
+                        </div>
                     </div>
-
-                    <div class="canteen daily-description">
+                    <div class="item canteen daily-description">
                         <p style="margin-top: 5px;" class="canteen daily-text">{{'break' | translate | uppercase}}</p>
                     </div>
-                    <div ng-repeat="food in day.break">
-                        <div class="canteen daily-text">{{food.name}}</div>
-                        <i class="col canteen food-image icon {{food.icon}}"></i>
+                    <div class="canteen food-container">
+                        <div ng-repeat="food in day.break">
+                            <div class="canteen daily-text">{{food.name}}</div>
+                            <i class="col canteen food-image icon {{food.icon}}"></i>
+                        </div>
                     </div>
                 </ion-list>
+                <div class="canteen form-container">
+                    <div class="input-description-padding">{{'note' | translate}}:</div>
+                </div>
             </div>
 
 
         <div class="calendarDisplay" ng-show="displayMode == 'monthly'">
+<!--
             <div class="row calendar-header">
                 <div class="canteen day-container col" ng-repeat="dayFood in calendarMatrix[0]">
                     {{dayFood.day | date:'EEEE' | capitalize}}
                 </div>
             </div>
+-->
 
-            <div class="row" ng-repeat="week in calendarMatrix">
-                <div class="calendar col canteen day" ng-repeat="dayFood in week" ng-class="{'calendar-today-cell': isToday(dayFood.day), 'calendar-day-not-current-month': isDayNotCurrentMonth(dayFood.day)}">
+            <div class="row calendar" ng-repeat="week in calendarMatrix">
+                <div class="calendar col canteen day" ng-repeat="dayFood in week" ng-class="{'calendar-today-cell': isToday(dayFood.day), 'calendar-day-not-current-month': isDayNotCurrentMonth(dayFood.day)}" style="{{$index == 4 ? 'border:0;':''}}">
                     <div class="calendar-monthly-day-text">{{dayFood.day | date:"dd"}}</div>
-                    <div class="row canteen food-image-parent" ng-repeat="foodsRow in dayFood.foods.lunch">
-                        <div class="col canteen food-image" ng-repeat="food in foodsRow">
-                            <i class="icon {{food.icon}}"></i>
+                    <div class="calendar-monthly-day-foods">
+                        <div class="row canteen food-image-parent" ng-repeat="foodsRow in dayFood.foods.lunch">
+                            <div class="col canteen food-image" ng-repeat="food in foodsRow">
+                                <i class="icon {{food.icon}}"></i>
+                            </div>
                         </div>
-                    </div>
-                    <div class="canteen foods-separator"></div>
-                    <div class="row canteen food-image-parent" ng-repeat="foodsRow in dayFood.foods.break">
-                        <div class="col canteen food-image" ng-repeat="food in foodsRow">
-                            <i class="icon {{food.icon}}"></i>
+                        <div class="row canteen food-image-parent" ng-repeat="foodsRow in dayFood.foods.break">
+                            <div class="col canteen food-image" ng-repeat="food in foodsRow">
+                                <i class="icon {{food.icon}}"></i>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="canteen form-container">
+                <div class="input-description-padding">{{'note' | translate}}:</div>
+            </div>
+
         </div>
 
         </div>

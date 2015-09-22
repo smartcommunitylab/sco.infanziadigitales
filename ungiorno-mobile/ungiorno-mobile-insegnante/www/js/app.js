@@ -310,7 +310,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
         no_communications: "Nessuna comunicazione",
         no_notes_today: "Nessuna nota oggi",
         communication_modified: "Modifica registrata con successo",
-        communication_not_modified: "La modifica non è stata registrata"
+        communication_not_modified: "La modifica non è stata registrata",
+profile_no_notes: "Nessuna nota presente"
 
 
     });

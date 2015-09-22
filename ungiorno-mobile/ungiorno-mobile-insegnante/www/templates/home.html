@@ -7,7 +7,7 @@
             <i class="icon ion-android-alarm-clock"></i>
         </button>
         <button style="color:black" class="button" ng-if="viewClose()" ng-click="closeNotesAndComm()">{{'close' | translate | uppercase}}</button>
-        <button style="color:black" class="button" ng-if="viewClose()" ng-click="saveNotesAndComm()">{{'save' | translate | uppercase}}</button>
+        <button style="color:black" class="button" ng-if="viewClose() && communicationExpanded " ng-click="saveNotesAndComm()">{{'save' | translate | uppercase}}</button>
 
     </ion-nav-buttons>
     <ion-content has-header="true">
@@ -115,7 +115,7 @@
                         <ion-list>
                             <ion-item class="item-text-complete" ng-repeat="babyWithNotes in parentNotes track by $index">
                                 <img class="notes-baby-image" ng-src="{{babyWithNotes.kid.image}}"></img>
-                                <div class="notes-baby-name inline" ng-click="openDetail(babyWithNotes)">{{babyWithNotes.kid.name}}</div>
+                                <div class="notes-baby-name inline" ng-click="openDetailById(babyWithNotes.kidId)">{{babyWithNotes.kid.name}}</div>
                                 <ion-item class="item-text-complete" ng-repeat="note in babyWithNotes.parentNotes">{{note.note}}</ion-item>
                             </ion-item>
                         </ion-list>

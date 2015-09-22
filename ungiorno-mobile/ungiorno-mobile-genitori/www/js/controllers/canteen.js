@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.canteen',  [])
 
-.controller('CanteenCtrl', function ($scope, moment, canteenService, dataServerService, $ionicModal, $filter) {
+.controller('CanteenCtrl', function ($scope, moment, canteenService, dataServerService, $ionicModal, $filter, $ionicPopup) {
     // Can be weekly, monthly or daily
     $scope.displayMode = 'monthly'; 
 
@@ -41,13 +41,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         }
 	};
 
-	// change view modal
-	$ionicModal.fromTemplateUrl('templates/changeCalendarViewModal.html', {
-		scope: $scope,
-		animation: 'slide-in-up'
-	}).then(function(modal) {
-		$scope.changeViewModal = modal
-	})
+//	// change view modal
+//	$ionicModal.fromTemplateUrl('templates/changeCalendarViewModal.html', {
+//		scope: $scope,
+//		animation: 'slide-in-up'
+//	}).then(function(modal) {
+//		$scope.changeViewModal = modal
+//	})
 
 	$scope.openChangeViewModal = function() {
 		$scope.options = [
@@ -55,15 +55,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 			'weekly',
 			'monthly'
 		];
-
-		$scope.changeViewModal.show()
-	}	
-
+        $scope.typePopup = $ionicPopup.show({
+            templateUrl: 'templates/changeCalendarViewModal.html',
+            title: $filter('translate')('show_type'),
+            scope: $scope
+          });
+	}
 	$scope.changeView = function(view) {
 		$scope.displayMode = view;
 		$scope.initialize();
 
-		$scope.changeViewModal.hide();
+		$scope.typePopup.close();
 	}
 
 	// info modal
@@ -127,7 +129,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                     }
                 } 
 
-                today.background = today.value.getDay() % 2 === 0 && today.value.getDay() !== 0 ? 'transparent': '#93DAF2';
+                today.background = today.value.getDay() % 2 === 0 && today.value.getDay() !== 0 ? '#fff': '#F8AB11';
 
 
 
@@ -285,7 +287,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             for (var weekIndex = 0; weekIndex < numberOfWeeks; weekIndex++) {
                 var weekDaysWithFoods = [];
 
-                for (var dayIndex = 0; dayIndex < 7; dayIndex++) {
+                for (var dayIndex = 0; dayIndex < 5; dayIndex++) {
                     var day = new Date(tmp);
                     var allFoodsToday = getMealPerDay(day, data);
 
@@ -299,7 +301,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                         day: day,
                         foods: foods
                     }
-                    tmp.setDate(tmp.getDate() + 1);
+                    tmp.setDate(tmp.getDate() + (dayIndex == 4 ? 3 : 1));
                     weekDaysWithFoods.push(dayWithFoods);
                 }
                 $scope.calendarMatrix.push(weekDaysWithFoods);

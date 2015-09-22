@@ -88,7 +88,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
 
 })
 
-.config(function ($stateProvider, $urlRouterProvider, $translateProvider) {
+.config(function ($stateProvider, $urlRouterProvider, $translateProvider, $ionicConfigProvider) {
+    $ionicConfigProvider.backButton.text('').previousTitleText(false);
+
     $stateProvider.state('app', {
         url: "/app",
         abstract: true,
@@ -294,7 +296,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         absence_date_wrong: "La data d'inizio dell'assenza succede quella della fine. Modificare le date.",
         assenza_sendok: 'Assenza inviata con successo',
         assenza_sendno: 'Assenza non inviata',
-        absence_choose: 'Selezionare un motivo dell\'assenza'
+        absence_choose: 'Selezionare un motivo dell\'assenza',
+        noinfo: "Nessuna informazione",
+        settings: "Impostazioni di base",
+        cancel: "Annulla",
+        absence: "Inserisci assenza",
+        period: "Periodo",
+        period_from: "Da",
+        period_to: "A",
+        reason: "Motivazione",
+        reason_other: "Altro..."
     });
 
     $translateProvider.translations('en', {
@@ -470,7 +481,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         absence_date_wrong: "La data d'inizio dell'assenza succede quella della fine. Modificare le date.",
         assenza_sendok: 'Assenza inviata con successo',
         assenza_sendno: 'Assenza non inviata',
-        absence_choose: 'Selezionare un motivo dell\'assenza'
+        absence_choose: 'Selezionare un motivo dell\'assenza',
+        noinfo: "No information",
+        settings: "Settings",
+        cancel: "Cancel",
+        absence: "Insert absence",
+        period: "Period",
+        period_from: "From",
+        period_to: "To",
+        reason: "Reason",
+        reason_other: "Other..."
 
     });
 

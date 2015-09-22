@@ -2,63 +2,60 @@
     <ion-nav-bar class="bar bar-ungiorno">
         <ion-nav-back-button>
         </ion-nav-back-button>
+        <ion-nav-title>
+            {{'settings' | translate}}
+        </ion-nav-title>
         <ion-nav-buttons side="right">
-            <button class="button" ng-click="saveNewSetting()">
-                {{'babysetting_save' | translate}}
+            <button class="button icon button-clear inf_digcheck" ng-click="saveNewSetting()">
             </button>
         </ion-nav-buttons>
     </ion-nav-bar>
 
     <ion-content has-header="true" class="page-padding">
+        <div class="form-container">
+            <div>{{'babysetting_intro' | translate}}</div>
 
-        <div>
-            {{'babysetting_intro' | translate}}
-        </div>
+            <div>
+                <div class="input-description-padding">{{'babysetting_services' | translate}}</div>
+                <ion-list class="padlist">
+                    <ion-checkbox ng-repeat="item in babyServices" ng-if="item.text!='mensa'" ng-model="item.checked" ng-checked="item.checked" ng-change="showOptions(item)">
+                        {{ item.text }}
+                    </ion-checkbox>
+                </ion-list>
 
-        <div>
-            <div>
-                {{'babysetting_services' | translate}}
-            </div>
-            <ion-list class="padlist">
-                <ion-checkbox ng-repeat="item in babyServices" ng-if="item.text!='mensa'" ng-model="item.checked" ng-checked="item.checked" ng-change="showOptions(item)">
-                    {{ item.text }}
-                </ion-checkbox>
-            </ion-list>
-            </li>
-            <div>
-                {{'babysetting_hours' | translate}}
+                <div class="input-description-padding">{{'babysetting_hours' | translate}}</div>
                 <input type="time" ng-model="time.value" />
+
+                <div  class="input-description-padding">{{'babysetting_who' | translate}}</div>
+                <ion-list class="padlist">
+                    <ion-radio ng-repeat="person in babyProfile.persons" ng-model="retireDefault.value" ng-value="person.personId">{{person.fullName}}</ion-radio>
+                </ion-list>
             </div>
-            <div>
-                {{'babysetting_who' | translate}}
+
+            <div ng-show="busEnabled">
+                <div  class="input-description-padding">{{'babysetting_hours' | translate}}</div>
+                <ion-list class="padlist">
+                    <div>
+                        <label class="item item-input item-select setting">
+                            <div class="input-label">
+                                {{'babysetting_busGo' | translate}}
+                            </div>
+                            <select ng-model="selectedBusGo" ng-options="item as item.name for item in busStops">
+                            </select>
+                        </label>
+                    </div>
+                    <div>
+                        <label class="item item-input item-select setting">
+                            <div class="input-label">
+                                {{'babysetting_busBack' | translate}}
+                            </div>
+                            <select ng-model="selectedBusBack" ng-options="item as item.name for item in busStops">
+                            </select>
+                        </label>
+                    </div>
+                    </select>
+                </ion-list>
             </div>
-            <ion-list class="padlist">
-                <ion-radio ng-repeat="person in babyProfile.persons" ng-model="retireDefault.value" ng-value="person.personId">{{person.fullName}}</ion-radio>
-            </ion-list>
-        </div>
-        <div ng-show="busEnabled">
-            {{'babysetting_hours' | translate}}
-            <ion-list class="padlist">
-                <div>
-                    <label class="item item-input item-select setting">
-                        <div class="input-label">
-                            {{'babysetting_busGo' | translate}}
-                        </div>
-                        <select ng-model="selectedBusGo" ng-options="item as item.name for item in busStops">
-                        </select>
-                    </label>
-                </div>
-                <div>
-                    <label class="item item-input item-select setting">
-                        <div class="input-label">
-                            {{'babysetting_busBack' | translate}}
-                        </div>
-                        <select ng-model="selectedBusBack" ng-options="item as item.name for item in busStops">
-                        </select>
-                    </label>
-                </div>
-                </select>
-            </ion-list>
         </div>
     </ion-content>
 </ion-view>

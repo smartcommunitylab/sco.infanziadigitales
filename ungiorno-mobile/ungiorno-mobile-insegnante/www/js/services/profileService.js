@@ -34,6 +34,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
                 }
                 i++;
             }
+            if (found == false)
+                deferred.reject();
         });
         return deferred.promise;
     }

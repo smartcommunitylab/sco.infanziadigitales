@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.home', [])
 
-.controller('HomeCtrl', function ($scope, $rootScope, $location, dataServerService, profileService, configurationService, $filter, retireService, busService, $state, Toast, $ionicModal, Config) {
+.controller('HomeCtrl', function ($scope, $rootScope, $location, $state, $filter, $ionicPopup, dataServerService, profileService, configurationService, retireService, busService, Toast, Config) {
 
     $scope.date = "";
     $scope.kidProfile = {};
@@ -44,23 +44,23 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     }
     var getButtonStyle = function (button) {
         if (button == "default") {
-            return "button-positive"
+            return "button-norm"
         }
         if (button == "retire") {
             if (isRetireSet()) {
-                return "button-positive";
+                return "button-norm";
             }
-            return "button-assertive";
+            return "button-alrt";
 
         }
         if (button == "bus") {
             if (isBusDisabled()) {
-                return "button-stable";
+                return "button-stab";
             }
             if (isRetireSet()) {
-                return "button-positive";
+                return "button-norm";
             }
-            return "button-assertive";
+            return "button-alrt";
 
         }
 
@@ -75,6 +75,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             click: "app.retire",
             string: $filter('translate')('home_retire'),
             class: style,
+            img: 'img/ritiro.png'
 
         });
         //if bus is available put it
@@ -84,6 +85,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 click: "app.bus",
                 string: $filter('translate')('home_bus'),
                 class: style,
+                img: 'img/bus.png'
             });
         }
         style = getButtonStyle("default");
@@ -91,8 +93,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             click: "app.calendar",
             string: $filter('translate')('home_calendario'),
             class: style,
-
-
+            img: 'img/calendario.png'
         });
         if (profileService.getBabyProfile().services.mensa.enabled) {
             style = getButtonStyle("default");
@@ -100,7 +101,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 click: "app.canteen",
                 string: $filter('translate')('home_mensa'),
                 class: style,
-
+                img: 'img/mensa.png'
             });
         }
 
@@ -109,35 +110,41 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             click: "app.absence",
             string: $filter('translate')('home_assenza'),
             class: style,
-
+            img: 'img/assenza.png'
         });
         style = getButtonStyle("default");
         $scope.elements.push({
             click: function () {
-                printlog();
+                contact();
             },
             string: $filter('translate')('home_contatta'),
             class: style,
-
+            img: 'img/contattaLaScuola.png'
         });
     }
-    var printlog = function () {
-        $ionicModal.fromTemplateUrl('templates/contacts.html', {
+    var contact = function () {
+        $scope.contactPopup = $ionicPopup.show({
+            templateUrl: 'templates/contacts.html',
+            title: $filter('translate')('contact_school'),
             scope: $scope,
-            animation: 'slide-in-up'
-        }).then(function (modal) {
-            $scope.modal = modal;
-            $scope.modal.show();
-        })
+            buttons: [{ // Array[Object] (optional). Buttons to place in the popup footer.
+                text: $filter('translate')('cancel'),
+                type: 'button-norm',
+                onTap: function(e) {
+                    $scope.contactPopup.close();
+                }
+              }]
+          });
     }
+    $scope.call = function () {
+        window.open('tel:'+profileService.getSchoolProfile().contacts.telephone[0]);
+        $scope.contactPopup.close();
+    }
+    $scope.createNote = function() {
+        $state.go('app.addnote');
+        $scope.contactPopup.close();
+    };
 
-    $scope.call = function (number) {
-        window.plugins.CallNumber.callNumber(function () {
-            alert("call swap");
-        }, function (err) {
-            alert(err);
-        }, number);
-    }
     $scope.execute = function (element) {
         if (element.class != "button-stable") {
             if (typeof element.click == "string") {

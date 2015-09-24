@@ -23,7 +23,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         communication: ""
     };
 
-
+    $scope.getDateString = function () {
+        var today = new Date();
+        $scope.date = today.getTime();;
+    }
     $scope.viewClose = function () {
         return $scope.noteExpanded || $scope.communicationExpanded;
     }

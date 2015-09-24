@@ -306,12 +306,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
         baby_name: 'Nome bambino',
         create_note: 'Crea nota',
         close: 'Chiudi',
+        save: 'Salva',
         no_baby_bus: 'Nessun bambino su questo autobus',
         no_communications: "Nessuna comunicazione",
         no_notes_today: "Nessuna nota oggi",
         communication_modified: "Modifica registrata con successo",
         communication_not_modified: "La modifica non è stata registrata",
-profile_no_notes: "Nessuna nota presente"
+        profile_no_notes: "Nessuna nota presente",
+        scadenze: " scadenze"
 
 
     });

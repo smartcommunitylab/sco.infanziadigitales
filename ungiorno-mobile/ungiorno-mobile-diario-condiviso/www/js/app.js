@@ -76,10 +76,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
     $ionicConfigProvider.tabs.position('top');
     $ionicConfigProvider.backButton.text('').previousTitleText(false);
 
-        pickadateI18nProvider.translations = {
-            prev: '<i class="icon ion-chevron-left"></i>',
-            next: '<i class="icon ion-chevron-right"></i>'
-        }
+    pickadateI18nProvider.translations = {
+        prev: '<i class="icon ion-chevron-left"></i>',
+        next: '<i class="icon ion-chevron-right"></i>'
+    }
 
     $stateProvider.state('app', {
         url: "/app",
@@ -173,7 +173,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
         data: 'Dati del bambino',
         data_family: 'Dati famiglia',
         name: 'Nome del bambino',
-        surname: 'Cognome del mambino',
+        surname: 'Cognome del bambino',
         date_birth: 'Data di nascita',
         add_family_component: 'Aggiungi un componente',
         add_authorized: 'Aggiungi una persona',

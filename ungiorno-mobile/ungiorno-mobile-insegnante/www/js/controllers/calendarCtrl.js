@@ -8,7 +8,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     var currentCalendarMode = CALENDAR_MODE_MONTHLY;
     var changeCalendarModeModal;
 
-    $scope.showLoader = function() {
+    $scope.showLoader = function () {
         return $ionicLoading.show({
             content: 'Loading',
             animation: 'fade-in',
@@ -24,7 +24,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     var getMonday = function (d) {
         d = new Date(d);
         var day = d.getDay(),
-        diff = d.getDate() - day + (day == 0 ? -6 : 1); // adjust when day is sunday
+            diff = d.getDate() - day + (day == 0 ? -6 : 1); // adjust when day is sunday
         return new Date(d.setDate(diff));
     }
     var getWeekDays = function (d) {
@@ -44,18 +44,18 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         var deferred = $q.defer();
         var remainingCalls = 0;
         //counts the number of profile calls to do, necessary to notify when all the teachers array is popolated.
-        $scope.events.forEach(function(event) {
+        $scope.events.forEach(function (event) {
             event.teachers.forEach(function (teacherId) {
-                if ($scope.teachers[teacherId] == undefined) {//not already present in the teachers array, get it
+                if ($scope.teachers[teacherId] == undefined) { //not already present in the teachers array, get it
                     $scope.teachers[teacherId] = true;
                     remainingCalls++;
                 }
             });
         });
         $scope.teachers = [];
-        $scope.events.forEach(function(event) {
+        $scope.events.forEach(function (event) {
             event.teachers.forEach(function (teacherId) {
-                if ($scope.teachers[teacherId] == undefined) {//not already present in the teachers array, get it
+                if ($scope.teachers[teacherId] == undefined) { //not already present in the teachers array, get it
                     profileService.getTeacherProfileById($scope.schoolProfile.schoolId, teacherId).then(function (data) {
                         $scope.teachers[teacherId] = data;
                         remainingCalls--;
@@ -91,25 +91,25 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         }
     }
 
-    var getEventsFor = function(day, hour) {
+    var getEventsFor = function (day, hour) {
         var realDateWithHour = new Date(day);
         if (hour !== undefined) { //hour specified
             realDateWithHour.setHours(hour.getHours(), hour.getMinutes(), hour.getSeconds(), 0);
             var realDateWithHourEnd = new Date(realDateWithHour.valueOf() + $scope.timeInterval * 1000);
         } else { //hour not specified, all day is evaluated
             realDateWithHour.setHours(0, 0, 0, 0);
-            var realDateWithHourEnd = new Date(realDateWithHour.valueOf() + 60*60*1000*24);
+            var realDateWithHourEnd = new Date(realDateWithHour.valueOf() + 60 * 60 * 1000 * 24);
         }
         var eventHere = {
             teachers: [],
             eventForAll: false,
             eventName: ""
         }
-        $scope.events.forEach(function(event) {
-            var eventFromDate = new Date(event.from);
-            var eventToDate = new Date(event.to);
-            if (isEventInDayHour(realDateWithHour, realDateWithHourEnd, eventFromDate, eventToDate, hour !== undefined))
-            {
+        $scope.events.forEach(function (event) {
+            //tmp for demo x1000
+            var eventFromDate = new Date(event.from * 1000);
+            var eventToDate = new Date(event.to * 1000);
+            if (isEventInDayHour(realDateWithHour, realDateWithHourEnd, eventFromDate, eventToDate, hour !== undefined)) {
                 if (event.teachers.length === 0) { //event for all
                     eventHere.eventForAll = true;
                     eventHere.eventName = event.what;
@@ -138,7 +138,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
                 $scope.calendarMatrix.push(eventsInDaysAtSameHour);
             }
         } else {
-            var numberOfWeeks = Math.ceil(($scope.month.end - $scope.month.start) / (1000*60*60*24)) / 7; //ceil to adjust number of days
+            var numberOfWeeks = Math.ceil(($scope.month.end - $scope.month.start) / (1000 * 60 * 60 * 24)) / 7; //ceil to adjust number of days
             var tmp = new Date($scope.month.start);
             for (var weekIndex = 0; weekIndex < numberOfWeeks; weekIndex++) {
                 var weekDaysWithEvent = [];
@@ -185,7 +185,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
 
         $scope.today = new Date();
         if (currentCalendarMode === CALENDAR_MODE_WEEKLY) {
-            $scope.days = getWeekDays($scope.today.valueOf() + timePadding * 60*60*1000*24*7); //+- 1 week
+            $scope.days = getWeekDays($scope.today.valueOf() + timePadding * 60 * 60 * 1000 * 24 * 7); //+- 1 week
             $scope.currentMonth = $scope.days[0];
 
             currentCalendar.from = Math.floor($scope.days[0].getTime() / 1000);
@@ -236,29 +236,29 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
 
     //change calendar mode stuff
     // change view modal
-	$ionicModal.fromTemplateUrl('templates/calendarChangeMode.html', {
-		scope: $scope,
-		animation: 'slide-in-up'
-	}).then(function(modal) {
-		changeCalendarModeModal = modal
-	})
+    $ionicModal.fromTemplateUrl('templates/calendarChangeMode.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function (modal) {
+        changeCalendarModeModal = modal
+    })
 
-	$scope.openChangeCalendarMode = function() {
-		$scope.options = [
-			CALENDAR_MODE_WEEKLY,
+    $scope.openChangeCalendarMode = function () {
+        $scope.options = [
+   CALENDAR_MODE_WEEKLY,
             CALENDAR_MODE_MONTHLY
-		];
+  ];
 
-		changeCalendarModeModal.show()
-	}
+        changeCalendarModeModal.show()
+    }
 
-	$scope.changeView = function(view) {
+    $scope.changeView = function (view) {
         $scope.dataLoaded = false;
-		currentCalendarMode = view;
+        currentCalendarMode = view;
         timePadding = 0;
-		$scope.initCalendarForCurrentSettings();
-		changeCalendarModeModal.hide();
-	}
+        $scope.initCalendarForCurrentSettings();
+        changeCalendarModeModal.hide();
+    }
 
 
 });

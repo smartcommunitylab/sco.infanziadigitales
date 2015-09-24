@@ -1,27 +1,37 @@
-<ion-view id="bus" title="{{'buses' | translate}}">
+<ion-view id="bus">
     <ion-nav-bar class="bar bar-ungiorno">
         <ion-nav-back-button>
         </ion-nav-back-button>
-        <ion-nav-buttons side="right">
-            <button class="button" ng-click="print()">
-                <i class="icon ion-printer"></i>
-            </button>
-        </ion-nav-buttons>
     </ion-nav-bar>
 
+    <ion-nav-buttons side="right">
+        <button class="button" ng-click="print()">
+            <i class="icon ion-printer"></i>
+        </button>
+    </ion-nav-buttons>
 
+    <ion-nav-title>
+        <div>{{'buses' | translate}}</div>
+    </ion-nav-title>
     <ion-content has-header="true">
         <div ng-if="dataLoaded">
-            <div class="row section-row">
+            <div class="row section-row home-container">
+                <div class="col section-row">
+                    <div class="row section-row">
+                        <div class="tabs-striped tabs-top tabs-background-dark tabs-color-light">
+                            <div class="tabs section-tabs">
+                                <a class="tab-item section-tab" ng-repeat="bus in buses track by $index" class="col" ng-click="changeSelectedBus(bus)" ng-class="{'active' :  (isThisBus(bus.busName))}"> {{bus.busName}} </a>
 
-                <div class="tabs-striped tabs-top tabs-background-dark tabs-color-light">
-                    <div class="tabs section-tabs">
-                        <a class="tab-item" ng-repeat="bus in buses track by $index" class="col" ng-click="changeSelectedBus(bus)" ng-class="{'active' :  (isThisBus(bus.busName))}">  {{bus.busName}} </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
             </div>
-            <h3>{{'today' | translate}}, {{nowDate | date:'EEEE dd MMMM y'}} {{'catch_the_bus' | translate}} {{realBabyNumer}} {{'baby_on_the' | translate}} {{selectedBus.busName}}</h3>
+
+
             <div class="babiesDisplay">
+                <h3>{{'today' | translate}}, {{nowDate | date:'EEEE dd MMMM y'}} {{'catch_the_bus' | translate}} {{realBabyNumer}} {{'baby_on_the' | translate}} {{selectedBus.busName}}</h3>
                 <div class="row" ng-repeat="nRow in totalNumRow()">
                     <div class="col" ng-repeat="baby in getBabiesByRow(nRow)">
                         <div class="card babyItemBus" ng-click="openBabyDetails(baby)" ng-if="!baby.isFake">

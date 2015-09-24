@@ -20,7 +20,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     $scope.showLoader();
 
     $scope.checkBusServiceActive = function () {
-        return $scope.babyInformations.bus.active && $scope.babyInformations.bus.enabled;
+        return $scope.babyInformations.bus.active && $scope.babyInformations.bus.enabled && $scope.babyInformations.stopId != null;
     }
     var getBusStopAddressByID = function (busStopID) {
         for (var i = 0; i < $scope.babyProfile.services.bus.stops.length; i++) {
@@ -62,7 +62,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
 
     $scope.calculateOtherData = function () {
 
-        $scope.babyEnterHour = $scope.babyInformations.anticipo.active ? $scope.schoolProfile.anticipoTiming.fromTime : $scope.schoolProfile.regularTiming.fromTime;
+        $scope.babyEnterHour = ($scope.babyInformations.anticipo.active && $scope.babyInformations.anticipo.enabled) ? $scope.schoolProfile.anticipoTiming.fromTime : $scope.schoolProfile.regularTiming.fromTime;
 
         //used to get if the baby is present
         var now = new Date();

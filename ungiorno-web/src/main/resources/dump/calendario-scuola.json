@@ -19,7 +19,7 @@
             "forWhom": "parent",
             "title": "Incontro con genitori"
         },
-        ,
+
         {
             "appId": "a",
             "schoolId": "a",
@@ -30,5 +30,4 @@
             "forWhom": "parent",
             "title": "Incontro con genitori"
         }
-]
- 
+    ]

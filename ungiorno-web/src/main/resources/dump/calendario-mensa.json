@@ -2,7 +2,7 @@
         {
             "appId": "a",
             "schoolId": "a",
-            "date": 1437343200,
+            "date": 1442589600,
             "lunch": [{
                     "name": "battuta di manzo",
                     "type": "meat"
@@ -19,12 +19,64 @@
         {
             "appId": "a",
             "schoolId": "a",
-            "date": 1435075887150,
+            "date": 1443503200,
             "lunch": [{
                     "name": "minestrone",
                     "type": "soup"
             },
-            {
+                {
+                    "name": "insalata",
+                    "type": "veg"
+            }],
+            "break": [{
+                "name": "mela",
+                "type": "fruit"
+            }]
+        },
+
+        {
+            "appId": "a",
+            "schoolId": "a",
+            "date": 1443416800,
+            "lunch": [{
+                    "name": "minestrone",
+                    "type": "soup"
+            },
+                {
+                    "name": "insalata",
+                    "type": "veg"
+            }],
+            "break": [{
+                "name": "mela",
+                "type": "fruit"
+            }]
+        },
+        {
+            "appId": "a",
+            "schoolId": "a",
+            "date": 1443589600,
+            "lunch": [{
+                    "name": "minestrone",
+                    "type": "soup"
+            },
+                {
+                    "name": "insalata",
+                    "type": "veg"
+            }],
+            "break": [{
+                "name": "mela",
+                "type": "fruit"
+            }]
+        },
+        {
+            "appId": "a",
+            "schoolId": "a",
+            "date": 1443676000,
+            "lunch": [{
+                    "name": "minestrone",
+                    "type": "soup"
+            },
+                {
                     "name": "insalata",
                     "type": "veg"
             }],

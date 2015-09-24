@@ -626,10 +626,10 @@ public class RepositoryManager {
 			skp.setImage(kp.getImage());
 
 			// merge service state from config and from profile
-			skp.setAnticipo(new ServiceProfile(kp.getServices().getAnticipo().isEnabled(), conf != null ? conf.getServices().getAnticipo().isActive() : true));
-			skp.setPosticipo(new ServiceProfile(kp.getServices().getPosticipo().isEnabled(), conf != null ? conf.getServices().getPosticipo().isActive() : true));
-			skp.setMensa(new ServiceProfile(kp.getServices().getMensa().isEnabled(), conf != null ? conf.getServices().getMensa().isActive() : true));
-			skp.setBus(new ServiceProfile(kp.getServices().getBus().isEnabled(), conf != null ? conf.getServices().getBus().isActive() : true));
+			skp.setAnticipo(new ServiceProfile(kp.getServices().getAnticipo().isEnabled(), conf != null ? conf.anticipoActive() : true));
+			skp.setPosticipo(new ServiceProfile(kp.getServices().getPosticipo().isEnabled(), conf != null ? conf.posticipoActive() : true));
+			skp.setMensa(new ServiceProfile(kp.getServices().getMensa().isEnabled(), conf != null ? conf.mensaActive() : true));
+			skp.setBus(new ServiceProfile(kp.getServices().getBus().isEnabled(), conf != null ? conf.busActive() : true));
 
 			// if absent, set exit time to null
 			if (assenzeMap.containsKey(kp.getKidId())) {

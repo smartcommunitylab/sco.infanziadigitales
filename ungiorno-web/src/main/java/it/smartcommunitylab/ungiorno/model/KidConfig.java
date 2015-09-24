@@ -74,6 +74,18 @@ public class KidConfig extends SchoolObject {
 	public void set_id(String _id) {
 		this._id = _id;
 	}
-	
+
+	public boolean anticipoActive() {
+		return services != null && services.getAnticipo() != null && services.getAnticipo().isActive();
+	}
+	public boolean posticipoActive() {
+		return services != null && services.getPosticipo() != null && services.getPosticipo().isActive();
+	}
+	public boolean mensaActive() {
+		return services != null && services.getMensa() != null && services.getMensa().isActive();
+	}
+	public boolean busActive() {
+		return services != null && services.getBus() != null && services.getBus().isActive();
+	}
 
 }

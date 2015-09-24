@@ -2,8 +2,8 @@
         {
             "appId": "a",
             "schoolId": "a",
-            "start": 1436540725,
-            "end": 1436540725,
+            "start": 1443528909,
+            "end": 1443528909,
             "sectionId": "sectionId1",
             "type": "gita",
             "forWhom": "kid",
@@ -12,11 +12,23 @@
         {
             "appId": "a",
             "schoolId": "a",
-            "start": 1436540725,
-            "end": 1436972725,
+            "start": 1443096909,
+            "end": 1443096909,
+            "sectionId": "sectionId1",
+            "type": "meeting",
+            "forWhom": "parent",
+            "title": "Incontro con genitori"
+        },
+        ,
+        {
+            "appId": "a",
+            "schoolId": "a",
+            "start": 1443528909,
+            "end": 1443528909,
             "sectionId": "sectionId1",
             "type": "meeting",
             "forWhom": "parent",
             "title": "Incontro con genitori"
         }
-    ]
+]
+ 

@@ -17,7 +17,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
 
     $scope.nowDate = new Date();
     $scope.changeSelectedBus = function (bus) {
-        $scope.selectedBus = bus;
+        //$scope.selectedBus = bus;
+        //se non c'e' fermata non e' settato
+        $scope.selectedBus = {
+            busId: bus.busId,
+            busName: bus.busName,
+            children: [],
+        };
+        for (var i = 0; i < bus.children.length; i++) {
+            if (bus.children[i].busStop)
+                $scope.selectedBus.children.push(bus.children[i]);
+        }
         $scope.realBabyNumer = $scope.selectedBus.children.length;
         if ($scope.selectedBus.lastChildIsFake) {
             $scope.realBabyNumer -= 1;
@@ -38,10 +48,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
 
     }
     dataServerService.getBuses(profileService.getSchoolProfile().schoolId, new Date().getTime()).then(function (data) {
-            $scope.buses = data.buses;
-            $scope.changeSelectedBus($scope.buses[0]);
-            $ionicLoading.hide();
-            $scope.dataLoaded = true;
+        $scope.buses = data.buses;
+        $scope.changeSelectedBus($scope.buses[0]);
+        $ionicLoading.hide();
+        $scope.dataLoaded = true;
     });
 
     $scope.getBabiesByRow = function (rowIndex) {
@@ -61,8 +71,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     }
 
     $scope.openBabyDetails = function (baby) {
-        profileService.setCurrentBabyID(baby.childrenId);
-        window.location.assign('#/app/babyprofile');
+        //it miss the setting of the kid profile (the section information)
+        //window.location.assign('#/app/babyprofile');
     }
 
     $scope.print = function () {

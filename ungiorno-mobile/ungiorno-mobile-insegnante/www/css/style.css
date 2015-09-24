@@ -88,13 +88,13 @@ body {
 }
 
 .delegate-label {
-    color: #A5A5A5;
+    color: #7b9e2a;
     text-align: right;
     width: 75%;
 }
 
 .delegate-field {
-    color: #A5A5A5;
+    color: #7b9e2a;
     text-align: right;
     width: 80%;
 }
@@ -132,7 +132,7 @@ body {
 }
 
 input[type=text] {
-    border-bottom: 1px solid #B0B0B0;
+    border-bottom: 1px solid #98ba3c;
     width: 100%;
     font-size: 20px;
 }
@@ -359,8 +359,8 @@ p {
 }
 
 .bar.bar-ungiorno {
-    border-color: #C8C6C6;
-    background-color: #C8C6C6;
+    border-color: #98ba3c;
+    background-color: #98ba3c;
     /*background-image: none;*/
 
     color: #fff;
@@ -382,7 +382,9 @@ p {
 }
 
 .leftmenu {
-    padding-top: 50px;
+    /*    padding-top: 50px;*/
+
+    background-color: #98ba3c;
 }
 
 .tabs-percorsi>.tabs,
@@ -1433,7 +1435,7 @@ select {
 }
 
 .section-tab-notpressed {
-    background-color: #C8C6C6;
+    background-color: #98ba3c;
 }
 
 .section-tab-pressed {
@@ -1541,30 +1543,34 @@ select {
 
 .newComItems {
     position: relative;
-    float:left;
+    float: left;
 }
+
 .item.item-checkbox.newCom {
     font-size: 18px;
     border-color: transparent;
     margin-top: -12px;
 }
+
 .button-control {
-	background-color:lightgray;
-	border:1px solid lightgray;
-	display:inline-block;
-	cursor:pointer;
-	color:black;
-	font-family:Arial;
-	font-size:15px;
-	padding:10px 25px;
+    background-color: lightgray;
+    border: 1px solid lightgray;
+    display: inline-block;
+    cursor: pointer;
+    color: black;
+    font-family: Arial;
+    font-size: 15px;
+    padding: 10px 25px;
     margin-top: 10px;
 }
+
 .button-control:active {
-	position:relative;
-	top:1px;
+    position: relative;
+    top: 1px;
 }
+
 .button-control:hover {
-	background-color:#e6e6e6;
+    background-color: #e6e6e6;
 }
 
 .child-search {
@@ -1611,8 +1617,8 @@ ion-content .scroll {
 
 .right-side-fake-menu.ng-hide-remove,
 .right-side-fake-menu.ng-hide-add {
-  display: block !important;
-  transition: all ease 200ms;
+    display: block !important;
+    transition: all ease 200ms;
 }
 
 .note-tabs-container {
@@ -1641,6 +1647,7 @@ ion-content .scroll {
     width: 100%;
     position: relative;
 }
+
 .parents-notes {
     width: 100%;
     position: relative;
@@ -1661,6 +1668,7 @@ ion-content .scroll {
     display: table-cell;
     margin-right: 3px;
 }
+
 .cancel-button.activated {
     background-color: #607D8B;
 }
@@ -1698,24 +1706,25 @@ ion-content .scroll {
     vertical-align: top;
 }
 
-.associated-kid-container {
-}
+.associated-kid-container {}
 
 .associated-kid-name {
     margin-left: 8px;
     vertical-align: middle;
 }
+
 .associated-kid-image {
     vertical-align: middle;
     max-height: 64px;
     max-width: 64px;
 }
+
 .associated-kid-delete-btn {
     float: right;
 }
 
 .nothing-to-show-placeholder-wrapper {
-   position: absolute;
+    position: absolute;
     top: 50%;
     left: 50%;
     margin-right: -50%;
@@ -1726,10 +1735,16 @@ ion-content .scroll {
     text-align: center;
     font-size: 1.4em;
 }
+
 .item-text-complete {
     white-space: normal;
 }
 
 .under-bar {
     margin-top: 60px;
+}
+
+.menu-item-insegnante {
+    border-style: hidden;
+    color: #3e5421;
 }

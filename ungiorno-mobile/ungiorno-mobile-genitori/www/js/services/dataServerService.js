@@ -157,7 +157,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            data: note,
+            data: assenza,
         }).
         success(function (data, status, headers, config) {
             deferred.resolve(assenza);
@@ -168,9 +168,26 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
         });
         return deferred.promise;
     }
-
-    //     addNewNoteForTeacher(appId,schoolId, kidid)
-    //  POST /school/{appId}/{schoolId}/{kidId}/notes
+    dataServerService.getAbsence = function (schoolId, kidId, date) {
+            var deferred = $q.defer();
+            $http({
+                method: 'GET',
+                url: Config.URL() + '/' + Config.app() + '/student/' + Config.appId() + '/' + schoolId + '/' + kidId + '/absence?date=' + date,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            }).
+            success(function (data, status, headers, config) {
+                deferred.resolve(data);
+            }).
+            error(function (data, status, headers, config) {
+                console.log(data + status + headers + config);
+                deferred.reject(data.errorCode + ' ' + data.errorMessage);
+            });
+            return deferred.promise;
+        }
+        //     addNewNoteForTeacher(appId,schoolId, kidid)
+        //  POST /school/{appId}/{schoolId}/{kidId}/notes
 
     dataServerService.sendNota = function (schoolId, kidId, nota) {
         var deferred = $q.defer();

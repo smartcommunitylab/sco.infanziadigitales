@@ -187,6 +187,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
 
         var requestSuccess = function (data) {
             if ($scope.isMode(MODE_EDIT)) {
+                $scope.communications[selectedCommunicationIndex].description = data.data.description;
                 Toast.show($filter('translate')('communication_updated'), 'bottom', 'short');
             } else {
                 Toast.show($filter('translate')('communication_sent'), 'bottom', 'short');

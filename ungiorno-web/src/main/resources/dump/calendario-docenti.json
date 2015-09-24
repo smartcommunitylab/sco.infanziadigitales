@@ -1,73 +1,28 @@
 [
     {
-        "timeDivisionInterval": 3600,
+        "timeDivisionInterval": 1800,
         "events": [{
                 "appId": "a",
                 "schoolId": "a",
-                "teachers": ["a","b","c"],
-                "from": 1442818800,
-                "to": 1442826000,
+                "teachers": ["a", "b", "c"],
+                "from": 1439370000,
+                "to": 1439373600,
                 "what": "class"
             },
             {
                 "appId": "a",
                 "schoolId": "a",
-                "teachers": ["b","c"],
-                "from": 1442826000,
-                "to": 1442833200,
-                "what": "visita oculistica"
-            },
-            {
-                "appId": "a",
-                "schoolId": "a",
-                "teachers": ["a","c"],
-                "from": 1442833200,
-                "to": 1442858400,
-                "what": "class"
-            },
-            {
-                "appId": "a",
-                "schoolId": "a",
-                "teachers": ["a","c"],
-                "from": 1442905200,
-                "to": 1442923200,
-                "what": "class"
-            },
-            {
-                "appId": "a",
-                "schoolId": "a",
-                "teachers": ["b","c"],
-                "from": 1442923200,
-                "to": 1442944800,
-                "what": "class"
-            },
-            {
-                "appId": "a",
-                "schoolId": "a",
-                "teachers": ["b","c"],
-                "from": 1442991600,
-                "to": 1443009600,
-                "what": "class"
-            }, {
-                "appId": "a",
-                "schoolId": "a",
-                "teachers": ["b","c"],
+                "teachers": [],
                 "from": 1443164400,
-                "to": 1443178800,
-                "what": "class"
-            }, {
-                "appId": "a",
-                "schoolId": "a",
-                "teachers": ["b","c"],
-                "from": 1443178800,
-                "to": 1443186000,
+                "to": 1443175200,
                 "what": "visita oculistica"
-            }, {
+            },
+            {
                 "appId": "a",
                 "schoolId": "a",
-                "teachers": ["a","b","c"],
-                "from": 1443186000,
-                "to": 1443204000,
+                "teachers": ["a", "c"],
+                "from": 1443175200,
+                "to": 1443189600,
                 "what": "class"
             }
             ]

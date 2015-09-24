@@ -1,7 +1,22 @@
 [
     {
         "timeDivisionInterval": 1800,
-        "events": [{
+        "events": [
+            {
+                "appId": "a",
+                "schoolId": "a",
+                "teachers": ["b", "c"],
+                "from": 1442818800,
+                "to": 1442844000,
+                "what": "class"
+            }, {
+                "appId": "a",
+                "schoolId": "a",
+                "teachers": ["a", "b"],
+                "from": 1443002400,
+                "to": 1443031200,
+                "what": "class"
+            }, {
                 "appId": "a",
                 "schoolId": "a",
                 "teachers": ["a", "b", "c"],

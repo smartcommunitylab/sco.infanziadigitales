@@ -29,7 +29,7 @@
             <div class="row" ng-if="elements.length%2==1">
                 <div class="col">
                     <div class=" button-home-wrapper" ng-class="elements[elements.length-1].class">
-                        <button class=" button-block button-home" ng-click="execute({{elements[elements.length-1]}})" style="background-image:url({{elements[elements.length-1].img}})">
+                        <button class=" button-block button-home" ng-click="execute(elements[elements.length-1])" style="background-image:url({{elements[elements.length-1].img}})">
                         </button>
                         <span>{{elements[elements.length-1].string}}</span>
                     </div>

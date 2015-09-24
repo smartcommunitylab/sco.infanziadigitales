@@ -1,62 +1,144 @@
 {
     "data": [
         {
-            "timeDivisionInterval": 1800,
+            "timeDivisionInterval": 3600,
             "events": [{
-                "appId": "a",
-                "schoolId": "a",
-                "teachers": [
-                    {
-                        "teacherId": "a"
+                    "appId": "a",
+                    "schoolId": "a",
+                    "teachers": [
+                        {
+                            "teacherId": "a"
                     },
-                    {
-                        "teacherId": "b"
+                        {
+                            "teacherId": "b"
                     },
-                    {
-                        "teacherId": "c"
+                        {
+                            "teacherId": "c"
                     }
                 ],
-                "from": 1439370000,
-                "to": 1439373600,
-                "what": "class"
+                    "from": 1442818800,
+                    "to": 1442826000,
+                    "what": "class"
             },
-            {
-                "appId": "a",
-                "schoolId": "a",
-                "teachers": [],
-                "from": 1439535600,
-                "to": 1439546400,
-                "what": "visita oculistica"
-            },
-            {
-                "appId": "a",
-                "schoolId": "a",
-                "teachers": [
-                    {
-                        "teacherId": "b"
+                {
+                    "appId": "a",
+                    "schoolId": "a",
+                    "teachers": [
+                        {
+                            "teacherId": "b"
                     },
-                    {
-                        "teacherId": "c"
+                        {
+                            "teacherId": "c"
                     }
                 ],
-                "from": 1439535600,
-                "to": 1439542800,
-                "what": "visita oculistica"
+                    "from": 1442826000,
+                    "to": 1442833200,
+                    "what": "visita oculistica"
             },
-            {
-                "appId": "a",
-                "schoolId": "a",
-                "teachers": [
-                    {
-                        "teacherId": "a"
+                {
+                    "appId": "a",
+                    "schoolId": "a",
+                    "teachers": [
+                        {
+                            "teacherId": "a"
                     },
-                    {
-                        "teacherId": "c"
+                        {
+                            "teacherId": "c"
                     }
                 ],
-                "from": 1440151200,
-                "to": 1440165600,
-                "what": "class"
+                    "from": 1442833200,
+                    "to": 1442858400,
+                    "what": "class"
+            },
+                {
+                    "appId": "a",
+                    "schoolId": "a",
+                    "teachers": [
+                        {
+                            "teacherId": "a"
+                    },
+                        {
+                            "teacherId": "c"
+                    }
+                ],
+                    "from": 1442905200,
+                    "to": 1442923200,
+                    "what": "class"
+            },
+                {
+                    "appId": "a",
+                    "schoolId": "a",
+                    "teachers": [
+                        {
+                            "teacherId": "b"
+                    },
+                        {
+                            "teacherId": "c"
+                    }
+                ],
+                    "from": 1442923200,
+                    "to": 1442944800,
+                    "what": "class"
+            },
+                {
+                    "appId": "a",
+                    "schoolId": "a",
+                    "teachers": [
+                        {
+                            "teacherId": "b"
+                    },
+                        {
+                            "teacherId": "c"
+                    }
+                ],
+                    "from": 1442991600,
+                    "to": 1443009600,
+                    "what": "class"
+            }, {
+                    "appId": "a",
+                    "schoolId": "a",
+                    "teachers": [
+                        {
+                            "teacherId": "b"
+                    },
+                        {
+                            "teacherId": "c"
+                    }
+                ],
+                    "from": 1443164400,
+                    "to": 1443178800,
+                    "what": "class"
+            }, {
+                    "appId": "a",
+                    "schoolId": "a",
+                    "teachers": [
+                        {
+                            "teacherId": "b"
+                    },
+                        {
+                            "teacherId": "c"
+                    }
+                ],
+                    "from": 1443178800,
+                    "to": 1443186000,
+                    "what": "visita oculistica"
+            }, , {
+                    "appId": "a",
+                    "schoolId": "a",
+                    "teachers": [
+                        {
+                            "teacherId": "a"
+                    },
+                        {
+                            "teacherId": "b"
+                    },
+                        {
+                            "teacherId": "b"
+                    }
+                ],
+                    "from": 1443186000,
+                    "to": 1443204000,
+                    "what": "class"
             }
             ]
         }

@@ -1,58 +1,58 @@
 <ion-view id="calendar" title="{{'calendar' | translate}}" ng-init="initialize()">
-	<ion-nav-bar class="bar bar-ungiorno">
-	    <ion-nav-back-button></ion-nav-back-button>
+    <ion-nav-bar class="bar bar-ungiorno">
+        <ion-nav-back-button></ion-nav-back-button>
 
-	    <ion-nav-buttons side="right">
-	    	<button class="button button-outline icon-right ion-arrow-down-b" ng-click="openModal()">{{displayParentsCalendar ? "parents" : "kid" |translate}}</button>
-	    </ion-nav-buttons>
-	</ion-nav-bar>
+        <ion-nav-buttons side="right">
+            <button class="button button-outline icon-right ion-arrow-down-b" ng-click="openModal()">{{displayParentsCalendar ? "parents" : "kid" |translate}}</button>
+        </ion-nav-buttons>
+    </ion-nav-bar>
 
-	<ion-pane>
-		<ion-content has-header="true">
-			<div class="calendar-background">
-				<div class="row calendar-month">
-					<div class="col calendar-arrow">
-						<button class="calendar-arrow left" ng-click="previous()">
-							<i class="icon ion-ios-arrow-back"></i>
-						</button>
-					</div>
-					<div class="col calendar-month">
-						<p class="calendar-month">{{monthDisplay}}</p>
-					</div>
-					<div class="col calendar-arrow">
-						<button class="calendar-arrow right" ng-click="next()">
-							<i class="icon ion-ios-arrow-forward"></i>
-						</button>
-					</div>
-				</div>
+    <ion-pane>
+        <ion-content has-header="true">
+            <div class="calendar-background">
+                <div class="row calendar-month">
+                    <div class="col calendar-arrow">
+                        <button class="calendar-arrow left" ng-click="previous()">
+                            <i class="icon ion-ios-arrow-back"></i>
+                        </button>
+                    </div>
+                    <div class="col calendar-month">
+                        <p class="calendar-month">{{monthDisplay}}</p>
+                    </div>
+                    <div class="col calendar-arrow">
+                        <button class="calendar-arrow right" ng-click="next()">
+                            <i class="icon ion-ios-arrow-forward"></i>
+                        </button>
+                    </div>
+                </div>
 
-				<div class="row calendar-container">
-					<div class="col" ng-repeat="day in week">
-						<p class="calendar-container">{{day | translate}}</p>
-					</div>
-				</div>
+                <div class="row calendar-container">
+                    <div class="col" ng-repeat="day in week">
+                        <p class="calendar-container">{{day | translate}}</p>
+                    </div>
+                </div>
 
-				<div class="row" ng-repeat="item in month track by $index">
-					<div style="background: {{days.background}}; color: {{days.color}}; border: 2px solid {{getBorderColor(days)}};" class="col calendar-container day" ng-repeat="days in item track by $index" ng-click="viewAppointmentsPerDay(days)">
-						<p class="calendar-container day">{{days.dayDate | date:"dd"}}</p>
-					</div>
-				</div>
+                <div class="row" ng-repeat="item in month track by $index">
+                    <div style="background: {{days.background}}; color: {{days.color}}; border: 2px solid {{getBorderColor(days)}};" class="col calendar-container day" ng-repeat="days in item track by $index" ng-click="viewAppointmentsPerDay(days)">
+                        <p class="calendar-container day">{{days.dayDate | date:"dd"}}</p>
+                    </div>
+                </div>
 
-				<hr class="page-padding"/>
-				<div class="page-padding row">
-					<div class="color-container" ng-repeat="appointmentType in colors.specific">
-						<div class="color-box" style="background: {{appointmentType.value}};"></div>
-						<p class="color-text">{{appointmentType.type | translate}}</p>
-					</div>
-				</div>
-			</div>
+                <hr class="page-padding" />
+                <div class="page-padding row">
+                    <div class="color-container" ng-repeat="appointmentType in colors.specific">
+                        <div class="color-box" style="background: {{appointmentType.value}};"></div>
+                        <p class="color-text">{{appointmentType.type | translate}}</p>
+                    </div>
+                </div>
+            </div>
 
-			<ion-scroll class="page-padding calendar-day-background" style="margin-top: 1px;">
-				<h5>{{selectedDay.dayDate | date:'EEEE, dd MMMM yyyy'}}</h5>
-				<div ng-repeat="appointment in daysAppointments">
-					<p>{{appointment.title}}</p>
-				</div>
-			</ion-scroll>
-		</ion-content>
-	</ion-pane>
+            <ion-scroll class="page-padding calendar-day-background" style="margin-top: 1px;">
+                <h5>{{selectedDay.dayDate | date:'EEEE, dd MMMM yyyy'}}</h5>
+                <div ng-repeat="appointment in daysAppointments">
+                    <p>{{appointment.title}}</p>
+                </div>
+            </ion-scroll>
+        </ion-content>
+    </ion-pane>
 </ion-view>

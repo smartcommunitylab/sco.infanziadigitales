@@ -15,6 +15,7 @@
  ******************************************************************************/
 package it.smartcommunitylab.ungiorno.importer;
 
+import it.smartcommunitylab.ungiorno.diary.model.DiaryTeacher;
 import it.smartcommunitylab.ungiorno.model.AuthPerson;
 import it.smartcommunitylab.ungiorno.model.BusService;
 import it.smartcommunitylab.ungiorno.model.Contact;
@@ -78,7 +79,7 @@ public class Importer {
 	private static final String SHEET_INSEGNANTI = "INSEGNANTI";
 
 	private static final Set<String> expectedSchoolSheets = Sets.newHashSet(SHEET_PROFILO,SHEET_ASSENZE,SHEET_MALATTIE,SHEET_TIPOLOGIE_NOTE,SHEET_SEZIONI, SHEET_CIBI,SHEET_BUS,SHEET_INSEGNANTI);
-	private static final Set<String> expectedKidSheets = Sets.newHashSet(SHEET_PROFILO,SHEET_UTENTI,SHEET_DELEGHE,SHEET_ALLERGIE,SHEET_BUS);
+	private static final Set<String> expectedKidSheets = Sets.newHashSet(SHEET_PROFILO,SHEET_UTENTI,SHEET_DELEGHE,SHEET_ALLERGIE,SHEET_BUS,SHEET_INSEGNANTI);
 	
 	private SchoolProfile schoolProfile = null;
 	private List<Teacher> teachers = new ArrayList<Teacher>();
@@ -129,6 +130,10 @@ public class Importer {
 			if (SHEET_BUS.equals(sheet.getSheetName())) {
 				parseKidBus(appId, schoolId, result, kidMap);
 			}
+			if (SHEET_INSEGNANTI.equals(sheet.getSheetName())) {
+				parseInsegnanti(appId, schoolId, result, kidMap);
+			}			
+			
 		}	
 	}
 
@@ -156,6 +161,28 @@ public class Importer {
 		}
 		
 	}
+	
+	/**
+	 * @param appId
+	 * @param schoolId
+	 * @param result
+	 * @param kidMap
+	 * @throws ImportError 
+	 */
+	private void parseInsegnanti(String appId, String schoolId, List<Map<String, String>> result, Map<String, KidProfile> kidMap) throws ImportError {
+		for (Map<String,String> m : result) {
+			String kidId = m.get("IDBAMBINO");
+			String teacherId = m.get("IDINSEGNANTE");
+			boolean primary = "X".equals(m.get("PRIMARIA"));
+			DiaryTeacher dt = new DiaryTeacher();
+			dt.setTeacherId(teacherId);
+			dt.setPrimary(primary);
+			kidMap.get(kidId).getDiaryTeachers().add(dt);
+		}
+		
+	}	
+	
+	
 	/**
 	 * @param appId
 	 * @param schoolId
@@ -263,6 +290,7 @@ public class Importer {
 			p.setFullName(p.getFirstName() + " " + p.getLastName());
 			p.setImage(map.get("IMMAGINE"));
 			p.setKidId(map.get("ID"));
+			p.setSharedDiary("X".equals(map.get("DIARIO_CONDIVISO")));
 			List<AuthPerson> parents = new ArrayList<AuthPerson>();
 			parents.add(new AuthPerson(map.get("GENITORE1"), map.get("GENITORE1_RELATION"),true));
 			if (map.containsKey("GENITORE2") && StringUtils.hasText(map.get("GENITORE2"))) {

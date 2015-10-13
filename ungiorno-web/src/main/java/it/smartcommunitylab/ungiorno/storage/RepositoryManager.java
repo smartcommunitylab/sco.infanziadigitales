@@ -16,6 +16,10 @@
 
 package it.smartcommunitylab.ungiorno.storage;
 
+import it.smartcommunitylab.ungiorno.diary.model.DiaryEntry;
+import it.smartcommunitylab.ungiorno.diary.model.DiaryKidProfile;
+import it.smartcommunitylab.ungiorno.diary.model.DiaryTeacher;
+import it.smartcommunitylab.ungiorno.diary.model.MultimediaEntry;
 import it.smartcommunitylab.ungiorno.model.AppInfo;
 import it.smartcommunitylab.ungiorno.model.AuthPerson;
 import it.smartcommunitylab.ungiorno.model.BusData;
@@ -56,10 +60,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
+import com.google.common.collect.Lists;
 
 @Component
 public class RepositoryManager {
@@ -145,6 +151,25 @@ public class RepositoryManager {
 	public void updateChildren(String appId, String schoolId, List<KidProfile> children) {
 		template.remove(schoolQuery(appId, schoolId), KidProfile.class);
 		template.insertAll(children);
+		
+		template.remove(schoolQuery(appId, schoolId), DiaryKidProfile.class);
+		for (KidProfile kp: children) {
+			DiaryKidProfile dkp = new DiaryKidProfile();
+			dkp.setAppId(kp.getAppId());
+			dkp.setSchoolId(kp.getSchoolId());
+			dkp.setKidId(kp.getKidId());
+			
+			List<String> auth = Lists.newArrayList();
+			for (AuthPerson ap: kp.getPersons()) {
+				auth.add(ap.getPersonId());
+			}
+			for (DiaryTeacher dt: kp.getDiaryTeachers()) {
+				auth.add(dt.getTeacherId());
+			}			
+			dkp.setAuthorizedPersonsIds(auth);
+			
+			template.insert(dkp);
+		}
 	}
 	/**
 	 * @param appId
@@ -237,6 +262,33 @@ public class RepositoryManager {
 		q.addCriteria(new Criteria("persons").elemMatch(new Criteria("personId").is(p.getPersonId()).and("parent").is(true)));
 		return template.find(q, KidProfile.class);
 	}
+	
+	/**
+	 * @param appId
+	 * @param username
+	 * @return
+	 */
+	public List<KidProfile> getKidProfilesByTeacher(String appId, String username) {
+		Query q = appQuery(appId);
+		q.addCriteria(new Criteria("username").is(username));
+		Teacher p = template.findOne(q, Teacher.class);
+		
+		q = appQuery(appId);
+		q.addCriteria(new Criteria("teacherId").is(p.getTeacherId()));
+		return template.find(q, KidProfile.class);
+	}	
+	
+	/**
+	 * @param appId
+	 * @param username
+	 * @return
+	 */
+	public List<DiaryKidProfile> getDiaryKidProfilesByAuthId(String appId, String schoolId, String authId) {
+		Query q = schoolQuery(appId, schoolId);
+		q.addCriteria(new Criteria("authorizedPersonsIds").is(authId));
+		return template.find(q, DiaryKidProfile.class);
+	}	
+	
 
 	/**
 	 * @param stop
@@ -849,5 +901,63 @@ public class RepositoryManager {
 		Parent p = template.findOne(q, Parent.class);
 		return p;
 	}
+	
+	public List<DiaryEntry> getDiary(String appId, String schoolId, String kidId, String search, Integer skip, Integer pageSize, Long from, Long to, String tag) {
+		Query q = kidQuery(appId, schoolId, kidId);
 
+		if (search != null) {
+			TextCriteria tc = TextCriteria.forDefaultLanguage().matchingAny(search);
+			q.addCriteria(tc);
+		}
+		
+		if (from != null || to != null) {
+			Criteria dateCriteria = new Criteria("date");
+			if (from != null) {
+				dateCriteria = dateCriteria.gte(from);
+			}
+			if (to != null) {
+				dateCriteria = dateCriteria.lte(to);
+			}
+			q.addCriteria(dateCriteria);
+		}
+		
+		if (skip != null) {
+			q = q.skip(skip);
+		}
+		if (pageSize != null) {
+			q = q.limit(pageSize);
+		}
+		if (tag != null) {
+			q.addCriteria(new Criteria("tags").is(tag));
+		}
+
+		return template.find(q, DiaryEntry.class);
+	}	
+	
+	public DiaryEntry getDiaryEntry(String appId, String schoolId, String kidId, String entryId) {
+		Query q = kidQuery(appId, schoolId, kidId);
+		q.addCriteria(new Criteria("entryId").is(entryId));
+		return template.findOne(q, DiaryEntry.class);
+	}
+	
+	public void saveDiaryEntry(DiaryEntry diary) {
+		Query q = kidQuery(diary.getAppId(), diary.getSchoolId(), diary.getKidId());
+		q.addCriteria(new Criteria("entryId").is(diary.getEntryId()));
+		template.remove(q, DiaryEntry.class);
+		template.save(diary);
+	}
+	
+	public MultimediaEntry getMultimediaEntry(String appId, String schoolId, String kidId, String multimediaId) {
+		Query q = kidQuery(appId, schoolId, kidId);
+		q.addCriteria(new Criteria("multimediaId").is(multimediaId));
+		return template.findOne(q, MultimediaEntry.class);
+	}	
+
+	public void saveMultimediaEntry(MultimediaEntry multimediaEntry) {
+		Query q = kidQuery(multimediaEntry.getAppId(), multimediaEntry.getSchoolId(), multimediaEntry.getKidId());
+		q.addCriteria(new Criteria("multimediaId").is(multimediaEntry.getMultimediaId()));
+		template.remove(q, MultimediaEntry.class);
+		template.save(multimediaEntry);
+	}	
+	
 }

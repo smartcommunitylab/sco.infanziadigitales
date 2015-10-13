@@ -30,15 +30,32 @@ public class AppSetup {
 		Yaml yaml = new Yaml(new Constructor(AppSetup.class));
 		AppSetup data = (AppSetup) yaml.load(resource.getInputStream());
 		this.apps = data.apps;
+		this.uploadDirectory = data.uploadDirectory;
 
 		for (AppInfo cred: data.getApps()) {
 			storage.createApp(cred);
 		}
+		
+		if (appsMap == null) {
+			appsMap = new HashMap<String, AppInfo>();
+			for (AppInfo app : apps) {
+				appsMap.put(app.getAppId(), app);
+			}
+		}		
 	}
 
 
+	private String uploadDirectory;
 	private List<AppInfo> apps;
 	private Map<String,AppInfo> appsMap;
+
+	public String getUploadDirectory() {
+		return uploadDirectory;
+	}
+
+	public void setUploadDirectory(String uploadDirectory) {
+		this.uploadDirectory = uploadDirectory;
+	}
 
 	public List<AppInfo> getApps() {
 		return apps;
@@ -48,18 +65,20 @@ public class AppSetup {
 		this.apps = apps;
 	}
 
+	public Map<String, AppInfo> getAppsMap() {
+		return appsMap;
+	}
+
+	public void setAppsMap(Map<String, AppInfo> appsMap) {
+		this.appsMap = appsMap;
+	}
+
 	@Override
 	public String toString() {
 		return "AppSetup [apps=" + apps + "]";
 	}
 
 	public AppInfo findAppById(String username) {
-		if (appsMap == null) {
-			appsMap = new HashMap<String, AppInfo>();
-			for (AppInfo app : apps) {
-				appsMap.put(app.getAppId(), app);
-			}
-		}
 		return appsMap.get(username);
 	}
 }

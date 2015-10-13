@@ -16,7 +16,11 @@
 
 package it.smartcommunitylab.ungiorno.config;
 
+import it.smartcommunitylab.ungiorno.diary.model.DiaryEntry;
+
 import java.net.UnknownHostException;
+
+import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,6 +30,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.index.TextIndexDefinition;
+import org.springframework.data.mongodb.core.index.TextIndexDefinition.TextIndexDefinitionBuilder;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
@@ -49,6 +55,15 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 
 	@Autowired
 	public AppConfig() {
+	}
+	
+	@PostConstruct
+	public void createIndex() {
+		try {
+		TextIndexDefinition textIndex = new TextIndexDefinitionBuilder().onField("text").build();
+		getMongo().indexOps(DiaryEntry.class).ensureIndex(textIndex);
+		} catch (Exception e) {
+		}
 	}
 
 	@Bean

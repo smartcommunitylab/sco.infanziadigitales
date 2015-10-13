@@ -16,6 +16,7 @@
 package it.smartcommunitylab.ungiorno.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author raman
@@ -26,6 +27,7 @@ public class School implements Serializable {
 	private static final long serialVersionUID = -2439551592309461718L;
 
 	private String schoolId;
+	private List<String> tags;
 
 	public String getSchoolId() {
 		return schoolId;
@@ -33,6 +35,14 @@ public class School implements Serializable {
 
 	public void setSchoolId(String schoolId) {
 		this.schoolId = schoolId;
+	}
+
+	public List<String> getTags() {
+		return tags;
+	}
+
+	public void setTags(List<String> tags) {
+		this.tags = tags;
 	}
 
 }

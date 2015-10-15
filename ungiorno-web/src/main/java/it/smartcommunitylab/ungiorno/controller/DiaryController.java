@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -229,7 +230,8 @@ public class DiaryController {
 	
 
 	private DiaryUser getUser(String appId, String schoolId, boolean isTeacher) {
-		String userId = "marco@gmail.com";
+		String userId = getUserId();
+		
 		DiaryUser du = new DiaryUser();
 
 		if (isTeacher) {
@@ -249,7 +251,10 @@ public class DiaryController {
 		}
 
 		return du;
-
+	}
+	
+	private String getUserId() {
+		return SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 	}
 
 	private List<String> getIds(DiaryUser du) {

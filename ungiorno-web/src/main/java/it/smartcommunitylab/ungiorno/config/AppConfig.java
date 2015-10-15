@@ -83,6 +83,16 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 		resolver.setSuffix(".html");
 		return resolver;
 	}
+	
+//	@Bean
+//	public WebContentInterceptor webContentInterceptor() {
+//		WebContentInterceptor interceptor = new WebContentInterceptor();
+//		interceptor.setCacheSeconds(0);
+//		interceptor.setUseExpiresHeader(true);
+//		interceptor.setUseCacheControlHeader(true);
+//		interceptor.setUseCacheControlNoStore(true);
+//		return interceptor;
+//	}
 
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {

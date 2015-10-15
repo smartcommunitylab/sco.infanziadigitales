@@ -24,6 +24,9 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
 
 	@Override
 	protected UserDetails retrieveUser(String username, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
+		if (UnGiornoUserDetails.isUnGiornoUser(authentication)) {
+			return new UnGiornoUserDetails(username);
+		} 
 		AppInfo app = appSetup.findAppById(username);
 		if (app == null) {
 			throw new UsernameNotFoundException(username);

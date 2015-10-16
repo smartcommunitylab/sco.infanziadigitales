@@ -1,17 +1,15 @@
 package it.smartcommunitylab.ungiorno.controller;
 
 import it.smartcommunitylab.ungiorno.diary.model.DiaryEntry;
-import it.smartcommunitylab.ungiorno.diary.model.DiaryKidProfile;
 import it.smartcommunitylab.ungiorno.diary.model.DiaryUser;
 import it.smartcommunitylab.ungiorno.diary.model.MultimediaEntry;
 import it.smartcommunitylab.ungiorno.model.AppInfo;
 import it.smartcommunitylab.ungiorno.model.KidProfile;
-import it.smartcommunitylab.ungiorno.model.Parent;
 import it.smartcommunitylab.ungiorno.model.Response;
 import it.smartcommunitylab.ungiorno.model.School;
-import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.storage.AppSetup;
 import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
+import it.smartcommunitylab.ungiorno.utils.PermissionsManager;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,7 +22,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,6 +39,9 @@ public class DiaryController {
 
 	@Autowired
 	private RepositoryManager storage;
+	
+	@Autowired
+	private PermissionsManager permissions;
 
 	@Autowired
 	private AppSetup appSetup;
@@ -56,8 +56,8 @@ public class DiaryController {
 				return new Response<>();		
 			}
 
-			DiaryUser du = getUser(appId, schoolId, isTeacher);
-			List<String> ids = getIds(du);
+			DiaryUser du = permissions.getDiaryUser(appId, schoolId, isTeacher);
+			List<String> ids = permissions.getIds(du);
 			if (!ids.contains(kidId)) {
 				return new Response<>();
 			}
@@ -76,8 +76,8 @@ public class DiaryController {
 				return new Response<>();		
 			}
 			
-			DiaryUser du = getUser(appId, schoolId, isTeacher);
-			List<String> ids = getIds(du);
+			DiaryUser du = permissions.getDiaryUser(appId, schoolId, isTeacher);
+			List<String> ids = permissions.getIds(du);
 			if (!ids.contains(kidId)) {
 				return new Response<>();
 			}
@@ -107,8 +107,8 @@ public class DiaryController {
 				return;		
 			}
 			
-			DiaryUser du = getUser(appId, schoolId, isTeacher);
-			List<String> ids = getIds(du);
+			DiaryUser du = permissions.getDiaryUser(appId, schoolId, isTeacher);
+			List<String> ids = permissions.getIds(du);
 			if (!ids.contains(kidId)) {
 				return;
 			}
@@ -153,8 +153,8 @@ public class DiaryController {
 				return;		
 			}
 			
-			DiaryUser du = getUser(appId, schoolId, isTeacher);
-			List<String> ids = getIds(du);
+			DiaryUser du = permissions.getDiaryUser(appId, schoolId, isTeacher);
+			List<String> ids = permissions.getIds(du);
 			if (!ids.contains(kidId)) {
 				return;
 			}
@@ -229,43 +229,6 @@ public class DiaryController {
 	}	
 	
 
-	private DiaryUser getUser(String appId, String schoolId, boolean isTeacher) {
-		String userId = getUserId();
-		
-		DiaryUser du = new DiaryUser();
-
-		if (isTeacher) {
-			Teacher teacher = storage.getTeacher(userId, appId, schoolId);
-			if (teacher != null) {
-				du.setTeacherId(teacher.getTeacherId());
-				List<DiaryKidProfile> kids = storage.getDiaryKidProfilesByAuthId(appId, schoolId, teacher.getTeacherId());
-				du.setStudents(kids);
-			}
-		} else {
-			Parent parent = storage.getParent(userId, appId, schoolId);
-			if (parent != null) {
-				du.setParentId(parent.getPersonId());
-				List<DiaryKidProfile> kids = storage.getDiaryKidProfilesByAuthId(appId, schoolId, parent.getPersonId());
-				du.setSons(kids);
-			}
-		}
-
-		return du;
-	}
 	
-	private String getUserId() {
-		return SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-	}
-
-	private List<String> getIds(DiaryUser du) {
-		List<String> ids = Lists.newArrayList();
-		for (DiaryKidProfile k : du.getStudents()) {
-			ids.add(k.getKidId());
-		}
-		for (DiaryKidProfile k : du.getSons()) {
-			ids.add(k.getKidId());
-		}
-		return ids;
-	}
 
 }

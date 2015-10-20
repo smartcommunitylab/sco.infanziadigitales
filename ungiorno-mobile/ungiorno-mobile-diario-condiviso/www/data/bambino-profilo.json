@@ -9,7 +9,7 @@
         "firstName": "Mario",
         "birthday": 1308967200,
         "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Happy_child.jpg",
-        "personalNotes": "gaw",
+        "personalNotes": "Mario e' allergico a latticini",
         "persons": [{
                 "personId": "personId1",
                 "fullName": "Mara Rossi",
@@ -58,7 +58,7 @@
         "firstName": "Elisa",
         "birthday": 1308957200,
         "image": "http://i.imgur.com/SWFtjEd.jpg",
-        "personalNotes": null,
+        "personalNotes": "Elisa e' allergico a kiwi",
         "persons": [{
                 "personId": "personId1",
                 "fullName": "Maria Rossi",

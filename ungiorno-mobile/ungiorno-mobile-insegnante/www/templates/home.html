@@ -107,12 +107,12 @@
                                 {{note.note}}
                             </ion-item>
                         </ion-list>
-                        <div class="nothing-to-show-placeholder-wrapper">
+                        <div class="padding-no-notes">
                             <div class="nothing-to-show-placeholder" ng-if="teacherNotes.length === 0">
                                 {{'no_notes_today' | translate}}
                             </div>
                         </div>
-                        <button class="button create-note section-tabs" ng-click="createNotes()">{{'new_note' | translate}}</button>
+                        <button class="button create-note " ng-click="createNotes()">{{'new_note' | translate}}</button>
 
                     </div>
                     <div ng-hide="!parentsNote" class="parents-notes" ng-class="{'changing-notes-parents-to-teachers': (!parentsNote && teachersNote)}">
@@ -123,7 +123,7 @@
                                 <ion-item class="item-text-complete" ng-repeat="note in babyWithNotes.parentNotes">{{note.note}}</ion-item>
                             </ion-item>
                         </ion-list>
-                        <div class="nothing-to-show-placeholder-wrapper">
+                        <div>
                             <div class="nothing-to-show-placeholder" ng-if="parentNotes.length === 0">
                                 {{'no_notes_today' | translate}}
                             </div>

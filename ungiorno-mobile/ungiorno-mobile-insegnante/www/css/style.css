@@ -1057,7 +1057,7 @@ select {
 }
 
 .comunication-done:before {
-    content: url(../img/check.png);
+    content: url('../img/check.png');
     color: green;
 }
 
@@ -1386,4 +1386,8 @@ ion-content .scroll {
 .select-note {
     margin-top: 16px;
     margin-left: 16px;
+}
+
+.padding-no-notes {
+    padding-bottom: 24px;
 }

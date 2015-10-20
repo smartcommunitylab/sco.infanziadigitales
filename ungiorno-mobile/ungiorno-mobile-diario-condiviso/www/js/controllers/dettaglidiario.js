@@ -1,26 +1,25 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.controllers.dettaglidiario', [])
 
-.controller('dettaglidiarioCtrl', function ($scope, profileService,$filter,$location,$ionicScrollDelegate,diaryService,$state,Toast) {
+.controller('dettaglidiarioCtrl', function ($scope, profileService, $filter, $location, $ionicScrollDelegate, diaryService, $state, Toast) {
     var mode = "view";
     $scope.createMode = diaryService.getCreateDiaryMode();
-    $scope.modify = function(){
+    $scope.modify = function () {
         $scope.babyCopy = clone($scope.baby);
         mode = "edit";
     }
-    $scope.save = function(){
+    $scope.save = function () {
         var error = false;
         error = checkDataError($scope.babyCopy);
         if (!error) {
             $scope.baby = $scope.babyCopy;
-            if ($scope.createMode){
+            if ($scope.createMode) {
                 $state.go('app.home')
-            }
-            else{
-            mode = "view";
+            } else {
+                mode = "view";
             }
         }
     }
-    var checkDataError = function(objectToCheck){
+    var checkDataError = function (objectToCheck) {
         var error = false;
         for (var key in objectToCheck) {
             if (objectToCheck.hasOwnProperty(key)) {
@@ -31,8 +30,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
                 } else if (objectToCheck[key] instanceof Date && objectToCheck[key] > new Date()) {
                     Toast.show("date must be before today", 'short', 'bottom');
                     error = true;
-                } else if (objectToCheck[key] instanceof Array){
-                    for (var i = 0; i < objectToCheck[key].length; i++){
+                } else if (objectToCheck[key] instanceof Array) {
+                    for (var i = 0; i < objectToCheck[key].length; i++) {
                         error = checkDataError(objectToCheck[key][i]);
                         if (error) return true;
                     }
@@ -42,44 +41,43 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         }
         return false;
     }
-    $scope.isViewMode = function(){
+    $scope.isViewMode = function () {
         return mode === "view";
     }
-    $scope.isMale = function (gender){
+    $scope.isMale = function (gender) {
         return gender === "Maschio";
     }
-    $scope.isTeacher = function (relation){
+    $scope.isTeacher = function (relation) {
         return relation === "maestra";
     }
-    $scope.isFamily = function (relation){
-        return relation === "mamma" || relation === "papà" || relation === "sorella" || relation === "fratello";
+    $scope.isFamily = function (relation) {
+        return relation === "mamma" || relation === "papà" || relation === "sorella" || relation === "fratello" || relation.startsWith('Genitore');
     }
-    $scope.getBaby = function(gender){
+    $scope.getBaby = function (gender) {
         var baby;
-        if (gender === "Femmina"){
+        if (gender === "Femmina") {
             baby = "bambina";
-        }
-        else{
+        } else {
 
             baby = "bambino";
         }
         return baby;
     }
     $scope.addedComponents = [];
-    $scope.addComponent = function(){
+    $scope.addComponent = function () {
         $scope.scrollTo("selezion-button");
         $scope.addedComponents.push({});
     }
     $scope.addedPeople = [];
 
-    $scope.addPeople = function(){
+    $scope.addPeople = function () {
         $scope.scrollTo("selezion-button");
         $scope.addedPeople.push({})
     }
-    $scope.deleteComponent = function(index){
+    $scope.deleteComponent = function (index) {
         $scope.addedComponents.splice(index, 1);
     }
-    $scope.deletePeople = function(index){
+    $scope.deletePeople = function (index) {
         $scope.addedPeople.splice(index, 1);
         $ionicScrollDelegate.scrollBottom("bottom-button");
     }
@@ -87,11 +85,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         $location.hash(id)
         $ionicScrollDelegate.anchorScroll(true);
     };
-    $scope.isEmptyNote = function(note){
-        if (note === ""){
+    $scope.isEmptyNote = function (note) {
+        if (note === "") {
             return true
-        }
-        else{
+        } else {
             return false
         }
     }
@@ -99,42 +96,42 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
     $scope.getPreposition = function (gender, relation) {
         var toRtn;
         switch (gender) {
-            case 'Maschio':
-                toRtn = "del";
-                break;
-            case 'Femmina':
-                toRtn = "della";
-                break;
-            default:
-                toRtn = "del";
+        case 'Maschio':
+            toRtn = "del";
+            break;
+        case 'Femmina':
+            toRtn = "della";
+            break;
+        default:
+            toRtn = "del";
         }
         if (relation === "zio") {
             toRtn = "dello";
         }
         return toRtn;
     }
-    $scope.getString = function (firstString, gender, relation){
+    $scope.getString = function (firstString, gender, relation) {
         var string;
         string = $filter('translate')(firstString) + $scope.getPreposition(gender, relation);
         return string;
     }
     $scope.babyCopy = {}
 
-    if ($scope.createMode){
+    if ($scope.createMode) {
         $scope.modify();
-    }
-    else{
+    } else {
 
-        profileService.getCurrentBaby().then( function(data){
+        profileService.getCurrentBaby().then(function (data) {
             $scope.baby = data;
             $scope.baby.birthday = new Date($scope.baby.birthday * 1000);
-            for (var i = 0; i < $scope.baby.persons.length; i++){
+            for (var i = 0; i < $scope.baby.persons.length; i++) {
                 $scope.baby.persons[i].birthday = new Date($scope.baby.persons[i].birthday * 1000);
             }
             $scope.babyCopy = clone($scope.baby);
 
         });
     }
+
     function clone(obj) {
         var copy;
         if (null == obj || "object" != typeof obj) return obj;

@@ -229,6 +229,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         babysetting_services: 'Servizi',
         babysetting_hours: 'Orario di uscita:',
         babysetting_who: 'Chi ritira il bambino:',
+        babysetting_bus: 'Autobus',
         babysetting_busGo: 'Fermata bus andata:',
         babysetting_busBack: 'Fermata bus ritorno:',
         retire: "Ritiro del bambino",
@@ -305,7 +306,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         period_from: "Da",
         period_to: "A",
         reason: "Motivazione",
-        reason_other: "Altro..."
+        reason_other: "Altro...",
+        absence_other: "Altro"
     });
 
     $translateProvider.translations('en', {
@@ -326,6 +328,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         babysetting_services: 'Servizi',
         babysetting_hours: 'Orario di uscita:',
         babysetting_who: 'Chi ritira il bambino:',
+        babysetting_bus: 'Autobus',
         babysetting_busGo: 'Fermata bus andata:',
         babysetting_busBack: 'Fermata bus ritorno:',
         retire: "Ritiro del bambino",
@@ -393,7 +396,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         absence_date_wrong: "La data d'inizio dell'assenza succede quella della fine. Modificare le date.",
         assenza_sendok: 'Assenza inviata con successo',
         assenza_sendno: 'Assenza non inviata',
-        absence_choose: 'Selezionare un motivo dell\'assenza'
+        absence_choose: 'Selezionare un motivo dell\'assenza',
+        absence_other: "Altro"
+
     });
 
     $translateProvider.translations('de', {
@@ -414,6 +419,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         babysetting_services: 'Servizi',
         babysetting_hours: 'Orario di uscita:',
         babysetting_who: 'Chi ritira il bambino:',
+        babysetting_bus: 'Autobus',
         babysetting_busGo: 'Fermata bus andata:',
         babysetting_busBack: 'Fermata bus ritorno:',
         retire: "Ritiro",
@@ -490,7 +496,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         period_from: "From",
         period_to: "To",
         reason: "Reason",
-        reason_other: "Other..."
+        reason_other: "Other...",
+        absence_other: "Altro"
+
 
     });
 

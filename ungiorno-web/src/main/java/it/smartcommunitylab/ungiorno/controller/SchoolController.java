@@ -26,6 +26,7 @@ import it.smartcommunitylab.ungiorno.model.SectionData;
 import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.model.TeacherCalendar;
 import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
+import it.smartcommunitylab.ungiorno.utils.PermissionsManager;
 
 import java.util.Collection;
 import java.util.List;
@@ -48,6 +49,9 @@ public class SchoolController {
 
 	@Autowired
 	private RepositoryManager storage;
+	
+	@Autowired
+	private PermissionsManager permissions;		
 
 	@RequestMapping(method = RequestMethod.GET, value = "/ping")
 	public @ResponseBody
@@ -69,7 +73,7 @@ public class SchoolController {
 	@RequestMapping(method = RequestMethod.GET, value = "/school/{appId}/profile")
 	public @ResponseBody Response<SchoolProfile> getSchoolProfileForTeacher(@PathVariable String appId) {
 		try {
-			String userId = getUserId();
+			String userId = permissions.getUserId();
 			SchoolProfile profile = storage.getSchoolProfileForUser(appId, userId);
 			return new Response<SchoolProfile>(profile);
 		} catch (Exception e) {
@@ -111,7 +115,7 @@ public class SchoolController {
 			else if (sectionIds != null && sectionIds.length > 0) {
 				comm.setSectionIds(sectionIds);
 			} else {
-				comm.setSectionIds(storage.getTeacher(getUserId(), appId, schoolId).getSectionIds().toArray(new String[0]));
+				comm.setSectionIds(storage.getTeacher(permissions.getUserId(), appId, schoolId).getSectionIds().toArray(new String[0]));
 			}
 
 			return new Response<>(storage.saveInternalNote(comm));
@@ -125,7 +129,7 @@ public class SchoolController {
 
 		try {
 			if (sectionIds == null || sectionIds.length == 0) {
-				sectionIds = (String[])storage.getTeacher(getUserId(), appId, schoolId).getSectionIds().toArray(new String[0]);
+				sectionIds = (String[])storage.getTeacher(permissions.getUserId(), appId, schoolId).getSectionIds().toArray(new String[0]);
 			}
 			List<InternalNote> list = storage.getInternalNotes(appId, schoolId, sectionIds, date);
 			return new Response<>(list);
@@ -194,21 +198,13 @@ public class SchoolController {
 
 		try {
 
-			Collection<String> sections = storage.getTeacher(getUserId(), appId, schoolId).getSectionIds();
+			Collection<String> sections = storage.getTeacher(permissions.getUserId(), appId, schoolId).getSectionIds();
 			List<SectionData> list = storage.getSections(appId, schoolId, sections , date);
 			return new Response<>(list);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new Response<>(e.getMessage());
 		}
-	}
-
-	/**
-	 * @return
-	 */
-	private String getUserId() {
-		// TODO Auto-generated method stub
-		return "giulia.puccini@gmail.com";
 	}
 
 }

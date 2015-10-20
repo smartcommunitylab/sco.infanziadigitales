@@ -15,6 +15,8 @@
  ******************************************************************************/
 package it.smartcommunitylab.ungiorno.model;
 
+import it.smartcommunitylab.ungiorno.diary.model.DiaryTeacher;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,6 +51,10 @@ public class KidProfile extends SchoolObject {
 	private KidServices services;
 	private List<AuthPerson> persons;
 	private List<Allergy> allergies;
+	
+	private List<DiaryTeacher> diaryTeachers;
+	private Boolean sharedDiary;
+	
 	public String getKidId() {
 		return kidId;
 	}
@@ -98,11 +104,29 @@ public class KidProfile extends SchoolObject {
 		this.persons = persons;
 	}
 	public List<Allergy> getAllergies() {
-		if (allergies == null) allergies = new ArrayList<KidProfile.Allergy>();
+		if (allergies == null) {
+			allergies = new ArrayList<KidProfile.Allergy>();
+		}
 		return allergies;
 	}
 	public void setAllergies(List<Allergy> allergies) {
 		this.allergies = allergies;
+	}
+	public Boolean getSharedDiary() {
+		return sharedDiary;
+	}
+	public void setSharedDiary(Boolean sharedDiary) {
+		this.sharedDiary = sharedDiary;
+	}
+
+	public List<DiaryTeacher> getDiaryTeachers() {
+		if (diaryTeachers == null) {
+			diaryTeachers = new ArrayList<DiaryTeacher>();
+		}
+		return diaryTeachers;
+	}
+	public void setDiaryTeachers(List<DiaryTeacher> diaryTeachers) {
+		this.diaryTeachers = diaryTeachers;
 	}
 
 	private String _id;

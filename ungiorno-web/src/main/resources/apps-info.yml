@@ -1,6 +1,12 @@
+uploadDirectory: c:/tmp/pics
 apps:
   - appId: trento
     password: trento
     schools:
-    - schoolId: scuola
-    - schoolId: scuola2
+      - 
+        schoolId: scuola
+        tags: 
+          - tag1
+          - tag2
+      - 
+        schoolId: scuola2

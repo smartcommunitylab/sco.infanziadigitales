@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class AppDetails implements UserDetails {
 	private static final long serialVersionUID = 1970015369860723085L;
 
+	public static final String MANAGER = "MANAGER";
+	
 	private AppInfo app;
 
 	public AppDetails() {
@@ -26,7 +28,7 @@ public class AppDetails implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return Collections.singletonList(new SimpleGrantedAuthority(app.getAppId()));
+		return Collections.singletonList(new SimpleGrantedAuthority(MANAGER));
 	}
 
 	@Override

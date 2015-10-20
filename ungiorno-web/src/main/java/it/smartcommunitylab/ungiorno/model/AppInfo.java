@@ -27,11 +27,6 @@ public class AppInfo implements Serializable{
         this.password = password;
     }
 
-    @Override
-    public String toString() {
-    	return appId + "=" + password;
-    }
-
 	public List<School> getSchools() {
 		return schools;
 	}
@@ -39,5 +34,11 @@ public class AppInfo implements Serializable{
 	public void setSchools(List<School> schools) {
 		this.schools = schools;
 	}
+
+	@Override
+    public String toString() {
+    	return appId + "=" + password;
+    }
+	
 
 }

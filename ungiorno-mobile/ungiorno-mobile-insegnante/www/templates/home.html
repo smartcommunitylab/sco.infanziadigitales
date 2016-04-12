@@ -73,7 +73,7 @@
                 <div class="home-separator"></div>
                 <div class="children-home" ng-repeat="child in childrenProfiles[selectedPeriod] track by $index" ng-click="detailOrCommunication(child)">
 
-                    <img ng-src="{{child.image}}" ng-class="{'child-assente' : (child.exitTime == null  || child.exitTime <= getNowDate()  || (child[selectedPeriod].active && !child[selectedPeriod].enabled) ), 'child-presente' :  (child.exitTime != null && child.exitTime>getNowDate()  && child[selectedPeriod].active && child[selectedPeriod].enabled)}">
+                    <img ng-src="{{getChildImage(child)}}" ng-class="{'child-assente' : (child.exitTime == null  || child.exitTime <= getNowDate()  || (child[selectedPeriod].active && !child[selectedPeriod].enabled) ), 'child-presente' :  (child.exitTime != null && child.exitTime>getNowDate()  && child[selectedPeriod].active && child[selectedPeriod].enabled)}">
                     <!--            <img ng-src="{{child.image}}">-->
                     <div class="children-assente" ng-if="child.exitTime == null || (child[selectedPeriod].active && !child[selectedPeriod].enabled)"><span>{{'absent' | translate}}</span>
                     </div>

@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.home', [])
 
-.controller('HomeCtrl', function ($scope, $location, dataServerService, profileService, babyConfigurationService, $filter, $state, Toast, $ionicModal, moment, teachersService, sectionService, communicationService, $ionicSideMenuDelegate, $ionicPopup) {
+.controller('HomeCtrl', function ($scope, $location, dataServerService, profileService, babyConfigurationService, $filter, $state, Toast, $ionicModal, moment, teachersService, sectionService, communicationService, Config, $ionicSideMenuDelegate, $ionicPopup) {
     $scope.sections = null;
     $scope.section = null;
     $scope.childrenConfigurations = [];
@@ -521,4 +521,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         $scope.selectedPeriod = period;
         $scope.getChildrenProfilesByPeriod(period);
     }
+		
+		$scope.getChildImage = function(child) {
+			var image = "/" + Config.app() + "/student/" + Config.appId() + "/" + $scope.schoolProfile.schoolId + "/" + child.kidId
+			+ "/true/images";
+			return image;
+		}
+		
 });

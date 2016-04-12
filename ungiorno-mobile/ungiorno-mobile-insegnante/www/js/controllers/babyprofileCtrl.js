@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.babyprofile', [])
 
-.controller('babyprofileCtrl', function ($scope, dataServerService, profileService, babyConfigurationService, $filter, Toast, $ionicLoading, $ionicPopup) {
+.controller('babyprofileCtrl', function ($scope, dataServerService, profileService, babyConfigurationService, Config, $filter, Toast, $ionicLoading, $ionicPopup) {
 
     $scope.newNote = {
         argument: "",
@@ -143,5 +143,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
         }
 
     }
-
+		
+		$scope.getProfileImage = function() {
+			var image = "/" + Config.app() + "/student/" + Config.appId() + "/" + $scope.schoolProfile.schoolId + "/" + $scope.babyProfile.kidId
+			+ "/true/images";
+			return image;
+		}
 });

@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
@@ -89,7 +90,8 @@ public class PermissionsManager {
 	}
 
 	public String getUserId() {
-		return SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+		UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return principal.getUsername();
 	}
 
 }

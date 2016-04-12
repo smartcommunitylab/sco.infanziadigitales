@@ -98,8 +98,7 @@ public class Importer {
 			busData.clear();
 			mapChildrenData(appId, schoolId, wb);
 			
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
 			throw new ImportError(e.getMessage());
 		}
 	}
@@ -348,6 +347,7 @@ public class Importer {
 		additionalFound.removeAll(expected);		
 		
 		if (!missingExpected.isEmpty() || !additionalFound.isEmpty()) {
+			System.err.println("Missing sheet(s) expected: " + missingExpected + " - Additional sheet(s) found: " + additionalFound);
 			throw new ImportError(Lists.newArrayList("Missing sheet(s) expected: " + missingExpected, "Additional sheet(s) found: " + additionalFound));
 		}
 		return wb;

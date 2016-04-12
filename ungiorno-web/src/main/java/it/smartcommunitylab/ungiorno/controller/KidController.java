@@ -34,13 +34,19 @@ import it.smartcommunitylab.ungiorno.utils.PermissionsManager;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.collect.Lists;
@@ -52,12 +58,15 @@ public class KidController {
 
 	@Autowired
 	private RepositoryManager storage;
-	
-	@Autowired
-	private PermissionsManager permissions;	
 
-	@RequestMapping(method = RequestMethod.GET, value = "/student/{appId}/{schoolId}/{kidId}/calendar")
-	public @ResponseBody Response<List<CalendarItem>> getCalendar(@PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId, @RequestParam long from, @RequestParam long to) {
+	@Autowired
+	private PermissionsManager permissions;
+
+	@RequestMapping(method = RequestMethod.GET,
+			value = "/student/{appId}/{schoolId}/{kidId}/calendar")
+	public @ResponseBody Response<List<CalendarItem>> getCalendar(@PathVariable String appId,
+			@PathVariable String schoolId, @PathVariable String kidId, @RequestParam long from,
+			@RequestParam long to) {
 
 		try {
 			if (!permissions.checkKidProfile(appId, schoolId, kidId, null)) {
@@ -74,20 +83,15 @@ public class KidController {
 
 	@RequestMapping(method = RequestMethod.GET, value = "/student/{appId}/profiles")
 	public @ResponseBody Response<List<KidProfile>> getProfiles(@PathVariable String appId) {
-
-		try {
-			String userId = permissions.getUserId();
-
-			List<KidProfile> profiles = storage.getKidProfilesByParent(appId, userId);
-			return new Response<>(profiles);
-		} catch (Exception e) {
-			return new Response<>(e.getMessage());
-		}
-
+		
+		String userId = permissions.getUserId();
+		List<KidProfile> profiles = storage.getKidProfilesByParent(appId, userId);
+		return new Response<>(profiles);
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/student/{appId}/{schoolId}/{kidId}/profile")
-	public @ResponseBody Response<KidProfile> getProfile(@PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId) {
+	public @ResponseBody Response<KidProfile> getProfile(@PathVariable String appId,
+			@PathVariable String schoolId, @PathVariable String kidId) {
 
 		try {
 			if (!permissions.checkKidProfile(appId, schoolId, kidId, null)) {
@@ -103,7 +107,8 @@ public class KidController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/student/{appId}/{schoolId}/{kidId}/config")
-	public @ResponseBody Response<KidConfig> getConfig(@PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId) {
+	public @ResponseBody Response<KidConfig> getConfig(@PathVariable String appId,
+			@PathVariable String schoolId, @PathVariable String kidId) {
 
 		try {
 			if (!permissions.checkKidProfile(appId, schoolId, kidId, null)) {
@@ -118,13 +123,14 @@ public class KidController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/student/{appId}/{schoolId}/{kidId}/config")
-	public @ResponseBody Response<KidConfig> sendConfig(@RequestBody KidConfig config, @PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId) {
+	public @ResponseBody Response<KidConfig> sendConfig(@RequestBody KidConfig config,
+			@PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId) {
 
 		try {
 			if (!permissions.checkKidProfile(appId, schoolId, kidId, null)) {
 				return new Response<>();
 			}
-			
+
 			config.setAppId(appId);
 			config.setKidId(kidId);
 			config.setSchoolId(schoolId);
@@ -137,13 +143,14 @@ public class KidController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/student/{appId}/{schoolId}/{kidId}/stop")
-	public @ResponseBody Response<KidConfig> sendStop(@RequestBody KidCalFermata stop, @PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId) {
+	public @ResponseBody Response<KidConfig> sendStop(@RequestBody KidCalFermata stop,
+			@PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId) {
 
 		try {
 			if (!permissions.checkKidProfile(appId, schoolId, kidId, null)) {
 				return new Response<>();
 			}
-			
+
 			stop.setAppId(appId);
 			stop.setKidId(kidId);
 			stop.setSchoolId(schoolId);
@@ -156,13 +163,14 @@ public class KidController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/student/{appId}/{schoolId}/{kidId}/stop")
-	public @ResponseBody Response<KidCalFermata> getStop(@PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId, @RequestParam long date) {
+	public @ResponseBody Response<KidCalFermata> getStop(@PathVariable String appId,
+			@PathVariable String schoolId, @PathVariable String kidId, @RequestParam long date) {
 
 		try {
 			if (!permissions.checkKidProfile(appId, schoolId, kidId, null)) {
 				return new Response<>();
 			}
-			
+
 			KidCalFermata obj = storage.getStop(appId, schoolId, kidId, date);
 			return new Response<>(obj);
 		} catch (Exception e) {
@@ -170,14 +178,16 @@ public class KidController {
 		}
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "/student/{appId}/{schoolId}/{kidId}/absence")
-	public @ResponseBody Response<KidConfig> sendAssenza(@RequestBody KidCalAssenza absence, @PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId) {
+	@RequestMapping(method = RequestMethod.POST,
+			value = "/student/{appId}/{schoolId}/{kidId}/absence")
+	public @ResponseBody Response<KidConfig> sendAssenza(@RequestBody KidCalAssenza absence,
+			@PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId) {
 
 		try {
 			if (!permissions.checkKidProfile(appId, schoolId, kidId, false)) {
 				return new Response<>();
 			}
-			
+
 			absence.setAppId(appId);
 			absence.setKidId(kidId);
 			absence.setSchoolId(schoolId);
@@ -190,29 +200,30 @@ public class KidController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/student/{appId}/{schoolId}/{kidId}/absence")
-	public @ResponseBody Response<KidCalAssenza> getAssenza(@PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId, @RequestParam long date) {
+	public @ResponseBody Response<KidCalAssenza> getAssenza(@PathVariable String appId,
+			@PathVariable String schoolId, @PathVariable String kidId, @RequestParam long date) {
 
 		try {
 			if (!permissions.checkKidProfile(appId, schoolId, kidId, null)) {
 				return new Response<>();
-			}			
-			
+			}
+
 			KidCalAssenza obj = storage.getAbsence(appId, schoolId, kidId, date);
 			return new Response<>(obj);
 		} catch (Exception e) {
 			return new Response<>(e.getMessage());
 		}
 	}
-	
 
 	@RequestMapping(method = RequestMethod.POST, value = "/student/{appId}/{schoolId}/{kidId}/return")
-	public @ResponseBody Response<KidConfig> sendRitiro(@RequestBody KidCalRitiro ritiro, @PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId) {
+	public @ResponseBody Response<KidConfig> sendRitiro(@RequestBody KidCalRitiro ritiro,
+			@PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId) {
 
 		try {
 			if (!permissions.checkKidProfile(appId, schoolId, kidId, false)) {
 				return new Response<>();
 			}
-			
+
 			ritiro.setAppId(appId);
 			ritiro.setKidId(kidId);
 			ritiro.setSchoolId(schoolId);
@@ -223,15 +234,16 @@ public class KidController {
 			return new Response<>(e.getMessage());
 		}
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "/student/{appId}/{schoolId}/{kidId}/return")
-	public @ResponseBody Response<KidCalRitiro> getRitiro(@PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId, @RequestParam long date) {
+	public @ResponseBody Response<KidCalRitiro> getRitiro(@PathVariable String appId,
+			@PathVariable String schoolId, @PathVariable String kidId, @RequestParam long date) {
 
 		try {
 			if (!permissions.checkKidProfile(appId, schoolId, kidId, null)) {
 				return new Response<>();
 			}
-			
+
 			KidCalRitiro obj = storage.getReturn(appId, schoolId, kidId, date);
 			return new Response<>(obj);
 		} catch (Exception e) {
@@ -239,9 +251,9 @@ public class KidController {
 		}
 	}
 
-
 	@RequestMapping(method = RequestMethod.GET, value = "/student/{appId}/{schoolId}/{kidId}/notes")
-	public @ResponseBody Response<List<KidCalNote>> getNotes(@PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId, @RequestParam long date) {
+	public @ResponseBody Response<List<KidCalNote>> getNotes(@PathVariable String appId,
+			@PathVariable String schoolId, @PathVariable String kidId, @RequestParam long date) {
 
 		try {
 			if (!permissions.checkKidProfile(appId, schoolId, kidId, null)) {
@@ -257,7 +269,9 @@ public class KidController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/student/{appId}/{schoolId}/notes")
-	public @ResponseBody Response<List<KidCalNote>> getSectionNotes(@PathVariable String appId, @PathVariable String schoolId, @RequestParam(required=false) String[] sectionIds, @RequestParam long date) {
+	public @ResponseBody Response<List<KidCalNote>> getSectionNotes(@PathVariable String appId,
+			@PathVariable String schoolId, @RequestParam(required = false) String[] sectionIds,
+			@RequestParam long date) {
 
 		Set<String> sIds;
 		if (sectionIds != null) {
@@ -265,18 +279,18 @@ public class KidController {
 		} else {
 			sIds = Sets.newHashSet();
 		}
-		
+
 		Teacher teacher = storage.getTeacher(permissions.getUserId(), appId, schoolId);
 
 		if (teacher == null) {
 			return new Response<>();
 		}
-		
+
 		Set<String> tsIds = Sets.newHashSet(teacher.getSectionIds());
-		
+
 		SetView sv = Sets.intersection(sIds, tsIds);
-		String[] sections = (String[])Lists.newArrayList(sv).toArray(new String[]{});
-		
+		String[] sections = (String[]) Lists.newArrayList(sv).toArray(new String[] {});
+
 		try {
 			List<KidCalNote> list = storage.getKidCalNotesForSection(appId, schoolId, sections, date);
 			return new Response<>(list);
@@ -286,9 +300,9 @@ public class KidController {
 
 	}
 
-
 	@RequestMapping(method = RequestMethod.POST, value = "/student/{appId}/{schoolId}/{kidId}/notes")
-	public @ResponseBody Response<KidCalNote> saveNote(@RequestBody KidCalNote note, @PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId) {
+	public @ResponseBody Response<KidCalNote> saveNote(@RequestBody KidCalNote note,
+			@PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId) {
 
 		try {
 			note.setAppId(appId);
@@ -297,20 +311,22 @@ public class KidController {
 			if (note.getParentNotes() != null && !note.getParentNotes().isEmpty()) {
 				if (!permissions.checkKidProfile(appId, schoolId, kidId, true)) {
 					return new Response<>();
-				}				
-				
+				}
+
 				Parent parent = storage.getParent(permissions.getUserId(), appId, schoolId);
-				if (parent == null) throw new IllegalArgumentException("No person registered");
+				if (parent == null)
+					throw new IllegalArgumentException("No person registered");
 				for (Note n : note.getParentNotes()) {
 					n.setPersonId(parent.getPersonId());
 				}
 			} else if (note.getSchoolNotes() != null && !note.getSchoolNotes().isEmpty()) {
 				if (!permissions.checkKidProfile(appId, schoolId, kidId, false)) {
 					return new Response<>();
-				}				
-				
+				}
+
 				Teacher teacher = storage.getTeacher(permissions.getUserId(), appId, schoolId);
-				if (teacher == null) throw new IllegalArgumentException("No teacher registered");
+				if (teacher == null)
+					throw new IllegalArgumentException("No teacher registered");
 				for (Note n : note.getSchoolNotes()) {
 					n.setPersonId(teacher.getTeacherId());
 				}
@@ -325,8 +341,10 @@ public class KidController {
 
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/student/{appId}/{schoolId}/{kidId}/communications")
-	public @ResponseBody Response<List<Communication>> getComms(@PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId) {
+	@RequestMapping(method = RequestMethod.GET,
+			value = "/student/{appId}/{schoolId}/{kidId}/communications")
+	public @ResponseBody Response<List<Communication>> getComms(@PathVariable String appId,
+			@PathVariable String schoolId, @PathVariable String kidId) {
 
 		try {
 			if (!permissions.checkKidProfile(appId, schoolId, kidId, null)) {
@@ -338,6 +356,13 @@ public class KidController {
 		} catch (Exception e) {
 			return new Response<>(e.getMessage());
 		}
+	}
+
+	@ExceptionHandler(Exception.class)
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	@ResponseBody
+	public String handleError(HttpServletRequest request, Exception exception) {
+		return exception.getMessage();
 	}
 
 }

@@ -24,18 +24,45 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
     'it.smartcommunitylab.infanziadigitales.diario.teachers.services.communicationService',
     'it.smartcommunitylab.infanziadigitales.diario.teachers.services.teachersService',
     'it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.login',
+		'it.smartcommunitylab.infanziadigitales.diario.teachers.services.loginService',
     'angularMoment'
 ])
 
-.run(function ($ionicPlatform, $rootScope, $cordovaSplashscreen, $state, $translate, $q, $ionicHistory, $ionicConfig, Config, babyConfigurationService, profileService, dataServerService, Toast, $ionicSideMenuDelegate) {
-    $rootScope.userIsLogged = (localStorage.userId != null && localStorage.userId != "null");
+.run(function ($ionicPlatform, $rootScope, $cordovaSplashscreen, $state, $translate, $q, $ionicHistory, $ionicConfig, Config, 
+	babyConfigurationService, profileService, dataServerService, loginService, Toast, $ionicSideMenuDelegate) {
+		
+	$rootScope.getUserId = function () {
+			return localStorage.userId;
+	};
 
-    $rootScope.getUserId = function () {
-        if ($rootScope.userIsLogged) {
-            return localStorage.userId;
-        }
-        return null;
-    };
+	$rootScope.userIsLogged = function() {
+		return (localStorage.userId != null && localStorage.userId != "null");	
+	};
+	
+	$rootScope.loginStarted = false;
+	$rootScope.authWindow = null;
+	
+	$rootScope.login = function () {
+		if ($rootScope.loginStarted) return;
+
+		$rootScope.loginStarted = true;
+		loginService.login().then(
+			function (data) {
+				$rootScope.loginStarted = false;
+				localStorage.userId = data.userId;
+				$state.go('app.home', {}, {
+        	reload: true
+        });				
+			},
+			function (error) {
+				//The user denied access to the app
+				$rootScope.loginStarted = false;
+				localStorage.userId = null;
+				alert('autenticazione non riuscita');
+				ionic.Platform.exitApp();
+			}
+		);
+	};	
 
     $ionicPlatform.ready(function () {
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -62,6 +89,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
         $rootScope.platform = ionic.Platform;
         $rootScope.backButtonStyle = $ionicConfig.backButton.icon();
         // $rootScope.getConfiguration();
+				
+				if(!$rootScope.userIsLogged()) {
+					$rootScope.login();
+				} else {
+					$state.go('app.home', {}, {
+						reload: true
+					});				
+				}
     });
 
 
@@ -157,10 +192,20 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
                 }
             }
         })
-
+				.state('app.login', {
+					cache: false,
+					url: '/login',
+					abstract: false,
+					views: {
+						'menuContent': {
+							templateUrl: "templates/login.html",
+							controller: 'AppCtrl'
+						}
+					}
+				});
 
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/app/home');
+    $urlRouterProvider.otherwise('/app/login');
 
     $translateProvider.translations('it', {
         menu_home: 'Home',

@@ -64,6 +64,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.c
         savedImagesDirName: function () {
             return 'Percorsi-ImagesCache';
         },
+				getServerURL: function() {
+					return URL + '/' + app;	
+				},
         syncUrl: function () {
             //console.log('$rootScope.TEST_CONNECTION: '+(!!$rootScope.TEST_CONNECTION));
             var SYNC_MODE = (!!$rootScope.TEST_CONNECTION ? 'syncdraft' : 'sync');

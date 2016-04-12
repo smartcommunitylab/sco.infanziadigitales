@@ -95,6 +95,7 @@ public class ConsoleController {
 			}
 			res = new ObjectMapper().writeValueAsString(storage.getApp(appId));
 		} catch (ImportError e) {
+			System.err.println("ERROR:" + e.getMessage());
 			res = new ObjectMapper().writeValueAsString(e);
 		}
 		return res;

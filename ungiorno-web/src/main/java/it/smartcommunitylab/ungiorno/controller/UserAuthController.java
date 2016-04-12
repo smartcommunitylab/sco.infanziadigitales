@@ -89,7 +89,7 @@ public class UserAuthController {
 			AccountProfile accountProfile = profileService.getAccountProfile(tokenData.getAccess_token());
 			
 			UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-					accountProfile.getAttribute("google", "openid.ext1.value.email"), basicProfile.getUserId(), UnGiornoUserDetails.UNGIORNO_AUTHORITIES);			
+					accountProfile.getAttribute("google", "OIDC_CLAIM_email"), basicProfile.getUserId(), UnGiornoUserDetails.UNGIORNO_AUTHORITIES);			
 			
 			token.setDetails(new WebAuthenticationDetails(request));
 			Authentication authenticatedUser = authenticationManager.authenticate(token);

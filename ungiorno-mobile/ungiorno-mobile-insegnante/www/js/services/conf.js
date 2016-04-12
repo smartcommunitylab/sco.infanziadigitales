@@ -50,6 +50,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
         URL: function () {
             return URL;
         },
+				getServerURL: function() {
+					return URL + '/' + app;	
+				},
         app: function () {
             return app;
         },

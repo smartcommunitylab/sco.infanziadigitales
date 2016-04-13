@@ -523,7 +523,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     }
 		
 		$scope.getChildImage = function(child) {
-			var image = "/" + Config.app() + "/student/" + Config.appId() + "/" + $scope.schoolProfile.schoolId + "/" + child.kidId
+			var image = Config.URL() + "/" + Config.app() + "/student/" + Config.appId() + "/" + $scope.schoolProfile.schoolId + "/" + child.kidId
 			+ "/true/images";
 			return image;
 		}

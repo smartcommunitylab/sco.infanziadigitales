@@ -195,7 +195,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     }
 		
 		$scope.getProfileImage = function() {
-			var image = "/" + Config.app() + "/student/" + Config.appId() + "/" + $scope.babyselected.schoolId + "/" + $scope.babyselected.kidId
+			var image = Config.URL() + "/" + Config.app() + "/student/" + Config.appId() + "/" + $scope.babyselected.schoolId + "/" + $scope.babyselected.kidId
 			+ "/false/images";
 			return image;
 		}

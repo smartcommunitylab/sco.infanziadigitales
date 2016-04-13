@@ -101,7 +101,7 @@
                         <ion-list>
                             <ion-item class="item-text-complete" ng-repeat="note in teacherNotes track by $index">
                                 <div class="babyNames" ng-if="isBabyAssignedToNote(note)">
-                                    <img class="notes-baby-image" ng-if="note.kids.length === 1" ng-src="{{note.kids[0].image}}"></img>
+                                    <img class="notes-baby-image" ng-if="note.kids.length === 1" ng-src="{{getChildImage(note.kids[0])}}"></img>
                                     <div class="notes-baby-name inline" ng-repeat="baby in note.kids track by $index" ng-click="openDetailById(note.kidIds[$index])">{{baby.name}}</div>
                                 </div>
                                 {{note.note}}
@@ -146,7 +146,7 @@
                             </label>
                             <ion-list class="list children-search" ng-if="displayHint()" ng-focus="focused(false, true)" ng-blur="focused(false, false)">
                                 <ion-item class="item-text-complete" ng-repeat="children in newNote.possibleChildrens" class="child-search" ng-click="selectChildrenForNote(children)">
-                                    <img class="inline new-note-kid-image" ng-src="{{children.image}}"></img>
+                                    <img class="inline new-note-kid-image" ng-src="{{getChildImage(children)}}"></img>
                                     <div class="inline new-note-kid-name">{{children.childrenName}}</div>
                                 </ion-item>
                             </ion-list>
@@ -155,7 +155,7 @@
                             </div>
                             <ion-list ng-if="newNote.assignedBaby">
                                 <ion-item class="item-text-complete" class="associated-kid-container" ng-repeat="children in newNote.associatedKids">
-                                    <img class="inline associated-kid-image" ng-src="{{children.image}}"></img>
+                                    <img class="inline associated-kid-image" ng-src="{{getChildImage(children)}}"></img>
                                     <div class="inline associated-kid-name">{{children.childrenName}}</div>
                                     <button class="button associated-kid-delete-btn" ng-click="deleteChildrenFromNewNote(children)">
                                         <i class="icon ion-android-close"></i>

@@ -364,6 +364,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
                 for (var i = 0; i < note.kidIds.length; i++) {
                     if ($scope.section.children[sectionChildrenIndex].kidId === note.kidIds[i]) {
                         var baby = {
+														kidId: $scope.section.children[sectionChildrenIndex].kidId,
                             image: $scope.section.children[sectionChildrenIndex].image,
                             name: $scope.section.children[sectionChildrenIndex].childrenName
 

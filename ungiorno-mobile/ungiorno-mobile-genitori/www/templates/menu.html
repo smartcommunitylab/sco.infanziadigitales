@@ -14,7 +14,7 @@
     <ion-side-menu side="left">
         <ion-content class="leftmenu">
             <ion-item class="item item-avatar item-button-right menu-profile" ng-if="babies && babies.length > 0">
-                <img ng-src="{{getProfileImage()}}">
+                <img ng-src="{{getProfileImage(babyselected)}}">
                 <h2>{{babyselected.fullName}}</h2>
                 <button menu-close class="button button-clear" id="babysetting" ng-click="gotoSetting({{babyselected.id}})">
                     <i class="icon inf_digsettings icon-light"></i>
@@ -27,7 +27,7 @@
                     </button>
                 </div>
                 <ion-item menu-close ng-click="changeKid(kp)" class="item item-avatar item-button-right menu-profile" ng-repeat="kp in babies" ng-if="profilesOpen && kp.kidId != babyselected.kidId">
-                    <img ng-src="{{kp.image}}">
+                    <img ng-src="{{getProfileImage(kp)}}">
                     <h2>{{kp.fullName}}</h2>
                 </ion-item>
 

@@ -243,7 +243,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
 			}
 	})
 
-	.state('app.login', {
+	.state('login', {
 			cache: false,
 			url: '/login',
 			abstract: false,
@@ -255,7 +255,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
 			}
 	});
 	// if none of the above states are matched, use this as the fallback
-	$urlRouterProvider.otherwise('/app/login');
+	$urlRouterProvider.otherwise('/login');
 
 	$translateProvider.translations('it', {
 			menu_home: 'Home',

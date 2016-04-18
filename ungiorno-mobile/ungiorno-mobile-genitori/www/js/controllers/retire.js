@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.retire', [])
 
-.controller('RetireCtrl', function ($scope, configurationService, profileService, dataServerService, Toast, $ionicHistory, retireService, $filter) {
+.controller('RetireCtrl', function ($scope, configurationService, profileService, dataServerService, Toast, $ionicHistory, $ionicPopup, retireService, $filter) {
     var retireConfiguration;
     $scope.retirePersons = [];
     $scope.babyProfile = null;
@@ -8,6 +8,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.temporary = null;
 		$scope.useBus = false;
 		$scope.busChecked = false;
+		$scope.isAbsent = false;
 
     function getTime() {
         var dateInsert = new Date($scope.temporary.date);
@@ -161,6 +162,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 					}
 				});
 			});
+			//check if child is absent
+			dataServerService.getAbsence($scope.babyProfile.schoolId, $scope.babyProfile.kidId, date.getTime()).then(function (response) {
+				var absence = response.data;
+				if(absence) {
+					$scope.isAbsent = true;
+				}
+			});
     };
 
     $scope.getRetire = function () {
@@ -220,4 +228,28 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         });
 			}
     }
-})
+		
+		$scope.showConfirm = function() {
+			if($scope.isAbsent) {
+				var myPopup = $ionicPopup.show({
+					title: $filter('translate')('retire_popup_absent_title'),
+					template: $filter('translate')('retire_popup_absent_text'),
+					buttons: [
+						{	
+							text: $filter('translate')('retire_popup_absent_cancel'),
+							type: 'button-positive'
+						},
+						{
+							text: $filter('translate')('retire_popup_absent_ok'),
+							type: 'button-positive',
+							onTap: function(e) {
+								$scope.send();
+							}
+						}
+					]
+				});
+			} else {
+				$scope.send();
+			}
+		};
+});

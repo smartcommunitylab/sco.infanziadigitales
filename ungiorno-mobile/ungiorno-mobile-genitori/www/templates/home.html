@@ -36,7 +36,7 @@
                 </div>
             </div>
             <div class="home_informations">
-                <p class="home-info-title">{{'home_personal_information' | translate}}</p>
+                <p class="home-info-title">{{'home_personal_information' | translate}} {{kidProfile.firstName}}</p>
                 <div class="home-info-content">
                     <div ng-repeat="schoolNotes in notes.schoolNotes">
                         {{schoolNotes.note}}

@@ -77,6 +77,26 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.l
 				return deferred.promise;
 		};
 	
+    loginService.logout = function () {
+        var deferred = $q.defer();
+
+        $http.get(Config.getServerURL() + '/logout', {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        }).then(
+            function (response) {
+							deferred.resolve(response.data);
+						},
+            function (responseError) {
+                deferred.reject(responseError.data.error);
+            }
+        );
+
+        return deferred.promise;
+    };	
+	
 	return loginService;
 	
 });

@@ -63,10 +63,26 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
 				//The user denied access to the app
 				$rootScope.loginStarted = false;
 				localStorage.userId = null;
+				//TODO toast
 				alert('autenticazione non riuscita');
 				ionic.Platform.exitApp();
 			}
 		);
+	};
+	
+	$rootScope.logout = function () {
+			loginService.logout().then(
+					function (data) {
+						localStorage.userId = null;
+						window.location.hash = '/login';
+						window.location.reload(true);
+					},
+					function (error) {
+						//TODO toast
+						//Utils.toast();
+						localStorage.userId = null;
+					}
+			);
 	};	
 
 	$ionicPlatform.ready(function () {
@@ -265,8 +281,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
 			home_mensa: 'Mensa',
 			home_calendario: 'Calendario',
 			home_contatta: 'Contatta',
-			home_personal_information: 'Note della maestra',
-			home_school_information: 'Comunicazioni ',
+			home_personal_information: 'Informazioni su',
+			home_school_information: 'Informazioni di servizio',
 			home_entry_to: ' entra alle ore ',
 			home_exit_to: ' ed esce alle ore ',
 			menu_exit: 'Esci',
@@ -279,6 +295,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
 			babysetting_busGo: 'Fermata bus andata:',
 			babysetting_busBack: 'Fermata bus ritorno:',
 			retire: "Ritiro del bambino",
+			retire_bus: "Utilizza il servizio bus",
 			date: "Data",
 			hour: "Ora",
 			who_takes_baby: "Chi ritira il bambino?",
@@ -469,6 +486,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
 			babysetting_busGo: 'Fermata bus andata:',
 			babysetting_busBack: 'Fermata bus ritorno:',
 			retire: "Ritiro",
+			retire_bus: "Utilizza il servizio bus",
 			date: "Data",
 			hour: "Ora",
 			who_takes_baby: "Chi ritira il bambino?",

@@ -15,10 +15,19 @@
             <!-- Date -->
             <h5 class="accent-color input-description-padding"><b>{{'date' | translate}}:</b></h5>
             <input type="date" ng-model="temporary.date" class="input-padding" required>
+							
+						<div ng-if="babyProfile.services.bus.enabled">
+							<ion-checkbox ng-model="busChecked" ng-change="checkBus(busChecked)"
+														class="accent-color input-description-padding">
+								<b> {{'retire_bus' | translate}}</b>
+							</ion-checkbox>
+						</div>	
 
             <!-- Hour -->
-            <h5 class="accent-color input-description-padding"><b>{{'hour' | translate}}:</b></h5>
-            <input type="time" ng-model="temporary.time" class="input-padding" required/>
+            <div ng-if="!isUsingBus()">
+							<h5 class="accent-color input-description-padding"><b>{{'hour' | translate}}:</b></h5>
+            	<input type="time" ng-model="temporary.time" class="input-padding" required/>
+						</div>
 
 
             <!-- Who takes baby -->
@@ -36,9 +45,9 @@
 
             </ion-list>
 
-            <div class="delegate-input">
+            <!--<div class="delegate-input">
                 <button class="button button-norm" ng-click="setRetire()" ui-sref="app.authorization">{{'nav_delegate' | translate}}</button>
-            </div>
+            </div>-->
 
             <h5 class="accent-color input-description-padding"><b>{{'note' | translate}}:</b></h4>
             <textarea id="note" ng-model="temporary.note" placeholder="{{'note_description' | translate}}"/>

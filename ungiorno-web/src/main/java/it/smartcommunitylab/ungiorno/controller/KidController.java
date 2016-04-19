@@ -27,12 +27,14 @@ import it.smartcommunitylab.ungiorno.model.KidConfig;
 import it.smartcommunitylab.ungiorno.model.KidProfile;
 import it.smartcommunitylab.ungiorno.model.Parent;
 import it.smartcommunitylab.ungiorno.model.Response;
+import it.smartcommunitylab.ungiorno.model.SchoolObject;
 import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
 import it.smartcommunitylab.ungiorno.utils.PermissionsManager;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -399,6 +401,31 @@ public class KidController {
 		} 
     return new HttpEntity<byte[]>(image, headers);
 	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/student/{appId}/{schoolId}/{kidId}/returns-or-stops")
+	public @ResponseBody Response<List<SchoolObject>> getReturnsOrStops(@PathVariable String appId, 
+			@PathVariable String schoolId, @PathVariable String kidId, @RequestParam long from,
+			@RequestParam long to) {
+		List<SchoolObject> result = new ArrayList<SchoolObject>();
+		try {
+			if (!permissions.checkKidProfile(appId, schoolId, kidId, false)) {
+				return new Response<>();
+			}
+			List<KidCalFermata> stops = storage.getStop(appId, schoolId, kidId, from, to);
+			if(stops != null) {
+				result.addAll(stops);
+			}
+			List<KidCalRitiro> returns = storage.getReturn(appId, schoolId, kidId, from, to);
+			if(returns != null) {
+				result.addAll(returns);
+			}
+			return new Response<>(result);
+		} catch (Exception e) {
+			return new Response<>(e.getMessage());
+		}
+		
+	}
+	
 	
 	@ExceptionHandler(Exception.class)
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

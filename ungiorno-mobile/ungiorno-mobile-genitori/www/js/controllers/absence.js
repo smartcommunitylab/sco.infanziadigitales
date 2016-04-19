@@ -1,11 +1,13 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.absence', [])
 
-.controller('AbsenceCtrl', function ($scope, profileService, $ionicModal, dataServerService, $filter, $ionicHistory, Toast) {
+.controller('AbsenceCtrl', function ($scope, profileService, $ionicModal, dataServerService, $filter, $ionicHistory, $ionicPopup, Toast) {
     $scope.schoolProfile = profileService.getSchoolProfile();
     $scope.babyProfile = profileService.getBabyProfile();
     $scope.selectedIllness = "Selezionare malattia frequente";
     $scope.absenceTypes = [];
     $scope.note = "";
+		$scope.isRetireSet = false;
+	
     for (var i = 0; i < $scope.schoolProfile.absenceTypes.length; i++) {
         $scope.absenceTypes.push({
             typeId: $scope.schoolProfile.absenceTypes[i].typeId,
@@ -129,4 +131,47 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             console.log("SENDING ERROR -> " + error);
         });
     }
+		
+    $scope.$watch('illness.dateFrom', function () {
+        $scope.checkRetire();
+    });
+	
+    $scope.$watch('illness.dateTo', function () {
+        $scope.checkRetire();
+    });
+		
+		$scope.checkRetire = function() {
+			dataServerService.getReturnsOrStops($scope.babyProfile.schoolId, $scope.babyProfile.kidId, $scope.illness.dateFrom.getTime(),
+			$scope.illness.dateTo.getTime()).then(function (data) {
+				if((data != null) && (data.length > 0)) {
+					$scope.isRetireSet = true;
+				} else {
+					$scope.isRetireSet = false;
+				}
+			});
+		};
+		
+		$scope.showConfirm = function() {
+			if($scope.isRetireSet) {
+				var myPopup = $ionicPopup.show({
+					title: $filter('translate')('assenza_popup_retire_title'),
+					template: $filter('translate')('assenza_popup_retire_text'),
+					buttons: [
+						{	
+							text: $filter('translate')('assenza_popup_retire_cancel'),
+							type: 'button-positive'
+						},
+						{
+							text: $filter('translate')('assenza_popup_retire_ok'),
+							type: 'button-positive',
+							onTap: function(e) {
+								$scope.send();
+							}
+						}
+					]
+				});
+			} else {
+				$scope.send();
+			}
+		};		
 });

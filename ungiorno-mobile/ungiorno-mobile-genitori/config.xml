@@ -6,6 +6,7 @@
     <author email="info@smartcommunitylab.it" href="http://www.smartcommunitylab.it">&#xD; Smart Community Lab&#xD;
     </author>
     <content src="index.html" />
+		<allow-navigation href="*" />
     <access origin="*" />
     <access origin="tel:*" launch-external="yes" />
     <preference name="webviewbounce" value="false" />

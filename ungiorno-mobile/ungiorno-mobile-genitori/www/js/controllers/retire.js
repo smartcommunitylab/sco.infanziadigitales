@@ -183,6 +183,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             time: new Date(),
             note: null
         };
+				$scope.temporary.date.setHours(0, 0, 0, 0);
         $scope.temporary.time.setHours($scope.temporary.time.getHours(), $scope.temporary.time.getMinutes(), 0, 0);
 				
 				//$scope.getRetireByDate(new Date());

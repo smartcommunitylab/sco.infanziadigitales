@@ -365,6 +365,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
 			assenza_sendok: 'Assenza inviata con successo',
 			assenza_sendno: 'Assenza non inviata',
 			absence_choose: 'Selezionare un motivo dell\'assenza',
+			assenza_popup_retire_title: 'ATTENZIONE',
+			assenza_popup_retire_text: "Per queste giornate è già stata impostata l'ora di ritiro. Impostando l'assenza i dati di ritiro veranno sovrascritti. Confermi?",
+			assenza_popup_retire_cancel: "Annulla",
+			assenza_popup_retire_ok: "Conferma",
 			noinfo: "Nessuna informazione",
 			settings: "Impostazioni di base",
 			cancel: "Annulla",
@@ -468,8 +472,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
 			assenza_sendok: 'Assenza inviata con successo',
 			assenza_sendno: 'Assenza non inviata',
 			absence_choose: 'Selezionare un motivo dell\'assenza',
-			absence_other: "Altro"
-
+			absence_other: "Altro",
+			assenza_popup_retire_title: 'ATTENZIONE',
+			assenza_popup_retire_text: "Per questa giornata è già stata impostata l'ora di ritiro. Impostando l'assenza i dati di ritiro veranno sovrascritti. Confermi?",
+			assenza_popup_retire_cancel: "Annulla",
+			assenza_popup_retire_ok: "Conferma"
 	});
 
 	$translateProvider.translations('de', {
@@ -573,9 +580,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
 			period_to: "To",
 			reason: "Reason",
 			reason_other: "Other...",
-			absence_other: "Altro"
-
-
+			absence_other: "Altro",
+			assenza_popup_retire_title: 'ATTENZIONE',
+			assenza_popup_retire_text: "Per questa giornata è già stata impostata l'ora di ritiro. Impostando l'assenza i dati di ritiro veranno sovrascritti. Confermi?",
+			assenza_popup_retire_cancel: "Annulla",
+			assenza_popup_retire_ok: "Conferma"
 	});
 
 	$translateProvider.preferredLanguage("it");

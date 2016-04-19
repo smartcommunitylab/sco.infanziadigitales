@@ -147,6 +147,25 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
 
         return deferred.promise;
     }
+		
+		dataServerService.getReturnsOrStops = function (schoolId, kidId, timeFrom, timeTo) {
+			var deferred = $q.defer();
+        $http({
+            method: 'GET',
+            url: Config.URL() + '/' + Config.app() + '/student/' + Config.appId() + '/' + schoolId + '/' + kidId + '/returns-or-stops?from=' + timeFrom + '&to=' + timeTo,
+            headers: {
+                'Accept': 'application/json'
+            }
+        }).
+        success(function (data, status, headers, config) {
+            deferred.resolve(data.data);
+        }).
+        error(function (data, status, headers, config) {
+            console.log(data + status + headers + config);
+            deferred.reject(data.errorCode + ' ' + data.errorMessage);
+        });
+        return deferred.promise;			
+		}
 
     dataServerService.sendAssenza = function (schoolId, kidId, assenza) {
         var deferred = $q.defer();

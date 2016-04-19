@@ -112,7 +112,13 @@ a.item-content {
     border-bottom-color: #FFAD00;
 }
 .popup-head .popup-title {
-    color: #FFAD00;
+  color: #FFAD00;
+	font-weight: bold;
+	font-size: large;
+}
+.popup-buttons .button.button-positive {
+	background-color: #5FC3DF;
+	border-color: #5FC3DF;
 }
 input[type=text],
 textarea {

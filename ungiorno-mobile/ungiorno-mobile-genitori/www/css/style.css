@@ -144,6 +144,10 @@ input[type=time] {
     border: 0px;
     background-color: transparent;
 }
+.item-checkbox {
+	padding-left: 60px;
+	border: 0px;
+}
 input:checked+.checkbox-icon:before {
     background-color: #5FC3DF !important;
     border-color: #5FC3DF !important;

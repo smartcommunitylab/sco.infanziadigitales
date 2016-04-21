@@ -4,6 +4,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.c
 
     var DEVELOPMENT = true;
     var URL = 'https://' + (DEVELOPMENT ? 'dev' : 'tn') + '.smartcommunitylab.it';
+    //var URL = 'http://192.168.42.60:8080';
     var app = 'ungiorno2'
     var appId = 'trento'
 
@@ -64,9 +65,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.c
         savedImagesDirName: function () {
             return 'Percorsi-ImagesCache';
         },
-				getServerURL: function() {
-					return URL + '/' + app;	
-				},
+        getServerURL: function () {
+            return URL + '/' + app;
+        },
         syncUrl: function () {
             //console.log('$rootScope.TEST_CONNECTION: '+(!!$rootScope.TEST_CONNECTION));
             var SYNC_MODE = (!!$rootScope.TEST_CONNECTION ? 'syncdraft' : 'sync');

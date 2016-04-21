@@ -1,6 +1,6 @@
-angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.retire', [])
+angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.retire', ['ionic-datepicker', 'ionic-timepicker'])
 
-.controller('RetireCtrl', function ($scope, configurationService, profileService, dataServerService, Toast, $ionicHistory, $ionicPopup, retireService, $filter) {
+.controller('RetireCtrl', function ($scope, configurationService, profileService, dataServerService, Toast, $ionicHistory, $ionicPopup, retireService, $filter, ionicTimePicker, ionicDatePicker) {
     var retireConfiguration;
     $scope.retirePersons = [];
     $scope.babyProfile = null;
@@ -9,7 +9,62 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 		$scope.useBus = false;
 		$scope.busChecked = false;
 		$scope.isAbsent = false;
-
+	
+		function setDateWidget() {
+			$scope.datePickerObject = {
+				inputDate: $scope.temporary.date,
+				closeLabel: $filter('translate')('cancel'),
+				setLabel: $filter('translate')('ok'), 
+				todayLabel: $filter('translate')('today'),
+				mondayFirst: true,
+				templateType: 'popup',
+				showTodayButton: true,
+				closeOnSelect: false,
+				monthsList: ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"],
+				callback: function (val) { 
+						datePickerCallback(val);
+				}
+			};	
+		}
+		
+		function datePickerCallback(val) {
+			if (typeof (val) === 'undefined') {
+					console.log('Date not selected');
+			} else {
+				$scope.datePickerObject.inputDate = val;
+				var date = new Date(val);
+				$scope.temporary.date = date;
+			}
+		}
+	
+		function setTimeWidget() {
+			$scope.timePickerObject24Hour = {
+				inputTime: (($scope.temporary.time.getHours() * 60 * 60) + ($scope.temporary.time.getMinutes() * 60)), 
+				step: 5, 
+				format: 24, 
+				closeLabel: $filter('translate')('cancel'), 
+				setLabel: $filter('translate')('ok'), 
+				setButtonType: 'button-popup', 
+				closeButtonType: 'button-popup',
+				callback: function (val) { 
+						timePicker24Callback(val);
+				}
+			};	
+		}
+	
+    function timePicker24Callback(val) {
+			if (typeof (val) === 'undefined') {
+					console.log('Time not selected');
+			} else {
+				$scope.timePickerObject24Hour.inputTime = val;
+				var selectedTime = new Date();
+				selectedTime.setHours(val / 3600);
+				selectedTime.setMinutes((val % 3600) / 60);
+				selectedTime.setSeconds(0);
+				$scope.temporary.time = selectedTime;
+			}
+    }
+	
     function getTime() {
         var dateInsert = new Date($scope.temporary.date);
         var timeInsert = new Date($scope.temporary.time);
@@ -43,6 +98,28 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         }
         return null;
     }
+	
+		$scope.openTimePicker = function() {
+			setTimeWidget();
+			ionicTimePicker.openTimePicker($scope.timePickerObject24Hour);
+		}
+		
+		$scope.openDatePicker = function() {
+			setDateWidget();
+			ionicDatePicker.openDatePicker($scope.datePickerObject);
+		}
+		
+		$scope.getTimeLabel = function() {
+			var day = moment($scope.temporary.time);
+			var result = day.format('HH:mm');
+			return result;
+		}
+		
+		$scope.getDateLabel = function() {
+			var day = moment($scope.temporary.date);
+			var result = day.format('DD/MM/YYYY');
+			return result;
+		}
 	
 		$scope.checkBus = function(value) {
 			$scope.useBus = value;
@@ -185,10 +262,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         };
 				$scope.temporary.date.setHours(0, 0, 0, 0);
         $scope.temporary.time.setHours($scope.temporary.time.getHours(), $scope.temporary.time.getMinutes(), 0, 0);
-				
-				//$scope.getRetireByDate(new Date());
+				//$scope.getRetireByDate($scope.temporary.date);
 				
     };
+	
     $scope.$watch('temporary.date', function () {
         $scope.getRetireByDate($scope.temporary.date);
     });

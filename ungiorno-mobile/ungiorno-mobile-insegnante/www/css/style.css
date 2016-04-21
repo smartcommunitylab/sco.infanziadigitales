@@ -806,6 +806,10 @@ p {
 .login-title {
     text-align: center;
     margin: 8px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    font-size: xx-large;
+    color: white;
 }
 
 .sceltaMalattia {
@@ -1390,7 +1394,7 @@ ion-content .scroll {
 }
 
 .login-page {
-    background-image: url("../img/background_login.jpg");
+    background-color: #7b9e2a;
     height: 100%;
 }
 

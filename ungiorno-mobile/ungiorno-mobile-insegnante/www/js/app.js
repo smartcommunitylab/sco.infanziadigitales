@@ -103,13 +103,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
         $rootScope.backButtonStyle = $ionicConfig.backButton.icon();
         // $rootScope.getConfiguration();
 
-//        if (!$rootScope.userIsLogged()) {
-//            $rootScope.login();
-//        } else {
-//            $state.go('app.home', {}, {
-//                reload: true
-//            });
-//        }
+        //        if (!$rootScope.userIsLogged()) {
+        //            $rootScope.login();
+        //        } else {
+        //            $state.go('app.home', {}, {
+        //                reload: true
+        //            });
+        //        }
     });
 
 
@@ -371,8 +371,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
         communication_not_modified: "La modifica non è stata registrata",
         profile_no_notes: "Nessuna nota presente",
         scadenze: " scadenze",
-        login_title: 'InfanziaDigitales',
-        login_subtitle: 'sperimentazione'
+        login_title: 'Un giorno a scuola',
+        login_subtitle: 'sperimentazione',
+        login_google: 'Google'
 
 
     });

@@ -326,6 +326,16 @@ public class RepositoryManager {
 		return template.findOne(q, KidCalFermata.class);
 	}
 
+	public List<KidCalFermata> getStop(String appId, String schoolId, String kidId, long dateFrom, long dateTo) {
+		Query q = kidQuery(appId, schoolId, kidId);
+		long dateTimestampFrom = timestampToDate(dateFrom);
+		long dateTimestampTo = timestampToDate(dateTo);
+		q.addCriteria(new Criteria().andOperator(
+				new Criteria("date").gte(dateTimestampFrom),
+				new Criteria("date").lte(dateTimestampTo)));
+		return template.find(q, KidCalFermata.class);
+	}
+
 	/**
 	 * @param appId
 	 * @param schoolId
@@ -335,7 +345,9 @@ public class RepositoryManager {
 	 */
 	public KidCalAssenza getAbsence(String appId, String schoolId, String kidId, long date) {
 		Query q = kidQuery(appId, schoolId, kidId);
-		q.addCriteria(new Criteria("dateFrom").is(timestampToDate(date)));
+		q.addCriteria(new Criteria().andOperator(
+				new Criteria("dateFrom").lte(date),
+				new Criteria("dateTo").gte(date)));
 		return template.findOne(q, KidCalAssenza.class);
 	}
 
@@ -352,6 +364,16 @@ public class RepositoryManager {
 		return template.findOne(q, KidCalRitiro.class);
 	}
 
+	public List<KidCalRitiro> getReturn(String appId, String schoolId, String kidId, long dateFrom, long dateTo) {
+		Query q = kidQuery(appId, schoolId, kidId);
+		long dateTimestampFrom = timestampToDate(dateFrom);
+		long dateTimestampTo = timestampToDate(dateTo);
+		q.addCriteria(new Criteria().andOperator(
+				new Criteria("date").gte(dateTimestampFrom),
+				new Criteria("date").lte(dateTimestampTo)));
+		return template.find(q, KidCalRitiro.class);
+	}
+
 	/**
 	 * @param absence
 	 * @return
@@ -363,7 +385,7 @@ public class RepositoryManager {
 		Query q = kidQuery(absence.getAppId(), absence.getSchoolId(), absence.getKidId());
 		q.addCriteria(new Criteria().andOperator(
 				new Criteria("dateFrom").gte(absence.getDateFrom()),
-				new Criteria("dateFrom").lte(absence.getDateTo())));
+				new Criteria("dateTo").lte(absence.getDateTo())));
 		template.remove(q, KidCalAssenza.class);
 		
 		Calendar c = Calendar.getInstance();

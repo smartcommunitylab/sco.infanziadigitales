@@ -63,10 +63,26 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
 				//The user denied access to the app
 				$rootScope.loginStarted = false;
 				localStorage.userId = null;
+				//TODO toast
 				alert('autenticazione non riuscita');
 				ionic.Platform.exitApp();
 			}
 		);
+	};
+
+	$rootScope.logout = function () {
+			loginService.logout().then(
+					function (data) {
+						localStorage.userId = null;
+						window.location.hash = '/login';
+						window.location.reload(true);
+					},
+					function (error) {
+						//TODO toast
+						//Utils.toast();
+						localStorage.userId = null;
+					}
+			);
 	};	
 
 	$ionicPlatform.ready(function () {
@@ -265,8 +281,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
 			home_mensa: 'Mensa',
 			home_calendario: 'Calendario',
 			home_contatta: 'Contatta',
-			home_personal_information: 'Note della maestra',
-			home_school_information: 'Comunicazioni ',
+			home_personal_information: 'Informazioni su',
+			home_school_information: 'Informazioni di servizio',
 			home_entry_to: ' entra alle ore ',
 			home_exit_to: ' ed esce alle ore ',
 			menu_exit: 'Esci',
@@ -279,6 +295,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
 			babysetting_busGo: 'Fermata bus andata:',
 			babysetting_busBack: 'Fermata bus ritorno:',
 			retire: "Ritiro del bambino",
+			retire_bus: "Utilizza il servizio bus",
 			date: "Data",
 			hour: "Ora",
 			who_takes_baby: "Chi ritira il bambino?",
@@ -314,6 +331,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
 			home_disabledbutton: "Funzione disabilitata",
 			retire_sendok: "Il ritiro del bambino e' stato confermato",
 			retire_sendno: "Problemi di invio dati",
+			retire_popup_absent_title: "ATTENZIONE",
+			retire_popup_absent_text: "Per questa giornata è stata impostata un'assenza. Inserendo i dati di ritiro lo stato verrà modificato. Confermi?",
+			retire_popup_absent_ok: "Conferma",
+			retire_popup_absent_cancel: "Annulla",
 			setting_sendok: "Modifica configurazione registrata",
 			setting_sendno: "Problemi di invio dati",
 			send_note: "Invia una nota",
@@ -344,6 +365,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
 			assenza_sendok: 'Assenza inviata con successo',
 			assenza_sendno: 'Assenza non inviata',
 			absence_choose: 'Selezionare un motivo dell\'assenza',
+			assenza_popup_retire_title: 'ATTENZIONE',
+			assenza_popup_retire_text: "Per queste giornate è già stata impostata l'ora di ritiro. Impostando l'assenza i dati di ritiro veranno sovrascritti. Confermi?",
+			assenza_popup_retire_cancel: "Annulla",
+			assenza_popup_retire_ok: "Conferma",
 			noinfo: "Nessuna informazione",
 			settings: "Impostazioni di base",
 			cancel: "Annulla",
@@ -353,7 +378,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
 			period_to: "A",
 			reason: "Motivazione",
 			reason_other: "Altro...",
-			absence_other: "Altro"
+			absence_other: "Altro",
+			ok: "OK",
+			today: "Oggi"
 	});
 
 	$translateProvider.translations('en', {
@@ -413,6 +440,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
 			home_disabledbutton: "Funzione disabilitata",
 			retire_sendok: "Il ritiro del bambino e' stato confermato",
 			retire_sendno: "Problemi di invio dati",
+			retire_popup_absent_title: "ATTENZIONE",
+			retire_popup_absent_text: "Per la giornata di oggi è stata impostata l'asenza. Inserendo i dati di ritiro lo stato verrà modificato. Confermi?",
+			retire_popup_absent_ok: "Conferma",
+			retire_popup_absent_cancel: "Annulla",
 			setting_sendok: "Modifica configurazione registrata",
 			setting_sendno: "Problemi di invio dati",
 			call: "Chiama",
@@ -443,8 +474,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
 			assenza_sendok: 'Assenza inviata con successo',
 			assenza_sendno: 'Assenza non inviata',
 			absence_choose: 'Selezionare un motivo dell\'assenza',
-			absence_other: "Altro"
-
+			absence_other: "Altro",
+			assenza_popup_retire_title: 'ATTENZIONE',
+			assenza_popup_retire_text: "Per questa giornata è già stata impostata l'ora di ritiro. Impostando l'assenza i dati di ritiro veranno sovrascritti. Confermi?",
+			assenza_popup_retire_cancel: "Annulla",
+			assenza_popup_retire_ok: "Conferma",
+			ok: "OK",
+			today: "Oggi"
 	});
 
 	$translateProvider.translations('de', {
@@ -469,6 +505,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
 			babysetting_busGo: 'Fermata bus andata:',
 			babysetting_busBack: 'Fermata bus ritorno:',
 			retire: "Ritiro",
+			retire_bus: "Utilizza il servizio bus",
 			date: "Data",
 			hour: "Ora",
 			who_takes_baby: "Chi ritira il bambino?",
@@ -504,6 +541,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
 			home_disabledbutton: "Funzione disabilitata",
 			retire_sendok: "Il ritiro del bambino e' stato confermato",
 			retire_sendno: "Problemi di invio dati",
+			retire_popup_absent_title: "ATTENZIONE",
+			retire_popup_absent_text: "Per la giornata di oggi è stata impostata l'asenza. Inserendo i dati di ritiro lo stato verrà modificato. Confermi?",
+			retire_popup_absent_ok: "Conferma",
+			retire_popup_absent_cancel: "Annulla",
 			setting_sendok: "Modifica configurazione registrata",
 			setting_sendno: "Problemi di invio dati",
 			send_note: "Invia una nota",
@@ -543,9 +584,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
 			period_to: "To",
 			reason: "Reason",
 			reason_other: "Other...",
-			absence_other: "Altro"
-
-
+			absence_other: "Altro",
+			assenza_popup_retire_title: 'ATTENZIONE',
+			assenza_popup_retire_text: "Per questa giornata è già stata impostata l'ora di ritiro. Impostando l'assenza i dati di ritiro veranno sovrascritti. Confermi?",
+			assenza_popup_retire_cancel: "Annulla",
+			assenza_popup_retire_ok: "Conferma",
+			ok: "OK",
+			today: "Oggi"
 	});
 
 	$translateProvider.preferredLanguage("it");

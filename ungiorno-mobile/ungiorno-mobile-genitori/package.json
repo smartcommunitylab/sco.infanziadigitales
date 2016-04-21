@@ -15,20 +15,9 @@
     "gulp-util": "^2.2.14",
     "shelljs": "^0.3.0"
   },
-  "cordovaPlugins": [
-    "org.apache.cordova.console",
-    "org.apache.cordova.device",
-    "org.apache.cordova.statusbar",
-    "nl.x-services.plugins.toast",
-    "org.apache.cordova.splashscreen",
-    "com.ionic.keyboard",
-    {
-      "locator": "https://github.com/Rohfosho/CordovaCallNumberPlugin.git",
-      "id": "mx.ferreyra.callnumber"
-    }
-  ],
+  "cordovaPlugins": [],
   "cordovaPlatforms": [
-    "android",
-    "ios"
+    "ios",
+    "android"
   ]
 }

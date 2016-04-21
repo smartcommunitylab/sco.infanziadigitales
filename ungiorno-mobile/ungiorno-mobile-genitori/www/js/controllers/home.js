@@ -78,39 +78,19 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             img: 'img/ritiro.png'
 
         });
-        //if bus is available put it
-        if (profileService.getBabyProfile().services.bus.enabled) {
-            style = getButtonStyle("bus");
-            $scope.elements.push({
-                click: "app.bus",
-                string: $filter('translate')('home_bus'),
-                class: style,
-                img: 'img/bus.png'
-            });
-        }
-        style = getButtonStyle("default");
-        $scope.elements.push({
-            click: "app.calendar",
-            string: $filter('translate')('home_calendario'),
-            class: style,
-            img: 'img/calendario.png'
-        });
-        if (profileService.getBabyProfile().services.mensa.enabled) {
-            style = getButtonStyle("default");
-            $scope.elements.push({
-                click: "app.canteen",
-                string: $filter('translate')('home_mensa'),
-                class: style,
-                img: 'img/mensa.png'
-            });
-        }
-
         style = getButtonStyle("default");
         $scope.elements.push({
             click: "app.absence",
             string: $filter('translate')('home_assenza'),
             class: style,
             img: 'img/assenza.png'
+        });
+        style = getButtonStyle("default");
+        $scope.elements.push({
+            click: "app.calendar",
+            string: $filter('translate')('home_calendario'),
+            class: style,
+            img: 'img/calendario.png'
         });
         style = getButtonStyle("default");
         $scope.elements.push({
@@ -121,6 +101,26 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             class: style,
             img: 'img/contattaLaScuola.png'
         });
+				/*//if bus is available put it
+        if (profileService.getBabyProfile().services.bus.enabled) {
+            style = getButtonStyle("bus");
+            $scope.elements.push({
+                click: "app.bus",
+                string: $filter('translate')('home_bus'),
+                class: style,
+                img: 'img/bus.png'
+            });
+        }*/
+        /*if (profileService.getBabyProfile().services.mensa.enabled) {
+            style = getButtonStyle("default");
+            $scope.elements.push({
+                click: "app.canteen",
+                string: $filter('translate')('home_mensa'),
+                class: style,
+                img: 'img/mensa.png'
+            });
+        }*/
+
     }
     var contact = function () {
         $scope.contactPopup = $ionicPopup.show({

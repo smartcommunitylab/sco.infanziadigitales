@@ -29,7 +29,7 @@
     "cordova-plugin-camera",
     "https://github.com/Rohfosho/CordovaCallNumberPlugin.git",
     "https://github.com/katzer/cordova-plugin-printer.git",
-    "cordova.plugin.whitelist"
+    "cordova-plugin-whitelist"
         "https://github.com/smartcommunitylab/cordova-plugin-googleplus"
   ],
     "cordovaPlatforms": [

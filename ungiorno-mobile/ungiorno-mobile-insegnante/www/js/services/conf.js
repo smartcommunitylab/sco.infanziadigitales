@@ -1,9 +1,11 @@
-angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.conf', [])
+angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.conf', [])
 
 .factory('Config', function ($q, $http, $window, $filter, $rootScope) {
 
     var DEVELOPMENT = true;
     var URL = 'https://' + (DEVELOPMENT ? 'dev' : 'tn') + '.smartcommunitylab.it';
+    //var URL = 'http://192.168.42.60:8080';
+
     var app = 'ungiorno2'
     var appId = 'trento'
 
@@ -50,9 +52,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
         URL: function () {
             return URL;
         },
-				getServerURL: function() {
-					return URL + '/' + app;	
-				},
+        getServerURL: function () {
+            return URL + '/' + app;
+        },
         app: function () {
             return app;
         },

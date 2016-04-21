@@ -263,6 +263,8 @@ p {
     -webkit-margin-before: 0em;
     -webkit-margin-after: 0em;
 }
+
+
 /*
 #map {
     position: absolute;
@@ -362,7 +364,6 @@ p {
     border-color: #98ba3c;
     background-color: #98ba3c;
     /*background-image: none;*/
-
     color: #fff;
 }
 
@@ -383,7 +384,6 @@ p {
 
 .leftmenu {
     /*    padding-top: 50px;*/
-
     background-color: #98ba3c;
 }
 
@@ -453,7 +453,6 @@ p {
 
 .poi-list-item {
     /*    margin-top: 10px;*/
-
     color: #000000;
     position: absolute;
     padding: 28px;
@@ -606,7 +605,6 @@ p {
     width: 30%;
     padding-bottom: 30%;
     /* = width for a 1:1 aspect ratio */
-
     margin: 1.66%;
     background-position: center center;
     background-repeat: no-repeat;
@@ -729,7 +727,6 @@ p {
 
 .social-numbers span {
     /*    color: #009688;*/
-
     font-size: 18px;
     vertical-align: super;
 }
@@ -1390,4 +1387,18 @@ ion-content .scroll {
 
 .padding-no-notes {
     padding-bottom: 24px;
+}
+
+.login-page {
+    background-image: url("../img/background_login.jpg");
+    height: 100%;
+}
+
+.google-button {
+    border-radius: 4px;
+    font-weight: 500;
+    width: 300px;
+    color: #fff;
+    background-color: #dd4c39;
+    border-color: darken(#dd4c39, 2);
 }

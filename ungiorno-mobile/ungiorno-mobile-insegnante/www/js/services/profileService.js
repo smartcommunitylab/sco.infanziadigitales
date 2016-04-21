@@ -1,4 +1,4 @@
-angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.profileService', [])
+angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.profileService', [])
 
 .factory('profileService', function ($http, $q, dataServerService) {
     var babyProfile = null;

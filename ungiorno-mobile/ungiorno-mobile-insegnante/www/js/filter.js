@@ -1,4 +1,4 @@
-angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.filters', [])
+angular.module('it.smartcommunitylab.infanziadigitales.teachers.filters', [])
 
 .filter('ellipsis', function ($rootScope) {
     return function (input, limit) {
@@ -99,10 +99,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.filters',
     };
 })
 
-.filter('capitalize', function() {
-  return function(input, scope) {
-    if (input!=null)
-    input = input.toLowerCase();
-    return input.substring(0,1).toUpperCase()+input.substring(1);
-  }
+.filter('capitalize', function () {
+    return function (input, scope) {
+        if (input != null)
+            input = input.toLowerCase();
+        return input.substring(0, 1).toUpperCase() + input.substring(1);
+    }
 });

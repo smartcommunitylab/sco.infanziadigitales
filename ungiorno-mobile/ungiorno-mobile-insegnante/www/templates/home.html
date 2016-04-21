@@ -1,4 +1,4 @@
-<ion-view id="home" ng-init="initialize()">
+<ion-view id="home" ng-init="initialize()" title="{{title}}">
     <ion-nav-buttons side="right">
         <button class="button" ng-if="!viewClose()" ng-click="openNotes()">
             <i class="icon ion-document-text"></i>
@@ -10,9 +10,11 @@
         <button class="button" ng-if="viewClose() && communicationExpanded " ng-click="saveNotesAndComm()">{{'save' | translate | uppercase}}</button>
 
     </ion-nav-buttons>
+    <!--
     <ion-nav-title ng-init="getDateString()">
         <div>{{date | date:'EEEE, d MMMM yyyy'}} - Maestra Chiara</div>
     </ion-nav-title>
+-->
     <ion-content has-header="true">
         <div class="row section-row home-container">
             <div class="col section-row" ng-class="{'sections-displayer-short': noteExpanded || communicationExpanded, 'sections-displayer-full': !(noteExpanded || communicationExpanded)}">
@@ -51,7 +53,7 @@
                             </svg>
                         </div>
                         <div class="section-text">
-                            {{'home_pranzo' | translate}}
+                            {{'home_orario_normale' | translate}}
                         </div>
                     </div>
                     <div class="col">

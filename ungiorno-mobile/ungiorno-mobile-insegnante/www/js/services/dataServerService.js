@@ -1,4 +1,4 @@
-angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.dataServerService', [])
+angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.dataServerService', [])
 
 .factory('dataServerService', function ($http, $q, Config) {
     var dataServerService = {};

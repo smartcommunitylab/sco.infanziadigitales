@@ -1,4 +1,4 @@
-angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.calendar', [])
+angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.calendar', [])
 
 .controller('calendarCtrl', function ($scope, $location, dataServerService, profileService, $q, $ionicLoading, $filter, $ionicModal, moment) {
 

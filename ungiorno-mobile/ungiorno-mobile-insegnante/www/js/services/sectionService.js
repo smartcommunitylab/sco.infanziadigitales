@@ -1,4 +1,4 @@
-angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.sectionService', [])
+angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.sectionService', [])
 
 .factory('sectionService', function ($http, $q) {
     var selectedSection = null;

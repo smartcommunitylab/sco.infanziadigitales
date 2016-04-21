@@ -1,4 +1,4 @@
-angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.common', [])
+angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.common', [])
 
 .factory('Toast', function ($rootScope, $timeout, $ionicPopup, $cordovaToast) {
     return {
@@ -98,6 +98,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controlle
     // Categories submenu
     $scope.categoriesSubmenu = false;
     $scope.version = Config.getVersion();
+    $scope.logout = function () {
+        window.plugins.googleplus.disconnect(
+            function (msg) {
+                $state.go('app.login');
+                $ionicHistory.nextViewOptions({
+                    disableBack: true,
+                    historyRoot: true
+                });
+            }
+        );
+    };
     $scope.toggleSubmenu = function () {
         $scope.categoriesSubmenu = !$scope.categoriesSubmenu;
     };

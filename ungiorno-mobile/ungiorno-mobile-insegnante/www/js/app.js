@@ -4,65 +4,78 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
+angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
     'ionic',
     'ngCordova',
     'pascalprecht.translate',
-    'it.smartcommunitylab.infanziadigitales.diario.teachers.filters',
-    'it.smartcommunitylab.infanziadigitales.diario.teachers.directives',
-    'it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.common',
-    'it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.home',
-    'it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.communications',
-    'it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.bus',
-    'it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.babyprofile',
-    'it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.calendar',
-    'it.smartcommunitylab.infanziadigitales.diario.teachers.services.conf',
-    'it.smartcommunitylab.infanziadigitales.diario.teachers.services.babyConfigurationService',
-    'it.smartcommunitylab.infanziadigitales.diario.teachers.services.dataServerService',
-    'it.smartcommunitylab.infanziadigitales.diario.teachers.services.profileService',
-    'it.smartcommunitylab.infanziadigitales.diario.teachers.services.sectionService',
-    'it.smartcommunitylab.infanziadigitales.diario.teachers.services.communicationService',
-    'it.smartcommunitylab.infanziadigitales.diario.teachers.services.teachersService',
-    'it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.login',
-		'it.smartcommunitylab.infanziadigitales.diario.teachers.services.loginService',
+    'it.smartcommunitylab.infanziadigitales.teachers.filters',
+    'it.smartcommunitylab.infanziadigitales.teachers.directives',
+    'it.smartcommunitylab.infanziadigitales.teachers.controllers.common',
+    'it.smartcommunitylab.infanziadigitales.teachers.controllers.home',
+    'it.smartcommunitylab.infanziadigitales.teachers.controllers.communications',
+    'it.smartcommunitylab.infanziadigitales.teachers.controllers.bus',
+    'it.smartcommunitylab.infanziadigitales.teachers.controllers.babyprofile',
+    'it.smartcommunitylab.infanziadigitales.teachers.controllers.calendar',
+    'it.smartcommunitylab.infanziadigitales.teachers.services.conf',
+    'it.smartcommunitylab.infanziadigitales.teachers.services.babyConfigurationService',
+    'it.smartcommunitylab.infanziadigitales.teachers.services.dataServerService',
+    'it.smartcommunitylab.infanziadigitales.teachers.services.profileService',
+    'it.smartcommunitylab.infanziadigitales.teachers.services.sectionService',
+    'it.smartcommunitylab.infanziadigitales.teachers.services.communicationService',
+    'it.smartcommunitylab.infanziadigitales.teachers.services.teachersService',
+    'it.smartcommunitylab.infanziadigitales.teachers.controllers.login',
+		'it.smartcommunitylab.infanziadigitales.teachers.services.loginService',
+		'it.smartcommunitylab.infanziadigitales.teachers.services.storageService',
     'angularMoment'
 ])
 
-.run(function ($ionicPlatform, $rootScope, $cordovaSplashscreen, $state, $translate, $q, $ionicHistory, $ionicConfig, Config, 
-	babyConfigurationService, profileService, dataServerService, loginService, Toast, $ionicSideMenuDelegate) {
-		
-	$rootScope.getUserId = function () {
-			return localStorage.userId;
-	};
+.run(function ($ionicPlatform, $rootScope, $cordovaSplashscreen, $state, $translate, $q, $ionicHistory, $ionicConfig, Config,
+    babyConfigurationService, profileService, dataServerService, loginService, Toast, $ionicSideMenuDelegate) {
 
-	$rootScope.userIsLogged = function() {
-		return (localStorage.userId != null && localStorage.userId != "null");	
-	};
-	
-	$rootScope.loginStarted = false;
-	$rootScope.authWindow = null;
-	
-	$rootScope.login = function () {
-		if ($rootScope.loginStarted) return;
+    $rootScope.getUserId = function () {
+        return localStorage.userId;
+    };
 
-		$rootScope.loginStarted = true;
-		loginService.login().then(
-			function (data) {
-				$rootScope.loginStarted = false;
-				localStorage.userId = data.userId;
-				$state.go('app.home', {}, {
-        	reload: true
-        });				
-			},
-			function (error) {
-				//The user denied access to the app
-				$rootScope.loginStarted = false;
-				localStorage.userId = null;
-				alert('autenticazione non riuscita');
-				ionic.Platform.exitApp();
-			}
-		);
-	};	
+    $rootScope.userIsLogged = function () {
+        return (localStorage.userId != null && localStorage.userId != "null");
+    };
+
+    $rootScope.loginStarted = false;
+    $rootScope.authWindow = null;
+
+    //    $rootScope.login = function () {
+    //        if ($rootScope.loginStarted) return;
+    //
+    //        $rootScope.loginStarted = true;
+    //        loginService.login("googlelocal").then(
+    //            function (data) {
+    //                loginStarted = false;
+    //            },
+    //            function (error) {
+    //                loginStarted = false;
+    //                ionic.Platform.exitApp();
+    //            }
+    //        );
+    //        loginService.login().then(
+    //            function (data) {
+    //                $rootScope.loginStarted = false;
+    //                localStorage.userId = data.userId; //store user data
+    //                localStorage.username = data.username;
+    //                //                localStorage.name = data.name;
+    //                //                localStorage.surname = data.surname;
+    //                $state.go('app.home', {}, {
+    //                    reload: true
+    //                });
+    //            },
+    //            function (error) {
+    //                //The user denied access to the app
+    //                $rootScope.loginStarted = false;
+    //                localStorage.userId = null;
+    //                alert('autenticazione non riuscita');
+    //                ionic.Platform.exitApp();
+    //            }
+    //        );
+    // };
 
     $ionicPlatform.ready(function () {
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -89,14 +102,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
         $rootScope.platform = ionic.Platform;
         $rootScope.backButtonStyle = $ionicConfig.backButton.icon();
         // $rootScope.getConfiguration();
-				
-				if(!$rootScope.userIsLogged()) {
-					$rootScope.login();
-				} else {
-					$state.go('app.home', {}, {
-						reload: true
-					});				
-				}
+
+//        if (!$rootScope.userIsLogged()) {
+//            $rootScope.login();
+//        } else {
+//            $state.go('app.home', {}, {
+//                reload: true
+//            });
+//        }
     });
 
 
@@ -192,20 +205,19 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
                 }
             }
         })
-				.state('login', {
-					cache: false,
-					url: '/login',
-					abstract: false,
-					views: {
-						'menuContent': {
-							templateUrl: "templates/login.html",
-							controller: 'AppCtrl'
-						}
-					}
-				});
+        .state('app.login', {
+            cache: false,
+            url: "/login",
+            views: {
+                'menuContent': {
+                    templateUrl: "templates/login.html",
+                    controller: 'LoginCtrl'
+                }
+            }
+        });
 
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/login');
+    $urlRouterProvider.otherwise('/app/login');
 
     $translateProvider.translations('it', {
         menu_home: 'Home',
@@ -315,7 +327,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
         extra_delegation: "Questa è una delega straordinaria",
         view_delegation: "Vedi delega",
         home_anticipo: "Anticipo",
-        home_pranzo: "Pranzo",
+        home_orario_normale: "Orario Normale",
         home_posticipo: "Posticipo",
         exit: "Uscito",
         present: "Presente",
@@ -358,7 +370,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers', [
         communication_modified: "Modifica registrata con successo",
         communication_not_modified: "La modifica non è stata registrata",
         profile_no_notes: "Nessuna nota presente",
-        scadenze: " scadenze"
+        scadenze: " scadenze",
+        login_title: 'InfanziaDigitales',
+        login_subtitle: 'sperimentazione'
 
 
     });

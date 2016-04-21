@@ -1,4 +1,4 @@
-angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.babyConfigurationService', [])
+angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.babyConfigurationService', [])
 
 .factory('babyConfigurationService', function ($http, $q, dataServerService) {
     var babyConfiguration = null;
@@ -21,7 +21,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.
         babyNotes = newBabyNotes;
     }
 
-     configurationService.getBabyNotesById = function (schoolId, babyId) {
+    configurationService.getBabyNotesById = function (schoolId, babyId) {
         var deferred = $q.defer();
         /*tmp*/
         dataServerService.getKidsNotesByKidId(schoolId, babyId).then(function (data) {

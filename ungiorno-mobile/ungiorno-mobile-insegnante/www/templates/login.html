@@ -1,3 +1,4 @@
+<!--
 <ion-view id="login">
     <ion-nav-bar class="bar bar-ungiorno">
         <ion-nav-back-button>
@@ -6,4 +7,28 @@
     <ion-content has-header="true" class="page-padding">
         
     </ion-content>
+</ion-view>
+-->
+
+<ion-view id="login" hide-nav-bar="true">
+    <ion-nav-bar class="bar bar-ungiorno" ng-class="{expanded: isExpanded, 'has-header-fab-left': hasHeaderFabLeft, 'has-header-fab-right': hasHeaderFabRight}" align-title="left">
+        <ion-nav-buttons side="left">
+
+        </ion-nav-buttons>
+
+    </ion-nav-bar>
+    <ion-content id="content " has-header="true" scroll="false" class="login-page">
+        <div class="login-title">{{'login_title'|translate}}</div>
+        <div class="login-subtitle" style="margin-bottom:30px;">{{'login_subtitle'|translate}}</div>
+        <!--        <div class="login-warning">{{'login_warning'|translate}}</div>-->
+
+        <div class="bottom-content row">
+            <div class="col col-bottom text-center">
+                <a class="google-button button button-block" ng-click="login('googlelocal')">{{'login_google'|translate}}</a>
+
+            </div>
+        </div>
+
+    </ion-content>
+
 </ion-view>

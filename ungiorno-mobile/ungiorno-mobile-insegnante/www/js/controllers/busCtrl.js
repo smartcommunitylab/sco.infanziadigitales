@@ -1,4 +1,4 @@
-angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.bus', [])
+angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.bus', [])
 
 .controller('busCtrl', function ($scope, $location, dataServerService, profileService, $ionicLoading, $timeout, $cordovaPrinter) {
 

@@ -1,4 +1,4 @@
-angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.controllers.communications', [])
+angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.communications', [])
 
 .controller('communicationsCtrl', function ($scope, dataServerService, $ionicPopup, communicationService, profileService, Toast, $filter) {
 

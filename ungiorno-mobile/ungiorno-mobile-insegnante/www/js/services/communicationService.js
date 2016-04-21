@@ -1,4 +1,4 @@
-angular.module('it.smartcommunitylab.infanziadigitales.diario.teachers.services.communicationService', [])
+angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.communicationService', [])
 
 .factory('communicationService', function ($http, $q, dataServerService) {
     var communications = null;

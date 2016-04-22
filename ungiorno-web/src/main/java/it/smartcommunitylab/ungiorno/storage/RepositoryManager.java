@@ -49,6 +49,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -379,13 +380,24 @@ public class RepositoryManager {
 	 * @return
 	 */
 	public KidConfig saveAbsence(KidCalAssenza absence) {
-		absence.setDateFrom(timestampToDate(absence.getDateFrom()));
-		absence.setDateTo(timestampToDate(absence.getDateTo()));
+		Calendar calendar = GregorianCalendar.getInstance();
+		calendar.setTimeInMillis(absence.getDateFrom());
+		calendar.set(Calendar.MILLISECOND, 0);
+    calendar.set(Calendar.SECOND, 0);
+    calendar.set(Calendar.MINUTE, 0);
+    calendar.set(Calendar.HOUR, 0);
+		Date dateFrom = calendar.getTime();
+		calendar.setTimeInMillis(absence.getDateTo());
+		calendar.set(Calendar.MILLISECOND, 0);
+    calendar.set(Calendar.SECOND, 59);
+    calendar.set(Calendar.MINUTE, 59);
+    calendar.set(Calendar.HOUR, 23);
+		Date dateTo = calendar.getTime();
 
 		Query q = kidQuery(absence.getAppId(), absence.getSchoolId(), absence.getKidId());
 		q.addCriteria(new Criteria().andOperator(
-				new Criteria("dateFrom").gte(absence.getDateFrom()),
-				new Criteria("dateTo").lte(absence.getDateTo())));
+				new Criteria("dateFrom").gte(dateFrom.getTime()),
+				new Criteria("dateTo").lte(dateTo.getTime())));
 		template.remove(q, KidCalAssenza.class);
 		
 		Calendar c = Calendar.getInstance();

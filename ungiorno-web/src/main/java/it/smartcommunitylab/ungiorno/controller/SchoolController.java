@@ -171,6 +171,18 @@ public class SchoolController {
 			return new Response<>(e.getMessage());
 		}
 	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/school/{appId}/{schoolId}/teacher")
+	public @ResponseBody Response<Teacher> getTeacher(@PathVariable String appId, @PathVariable String schoolId) {
+		String username = permissions.getUserId();
+		try {
+			Teacher result = storage.getTeacher(username, appId, schoolId);
+			return new Response<>(result);
+		} catch (Exception e) {
+			return new Response<>(e.getMessage());
+		}
+	}
+	
 	@RequestMapping(method = RequestMethod.GET, value = "/school/{appId}/{schoolId}/teachercalendar")
 	public @ResponseBody Response<List<TeacherCalendar>> getTeacherCalendar(@PathVariable String appId, @PathVariable String schoolId, @RequestParam long from, @RequestParam long to) {
 

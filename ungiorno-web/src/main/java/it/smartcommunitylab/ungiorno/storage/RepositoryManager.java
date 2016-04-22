@@ -790,7 +790,9 @@ public class RepositoryManager {
 	private Map<String, KidCalAssenza> readAssenze(String appId,
 			String schoolId, long date) {
 		Query q = schoolQuery(appId, schoolId);
-		q.addCriteria(new Criteria("dateFrom").is(timestampToDate(date)));
+		q.addCriteria(new Criteria().andOperator(
+				new Criteria("dateFrom").lte(date),
+				new Criteria("dateTo").gte(date)));
 		List<KidCalAssenza> assenze = template.find(q, KidCalAssenza.class);
 		Map<String, KidCalAssenza> assenzeMap = new HashMap<String, KidCalAssenza>();
 		for (KidCalAssenza a : assenze) {

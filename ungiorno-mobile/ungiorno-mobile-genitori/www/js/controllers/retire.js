@@ -7,7 +7,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.babyConfiguration = null;
     $scope.temporary = null;
 		$scope.useBus = false;
-		$scope.busChecked = false;
+		$scope.busChecked = {
+			value: false
+		};
 		$scope.isAbsent = false;
 		$scope.modifyBefore = 10;
 
@@ -171,7 +173,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 			dataServerService.getFermata($scope.babyProfile.schoolId, $scope.babyProfile.kidId, date.getTime()).then(function (data) {
 				var fermata = data;
 				if(fermata) {
-					$scope.busChecked = true;
+					$scope.busChecked.value = true;
 					$scope.useBus = true;
 					retirePerson = fermata.personId;
 					for (var k in $scope.babyProfile.persons) {
@@ -214,7 +216,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 							$scope.temporary.time = tmpdate;
 					}
 					if(!fermata) {
-						$scope.busChecked = false;
+						$scope.busChecked.value = false;
 						$scope.useBus = false;
 						if (retireConfiguration) {
 								retirePerson = retireConfiguration.personId;

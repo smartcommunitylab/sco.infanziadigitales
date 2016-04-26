@@ -18,7 +18,7 @@
             <!--<input type="date" ng-model="temporary.date" class="input-padding" required>-->
 
 						<div ng-if="babyProfile.services.bus.enabled">
-							<ion-checkbox ng-model="busChecked" ng-change="checkBus(busChecked)"
+							<ion-checkbox ng-model="busChecked.value" ng-checked="busChecked.value" ng-change="checkBus(busChecked.value)"
 														class="accent-color input-description-padding">
 								<b> {{'retire_bus' | translate}}</b>
 							</ion-checkbox>

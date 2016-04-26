@@ -757,6 +757,13 @@ public class RepositoryManager {
 			skp.setPersonId(personId);
 			skp.setPersonName(getPerson(personId, conf, kp).getFullName());
 			
+			//set if extist some KidCalNote
+			List<KidCalNote> list = getKidCalNotes(appId, schoolId, skp.getKidId(), date);
+			if((list != null) && (list.size() > 0)) {
+				skp.setCalNotes(true);
+			} else {
+				skp.setCalNotes(false);
+			}
 			map.get(kp.getSection().getSectionId()).getChildren().add(skp);
 		}
 		

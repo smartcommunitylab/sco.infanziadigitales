@@ -322,7 +322,7 @@ public class KidController {
 			note.setKidId(kidId);
 			note.setSchoolId(schoolId);
 			if (note.getParentNotes() != null && !note.getParentNotes().isEmpty()) {
-				if (!permissions.checkKidProfile(appId, schoolId, kidId, true)) {
+				if (!permissions.checkKidProfile(appId, schoolId, kidId, false)) {
 					return new Response<>();
 				}
 
@@ -333,7 +333,7 @@ public class KidController {
 					n.setPersonId(parent.getPersonId());
 				}
 			} else if (note.getSchoolNotes() != null && !note.getSchoolNotes().isEmpty()) {
-				if (!permissions.checkKidProfile(appId, schoolId, kidId, false)) {
+				if (!permissions.checkKidProfile(appId, schoolId, kidId, true)) {
 					return new Response<>();
 				}
 

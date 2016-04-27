@@ -465,20 +465,11 @@ public class RepositoryManager {
 		q.addCriteria(new Criteria("date").is(timestampToDate(date)));
 		q.with(new Sort(Sort.Direction.DESC, "date"));
 		List<KidCalNote> noteList = template.find(q, KidCalNote.class);
-		//order notes inside
-		Comparator<Note> comparator = new Comparator<Note>() {
-			@Override
-			public int compare(Note o1, Note o2) {
-				Long date1 = new Long(o1.getDate());
-				Long date2 = new Long(o2.getDate());
-				return date2.compareTo(date1);
-			}
-		};
 		for(KidCalNote kidCalNote : noteList) {
 			List<Note> parentNotes = kidCalNote.getParentNotes();
-			Collections.sort(parentNotes,	comparator);
+			sortNotes(parentNotes);
 			List<Note> schoolNotes = kidCalNote.getSchoolNotes();
-			Collections.sort(schoolNotes,	comparator);
+			sortNotes(schoolNotes);
 		}
 		return noteList;
 	}
@@ -510,18 +501,24 @@ public class RepositoryManager {
 	 * @param note
 	 */
 	public KidCalNote saveNote(KidCalNote note) {
+		KidCalNote result = null;
 		Query q = kidQuery(note.getAppId(),note.getSchoolId(),note.getKidId());
 		q.addCriteria(new Criteria("date").is(timestampToDate(note.getDate())));
 		KidCalNote old = template.findOne(q, KidCalNote.class);
 		if (old != null) {
 			old.merge(note);
 			template.save(old);
-			return old;
+			result = old;
 		} else {
 			note.setDate(timestampToDate(note.getDate()));
 			template.save(note);
-			return note;
+			result = note;
 		}
+		List<Note> parentNotes = result.getParentNotes();
+		sortNotes(parentNotes);
+		List<Note> schoolNotes = result.getSchoolNotes();
+		sortNotes(schoolNotes);
+		return result;
 	}
 
 	/**
@@ -604,9 +601,11 @@ public class RepositoryManager {
 			q.addCriteria(new Criteria().orOperator(
 					new Criteria("sectionIds").in((Object[])sectionIds), 
 					new Criteria("kidIds").in(ids)));
+			q.with(new Sort(Sort.Direction.DESC, "date"));
 			return template.find(q, InternalNote.class);
 		} else {
 			q.addCriteria(new Criteria("date").is(timestampToDate(date)));
+			q.with(new Sort(Sort.Direction.DESC, "date"));
 			return template.find(q, InternalNote.class);
 		}
 	}
@@ -1024,4 +1023,18 @@ public class RepositoryManager {
 		template.save(multimediaEntry);
 	}	
 	
+	public void sortNotes(List<Note> notes) {
+		if((notes != null) && (notes.size() > 0)) {
+			//order notes inside
+			Comparator<Note> comparator = new Comparator<Note>() {
+				@Override
+				public int compare(Note o1, Note o2) {
+					Long date1 = new Long(o1.getDate());
+					Long date2 = new Long(o2.getDate());
+					return date2.compareTo(date1);
+				}
+			};
+			Collections.sort(notes,	comparator);
+		}
+	}
 }

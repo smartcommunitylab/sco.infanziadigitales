@@ -36,7 +36,8 @@
                     <div class="col" ng-repeat="baby in getBabiesByRow(nRow)">
                         <div class="card babyItemBus" ng-click="openBabyDetails(baby)" ng-if="!baby.isFake">
                             <div class="baby-card-element">
-                                <img ng-src="{{baby.image}}" class="baby-card-image">
+                                <!--                                <img  ng-src="{{baby.image}}" class="baby-card-image">-->
+                                <img ng-src="{{getChildImage(baby)}}" class="baby-card-image">
                             </div>
                             <div class="baby-card-element baby-card-element-right">
                                 <h3 class="busBabyDetail">{{baby.fullName}}</h3>

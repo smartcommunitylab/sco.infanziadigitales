@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.bus', [])
 
-.controller('busCtrl', function ($scope, $location, dataServerService, profileService, $ionicLoading, $timeout, $cordovaPrinter) {
+.controller('busCtrl', function ($scope, $location, dataServerService, profileService, $ionicLoading, $timeout, $cordovaPrinter, Config) {
 
     $scope.showLoader = function () {
         $ionicLoading.show({
@@ -96,7 +96,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.bus'
         $cordovaPrinter.print(doc);
     }
 
+    $scope.getChildImage = function (child) {
 
+        var image = Config.URL() + "/" + Config.app() + "/student/" + Config.appId() + "/" + profileService.getSchoolProfile().schoolId + "/" + child.kidId + "/true/images";
+        return image;
+    }
 
 
 

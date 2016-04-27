@@ -14,7 +14,7 @@
                 <h5>{{'period_from' | translate}}:</h5>
             </div>
             <div class="col">
-                <input type="date" ng-model="illness.dateFrom" />
+							<button class="button-positive" ng-click="openDatePickerFrom()">{{getDateLabel(illness.dateFrom)}}</button>
             </div>
         </div>
 
@@ -23,7 +23,7 @@
                 <h5>{{'period_to' | translate}}:</h5>
             </div>
             <div class="col">
-                <input type="date" ng-model="illness.dateTo" />
+							<button class="button-positive" ng-click="openDatePickerTo()">{{getDateLabel(illness.dateTo)}}</button>
             </div>
         </div>
 

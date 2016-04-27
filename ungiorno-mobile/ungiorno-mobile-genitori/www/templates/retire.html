@@ -15,7 +15,6 @@
             <!-- Date -->
             <h5 class="accent-color input-description-padding"><b>{{'date' | translate}}:</b></h5>
 						<button class="button-positive" ng-click="openDatePicker()">{{getDateLabel()}}</button>
-            <!--<input type="date" ng-model="temporary.date" class="input-padding" required>-->
 
 						<div ng-if="babyProfile.services.bus.enabled">
 							<ion-checkbox ng-model="busChecked.value" ng-checked="busChecked.value" ng-change="checkBus(busChecked.value)"

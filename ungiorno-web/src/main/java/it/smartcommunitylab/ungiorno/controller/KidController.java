@@ -35,6 +35,7 @@ import it.smartcommunitylab.ungiorno.utils.PermissionsManager;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -318,6 +319,7 @@ public class KidController {
 			@PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId) {
 
 		try {
+			long now = System.currentTimeMillis();
 			note.setAppId(appId);
 			note.setKidId(kidId);
 			note.setSchoolId(schoolId);
@@ -330,6 +332,7 @@ public class KidController {
 				if (parent == null)
 					throw new IllegalArgumentException("No person registered");
 				for (Note n : note.getParentNotes()) {
+					n.setDate(now);
 					n.setPersonId(parent.getPersonId());
 				}
 			} else if (note.getSchoolNotes() != null && !note.getSchoolNotes().isEmpty()) {
@@ -341,6 +344,7 @@ public class KidController {
 				if (teacher == null)
 					throw new IllegalArgumentException("No teacher registered");
 				for (Note n : note.getSchoolNotes()) {
+					n.setDate(now);
 					n.setPersonId(teacher.getTeacherId());
 				}
 			} else {
@@ -398,7 +402,11 @@ public class KidController {
 			headers.setContentType(MediaType.IMAGE_JPEG);
 		} else if(extension.toLowerCase().equals(".jpeg")) {
 			headers.setContentType(MediaType.IMAGE_JPEG);
-		} 
+		}
+		/*int cacheAge = 3600;
+		long expiry = new Date().getTime() + cacheAge*1000;
+		response.setDateHeader("Expires", expiry);
+		response.setHeader("Cache-Control", "max-age="+ cacheAge);*/
     return new HttpEntity<byte[]>(image, headers);
 	}
 	

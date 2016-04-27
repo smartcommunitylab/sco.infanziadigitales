@@ -30,6 +30,7 @@ import it.smartcommunitylab.ungiorno.model.KidBusData;
 import it.smartcommunitylab.ungiorno.model.KidCalAssenza;
 import it.smartcommunitylab.ungiorno.model.KidCalFermata;
 import it.smartcommunitylab.ungiorno.model.KidCalNote;
+import it.smartcommunitylab.ungiorno.model.KidCalNote.Note;
 import it.smartcommunitylab.ungiorno.model.KidCalRitiro;
 import it.smartcommunitylab.ungiorno.model.KidConfig;
 import it.smartcommunitylab.ungiorno.model.KidProfile;
@@ -48,6 +49,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -58,6 +61,7 @@ import java.util.Set;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -459,7 +463,24 @@ public class RepositoryManager {
 	public List<KidCalNote> getKidCalNotes(String appId, String schoolId, String kidId, long date) {
 		Query q = kidQuery(appId, schoolId, kidId);
 		q.addCriteria(new Criteria("date").is(timestampToDate(date)));
-		return template.find(q, KidCalNote.class);
+		q.with(new Sort(Sort.Direction.DESC, "date"));
+		List<KidCalNote> noteList = template.find(q, KidCalNote.class);
+		//order notes inside
+		Comparator<Note> comparator = new Comparator<Note>() {
+			@Override
+			public int compare(Note o1, Note o2) {
+				Long date1 = new Long(o1.getDate());
+				Long date2 = new Long(o2.getDate());
+				return date2.compareTo(date1);
+			}
+		};
+		for(KidCalNote kidCalNote : noteList) {
+			List<Note> parentNotes = kidCalNote.getParentNotes();
+			Collections.sort(parentNotes,	comparator);
+			List<Note> schoolNotes = kidCalNote.getSchoolNotes();
+			Collections.sort(schoolNotes,	comparator);
+		}
+		return noteList;
 	}
 
 	/**

@@ -30,6 +30,7 @@ import it.smartcommunitylab.ungiorno.model.KidBusData;
 import it.smartcommunitylab.ungiorno.model.KidCalAssenza;
 import it.smartcommunitylab.ungiorno.model.KidCalFermata;
 import it.smartcommunitylab.ungiorno.model.KidCalNote;
+import it.smartcommunitylab.ungiorno.model.KidCalNote.Note;
 import it.smartcommunitylab.ungiorno.model.KidCalRitiro;
 import it.smartcommunitylab.ungiorno.model.KidConfig;
 import it.smartcommunitylab.ungiorno.model.KidProfile;
@@ -48,6 +49,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -58,6 +61,7 @@ import java.util.Set;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -459,7 +463,15 @@ public class RepositoryManager {
 	public List<KidCalNote> getKidCalNotes(String appId, String schoolId, String kidId, long date) {
 		Query q = kidQuery(appId, schoolId, kidId);
 		q.addCriteria(new Criteria("date").is(timestampToDate(date)));
-		return template.find(q, KidCalNote.class);
+		q.with(new Sort(Sort.Direction.DESC, "date"));
+		List<KidCalNote> noteList = template.find(q, KidCalNote.class);
+		for(KidCalNote kidCalNote : noteList) {
+			List<Note> parentNotes = kidCalNote.getParentNotes();
+			sortNotes(parentNotes);
+			List<Note> schoolNotes = kidCalNote.getSchoolNotes();
+			sortNotes(schoolNotes);
+		}
+		return noteList;
 	}
 
 	/**
@@ -489,18 +501,24 @@ public class RepositoryManager {
 	 * @param note
 	 */
 	public KidCalNote saveNote(KidCalNote note) {
+		KidCalNote result = null;
 		Query q = kidQuery(note.getAppId(),note.getSchoolId(),note.getKidId());
 		q.addCriteria(new Criteria("date").is(timestampToDate(note.getDate())));
 		KidCalNote old = template.findOne(q, KidCalNote.class);
 		if (old != null) {
 			old.merge(note);
 			template.save(old);
-			return old;
+			result = old;
 		} else {
 			note.setDate(timestampToDate(note.getDate()));
 			template.save(note);
-			return note;
+			result = note;
 		}
+		List<Note> parentNotes = result.getParentNotes();
+		sortNotes(parentNotes);
+		List<Note> schoolNotes = result.getSchoolNotes();
+		sortNotes(schoolNotes);
+		return result;
 	}
 
 	/**
@@ -583,9 +601,11 @@ public class RepositoryManager {
 			q.addCriteria(new Criteria().orOperator(
 					new Criteria("sectionIds").in((Object[])sectionIds), 
 					new Criteria("kidIds").in(ids)));
+			q.with(new Sort(Sort.Direction.DESC, "date"));
 			return template.find(q, InternalNote.class);
 		} else {
 			q.addCriteria(new Criteria("date").is(timestampToDate(date)));
+			q.with(new Sort(Sort.Direction.DESC, "date"));
 			return template.find(q, InternalNote.class);
 		}
 	}
@@ -757,6 +777,13 @@ public class RepositoryManager {
 			skp.setPersonId(personId);
 			skp.setPersonName(getPerson(personId, conf, kp).getFullName());
 			
+			//set if extist some KidCalNote
+			List<KidCalNote> list = getKidCalNotes(appId, schoolId, skp.getKidId(), date);
+			if((list != null) && (list.size() > 0)) {
+				skp.setCalNotes(true);
+			} else {
+				skp.setCalNotes(false);
+			}
 			map.get(kp.getSection().getSectionId()).getChildren().add(skp);
 		}
 		
@@ -996,4 +1023,18 @@ public class RepositoryManager {
 		template.save(multimediaEntry);
 	}	
 	
+	public void sortNotes(List<Note> notes) {
+		if((notes != null) && (notes.size() > 0)) {
+			//order notes inside
+			Comparator<Note> comparator = new Comparator<Note>() {
+				@Override
+				public int compare(Note o1, Note o2) {
+					Long date1 = new Long(o1.getDate());
+					Long date2 = new Long(o2.getDate());
+					return date2.compareTo(date1);
+				}
+			};
+			Collections.sort(notes,	comparator);
+		}
+	}
 }

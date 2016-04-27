@@ -24,9 +24,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     }
     //set hour
     var exitTime = new Date();
-    if ($scope.babyConfiguration.exitTime) {
-        exitTime.setHours($scope.babyConfiguration.exitTime.substr(0, 2), $scope.babyConfiguration.exitTime.substr(3, 2), 0, 0);
-    }
+		if (!$scope.babyProfile.services.posticipo.enabled) {
+				//creo data nuova con ora configurata e setto il model della pagina
+				exitTime.setHours(profileService.getSchoolProfile().regularTiming.toTime.substring(0, 2), profileService.getSchoolProfile().posticipoTiming.toTime.substring(3, 5), 0, 0);
+		} else {
+				exitTime.setHours(profileService.getSchoolProfile().posticipoTiming.toTime.substring(0, 2), profileService.getSchoolProfile().posticipoTiming.toTime.substring(3, 5), 0, 0);
+		}
     $scope.time.value = exitTime;
 
     //set who get child
@@ -100,5 +103,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             console.log("SENDING ERROR -> " + error);
         });
     }
+		
+		$scope.getTimeLabel = function() {
+			var day = moment($scope.time.value);
+			var result = day.format('HH:mm');
+			return result;
+		}
+		
 
 });

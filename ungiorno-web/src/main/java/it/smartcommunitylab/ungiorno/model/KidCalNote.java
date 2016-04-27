@@ -28,6 +28,7 @@ public class KidCalNote extends SchoolObject {
 
 	public static class Note {
 		private String note, personId, type;
+		private long date;
 
 		public String getNote() {
 			return note;
@@ -82,6 +83,12 @@ public class KidCalNote extends SchoolObject {
 			} else if (!type.equals(other.type))
 				return false;
 			return true;
+		}
+		public long getDate() {
+			return date;
+		}
+		public void setDate(long date) {
+			this.date = date;
 		}
 	}
 

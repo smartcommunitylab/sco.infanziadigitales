@@ -64,6 +64,8 @@ public class SectionData extends SchoolObject{
 		private String note;
 		private String stopId;
 		
+		private boolean calNotes;
+		
 		public String getKidId() {
 			return kidId;
 		}
@@ -147,6 +149,12 @@ public class SectionData extends SchoolObject{
 		}
 		public void setStopException(boolean stopException) {
 			this.stopException = stopException;
+		}
+		public boolean isCalNotes() {
+			return calNotes;
+		}
+		public void setCalNotes(boolean calNotes) {
+			this.calNotes = calNotes;
 		}
 	}
 

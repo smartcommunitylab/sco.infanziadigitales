@@ -7,8 +7,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.babyConfiguration = null;
     $scope.temporary = null;
 		$scope.useBus = false;
-		$scope.busChecked = false;
+		$scope.busChecked = {
+			value: false
+		};
 		$scope.isAbsent = false;
+		$scope.modifyBefore = 10;
 
 		function setDateWidget() {
 			$scope.datePickerObject = {
@@ -170,7 +173,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 			dataServerService.getFermata($scope.babyProfile.schoolId, $scope.babyProfile.kidId, date.getTime()).then(function (data) {
 				var fermata = data;
 				if(fermata) {
-					$scope.busChecked = true;
+					$scope.busChecked.value = true;
 					$scope.useBus = true;
 					retirePerson = fermata.personId;
 					for (var k in $scope.babyProfile.persons) {
@@ -213,7 +216,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 							$scope.temporary.time = tmpdate;
 					}
 					if(!fermata) {
-						$scope.busChecked = false;
+						$scope.busChecked.value = false;
 						$scope.useBus = false;
 						if (retireConfiguration) {
 								retirePerson = retireConfiguration.personId;
@@ -308,7 +311,25 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     }
 
 		$scope.showConfirm = function() {
-			if($scope.isAbsent) {
+			var now = new Date();
+			var dateToModify = $scope.temporary.date;
+			dateToModify.setHours(now.getHours(), now.getMinutes(), 0, 0);
+			var today = new Date();
+			today.setHours(23, 59, 59, 0);
+			var todayMax = new Date();
+			todayMax.setHours($scope.modifyBefore, 0, 0, 0);
+			if(($scope.temporary.date < today) && (dateToModify > todayMax)) {
+				var myPopup = $ionicPopup.show({
+					title: $filter('translate')('retire_popup_toolate_title'),
+					template: $filter('translate')('retire_popup_toolate_text') + " " + $scope.modifyBefore,
+					buttons: [
+						{
+							text: $filter('translate')('retire_popup_absent_cancel'),
+							type: 'button-positive'
+						}
+					]
+				});
+			} else if($scope.isAbsent) {
 				var myPopup = $ionicPopup.show({
 					title: $filter('translate')('retire_popup_absent_title'),
 					template: $filter('translate')('retire_popup_absent_text'),

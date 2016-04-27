@@ -88,7 +88,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.loginSe
     var authWindow = null;
 
     loginService.userIsLogged = function () {
-        return (StorageSrv.getUserId() != null && StorageSrv.getUser() != null);
+        console.log(StorageSrv.getUserId());
+        console.log(StorageSrv.getUser());
+        return (StorageSrv.getUserId() != null);
+        // return (StorageSrv.getUserId() != null && StorageSrv.getUser() != null);
     };
 
     loginService.login = function (provider) {
@@ -195,6 +198,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.loginSe
                 },
                 function (msg) {
                     console.log('Login googlelocal error: ' + msg);
+                    deferred.reject(msg);
                 }
             );
         } else {

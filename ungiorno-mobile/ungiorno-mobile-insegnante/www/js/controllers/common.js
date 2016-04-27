@@ -52,7 +52,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
     };
 })
 
-.controller('AppCtrl', function ($scope, $rootScope, $cordovaDevice, $ionicModal, $ionicHistory, $timeout, $filter, $ionicPopover, $state, Toast, Config, $ionicSideMenuDelegate, teachersService) {
+.controller('AppCtrl', function ($scope, $rootScope, $cordovaDevice, $ionicModal, $ionicHistory, $timeout, $filter, $ionicPopover, $state, Toast, Config, $ionicSideMenuDelegate, loginService, teachersService) {
     $scope.rightView = null;
     $scope.openRightMenu = function (item) {
         $scope.rightView = item;
@@ -99,15 +99,20 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
     $scope.categoriesSubmenu = false;
     $scope.version = Config.getVersion();
     $scope.logout = function () {
-        window.plugins.googleplus.disconnect(
-            function (msg) {
-                $state.go('app.login');
-                $ionicHistory.nextViewOptions({
-                    disableBack: true,
-                    historyRoot: true
-                });
-            }
-        );
+
+        //first logout the exit from auth
+        loginService.logout().then(function (done) {
+            window.plugins.googleplus.disconnect(
+                function (msg) {
+                    $state.go('app.login');
+                    $ionicHistory.nextViewOptions({
+                        disableBack: true,
+                        historyRoot: true
+                    });
+                }
+            );
+        });
+
     };
     $scope.toggleSubmenu = function () {
         $scope.categoriesSubmenu = !$scope.categoriesSubmenu;

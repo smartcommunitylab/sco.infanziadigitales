@@ -1,7 +1,7 @@
 angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.login', [])
 
 
-.controller('LoginCtrl', function ($scope, $rootScope, $state, $ionicHistory, loginService) {
+.controller('LoginCtrl', function ($scope, $rootScope, $state, $ionicHistory, loginService, Toast, $filter) {
     var loginStarted = false;
 
     $scope.login = function (provider) {
@@ -10,8 +10,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.logi
         };
 
         loginStarted = true;
+        //if user already logged enter, otherwise login
+
         loginService.login(provider).then(
+
             function (data) {
+                console.log("user is not logged");
+
                 $state.go('app.home');
                 $ionicHistory.nextViewOptions({
                     disableBack: true,
@@ -20,8 +25,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.logi
             },
             function (error) {
                 loginStarted = false;
-                ionic.Platform.exitApp();
+                Toast.show($filter('translate')('authentication_error'), 'short', 'bottom');
+                //ionic.Platform.exitApp();
             }
         );
+
     };
 });

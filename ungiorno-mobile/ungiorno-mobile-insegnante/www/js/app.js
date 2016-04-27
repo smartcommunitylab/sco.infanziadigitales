@@ -29,9 +29,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
     'angularMoment'
 ])
 
-.run(function ($ionicPlatform, $rootScope, $cordovaSplashscreen, $state, $translate, $q, $ionicHistory, $ionicConfig, Config,
+.run(function ($ionicPlatform, $rootScope, $cordovaSplashscreen, $state, $translate, $q, $ionicHistory, $ionicConfig, $ionicLoading, Config,
     babyConfigurationService, profileService, dataServerService, loginService, Toast, $ionicSideMenuDelegate) {
-
+    $ionicLoading.show();
     $rootScope.getUserId = function () {
         return localStorage.userId;
     };
@@ -80,6 +80,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
     $ionicPlatform.ready(function () {
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
         // for form inputs)
+        if (window.cordova && window.cordova.plugins.screenorientation) {
+            screen.lockOrientation('landscape');
+        }
         if (window.cordova && window.cordova.plugins.Keyboard) {
             cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
         }
@@ -101,6 +104,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
         }
         $rootScope.platform = ionic.Platform;
         $rootScope.backButtonStyle = $ionicConfig.backButton.icon();
+        if (loginService.userIsLogged()) {
+            console.log("user is logged");
+            $state.go('app.home');
+            $ionicHistory.nextViewOptions({
+                disableBack: true,
+                historyRoot: true
+            });
+
+        }
+        $ionicLoading.hide();
         // $rootScope.getConfiguration();
 
         //        if (!$rootScope.userIsLogged()) {
@@ -143,7 +156,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
 
 
     .state('app.home', {
-        cache: false,
+        cache: true,
         url: "/home",
         views: {
             'menuContent': {
@@ -314,8 +327,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
         bus_stop_drops_off: "Scende in:",
         bus_stop_person_wait: "Ad aspettare c'è:",
         person_who_retire: "Persona incaricata del ritiro: ",
-        parents_notes: "Note genitori",
-        teachers_notes: "Note maestre",
+        parents_notes: "Note ricevute",
+        teachers_notes: "Note inviate",
         arguments: "Argomento",
         description: "Descrizione",
         send: "Invia",
@@ -373,7 +386,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
         scadenze: " scadenze",
         login_title: 'Un giorno a scuola',
         login_subtitle: 'sperimentazione',
-        login_google: 'Google'
+        login_google: 'Google',
+        exit_to: 'Esce alle ',
+        loading_data: 'Caricamento dati',
+        authentication_error: 'Problemi di autenticazione. Verificare la connessione',
+        class_diary: 'DIARIO DI CLASSE',
+        send_note: 'Invia nota al genitore'
+
 
 
     });

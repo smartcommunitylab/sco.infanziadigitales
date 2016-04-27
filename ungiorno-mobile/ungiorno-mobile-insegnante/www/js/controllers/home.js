@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home', [])
 
-.controller('HomeCtrl', function ($scope, $location, dataServerService, profileService, babyConfigurationService, $filter, $state, Toast, $ionicModal, moment, teachersService, sectionService, communicationService, Config, $ionicSideMenuDelegate, $ionicPopup) {
+.controller('HomeCtrl', function ($scope, $location, dataServerService, profileService, babyConfigurationService, $filter, $state, Toast, $ionicModal, $ionicLoading, moment, teachersService, sectionService, communicationService, Config, $ionicSideMenuDelegate, $ionicPopup) {
     $scope.sections = null;
     $scope.section = null;
     $scope.childrenConfigurations = [];
@@ -50,9 +50,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
         var communication = communicationService.getCommunication();
         communication.children = $scope.childrenCommunicationDelivery;
         dataServerService.modifyCommunication($scope.schoolProfile.schoolId, communicationService.getCommunication().coomunicationId, communication).then(function (data) {
-            Toast.show($filter('translate')('communication_modified'), 'bottom', 'short');
+            Toast.show($filter('translate')('communication_modified'), 'short', 'bottom');
         }, function (data) {
-            Toast.show($filter('translate')('communication_not_modified'), 'bottom', 'short');
+            Toast.show($filter('translate')('communication_not_modified'), 'short', 'bottom');
 
         });
     }
@@ -101,7 +101,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
         }
 
         var requestSuccess = function (data) {
-            Toast.show($filter('translate')('new_note_sent'), 'bottom', 'short');
+            Toast.show($filter('translate')('new_note_sent'), 'short', 'bottom');
             $scope.newNote = {
                 possibleChildrens: [],
                 associatedKids: [],
@@ -178,13 +178,22 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
     }
 
     $scope.title = moment().locale('it').format("dddd, D MMMM gggg");
+    $scope.refreshHome = function () {
+        $scope.initialize();
+    }
     $scope.initialize = function () {
-
+        $ionicLoading.show({
+            template: $filter('translate')('loading_data')
+        });
         $scope.title = $filter('date')(new Date(), 'EEEE, dd MMMM yyyy'); // cat - profile teacher
 
 
         dataServerService.getSchoolProfileForTeacher().then(function (schoolProfile) {
             $scope.schoolProfile = schoolProfile;
+            $scope.datePosticipo = new Date();
+            var timeArr = $scope.schoolProfile.posticipoTiming.fromTime.split(':')
+            $scope.datePosticipo.setHours(timeArr[0]);
+            $scope.datePosticipo.setMinutes(timeArr[1]);
             profileService.setSchoolProfile($scope.schoolProfile);
             $scope.selectedPeriod = getPeriodToNow();
 
@@ -195,6 +204,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
                     sectionService.setSection(0);
                     $scope.getChildrenByCurrentSection();
                     $scope.loadNotes();
+                    $ionicLoading.hide();
                 }
             }, function (err) {
                 //manage error sections
@@ -244,6 +254,32 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
         }
     };
 
+    $scope.getClassByPeriod = function (child, selectedPeriod) {
+        switch (selectedPeriod) {
+        case 'anticipo':
+
+            if (child.exitTime != null && child.anticipo.enabled) {
+                //presente se iscritto ad anticipo e non assente
+                return 'child-presente';
+            } else return 'child-assente';
+            break;
+        case 'mensa':
+            //totale di bambini iscritti a scuola
+            if (child.exitTime != null) {
+                //presente se iscritto e non assente
+                return 'child-presente';
+            } else return 'child-assente';
+            break;
+        case 'posticipo':
+
+            if (child.exitTime != null && child.exitTime > $scope.datePosticipo.getTime() && child.posticipo.enabled) {
+                //presente se iscritto  a posticipo e non assente e non ritirto prima dell'inizio del posticipo
+
+                return 'child-presente';
+            } else return 'child-assente';
+            break;
+        }
+    }
     $scope.openParentsNotes = function () {
         $scope.parentsNote = true;
         $scope.teachersNote = false;
@@ -428,6 +464,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
                     if ($scope.section.children[sectionChildrenIndex].kidId === note.kidId) {
                         var baby = {
                             image: $scope.section.children[sectionChildrenIndex].image,
+                            kidId: $scope.section.children[sectionChildrenIndex].kidId,
                             name: $scope.section.children[sectionChildrenIndex].childrenName
                         }
                         note.kid = baby;
@@ -481,6 +518,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
 
         }
     }
+
     $scope.getChildrenProfilesByPeriod = function (periodOfTheDay) {
         $scope.childrenProfiles[periodOfTheDay] = [];
         $scope.colors['anticipo'] = '#ddd';
@@ -491,10 +529,35 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
 
         if ($scope.section != null) {
             for (var i = 0; i < $scope.section.children.length; i++) {
-                if ($scope.section.children[i][periodOfTheDay].active) {
-                    //totalNumber++;
-                    $scope.childrenProfiles[periodOfTheDay].push($scope.section.children[i]);
+                //create string child[selectedPeriod].presenza
+                if ($scope.section.children[i].exitTime == null) {
+                    $scope.section.children[i].presenza = $filter('translate')('absent');
+                } else {
+                    var oraUscita = new Date($scope.section.children[i].exitTime);
+                    $scope.section.children[i].presenza = $filter('translate')('exit_to') + $filter('date')(oraUscita, 'HH:mm');
                 }
+                //putNotification($scope.section.children[i]):
+                switch (periodOfTheDay) {
+                case 'anticipo':
+                    if ($scope.section.children[i][periodOfTheDay].enabled) {
+                        //aggiungi se iscritto al servizio
+                        $scope.childrenProfiles[periodOfTheDay].push($scope.section.children[i]);
+                    }
+                    break;
+                case 'mensa':
+                    //totale di bambini iscritti a scuola
+                    $scope.childrenProfiles[periodOfTheDay].push($scope.section.children[i]);
+                    break;
+                case 'posticipo':
+                    if ($scope.section.children[i][periodOfTheDay].enabled) {
+                        //totalNumber++;
+                        $scope.childrenProfiles[periodOfTheDay].push($scope.section.children[i]);
+                    }
+                    break;
+                }
+
+
+
             }
         }
     }
@@ -507,14 +570,38 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
 
         if ($scope.section != null) {
             for (var i = 0; i < $scope.section.children.length; i++) {
-                if ($scope.section.children[i][periodOfTheDay].active) {
-                    //totalNumber++;
+                switch (periodOfTheDay) {
+                case 'anticipo':
+                    if ($scope.section.children[i][periodOfTheDay].enabled) {
+                        //aggiungi se iscritto al servizio
+                        $scope.totalChildrenNumber[periodOfTheDay]++;
+                    }
+                    if ($scope.section.children[i].exitTime != null && $scope.section.children[i][periodOfTheDay].enabled) {
+                        //aggiungi se iscritto ad anticipo e non assente
+                        $scope.availableChildren[periodOfTheDay]++;
+                    }
+                    break;
+                case 'mensa':
+                    //totale di bambini iscritti a scuola
                     $scope.totalChildrenNumber[periodOfTheDay]++;
+                    if ($scope.section.children[i].exitTime != null) {
+                        //aggiungi se iscritto e non assente
+                        $scope.availableChildren[periodOfTheDay]++;
+                    }
+                    break;
+                case 'posticipo':
+                    if ($scope.section.children[i][periodOfTheDay].enabled) {
+                        //totalNumber++;
+                        $scope.totalChildrenNumber[periodOfTheDay]++;
+                    }
+                    if ($scope.section.children[i].exitTime != null && $scope.section.children[i].exitTime > $scope.datePosticipo.getTime() && $scope.section.children[i][periodOfTheDay].enabled) {
+                        //totalNumber++;
+                        $scope.availableChildren[periodOfTheDay]++;
+                    }
+                    break;
                 }
-                if ($scope.section.children[i].exitTime != null && $scope.section.children[i].exitTime > Date.now() && $scope.section.children[i][periodOfTheDay].enabled) {
-                    //totalNumber++;
-                    $scope.availableChildren[periodOfTheDay]++;
-                }
+
+
             }
         }
     }

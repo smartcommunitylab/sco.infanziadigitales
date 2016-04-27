@@ -1,5 +1,8 @@
 <ion-view id="home" ng-init="initialize()" title="{{title}}">
     <ion-nav-buttons side="right">
+        <button class="button" ng-click="refreshHome()">
+            <i class="icon ion-loop"></i>
+        </button>
         <button class="button" ng-if="!viewClose()" ng-click="openNotes()">
             <i class="icon ion-document-text"></i>
         </button>
@@ -74,16 +77,12 @@
                 </div>
                 <div class="home-separator"></div>
                 <div class="children-home" ng-repeat="child in childrenProfiles[selectedPeriod] track by $index" ng-click="detailOrCommunication(child)">
+                    <div class="badge-msg" ng-if="child.calNotes"><i class="icon ion-document-text"></i>
+                    </div>
+                    <img ng-src="{{getChildImage(child)}}" ng-class="{'img-assente':child.exitTime == null}">
 
-                    <img ng-src="{{getChildImage(child)}}" ng-class="{'child-assente' : (child.exitTime == null  || child.exitTime <= getNowDate()  || (child[selectedPeriod].active && !child[selectedPeriod].enabled) ), 'child-presente' :  (child.exitTime != null && child.exitTime>getNowDate()  && child[selectedPeriod].active && child[selectedPeriod].enabled)}">
                     <!--            <img ng-src="{{child.image}}">-->
-                    <div class="children-assente" ng-if="child.exitTime == null || (child[selectedPeriod].active && !child[selectedPeriod].enabled)"><span>{{'absent' | translate}}</span>
-                    </div>
-                    <div class="children-uscito" ng-if="(child.exitTime != null && child.exitTime<=getNowDate() && child[selectedPeriod].active && child[selectedPeriod].enabled)"><span>{{'exit' | translate}}</span>
-                    </div>
-                    <div class="children-presente" ng-if="(child.exitTime != null && child.exitTime>getNowDate() && child[selectedPeriod].active && child[selectedPeriod].enabled)"><span>{{'present' | translate}}</span>
-                    </div>
-
+                    <div class="children-presenza" ng-class="{'child-assente':child.exitTime == null,'child-presente':child.exitTime != null}">{{child.presenza}}</div>
                     <span class="comunication-done" ng-if="getChildrenDeliveryByID(child.kidId)"></span>
 
                 </div>
@@ -93,8 +92,9 @@
                 <div class="row note-tabs-container" ng-if="!newNoteExpandend">
                     <div class="tabs-striped tabs-top tabs-background-dark tabs-color-light">
                         <div class="tabs note-tabs side-fake-menu-shadow">
-                            <a class="tab-item note-tab" class="col" ng-click="openTeacherNotes()" ng-class="{'active': teachersNote}">{{'teachers_notes' | translate}}</a>
-                            <a class="tab-item note-tab" class="col" ng-click="openParentsNotes()" ng-class="{'active': parentsNote}">{{'parents_notes' | translate}}</a>
+                             <a class="tab-item note-tab" class="col" ng-click="openTeacherNotes()" ng-class="{'active': teachersNote}">{{'class_diary' | translate}}</a>
+                            <!--                            <a class="tab-item note-tab" class="col" ng-click="openTeacherNotes()" ng-class="{'active': teachersNote}">{{'teachers_notes' | translate}}</a>-->
+                            <!--                            <a class="tab-item note-tab" class="col" ng-click="openParentsNotes()" ng-class="{'active': parentsNote}">{{'parents_notes' | translate}}</a>-->
                         </div>
                     </div>
                 </div>
@@ -120,7 +120,7 @@
                     <div ng-hide="!parentsNote" class="parents-notes" ng-class="{'changing-notes-parents-to-teachers': (!parentsNote && teachersNote)}">
                         <ion-list>
                             <ion-item class="item-text-complete" ng-repeat="babyWithNotes in parentNotes track by $index">
-                                <img class="notes-baby-image" ng-src="{{babyWithNotes.kid.image}}"></img>
+                                <img class="notes-baby-image" ng-src="{{getChildImage(babyWithNotes.kid)}}"></img>
                                 <div class="notes-baby-name inline" ng-click="openDetailById(babyWithNotes.kidId)">{{babyWithNotes.kid.name}}</div>
                                 <ion-item class="item-text-complete" ng-repeat="note in babyWithNotes.parentNotes">{{note.note}}</ion-item>
                             </ion-item>

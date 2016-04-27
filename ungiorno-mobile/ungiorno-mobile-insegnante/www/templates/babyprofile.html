@@ -27,12 +27,19 @@
                             <div class="babyProfile detailItem">{{note.note}}</div>
                         </ion-item>
                     </ion-list>
-                    <div class="card">
-                        <div class="item item-text-wrap" ng-if="!notes || notes.parentNotes.length==0">
+                    <div class="card" ng-if="!notes || notes.parentNotes.length==0">
+                        <div class="item item-text-wrap">
                             {{'profile_no_notes' | translate}}
                         </div>
                     </div>
                     <div class="babyProfile detailsTitle" id="teachersNotes" style="margin-top: 24px;">{{'teachers_notes' | translate}}</div>
+                    <ion-list ng-if="notes.schoolNotes.length>0">
+                        <ion-item ng-repeat="note in notes.schoolNotes">
+                            <div class="babyProfile detailItem">{{note.note}}</div>
+                        </ion-item>
+                    </ion-list>
+                    <hr>
+                    <div class="babyProfile detailsTitle" id="teachersNotes" style="margin-top: 24px;">{{'send_note' | translate}}</div>
                     <select id="note_type" class="select-note" ng-model="newNote.argument">
                         <option value="" disabled selected>{{'arguments' | translate}}</option>
                         <option value="{{arg.typeId}" ng-repeat="arg in schoolProfile.teacherNoteTypes">{{arg.type}}</option>

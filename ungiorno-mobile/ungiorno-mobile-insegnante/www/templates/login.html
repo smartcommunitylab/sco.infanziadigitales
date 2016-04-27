@@ -17,18 +17,19 @@
         </ion-nav-buttons>
 
     </ion-nav-bar>
-    <ion-content id="content " has-header="true" scroll="false" class="login-page">
-        <div class="login-title">{{'login_title'|translate}}</div>
-        <!--        <div class="login-subtitle" style="margin-bottom:30px;">{{'login_subtitle'|translate}}</div>-->
-        <!--        <div class="login-warning">{{'login_warning'|translate}}</div>-->
+    <ion-content id="content" has-header="true" scroll="false" class="login-page">
+        <div>
+            <div class="login-title">{{'login_title'|translate}}</div>
+            <!--        <div class="login-subtitle" style="margin-bottom:30px;">{{'login_subtitle'|translate}}</div>-->
+            <!--        <div class="login-warning">{{'login_warning'|translate}}</div>-->
 
-        <div class="bottom-content row text-center">
-            <div class="col col-center ">
-                <a class="google-button button" ng-click="login('googlelocal')">{{'login_google'|translate}}</a>
+            <div class="bottom-content row text-center">
+                <div class="col col-center ">
+                    <a class="google-button button" ng-click="login('googlelocal')">{{'login_google'|translate}}</a>
 
+                </div>
             </div>
         </div>
-
     </ion-content>
 
 </ion-view>

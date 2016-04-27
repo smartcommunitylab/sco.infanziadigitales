@@ -95,9 +95,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
     $scope.sendTeacherNote = function () {
 
         if ($scope.newNote.argument === "") {
-            Toast.show($filter('translate')('select_argument'));
+            Toast.show($filter('translate')('select_argument'), 'short', 'bottom');
         } else if ($scope.newNote.description === "") {
-            Toast.show($filter('translate')('type_description'));
+            Toast.show($filter('translate')('type_description'), 'short', 'bottom');
         } else { //all data are correct
             var note = {
                 date: new Date().getTime(),
@@ -129,9 +129,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
             }
 
             var requestSuccess = function (data) {
-                Toast.show($filter('translate')('note_sent_success'));
+                Toast.show($filter('translate')('note_sent_success'), 'short', 'bottom');
                 $scope.newNote.argument = "";
                 $scope.newNote.description = "";
+                //update the new notes
+                if (data != null && data.data != null && data.data.schoolNotes != null) {
+                    $scope.notes.schoolNotes = data.data.schoolNotes;
+                }
+                if (data != null && data.data != null && data.data.parentNotes != null) {
+                    $scope.notes.parentNotes = data.data.parentNotes;
+                }
             }
 
 

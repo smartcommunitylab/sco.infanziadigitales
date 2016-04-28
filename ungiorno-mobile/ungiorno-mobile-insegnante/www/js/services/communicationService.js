@@ -26,7 +26,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.communi
         var deferred = $q.defer();
 
         dataServerService.addCommunication(schoolId, communication).then(function (data) {
-            communications = data;
+            //add to the top
+            communications.unshift(data);
             deferred.resolve(data);
         }, function (data) {
             deferred.reject(data.errorCode + ' ' + data.errorMessage);

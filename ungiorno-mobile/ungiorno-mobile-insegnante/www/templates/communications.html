@@ -3,25 +3,28 @@
         <ion-nav-back-button>
         </ion-nav-back-button>
         <ion-nav-buttons side="right">
-            <button class="button" ng-click="createCommunicationMode()" ng-if="isMode('normal') && !someCommunicationSelected()">
+            <button class="button" ng-click="createCommunicationMode()" ng-show="isMode('normal') && !someCommunicationSelected()">
                 <i class="icon ion-plus-round"></i>
             </button>
 
             <!--communication selected mode-->
-            <button class="button" ng-click="editCommunicationMode()" ng-if="isMode('normal') && someCommunicationSelected()">
+            <button class="button" ng-click="editCommunicationMode()" ng-show="isMode('normal') && someCommunicationSelected()">
                 <i class="icon ion-android-create"></i>
             </button>
-            <button class="button" ng-click="deleteCommunication()" ng-if="isMode('normal') && someCommunicationSelected()">
+            <button class="button" ng-click="deleteCommunication()" ng-show="isMode('normal') && someCommunicationSelected()">
                 <i class="icon ion-trash-b"></i>
             </button>
 
             <!--edit mode || new communication mode-->
-            <button class="button" ng-click="submitCommunication()" ng-if="isMode('edit') || isMode('new')">
-                <i class="icon ion-checkmark-round"></i>
-            </button>
-            <button class="button" ng-click="discardCommunication()" ng-if="isMode('edit') || isMode('new')">
-                <i class="icon ion-close-round"></i>
-            </button>
+            <!--
+<button class="button" ng-click="discardCommunication()" ng-show="isMode('edit') || isMode('new')">
+    <i class="icon ion-close-round"></i>
+</button>
+<button class="button" ng-click="submitCommunication()" ng-show="isMode('edit') || isMode('new')">
+    <i class="icon ion-checkmark-round"></i>
+</button>
+-->
+
         </ion-nav-buttons>
     </ion-nav-bar>
 
@@ -33,31 +36,58 @@
                     {{communicationType.name}}
                 </ion-checkbox>
             </ion-list>
-            <div>
+            <div ng-if="delivery">
                 <a class=" input-label newComItems communication-text">{{ 'deadline_time' | translate}} : </a>
+                <!--
                 <label class="item-input">
                     <input class="newComItems" id="deadlineDate" type="date" ng-model="newCommunication.dateToCheck">
                 </label>
-                <ion-checkbox class="item item-checkbox newCom newComItems" ng-model="newCommunication.doCheck">Controlla consegna</ion-checkbox>
+-->
+                <ionic-datepicker input-obj="datepickerObjectPopup">
+                    <span class="input-label date-label">{{datepickerObjectPopup.inputDate | date:'dd/MM/yyyy'}}</span>
+                    <button ng-hide="true"></button>
+                </ionic-datepicker>
+                <!--                <ion-checkbox class="item item-checkbox newCom newComItems" ng-model="newCommunication.doCheck">Controlla consegna</ion-checkbox>-->
             </div>
             <label>
                 <input type="text" id="description" placeholder="{{'description' | translate}}" ng-model="newCommunication.description">
             </label>
+            <div class="communication-interaction">
+                <button class="button communication-button cancel-button" ng-click="discardCommunication()" ng-show=" isMode('new')">
+                    {{'communication_discard' | translate}}
+                </button>
+                <button class="button communication-button create-button" ng-click="submitCommunication()" ng-show=" isMode('new')">
+                    {{'communication_confirm' | translate}}
+                </button>
+            </div>
         </div>
 
 
-        <div class="communication card" ng-repeat="communication in communications track by $index" ng-click="selectCommunication($index)" ng-class="{'communication-selected': isCommunicationSelected($index), 'communication-disabled': !isCommunicationSelected($index) && !isMode('normal'), 'communication-active': isCommunicationSelected($index) && isMode('edit')}">
+        <div class="communication card" ng-repeat="communication in communications | orderBy: '-creation' track by $index " ng-click="selectCommunication($index)" ng-class="{'communication-selected': isCommunicationSelected($index), 'communication-disabled': !isCommunicationSelected($index) && !isMode('normal'), 'communication-active': isCommunicationSelected($index) && isMode('edit')}">
             <div>
                 <a ng-if="!(isCommunicationSelected($index) && isMode('edit'))" class="communication-text">{{communication.description}}</a>
                 <input ng-if="isCommunicationSelected($index) && isMode('edit')" ng-model="editedCommunication.description" type="text" id="modifyDescription" value="{{editedCommunication.description}}">
                 <a ng-if="!(isCommunicationSelected($index) && isMode('edit'))" class="communication-date">{{'communication_of' | translate}} {{communication.creationDate | date}}</a>
                 <label class="item-input" ng-if="(isCommunicationSelected($index) && isMode('edit')) && controlDateToCheck($index)">
-                    <input type="date" ng-model="editedCommunication.dateToCheck">
+                    <!--                    <input type="date" ng-model="editedCommunication.dateToCheck">-->
+                    <ionic-datepicker input-obj="datepickerObjectPopup">
+                        <span class="input-label date-label">{{editedCommunication.dateToCheck | date:'dd/MM/yyyy'}}</span>
+                        <button ng-hide="true"></button>
+                    </ionic-datepicker>
                 </label>
                 <p ng-if="!(isCommunicationSelected($index) && isMode('edit')) && controlDateToCheck($index)">{{'deadline' | translate}}: {{communication.dateToCheck | date}}</p>
                 <button class="button-control" ng-if="controlDateToCheck($index)" ng-click="homeRedirect($index)">
                     {{'communication_check' | translate | uppercase}}
                 </button>
+                <div class="communication-interaction">
+
+                    <button class="button cancel-button" ng-click="discardCommunication()" ng-show="isCommunicationSelected($index)&& isMode('edit')">
+                        {{'communication_discard' | translate}}
+                    </button>
+                    <button class="button create-button" ng-click="submitCommunication()" ng-show="isCommunicationSelected($index) && isMode('edit')">
+                        {{'communication_confirm' | translate}}
+                    </button>
+                </div>
             </div>
         </div>
         <div class="nothing-to-show-placeholder-wrapper">

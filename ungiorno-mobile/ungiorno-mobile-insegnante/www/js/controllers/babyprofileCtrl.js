@@ -55,7 +55,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
 
     });
     babyConfigurationService.getBabyNotesById($scope.schoolProfile.schoolId, babyProfileID).then(function (data) {
-        $scope.notes = data[0];
+        if (data[0]) {
+            $scope.notes = data[0];
+        } else {
+            $scope.notes = null;
+        }
         notesLoaded = true;
         checkAllDataLoaded();
     });
@@ -133,10 +137,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
                 $scope.newNote.argument = "";
                 $scope.newNote.description = "";
                 //update the new notes
+
                 if (data != null && data.data != null && data.data.schoolNotes != null) {
+                    if (!$scope.notes) {
+                        $scope.notes = {};
+                    }
                     $scope.notes.schoolNotes = data.data.schoolNotes;
                 }
                 if (data != null && data.data != null && data.data.parentNotes != null) {
+                    if (!$scope.notes) {
+                        $scope.notes = {};
+                    }
                     $scope.notes.parentNotes = data.data.parentNotes;
                 }
             }

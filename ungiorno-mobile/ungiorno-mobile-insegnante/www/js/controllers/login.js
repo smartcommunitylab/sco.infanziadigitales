@@ -15,8 +15,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.logi
         loginService.login(provider).then(
 
             function (data) {
-                console.log("user is not logged");
-
+                console.log("user is logged");
+                //get Name of teachr and set variable
                 $state.go('app.home');
                 $ionicHistory.nextViewOptions({
                     disableBack: true,

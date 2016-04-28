@@ -556,6 +556,7 @@ public class RepositoryManager {
 			comm.set_id(ObjectId.get().toString());
 			comm.setCommunicationId(comm.get_id());
 		}
+		comm.setCreationDate(System.currentTimeMillis());
 		template.save(comm);
 		return comm;
 	}

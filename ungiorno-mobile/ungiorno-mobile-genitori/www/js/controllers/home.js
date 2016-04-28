@@ -14,7 +14,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.elements = [];
     $scope.dailyFermata = null;
     $scope.dailyRitiro = null;
-
+		
+		$scope.refresh = function() {
+			window.location.reload(true);	
+		}
+		
     $scope.goTo = function (location) {
         window.location.assign(location);
     }
@@ -51,7 +55,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 return "button-norm";
             }
             return "button-alrt";
-
         }
         if (button == "bus") {
             if (isBusDisabled()) {
@@ -63,7 +66,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             return "button-alrt";
 
         }
-
+				if (button == "disabled") {
+					return "button-norm disabled";
+				}
     }
 
     var buildHome = function () {
@@ -75,22 +80,24 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             click: "app.retire",
             string: $filter('translate')('home_retire'),
             class: style,
-            img: 'img/ritiro.png'
-
+            img: 'img/ritiro.png',
+						disabled: false
         });
         style = getButtonStyle("default");
         $scope.elements.push({
             click: "app.absence",
             string: $filter('translate')('home_assenza'),
             class: style,
-            img: 'img/assenza.png'
+            img: 'img/assenza.png',
+						disabled: false
         });
-        style = getButtonStyle("default");
+        style = getButtonStyle("disabled");
         $scope.elements.push({
             click: "app.calendar",
             string: $filter('translate')('home_calendario'),
             class: style,
-            img: 'img/calendario.png'
+            img: 'img/calendario.png',
+						disabled: true
         });
         style = getButtonStyle("default");
         $scope.elements.push({
@@ -99,7 +106,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             },
             string: $filter('translate')('home_contatta'),
             class: style,
-            img: 'img/contattaLaScuola.png'
+            img: 'img/contattaLaScuola.png',
+						disabled: false
         });
 				/*//if bus is available put it
         if (profileService.getBabyProfile().services.bus.enabled) {

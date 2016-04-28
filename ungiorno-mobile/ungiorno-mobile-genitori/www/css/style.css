@@ -91,6 +91,9 @@ a.item-content {
 .button-alrt {
     background-color: #FFAD00;
 }
+.disabled {
+	opacity: 0.5;
+}
 .home-comm {
     padding-bottom: 8px;
 }

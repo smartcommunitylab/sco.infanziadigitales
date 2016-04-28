@@ -1,7 +1,13 @@
 <ion-view id="home">
+		
     <ion-nav-title ng-init="getDateString()">
-        {{date | date:'EEEE, d MMMM yyyy'}}
+      {{date | date:'EEEE, d MMMM yyyy'}} 
     </ion-nav-title>
+	<ion-nav-buttons side="right">
+		<button class="button" ng-click="refresh()">
+    	<i class="icon ion-loop"></i>
+    </button>
+	</ion-nav-buttons>	
     <ion-content has-header="true" scroll="false">
         <div class="home-info" ng-show="isPresent">
             {{kidProfile.firstName}} {{'home_entry_to' | translate}} {{fromTime}}{{'home_exit_to' | translate}}{{toTime}}
@@ -12,15 +18,17 @@
         <ion-scroll class="home-area" style="height:95%">
             <div ng-repeat="element in elements | limitTo: (elements.length-elements.length%2)" ng-if="$index % 2 == 0" class="row">
                 <div class="col col-50">
-                    <div class=" button-home-wrapper" ng-class="elements[$index].class" ng-click="execute(elements[$index])">
-                        <button style="background-image:url({{elements[$index].img}})" class=" button-block button-home ">
+                    <div class="button-home-wrapper" ng-class="elements[$index].class">
+                        <button style="background-image:url({{elements[$index].img}})" class=" button-block button-home " 
+																ng-click="execute(elements[$index])" ng-disabled="elements[$index].disabled">
                         </button>
                         <span>{{elements[$index].string}}</span>
                     </div>
                 </div>
                 <div class="col col-50">
                     <div class=" button-home-wrapper" ng-class="elements[$index+1].class">
-                        <button style="background-image:url({{elements[$index+1].img}})" class=" button-block button-home" ng-click="execute(elements[$index+1])">
+                        <button style="background-image:url({{elements[$index+1].img}})" class=" button-block button-home" 
+																ng-click="execute(elements[$index+1])" ng-disabled="elements[$index+1].disabled">
                         </button>
                         <span>{{elements[$index+1].string}}</span>
                     </div>
@@ -29,7 +37,8 @@
             <div class="row" ng-if="elements.length%2==1">
                 <div class="col">
                     <div class=" button-home-wrapper" ng-class="elements[elements.length-1].class">
-                        <button class=" button-block button-home" ng-click="execute(elements[elements.length-1])" style="background-image:url({{elements[elements.length-1].img}})">
+                        <button class=" button-block button-home" ng-click="execute(elements[elements.length-1])" ng-disabled="elements[elements.length-1].disabled"
+																style="background-image:url({{elements[elements.length-1].img}})">
                         </button>
                         <span>{{elements[elements.length-1].string}}</span>
                     </div>
@@ -43,7 +52,6 @@
                     </div>
                     <div ng-if="!notes.schoolNotes || notes.schoolNotes.length == 0">{{'noinfo' | translate}}</div>
                 </div>
-                </p>
                 <p class="home-info-title">{{'home_school_information' | translate}}</p>
                 <ul class="home-info-content">
                     <li ng-repeat="communication in communications" class="home-comm">

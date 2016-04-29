@@ -9,7 +9,72 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
     var MODE_NEW = "new";
 
     var currentMode = MODE_NORMAL_LIST;
+    $scope.datepickerObject = {};
+    $scope.datepickerObject.inputDate = new Date();
+    var monthList = [
+        $filter('translate')('popup_datepicker_jan'),
+        $filter('translate')('popup_datepicker_feb'),
+        $filter('translate')('popup_datepicker_mar'),
+        $filter('translate')('popup_datepicker_apr'),
+        $filter('translate')('popup_datepicker_may'),
+        $filter('translate')('popup_datepicker_jun'),
+        $filter('translate')('popup_datepicker_jul'),
+        $filter('translate')('popup_datepicker_ago'),
+        $filter('translate')('popup_datepicker_sep'),
+        $filter('translate')('popup_datepicker_oct'),
+        $filter('translate')('popup_datepicker_nov'),
+        $filter('translate')('popup_datepicker_dic')
+    ];
+    var weekDaysList = [
+        $filter('translate')('popup_datepicker_sun'),
+        $filter('translate')('popup_datepicker_mon'),
+        $filter('translate')('popup_datepicker_tue'),
+        $filter('translate')('popup_datepicker_wed'),
+        $filter('translate')('popup_datepicker_thu'),
+        $filter('translate')('popup_datepicker_fri'),
+        $filter('translate')('popup_datepicker_sat')
+    ];
 
+    function setDateWidget() {
+
+        $scope.datepickerObjectPopup = {
+            titleLabel: $filter('translate')('popup_datepicker_title'), //Optional
+            todayLabel: $filter('translate')('popup_datepicker_today'), //Optional
+            closeLabel: $filter('translate')('popup_datepicker_close'), //Optional
+            setLabel: $filter('translate')('popup_datepicker_set'), //Optional
+            errorMsgLabel: $filter('translate')('popup_datepicker_error_label'), //Optional
+            setButtonType: 'button-popup', //Optional
+            todayButtonType: 'button-popup', //Optional
+            closeButtonType: 'button-popup', //Optional
+            modalHeaderColor: 'bar-positive', //Optional
+            modalFooterColor: 'bar-positive', //Optional
+            templateType: 'popup', //Optional
+            showTodayButton: 'true',
+            inputDate: $scope.datepickerObject.inputDate, //Optional
+            mondayFirst: true, //Optional
+            monthList: monthList, //Optional
+            weekDaysList: weekDaysList,
+            from: new Date(), //Optional
+            to: new Date(2220, 12, 1), //Optional
+            callback: function (val) { //Optional
+                datePickerCallbackPopup(val);
+            }
+        };
+    }
+    var datePickerCallbackPopup = function (val) {
+        if (typeof (val) === 'undefined') {
+            console.log('No date selected');
+        } else {
+            $scope.datepickerObjectPopup.inputDate = val;
+            $scope.dateTimestamp = $filter('date')(val.getTime(), 'MM/dd/yyyy');
+            if ($scope.isMode(MODE_NEW)) {
+                $scope.newCommunication.dateToCheck = $scope.datepickerObjectPopup.inputDate;
+            } else {
+                $scope.editedCommunication.dateToCheck = $scope.datepickerObjectPopup.inputDate;
+            }
+        }
+    };
+    setDateWidget();
     $scope.communicationTypes = [
         {
             typeId: "0",
@@ -22,9 +87,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
             checked: false
         }
     ];
-
+    $scope.delivery = false;
     var sortCommunications = function () {
-        $scope.communications = $filter('orderBy')($scope.communications, '+creationDate');
+        $scope.communications = $filter('orderBy')($scope.communications, '-creation');
     }
 
 
@@ -32,7 +97,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
         $scope.communications = data;
         for (var i = 0; i < $scope.communications.length; i++) {
             $scope.communications[i].dateToCheck = new Date($scope.communications[i].dateToCheck);
-            $scope.communications[i].creationDate = new Date($scope.communications[i].creationDate);
+            $scope.communications[i].creation = $scope.communications[i].creationDate;
+            $scope.communications[i].creationDate = $scope.communications[i].creationDate;
         }
         sortCommunications();
     });
@@ -59,7 +125,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
 
         $scope.editedCommunication = JSON.parse(JSON.stringify(tmp));
         $scope.editedCommunication.dateToCheck = new Date(tmp.dateToCheck);
-        $scope.editedCommunication.creationDate = new Date(tmp.creationDate);
+        //$scope.editedCommunication.creationDate = new Date(tmp.creationDate);
     }
 
     $scope.isCommunicationSelected = function (index) {
@@ -91,6 +157,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
     $scope.selectType = function (newType) {
         for (var i = 0; i < $scope.communicationTypes.length; i++) {
             $scope.communicationTypes[i].checked = ($scope.communicationTypes[i].typeId === newType.typeId);
+        }
+        if ($scope.communicationTypes[1].checked) {
+            $scope.delivery = true;
+            $scope.newCommunication.doCheck = true;
+        } else {
+            $scope.delivery = false;
+            $scope.newCommunication.doCheck = false;
         }
     }
 
@@ -164,6 +237,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
         sortCommunications();
     }
 
+
+
     $scope.submitCommunication = function () { //edit or new
 
         var requestFail = function () {
@@ -195,15 +270,30 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
             updateCurrentCommunicationList(data);
 
             currentMode = MODE_NORMAL_LIST;
+            if (selectedCommunicationIndex >= 0) {
+                selectedCommunicationIndex = -1;
+            }
         }
 
+
         if ($scope.isMode(MODE_EDIT) || $scope.isMode(MODE_NEW)) {
+            if ($scope.isMode(MODE_NEW) && $scope.newCommunication.description == "") {
+                Toast.show($filter('translate')('communication_empty'), 'short', 'bottom');
+                return;
+            }
+            if ($scope.isMode(MODE_EDIT) && $scope.editedCommunication.description == "") {
+                Toast.show($filter('translate')('communication_empty'), 'short', 'bottom');
+                return;
+            }
             if ($scope.isMode(MODE_EDIT)) {
                 var tmp = JSON.parse(JSON.stringify($scope.editedCommunication));
             } else {
                 var tmp = JSON.parse(JSON.stringify($scope.newCommunication));
             }
             tmp.creationDate = new Date(tmp.creationDate).getTime();
+            if (tmp.creation) {
+                delete tmp['creation'];
+            }
             tmp.dateToCheck = new Date(tmp.dateToCheck).getTime();
             communicationService.addCommunication(profileService.getSchoolProfile().schoolId, tmp).then(function (data) {
                 requestSuccess(data);

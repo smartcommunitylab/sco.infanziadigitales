@@ -134,7 +134,19 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             $scope.modal.hide();
         }, delay);
     };
+	
+		$scope.initDay = function(date) {
+			var result = new Date(date.getTime());
+			result.setHours(0, 0, 0, 0);
+			return result;
+		};
 
+		$scope.endDay = function(date) {
+			var result = new Date(date.getTime());
+			result.setHours(23, 59, 59, 0);
+			return result;
+		};
+	
     //    $scope.send = function () {
     //        if (dateFrom > dateTo) {
     //            alert("La data d'inizio dell'assenza succede quella della fine. Modificare le date.");
@@ -172,8 +184,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         var illness = {
             kidId: $scope.babyProfile.kidId,
             note: '',
-            dateFrom: $scope.illness.dateFrom.getTime(),
-            dateTo: $scope.illness.dateTo.getTime(),
+            dateFrom: $scope.initDay($scope.illness.dateFrom).getTime(),
+            dateTo: $scope.endDay($scope.illness.dateTo).getTime(),
             reason: getReason()
         };
         dataServerService.sendAssenza($scope.babyProfile.schoolId, $scope.babyProfile.kidId, illness).then(function (data) {

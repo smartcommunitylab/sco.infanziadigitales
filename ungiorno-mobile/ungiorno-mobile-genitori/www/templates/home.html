@@ -54,7 +54,7 @@
                 </div>
                 <p class="home-info-title">{{'home_school_information' | translate}}</p>
                 <ul class="home-info-content">
-                    <li ng-repeat="communication in communications" class="home-comm">
+                    <li ng-repeat="communication in communications | orderBy:'-creationDate' " class="home-comm">
                         <i class="icon ion-arrow-right-b"></i>
                         <span>{{communication.description}}</span>
                         <span class="alignright" ng-show="communication.doCheck">{{communication.dateToCheck | date:'EEEE, d MMMM yyyy'}}</span>

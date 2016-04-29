@@ -731,6 +731,7 @@ public class RepositoryManager {
 			skp.setKidId(kp.getKidId());
 			skp.setChildrenName(kp.getFullName());
 			skp.setImage(kp.getImage());
+			skp.setActive(kp.isActive());
 
 			// merge service state from config and from profile
 			skp.setAnticipo(new ServiceProfile(kp.getServices().getAnticipo().isEnabled(), conf != null ? conf.anticipoActive() : true));

@@ -66,6 +66,8 @@ public class SectionData extends SchoolObject{
 		
 		private boolean calNotes;
 		
+		private boolean active = true;
+		
 		public String getKidId() {
 			return kidId;
 		}
@@ -155,6 +157,12 @@ public class SectionData extends SchoolObject{
 		}
 		public void setCalNotes(boolean calNotes) {
 			this.calNotes = calNotes;
+		}
+		public boolean isActive() {
+			return active;
+		}
+		public void setActive(boolean active) {
+			this.active = active;
 		}
 	}
 

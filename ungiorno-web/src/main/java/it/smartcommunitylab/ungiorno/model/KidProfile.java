@@ -51,6 +51,7 @@ public class KidProfile extends SchoolObject {
 	private KidServices services;
 	private List<AuthPerson> persons;
 	private List<Allergy> allergies;
+	private boolean active = true;
 	
 	private List<DiaryTeacher> diaryTeachers;
 	private Boolean sharedDiary;
@@ -135,6 +136,12 @@ public class KidProfile extends SchoolObject {
 	}
 	public void set_id(String _id) {
 		this._id = _id;
+	}
+	public boolean isActive() {
+		return active;
+	}
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 	
 }

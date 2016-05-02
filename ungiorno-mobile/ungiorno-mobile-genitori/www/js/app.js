@@ -335,6 +335,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
 			retire_popup_absent_text: "Per questa giornata è stata impostata un'assenza. Inserendo i dati di ritiro lo stato verrà modificato. Confermi?",
 			retire_popup_absent_ok: "Conferma",
 			retire_popup_absent_cancel: "Annulla",
+			retire_popup_toolate_title: "ATTENZIONE",
+			retire_popup_toolate_text: "Non è più possibile modificare le modalità di ritiro per oggi. Modifica permessa entro le ore",
 			setting_sendok: "Modifica configurazione registrata",
 			setting_sendno: "Problemi di invio dati",
 			send_note: "Invia una nota",
@@ -369,6 +371,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
 			assenza_popup_retire_text: "Per queste giornate è già stata impostata l'ora di ritiro. Impostando l'assenza i dati di ritiro veranno sovrascritti. Confermi?",
 			assenza_popup_retire_cancel: "Annulla",
 			assenza_popup_retire_ok: "Conferma",
+			assenza_popup_toolate_title: "ATTENZIONE",
+			assenza_popup_toolate_text: "Non è più possibile inserire un'assenza per oggi. Modifica permessa entro le ore",
 			noinfo: "Nessuna informazione",
 			settings: "Impostazioni di base",
 			cancel: "Annulla",
@@ -444,6 +448,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
 			retire_popup_absent_text: "Per la giornata di oggi è stata impostata l'asenza. Inserendo i dati di ritiro lo stato verrà modificato. Confermi?",
 			retire_popup_absent_ok: "Conferma",
 			retire_popup_absent_cancel: "Annulla",
+			retire_popup_toolate_title: "ATTENZIONE",
+			retire_popup_toolate_text: "Non è più possibile modificare le modalità di ritiro per oggi. Modifica permessa entro le ore",
 			setting_sendok: "Modifica configurazione registrata",
 			setting_sendno: "Problemi di invio dati",
 			call: "Chiama",
@@ -479,6 +485,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
 			assenza_popup_retire_text: "Per questa giornata è già stata impostata l'ora di ritiro. Impostando l'assenza i dati di ritiro veranno sovrascritti. Confermi?",
 			assenza_popup_retire_cancel: "Annulla",
 			assenza_popup_retire_ok: "Conferma",
+			assenza_popup_toolate_title: "ATTENZIONE",
+			assenza_popup_toolate_text: "Non è più possibile inserire un'assenza per oggi. Modifica permessa entro le ore",
 			ok: "OK",
 			today: "Oggi"
 	});
@@ -545,6 +553,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
 			retire_popup_absent_text: "Per la giornata di oggi è stata impostata l'asenza. Inserendo i dati di ritiro lo stato verrà modificato. Confermi?",
 			retire_popup_absent_ok: "Conferma",
 			retire_popup_absent_cancel: "Annulla",
+			retire_popup_toolate_title: "ATTENZIONE",
+			retire_popup_toolate_text: "Non è più possibile modificare le modalità di ritiro per oggi. Modifica permessa entro le ore",
 			setting_sendok: "Modifica configurazione registrata",
 			setting_sendno: "Problemi di invio dati",
 			send_note: "Invia una nota",
@@ -589,6 +599,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
 			assenza_popup_retire_text: "Per questa giornata è già stata impostata l'ora di ritiro. Impostando l'assenza i dati di ritiro veranno sovrascritti. Confermi?",
 			assenza_popup_retire_cancel: "Annulla",
 			assenza_popup_retire_ok: "Conferma",
+			assenza_popup_toolate_title: "ATTENZIONE",
+			assenza_popup_toolate_text: "Non è più possibile inserire un'assenza per oggi. Modifica permessa entro le ore",
 			ok: "OK",
 			today: "Oggi"
 	});

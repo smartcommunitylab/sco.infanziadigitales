@@ -384,9 +384,9 @@ public class KidController {
     headers.setContentType(MediaType.IMAGE_PNG);
     headers.setContentLength(0);
     
-		if (!permissions.checkKidProfile(appId, schoolId, kidId, isTeacher)) {
+		/*if (!permissions.checkKidProfile(appId, schoolId, kidId, isTeacher)) {
 			return new HttpEntity<byte[]>(new byte[0], headers);
-		}
+		}*/
 		KidProfile profile = storage.getKidProfile(appId, schoolId, kidId);
 		String name = profile.getImage();
 		String path = imageDownloadDir + "/" + name;

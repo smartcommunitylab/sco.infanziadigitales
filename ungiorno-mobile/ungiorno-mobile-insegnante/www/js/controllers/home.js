@@ -26,6 +26,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
         //if I come from login, initialize
         if (fromState.name == 'app.login') {
             $scope.initialize();
+            sectionService.setSection(null);
+
         }
     });
     $scope.$on('$ionicView.beforeEnter', function () {
@@ -137,6 +139,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
 
         dataServerService.addNewInternalNote($scope.schoolProfile.schoolId, $scope.newNote.assignedBaby, ids, noteToSend).then(function (data) {
             requestSuccess(data);
+            $scope.cancelNewNote(); //close panel of new note
         }, function (data) {
             requestFail(data);
         });
@@ -217,14 +220,18 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
                 $scope.datePosticipo.setHours(timeArr[0]);
                 $scope.datePosticipo.setMinutes(timeArr[1]);
                 profileService.setSchoolProfile($scope.schoolProfile);
-                $scope.selectedPeriod = getPeriodToNow();
+                if ($scope.selectedPeriod == null) {
+                    $scope.selectedPeriod = getPeriodToNow();
+                }
                 loginService.getTeacherName($scope.schoolProfile.schoolId);
 
                 dataServerService.getSections($scope.schoolProfile.schoolId).then(function (data) {
                     if (data != null) {
                         $scope.sections = data;
-                        $scope.section = $scope.sections[0];
-                        sectionService.setSection(0);
+                        if (sectionService.getSection() == null) {
+                            $scope.section = $scope.sections[0];
+                            sectionService.setSection(0);
+                        }
                         $scope.getChildrenByCurrentSection();
                         $scope.loadNotes();
                         $ionicLoading.hide();

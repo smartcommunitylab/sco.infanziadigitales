@@ -1207,8 +1207,8 @@ ion-content .scroll {
 
 .right-side-fake-menu {
     background-color: #EEEEEE;
-    height: 100%;
-    right: 0%;
+/*    height: 100%;
+    */    right: 0%;
     position: absolute;
     padding: 0;
 }
@@ -1294,6 +1294,7 @@ ion-content .scroll {
 .new-note-title {
     font-size: 20px;
     font-weight: bold;
+    color: #3e5421;
 }
 
 .new-note-description {

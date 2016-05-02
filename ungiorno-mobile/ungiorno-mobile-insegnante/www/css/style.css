@@ -989,6 +989,10 @@ select {
 }
 
 .img-assente {
+    border: 2px solid #ff0000;
+}
+
+.img-not-active {
     opacity: 0.4;
 }
 
@@ -1487,4 +1491,6 @@ ion-content .scroll {
     margin-top: 8px;
 }
 
-.communication-button {}
+.text-gray {
+    color: gray;
+}

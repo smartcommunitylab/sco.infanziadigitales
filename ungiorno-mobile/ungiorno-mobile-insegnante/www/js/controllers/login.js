@@ -17,11 +17,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.logi
             function (data) {
                 console.log("user is logged");
                 //get Name of teachr and set variable
+                //$ionicHistory.clearCache().then(function () {
+                //$ionicHistory.clearCache();
                 $state.go('app.home');
                 $ionicHistory.nextViewOptions({
                     disableBack: true,
                     historyRoot: true
                 });
+                //});
+
             },
             function (error) {
                 loginStarted = false;

@@ -106,12 +106,19 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
         $rootScope.platform = ionic.Platform;
         $rootScope.backButtonStyle = $ionicConfig.backButton.icon();
         if (loginService.userIsLogged()) {
+            //            $ionicHistory.clearCache().then(function () {
+            //$ionicHistory.clearCache();
             console.log("user is logged");
-            $state.go('app.home');
-            $ionicHistory.nextViewOptions({
-                disableBack: true,
-                historyRoot: true
-            });
+            loginService.login('googlelocal').then(
+
+                function (data) {
+                    $state.go('app.home');
+                    $ionicHistory.nextViewOptions({
+                        disableBack: true,
+                        historyRoot: true
+                            //                });
+                    });
+                });
 
         }
         $ionicLoading.hide();

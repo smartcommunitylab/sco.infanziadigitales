@@ -79,10 +79,10 @@
                 <div class="children-home" ng-repeat="child in childrenProfiles[selectedPeriod] track by $index" ng-click="detailOrCommunication(child)">
                     <div class="badge-msg" ng-if="child.calNotes"><i class="icon center icon-message  ion-document-text"></i>
                     </div>
-                    <img ng-src="{{getChildImage(child)}}" ng-class="{'img-assente':child.exitTime == null}">
+                    <img ng-src="{{getChildImage(child)}}" ng-class="{'img-assente':child.exitTime == null,'img-not-active':!child.active}">
 
                     <!--            <img ng-src="{{child.image}}">-->
-                    <div class="children-presenza" ng-class="{'child-assente':child.exitTime == null,'child-presente':child.exitTime != null}">{{child.presenza}}</div>
+                    <div class="children-presenza" ng-if="child.active" ng-class="{'child-assente':child.exitTime == null,'child-presente':child.exitTime != null}">{{child.presenza}}</div>
                     <span class="comunication-done" ng-if="getChildrenDeliveryByID(child.kidId)"></span>
 
                 </div>

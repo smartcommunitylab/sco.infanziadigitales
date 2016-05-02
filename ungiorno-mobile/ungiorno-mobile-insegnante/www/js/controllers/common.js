@@ -102,7 +102,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
 
         //first logout the exit from auth
         loginService.logout().then(function (done) {
-            window.plugins.googleplus.disconnect(
+            window.plugins.googleplus.logout(
                 function (msg) {
                     $state.go('app.login');
                     $ionicHistory.nextViewOptions({

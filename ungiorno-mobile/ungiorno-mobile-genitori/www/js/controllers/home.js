@@ -145,7 +145,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
           });
     }
     $scope.call = function () {
-        window.open('tel:'+profileService.getSchoolProfile().contacts.telephone[0]);
+				var num = profileService.getSchoolProfile().contacts.telephone[0];
+        window.open('tel:'+ num);
         $scope.contactPopup.close();
     }
     $scope.createNote = function() {

@@ -9,7 +9,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.logi
             return;
         };
 
-        loginStarted = true;
+        $rootScope.loginStarted = true;
         //if user already logged enter, otherwise login
 
         loginService.login(provider).then(
@@ -28,7 +28,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.logi
 
             },
             function (error) {
-                loginStarted = false;
+                $rootScope.loginStarted = false;
                 Toast.show($filter('translate')('authentication_error'), 'short', 'bottom');
                 //ionic.Platform.exitApp();
             }

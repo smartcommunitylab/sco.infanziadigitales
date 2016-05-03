@@ -119,11 +119,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
                     scope: $scope,
                     buttons: [
                         {
-                            text: $filter('translate')('cancel')
+                            text: $filter('translate')('cancel'),
+                            type: 'cancel-button'
                         },
                         {
                             text: '<b>' + $filter('translate')('retry') + '</b>',
-                            type: 'button-positive',
+                            type: 'create-button',
                             onTap: function (e) {
                                 $scope.sendTeacherNote();
                             }

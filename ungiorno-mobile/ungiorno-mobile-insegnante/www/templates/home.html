@@ -1,13 +1,13 @@
 <ion-view id="home" ng-init="initialize()" title="{{title}}">
     <ion-nav-buttons side="right">
         <button class="button" ng-click="refreshHome()">
-            <i class="icon ion-loop"></i>
+            <i class="icon ion-loop action-icon"></i>
         </button>
         <button class="button" ng-if="!viewClose()" ng-click="openNotes()">
-            <i class="icon ion-document-text"></i>
+            <i class="icon ion-document-text action-icon "></i>
         </button>
         <button class="button" ng-if="!viewClose()" ng-click="openCommunications()">
-            <i class="icon ion-android-alarm-clock"></i>
+            <i class="icon ion-android-alarm-clock action-icon"></i>
         </button>
         <button class="button" ng-if="viewClose()" ng-click="closeNotesAndComm()">{{'close' | translate | uppercase}}</button>
         <button class="button" ng-if="viewClose() && communicationExpanded " ng-click="saveNotesAndComm()">{{'save' | translate | uppercase}}</button>
@@ -82,6 +82,8 @@
                     <img ng-src="{{getChildImage(child)}}" ng-class="{'img-assente':child.exitTime == null,'img-not-active':!child.active}">
 
                     <!--            <img ng-src="{{child.image}}">-->
+                    <div class="name-of-child" ng-if="!child.image || child.image==''">{{child.childrenName}}</div>
+
                     <div class="children-presenza" ng-if="child.active" ng-class="{'child-assente':child.exitTime == null,'child-presente':child.exitTime != null}">{{child.presenza}}</div>
                     <span class="comunication-done" ng-if="getChildrenDeliveryByID(child.kidId)"></span>
 
@@ -90,19 +92,6 @@
             <div class="col col-25 home-section-space right-side-fake-menu side-fake-menu-shadow " ng-hide="!noteExpanded">
                 <div class="scadenze" ng-if="!newNoteExpandend"> <i class="icon ion-document-text"></i>{{'class_diary' | translate}}</div>
 
-                <!--
-                <div class="row note-tabs-container" ng-if="!newNoteExpandend">
-                    <div class="tabs-striped tabs-top tabs-background-dark tabs-color-light">
-                        <div class="tabs note-tabs side-fake-menu-shadow">
-                            <a class="tab-item note-tab" class="col" ng-click="openTeacherNotes()" ng-class="{'active': teachersNote}">{{'class_diary' | translate}}</a>
--->
-                <!--                            <a class="tab-item note-tab" class="col" ng-click="openTeacherNotes()" ng-class="{'active': teachersNote}">{{'teachers_notes' | translate}}</a>-->
-                <!--                            <a class="tab-item note-tab" class="col" ng-click="openParentsNotes()" ng-class="{'active': parentsNote}">{{'parents_notes' | translate}}</a>-->
-                <!--
-                        </div>
-                    </div>
-                </div>
--->
                 <div class="row">
                     <div ng-hide="!teachersNote" class="teacher-notes" ng-class="{'changing-notes-teachers-to-parents': (parentsNote && !teachersNote)}">
                         <button class="button create-note" ng-click="createNotes()">{{'new_note' | translate}}</button>

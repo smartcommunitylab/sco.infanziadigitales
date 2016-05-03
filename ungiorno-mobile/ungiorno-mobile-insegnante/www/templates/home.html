@@ -79,27 +79,34 @@
                 <div class="children-home" ng-repeat="child in childrenProfiles[selectedPeriod] track by $index" ng-click="detailOrCommunication(child)">
                     <div class="badge-msg" ng-if="child.calNotes"><i class="icon center icon-message  ion-document-text"></i>
                     </div>
-                    <img ng-src="{{getChildImage(child)}}" ng-class="{'img-assente':child.exitTime == null}">
+                    <img ng-src="{{getChildImage(child)}}" ng-class="{'img-assente':child.exitTime == null,'img-not-active':!child.active}">
 
                     <!--            <img ng-src="{{child.image}}">-->
-                    <div class="children-presenza" ng-class="{'child-assente':child.exitTime == null,'child-presente':child.exitTime != null}">{{child.presenza}}</div>
+                    <div class="children-presenza" ng-if="child.active" ng-class="{'child-assente':child.exitTime == null,'child-presente':child.exitTime != null}">{{child.presenza}}</div>
                     <span class="comunication-done" ng-if="getChildrenDeliveryByID(child.kidId)"></span>
 
                 </div>
             </div>
             <div class="col col-25 home-section-space right-side-fake-menu side-fake-menu-shadow " ng-hide="!noteExpanded">
+                <div class="scadenze" ng-if="!newNoteExpandend"> <i class="icon ion-document-text"></i>{{'class_diary' | translate}}</div>
 
+                <!--
                 <div class="row note-tabs-container" ng-if="!newNoteExpandend">
                     <div class="tabs-striped tabs-top tabs-background-dark tabs-color-light">
                         <div class="tabs note-tabs side-fake-menu-shadow">
                             <a class="tab-item note-tab" class="col" ng-click="openTeacherNotes()" ng-class="{'active': teachersNote}">{{'class_diary' | translate}}</a>
-                            <!--                            <a class="tab-item note-tab" class="col" ng-click="openTeacherNotes()" ng-class="{'active': teachersNote}">{{'teachers_notes' | translate}}</a>-->
-                            <!--                            <a class="tab-item note-tab" class="col" ng-click="openParentsNotes()" ng-class="{'active': parentsNote}">{{'parents_notes' | translate}}</a>-->
+-->
+                <!--                            <a class="tab-item note-tab" class="col" ng-click="openTeacherNotes()" ng-class="{'active': teachersNote}">{{'teachers_notes' | translate}}</a>-->
+                <!--                            <a class="tab-item note-tab" class="col" ng-click="openParentsNotes()" ng-class="{'active': parentsNote}">{{'parents_notes' | translate}}</a>-->
+                <!--
                         </div>
                     </div>
                 </div>
-                <div class="row" style="margin-top:50px">
+-->
+                <div class="row">
                     <div ng-hide="!teachersNote" class="teacher-notes" ng-class="{'changing-notes-teachers-to-parents': (parentsNote && !teachersNote)}">
+                        <button class="button create-note" ng-click="createNotes()">{{'new_note' | translate}}</button>
+
                         <ion-list>
                             <ion-item class="item-text-complete" ng-repeat="note in teacherNotes track by $index">
                                 <div class="babyNames" ng-if="isBabyAssignedToNote(note)">
@@ -114,7 +121,6 @@
                                 {{'no_notes_today' | translate}}
                             </div>
                         </div>
-                        <button class="button create-note " ng-click="createNotes()">{{'new_note' | translate}}</button>
 
                     </div>
                     <div ng-hide="!parentsNote" class="parents-notes" ng-class="{'changing-notes-parents-to-teachers': (!parentsNote && teachersNote)}">

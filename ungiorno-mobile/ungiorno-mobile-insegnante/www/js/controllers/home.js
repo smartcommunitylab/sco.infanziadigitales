@@ -22,6 +22,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
     $scope.data = {
         communication: ""
     };
+    $scope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
+        //if I come from login, initialize
+        if (fromState.name == 'app.login') {
+            $scope.initialize();
+            sectionService.setSection(null);
+
+        }
+    });
     $scope.$on('$ionicView.beforeEnter', function () {
         if (communicationService.getToCheck()) {
             //expand side menu on communication
@@ -131,6 +139,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
 
         dataServerService.addNewInternalNote($scope.schoolProfile.schoolId, $scope.newNote.assignedBaby, ids, noteToSend).then(function (data) {
             requestSuccess(data);
+            $scope.cancelNewNote(); //close panel of new note
         }, function (data) {
             requestFail(data);
         });
@@ -204,46 +213,52 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
 
 
         dataServerService.getSchoolProfileForTeacher().then(function (schoolProfile) {
-            $scope.schoolProfile = schoolProfile;
-            $scope.datePosticipo = new Date();
-            var timeArr = $scope.schoolProfile.posticipoTiming.fromTime.split(':')
-            $scope.datePosticipo.setHours(timeArr[0]);
-            $scope.datePosticipo.setMinutes(timeArr[1]);
-            profileService.setSchoolProfile($scope.schoolProfile);
-            $scope.selectedPeriod = getPeriodToNow();
-            loginService.getTeacherName($scope.schoolProfile.schoolId);
-
-            dataServerService.getSections($scope.schoolProfile.schoolId).then(function (data) {
-                if (data != null) {
-                    $scope.sections = data;
-                    $scope.section = $scope.sections[0];
-                    sectionService.setSection(0);
-                    $scope.getChildrenByCurrentSection();
-                    $scope.loadNotes();
-                    $ionicLoading.hide();
+            if (schoolProfile) {
+                $scope.schoolProfile = schoolProfile;
+                $scope.datePosticipo = new Date();
+                var timeArr = $scope.schoolProfile.posticipoTiming.fromTime.split(':')
+                $scope.datePosticipo.setHours(timeArr[0]);
+                $scope.datePosticipo.setMinutes(timeArr[1]);
+                profileService.setSchoolProfile($scope.schoolProfile);
+                if ($scope.selectedPeriod == null) {
+                    $scope.selectedPeriod = getPeriodToNow();
                 }
-            }, function (err) {
-                //manage error sections
-            })
-            dataServerService.getTeachers($scope.schoolProfile.schoolId).then(function (data) {
-                teachersService.setTeachers(data);
-                // select the right teacher
-                for (var k = 0; k < data.length; k++) {
-                    if (data[k].username == localStorage.username) {
-                        $scope.selectedTeacher = data[k];
-                        $scope.title += ' - ' + $scope.selectedTeacher.teacherFullname;
+                loginService.getTeacherName($scope.schoolProfile.schoolId);
+
+                dataServerService.getSections($scope.schoolProfile.schoolId).then(function (data) {
+                    if (data != null) {
+                        $scope.sections = data;
+                        if (sectionService.getSection() == null) {
+                            $scope.section = $scope.sections[0];
+                            sectionService.setSection(0);
+                        }
+                        $scope.getChildrenByCurrentSection();
+                        $scope.loadNotes();
+                        $ionicLoading.hide();
                     }
-                }
+                }, function (err) {
+                    //manage error sections
+                })
+                dataServerService.getTeachers($scope.schoolProfile.schoolId).then(function (data) {
+                    teachersService.setTeachers(data);
+                    // select the right teacher
+                    for (var k = 0; k < data.length; k++) {
+                        if (data[k].username == localStorage.username) {
+                            $scope.selectedTeacher = data[k];
+                            $scope.title += ' - ' + $scope.selectedTeacher.teacherFullname;
+                        }
+                    }
 
 
-                //                if (localStorage.name || localStorage.surname) {
-                //                    $scope.title += ' - ' + localStorage.name + ' ' + localStorage.surname;
-                //                }
-                teachersService.setSelectedTeacher($scope.selectedTeacher);
-                console.log($scope.selectedTeacher);
-            }, function (err) {
-                //manage error teachers
-            });
+                    //                if (localStorage.name || localStorage.surname) {
+                    //                    $scope.title += ' - ' + localStorage.name + ' ' + localStorage.surname;
+                    //                }
+                    teachersService.setSelectedTeacher($scope.selectedTeacher);
+                    console.log($scope.selectedTeacher);
+                }, function (err) {
+                    //manage error teachers
+                });
+            }
             communicationService.getCommunicationsFromServer($scope.schoolProfile.schoolId).then(function (data) {
                 $scope.communications = [];
                 for (var i = 0; i < data.length; i++) {
@@ -261,6 +276,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
         }, function (err) {
             //manage error school profile
         });
+
 
     };
 

@@ -106,12 +106,19 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
         $rootScope.platform = ionic.Platform;
         $rootScope.backButtonStyle = $ionicConfig.backButton.icon();
         if (loginService.userIsLogged()) {
+            //            $ionicHistory.clearCache().then(function () {
+            //$ionicHistory.clearCache();
             console.log("user is logged");
-            $state.go('app.home');
-            $ionicHistory.nextViewOptions({
-                disableBack: true,
-                historyRoot: true
-            });
+            loginService.login('googlelocal').then(
+
+                function (data) {
+                    $state.go('app.home');
+                    $ionicHistory.nextViewOptions({
+                        disableBack: true,
+                        historyRoot: true
+                            //                });
+                    });
+                });
 
         }
         $ionicLoading.hide();
@@ -392,7 +399,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
         exit_to: 'Esce alle ',
         loading_data: 'Caricamento dati',
         authentication_error: 'Problemi di autenticazione. Verificare la connessione',
-        class_diary: 'DIARIO DI CLASSE',
+        class_diary: ' DIARIO DI CLASSE',
         send_note: 'Invia nota al genitore',
         communication_empty: 'Inserire una descrizione',
         popup_datepicker_title: 'Selezionare il giorno',
@@ -424,6 +431,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
         profile_no_parents_notes1: 'I genitori di ',
         profile_no_parents_notes2: ' non hanno inviato nessuna nota oggi',
         profile_no_teacher_notes: 'Oggi non è stata inviata nessuna nota ai genitori di ',
+        baby_not_monitored: ' non è monitorato dal sistema '
 
 
 

@@ -989,6 +989,10 @@ select {
 }
 
 .img-assente {
+    border: 2px solid #ff0000;
+}
+
+.img-not-active {
     opacity: 0.4;
 }
 
@@ -1203,8 +1207,8 @@ ion-content .scroll {
 
 .right-side-fake-menu {
     background-color: #EEEEEE;
-    height: 100%;
-    right: 0%;
+/*    height: 100%;
+    */    right: 0%;
     position: absolute;
     padding: 0;
 }
@@ -1290,6 +1294,7 @@ ion-content .scroll {
 .new-note-title {
     font-size: 20px;
     font-weight: bold;
+    color: #3e5421;
 }
 
 .new-note-description {
@@ -1487,4 +1492,6 @@ ion-content .scroll {
     margin-top: 8px;
 }
 
-.communication-button {}
+.text-gray {
+    color: gray;
+}

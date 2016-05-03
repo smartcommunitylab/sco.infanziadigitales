@@ -34,6 +34,7 @@ import it.smartcommunitylab.ungiorno.utils.PermissionsManager;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -390,7 +391,14 @@ public class KidController {
 		KidProfile profile = storage.getKidProfile(appId, schoolId, kidId);
 		String name = profile.getImage();
 		String path = imageDownloadDir + "/" + name;
-		FileInputStream in = new FileInputStream(new File(path));
+		FileInputStream in = null;
+		try {
+			in = new FileInputStream(new File(path));
+		} catch (FileNotFoundException e) {
+			name = "placeholder_child.png";
+			path = imageDownloadDir + "/" + name;
+			in = new FileInputStream(new File(path));
+		}
 		byte[] image = IOUtils.toByteArray(in);
 		headers.setContentLength(image.length);
 		String extension = name.substring(name.lastIndexOf("."));
@@ -403,10 +411,6 @@ public class KidController {
 		} else if(extension.toLowerCase().equals(".jpeg")) {
 			headers.setContentType(MediaType.IMAGE_JPEG);
 		}
-		/*int cacheAge = 3600;
-		long expiry = new Date().getTime() + cacheAge*1000;
-		response.setDateHeader("Expires", expiry);
-		response.setHeader("Cache-Control", "max-age="+ cacheAge);*/
     return new HttpEntity<byte[]>(image, headers);
 	}
 	

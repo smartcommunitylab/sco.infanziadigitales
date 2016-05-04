@@ -48,8 +48,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.bus'
 
     }
     dataServerService.getBuses(profileService.getSchoolProfile().schoolId, new Date().getTime()).then(function (data) {
-        $scope.buses = data.buses;
-        $scope.changeSelectedBus($scope.buses[0]);
+        if (data && data.buses && data.buses.length > 0) {
+            $scope.buses = data.buses;
+            $scope.changeSelectedBus($scope.buses[0]);
+        }
         $ionicLoading.hide();
         $scope.dataLoaded = true;
     });

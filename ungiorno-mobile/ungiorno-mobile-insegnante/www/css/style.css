@@ -992,6 +992,10 @@ select {
     border: 2px solid #ff0000;
 }
 
+.img-presente {
+    border: 2px solid #cccccc;
+}
+
 .img-not-active {
     opacity: 0.4;
 }
@@ -1350,7 +1354,7 @@ ion-content .scroll {
     width: 100%;
     text-align: center;
     margin-right: auto;
-    transform: translate(-50%, -50%)
+    /*    transform: translate(-50%, -50%)*/
 }
 
 .nothing-to-show-placeholder {

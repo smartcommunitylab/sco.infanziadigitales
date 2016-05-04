@@ -1133,6 +1133,15 @@ select {
     width: 100%;
     background-color: #bd3e4d;
     color: #fff;
+    margin-bottom: 16px;
+}
+
+.name-of-child {
+    position: absolute;
+    bottom: 20px;
+    text-overflow: ellipsis;
+    text-align: center;
+    width: 100%;
 }
 
 .communication-disabled {
@@ -1207,8 +1216,8 @@ ion-content .scroll {
 
 .right-side-fake-menu {
     background-color: #EEEEEE;
-/*    height: 100%;
-    */    right: 0%;
+    min-height: 100%;
+    right: 0%;
     position: absolute;
     padding: 0;
 }
@@ -1364,6 +1373,30 @@ ion-content .scroll {
 
 .icon-menu-insegnante {
     margin-right: 8px;
+    font-size: 30px;
+}
+
+.action-icon:before {
+    font-size: 30px!important;
+}
+
+
+/*
+.id-checkbox:before {
+    background: #bd3e4d;
+    border-color: #bd3e4d;
+}
+*/
+
+.id-checkbox input:before,
+.id-checkbox .checkbox-icon:before {
+    border-color: #bd3e4d;
+}
+
+.id-checkbox input:checked:before,
+.id-checkbox input:checked + .checkbox-icon:before {
+    background: #bd3e4d;
+    border-color: #bd3e4d;
 }
 
 .menu-profile {
@@ -1399,7 +1432,7 @@ ion-content .scroll {
     color: #3e5421;
     font-size: 22px;
     font-weight: bold;
-    margin-left: 16px
+    margin: 16px
 }
 
 .controlla-consegne {

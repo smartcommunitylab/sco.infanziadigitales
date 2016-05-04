@@ -32,7 +32,7 @@
         <div class="communication card" ng-if="isMode('new')">
             <a class="communication-text"> {{ 'communication_type' | translate}} </a>
             <ion-list class="padlist">
-                <ion-checkbox ng-repeat="communicationType in communicationTypes" ng-model="communicationType.checked" ng-checked="communicationType.checked" ng-change="selectType(communicationType)">
+                <ion-checkbox class="id-checkbox" ng-repeat="communicationType in communicationTypes" ng-model="communicationType.checked" ng-checked="communicationType.checked" ng-change="selectType(communicationType)">
                     {{communicationType.name}}
                 </ion-checkbox>
             </ion-list>

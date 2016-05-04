@@ -110,11 +110,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
                 scope: $scope,
                 buttons: [
                     {
-                        text: $filter('translate')('cancel')
+                        text: $filter('translate')('cancel'),
+                        type: 'cancel-button'
                     },
                     {
                         text: '<b>' + $filter('translate')('retry') + '</b>',
-                        type: 'button-positive',
+                        type: 'create-button',
                         onTap: function (e) {
                             $scope.sendNewNote();
                         }
@@ -231,6 +232,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
                         if (sectionService.getSection() == null) {
                             $scope.section = $scope.sections[0];
                             sectionService.setSection(0);
+                        } else {
+                            $scope.changeSection(sectionService.getSection());
                         }
                         $scope.getChildrenByCurrentSection();
                         $scope.loadNotes();

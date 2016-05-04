@@ -367,7 +367,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
         communication_updated: 'Comunicazione aggiornata correttamente',
         communication_fail: 'Comunicazione non inviata',
         communication_check: 'Controlla consegne',
-        communication_delete_confirm: 'Eliminare questa comunicazione?',
+        communication_delete_confirm: 'Sei sicuro di voler eliminare questa comunicazione?',
         communication_delete_fail: 'Comunicazione non eliminata',
         retry: 'Riprova',
         deadline: 'Scadenza consegna',

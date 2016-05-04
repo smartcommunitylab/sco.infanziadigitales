@@ -175,11 +175,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
                 scope: $scope,
                 buttons: [
                     {
-                        text: $filter('translate')('cancel')
+                        text: $filter('translate')('cancel'),
+                        type: 'cancel-button'
+
+
                     },
                     {
                         text: '<b>' + $filter('translate')('retry') + '</b>',
-                        type: 'button-positive',
+                        type: 'create-button',
                         onTap: function (e) {
                             deleteFromServer();
                         }
@@ -203,11 +206,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
                 scope: $scope,
                 buttons: [
                     {
-                        text: $filter('translate')('cancel')
+                        text: $filter('translate')('communication_discard'),
+                        type: 'cancel-button'
                     },
                     {
-                        text: '<b>' + $filter('translate')('ok') + '</b>',
-                        type: 'button-positive',
+                        text: '<b>' + $filter('translate')('communication_confirm') + '</b>',
+                        type: 'create-button',
                         onTap: function (e) {
                             deleteFromServer();
                         }
@@ -247,11 +251,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
                 scope: $scope,
                 buttons: [
                     {
-                        text: $filter('translate')('cancel')
+                        text: $filter('translate')('cancel'),
+                        type: 'cancel-button'
                     },
                     {
                         text: '<b>' + $filter('translate')('retry') + '</b>',
-                        type: 'button-positive',
+                        type: 'create-button',
                         onTap: function (e) {
                             $scope.submitCommunication();
                         }

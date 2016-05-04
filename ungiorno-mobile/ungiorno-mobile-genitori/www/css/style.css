@@ -23,6 +23,8 @@
     min-height: 16px !important;
     line-height: 18px !important;
 }
+
+
 }
 .menu-profile-open button .icon::before {
     line-height: 18px !important;
@@ -92,7 +94,7 @@ a.item-content {
     background-color: #FFAD00;
 }
 .disabled {
-	opacity: 0.5;
+    opacity: 0.5;
 }
 .home-comm {
     padding-bottom: 8px;
@@ -115,13 +117,13 @@ a.item-content {
     border-bottom-color: #FFAD00;
 }
 .popup-head .popup-title {
-  color: #FFAD00;
-	font-weight: bold;
-	font-size: large;
+    color: #FFAD00;
+    font-weight: bold;
+    font-size: large;
 }
 .popup-buttons .button.button-positive {
-	background-color: #5FC3DF;
-	border-color: #5FC3DF;
+    background-color: #5FC3DF;
+    border-color: #5FC3DF;
 }
 input[type=text],
 textarea {
@@ -148,8 +150,8 @@ input[type=time] {
     background-color: transparent;
 }
 .item-checkbox {
-	padding-left: 60px;
-	border: 0px;
+    padding-left: 60px;
+    border: 0px;
 }
 input:checked+.checkbox-icon:before {
     background-color: #5FC3DF !important;
@@ -259,6 +261,7 @@ input:checked+.checkbox-icon:before {
 .canteen.food-image {
     font-size: 32px;
 }
+
 /*
 .canteen.day-container {
     text-align: center;
@@ -267,7 +270,6 @@ input:checked+.checkbox-icon:before {
     border-left: 3px solid #2DAAE1;
 }
 */
-
 .canteen.foods-separator {
     width: 100%;
     height: 2px;
@@ -377,6 +379,7 @@ p {
     -webkit-margin-before: 0em;
     -webkit-margin-after: 0em;
 }
+
 /*
 #map {
     position: absolute;
@@ -386,7 +389,6 @@ p {
     width: 100%;
 }
 */
-
 @media screen and (orientation: portrait) {
     .angular-leaflet-map {
         width: 100%;
@@ -598,6 +600,7 @@ p {
     right: 8px;
     font-size: larger;
 }
+
 /*
 ion-slide div[cover-img] i {
     position: absolute;
@@ -639,7 +642,6 @@ ion-slide div[cover-img] i {
     right: 16px;
 }
 */
-
 ion-slide div[cover-img] i {
     position: absolute;
     top: 50%;
@@ -1255,40 +1257,50 @@ select {
 
 /* Timepicker */
 .ionic_timepicker_popup .heading {
-	background-color: #5FC3DF;
+    background-color: #5FC3DF;
 }
 .ionic_timepicker_popup .button_close {
-	background-color: #5FC3DF;
+    background-color: #5FC3DF;
 }
 .ionic_timepicker_popup .button_set {
-	background-color: #5FC3DF;
+    background-color: #5FC3DF;
 }
 
 /* Datepicker */
 .ionic_datepicker_popup .popup-body .selected_date_full {
-	background-color: #5FC3DF;
+    background-color: #5FC3DF;
 }
 .ionic_datepicker_popup .popup-buttons button {
-	background-color: #5FC3DF;
+    background-color: #5FC3DF;
 }
 .ionic_datepicker_popup .selected_date {
-	background-color: #5FC3DF;
+    background-color: #5FC3DF;
 }
 .ionic_datepicker_popup .today {
-	border: 1px solid #5FC3DF;
+    border: 1px solid #5FC3DF;
 }
 .ionic_datepicker_popup .popup-body .month_select {
-	border: 1px solid #5FC3DF;
+    border: 1px solid #5FC3DF;
 }
 .ionic_datepicker_popup .popup-body .year_select {
-	border: 1px solid #5FC3DF;
+    border: 1px solid #5FC3DF;
 }
 .ionic_datepicker_popup .popup-body .button-clear {
-	color: #5FC3DF;
+    color: #5FC3DF;
 }
 .ionic_datepicker_popup .popup-body .month_select:after {
-	color: #5FC3DF;
+    color: #5FC3DF;
 }
 .ionic_datepicker_popup .popup-body .year_select:after {
-	color: #5FC3DF;
+    color: #5FC3DF;
+}
+.note-date {
+    color: gray;
+}
+.note-text {
+    margin-left: 12px;
+}
+.note-pointer {
+    margin-right: 6px;
+    float: left;
 }

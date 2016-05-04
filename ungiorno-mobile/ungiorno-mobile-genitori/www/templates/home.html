@@ -1,13 +1,13 @@
 <ion-view id="home">
-		
+
     <ion-nav-title ng-init="getDateString()">
-      {{date | date:'EEEE, d MMMM yyyy'}} 
+        {{date | date:'EEEE, d MMMM yyyy'}}
     </ion-nav-title>
-	<ion-nav-buttons side="right">
-		<button class="button" ng-click="refresh()">
-    	<i class="icon ion-loop"></i>
-    </button>
-	</ion-nav-buttons>	
+    <ion-nav-buttons side="right">
+        <button class="button" ng-click="refresh()">
+            <i class="icon ion-loop"></i>
+        </button>
+    </ion-nav-buttons>
     <ion-content has-header="true" scroll="false">
         <div class="home-info" ng-show="isPresent">
             {{kidProfile.firstName}} {{'home_entry_to' | translate}} {{fromTime}}{{'home_exit_to' | translate}}{{toTime}}
@@ -19,16 +19,14 @@
             <div ng-repeat="element in elements | limitTo: (elements.length-elements.length%2)" ng-if="$index % 2 == 0" class="row">
                 <div class="col col-50">
                     <div class="button-home-wrapper" ng-class="elements[$index].class">
-                        <button style="background-image:url({{elements[$index].img}})" class=" button-block button-home " 
-																ng-click="execute(elements[$index])" ng-disabled="elements[$index].disabled">
+                        <button style="background-image:url({{elements[$index].img}})" class=" button-block button-home " ng-click="execute(elements[$index])" ng-disabled="elements[$index].disabled">
                         </button>
                         <span>{{elements[$index].string}}</span>
                     </div>
                 </div>
                 <div class="col col-50">
                     <div class=" button-home-wrapper" ng-class="elements[$index+1].class">
-                        <button style="background-image:url({{elements[$index+1].img}})" class=" button-block button-home" 
-																ng-click="execute(elements[$index+1])" ng-disabled="elements[$index+1].disabled">
+                        <button style="background-image:url({{elements[$index+1].img}})" class=" button-block button-home" ng-click="execute(elements[$index+1])" ng-disabled="elements[$index+1].disabled">
                         </button>
                         <span>{{elements[$index+1].string}}</span>
                     </div>
@@ -37,8 +35,7 @@
             <div class="row" ng-if="elements.length%2==1">
                 <div class="col">
                     <div class=" button-home-wrapper" ng-class="elements[elements.length-1].class">
-                        <button class=" button-block button-home" ng-click="execute(elements[elements.length-1])" ng-disabled="elements[elements.length-1].disabled"
-																style="background-image:url({{elements[elements.length-1].img}})">
+                        <button class=" button-block button-home" ng-click="execute(elements[elements.length-1])" ng-disabled="elements[elements.length-1].disabled" style="background-image:url({{elements[elements.length-1].img}})">
                         </button>
                         <span>{{elements[elements.length-1].string}}</span>
                     </div>
@@ -54,13 +51,30 @@
                 </div>
                 <p class="home-info-title">{{'home_school_information' | translate}}</p>
                 <ul class="home-info-content">
-                    <li ng-repeat="communication in communications | orderBy:'-creationDate' " class="home-comm">
-                        <i class="icon ion-arrow-right-b"></i>
-                        <span>{{communication.description}}</span>
-                        <span class="alignright" ng-show="communication.doCheck">{{communication.dateToCheck | date:'EEEE, d MMMM yyyy'}}</span>
+                    <li ng-repeat="communication in communications | orderBy:'-creationDate' " class="home-comm row">
+                        <!--
+<div class="row" ng-show="communication.doCheck">
+    <div class="col"></div>
+</div>
+-->
+                        <div class="row">
+                            <div class="col">
+                                <p class="note-date"><i class="icon ion-arrow-right-b note-pointer"></i>
+                                    <p class="note-date" ng-show="communication.doCheck">{{communication.dateToCheck | date:'EEEE, d MMMM yyyy'}}</p>
+                                </p>
+                                <p class="note-text">{{communication.description}}</p>
+                            </div>
+                        </div>
+                        <!--
+                        <a class="item">
+                            <i class="icon ion-arrow-right-b"></i>
+                            <h2>{{communication.dateToCheck | date:'EEEE, d MMMM yyyy'}}</h2>
+                            <p>{{communication.description}}/p>
+                        </a>
+-->
 
                     </li>
-							</ul>
+                </ul>
             </div>
         </ion-scroll>
     </ion-content>

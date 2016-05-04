@@ -63,6 +63,7 @@ public class SectionData extends SchoolObject{
 		private boolean personException, stopException;
 		private String note;
 		private String stopId;
+		private String absenceType;
 		
 		private boolean calNotes;
 		
@@ -163,6 +164,12 @@ public class SectionData extends SchoolObject{
 		}
 		public void setActive(boolean active) {
 			this.active = active;
+		}
+		public String getAbsenceType() {
+			return absenceType;
+		}
+		public void setAbsenceType(String absenceType) {
+			this.absenceType = absenceType;
 		}
 	}
 

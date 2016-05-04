@@ -420,7 +420,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
     }
     $scope.changeSection = function (sectionId) {
         sectionService.setSection(sectionId);
-        if (sectionId != 'all') {
+        //if (sectionId != -1) {
+        if (sectionId != 'all' && sectionId != -1) {
             $scope.section = $scope.sections[sectionId];
             $scope.getChildrenByCurrentSection();
         } else {

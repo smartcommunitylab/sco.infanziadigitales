@@ -88,7 +88,8 @@ public class Importer {
 	
 	private List<KidBusData> busData = new ArrayList<KidBusData>();
 	
-	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
+	//private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
+	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 	
 	public void importChildrenData(String appId, String schoolId, InputStream is) throws ImportError {
 		try {

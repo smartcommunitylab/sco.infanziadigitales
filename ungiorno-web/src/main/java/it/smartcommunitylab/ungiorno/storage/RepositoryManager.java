@@ -744,6 +744,7 @@ public class RepositoryManager {
 				KidCalAssenza a = assenzeMap.get(kp.getKidId());
 				skp.setExitTime(null);
 				skp.setNote(a.getNote());
+				skp.setAbsenceType(a.getReason().getType());
 			} else if (ritiriMap.containsKey(kp.getKidId())){
 				KidCalRitiro r = ritiriMap.get(kp.getKidId());
 				skp.setExitTime(r.getDate());

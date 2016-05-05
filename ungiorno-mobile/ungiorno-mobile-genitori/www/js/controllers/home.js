@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.home', [])
 
-.controller('HomeCtrl', function ($scope, $rootScope, $location, $state, $filter, $ionicPopup, dataServerService, profileService, configurationService, retireService, busService, Toast, Config) {
+.controller('HomeCtrl', function ($scope, $rootScope, $location, $state, $filter, $ionicPopup, $ionicLoading, dataServerService, profileService, configurationService, retireService, busService, Toast, Config) {
 
     $scope.date = "";
     $scope.kidProfile = {};
@@ -14,11 +14,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.elements = [];
     $scope.dailyFermata = null;
     $scope.dailyRitiro = null;
-		
-		$scope.refresh = function() {
-			window.location.reload(true);	
-		}
-		
+
+    $scope.refresh = function () {
+        window.location.reload(true);
+    }
+
     $scope.goTo = function (location) {
         window.location.assign(location);
     }
@@ -66,9 +66,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             return "button-alrt";
 
         }
-				if (button == "disabled") {
-					return "button-norm disabled";
-				}
+        if (button == "disabled") {
+            return "button-norm disabled";
+        }
     }
 
     var buildHome = function () {
@@ -81,7 +81,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             string: $filter('translate')('home_retire'),
             class: style,
             img: 'img/ritiro.png',
-						disabled: false
+            disabled: false
         });
         style = getButtonStyle("default");
         $scope.elements.push({
@@ -89,7 +89,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             string: $filter('translate')('home_assenza'),
             class: style,
             img: 'img/assenza.png',
-						disabled: false
+            disabled: false
         });
         style = getButtonStyle("disabled");
         $scope.elements.push({
@@ -97,7 +97,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             string: $filter('translate')('home_calendario'),
             class: style,
             img: 'img/calendario.png',
-						disabled: true
+            disabled: true
         });
         style = getButtonStyle("default");
         $scope.elements.push({
@@ -107,9 +107,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             string: $filter('translate')('home_contatta'),
             class: style,
             img: 'img/contattaLaScuola.png',
-						disabled: false
+            disabled: false
         });
-				/*//if bus is available put it
+        /*//if bus is available put it
         if (profileService.getBabyProfile().services.bus.enabled) {
             style = getButtonStyle("bus");
             $scope.elements.push({
@@ -138,18 +138,18 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             buttons: [{ // Array[Object] (optional). Buttons to place in the popup footer.
                 text: $filter('translate')('cancel'),
                 type: 'button-norm',
-                onTap: function(e) {
+                onTap: function (e) {
                     $scope.contactPopup.close();
                 }
               }]
-          });
+        });
     }
     $scope.call = function () {
-				var num = profileService.getSchoolProfile().contacts.telephone[0];
-        window.open('tel:'+ num);
+        var num = profileService.getSchoolProfile().contacts.telephone[0];
+        window.open('tel:' + num);
         $scope.contactPopup.close();
     }
-    $scope.createNote = function() {
+    $scope.createNote = function () {
         $state.go('app.addnote');
         $scope.contactPopup.close();
     };
@@ -248,8 +248,24 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
                                 }
                                 buildHome();
+                                $ionicLoading.hide();
+                            }, function (error) {
+                                console.log("ERROR -> " + error);
+                                Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+
+                                $ionicLoading.hide();
                             });
+                        }, function (error) {
+                            console.log("ERROR -> " + error);
+                            Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+
+                            $ionicLoading.hide();
                         });
+                    }, function (error) {
+                        console.log("ERROR -> " + error);
+                        Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+
+                        $ionicLoading.hide();
                     });
                 });
                 //recupero le note
@@ -257,16 +273,27 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                     $scope.notes = data[0];
                 }, function (error) {
                     console.log("ERROR -> " + error);
+                    Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+
+                    $ionicLoading.hide();
                 });
                 dataServerService.getCommunications(schoolId, kidId).then(function (data) {
                     $scope.communications = data;
                 }, function (error) {
                     console.log("ERROR -> " + error);
+                    Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+
+                    $ionicLoading.hide();
                 });
+            }, function (error) {
+                console.log("ERROR -> " + error);
+                Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+                $ionicLoading.hide();
             });
         }
         //corretto tutte e tre annidate? cosa succede se una salta? ma come faccio a settare il profilo temporaneo senza avere conf, prof????
     $scope.getConfiguration = function () {
+        $ionicLoading.show();
         //parto da getBabyProfiles()(appid incluso nel server e qui ottengo schoolId e kidId
         dataServerService.getBabyProfiles().then(function (data) {
             //in data ho tutti i profili dei kids: memorizzo in locale e ottengo le configurazioni
@@ -282,6 +309,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             $scope.loadConfiguration($scope.kidProfile.schoolId, $scope.kidProfile.kidId);
 
 
+        }, function (error) {
+            console.log("ERROR -> " + error);
+            Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+            $ionicLoading.hide();
         });
 
 

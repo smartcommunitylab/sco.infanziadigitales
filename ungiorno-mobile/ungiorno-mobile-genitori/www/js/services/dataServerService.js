@@ -17,14 +17,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
             url: Config.URL() + '/' + Config.app() + '/student/' + Config.appId() + '/' + schoolId + '/' + kidId + '/config',
             headers: {
                 'Accept': 'application/json'
-            }
+            },
+            timeout: Config.httpTimout()
+
         }).
         success(function (data, status, headers, config) {
             deferred.resolve(data.data);
         }).
         error(function (data, status, headers, config) {
             console.log(data + status + headers + config);
-            deferred.reject(data.errorCode + ' ' + data.errorMessage);
+            deferred.reject(data);
         });
 
         return deferred.promise;
@@ -37,14 +39,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
             url: Config.URL() + '/' + Config.app() + '/student/' + Config.appId() + '/profiles',
             headers: {
                 'Accept': 'application/json'
-            }
+            },
+            timeout: Config.httpTimout()
         }).
         success(function (data, status, headers, config) {
             deferred.resolve(data.data);
         }).
         error(function (data, status, headers, config) {
             console.log(data + status + headers + config);
-            deferred.reject(data.errorCode + ' ' + data.errorMessage);
+            deferred.reject(data);
         });
         return deferred.promise;
     }
@@ -74,14 +77,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
             url: Config.URL() + '/' + Config.app() + '/school/' + Config.appId() + '/' + schoolId + '/profile',
             headers: {
                 'Accept': 'application/json'
-            }
+            },
+            timeout: Config.httpTimout()
         }).
         success(function (data, status, headers, config) {
             deferred.resolve(data.data);
         }).
         error(function (data, status, headers, config) {
             console.log(data + status + headers + config);
-            deferred.reject(data.errorCode + ' ' + data.errorMessage);
+            deferred.reject(data);
         });
         return deferred.promise;
     }
@@ -94,14 +98,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
             url: Config.URL() + '/' + Config.app() + '/student/' + Config.appId() + '/' + schoolId + '/' + kidId + '/notes?date=' + time,
             headers: {
                 'Accept': 'application/json'
-            }
+            },
+            timeout: Config.httpTimout()
         }).
         success(function (data, status, headers, config) {
             deferred.resolve(data.data);
         }).
         error(function (data, status, headers, config) {
             console.log(data + status + headers + config);
-            deferred.reject(data.errorCode + ' ' + data.errorMessage);
+            deferred.reject(data);
         });
 
         return deferred.promise;
@@ -114,14 +119,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
             url: Config.URL() + '/' + Config.app() + '/school/' + Config.appId() + '/' + schoolId + '/communications',
             headers: {
                 'Accept': 'application/json'
-            }
+            },
+            timeout: Config.httpTimout()
         }).
         success(function (data, status, headers, config) {
             deferred.resolve(data.data);
         }).
         error(function (data, status, headers, config) {
             console.log(data + status + headers + config);
-            deferred.reject(data.errorCode + ' ' + data.errorMessage);
+            deferred.reject(data);
         });
 
         return deferred.promise;
@@ -135,37 +141,39 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
             url: Config.URL() + '/' + Config.app() + '/student/' + Config.appId() + '/' + schoolId + '/' + kidId + '/stop?date=' + time,
             headers: {
                 'Accept': 'application/json'
-            }
+            },
+            timeout: Config.httpTimout()
         }).
         success(function (data, status, headers, config) {
             deferred.resolve(data.data);
         }).
         error(function (data, status, headers, config) {
             console.log(data + status + headers + config);
-            deferred.reject(data.errorCode + ' ' + data.errorMessage);
+            deferred.reject(data);
         });
 
         return deferred.promise;
     }
 
-		dataServerService.getReturnsOrStops = function (schoolId, kidId, timeFrom, timeTo) {
-			var deferred = $q.defer();
+    dataServerService.getReturnsOrStops = function (schoolId, kidId, timeFrom, timeTo) {
+        var deferred = $q.defer();
         $http({
             method: 'GET',
             url: Config.URL() + '/' + Config.app() + '/student/' + Config.appId() + '/' + schoolId + '/' + kidId + '/returns-or-stops?from=' + timeFrom + '&to=' + timeTo,
             headers: {
                 'Accept': 'application/json'
-            }
+            },
+            timeout: Config.httpTimout()
         }).
         success(function (data, status, headers, config) {
             deferred.resolve(data.data);
         }).
         error(function (data, status, headers, config) {
             console.log(data + status + headers + config);
-            deferred.reject(data.errorCode + ' ' + data.errorMessage);
+            deferred.reject(data);
         });
         return deferred.promise;
-		}
+    }
 
     dataServerService.sendAssenza = function (schoolId, kidId, assenza) {
         var deferred = $q.defer();
@@ -177,13 +185,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
                 'Content-Type': 'application/json'
             },
             data: assenza,
+            timeout: Config.httpTimout()
         }).
         success(function (data, status, headers, config) {
             deferred.resolve(assenza);
         }).
         error(function (data, status, headers, config) {
             console.log(data + status + headers + config);
-            deferred.reject(data.errorCode + ' ' + data.errorMessage);
+            deferred.reject(data);
         });
         return deferred.promise;
     }
@@ -194,14 +203,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
                 url: Config.URL() + '/' + Config.app() + '/student/' + Config.appId() + '/' + schoolId + '/' + kidId + '/absence?date=' + date,
                 headers: {
                     'Accept': 'application/json'
-                }
+                },
+                timeout: Config.httpTimout()
             }).
             success(function (data, status, headers, config) {
                 deferred.resolve(data);
             }).
             error(function (data, status, headers, config) {
                 console.log(data + status + headers + config);
-                deferred.reject(data.errorCode + ' ' + data.errorMessage);
+                deferred.reject(data);
             });
             return deferred.promise;
         }
@@ -224,7 +234,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
         }).
         error(function (data, status, headers, config) {
             console.log(data + status + headers + config);
-            deferred.reject(data.errorCode + ' ' + data.errorMessage);
+            deferred.reject(data);
         });
         return deferred.promise;
     }
@@ -240,13 +250,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
                 'Content-Type': 'application/json'
             },
             data: ritiro,
+            timeout: Config.httpTimout()
         }).
         success(function (data, status, headers, config) {
             deferred.resolve(ritiro);
         }).
         error(function (data, status, headers, config) {
             console.log(data + status + headers + config);
-            deferred.reject(data.errorCode + ' ' + data.errorMessage);
+            deferred.reject(data);
         });
         return deferred.promise;
 
@@ -261,14 +272,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
             url: Config.URL() + '/' + Config.app() + '/student/' + Config.appId() + '/' + schoolId + '/' + kidId + '/return?date=' + time,
             headers: {
                 'Accept': 'application/json'
-            }
+            },
+            timeout: Config.httpTimout()
         }).
         success(function (data, status, headers, config) {
             deferred.resolve(data.data);
         }).
         error(function (data, status, headers, config) {
             console.log(data + status + headers + config);
-            deferred.reject(data.errorCode + ' ' + data.errorMessage);
+            deferred.reject(data);
         });
 
         return deferred.promise;
@@ -285,13 +297,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
                 'Content-Type': 'application/json'
             },
             data: babysetting,
+            timeout: Config.httpTimout()
         }).
         success(function (data, status, headers, config) {
             deferred.resolve(babysetting);
         }).
         error(function (data, status, headers, config) {
             console.log(data + status + headers + config);
-            deferred.reject(data.errorCode + ' ' + data.errorMessage);
+            deferred.reject(data);
         });
         return deferred.promise;
     }
@@ -305,13 +318,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
                 'Content-Type': 'application/json'
             },
             data: fermata,
+            timeout: Config.httpTimout()
         }).
         success(function (data, status, headers, config) {
             deferred.resolve(fermata);
         }).
         error(function (data, status, headers, config) {
             console.log(data + status + headers + config);
-            deferred.reject(data.errorCode + ' ' + data.errorMessage);
+            deferred.reject(data);
         });
         return deferred.promise;
     }

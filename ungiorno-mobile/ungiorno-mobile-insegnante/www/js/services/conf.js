@@ -5,7 +5,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.conf', 
     var DEVELOPMENT = true;
     var URL = 'https://' + (DEVELOPMENT ? 'dev' : 'tn') + '.smartcommunitylab.it';
     //var URL = 'http://192.168.42.60:8080';
-
+    var timeout = 100000;
     var app = 'ungiorno2'
     var appId = 'trento'
 
@@ -51,6 +51,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.conf', 
         },
         URL: function () {
             return URL;
+        },
+
+        httpTimout: function () {
+            return timeout;
         },
         getServerURL: function () {
             return URL + '/' + app;

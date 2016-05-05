@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.communications', [])
 
-.controller('communicationsCtrl', function ($scope, dataServerService, $ionicPopup, communicationService, profileService, Toast, $filter) {
+.controller('communicationsCtrl', function ($scope, dataServerService, $ionicPopup, communicationService, profileService, Toast, $filter, $ionicLoading) {
 
     var selectedCommunicationIndex = -1;
 
@@ -101,6 +101,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
             $scope.communications[i].creationDate = $scope.communications[i].creationDate;
         }
         sortCommunications();
+    }, function (err) {
+        Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+        $ionicLoading.hide();
     });
 
     $scope.selectCommunication = function (index) {

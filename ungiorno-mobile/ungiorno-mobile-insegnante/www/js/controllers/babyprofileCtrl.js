@@ -53,6 +53,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
         babyProfileLoaded = true;
         checkAllDataLoaded();
 
+    }, function (err) {
+        Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+        $ionicLoading.hide();
     });
     babyConfigurationService.getBabyNotesById($scope.schoolProfile.schoolId, babyProfileID).then(function (data) {
         if (data[0]) {
@@ -62,6 +65,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
         }
         notesLoaded = true;
         checkAllDataLoaded();
+    }, function (err) {
+        Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+        $ionicLoading.hide();
     });
 
     $scope.calculateOtherData = function () {

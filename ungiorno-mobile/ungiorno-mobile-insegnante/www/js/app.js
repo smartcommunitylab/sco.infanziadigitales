@@ -431,7 +431,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
         profile_no_parents_notes1: 'I genitori di ',
         profile_no_parents_notes2: ' non hanno inviato nessuna nota oggi',
         profile_no_teacher_notes: 'Oggi non è stata inviata nessuna nota ai genitori di ',
-        baby_not_monitored: ' non è monitorato dal sistema '
+        baby_not_monitored: ' non è monitorato dal sistema ',
+        communication_error: 'Errore di connessione',
+        absence_type: 'Motivazione: '
 
 
 

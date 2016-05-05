@@ -18,6 +18,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.profile
         var deferred = $q.defer();
         dataServerService.getBabyProfileById(schoolId, babyId).then(function (data) {
             deferred.resolve(data);
+        }, function (err) {
+            deferred.reject(err);
         });
         return deferred.promise;
     }
@@ -36,6 +38,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.profile
             }
             if (found == false)
                 deferred.reject();
+        }, function (err) {
+            deferred.reject(err);
         });
         return deferred.promise;
     }

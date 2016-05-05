@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.bus', [])
 
-.controller('busCtrl', function ($scope, $location, dataServerService, profileService, $ionicLoading, $timeout, $cordovaPrinter, Config) {
+.controller('busCtrl', function ($scope, $location, dataServerService, profileService, $ionicLoading, $timeout, $cordovaPrinter, Config, Toast, $filter) {
 
     $scope.showLoader = function () {
         $ionicLoading.show({
@@ -54,6 +54,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.bus'
         }
         $ionicLoading.hide();
         $scope.dataLoaded = true;
+    }, function (err) {
+        Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+        $ionicLoading.hide();
     });
 
     $scope.getBabiesByRow = function (rowIndex) {

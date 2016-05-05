@@ -241,6 +241,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
                     }
                 }, function (err) {
                     //manage error sections
+                    Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+                    $ionicLoading.hide();
                 })
                 dataServerService.getTeachers($scope.schoolProfile.schoolId).then(function (data) {
                     teachersService.setTeachers(data);
@@ -260,6 +262,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
                     console.log($scope.selectedTeacher);
                 }, function (err) {
                     //manage error teachers
+                    Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+                    $ionicLoading.hide();
                 });
             }
             communicationService.getCommunicationsFromServer($scope.schoolProfile.schoolId).then(function (data) {
@@ -275,9 +279,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
                 $scope.changeCommunication($scope.data.communication);*/
             }, function (err) {
                 //manage error communications
+                Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+                $ionicLoading.hide();
             });
         }, function (err) {
-            //manage error school profile
+            Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+            $ionicLoading.hide();
         });
 
 
@@ -484,6 +491,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
 
 
 
+        }, function (err) {
+            Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+            $ionicLoading.hide();
         });
         dataServerService.getKidsNotesBySectionIds($scope.schoolProfile.schoolId, sectionsIdsArray).then(function (data) {
             $scope.parentNotes = data;
@@ -502,6 +512,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
                     sectionChildrenIndex++;
                 }
             });
+        }, function (err) {
+            Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+            $ionicLoading.hide();
         });
     }
 

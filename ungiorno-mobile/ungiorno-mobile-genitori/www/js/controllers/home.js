@@ -7,7 +7,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.kidConfiguration = {};
     $scope.school = {};
     $scope.notes = {};
-    $scope.communications = {};
+    $scope.communications = []
     $scope.fromTime = "";
     $scope.toTime = "";
     //build options

@@ -4,9 +4,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.c
 
     var DEVELOPMENT = true;
     var URL = 'https://' + (DEVELOPMENT ? 'dev' : 'tn') + '.smartcommunitylab.it';
+    //var URL = 'http://192.168.42.60:8080';
+
     var app = 'ungiorno2'
     var appId = 'trento'
-
+    var httpTimeout = 10000;
 
     var APP_BUILD = '';
 
@@ -58,6 +60,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.c
         },
         appId: function () {
             return appId;
+        },
+        httpTimout: function () {
+            return httpTimeout
         },
         schemaVersion: function () {
             return SCHEMA_VERSION;

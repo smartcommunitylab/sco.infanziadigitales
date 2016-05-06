@@ -33,578 +33,584 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     'angularMoment'
 ])
 
-.run(function ($ionicPlatform, $rootScope, $cordovaSplashscreen, $state, $translate, $q, $window, $ionicHistory, $ionicConfig, Config, 
-								configurationService, profileService, dataServerService, loginService, Toast) {
+.run(function ($ionicPlatform, $rootScope, $cordovaSplashscreen, $state, $translate, $q, $window, $ionicHistory, $ionicConfig, Config,
+    configurationService, profileService, dataServerService, loginService, Toast) {
 
-	$rootScope.getUserId = function () {
-			return localStorage.userId;
-	};
+    $rootScope.getUserId = function () {
+        return localStorage.userId;
+    };
 
-	$rootScope.userIsLogged = function() {
-		return (localStorage.userId != null && localStorage.userId != "null");	
-	};
-	
-	$rootScope.loginStarted = false;
-	$rootScope.authWindow = null;
-	
-	$rootScope.login = function () {
-		if ($rootScope.loginStarted) return;
+    $rootScope.userIsLogged = function () {
+        return (localStorage.userId != null && localStorage.userId != "null");
+    };
 
-		$rootScope.loginStarted = true;
-		loginService.login().then(
-			function (data) {
-				$rootScope.loginStarted = false;
-				localStorage.userId = data.userId;
-				$state.go('app.home', {}, {
-        	reload: true
-        });				
-			},
-			function (error) {
-				//The user denied access to the app
-				$rootScope.loginStarted = false;
-				localStorage.userId = null;
-				//TODO toast
-				alert('autenticazione non riuscita');
-				ionic.Platform.exitApp();
-			}
-		);
-	};
+    $rootScope.loginStarted = false;
+    $rootScope.authWindow = null;
 
-	$rootScope.logout = function () {
-			loginService.logout().then(
-					function (data) {
-						localStorage.userId = null;
-						window.location.hash = '/login';
-						window.location.reload(true);
-					},
-					function (error) {
-						//TODO toast
-						//Utils.toast();
-						localStorage.userId = null;
-					}
-			);
-	};	
+    $rootScope.login = function () {
+        if ($rootScope.loginStarted) return;
 
-	$ionicPlatform.ready(function () {
-			// Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-			// for form inputs)
-			if (window.cordova && window.cordova.plugins.Keyboard) {
-					cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-			}
+        $rootScope.loginStarted = true;
+        loginService.login().then(
+            function (data) {
+                $rootScope.loginStarted = false;
+                localStorage.userId = data.userId;
+                $state.go('app.home', {}, {
+                    reload: true
+                });
+            },
+            function (error) {
+                //The user denied access to the app
+                $rootScope.loginStarted = false;
+                localStorage.userId = null;
+                //TODO toast
+                alert('autenticazione non riuscita');
+                ionic.Platform.exitApp();
+            }
+        );
+    };
 
-			if (window.StatusBar) {
-					// org.apache.cordova.statusbar required
-					StatusBar.styleDefault();
-			}
+    $rootScope.logout = function () {
+        loginService.logout().then(
+            function (data) {
+                localStorage.userId = null;
+                window.location.hash = '/login';
+                window.location.reload(true);
+            },
+            function (error) {
+                //TODO toast
+                //Utils.toast();
+                localStorage.userId = null;
+            }
+        );
+    };
 
-			if (typeof navigator.globalization !== "undefined") {
-					navigator.globalization.getPreferredLanguage(function (language) {
-							$translate.use((language.value).split("-")[0]).then(function (data) {
-									console.log("SUCCESS -> " + data);
-									$rootScope.lang = data;
-							}, function (error) {
-									console.log("ERROR -> " + error);
-							});
-					}, null);
-			}
-			$rootScope.platform = ionic.Platform;
-			$rootScope.backButtonStyle = $ionicConfig.backButton.icon();
-			// $rootScope.getConfiguration();
+    $ionicPlatform.ready(function () {
+        // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+        // for form inputs)
+        if (window.cordova && window.cordova.plugins.Keyboard) {
+            cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+        }
 
-		if(!$rootScope.userIsLogged()) {
-			$rootScope.login();
-		} else {
-			$state.go('app.home', {}, {
-				reload: true
-			});				
-		}
-	});
+        if (window.StatusBar) {
+            // org.apache.cordova.statusbar required
+            StatusBar.styleDefault();
+        }
+
+        if (typeof navigator.globalization !== "undefined") {
+            navigator.globalization.getPreferredLanguage(function (language) {
+                $translate.use((language.value).split("-")[0]).then(function (data) {
+                    console.log("SUCCESS -> " + data);
+                    $rootScope.lang = data;
+                }, function (error) {
+                    console.log("ERROR -> " + error);
+                });
+            }, null);
+        }
+        $rootScope.platform = ionic.Platform;
+        $rootScope.backButtonStyle = $ionicConfig.backButton.icon();
+        // $rootScope.getConfiguration();
+
+        if (!$rootScope.userIsLogged()) {
+            $rootScope.login();
+        } else {
+            $state.go('app.home', {}, {
+                reload: true
+            });
+        }
+    });
 
 
-	// for BlackBerry 10, WP8, iOS
-	setTimeout(function () {
-			$cordovaSplashscreen.hide();
-			//navigator.splashscreen.hide();
-	}, 3000);
+    // for BlackBerry 10, WP8, iOS
+    setTimeout(function () {
+        $cordovaSplashscreen.hide();
+        //navigator.splashscreen.hide();
+    }, 3000);
 
-	$rootScope.locationWatchID = undefined;
-	//  ionic.Platform.fullScreen(false,true);
-	if (typeof (Number.prototype.toRad) === "undefined") {
-			Number.prototype.toRad = function () {
-					return this * Math.PI / 180;
-			}
-	}
+    $rootScope.locationWatchID = undefined;
+    //  ionic.Platform.fullScreen(false,true);
+    if (typeof (Number.prototype.toRad) === "undefined") {
+        Number.prototype.toRad = function () {
+            return this * Math.PI / 180;
+        }
+    }
 
-	$rootScope.appName = Config.cityName;
+    $rootScope.appName = Config.cityName;
 
 })
 
 .config(function ($stateProvider, $urlRouterProvider, $translateProvider, $ionicConfigProvider) {
-	$ionicConfigProvider.backButton.text('').previousTitleText(false);
+    $ionicConfigProvider.backButton.text('').previousTitleText(false);
 
-	$stateProvider.state('app', {
-			url: "/app",
-			abstract: true,
-			templateUrl: "templates/menu.html",
-			controller: 'AppCtrl'
-	})
+    $stateProvider.state('app', {
+        url: "/app",
+        abstract: true,
+        templateUrl: "templates/menu.html",
+        controller: 'AppCtrl'
+    })
 
 
-	.state('app.home', {
-			cache: false,
-			url: "/home",
-			views: {
-					'menuContent': {
-							templateUrl: "templates/home.html",
-							controller: 'HomeCtrl'
-					}
-			}
-	})
+    .state('app.home', {
+        cache: false,
+        url: "/home",
+        views: {
+            'menuContent': {
+                templateUrl: "templates/home.html",
+                controller: 'HomeCtrl'
+            }
+        }
+    })
 
-	.state('app.absence', {
-			cache: false,
-			url: '/assenza',
-			abstract: false,
-			views: {
-					'menuContent': {
-							templateUrl: "templates/absence.html",
-							controller: 'AbsenceCtrl'
-					}
-			}
-	})
+    .state('app.absence', {
+        cache: false,
+        url: '/assenza',
+        abstract: false,
+        views: {
+            'menuContent': {
+                templateUrl: "templates/absence.html",
+                controller: 'AbsenceCtrl'
+            }
+        }
+    })
 
-	.state('app.retire', {
-			cache: false,
-			url: '/retire',
-			abstract: false,
-			views: {
-					'menuContent': {
-							templateUrl: "templates/retire.html",
-							controller: 'RetireCtrl'
-					}
+    .state('app.retire', {
+        cache: false,
+        url: '/retire',
+        abstract: false,
+        views: {
+            'menuContent': {
+                templateUrl: "templates/retire.html",
+                controller: 'RetireCtrl'
+            }
 
-			}
-	})
+        }
+    })
 
-	.state('app.canteen', {
-			cache: false,
-			url: '/canteen',
-			abstract: false,
-			views: {
-					'menuContent': {
-							templateUrl: "templates/canteen.html",
-							controller: 'CanteenCtrl'
-					}
+    .state('app.canteen', {
+        cache: false,
+        url: '/canteen',
+        abstract: false,
+        views: {
+            'menuContent': {
+                templateUrl: "templates/canteen.html",
+                controller: 'CanteenCtrl'
+            }
 
-			}
-	})
+        }
+    })
 
-	.state('app.babysetting', {
-			cache: false,
-			url: '/babysetting',
-			abstract: false,
-			views: {
-					'menuContent': {
-							templateUrl: "templates/babysetting.html",
-							controller: 'BabySettingCtrl'
-					}
-			}
-	})
+    .state('app.babysetting', {
+        cache: false,
+        url: '/babysetting',
+        abstract: false,
+        views: {
+            'menuContent': {
+                templateUrl: "templates/babysetting.html",
+                controller: 'BabySettingCtrl'
+            }
+        }
+    })
 
-	.state('app.calendar', {
-			cache: false,
-			url: '/calendar',
-			abstract: false,
-			views: {
-					'menuContent': {
-							templateUrl: "templates/calendar.html",
-							controller: "CalendarCtrl"
-					}
-			}
-	})
+    .state('app.calendar', {
+        cache: false,
+        url: '/calendar',
+        abstract: false,
+        views: {
+            'menuContent': {
+                templateUrl: "templates/calendar.html",
+                controller: "CalendarCtrl"
+            }
+        }
+    })
 
-	.state('app.authorization', {
-			cache: false,
-			url: '/authorization',
-			abstract: false,
-			views: {
-					'menuContent': {
-							templateUrl: "templates/authorization.html",
-							controller: 'AuthorizationCtrl'
-					}
-			}
-	})
+    .state('app.authorization', {
+        cache: false,
+        url: '/authorization',
+        abstract: false,
+        views: {
+            'menuContent': {
+                templateUrl: "templates/authorization.html",
+                controller: 'AuthorizationCtrl'
+            }
+        }
+    })
 
-	.state('app.addnote', {
-			cache: false,
-			url: '/addnote',
-			abstract: false,
-			views: {
-					'menuContent': {
-							templateUrl: "templates/note.html",
-							controller: 'NoteCtrl'
-					}
-			}
-	})
+    .state('app.addnote', {
+        cache: false,
+        url: '/addnote',
+        abstract: false,
+        views: {
+            'menuContent': {
+                templateUrl: "templates/note.html",
+                controller: 'NoteCtrl'
+            }
+        }
+    })
 
-	.state('app.bus', {
-			cache: false,
-			url: '/bus',
-			abstract: false,
-			views: {
-					'menuContent': {
-							templateUrl: "templates/bus.html",
-							controller: 'BusCtrl'
-					}
-			}
-	})
+    .state('app.bus', {
+        cache: false,
+        url: '/bus',
+        abstract: false,
+        views: {
+            'menuContent': {
+                templateUrl: "templates/bus.html",
+                controller: 'BusCtrl'
+            }
+        }
+    })
 
-	.state('login', {
-			cache: false,
-			url: '/login',
-			abstract: false,
-			views: {
-					'menuContent': {
-							templateUrl: "templates/login.html",
-							controller: 'AppCtrl'
-					}
-			}
-	});
-	// if none of the above states are matched, use this as the fallback
-	$urlRouterProvider.otherwise('/login');
+    .state('login', {
+        cache: false,
+        url: '/login',
+        abstract: false,
+        views: {
+            'menuContent': {
+                templateUrl: "templates/login.html",
+                controller: 'AppCtrl'
+            }
+        }
+    });
+    // if none of the above states are matched, use this as the fallback
+    $urlRouterProvider.otherwise('/login');
 
-	$translateProvider.translations('it', {
-			menu_home: 'Home',
-			home_assenza: 'Assenza',
-			home_retire: 'Ritiro',
-			home_bus: 'Bus',
-			home_mensa: 'Mensa',
-			home_calendario: 'Calendario',
-			home_contatta: 'Contatta',
-			home_personal_information: 'Informazioni su',
-			home_school_information: 'Informazioni di servizio',
-			home_entry_to: ' entra alle ore ',
-			home_exit_to: ' ed esce alle ore ',
-			menu_exit: 'Esci',
-			menu_enter: 'Entra',
-			babysetting_intro: 'Definisci i seguenti dati relativi all\'orario scolastico del bambino.',
-			babysetting_services: 'Servizi',
-			babysetting_hours: 'Orario di uscita:',
-			babysetting_who: 'Chi ritira il bambino:',
-			babysetting_bus: 'Autobus',
-			babysetting_busGo: 'Fermata bus andata:',
-			babysetting_busBack: 'Fermata bus ritorno:',
-			retire: "Ritiro del bambino",
-			retire_bus: "Utilizza il servizio bus",
-			date: "Data",
-			hour: "Ora",
-			who_takes_baby: "Chi ritira il bambino?",
-			nav_delegate: "Delega straordinaria",
-			delegate_status: "Validità delega",
-			note: "Note",
-			note_description: "Inserisci una nota...",
-			delegate: "Delega straordinaria",
-			delegate_description: "Dati del delegato",
-			name: "Nome del delegato",
-			surname: "Cognome del delegato",
-			add_image: "Aggiungi documento del delegato",
-			delegate_auth: "Autorizzazione",
-			delegate_majority: "Il delegato è maggiorenne",
-			auth_take_baby: "Autorizzo il soggetto sopraindicato a ritirare mio figlio da scuola",
-			babysetting_save: "Salva",
-			add_image_completed: "Documento aggiunto correttamente",
-			calendar: "Calendario",
-			monday: "Lunedì",
-			tuesday: "Martedì",
-			wednesday: "Mercoledì",
-			thursday: "Giovedì",
-			friday: "Venerdì",
-			saturday: "Sabato",
-			sunday: "Domenica",
-			monday_reduced: "Lun",
-			tuesday_reduced: "Mar",
-			wednesday_reduced: "Mer",
-			thursday_reduced: "Gio",
-			friday_reduced: "Ven",
-			saturday_reduced: "Sab",
-			sunday_reduced: "Dom",
-			home_disabledbutton: "Funzione disabilitata",
-			retire_sendok: "Il ritiro del bambino e' stato confermato",
-			retire_sendno: "Problemi di invio dati",
-			retire_popup_absent_title: "ATTENZIONE",
-			retire_popup_absent_text: "Per questa giornata è stata impostata un'assenza. Inserendo i dati di ritiro lo stato verrà modificato. Confermi?",
-			retire_popup_absent_ok: "Conferma",
-			retire_popup_absent_cancel: "Annulla",
-			retire_popup_toolate_title: "ATTENZIONE",
-			retire_popup_toolate_text: "Non è più possibile modificare le modalità di ritiro per oggi. Modifica permessa entro le ore",
-			setting_sendok: "Modifica configurazione registrata",
-			setting_sendno: "Problemi di invio dati",
-			send_note: "Invia una nota",
-			text: "Testo",
-			send: "Invia",
-			contact_school: "Contatta la scuola",
-			call: "Chiama",
-			bus_stop: "Fermata bus",
-			baby_drops_off_to: "Il bambino scende in",
-			whos_waiting_is: "Ad aspettare c'è",
-			open: "Apertura",
-			close: "Chiusura",
-			holiday: "Vacanza",
-			meeting: "Riunione genitori",
-			trip: "Gita",
-			events: "Eventi sul territorio",
-			kid: "Bambino",
-			parents: "Genitori",
-			meal: "Pasto",
-			lunch: "Pranzo",
-			break: "Merenda",
-			meals_info: "Info pasti",
-			show_type: "Tipo visualizzazione",
-			daily: "Giornaliera",
-			weekly: "Settimanale",
-			monthly: "Mensile",
-			absence_date_wrong: "La data d'inizio dell'assenza succede quella della fine. Modificare le date.",
-			assenza_sendok: 'Assenza inviata con successo',
-			assenza_sendno: 'Assenza non inviata',
-			absence_choose: 'Selezionare un motivo dell\'assenza',
-			assenza_popup_retire_title: 'ATTENZIONE',
-			assenza_popup_retire_text: "Per queste giornate è già stata impostata l'ora di ritiro. Impostando l'assenza i dati di ritiro veranno sovrascritti. Confermi?",
-			assenza_popup_retire_cancel: "Annulla",
-			assenza_popup_retire_ok: "Conferma",
-			assenza_popup_toolate_title: "ATTENZIONE",
-			assenza_popup_toolate_text: "Non è più possibile inserire un'assenza per oggi. Modifica permessa entro le ore",
-			noinfo: "Nessuna informazione",
-			settings: "Impostazioni di base",
-			cancel: "Annulla",
-			absence: "Inserisci assenza",
-			period: "Periodo",
-			period_from: "Da",
-			period_to: "A",
-			reason: "Motivazione",
-			reason_other: "Altro...",
-			absence_other: "Altro",
-			ok: "OK",
-			today: "Oggi"
-	});
+    $translateProvider.translations('it', {
+        menu_home: 'Home',
+        home_assenza: 'Assenza',
+        home_retire: 'Ritiro',
+        home_bus: 'Bus',
+        home_mensa: 'Mensa',
+        home_calendario: 'Calendario',
+        home_contatta: 'Contatta',
+        home_personal_information: 'Informazioni su',
+        home_school_information: 'Informazioni di servizio',
+        home_entry_to: ' entra alle ore ',
+        home_exit_to: ' ed esce alle ore ',
+        menu_exit: 'Esci',
+        menu_enter: 'Entra',
+        babysetting_intro: 'Definisci i seguenti dati relativi all\'orario scolastico del bambino.',
+        babysetting_services: 'Servizi',
+        babysetting_hours: 'Orario di uscita:',
+        babysetting_who: 'Chi ritira il bambino:',
+        babysetting_bus: 'Autobus',
+        babysetting_busGo: 'Fermata bus andata:',
+        babysetting_busBack: 'Fermata bus ritorno:',
+        retire: "Ritiro del bambino",
+        retire_bus: "Utilizza il servizio bus",
+        date: "Data",
+        hour: "Ora",
+        who_takes_baby: "Chi ritira il bambino?",
+        nav_delegate: "Delega straordinaria",
+        delegate_status: "Validità delega",
+        note: "Note",
+        note_description: "Inserisci una nota...",
+        delegate: "Delega straordinaria",
+        delegate_description: "Dati del delegato",
+        name: "Nome del delegato",
+        surname: "Cognome del delegato",
+        add_image: "Aggiungi documento del delegato",
+        delegate_auth: "Autorizzazione",
+        delegate_majority: "Il delegato è maggiorenne",
+        auth_take_baby: "Autorizzo il soggetto sopraindicato a ritirare mio figlio da scuola",
+        babysetting_save: "Salva",
+        add_image_completed: "Documento aggiunto correttamente",
+        calendar: "Calendario",
+        monday: "Lunedì",
+        tuesday: "Martedì",
+        wednesday: "Mercoledì",
+        thursday: "Giovedì",
+        friday: "Venerdì",
+        saturday: "Sabato",
+        sunday: "Domenica",
+        monday_reduced: "Lun",
+        tuesday_reduced: "Mar",
+        wednesday_reduced: "Mer",
+        thursday_reduced: "Gio",
+        friday_reduced: "Ven",
+        saturday_reduced: "Sab",
+        sunday_reduced: "Dom",
+        home_disabledbutton: "Funzione disabilitata",
+        retire_sendok: "Il ritiro del bambino e' stato confermato",
+        retire_sendno: "Problemi di invio dati",
+        retire_popup_absent_title: "ATTENZIONE",
+        retire_popup_absent_text: "Per questa giornata è stata impostata un'assenza. Inserendo i dati di ritiro lo stato verrà modificato. Confermi?",
+        retire_popup_absent_ok: "Conferma",
+        retire_popup_absent_cancel: "Annulla",
+        retire_popup_toolate_title: "ATTENZIONE",
+        retire_popup_toolate_text: "Non è più possibile modificare le modalità di ritiro per oggi. Modifica permessa entro le ore",
+        setting_sendok: "Modifica configurazione registrata",
+        setting_sendno: "Problemi di invio dati",
+        send_note: "Invia una nota",
+        text: "Testo",
+        send: "Invia",
+        contact_school: "Contatta la scuola",
+        call: "Chiama",
+        bus_stop: "Fermata bus",
+        baby_drops_off_to: "Il bambino scende in",
+        whos_waiting_is: "Ad aspettare c'è",
+        open: "Apertura",
+        close: "Chiusura",
+        holiday: "Vacanza",
+        meeting: "Riunione genitori",
+        trip: "Gita",
+        events: "Eventi sul territorio",
+        kid: "Bambino",
+        parents: "Genitori",
+        meal: "Pasto",
+        lunch: "Pranzo",
+        break: "Merenda",
+        meals_info: "Info pasti",
+        show_type: "Tipo visualizzazione",
+        daily: "Giornaliera",
+        weekly: "Settimanale",
+        monthly: "Mensile",
+        absence_date_wrong: "La data d'inizio dell'assenza succede quella della fine. Modificare le date.",
+        assenza_sendok: 'Assenza inviata con successo',
+        assenza_sendno: 'Assenza non inviata',
+        absence_choose: 'Selezionare un motivo dell\'assenza',
+        assenza_popup_retire_title: 'ATTENZIONE',
+        assenza_popup_retire_text: "Per queste giornate è già stata impostata l'ora di ritiro. Impostando l'assenza i dati di ritiro veranno sovrascritti. Confermi?",
+        assenza_popup_retire_cancel: "Annulla",
+        assenza_popup_retire_ok: "Conferma",
+        assenza_popup_toolate_title: "ATTENZIONE",
+        assenza_popup_toolate_text: "Non è più possibile inserire un'assenza per oggi. Modifica permessa entro le ore",
+        noinfo: "Nessuna informazione",
+        settings: "Impostazioni di base",
+        cancel: "Annulla",
+        absence: "Inserisci assenza",
+        period: "Periodo",
+        period_from: "Da",
+        period_to: "A",
+        reason: "Motivazione",
+        reason_other: "Altro...",
+        absence_other: "Altro",
+        ok: "OK",
+        today: "Oggi",
+        communication_error: "Errore di comunicazione con il server. Impossibile caricare i dati"
 
-	$translateProvider.translations('en', {
-			menu_home: 'Home',
-			home_assenza: 'Assenza',
-			home_retire: 'Ritiro',
-			home_bus: 'Bus',
-			home_mensa: 'Mensa',
-			home_calendario: 'Calendario',
-			home_contatta: 'Contatta',
-			home_personal_information: 'Informazioni su ',
-			home_school_information: 'Informazioni di servizio',
-			home_entry_to: ' entra alle ore ',
-			home_exit_to: ' ed esce alle ore ',
-			menu_exit: 'Esci',
-			menu_enter: 'Entra',
-			babysetting_intro: 'Definisci i seguenti dati relativi all\'orario scolastico del bambino.',
-			babysetting_services: 'Servizi',
-			babysetting_hours: 'Orario di uscita:',
-			babysetting_who: 'Chi ritira il bambino:',
-			babysetting_bus: 'Autobus',
-			babysetting_busGo: 'Fermata bus andata:',
-			babysetting_busBack: 'Fermata bus ritorno:',
-			retire: "Ritiro del bambino",
-			date: "Data",
-			hour: "Ora",
-			who_takes_baby: "Chi ritira il bambino?",
-			nav_delegate: "Delega straordinaria",
-			delegate_status: "Validità delega",
-			note: "Note",
-			note_description: "Inserisci una nota...",
-			delegate: "Delega straordinaria",
-			delegate_description: "Dati del delegato",
-			name: "Nome del delegato",
-			surname: "Cognome del delegato",
-			add_image: "Aggiungi documento del delegato",
-			delegate_auth: "Autorizzazione",
-			delegate_majority: "Il delegato è maggiorenne",
-			auth_take_baby: "Autorizzo il soggetto sopraindicato a ritirare mio figlio da scuola",
-			babysetting_save: "Salva",
-			add_image_completed: "Documento aggiunto correttamente",
-			calendar: "Calendario",
-			monday: "Lunedì",
-			tuesday: "Martedì",
-			wednesday: "Mercoledì",
-			thursday: "Giovedì",
-			friday: "Venerdì",
-			saturday: "Sabato",
-			sunday: "Domenica",
-			monday_reduced: "Lun",
-			tuesday_reduced: "Mart",
-			wednesday_reduced: "Merc",
-			thursday_reduced: "Giov",
-			friday_reduced: "Ven",
-			saturday_reduced: "Sab",
-			sunday_reduced: "Dom",
-			home_disabledbutton: "Funzione disabilitata",
-			retire_sendok: "Il ritiro del bambino e' stato confermato",
-			retire_sendno: "Problemi di invio dati",
-			retire_popup_absent_title: "ATTENZIONE",
-			retire_popup_absent_text: "Per la giornata di oggi è stata impostata l'asenza. Inserendo i dati di ritiro lo stato verrà modificato. Confermi?",
-			retire_popup_absent_ok: "Conferma",
-			retire_popup_absent_cancel: "Annulla",
-			retire_popup_toolate_title: "ATTENZIONE",
-			retire_popup_toolate_text: "Non è più possibile modificare le modalità di ritiro per oggi. Modifica permessa entro le ore",
-			setting_sendok: "Modifica configurazione registrata",
-			setting_sendno: "Problemi di invio dati",
-			call: "Chiama",
-			send_note: "Invia una nota",
-			text: "Testo",
-			send: "Invia",
-			contact_school: "Contatta la scuola",
-			bus_stop: "Fermata bus",
-			baby_drops_off_to: "Il bambino scende in",
-			whos_waiting_is: "Ad aspettare c'è",
-			open: "Aperture",
-			close: "Chiusure",
-			holiday: "Vacanza",
-			meeting: "Riunione genitori",
-			trip: "Gita",
-			events: "Eventi sul territorio",
-			kid_toggle: "Bambino",
-			parents_toggle: "Genitori",
-			meal: "Pasto",
-			lunch: "Pranzo",
-			break: "Merenda",
-			meals_info: "Info pasti",
-			show_type: "Tipo visualizzazione",
-			daily: "Giornaliera",
-			weekly: "Settimanale",
-			monthly: "Mensile",
-			absence_date_wrong: "La data d'inizio dell'assenza succede quella della fine. Modificare le date.",
-			assenza_sendok: 'Assenza inviata con successo',
-			assenza_sendno: 'Assenza non inviata',
-			absence_choose: 'Selezionare un motivo dell\'assenza',
-			absence_other: "Altro",
-			assenza_popup_retire_title: 'ATTENZIONE',
-			assenza_popup_retire_text: "Per questa giornata è già stata impostata l'ora di ritiro. Impostando l'assenza i dati di ritiro veranno sovrascritti. Confermi?",
-			assenza_popup_retire_cancel: "Annulla",
-			assenza_popup_retire_ok: "Conferma",
-			assenza_popup_toolate_title: "ATTENZIONE",
-			assenza_popup_toolate_text: "Non è più possibile inserire un'assenza per oggi. Modifica permessa entro le ore",
-			ok: "OK",
-			today: "Oggi"
-	});
+    });
 
-	$translateProvider.translations('de', {
-			menu_home: 'Home',
-			home_assenza: 'Assenza',
-			home_retire: 'Ritiro',
-			home_bus: 'Bus',
-			home_mensa: 'Mensa',
-			home_calendario: 'Calendario',
-			home_contatta: 'Contatta',
-			home_personal_information: 'Informazioni su ',
-			home_school_information: 'Informazioni di servizio',
-			home_entry_to: ' entra alle ore ',
-			home_exit_to: ' ed esce alle ore ',
-			menu_exit: 'Esci',
-			menu_enter: 'Entra',
-			babysetting_intro: 'Definisci i seguenti dati relativi all\'orario scolastico del bambino.',
-			babysetting_services: 'Servizi',
-			babysetting_hours: 'Orario di uscita:',
-			babysetting_who: 'Chi ritira il bambino:',
-			babysetting_bus: 'Autobus',
-			babysetting_busGo: 'Fermata bus andata:',
-			babysetting_busBack: 'Fermata bus ritorno:',
-			retire: "Ritiro",
-			retire_bus: "Utilizza il servizio bus",
-			date: "Data",
-			hour: "Ora",
-			who_takes_baby: "Chi ritira il bambino?",
-			nav_delegate: "Delega straordinaria",
-			delegate_status: "Validità delega",
-			note: "Note",
-			note_description: "Inserisci una nota...",
-			delegate: "Delega straordinaria",
-			delegate_description: "Dati del delegato",
-			name: "Nome del delegato",
-			surname: "Cognome del delegato",
-			add_image: "Aggiungi documento del delegato",
-			delegate_auth: "Autorizzazione",
-			delegate_majority: "Il delegato è maggiorenne",
-			auth_take_baby: "Autorizzo il soggetto sopraindicato a ritirare mio figlio da scuola",
-			babysetting_save: "Salva",
-			add_image_completed: "Documento aggiunto correttamente",
-			calendar: "Calendario",
-			monday: "Lunedì",
-			tuesday: "Martedì",
-			wednesday: "Mercoledì",
-			thursday: "Giovedì",
-			friday: "Venerdì",
-			saturday: "Sabato",
-			sunday: "Domenica",
-			monday_reduced: "Lun",
-			tuesday_reduced: "Mart",
-			wednesday_reduced: "Merc",
-			thursday_reduced: "Giov",
-			friday_reduced: "Ven",
-			saturday_reduced: "Sab",
-			sunday_reduced: "Dom",
-			home_disabledbutton: "Funzione disabilitata",
-			retire_sendok: "Il ritiro del bambino e' stato confermato",
-			retire_sendno: "Problemi di invio dati",
-			retire_popup_absent_title: "ATTENZIONE",
-			retire_popup_absent_text: "Per la giornata di oggi è stata impostata l'asenza. Inserendo i dati di ritiro lo stato verrà modificato. Confermi?",
-			retire_popup_absent_ok: "Conferma",
-			retire_popup_absent_cancel: "Annulla",
-			retire_popup_toolate_title: "ATTENZIONE",
-			retire_popup_toolate_text: "Non è più possibile modificare le modalità di ritiro per oggi. Modifica permessa entro le ore",
-			setting_sendok: "Modifica configurazione registrata",
-			setting_sendno: "Problemi di invio dati",
-			send_note: "Invia una nota",
-			text: "Testo",
-			send: "Invia",
-			contact_school: "Contatta la scuola",
-			call: "Chiama",
-			bus_stop: "Fermata bus",
-			baby_drops_off_to: "Il bambino scende in",
-			whos_waiting_is: "Ad aspettare c'è",
-			open: "Aperture",
-			close: "Chiusure",
-			holiday: "Vacanza",
-			meeting: "Riunione genitori",
-			trip: "Gita",
-			events: "Eventi sul territorio",
-			kid: "Bambino",
-			parents: "Genitori",
-			meal: "Pasto",
-			lunch: "Pranzo",
-			break: "Merenda",
-			meals_info: "Info pasti",
-			show_type: "Tipo visualizzazione",
-			daily: "Giornaliera",
-			weekly: "Settimanale",
-			monthly: "Mensile",
-			absence_date_wrong: "La data d'inizio dell'assenza succede quella della fine. Modificare le date.",
-			assenza_sendok: 'Assenza inviata con successo',
-			assenza_sendno: 'Assenza non inviata',
-			absence_choose: 'Selezionare un motivo dell\'assenza',
-			noinfo: "No information",
-			settings: "Settings",
-			cancel: "Cancel",
-			absence: "Insert absence",
-			period: "Period",
-			period_from: "From",
-			period_to: "To",
-			reason: "Reason",
-			reason_other: "Other...",
-			absence_other: "Altro",
-			assenza_popup_retire_title: 'ATTENZIONE',
-			assenza_popup_retire_text: "Per questa giornata è già stata impostata l'ora di ritiro. Impostando l'assenza i dati di ritiro veranno sovrascritti. Confermi?",
-			assenza_popup_retire_cancel: "Annulla",
-			assenza_popup_retire_ok: "Conferma",
-			assenza_popup_toolate_title: "ATTENZIONE",
-			assenza_popup_toolate_text: "Non è più possibile inserire un'assenza per oggi. Modifica permessa entro le ore",
-			ok: "OK",
-			today: "Oggi"
-	});
+    $translateProvider.translations('en', {
+        menu_home: 'Home',
+        home_assenza: 'Assenza',
+        home_retire: 'Ritiro',
+        home_bus: 'Bus',
+        home_mensa: 'Mensa',
+        home_calendario: 'Calendario',
+        home_contatta: 'Contatta',
+        home_personal_information: 'Informazioni su ',
+        home_school_information: 'Informazioni di servizio',
+        home_entry_to: ' entra alle ore ',
+        home_exit_to: ' ed esce alle ore ',
+        menu_exit: 'Esci',
+        menu_enter: 'Entra',
+        babysetting_intro: 'Definisci i seguenti dati relativi all\'orario scolastico del bambino.',
+        babysetting_services: 'Servizi',
+        babysetting_hours: 'Orario di uscita:',
+        babysetting_who: 'Chi ritira il bambino:',
+        babysetting_bus: 'Autobus',
+        babysetting_busGo: 'Fermata bus andata:',
+        babysetting_busBack: 'Fermata bus ritorno:',
+        retire: "Ritiro del bambino",
+        date: "Data",
+        hour: "Ora",
+        who_takes_baby: "Chi ritira il bambino?",
+        nav_delegate: "Delega straordinaria",
+        delegate_status: "Validità delega",
+        note: "Note",
+        note_description: "Inserisci una nota...",
+        delegate: "Delega straordinaria",
+        delegate_description: "Dati del delegato",
+        name: "Nome del delegato",
+        surname: "Cognome del delegato",
+        add_image: "Aggiungi documento del delegato",
+        delegate_auth: "Autorizzazione",
+        delegate_majority: "Il delegato è maggiorenne",
+        auth_take_baby: "Autorizzo il soggetto sopraindicato a ritirare mio figlio da scuola",
+        babysetting_save: "Salva",
+        add_image_completed: "Documento aggiunto correttamente",
+        calendar: "Calendario",
+        monday: "Lunedì",
+        tuesday: "Martedì",
+        wednesday: "Mercoledì",
+        thursday: "Giovedì",
+        friday: "Venerdì",
+        saturday: "Sabato",
+        sunday: "Domenica",
+        monday_reduced: "Lun",
+        tuesday_reduced: "Mart",
+        wednesday_reduced: "Merc",
+        thursday_reduced: "Giov",
+        friday_reduced: "Ven",
+        saturday_reduced: "Sab",
+        sunday_reduced: "Dom",
+        home_disabledbutton: "Funzione disabilitata",
+        retire_sendok: "Il ritiro del bambino e' stato confermato",
+        retire_sendno: "Problemi di invio dati",
+        retire_popup_absent_title: "ATTENZIONE",
+        retire_popup_absent_text: "Per la giornata di oggi è stata impostata l'asenza. Inserendo i dati di ritiro lo stato verrà modificato. Confermi?",
+        retire_popup_absent_ok: "Conferma",
+        retire_popup_absent_cancel: "Annulla",
+        retire_popup_toolate_title: "ATTENZIONE",
+        retire_popup_toolate_text: "Non è più possibile modificare le modalità di ritiro per oggi. Modifica permessa entro le ore",
+        setting_sendok: "Modifica configurazione registrata",
+        setting_sendno: "Problemi di invio dati",
+        call: "Chiama",
+        send_note: "Invia una nota",
+        text: "Testo",
+        send: "Invia",
+        contact_school: "Contatta la scuola",
+        bus_stop: "Fermata bus",
+        baby_drops_off_to: "Il bambino scende in",
+        whos_waiting_is: "Ad aspettare c'è",
+        open: "Aperture",
+        close: "Chiusure",
+        holiday: "Vacanza",
+        meeting: "Riunione genitori",
+        trip: "Gita",
+        events: "Eventi sul territorio",
+        kid_toggle: "Bambino",
+        parents_toggle: "Genitori",
+        meal: "Pasto",
+        lunch: "Pranzo",
+        break: "Merenda",
+        meals_info: "Info pasti",
+        show_type: "Tipo visualizzazione",
+        daily: "Giornaliera",
+        weekly: "Settimanale",
+        monthly: "Mensile",
+        absence_date_wrong: "La data d'inizio dell'assenza succede quella della fine. Modificare le date.",
+        assenza_sendok: 'Assenza inviata con successo',
+        assenza_sendno: 'Assenza non inviata',
+        absence_choose: 'Selezionare un motivo dell\'assenza',
+        absence_other: "Altro",
+        assenza_popup_retire_title: 'ATTENZIONE',
+        assenza_popup_retire_text: "Per questa giornata è già stata impostata l'ora di ritiro. Impostando l'assenza i dati di ritiro veranno sovrascritti. Confermi?",
+        assenza_popup_retire_cancel: "Annulla",
+        assenza_popup_retire_ok: "Conferma",
+        assenza_popup_toolate_title: "ATTENZIONE",
+        assenza_popup_toolate_text: "Non è più possibile inserire un'assenza per oggi. Modifica permessa entro le ore",
+        ok: "OK",
+        today: "Oggi",
+        communication_error: "Errore di comunicazione con il server. Impossibile caricare i dati"
 
-	$translateProvider.preferredLanguage("it");
-	$translateProvider.fallbackLanguage("it");
+    });
+
+    $translateProvider.translations('de', {
+        menu_home: 'Home',
+        home_assenza: 'Assenza',
+        home_retire: 'Ritiro',
+        home_bus: 'Bus',
+        home_mensa: 'Mensa',
+        home_calendario: 'Calendario',
+        home_contatta: 'Contatta',
+        home_personal_information: 'Informazioni su ',
+        home_school_information: 'Informazioni di servizio',
+        home_entry_to: ' entra alle ore ',
+        home_exit_to: ' ed esce alle ore ',
+        menu_exit: 'Esci',
+        menu_enter: 'Entra',
+        babysetting_intro: 'Definisci i seguenti dati relativi all\'orario scolastico del bambino.',
+        babysetting_services: 'Servizi',
+        babysetting_hours: 'Orario di uscita:',
+        babysetting_who: 'Chi ritira il bambino:',
+        babysetting_bus: 'Autobus',
+        babysetting_busGo: 'Fermata bus andata:',
+        babysetting_busBack: 'Fermata bus ritorno:',
+        retire: "Ritiro",
+        retire_bus: "Utilizza il servizio bus",
+        date: "Data",
+        hour: "Ora",
+        who_takes_baby: "Chi ritira il bambino?",
+        nav_delegate: "Delega straordinaria",
+        delegate_status: "Validità delega",
+        note: "Note",
+        note_description: "Inserisci una nota...",
+        delegate: "Delega straordinaria",
+        delegate_description: "Dati del delegato",
+        name: "Nome del delegato",
+        surname: "Cognome del delegato",
+        add_image: "Aggiungi documento del delegato",
+        delegate_auth: "Autorizzazione",
+        delegate_majority: "Il delegato è maggiorenne",
+        auth_take_baby: "Autorizzo il soggetto sopraindicato a ritirare mio figlio da scuola",
+        babysetting_save: "Salva",
+        add_image_completed: "Documento aggiunto correttamente",
+        calendar: "Calendario",
+        monday: "Lunedì",
+        tuesday: "Martedì",
+        wednesday: "Mercoledì",
+        thursday: "Giovedì",
+        friday: "Venerdì",
+        saturday: "Sabato",
+        sunday: "Domenica",
+        monday_reduced: "Lun",
+        tuesday_reduced: "Mart",
+        wednesday_reduced: "Merc",
+        thursday_reduced: "Giov",
+        friday_reduced: "Ven",
+        saturday_reduced: "Sab",
+        sunday_reduced: "Dom",
+        home_disabledbutton: "Funzione disabilitata",
+        retire_sendok: "Il ritiro del bambino e' stato confermato",
+        retire_sendno: "Problemi di invio dati",
+        retire_popup_absent_title: "ATTENZIONE",
+        retire_popup_absent_text: "Per la giornata di oggi è stata impostata l'asenza. Inserendo i dati di ritiro lo stato verrà modificato. Confermi?",
+        retire_popup_absent_ok: "Conferma",
+        retire_popup_absent_cancel: "Annulla",
+        retire_popup_toolate_title: "ATTENZIONE",
+        retire_popup_toolate_text: "Non è più possibile modificare le modalità di ritiro per oggi. Modifica permessa entro le ore",
+        setting_sendok: "Modifica configurazione registrata",
+        setting_sendno: "Problemi di invio dati",
+        send_note: "Invia una nota",
+        text: "Testo",
+        send: "Invia",
+        contact_school: "Contatta la scuola",
+        call: "Chiama",
+        bus_stop: "Fermata bus",
+        baby_drops_off_to: "Il bambino scende in",
+        whos_waiting_is: "Ad aspettare c'è",
+        open: "Aperture",
+        close: "Chiusure",
+        holiday: "Vacanza",
+        meeting: "Riunione genitori",
+        trip: "Gita",
+        events: "Eventi sul territorio",
+        kid: "Bambino",
+        parents: "Genitori",
+        meal: "Pasto",
+        lunch: "Pranzo",
+        break: "Merenda",
+        meals_info: "Info pasti",
+        show_type: "Tipo visualizzazione",
+        daily: "Giornaliera",
+        weekly: "Settimanale",
+        monthly: "Mensile",
+        absence_date_wrong: "La data d'inizio dell'assenza succede quella della fine. Modificare le date.",
+        assenza_sendok: 'Assenza inviata con successo',
+        assenza_sendno: 'Assenza non inviata',
+        absence_choose: 'Selezionare un motivo dell\'assenza',
+        noinfo: "No information",
+        settings: "Settings",
+        cancel: "Cancel",
+        absence: "Insert absence",
+        period: "Period",
+        period_from: "From",
+        period_to: "To",
+        reason: "Reason",
+        reason_other: "Other...",
+        absence_other: "Altro",
+        assenza_popup_retire_title: 'ATTENZIONE',
+        assenza_popup_retire_text: "Per questa giornata è già stata impostata l'ora di ritiro. Impostando l'assenza i dati di ritiro veranno sovrascritti. Confermi?",
+        assenza_popup_retire_cancel: "Annulla",
+        assenza_popup_retire_ok: "Conferma",
+        assenza_popup_toolate_title: "ATTENZIONE",
+        assenza_popup_toolate_text: "Non è più possibile inserire un'assenza per oggi. Modifica permessa entro le ore",
+        ok: "OK",
+        today: "Oggi",
+        communication_error: "Communication error"
+
+    });
+
+    $translateProvider.preferredLanguage("it");
+    $translateProvider.fallbackLanguage("it");
 });

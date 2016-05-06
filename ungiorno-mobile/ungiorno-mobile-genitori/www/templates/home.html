@@ -74,6 +74,8 @@
 -->
 
                     </li>
+                    <div ng-if="!communications || communications.length == 0">{{'noinfo' | translate}}</div>
+
                 </ul>
             </div>
         </ion-scroll>

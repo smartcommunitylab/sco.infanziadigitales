@@ -402,7 +402,7 @@ public class KidController {
 		byte[] image = IOUtils.toByteArray(in);
 		headers.setContentLength(image.length);
 		String extension = name.substring(name.lastIndexOf("."));
-		if(extension.toLowerCase().equals("png")) {
+		if(extension.toLowerCase().equals(".png")) {
 			headers.setContentType(MediaType.IMAGE_PNG);
 		} else if(extension.toLowerCase().equals(".gif")) {
 			headers.setContentType(MediaType.IMAGE_GIF);

@@ -16,6 +16,7 @@
 
 package it.smartcommunitylab.ungiorno.controller;
 
+import it.smartcommunitylab.ungiorno.config.exception.ProfileNotFoundException;
 import it.smartcommunitylab.ungiorno.model.CalendarItem;
 import it.smartcommunitylab.ungiorno.model.Communication;
 import it.smartcommunitylab.ungiorno.model.KidCalAssenza;
@@ -97,7 +98,8 @@ public class KidController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/student/{appId}/profiles")
-	public @ResponseBody Response<List<KidProfile>> getProfiles(@PathVariable String appId) {
+	public @ResponseBody Response<List<KidProfile>> getProfiles(@PathVariable String appId) 
+			throws ProfileNotFoundException {
 		
 		String userId = permissions.getUserId();
 		List<KidProfile> profiles = storage.getKidProfilesByParent(appId, userId);
@@ -443,7 +445,14 @@ public class KidController {
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	@ResponseBody
 	public String handleError(HttpServletRequest request, Exception exception) {
-		return exception.getMessage();
+		return "{\"error\":\"" + exception.getMessage() + "\"}";
+	}
+	
+	@ExceptionHandler(ProfileNotFoundException.class)
+	@ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
+	@ResponseBody
+	public String handleProfileNotFoundError(HttpServletRequest request, Exception exception) {
+		return "{\"error\":\"" + exception.getMessage() + "\"}";
 	}
 
 }

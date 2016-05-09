@@ -129,7 +129,7 @@ public class UserAuthController {
 		AccountProfile accountProfile = profileService.getAccountProfile(tokenData.getAccess_token());
 		
 		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-				accountProfile.getAttribute("google", "OIDC_CLAIM_email"), basicProfile.getUserId(), UnGiornoUserDetails.UNGIORNO_AUTHORITIES);			
+				getEmail(accountProfile), basicProfile.getUserId(), UnGiornoUserDetails.UNGIORNO_AUTHORITIES);			
 		
 		token.setDetails(new WebAuthenticationDetails(request));
 		Authentication authenticatedUser = authenticationManager.authenticate(token);
@@ -138,7 +138,21 @@ public class UserAuthController {
 		rememberMeServices.loginSuccess(request, response, authenticatedUser);
 		return basicProfile;
 	}
-
+	
+	private String getEmail(AccountProfile account) {
+		String email = null;
+		for (String aName : account.getAccountNames()) {
+			for (String key : account.getAccountAttributes(aName).keySet()) {
+				if (key.toLowerCase().contains("email")) {
+					email = account.getAccountAttributes(aName).get(key);
+					if (email != null) break;
+				}
+			}
+			if (email != null) break;
+		}
+		return email;
+	}
+	
 	@RequestMapping(value="/register", method=RequestMethod.POST)
 	public void register(@RequestBody RegUser user, HttpServletResponse response) {
 		String url = String.format("%s/internal/register/rest?client_id=%s&client_secret=%s", env.getProperty("ext.aacURL"), env.getProperty("ext.clientId"), env.getProperty("ext.clientSecret"));

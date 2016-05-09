@@ -36,6 +36,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -65,7 +67,8 @@ import eu.trentorise.smartcampus.profileservice.model.BasicProfile;
 
 @Controller
 public class UserAuthController {
-
+	private static final transient Logger logger = LoggerFactory.getLogger(UserAuthController.class);
+			
 	@Autowired
 	private AuthenticationManager authenticationManager;
 	@Autowired
@@ -163,6 +166,9 @@ public class UserAuthController {
 			TokenData tokenData = service.exchngeCodeForToken(request.getParameter("code"),
 					env.getProperty("ext.redirect"));
 			BasicProfile basicProfile = processTokenData(request, response, tokenData);
+			if(logger.isInfoEnabled()) {
+				logger.info("ext_callback:" + basicProfile.getName() + " " + basicProfile.getSurname() + " - " + basicProfile.getUserId());
+			}
 			response.sendRedirect("userloginsuccess?profile="
 					+ URLEncoder.encode(JsonUtils.toJSON(basicProfile), "UTF-8"));
 		} catch (Exception e) {

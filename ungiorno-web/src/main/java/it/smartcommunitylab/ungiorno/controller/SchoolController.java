@@ -79,7 +79,7 @@ public class SchoolController {
 			String userId = permissions.getUserId();
 			SchoolProfile profile = storage.getSchoolProfileForUser(appId, userId);
 			if(logger.isInfoEnabled()) {
-				logger.info("getSchoolProfileForTeacher:" + profile);
+				logger.info("getSchoolProfileForTeacher:" + userId + " - " + profile);
 			}
 			return new Response<SchoolProfile>(profile);
 		} catch (Exception e) {

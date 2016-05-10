@@ -363,7 +363,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         home_exit_to: ' ed esce alle ore ',
         menu_exit: 'Esci',
         menu_enter: 'Entra',
-        babysetting_intro: 'Informazioni relative all\'orario scolastico del bambino.',
+        babysetting_intro: 'Informazioni relative al bambino.',
         babysetting_services: 'Servizi',
         babysetting_hours: 'Orario di uscita:',
         babysetting_who: 'Chi ritira il bambino:',

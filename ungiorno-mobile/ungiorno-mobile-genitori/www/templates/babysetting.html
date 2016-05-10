@@ -5,10 +5,6 @@
         <ion-nav-title>
             {{'settings' | translate}}
         </ion-nav-title>
-        <!--<ion-nav-buttons side="right">
-            <button class="button icon button-clear inf_digcheck" ng-click="saveNewSetting()">
-            </button>
-        </ion-nav-buttons>-->
     </ion-nav-bar>
 
     <ion-content has-header="true" class="page-padding">
@@ -17,21 +13,20 @@
 
             <div>
                 <div class="input-description-padding">{{'babysetting_services' | translate}}</div>
-                <ion-list class="padlist">
-                    <ion-checkbox ng-repeat="item in babyServices" ng-if="item.text!='mensa'" ng-model="item.checked" ng-checked="item.checked" ng-change="showOptions(item)" ng-disabled="true">
-                        {{ item.text }}
-                    </ion-checkbox>
-                </ion-list>
+								<ul class="home-info-content">
+									<li class="home-comm row icon ion-arrow-right-b" ng-repeat="item in babyServices" ng-if="item.text!='mensa'"
+											ng-model="item.checked" ng-checked="item.checked" ng-change="showOptions(item)">
+										{{ item.text }}
+									</li>
+								</ul>
 
                 <div class="input-description-padding">{{'babysetting_hours' | translate}}</div>
 								<label class="item item-input setting">{{getTimeLabel()}}</label>
-                <!--<input type="time" ng-model="time.value" />-->
 								
 
                 <div  class="input-description-padding">{{'babysetting_who' | translate}}</div>
                 <ion-list class="padlist">
-										<div class="item item-input setting" ng-repeat="person in babyProfile.persons">{{person.fullName}}</div>		
-                    <!--<ion-radio ng-repeat="person in babyProfile.persons" ng-model="retireDefault.value" ng-value="person.personId" ng-disabled="true">{{person.fullName}}</ion-radio>-->
+										<div class="item item-input setting" ng-repeat="person in babyProfile.persons">{{person.fullName}}</div>
                 </ion-list>
             </div>
 

@@ -24,40 +24,23 @@
                 </ion-list>
 
                 <div class="input-description-padding">{{'babysetting_hours' | translate}}</div>
-								<label>{{getTimeLabel()}}</label>
+								<label class="item item-input setting">{{getTimeLabel()}}</label>
                 <!--<input type="time" ng-model="time.value" />-->
 								
 
                 <div  class="input-description-padding">{{'babysetting_who' | translate}}</div>
                 <ion-list class="padlist">
-                    <ion-radio ng-repeat="person in babyProfile.persons" ng-model="retireDefault.value" ng-value="person.personId" ng-disabled="true">{{person.fullName}}</ion-radio>
+										<div class="item item-input setting" ng-repeat="person in babyProfile.persons">{{person.fullName}}</div>		
+                    <!--<ion-radio ng-repeat="person in babyProfile.persons" ng-model="retireDefault.value" ng-value="person.personId" ng-disabled="true">{{person.fullName}}</ion-radio>-->
                 </ion-list>
             </div>
 
             <div ng-show="busEnabled">
                 <div  class="input-description-padding">{{'babysetting_bus' | translate}}</div>
-                <ion-list class="padlist">
-                    <div>
-                        <label class="item item-input item-select setting">
-                            <div class="input-label">
-                                {{'babysetting_busGo' | translate}}
-                            </div>
-                            <select ng-model="selectedBusGo" ng-options="item as item.name for item in busStops">
-                            </select>
-                        </label>
-                    </div>
-                    <div>
-                        <label class="item item-input item-select setting">
-                            <div class="input-label">
-                                {{'babysetting_busBack' | translate}}
-                            </div>
-                            <select ng-model="selectedBusBack" ng-options="item as item.name for item in busStops">
-                            </select>
-                        </label>
-                    </div>
-                    </select>
-                </ion-list>
-            </div>
+								<label class="item item-input setting">
+									{{selectedBusBack.name}}
+            		</label>
+						</div>
         </div>
     </ion-content>
 </ion-view>

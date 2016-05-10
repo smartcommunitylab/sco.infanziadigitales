@@ -10,3 +10,6 @@ apps:
           - tag2
       - 
         schoolId: scuola2
+      - 
+        schoolId: cogolo
+        

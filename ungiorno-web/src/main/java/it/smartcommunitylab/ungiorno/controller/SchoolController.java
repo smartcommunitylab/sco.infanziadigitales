@@ -35,6 +35,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -46,7 +48,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class SchoolController {
-
+	private static final transient Logger logger = LoggerFactory.getLogger(SchoolController.class);
+	
 	@Autowired
 	private RepositoryManager storage;
 	
@@ -75,6 +78,9 @@ public class SchoolController {
 		try {
 			String userId = permissions.getUserId();
 			SchoolProfile profile = storage.getSchoolProfileForUser(appId, userId);
+			if(logger.isInfoEnabled()) {
+				logger.info("getSchoolProfileForTeacher:" + userId + " - " + profile);
+			}
 			return new Response<SchoolProfile>(profile);
 		} catch (Exception e) {
 			return new Response<>(e.getMessage());

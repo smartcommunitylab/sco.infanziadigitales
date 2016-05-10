@@ -36,6 +36,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -65,7 +67,8 @@ import eu.trentorise.smartcampus.profileservice.model.BasicProfile;
 
 @Controller
 public class UserAuthController {
-
+	private static final transient Logger logger = LoggerFactory.getLogger(UserAuthController.class);
+			
 	@Autowired
 	private AuthenticationManager authenticationManager;
 	@Autowired
@@ -126,7 +129,7 @@ public class UserAuthController {
 		AccountProfile accountProfile = profileService.getAccountProfile(tokenData.getAccess_token());
 		
 		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-				accountProfile.getAttribute("google", "OIDC_CLAIM_email"), basicProfile.getUserId(), UnGiornoUserDetails.UNGIORNO_AUTHORITIES);			
+				getEmail(accountProfile), basicProfile.getUserId(), UnGiornoUserDetails.UNGIORNO_AUTHORITIES);			
 		
 		token.setDetails(new WebAuthenticationDetails(request));
 		Authentication authenticatedUser = authenticationManager.authenticate(token);
@@ -135,7 +138,21 @@ public class UserAuthController {
 		rememberMeServices.loginSuccess(request, response, authenticatedUser);
 		return basicProfile;
 	}
-
+	
+	private String getEmail(AccountProfile account) {
+		String email = null;
+		for (String aName : account.getAccountNames()) {
+			for (String key : account.getAccountAttributes(aName).keySet()) {
+				if (key.toLowerCase().contains("email")) {
+					email = account.getAccountAttributes(aName).get(key);
+					if (email != null) break;
+				}
+			}
+			if (email != null) break;
+		}
+		return email;
+	}
+	
 	@RequestMapping(value="/register", method=RequestMethod.POST)
 	public void register(@RequestBody RegUser user, HttpServletResponse response) {
 		String url = String.format("%s/internal/register/rest?client_id=%s&client_secret=%s", env.getProperty("ext.aacURL"), env.getProperty("ext.clientId"), env.getProperty("ext.clientSecret"));
@@ -163,6 +180,9 @@ public class UserAuthController {
 			TokenData tokenData = service.exchngeCodeForToken(request.getParameter("code"),
 					env.getProperty("ext.redirect"));
 			BasicProfile basicProfile = processTokenData(request, response, tokenData);
+			if(logger.isInfoEnabled()) {
+				logger.info("ext_callback:" + basicProfile.getName() + " " + basicProfile.getSurname() + " - " + basicProfile.getUserId());
+			}
 			response.sendRedirect("userloginsuccess?profile="
 					+ URLEncoder.encode(JsonUtils.toJSON(basicProfile), "UTF-8"));
 		} catch (Exception e) {

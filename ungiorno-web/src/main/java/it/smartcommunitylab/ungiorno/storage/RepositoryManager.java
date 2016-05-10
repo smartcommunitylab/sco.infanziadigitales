@@ -16,6 +16,7 @@
 
 package it.smartcommunitylab.ungiorno.storage;
 
+import it.smartcommunitylab.ungiorno.config.exception.ProfileNotFoundException;
 import it.smartcommunitylab.ungiorno.diary.model.DiaryEntry;
 import it.smartcommunitylab.ungiorno.diary.model.DiaryKidProfile;
 import it.smartcommunitylab.ungiorno.diary.model.DiaryTeacher;
@@ -258,10 +259,13 @@ public class RepositoryManager {
 	 * @param username
 	 * @return
 	 */
-	public List<KidProfile> getKidProfilesByParent(String appId, String username) {
+	public List<KidProfile> getKidProfilesByParent(String appId, String username) throws ProfileNotFoundException {
 		Query q = appQuery(appId);
 		q.addCriteria(new Criteria("username").is(username));
 		Parent p = template.findOne(q, Parent.class);
+		if(p == null) {
+			throw new ProfileNotFoundException("Profile not found");
+		}
 		
 		q = appQuery(appId);
 		q.addCriteria(new Criteria("persons").elemMatch(new Criteria("personId").is(p.getPersonId()).and("parent").is(true)));

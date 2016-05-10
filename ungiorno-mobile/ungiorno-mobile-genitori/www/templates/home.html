@@ -9,63 +9,64 @@
         </button>
     </ion-nav-buttons>
     <ion-content has-header="true" scroll="false">
-        <div class="home-info" ng-show="isPresent">
-            {{kidProfile.firstName}} {{'home_entry_to' | translate}} {{fromTime}}{{'home_exit_to' | translate}}{{toTime}}
-        </div>
-        <div class="home-info" ng-show="!isPresent">
-            {{kidProfile.firstName}} e' assente
-        </div>
-        <ion-scroll class="home-area" style="height:95%">
-            <div ng-repeat="element in elements | limitTo: (elements.length-elements.length%2)" ng-if="$index % 2 == 0" class="row">
-                <div class="col col-50">
-                    <div class="button-home-wrapper" ng-class="elements[$index].class">
-                        <button style="background-image:url({{elements[$index].img}})" class=" button-block button-home " ng-click="execute(elements[$index])" ng-disabled="elements[$index].disabled">
-                        </button>
-                        <span>{{elements[$index].string}}</span>
-                    </div>
-                </div>
-                <div class="col col-50">
-                    <div class=" button-home-wrapper" ng-class="elements[$index+1].class">
-                        <button style="background-image:url({{elements[$index+1].img}})" class=" button-block button-home" ng-click="execute(elements[$index+1])" ng-disabled="elements[$index+1].disabled">
-                        </button>
-                        <span>{{elements[$index+1].string}}</span>
-                    </div>
-                </div>
+        <div ng-if="allowed">
+            <div class="home-info" ng-show="isPresent">
+                {{kidProfile.firstName}} {{'home_entry_to' | translate}} {{fromTime}}{{'home_exit_to' | translate}}{{toTime}}
             </div>
-            <div class="row" ng-if="elements.length%2==1">
-                <div class="col">
-                    <div class=" button-home-wrapper" ng-class="elements[elements.length-1].class">
-                        <button class=" button-block button-home" ng-click="execute(elements[elements.length-1])" ng-disabled="elements[elements.length-1].disabled" style="background-image:url({{elements[elements.length-1].img}})">
-                        </button>
-                        <span>{{elements[elements.length-1].string}}</span>
-                    </div>
-                </div>
+            <div class="home-info" ng-show="!isPresent">
+                {{kidProfile.firstName}} e' assente
             </div>
-            <div class="home_informations">
-                <p class="home-info-title">{{'home_personal_information' | translate}} {{kidProfile.firstName}}</p>
-                <div class="home-info-content">
-                    <div ng-repeat="schoolNotes in notes.schoolNotes">
-                        {{schoolNotes.note}}
+            <ion-scroll class="home-area" style="height:95%">
+                <div ng-repeat="element in elements | limitTo: (elements.length-elements.length%2)" ng-if="$index % 2 == 0" class="row">
+                    <div class="col col-50">
+                        <div class="button-home-wrapper" ng-class="elements[$index].class">
+                            <button style="background-image:url({{elements[$index].img}})" class=" button-block button-home " ng-click="execute(elements[$index])" ng-disabled="elements[$index].disabled">
+                            </button>
+                            <span>{{elements[$index].string}}</span>
+                        </div>
                     </div>
-                    <div ng-if="!notes.schoolNotes || notes.schoolNotes.length == 0">{{'noinfo' | translate}}</div>
+                    <div class="col col-50">
+                        <div class=" button-home-wrapper" ng-class="elements[$index+1].class">
+                            <button style="background-image:url({{elements[$index+1].img}})" class=" button-block button-home" ng-click="execute(elements[$index+1])" ng-disabled="elements[$index+1].disabled">
+                            </button>
+                            <span>{{elements[$index+1].string}}</span>
+                        </div>
+                    </div>
                 </div>
-                <p class="home-info-title">{{'home_school_information' | translate}}</p>
-                <ul class="home-info-content">
-                    <li ng-repeat="communication in communications | orderBy:'-creationDate' " class="home-comm row">
-                        <!--
+                <div class="row" ng-if="elements.length%2==1">
+                    <div class="col">
+                        <div class=" button-home-wrapper" ng-class="elements[elements.length-1].class">
+                            <button class=" button-block button-home" ng-click="execute(elements[elements.length-1])" ng-disabled="elements[elements.length-1].disabled" style="background-image:url({{elements[elements.length-1].img}})">
+                            </button>
+                            <span>{{elements[elements.length-1].string}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="home_informations">
+                    <p class="home-info-title">{{'home_personal_information' | translate}} {{kidProfile.firstName}}</p>
+                    <div class="home-info-content">
+                        <div ng-repeat="schoolNotes in notes.schoolNotes">
+                            {{schoolNotes.note}}
+                        </div>
+                        <div ng-if="!notes.schoolNotes || notes.schoolNotes.length == 0">{{'noinfo' | translate}}</div>
+                    </div>
+                    <p class="home-info-title">{{'home_school_information' | translate}}</p>
+                    <ul class="home-info-content">
+                        <li ng-repeat="communication in communications | orderBy:'-creationDate' " class="home-comm row">
+                            <!--
 <div class="row" ng-show="communication.doCheck">
     <div class="col"></div>
 </div>
 -->
-                        <div class="row">
-                            <div class="col">
-                                <p class="note-date"><i class="icon ion-arrow-right-b note-pointer"></i>
-                                    <p class="note-date" ng-show="communication.doCheck">{{communication.dateToCheck | date:'EEEE, d MMMM yyyy'}}</p>
-                                </p>
-                                <p class="note-text">{{communication.description}}</p>
+                            <div class="row">
+                                <div class="col">
+                                    <p class="note-date"><i class="icon ion-arrow-right-b note-pointer"></i>
+                                        <p class="note-date" ng-show="communication.doCheck">{{communication.dateToCheck | date:'EEEE, d MMMM yyyy'}}</p>
+                                    </p>
+                                    <p class="note-text">{{communication.description}}</p>
+                                </div>
                             </div>
-                        </div>
-                        <!--
+                            <!--
                         <a class="item">
                             <i class="icon ion-arrow-right-b"></i>
                             <h2>{{communication.dateToCheck | date:'EEEE, d MMMM yyyy'}}</h2>
@@ -73,11 +74,15 @@
                         </a>
 -->
 
-                    </li>
-                    <div ng-if="!communications || communications.length == 0">{{'noinfo' | translate}}</div>
+                        </li>
+                        <div ng-if="!communications || communications.length == 0">{{'noinfo' | translate}}</div>
 
-                </ul>
-            </div>
-        </ion-scroll>
+                    </ul>
+                </div>
+            </ion-scroll>
+        </div>
+        <div class="not_allowed" ng-if="!allowed">
+            {{'not_allowed' | translate}}
+        </div>
     </ion-content>
 </ion-view>

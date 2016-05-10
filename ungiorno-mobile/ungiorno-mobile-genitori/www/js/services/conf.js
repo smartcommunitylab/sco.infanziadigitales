@@ -2,8 +2,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.c
 
 .factory('Config', function ($q, $http, $window, $filter, $rootScope) {
 
-    var DEVELOPMENT = true;
+    var DEVELOPMENT = false;
     var URL = 'https://' + (DEVELOPMENT ? 'dev' : 'tn') + '.smartcommunitylab.it';
+    var AAC_URL = 'https://tn.smartcommunitylab.it/aac';
     //var URL = 'http://192.168.42.60:8080';
 
     var app = 'ungiorno2'
@@ -16,7 +17,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.c
 
 
     return {
-
+        getAACURL: function () {
+            return AAC_URL;
+        },
         getVersion: function () {
             return 'v ' + APP_VERSION + (APP_BUILD && APP_BUILD != '' ? '<br/>(' + APP_BUILD + ')' : '');
         },

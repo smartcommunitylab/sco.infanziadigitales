@@ -14,7 +14,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.elements = [];
     $scope.dailyFermata = null;
     $scope.dailyRitiro = null;
-
+    $rootScope.allowed = true;
     $scope.refresh = function () {
         window.location.reload(true);
     }
@@ -307,12 +307,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 $scope.kidProfile = profileService.getBabyProfile();
             }
             $scope.loadConfiguration($scope.kidProfile.schoolId, $scope.kidProfile.kidId);
+            $rootScope.allowed = true;
 
 
         }, function (error) {
             console.log("ERROR -> " + error);
             Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
             $ionicLoading.hide();
+            if (error == 406) {
+                $rootScope.allowed = false;
+            }
         });
 
 

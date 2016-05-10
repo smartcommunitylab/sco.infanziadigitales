@@ -97,8 +97,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         });
         style = getButtonStyle("disabled");
         $scope.elements.push({
-            click: "app.calendar",
-            string: $filter('translate')('home_calendario'),
+            click: function () {
+               Toast.show($filter('translate')('home_disabledbutton'), 'long', 'center');
+            },
+						string: $filter('translate')('home_calendario'),
             class: style,
             img: 'img/calendario.png',
             disabled: false
@@ -159,7 +161,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
 
     $scope.execute = function (element) {
-        if (element.class != "button-stable") {
+				if (element.class != "button-stable") {
             if (typeof element.click == "string") {
                 $state.go(element.click);
             } else {

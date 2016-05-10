@@ -20,7 +20,7 @@
                 <div ng-repeat="element in elements | limitTo: (elements.length-elements.length%2)" ng-if="$index % 2 == 0" class="row">
                     <div class="col col-50">
                         <div class="button-home-wrapper" ng-class="elements[$index].class">
-                            <button style="background-image:url({{elements[$index].img}})" class=" button-block button-home " ng-click="execute(elements[$index])" ng-disabled="elements[$index].disabled">
+                            <button style="background-image:url({{elements[$index].img}})" class=" button-block button-home " ng-click="execute(elements[$index])">
                             </button>
                             <span>{{elements[$index].string}}</span>
                             <span class="note">{{elements[$index].note}}</span>
@@ -29,7 +29,7 @@
                     </div>
                     <div class="col col-50">
                         <div class=" button-home-wrapper" ng-class="elements[$index+1].class">
-                            <button style="background-image:url({{elements[$index+1].img}})" class=" button-block button-home" ng-click="execute(elements[$index+1])" ng-disabled="elements[$index+1].disabled">
+                            <button style="background-image:url({{elements[$index+1].img}})" class=" button-block button-home" ng-click="execute(elements[$index+1])">
                             </button>
                             <span>{{elements[$index+1].string}}</span>
                             <span class="note">{{elements[$index+1].note}}</span>
@@ -40,7 +40,7 @@
                 <div class="row" ng-if="elements.length%2==1">
                     <div class="col">
                         <div class=" button-home-wrapper" ng-class="elements[elements.length-1].class">
-                            <button class=" button-block button-home" ng-click="execute(elements[elements.length-1])" ng-disabled="elements[elements.length-1].disabled" style="background-image:url({{elements[elements.length-1].img}})">
+                            <button class=" button-block button-home" ng-click="execute(elements[elements.length-1])" style="background-image:url({{elements[elements.length-1].img}})">
                             </button>
                             <span>{{elements[elements.length-1].string}}</span>
                             <span class="note">{{elements[elements.length-1].note}}</span>

@@ -23,6 +23,8 @@
                             <button style="background-image:url({{elements[$index].img}})" class=" button-block button-home " ng-click="execute(elements[$index])" ng-disabled="elements[$index].disabled">
                             </button>
                             <span>{{elements[$index].string}}</span>
+                            <span class="note">{{elements[$index].note}}</span>
+
                         </div>
                     </div>
                     <div class="col col-50">
@@ -30,6 +32,8 @@
                             <button style="background-image:url({{elements[$index+1].img}})" class=" button-block button-home" ng-click="execute(elements[$index+1])" ng-disabled="elements[$index+1].disabled">
                             </button>
                             <span>{{elements[$index+1].string}}</span>
+                            <span class="note">{{elements[$index+1].note}}</span>
+
                         </div>
                     </div>
                 </div>
@@ -39,6 +43,7 @@
                             <button class=" button-block button-home" ng-click="execute(elements[elements.length-1])" ng-disabled="elements[elements.length-1].disabled" style="background-image:url({{elements[elements.length-1].img}})">
                             </button>
                             <span>{{elements[elements.length-1].string}}</span>
+                            <span class="note">{{elements[elements.length-1].note}}</span>
                         </div>
                     </div>
                 </div>

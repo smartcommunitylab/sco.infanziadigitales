@@ -460,6 +460,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         reason_other: "Altro...",
         absence_other: "Altro",
         ok: "OK",
+        timepicker_close: "Chiudi",
         today: "Oggi",
         communication_error: "Errore di comunicazione con il server. Impossibile caricare i dati",
         lbl_login: 'Login',
@@ -485,7 +486,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         signin_pwd_reset: 'Password dimenticata?',
         signin_title: 'Accedi con le tue credenziali',
         error_signin: 'Username/password non validi',
-        not_allowed: 'Utente non registrato. Completare il profilo presso la scuola'
+        not_allowed: 'Utente non registrato. Completare il profilo presso la scuola',
+        home_absence_before: 'entro le ore ',
+        home_retire_before: 'entro le ore '
 
 
     });
@@ -565,6 +568,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         whos_waiting_is: "Ad aspettare c'è",
         open: "Aperture",
         close: "Chiusure",
+        timepicker_close: "Chiudi",
         holiday: "Vacanza",
         meeting: "Riunione genitori",
         trip: "Gita",
@@ -616,7 +620,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         signin_pwd_reset: 'Password dimenticata?',
         signin_title: 'Accedi con le tue credenziali',
         error_signin: 'Username/password non validi',
-        not_allowed: 'Utente non registrato. Completare il profilo presso la scuola'
+        not_allowed: 'Utente non registrato. Completare il profilo presso la scuola',
+        home_absence_before: 'entro le ore ',
+        home_retire_before: 'entro le ore '
 
     });
 
@@ -717,6 +723,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         noinfo: "No information",
         settings: "Settings",
         cancel: "Cancel",
+        timepicker_close: "Chiudi",
         absence: "Insert absence",
         period: "Period",
         period_from: "From",
@@ -756,8 +763,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         signin_pwd_reset: 'Password dimenticata?',
         signin_title: 'Accedi con le tue credenziali',
         error_signin: 'Username/password non validi',
-        not_allowed: 'Utente non registrato. Completare il profilo presso la scuola'
-
+        not_allowed: 'Utente non registrato. Completare il profilo presso la scuola',
+        home_absence_before: 'entro le ore ',
+        home_retire_before: 'entro le ore '
 
     });
 

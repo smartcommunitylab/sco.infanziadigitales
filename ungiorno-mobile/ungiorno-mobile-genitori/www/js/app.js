@@ -28,6 +28,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.addNote',
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.buses',
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.canteen',
+    'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.login',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.canteenService',
 		'it.smartcommunitylab.infanziadigitales.diario.parents.services.loginService',
     'angularMoment'
@@ -47,28 +48,56 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     $rootScope.loginStarted = false;
     $rootScope.authWindow = null;
 
-    $rootScope.login = function () {
-        if ($rootScope.loginStarted) return;
 
-        $rootScope.loginStarted = true;
-        loginService.login().then(
+    $rootScope.login = function () {
+        $ionicHistory.nextViewOptions({
+            historyRoot: true
+        });
+
+        $state.go('app.login', null, {
+            reload: true
+        });
+    };
+
+    $rootScope.logout = function () {
+        //        if (window.ParsePushPlugin) {
+        //            window.ParsePushPlugin.unsubscribe('CarPooling_' + StorageSrv.getUserId(), function () {
+        //                console.log("Success in channel " + 'CarPooling_' + StorageSrv.getUserId() + " unsubscribe");
+        //            });
+        //        }
+        loginService.logout().then(
             function (data) {
-                $rootScope.loginStarted = false;
-                localStorage.userId = data.userId;
-                $state.go('app.home', {}, {
-                    reload: true
-                });
+                //ionic.Platform.exitApp();
+                window.location.reload(true);
+                Utils.loading();
             },
             function (error) {
-                //The user denied access to the app
-                $rootScope.loginStarted = false;
-                localStorage.userId = null;
-                //TODO toast
-                alert('autenticazione non riuscita');
-                ionic.Platform.exitApp();
+                Utils.toast(Utils.getErrorMsg(error));
             }
         );
     };
+    //    $rootScope.login = function () {
+    //        if ($rootScope.loginStarted) return;
+    //
+    //        $rootScope.loginStarted = true;
+    //        loginService.login().then(
+    //            function (data) {
+    //                $rootScope.loginStarted = false;
+    //                localStorage.userId = data.userId;
+    //                $state.go('app.home', {}, {
+    //                    reload: true
+    //                });
+    //            },
+    //            function (error) {
+    //                //The user denied access to the app
+    //                $rootScope.loginStarted = false;
+    //                localStorage.userId = null;
+    //                //TODO toast
+    //                alert('autenticazione non riuscita');
+    //                ionic.Platform.exitApp();
+    //            }
+    //        );
+    //    };
 
     $rootScope.logout = function () {
         loginService.logout().then(
@@ -111,12 +140,41 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         $rootScope.backButtonStyle = $ionicConfig.backButton.icon();
         // $rootScope.getConfiguration();
 
-        if (!$rootScope.userIsLogged()) {
-            $rootScope.login();
+        $rootScope.login_googlelocal = 'google';
+        $rootScope.login_facebooklocal = 'facebook';
+
+        //        if (!!window.plugins && !!window.plugins.googleplus) {
+        //            window.plugins.googleplus.isAvailable(
+        //                function (available) {
+        //                    if (available) $rootScope.login_googlelocal = 'googlelocal';
+        //                    console.log('login_googlelocal available!');
+        //                }
+        //            );
+        //        }
+
+        //        if (window.cordova && window.cordova.platformId == 'browser') {
+        //            facebookConnectPlugin.browserInit('1031028236933030');
+        //            //facebookConnectPlugin.browserInit(appId, version);
+        //            // version is optional. It refers to the version of API you may want to use.
+        //        }
+        if (loginService.userIsLogged()) {
+            console.log("user is logged");
+            //
+            if (localStorage.provider == 'internal') {
+                $rootScope.login();
+            } else {
+                loginService.login(localStorage.provider).then(
+                    function (data) {
+                        $state.go('app.home');
+                        $ionicHistory.nextViewOptions({
+                            disableBack: true,
+                            historyRoot: true
+                                //                });
+                        });
+                    })
+            };
         } else {
-            $state.go('app.home', {}, {
-                reload: true
-            });
+            $rootScope.login();
         }
     });
 
@@ -259,17 +317,35 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         }
     })
 
-    .state('login', {
-        cache: false,
-        url: '/login',
-        abstract: false,
-        views: {
-            'menuContent': {
-                templateUrl: "templates/login.html",
-                controller: 'AppCtrl'
+    .state('app.login', {
+            cache: false,
+            url: '/login',
+            abstract: false,
+            views: {
+                'menuContent': {
+                    templateUrl: "templates/login.html",
+                    controller: 'LoginCtrl'
+                }
             }
-        }
-    });
+        })
+        .state('app.signup', {
+            url: '/signup',
+            views: {
+                'menuContent': {
+                    templateUrl: 'templates/signup.html',
+                    controller: 'RegisterCtrl'
+                }
+            }
+        })
+        .state('app.signupsuccess', {
+            url: '/signupsuccess',
+            views: {
+                'menuContent': {
+                    templateUrl: 'templates/signupsuccess.html',
+                    controller: 'RegisterCtrl'
+                }
+            }
+        });
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/login');
 
@@ -287,7 +363,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         home_exit_to: ' ed esce alle ore ',
         menu_exit: 'Esci',
         menu_enter: 'Entra',
-        babysetting_intro: 'Informazioni relative all\'orario scolastico del bambino.',
+        babysetting_intro: 'Informazioni relative al bambino.',
         babysetting_services: 'Servizi',
         babysetting_hours: 'Orario di uscita:',
         babysetting_who: 'Chi ritira il bambino:',
@@ -384,8 +460,36 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         reason_other: "Altro...",
         absence_other: "Altro",
         ok: "OK",
+        timepicker_close: "Chiudi",
         today: "Oggi",
-        communication_error: "Errore di comunicazione con il server. Impossibile caricare i dati"
+        communication_error: "Errore di comunicazione con il server. Impossibile caricare i dati",
+        lbl_login: 'Login',
+        text_login_title: 'InfanziaDigitales',
+        text_login_use: 'oppure accedi con',
+        login_signin: 'Entra',
+        login_signup: 'REGISTRATI',
+        error_popup_title: 'Errore',
+        error_generic: 'La registrazione non è andata a buon fine. Riprova più tardi.',
+        error_email_inuse: 'L\'indirizzo email è già in uso.',
+        signup_signup: 'Registrati',
+        signup_title: 'Registrati con',
+        signup_subtitle: 'Registrati a Smart Community per accedere ad InfanziaDigitales e a tutte le altre App',
+        signup_name: 'Nome',
+        signup_surname: 'Cognome',
+        signup_email: 'Email',
+        signup_pwd: 'Password',
+        error_required_fields: 'Tutti i campi sono obbligatori',
+        error_password_short: 'La lunghezza della password deve essere di almeno 6 caratteri',
+        signup_success_title: 'Registrazione completata!',
+        signup_success_text: 'Completa la registrazione cliccando sul link che trovi nella email che ti abbiamo inviato.',
+        signup_resend: 'Re-inviare l\'email di conferma',
+        signin_pwd_reset: 'Password dimenticata?',
+        signin_title: 'Accedi con le tue credenziali',
+        error_signin: 'Username/password non validi',
+        not_allowed: 'Utente non registrato. Completare il profilo presso la scuola',
+        home_absence_before: 'entro le ore ',
+        home_retire_before: 'entro le ore '
+
 
     });
 
@@ -464,6 +568,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         whos_waiting_is: "Ad aspettare c'è",
         open: "Aperture",
         close: "Chiusure",
+        timepicker_close: "Chiudi",
         holiday: "Vacanza",
         meeting: "Riunione genitori",
         trip: "Gita",
@@ -491,7 +596,33 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         assenza_popup_toolate_text: "Non è più possibile inserire un'assenza per oggi. Modifica permessa entro le ore",
         ok: "OK",
         today: "Oggi",
-        communication_error: "Errore di comunicazione con il server. Impossibile caricare i dati"
+        communication_error: "Errore di comunicazione con il server. Impossibile caricare i dati",
+        lbl_login: 'Login',
+        text_login_title: 'InfanziaDigitales',
+        text_login_use: 'oppure accedi con',
+        login_signin: 'Entra',
+        login_signup: 'REGISTRATI',
+        error_popup_title: 'Errore',
+        error_generic: 'La registrazione non è andata a buon fine. Riprova più tardi.',
+        error_email_inuse: 'L\'indirizzo email è già in uso.',
+        signup_signup: 'Registrati',
+        signup_title: 'Registrati con',
+        signup_subtitle: 'Registrati a Smart Community per accedere ad InfanziaDigitales e a tutte le altre App',
+        signup_name: 'Nome',
+        signup_surname: 'Cognome',
+        signup_email: 'Email',
+        signup_pwd: 'Password',
+        error_required_fields: 'Tutti i campi sono obbligatori',
+        error_password_short: 'La lunghezza della password deve essere di almeno 6 caratteri',
+        signup_success_title: 'Registrazione completata!',
+        signup_success_text: 'Completa la registrazione cliccando sul link che trovi nella email che ti abbiamo inviato.',
+        signup_resend: 'Re-inviare l\'email di conferma',
+        signin_pwd_reset: 'Password dimenticata?',
+        signin_title: 'Accedi con le tue credenziali',
+        error_signin: 'Username/password non validi',
+        not_allowed: 'Utente non registrato. Completare il profilo presso la scuola',
+        home_absence_before: 'entro le ore ',
+        home_retire_before: 'entro le ore '
 
     });
 
@@ -592,6 +723,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         noinfo: "No information",
         settings: "Settings",
         cancel: "Cancel",
+        timepicker_close: "Chiudi",
         absence: "Insert absence",
         period: "Period",
         period_from: "From",
@@ -607,7 +739,33 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         assenza_popup_toolate_text: "Non è più possibile inserire un'assenza per oggi. Modifica permessa entro le ore",
         ok: "OK",
         today: "Oggi",
-        communication_error: "Communication error"
+        communication_error: "Communication error",
+        lbl_login: 'Login',
+        text_login_title: 'InfanziaDigitales',
+        text_login_use: 'oppure accedi con',
+        login_signin: 'Entra',
+        login_signup: 'REGISTRATI',
+        error_popup_title: 'Errore',
+        error_generic: 'La registrazione non è andata a buon fine. Riprova più tardi.',
+        error_email_inuse: 'L\'indirizzo email è già in uso.',
+        signup_signup: 'Registrati',
+        signup_title: 'Registrati con',
+        signup_subtitle: 'Registrati a Smart Community per accedere ad InfanziaDigitales e a tutte le altre App',
+        signup_name: 'Nome',
+        signup_surname: 'Cognome',
+        signup_email: 'Email',
+        signup_pwd: 'Password',
+        error_required_fields: 'Tutti i campi sono obbligatori',
+        error_password_short: 'La lunghezza della password deve essere di almeno 6 caratteri',
+        signup_success_title: 'Registrazione completata!',
+        signup_success_text: 'Completa la registrazione cliccando sul link che trovi nella email che ti abbiamo inviato.',
+        signup_resend: 'Re-inviare l\'email di conferma',
+        signin_pwd_reset: 'Password dimenticata?',
+        signin_title: 'Accedi con le tue credenziali',
+        error_signin: 'Username/password non validi',
+        not_allowed: 'Utente non registrato. Completare il profilo presso la scuola',
+        home_absence_before: 'entro le ore ',
+        home_retire_before: 'entro le ore '
 
     });
 

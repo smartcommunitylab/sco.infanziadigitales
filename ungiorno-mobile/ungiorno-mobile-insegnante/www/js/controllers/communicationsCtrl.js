@@ -40,7 +40,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
         $scope.datepickerObjectPopup = {
             titleLabel: $filter('translate')('popup_datepicker_title'), //Optional
             todayLabel: $filter('translate')('popup_datepicker_today'), //Optional
-            closeLabel: $filter('translate')('popup_datepicker_close'), //Optional
+            closeLabel: $filter('translate')('close'), //Optional
             setLabel: $filter('translate')('popup_datepicker_set'), //Optional
             errorMsgLabel: $filter('translate')('popup_datepicker_error_label'), //Optional
             setButtonType: 'button-popup', //Optional

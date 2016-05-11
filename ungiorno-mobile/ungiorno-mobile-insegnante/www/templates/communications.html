@@ -68,7 +68,7 @@
             <div>
                 <a ng-if="!(isCommunicationSelected($index) && isMode('edit'))" class="communication-text">{{communication.description}}</a>
                 <input ng-if="isCommunicationSelected($index) && isMode('edit')" ng-model="editedCommunication.description" type="text" id="modifyDescription" value="{{editedCommunication.description}}">
-                <a ng-if="!(isCommunicationSelected($index) && isMode('edit'))" class="communication-date">{{'communication_of' | translate}} {{communication.creationDate | date}}</a>
+                <p ng-if="!(isCommunicationSelected($index) && isMode('edit'))" class="communication-date">{{'communication_of' | translate}} {{communication.creationDate | date}}</p>
                 <label class="item-input" ng-if="(isCommunicationSelected($index) && isMode('edit')) && controlDateToCheck($index)">
                     <!--                    <input type="date" ng-model="editedCommunication.dateToCheck">-->
                     <ionic-datepicker input-obj="datepickerObjectPopup">

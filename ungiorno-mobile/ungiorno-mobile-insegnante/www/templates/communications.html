@@ -25,6 +25,7 @@
 </button>
 -->
 
+
         </ion-nav-buttons>
     </ion-nav-bar>
 
@@ -76,7 +77,7 @@
                     </ionic-datepicker>
                 </label>
                 <p ng-if="!(isCommunicationSelected($index) && isMode('edit')) && controlDateToCheck($index)">{{'deadline' | translate}}: {{communication.dateToCheck | date}}</p>
-                <button class="button-control" ng-if="controlDateToCheck($index)" ng-click="homeRedirect($index)">
+                <button class="button-control" ng-if="controlDateToCheck($index) && !isMode('edit')" ng-click="homeRedirect($index)">
                     {{'communication_check' | translate | uppercase}}
                 </button>
                 <div class="communication-interaction">

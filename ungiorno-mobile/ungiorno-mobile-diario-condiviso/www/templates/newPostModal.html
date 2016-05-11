@@ -1,12 +1,12 @@
 <div class="modal">
-	<ion-header-bar class="bar-ungiorno">
+    <ion-header-bar class="bar-ungiorno">
         <button class="button back-button button-clear" ng-click="cancel()">
             <i class="icon inf_digarrow_back "></i>
         </button>
-		<h1 class="title">{{'create_post' | translate}}</h1>
+        <h1 class="title">{{'create_post' | translate}}</h1>
         <button class="button button-clear" ng-click="save()"><i class="icon inf_digcheck "></i></button>
-	</ion-header-bar>
-	<ion-content style="margin-left:10px; margin-right:10px;">
+    </ion-header-bar>
+    <ion-content style="margin-left:10px; margin-right:10px;">
         <label class="item item-input post-create-element-row">
             <textarea type="text" ng-model="currentPost.description" placeholder="{{'description' | translate}}"></textarea>
         </label>
@@ -29,18 +29,19 @@
         <div class="post-create-element-row">
             <i class="icon inf_digclock post-create-element"></i>
             <div class="post-create-element">
-            <label class="item-input">
-                <input class="post-create-element" type="date" ng-model="currentPost.date">
-            </label>
+                <item class="item-input">
+                 <label type="date" ng-click="openDatePicker()">{{date | date:'yyyy-MM-dd'}}</label>
+                <!-- <input class="post-create-element" type="date" ng-click="openDatePicker()"> -->
+                </item>
             </div>
         </div>
-<!--
+        <!--
         <div class="post-create-element-row mood-container">
             <i ng-class="{'ion-sad':currentPost.mood==-1, 'ion-sad-outline':currentPost.mood != -1}" class="post-create-mood icon" ng-click="setMood(-1)"></i>
             <i ng-class="{'ion-happy':currentPost.mood==1, 'ion-happy-outline':currentPost.mood != 1}" class="post-create-mood icon" ng-click="setMood(1)"></i>
         </div>
 -->
 
-	</ion-content>
+    </ion-content>
 </div>
 <!--TODO: description label must be multiline!

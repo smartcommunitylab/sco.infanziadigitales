@@ -265,23 +265,28 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
                     Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
                     $ionicLoading.hide();
                 });
-            }
-            communicationService.getCommunicationsFromServer($scope.schoolProfile.schoolId).then(function (data) {
-                $scope.communications = [];
-                for (var i = 0; i < data.length; i++) {
-                    if (data[i].doCheck) {
-                        $scope.communications.push(data[i]);
-                    }
-                }
-                //manage kids' profiles with notifications for messages
-                //check if parameter is sent otherwise take the first
-                /*$scope.data.communication = $scope.communications[0].communicationId;
-                $scope.changeCommunication($scope.data.communication);*/
-            }, function (err) {
-                //manage error communications
-                Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+            } else {
                 $ionicLoading.hide();
-            });
+
+            }
+            if ($scope.schoolProfile) {
+                communicationService.getCommunicationsFromServer($scope.schoolProfile.schoolId).then(function (data) {
+                    $scope.communications = [];
+                    for (var i = 0; i < data.length; i++) {
+                        if (data[i].doCheck) {
+                            $scope.communications.push(data[i]);
+                        }
+                    }
+                    //manage kids' profiles with notifications for messages
+                    //check if parameter is sent otherwise take the first
+                    /*$scope.data.communication = $scope.communications[0].communicationId;
+                    $scope.changeCommunication($scope.data.communication);*/
+                }, function (err) {
+                    //manage error communications
+                    Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+                    $ionicLoading.hide();
+                });
+            }
         }, function (err) {
             Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
             $ionicLoading.hide();

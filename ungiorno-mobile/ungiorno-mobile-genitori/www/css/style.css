@@ -135,11 +135,19 @@ input[type=time] {
     border-bottom: 1px solid #B0B0B0;
 }
 .input-description-padding {
-    margin-top: 24px;
+    margin-top: 20px;
     color: #FFAD00;
     font-weight: bold;
 }
 .input-description-padding i {
+    color: #000000;
+}
+.input-retire-description-padding {
+    margin-top: 16px;
+    color: #FFAD00;
+    font-weight: bold;
+}
+.iinput-retire--description-padding i {
     color: #000000;
 }
 .form-container {
@@ -1197,6 +1205,7 @@ ul.rating {
 }
 .home_informations {
     margin: 10px;
+    padding-bottom: 10px;
 }
 .ion-input-select,
 select {

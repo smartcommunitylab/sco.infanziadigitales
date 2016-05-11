@@ -11,6 +11,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.l
         };
 
         loginService.login = function (provider) {
+            authWindow = null;
             var deferred = $q.defer();
 
             if (provider != 'google' && provider != 'googlelocal') {

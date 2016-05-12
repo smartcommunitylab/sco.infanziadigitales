@@ -177,6 +177,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.loginSe
                     if (!token) token = obj.accessToken;
                     authapi.authorize(token).then(
                         function (data) {
+                            Config.setAppId(data.userId);
                             StorageSrv.saveUserId(data.userId).then(function () {
                                 deferred.resolve(data);
                                 //                                UserSrv.getUser(data.userId).then(function () {
@@ -204,6 +205,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.loginSe
         } else {
             authapi.authorize().then(
                 function (data) {
+                    Config.setAppId(data.userId);
                     StorageSrv.saveUserId(data.userId).then(function () {
                         deferred.resolve(data);
                         //                        UserSrv.getUser(data.userId).then(function () {

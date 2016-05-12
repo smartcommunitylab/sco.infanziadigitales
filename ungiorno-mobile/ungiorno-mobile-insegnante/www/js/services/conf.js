@@ -2,12 +2,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.conf', 
 
 .factory('Config', function ($q, $http, $window, $filter, $rootScope) {
 
-    var DEVELOPMENT = true;
+    var DEVELOPMENT = false;
     var URL = 'https://' + (DEVELOPMENT ? 'dev' : 'tn') + '.smartcommunitylab.it';
     //var URL = 'http://192.168.42.60:8080';
     var timeout = 100000;
+    var fakeId = '23655';
+
     var app = 'ungiorno2'
-    var appId = 'trento'
+        //var appId = 'trento'
 
     var APP_BUILD = '';
 
@@ -16,7 +18,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.conf', 
     var APP_VERSION = '1.0.0RC1';
 
     return {
-
+        getFakeId: function () {
+            return fakeId;
+        },
+        setAppId: function (userId) {
+            if (userId == this.getFakeId()) {
+                $rootScope.appId = 'test';
+            } else {
+                $rootScope.appId = 'trento';
+            }
+        },
         getVersion: function () {
             return 'v ' + APP_VERSION + (APP_BUILD && APP_BUILD != '' ? '<br/>(' + APP_BUILD + ')' : '');
         },
@@ -63,7 +74,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.conf', 
             return app;
         },
         appId: function () {
-            return appId;
+            return $rootScope.appId;
         },
         service: function () {
             return service;

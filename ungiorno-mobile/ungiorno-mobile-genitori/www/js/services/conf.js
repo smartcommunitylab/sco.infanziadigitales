@@ -5,10 +5,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.c
     var DEVELOPMENT = false;
     var URL = 'https://' + (DEVELOPMENT ? 'dev' : 'tn') + '.smartcommunitylab.it';
     var AAC_URL = 'https://tn.smartcommunitylab.it/aac';
-    //var URL = 'http://192.168.42.60:8080';
+    // var URL = 'http://192.168.42.60:8080';
+    var fakeId = '23655';
+    var app = 'ungiorno2';
+    // var appId = 'trento'
+    //    var appId = $rootScope.appId;
 
-    var app = 'ungiorno2'
-    var appId = 'trento'
     var httpTimeout = 10000;
 
     var APP_BUILD = '';
@@ -17,6 +19,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.c
 
 
     return {
+        getFakeId: function () {
+            return fakeId;
+        },
+        setAppId: function (userId) {
+            if (userId == this.getFakeId()) {
+                $rootScope.appId = 'test';
+            } else {
+                $rootScope.appId = 'trento';
+            }
+        },
         getAACURL: function () {
             return AAC_URL;
         },
@@ -62,8 +74,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.c
             return service;
         },
         appId: function () {
-            return appId;
+            return $rootScope.appId;
         },
+
         httpTimout: function () {
             return httpTimeout
         },
@@ -80,7 +93,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.c
             //console.log('$rootScope.TEST_CONNECTION: '+(!!$rootScope.TEST_CONNECTION));
             var SYNC_MODE = (!!$rootScope.TEST_CONNECTION ? 'syncdraft' : 'sync');
             //console.log('SYNC_MODE: '+SYNC_MODE);
-            return URL + '/' + app + '/sync/' + appId + '?since=';
+            return URL + '/' + app + '/sync/' + $rootScope.appId + '?since=';
             // /sync/{appId}?since={version}
         },
         syncTimeoutSeconds: function () {

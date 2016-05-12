@@ -34,7 +34,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     'angularMoment'
 ])
 
-.run(function ($ionicPlatform, $rootScope, $cordovaSplashscreen, $state, $translate, $q, $window, $ionicHistory, $ionicConfig, Config,
+.run(function ($ionicPlatform, $rootScope, $ionicLoading, $ionicPopup, $filter, $cordovaSplashscreen, $state, $translate, $q, $window, $ionicHistory, $ionicConfig, Config,
     configurationService, profileService, dataServerService, loginService, Toast) {
 
     $rootScope.getUserId = function () {
@@ -165,12 +165,36 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
             } else {
                 loginService.login(localStorage.provider).then(
                     function (data) {
-                        $state.go('app.home');
-                        $ionicHistory.nextViewOptions({
-                            disableBack: true,
-                            historyRoot: true
-                                //                });
+                        dataServerService.getBabyProfiles().then(function (data) {
+                            $state.go('app.home');
+                            $ionicHistory.nextViewOptions({
+                                disableBack: true,
+                                historyRoot: true
+                            });
+
+                        }, function (error) {
+                            console.log("ERROR -> " + error);
+                            // Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+                            $ionicLoading.hide();
+                            if (error == 406) {
+                                loginService.logout();
+                                $ionicPopup.alert({
+                                    title: $filter('translate')('not_allowed_popup_title'),
+                                    template: $filter('translate')('not_allowed_signin')
+                                });
+                                $state.go('app.login');
+                                $ionicHistory.nextViewOptions({
+                                    disableBack: true,
+                                    historyRoot: true
+                                });
+                            }
                         });
+                        //                        $state.go('app.home');
+                        //                        $ionicHistory.nextViewOptions({
+                        //                            disableBack: true,
+                        //                            historyRoot: true
+                        //                                //                });
+                        //                        });
                     })
             };
         } else {
@@ -488,7 +512,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         error_signin: 'Username/password non validi',
         not_allowed: 'Utente non registrato. Completare il profilo presso la scuola',
         home_absence_before: 'entro le ore ',
-        home_retire_before: 'entro le ore '
+        home_retire_before: 'entro le ore ',
+        not_allowed_popup_title: 'Errore',
+        not_allowed_signin: 'Utente non autorizzato'
 
 
     });
@@ -622,7 +648,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         error_signin: 'Username/password non validi',
         not_allowed: 'Utente non registrato. Completare il profilo presso la scuola',
         home_absence_before: 'entro le ore ',
-        home_retire_before: 'entro le ore '
+        home_retire_before: 'entro le ore ',
+        not_allowed_popup_title: 'Errore',
+        not_allowed_signin: 'Utente non autorizzato'
 
     });
 
@@ -765,7 +793,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         error_signin: 'Username/password non validi',
         not_allowed: 'Utente non registrato. Completare il profilo presso la scuola',
         home_absence_before: 'entro le ore ',
-        home_retire_before: 'entro le ore '
+        home_retire_before: 'entro le ore ',
+        not_allowed_popup_title: 'Errore',
+        not_allowed_signin: 'Utente non autorizzato'
 
     });
 

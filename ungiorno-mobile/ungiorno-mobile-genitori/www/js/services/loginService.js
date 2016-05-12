@@ -11,6 +11,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.l
         };
 
         loginService.login = function (provider) {
+            authWindow = null;
             var deferred = $q.defer();
 
             if (provider != 'google' && provider != 'googlelocal') {
@@ -93,27 +94,23 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.l
                         if (!token) token = obj.accessToken;
                         authapi.authorize(token).then(
                             function (data) {
+                                Config.setAppId(data.userId);
+                                //                                if (data.userId = '23655') {
+                                //                                    //                                if (data.name == 'testugas') {
+                                //                                    $rootScope.appId = 'test';
+                                //                                } else {
+                                //                                    $rootScope.appId = 'trento';
+                                //                                }
                                 localStorage.userId = data.userId;
                                 localStorage.provider = 'googlelocal';
                                 deferred.resolve(data);
-                                //                                StorageSrv.saveUserId(data.userId).then(function () {
-                                //                                    deferred.resolve(data);
-                                //                                    //                                UserSrv.getUser(data.userId).then(function () {
-                                //                                    //                                    deferred.resolve(data);
-                                //                                    //                                }, function (reason) {
-                                //                                    //                                    StorageSrv.saveUserId(null).then(function () {
-                                //                                    //                                        deferred.reject(reason);
-                                //                                    //                                    });
-                                //                                    //                                });
-                                //                                });
+
                             },
                             function (reason) {
                                 //reset data
                                 localStorage.userId = null;
                                 deferred.reject(reason);
-                                //                                StorageSrv.saveUserId(null).then(function () {
-                                //                                    deferred.reject(reason);
-                                //                                });
+
                             }
                         );
                     },
@@ -125,19 +122,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.l
             } else {
                 authapi.authorize().then(
                     function (data) {
+                        Config.setAppId(data.userId);
+                        //                        if (data.userId = '23655') {
+                        //                            //                                if (data.name == 'testugas') {
+                        //                            $rootScope.appId = 'test';
+                        //                        } else {
+                        //                            $rootScope.appId = 'trento';
+                        //                        }
                         localStorage.userId = data.userId;
                         localStorage.provider = 'google';
                         deferred.resolve(data);
-                        //                        StorageSrv.saveUserId(data.userId).then(function () {
-                        //                            deferred.resolve(data);
-                        //                            //                        UserSrv.getUser(data.userId).then(function () {
-                        //                            //                            deferred.resolve(data);
-                        //                            //                        }, function (reason) {
-                        //                            //                            StorageSrv.saveUserId(null).then(function () {
-                        //                            //                                deferred.reject(reason);
-                        //                            //                            });
-                        //                            //                        });
-                        //                        });
+
                     },
                     function (reason) {
                         //reset data
@@ -229,26 +224,24 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.l
                 })
                 .then(
                     function (res) {
+                        //workaround for apple test
+                        Config.setAppId(res.data.userId);
+                        //                        if (res.data.userId = '23655') {
+                        //                            //                        if (res.data.name == 'testugas') {
+                        //                            $rootScope.appId = 'test';
+                        //                        } else {
+                        //                            $rootScope.appId = 'trento';
+                        //                        }
                         var data = res.data;
                         localStorage.userId = data.userId;
                         localStorage.provider = 'internal';
                         deferred.resolve(data);
-                        //                        StorageSrv.saveUserId(data.userId).then(function () {
-                        //                            UserSrv.getUser(data.userId).then(function () {
-                        //                                deferred.resolve(data);
-                        //                            }, function (reason) {
-                        //                                StorageSrv.saveUserId(null).then(function () {
-                        //                                    deferred.reject(reason);
-                        //                                });
-                        //                            });
-                        //                        });
+
                     },
                     function (reason) {
                         localStorage.userId = null;
                         deferred.reject(reason);
-                        //                        StorageSrv.saveUserId(null).then(function () {
-                        //                            deferred.reject(reason);
-                        //                        });
+
                     }
                 );
 

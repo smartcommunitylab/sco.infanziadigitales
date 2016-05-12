@@ -12,4 +12,8 @@ apps:
         schoolId: scuola2
       - 
         schoolId: cogolo
-        
+  - appId: test
+    password: test
+    schools:
+      -
+        schoolId: test

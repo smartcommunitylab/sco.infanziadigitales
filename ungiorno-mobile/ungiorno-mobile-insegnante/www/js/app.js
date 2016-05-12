@@ -433,7 +433,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
         profile_no_teacher_notes: 'Oggi non è stata inviata nessuna nota ai genitori di ',
         baby_not_monitored: ' non è monitorato dal sistema ',
         communication_error: 'Errore di connessione',
-        absence_type: 'Motivazione: '
+        absence_type: 'Motivazione: ',
+        not_allowed_popup_title: 'Errore',
+        not_allowed_signin: 'Utente non autorizzato',
+        child_not_partecipate: 'Il bambino non partecipa alla sperimentazione'
 
 
 

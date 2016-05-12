@@ -1,6 +1,74 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.controllers.dettaglidiario', [])
 
 .controller('dettaglidiarioCtrl', function ($scope, profileService, $filter, $location, $ionicScrollDelegate, diaryService, $state, Toast) {
+    $scope.access = {
+        relation: '',
+        firstName: '',
+        lastName: '',
+        telephone: [],
+        email: [],
+        gender: '',
+        birthday: ''
+    };
+    $scope.accessCopy = {
+        lastName: '',
+        firstName: '',
+        phone: [],
+        email: [],
+        relation: '',
+        gender: '',
+        isParent: '',
+        birthday: '',
+        default: '',
+        authorizationDeadline: '',
+        authorizationUrl: '',
+        adult: '',
+        authorized: ''
+    };
+
+    $scope.isParent= function () {
+        if($scope.access.relation=='parent1'||$scope.access.relation=='parent2'||$scope.access.relation=='brother'||$scope.access.relation=='sister'){return true;}
+    };
+     $scope.isAccess= function () {
+        if($scope.access.relation=='parent'||$scope.access.relation=='teacher'){return true;}
+    };
+
+    var addAccessComponent = function () {
+        /*$scope.addedComponents.splice(index, 1);*/
+        copyAccess();
+        $scope.babyCopy.persons.push($scope.accessCopy);
+        clearAccess();
+    }
+
+    var copyAccess = function () {
+        $scope.accessCopy.personId == "personId1asa";
+        $scope.accessCopy.fullName = $scope.access.firstName + " " + $scope.access.lastName;
+        $scope.accessCopy.lastName = $scope.access.lastName;
+        $scope.accessCopy.firstName = $scope.access.firstName;
+        $scope.accessCopy.phone.push($scope.access.telephone);
+        $scope.accessCopy.email.push($scope.access.email);
+        $scope.accessCopy.relation = $scope.access.relation;
+        $scope.accessCopy.gender = "Maschio";
+        $scope.accessCopy.isParent = true;
+        $scope.accessCopy.birthday = 1308967200;
+        $scope.accessCopy.default = true;
+        $scope.accessCopy.authorizationDeadline = 1534964475576;
+        $scope.accessCopy.authorizationUrl = "url1";
+        $scope.accessCopy.adult = true;
+        $scope.accessCopy.authorized = true;
+    };
+
+    var clearAccess = function () {
+        $scope.access = {
+            relation: '',
+            firstName: '',
+            lastName: '',
+            telephone: '',
+            email: '',
+            gender: '',
+            birthday: ''
+        };
+    }
     var mode = "view";
     $scope.createMode = diaryService.getCreateDiaryMode();
     $scope.modify = function () {
@@ -15,6 +83,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
             if ($scope.createMode) {
                 $state.go('app.home')
             } else {
+                addAccessComponent();
                 mode = "view";
             }
         }
@@ -75,7 +144,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         $scope.addedPeople.push({})
     }
     $scope.deleteComponent = function (index) {
-        $scope.addedComponents.splice(index, 1);
+        /*$scope.addedComponents.splice(index, 1);*/
+        $scope.babyCopy.persons.splice(index, 1);
     }
     $scope.deletePeople = function (index) {
         $scope.addedPeople.splice(index, 1);
@@ -96,14 +166,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
     $scope.getPreposition = function (gender, relation) {
         var toRtn;
         switch (gender) {
-        case 'Maschio':
-            toRtn = "del";
-            break;
-        case 'Femmina':
-            toRtn = "della";
-            break;
-        default:
-            toRtn = "del";
+            case 'Maschio':
+                toRtn = "del";
+                break;
+            case 'Femmina':
+                toRtn = "della";
+                break;
+            default:
+                toRtn = "del";
         }
         if (relation === "zio") {
             toRtn = "dello";

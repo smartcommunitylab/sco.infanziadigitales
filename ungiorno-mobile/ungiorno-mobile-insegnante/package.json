@@ -31,7 +31,8 @@
     "https://github.com/katzer/cordova-plugin-printer.git",
     "cordova-plugin-whitelist",
     "https://github.com/smartcommunitylab/cordova-plugin-googleplus",
-    "net.yoik.cordova.plugins.screenorientation"
+    "net.yoik.cordova.plugins.screenorientation",
+    "com.cordova.plugins.cookiemaster"
   ],
   "cordovaPlatforms": [
     "android"

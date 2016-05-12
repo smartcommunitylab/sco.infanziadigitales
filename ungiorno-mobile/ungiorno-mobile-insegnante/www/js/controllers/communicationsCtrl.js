@@ -76,13 +76,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
     };
     setDateWidget();
     $scope.communicationTypes = [
+//        {
+//            typeId: "0",
+//            name: "Generica",
+//            checked: true
+//        }, {
+//            typeId: "1",
+//            name: "Consegna Documenti",
+//            checked: false
+//        }
         {
             typeId: "0",
-            name: "Generica",
-            checked: true
-        },
-        {
-            typeId: "1",
             name: "Consegna Documenti",
             checked: false
         }
@@ -158,16 +162,26 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
     }
 
     $scope.selectType = function (newType) {
-        for (var i = 0; i < $scope.communicationTypes.length; i++) {
-            $scope.communicationTypes[i].checked = ($scope.communicationTypes[i].typeId === newType.typeId);
-        }
-        if ($scope.communicationTypes[1].checked) {
+        //        for (var i = 0; i < $scope.communicationTypes.length; i++) {
+        //            $scope.communicationTypes[i].checked = ($scope.communicationTypes[i].typeId === newType.typeId);
+        //        }
+        //        if ($scope.communicationTypes[0].checked) {
+        //            $scope.delivery = true;
+        //            $scope.newCommunication.doCheck = true;
+        //        } else {
+        //            $scope.delivery = false;
+        //            $scope.newCommunication.doCheck = false;
+        //        }
+
+        if (newType.checked) {
             $scope.delivery = true;
             $scope.newCommunication.doCheck = true;
         } else {
             $scope.delivery = false;
             $scope.newCommunication.doCheck = false;
+
         }
+
     }
 
     $scope.deleteCommunication = function () {

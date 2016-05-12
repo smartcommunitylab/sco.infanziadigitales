@@ -30,7 +30,7 @@
                                 <div class="babyProfile detailItem">{{note.note}}</div>
                             </ion-item>
                         </ion-list>
-                        <div ng-if="!notes || notes.parentNotes.length==0">
+                        <div ng-if="!notes.parentNotes ||  notes.parentNotes.length==0">
                             <div class="item item-text-wrap text-gray">
                                 {{'profile_no_parents_notes1' | translate}}{{babyProfile.firstName}} {{'profile_no_parents_notes2' | translate}}
 
@@ -42,7 +42,7 @@
                                 <div class="babyProfile detailItem">{{note.note}}</div>
                             </ion-item>
                         </ion-list>
-                        <div ng-if="!notes || notes.teachersNotes.length==0">
+                        <div ng-if="!notes.schoolNotes  || notes.schoolNotes.length==0">
                             <div class="item item-text-wrap text-gray">
                                 {{'profile_no_teacher_notes' | translate}}{{babyProfile.firstName}}
                             </div>
@@ -58,15 +58,17 @@
                         </select>
                     </div>
 -->
-                        <div class="row">
-                            <div class="input-label">
-                                {{'send_note_type' | translate}}
-                            </div>
-                            <select id="note_type" ng-model="newNote.argument">
-                                <option value="" disabled selected>{{'arguments' | translate}}</option>
-                                <option value="{{arg.typeId}" ng-repeat="arg in schoolProfile.teacherNoteTypes">{{arg.type}}</option>
-                            </select>
-                        </div>
+                        <!--
+<div class="row">
+    <div class="input-label">
+        {{'send_note_type' | translate}}
+    </div>
+    <select id="note_type" ng-model="newNote.argument">
+        <option value="" disabled selected>{{'arguments' | translate}}</option>
+        <option value="{{arg.typeId}" ng-repeat="arg in schoolProfile.teacherNoteTypes">{{arg.type}}</option>
+    </select>
+</div>
+-->
                         <!--</label>-->
                         <input id="note_description" class="select-note" type="text" placeholder="{{'description' | translate}}" ng-model="newNote.description">
                         <button class="button-control total col-offset-25" ng-click="sendTeacherNote()">{{'send' | translate}}</button>

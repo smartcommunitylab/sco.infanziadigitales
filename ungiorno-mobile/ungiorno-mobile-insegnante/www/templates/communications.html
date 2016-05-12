@@ -36,6 +36,11 @@
                 <ion-checkbox class="id-checkbox" ng-repeat="communicationType in communicationTypes" ng-model="communicationType.checked" ng-checked="communicationType.checked" ng-change="selectType(communicationType)">
                     {{communicationType.name}}
                 </ion-checkbox>
+                <!--
+<ion-checkbox class="id-checkbox" ng-repeat="communicationType in communicationTypes" ng-model="communicationType.checked" ng-checked="communicationType.checked" ng-change="selectType(communicationType)">
+    {{communicationType.name}}
+</ion-checkbox>
+-->
             </ion-list>
             <div ng-if="delivery">
                 <a class=" input-label newComItems communication-text">{{ 'deadline_time' | translate}} : </a>

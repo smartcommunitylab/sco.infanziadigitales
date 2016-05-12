@@ -364,11 +364,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
         //se presente rimuovi, se assente aggiungi
         //var childrenID = $scope.childrenProfiles[id].kidId
         var index = -1;
-        index = $scope.childrenCommunicationDelivery.indexOf(childId);
-        if (index > -1) {
-            $scope.childrenCommunicationDelivery.splice(index, 1);
-        } else {
-            $scope.childrenCommunicationDelivery.push(childId);
+        if ($scope.childrenCommunicationDelivery) {
+            index = $scope.childrenCommunicationDelivery.indexOf(childId);
+            if (index > -1) {
+                $scope.childrenCommunicationDelivery.splice(index, 1);
+            } else {
+                $scope.childrenCommunicationDelivery.push(childId);
+            }
         }
         //$scope.childrenCommunicationDelivery[id] = !$scope.childrenCommunicationDelivery[id]
         //}
@@ -378,10 +380,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
     $scope.detailOrCommunication = function (child) {
         //se modalita' communication, modifico lista consegne e poi confermo
         //altrimenti openDetail(index)
-        if ($scope.communicationExpanded) {
-            $scope.switchChildrenDeliveryByID(child.kidId)
+        if (child.active) {
+            if ($scope.communicationExpanded) {
+                $scope.switchChildrenDeliveryByID(child.kidId)
+            } else {
+                $scope.openDetail(child);
+            }
         } else {
-            $scope.openDetail(child);
+            Toast.show($filter('translate')('child_not_partecipate'), 'short', 'bottom');
+
         }
     }
     $scope.communicationDone = function (childId) {

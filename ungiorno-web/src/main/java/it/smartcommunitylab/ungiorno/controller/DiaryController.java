@@ -61,8 +61,7 @@ public class DiaryController {
 		SchoolProfile schoolProfile = storage.getSchoolProfileForUser(appId, userId);
 		DiaryUser du = permissions.getDiaryUser(
 				appId, 
-				schoolProfile != null ? schoolProfile.getSchoolId() : null, 
-				schoolProfile != null ? true: false);
+				schoolProfile != null ? schoolProfile.getSchoolId() : null, null);
 
 		if (du == null) {
 			throw new ProfileNotFoundException();

@@ -63,6 +63,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -77,6 +79,8 @@ import com.google.common.collect.ListMultimap;
 @Component
 public class RepositoryManager {
 
+	private static final Logger logger = LoggerFactory.getLogger(RepositoryManager.class);
+	
 	@Autowired
 	private AppSetup appSetup;
 
@@ -175,13 +179,19 @@ public class RepositoryManager {
 				dk.setImage(kp.getImage());
 				dk.setPersons(new ArrayList<DiaryKid.DiaryKidPerson>());
 				
-				for (AuthPerson ap: kp.getPersons()) {
-					dk.getPersons().add(ap.toDiaryKidPerson(true));
+				if (kp.getPersons() != null) {
+					for (AuthPerson ap: kp.getPersons()) {
+						dk.getPersons().add(ap.toDiaryKidPerson(true));
+					}
+				} else {
+					logger.error("No persons for kid "+ kid.getKidId());
 				}
-				for (DiaryTeacher dt: kp.getDiaryTeachers()) {
-					Teacher teacher = getTeacher(dt.getTeacherId(), appId, schoolId);
-					dk.getPersons().add(teacher.toDiaryKidPerson(true));
-				}			
+				if (kp.getDiaryTeachers() != null) {
+					for (DiaryTeacher dt: kp.getDiaryTeachers()) {
+						Teacher teacher = getTeacher(dt.getTeacherId(), appId, schoolId);
+						dk.getPersons().add(teacher.toDiaryKidPerson(true));
+					}			
+				}
 				template.insert(dk);
 			}
 			
@@ -302,9 +312,9 @@ public class RepositoryManager {
 	 * @param username
 	 * @return
 	 */
-	public List<DiaryKidProfile> getDiaryKidProfilesByAuthId(String appId, String schoolId, String authId) {
+	public List<DiaryKidProfile> getDiaryKidProfilesByAuthId(String appId, String schoolId, String authId, boolean isTeacher) {
 		Query q = schoolQuery(appId, schoolId);
-		q.addCriteria(new Criteria("authorizedPersonsIds").is(authId));
+		q.addCriteria(new Criteria("persons").elemMatch(new Criteria("personId").is(authId).and("parent").is(true)));
 		List<DiaryKid> kids = template.find(q, DiaryKid.class);
 		List<DiaryKidProfile> profiles = new ArrayList<DiaryKidProfile>();
 		for (DiaryKid kid : kids) {

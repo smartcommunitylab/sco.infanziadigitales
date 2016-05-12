@@ -135,8 +135,8 @@ public class DiaryUser {
 		public static DiaryUserTeacher fromTeacher(Teacher teacher) {
 			DiaryUserTeacher t = new DiaryUserTeacher();
 			t.setSchoolId(teacher.getSchoolId());
-			t.setUserId(t.getUserId());
-			t.setSectionIds(t.getSectionIds());
+			t.setUserId(teacher.getTeacherId());
+			t.setSectionIds(teacher.getSectionIds());
 			return t;
 		}
 

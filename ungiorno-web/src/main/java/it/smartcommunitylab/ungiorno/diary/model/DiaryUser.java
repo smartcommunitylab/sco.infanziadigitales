@@ -9,13 +9,13 @@ import com.google.common.collect.Lists;
 
 public class DiaryUser {
 
-	private List<String> kids;
-	private List<String> students;
+	private List<DiaryKidProfile> kids;
+	private List<DiaryKidProfile> students;
 	
 	private DiaryUserParent parent;
 	private DiaryUserTeacher teacher;
 	
-	private String appId, name, surname, fullName;
+	private String appId, name, surname, fullname;
 	
 	public DiaryUser() {
 		kids = Lists.newArrayList();
@@ -40,26 +40,29 @@ public class DiaryUser {
 	public void setSurname(String surname) {
 		this.surname = surname;
 	}
-	public String getFullName() {
-		return fullName;
+	public String getFullname() {
+		if (fullname == null) {
+			fullname = name + " " + surname;
+		}
+		return fullname;
 	}
-	public void setFullName(String fullName) {
-		this.fullName = fullName;
+	public void setFullname(String fullName) {
+		this.fullname = fullName;
 	}
 
-	public List<String> getKids() {
+	public List<DiaryKidProfile> getKids() {
 		return kids;
 	}
 
-	public void setKids(List<String> kids) {
+	public void setKids(List<DiaryKidProfile> kids) {
 		this.kids = kids;
 	}
 
-	public List<String> getStudents() {
+	public List<DiaryKidProfile> getStudents() {
 		return students;
 	}
 
-	public void setStudents(List<String> students) {
+	public void setStudents(List<DiaryKidProfile> students) {
 		this.students = students;
 	}
 

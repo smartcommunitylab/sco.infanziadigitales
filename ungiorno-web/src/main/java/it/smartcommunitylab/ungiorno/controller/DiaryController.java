@@ -46,6 +46,10 @@ public class DiaryController {
 	@Autowired
 	private AppSetup appSetup;
 
+	// TODO get compound profile
+	// TODO update kid profile
+
+
 	@RequestMapping(method = RequestMethod.GET, value = "/diary/{appId}/{schoolId}/{kidId}/entries")
 	public Response<List<DiaryEntry>> getDiary(@PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId, @RequestParam boolean isTeacher,
 			@RequestParam(required=false) String search, @RequestParam(required=false) Integer skip, @RequestParam(required=false) Integer pageSize, @RequestParam(required=false) Long from, @RequestParam(required=false) Long to,

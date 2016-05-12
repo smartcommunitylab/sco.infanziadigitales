@@ -8,6 +8,7 @@ import it.smartcommunitylab.ungiorno.model.Parent;
 import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,21 +58,37 @@ public class PermissionsManager {
 		String userId = getUserId();
 
 		DiaryUser du = new DiaryUser();
+		du.setAppId(appId);
 
 		if (isTeacher == null || isTeacher) {
 			Teacher teacher = storage.getTeacher(userId, appId, schoolId);
+			du.setName(teacher.getTeacherName());
+			du.setSurname(teacher.getTeacherSurname());
+			du.setFullName(teacher.getTeacherFullname());
 			if (teacher != null) {
-				du.setTeacherId(teacher.getTeacherId());
+				du.setTeacher(DiaryUser.DiaryUserTeacher.fromTeacher(teacher));
 				List<DiaryKidProfile> kids = storage.getDiaryKidProfilesByAuthId(appId, schoolId, teacher.getTeacherId());
-				du.setStudents(kids);
+				List<String> kidIds = new ArrayList<String>();
+				for (DiaryKidProfile kid : kids) {
+					kidIds.add(kid.getKidId());
+				}
+				du.setStudents(kidIds);
 			}
 		}
 		if (isTeacher == null || !isTeacher) {
 			Parent parent = storage.getParent(userId, appId, schoolId);
 			if (parent != null) {
-				du.setParentId(parent.getPersonId());
+				du.setName(parent.getFirstName());
+				du.setSurname(parent.getLastName());
+				du.setFullName(parent.getFullName());
+
+				du.setParent(DiaryUser.DiaryUserParent.fromParent(parent));
 				List<DiaryKidProfile> kids = storage.getDiaryKidProfilesByAuthId(appId, schoolId, parent.getPersonId());
-				du.setSons(kids);
+				List<String> kidIds = new ArrayList<String>();
+				for (DiaryKidProfile kid : kids) {
+					kidIds.add(kid.getKidId());
+				}
+				du.setKids(kidIds);
 			}
 		}
 
@@ -80,11 +97,11 @@ public class PermissionsManager {
 
 	public List<String> getIds(DiaryUser du) {
 		List<String> ids = Lists.newArrayList();
-		for (DiaryKidProfile k : du.getStudents()) {
-			ids.add(k.getKidId());
+		for (String k : du.getStudents()) {
+			ids.add(k);
 		}
-		for (DiaryKidProfile k : du.getSons()) {
-			ids.add(k.getKidId());
+		for (String k : du.getKids()) {
+			ids.add(k);
 		}
 		return ids;
 	}

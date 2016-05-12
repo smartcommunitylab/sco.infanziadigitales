@@ -223,11 +223,11 @@ public class DiaryController {
 	 */
 	private DiaryUser checkKidDiaryEnabled(String appId, String schoolId, String kidId, Boolean isTeacher) {
 		KidProfile kid = storage.getKidProfile(appId, schoolId, kidId);
-		if (kid == null || !kid.getSharedDiary()) {
+		if (kid == null) {
 			throw new SecurityException("No access to kid "+kidId);
 		}
 		DiaryUser du = permissions.getDiaryUser(appId, schoolId, isTeacher);
-		if (permissions.hasAccess(du, kidId, schoolId)) {
+		if (!permissions.hasAccess(du, kidId, schoolId)) {
 			throw new SecurityException("No access to kid "+kidId);
 		}
 		return du;

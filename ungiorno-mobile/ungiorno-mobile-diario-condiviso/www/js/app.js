@@ -23,6 +23,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
     'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.services.galleryService',
     'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.services.diaryservice',
     'pickadate',
+    'ionic-datepicker',
     'angularMoment'
 ])
 
@@ -72,6 +73,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
 })
 
 .config(function ($stateProvider, $urlRouterProvider, $translateProvider, $ionicConfigProvider, pickadateI18nProvider) {
+    
+        
     $ionicConfigProvider.tabs.position('top');
     $ionicConfigProvider.backButton.text('').previousTitleText(false);
 
@@ -172,6 +175,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
         data: 'Dati del bambino',
         data_family: 'Dati famiglia',
         name: 'Nome del bambino',
+        setLabel:'Set',
+        todayLabel:'Today',
+        closeLabel:'Close',
         surname: 'Cognome del bambino',
         date_birth: 'Data di nascita',
         add_family_component: 'Aggiungi un componente',

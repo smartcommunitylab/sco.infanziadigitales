@@ -14,7 +14,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.elements = [];
     $scope.dailyFermata = null;
     $scope.dailyRitiro = null;
-
+    $rootScope.allowed = true;
+    $rootScope.absenceLimit = 9;
+    $rootScope.retireLimit = 10;
     $scope.refresh = function () {
         window.location.reload(true);
     }
@@ -79,6 +81,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         $scope.elements.push({
             click: "app.retire",
             string: $filter('translate')('home_retire'),
+            note: $filter('translate')('home_retire_before') + $rootScope.retireLimit,
             class: style,
             img: 'img/ritiro.png',
             disabled: false
@@ -87,17 +90,20 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         $scope.elements.push({
             click: "app.absence",
             string: $filter('translate')('home_assenza'),
+            note: $filter('translate')('home_absence_before') + $rootScope.absenceLimit,
             class: style,
             img: 'img/assenza.png',
             disabled: false
         });
         style = getButtonStyle("disabled");
         $scope.elements.push({
-            click: "app.calendar",
-            string: $filter('translate')('home_calendario'),
+            click: function () {
+               Toast.show($filter('translate')('home_disabledbutton'), 'long', 'center');
+            },
+						string: $filter('translate')('home_calendario'),
             class: style,
             img: 'img/calendario.png',
-            disabled: true
+            disabled: false
         });
         style = getButtonStyle("default");
         $scope.elements.push({
@@ -155,7 +161,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
 
     $scope.execute = function (element) {
-        if (element.class != "button-stable") {
+				if (element.class != "button-stable") {
             if (typeof element.click == "string") {
                 $state.go(element.click);
             } else {
@@ -307,12 +313,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 $scope.kidProfile = profileService.getBabyProfile();
             }
             $scope.loadConfiguration($scope.kidProfile.schoolId, $scope.kidProfile.kidId);
+            $rootScope.allowed = true;
 
 
         }, function (error) {
             console.log("ERROR -> " + error);
             Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
             $ionicLoading.hide();
+            if (error == 406) {
+                $rootScope.allowed = false;
+            }
         });
 
 

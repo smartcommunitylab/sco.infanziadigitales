@@ -135,11 +135,19 @@ input[type=time] {
     border-bottom: 1px solid #B0B0B0;
 }
 .input-description-padding {
-    margin-top: 24px;
+    margin-top: 20px;
     color: #FFAD00;
     font-weight: bold;
 }
 .input-description-padding i {
+    color: #000000;
+}
+.input-retire-description-padding {
+    margin-top: 16px;
+    color: #FFAD00;
+    font-weight: bold;
+}
+.iinput-retire--description-padding i {
     color: #000000;
 }
 .form-container {
@@ -1189,7 +1197,7 @@ ul.rating {
 }
 .login-title {
     text-align: center;
-    margin: 8px;
+    /*    margin: 8px;*/
 }
 .sceltaMalattia {
     width: inherit;
@@ -1197,6 +1205,7 @@ ul.rating {
 }
 .home_informations {
     margin: 10px;
+    padding-bottom: 10px;
 }
 .ion-input-select,
 select {
@@ -1303,4 +1312,224 @@ select {
 .note-pointer {
     margin-right: 6px;
     float: left;
+}
+
+/* Login */
+.scroll {
+    height: 100% !important
+}
+.login {
+    height: 100%;
+    min-height: 100%;
+}
+.login .login-title {
+    position: relative;
+    /*    padding: 1em 2em;*/
+
+    text-align: center;
+    color: #fff;
+    /*    box-shadow: 0 0 30px 5px #222;*/
+
+    background-color: #009aa8;
+}
+.login .login-title .bgimg {
+    width: 50%;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    opacity: 0.1;
+}
+.login .login-buttons {
+    height: 100%;
+    position: relative;
+    text-align: center;
+    color: #fff;
+    background-color: #009aa8;
+}
+.stuffcontainer {
+    font-size: 16px;
+}
+.login-margin {
+    margin-top: 24px !important;
+}
+.login-title-top {
+    font-size: xx-large;
+    line-height: initial;
+    margin-top: 36px;
+}
+.login .login-title .stuffcontainer,
+.login .login-buttons .stuffcontainer {
+    background-color: #009aa8;
+    /*position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);*/
+}
+.login .login-buttons .stuffcontainer {
+    padding: 2em;
+}
+.login .login-title h1,
+.login .login-title h3 {
+    color: #fff;
+}
+.login .login-buttons h3,
+.login .login-buttons h4 {
+    color: #fff;
+}
+.login .login-button-google {
+    text-transform: uppercase;
+    border-color: #DB4437;
+    background-color: #DB4437;
+    color: #FFFFFF;
+}
+.login .login-button-facebook {
+    text-transform: uppercase;
+    border-color: #3a5795;
+    background-color: #3a5795;
+    color: #FFFFFF;
+}
+.login .login-button-internal {
+    text-transform: uppercase;
+    border-color: #f8ab15;
+    background-color: #f8ab15;
+    color: #FFFFFF;
+}
+.delete-login {
+    text-transform: uppercase;
+    border-color: #5dc3de;
+    background-color: #5dc3de;
+    color: #FFFFFF;
+}
+.login .login-button-signup {
+    border-color: #fff;
+    background-color: #A5A5A5;
+    color: #fff;
+}
+::-webkit-input-placeholder {
+    color: white!important;
+}
+:-moz-placeholder {
+    color: white!important;
+}
+::-moz-placeholder {
+    color: white!important;
+}
+:-ms-input-placeholder {
+    color: red!important;
+}
+.login .login-link {
+    display: block;
+    color: #fff;
+    padding: 0 1em;
+}
+.login-input {
+    background-color: transparent;
+    color: #fff;
+}
+.not_allowed {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 30px;
+}
+.login-label {
+    color: #fff!important;
+}
+.note {
+    font-size: small!important;
+}
+$light: #fff !default;
+$stable: #f8f8f8 !default;
+$positive: #387ef5 !default;
+$calm: #11c1f3 !default;
+$balanced: #33cd5f !default;
+$energized: #ffc900 !default;
+$assertive: #ef473a !default;
+$royal: #886aea !default;
+$dark: #444 !default;
+.item-md-label {
+    display: block;
+    background-color: transparent;
+    box-shadow: none;
+    padding-top: 30px;
+    padding-bottom: 0;
+    .input-label {
+        position: absolute;
+        padding: 5px 0 0;
+        z-index: 2;
+        -webkit-transform: translate3d(0, -30px, 0) scale(1);
+        ;
+        transform: translate3d(0, -30px, 0) scale(1);
+        ;
+        -webkit-transition: all 0.2s ease;
+        transition: all 0.2s ease;
+        color: $dark;
+        opacity: 0.5;
+        transform-origin: 0;
+    }
+
+    input {
+        z-index: 1;
+        position: relative;
+        bottom: 0;
+    }
+
+    .hightlight {
+        position: absolute;
+        bottom: 0;
+        height: 2px;
+        left: 0;
+        width: 100%;
+        -webkit-transform: translate3d(-100%, 0, 0);
+        transform: translate3d(-100%, 0, 0);
+        -webkit-transition: all 0.15s ease;
+        transition: all 0.15s ease;
+    }
+
+    .hightlight-light {
+        background: $light;
+    }
+
+    .hightlight-stable {
+        background: $stable;
+    }
+
+    .hightlight-positive {
+        background: $positive;
+    }
+
+    .hightlight-calm {
+        background: $calm;
+    }
+
+    .hightlight-balanced {
+        background: $balanced;
+    }
+
+    .hightlight-energized {
+        background: $energized;
+    }
+
+    .hightlight-assertive {
+        background: $assertive;
+    }
+
+    .hightlight-royal {
+        background: $royal;
+    }
+
+    .hightlight-dark {
+        background: $dark;
+    }
+
+    input:focus ~ .input-label,
+    input.used ~ .input-label {
+        -webkit-transform: translate3d(0, -60px, 0) scale(0.9);
+        transform: translate3d(0, -60px, 0) scale(0.9);
+        opacity: 1;
+    }
+
+    input:focus ~ .hightlight {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
 }

@@ -6,43 +6,43 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         description: null
     }
 
-		function setDateWidget() {
-			$scope.datePickerObject = {
-				inputDate: $scope.note.date,
-				closeLabel: $filter('translate')('cancel'),
-				setLabel: $filter('translate')('ok'),
-				todayLabel: $filter('translate')('today'),
-				mondayFirst: true,
-				templateType: 'popup',
-				showTodayButton: true,
-				closeOnSelect: false,
-				monthsList: ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"],
-				callback: function (val) {
-						datePickerCallback(val);
-				}
-			};
-		}
-	
-		function datePickerCallback(val) {
-			if (typeof (val) === 'undefined') {
-					console.log('Date not selected');
-			} else {
-				$scope.datePickerObject.inputDate = val;
-				var date = new Date(val);
-				$scope.note.date = date;
-			}
-		}
-	
-		$scope.openDatePicker = function() {
-			setDateWidget();
-			ionicDatePicker.openDatePicker($scope.datePickerObject);
-		}
-		
-		$scope.getDateLabel = function() {
-			var day = moment($scope.note.date);
-			var result = day.format('DD/MM/YYYY');
-			return result;
-		}
+    function setDateWidget() {
+        $scope.datePickerObject = {
+            inputDate: $scope.note.date,
+            closeLabel: $filter('translate')('timepicker_close'),
+            setLabel: $filter('translate')('ok'),
+            todayLabel: $filter('translate')('today'),
+            mondayFirst: true,
+            templateType: 'popup',
+            showTodayButton: true,
+            closeOnSelect: false,
+            monthsList: ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"],
+            callback: function (val) {
+                datePickerCallback(val);
+            }
+        };
+    }
+
+    function datePickerCallback(val) {
+        if (typeof (val) === 'undefined') {
+            console.log('Date not selected');
+        } else {
+            $scope.datePickerObject.inputDate = val;
+            var date = new Date(val);
+            $scope.note.date = date;
+        }
+    }
+
+    $scope.openDatePicker = function () {
+        setDateWidget();
+        ionicDatePicker.openDatePicker($scope.datePickerObject);
+    }
+
+    $scope.getDateLabel = function () {
+        var day = moment($scope.note.date);
+        var result = day.format('DD/MM/YYYY');
+        return result;
+    }
 
     $scope.send = function () {
         var noteToSend = {

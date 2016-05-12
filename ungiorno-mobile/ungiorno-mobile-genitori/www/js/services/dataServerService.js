@@ -47,7 +47,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
         }).
         error(function (data, status, headers, config) {
             console.log(data + status + headers + config);
-            deferred.reject(data);
+            deferred.reject(status);
         });
         return deferred.promise;
     }

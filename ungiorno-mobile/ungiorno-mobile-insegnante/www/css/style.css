@@ -1000,6 +1000,10 @@ select {
     opacity: 0.4;
 }
 
+.img-communication {
+    opacity: 0.8;
+}
+
 .child-presente {
     background-color: #98ba3c;
 }
@@ -1516,6 +1520,21 @@ ion-content .scroll {
     border-radius: 50%;
     display: table !important;
     text-align: center;
+}
+
+.badge-delivery {
+    position: absolute;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    top: 3px;
+    right: -10px;
+    color: white;
+    background-color: #98ba3c;
+    border-radius: 50%;
+    display: table !important;
+    text-align: center;
+    font-size: x-large;
 }
 
 .icon-message {

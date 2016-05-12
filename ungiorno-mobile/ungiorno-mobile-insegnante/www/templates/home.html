@@ -79,14 +79,15 @@
                 <div class="children-home" ng-repeat="child in childrenProfiles[selectedPeriod] track by $index" ng-click="detailOrCommunication(child)">
                     <div class="badge-msg" ng-if="child.calNotes"><i class="icon center icon-message  ion-document-text"></i>
                     </div>
-                    <img ng-src="{{getChildImage(child)}}" ng-class="{'img-assente':child.exitTime == null,'img-presente':child.exitTime != null,'img-not-active':!child.active  }">
+                    <img ng-src="{{getChildImage(child)}}" ng-class="{'img-assente':child.exitTime == null,'img-presente':child.exitTime != null,'img-not-active':!child.active, 'img-communication':communicationExpanded  }">
 
                     <!--            <img ng-src="{{child.image}}">-->
                     <div class="name-of-child" ng-if="!child.image || child.image==''">{{child.childrenName}}</div>
 
-                    <div class="children-presenza" ng-if="child.active" ng-class="{'child-assente':child.exitTime == null,'child-presente':child.exitTime != null}">{{child.presenza}}</div>
-                    <span class="comunication-done" ng-if="getChildrenDeliveryByID(child.kidId)"></span>
-
+                    <div class="children-presenza" ng-if="child.active && !communicationExpanded" ng-class="{'child-assente':child.exitTime == null,'child-presente':child.exitTime != null}">{{child.presenza}}</div>
+                    <!--                    <span class="comunication-done" ng-if="getChildrenDeliveryByID(child.kidId)"></span>-->
+                    <div class="badge-delivery" ng-if="getChildrenDeliveryByID(child.kidId)"><i class="icon center  con-message ion-checkmark-round"></i>
+                    </div>
                 </div>
             </div>
             <div class="col col-25 home-section-space right-side-fake-menu side-fake-menu-shadow " ng-hide="!noteExpanded">
@@ -139,7 +140,7 @@
                                 {{'associate_to_childs' | translate}}
                             </div>
                             <label class="item item-input">
-                                <input type="text" ng-disabled="!newNote.assignedBaby" placeholder="{{'baby_name' | translate}}" ng-change="search()" ng-focus="focused(true, true)" ng-blur="focused(true, false)" ng-model="newNote.search">
+                                <input type="text" ng-if="newNote.assignedBaby" placeholder="{{'baby_name' | translate}}" ng-change="search()" ng-focus="focused(true, true)" ng-blur="focused(true, false)" ng-model="newNote.search">
                             </label>
                             <ion-list class="list children-search" ng-if="displayHint()" ng-focus="focused(false, true)" ng-blur="focused(false, false)">
                                 <ion-item class="item-text-complete" ng-repeat="children in newNote.possibleChildrens" class="child-search" ng-click="selectChildrenForNote(children)">

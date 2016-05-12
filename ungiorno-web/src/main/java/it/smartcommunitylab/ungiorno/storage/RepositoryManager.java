@@ -184,7 +184,7 @@ public class RepositoryManager {
 						dk.getPersons().add(ap.toDiaryKidPerson(true));
 					}
 				} else {
-					logger.error("No persons for kid "+ kid.getKidId());
+					logger.error("No persons for kid "+ kp.getKidId());
 				}
 				if (kp.getDiaryTeachers() != null) {
 					for (DiaryTeacher dt: kp.getDiaryTeachers()) {
@@ -1101,5 +1101,41 @@ public class RepositoryManager {
 		}
 		template.save(kid);
 		return kid;
+	}
+
+	/**
+	 * @param appId
+	 * @param schoolId
+	 * @param kidId
+	 * @param skip
+	 * @param pageSize
+	 * @param from
+	 * @param to
+	 * @return
+	 */
+	public List<MultimediaEntry> getMultimediaEntries(String appId,
+			String schoolId, String kidId, Integer skip, Integer pageSize,
+			Long from, Long to) {
+
+		Query q = kidQuery(appId, schoolId, kidId);
+
+		if (from != null || to != null) {
+			Criteria dateCriteria = new Criteria("timestamp");
+			if (from != null) {
+				dateCriteria = dateCriteria.gte(from);
+			}
+			if (to != null) {
+				dateCriteria = dateCriteria.lte(to);
+			}
+			q.addCriteria(dateCriteria);
+		}
+		
+		if (skip != null) {
+			q = q.skip(skip);
+		}
+		if (pageSize != null) {
+			q = q.limit(pageSize);
+		}
+		return template.find(q, MultimediaEntry.class);
 	}
 }

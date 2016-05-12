@@ -15,8 +15,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import com.google.common.collect.Lists;
-
 @Component
 public class PermissionsManager {
 
@@ -40,7 +38,6 @@ public class PermissionsManager {
 			if (isTeacher == null || !isTeacher) {
 				Parent parent = storage.getParent(userId, appId, schoolId);
 				if (parent != null) {
-					List<String> personsId = Lists.newArrayList();
 					for (AuthPerson person : kid.getPersons()) {
 						if (person.getPersonId().equals(parent.getPersonId())) {
 							return true;
@@ -57,11 +54,15 @@ public class PermissionsManager {
 		String userId = getUserId();
 
 		DiaryUser du = new DiaryUser();
+		du.setAppId(appId);
 
 		if (isTeacher == null || isTeacher) {
 			Teacher teacher = storage.getTeacher(userId, appId, schoolId);
+			du.setName(teacher.getTeacherName());
+			du.setSurname(teacher.getTeacherSurname());
+			du.setFullname(teacher.getTeacherFullname());
 			if (teacher != null) {
-				du.setTeacherId(teacher.getTeacherId());
+				du.setTeacher(DiaryUser.DiaryUserTeacher.fromTeacher(teacher));
 				List<DiaryKidProfile> kids = storage.getDiaryKidProfilesByAuthId(appId, schoolId, teacher.getTeacherId());
 				du.setStudents(kids);
 			}
@@ -69,29 +70,57 @@ public class PermissionsManager {
 		if (isTeacher == null || !isTeacher) {
 			Parent parent = storage.getParent(userId, appId, schoolId);
 			if (parent != null) {
-				du.setParentId(parent.getPersonId());
+				du.setName(parent.getFirstName());
+				du.setSurname(parent.getLastName());
+				du.setFullname(parent.getFullName());
+
+				du.setParent(DiaryUser.DiaryUserParent.fromParent(parent));
 				List<DiaryKidProfile> kids = storage.getDiaryKidProfilesByAuthId(appId, schoolId, parent.getPersonId());
-				du.setSons(kids);
+				du.setKids(kids);
 			}
 		}
 
 		return du;
 	}
-
-	public List<String> getIds(DiaryUser du) {
-		List<String> ids = Lists.newArrayList();
-		for (DiaryKidProfile k : du.getStudents()) {
-			ids.add(k.getKidId());
-		}
-		for (DiaryKidProfile k : du.getSons()) {
-			ids.add(k.getKidId());
-		}
-		return ids;
-	}
+//
+//	public List<String> getIds(DiaryUser du) {
+//		List<String> ids = Lists.newArrayList();
+//		for (String k : du.getStudents()) {
+//			ids.add(k);
+//		}
+//		for (String k : du.getKids()) {
+//			ids.add(k);
+//		}
+//		return ids;
+//	}
 
 	public String getUserId() {
 		UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		return principal.getUsername();
+	}
+
+	/**
+	 * @param du
+	 * @param kidId
+	 * @param schoolId
+	 * @return
+	 */
+	public boolean hasAccess(DiaryUser du, String kidId, String schoolId) {
+		if (du.getStudents() != null) {
+			for (DiaryKidProfile p : du.getStudents()) {
+				if (p.getKidId().equals(kidId) && p.getSchoolId().equals(schoolId)) {
+					return true;
+				}
+			}
+		}
+		if (du.getKids() != null) {
+			for (DiaryKidProfile p : du.getKids()) {
+				if (p.getKidId().equals(kidId) && p.getSchoolId().equals(schoolId)) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 }

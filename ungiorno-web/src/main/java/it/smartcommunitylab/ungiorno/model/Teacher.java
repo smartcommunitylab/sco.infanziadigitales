@@ -15,6 +15,8 @@
  ******************************************************************************/
 package it.smartcommunitylab.ungiorno.model;
 
+import it.smartcommunitylab.ungiorno.diary.model.DiaryKid.DiaryKidPerson;
+
 import java.util.List;
 
 /**
@@ -79,5 +81,21 @@ public class Teacher extends SchoolObject {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	/**
+	 * @param b
+	 * @return
+	 */
+	public DiaryKidPerson toDiaryKidPerson(boolean authorized) {
+		DiaryKidPerson p = new DiaryKidPerson();
+		p.setAdult(true);
+		p.setAuthorized(authorized);
+		p.setFirstName(teacherName);
+		p.setFullName(teacherFullname);
+		p.setLastName(teacherSurname);
+		p.setParent(false);
+		p.setPersonId(teacherId);
+		return p;
 	}
 }

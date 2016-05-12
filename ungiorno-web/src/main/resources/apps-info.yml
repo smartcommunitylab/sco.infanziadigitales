@@ -15,6 +15,5 @@ apps:
   - appId: test
     password: test
     schools:
-      - 
+      -
         schoolId: test
-                

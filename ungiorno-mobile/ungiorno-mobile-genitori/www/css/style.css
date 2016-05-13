@@ -171,7 +171,11 @@ input:checked+.checkbox-icon:before {
 .item-radio input:checked~.item-content {
     background: none;
 }
-.delegate-label,
+.delegate-label {
+    color: #A5A5A5;
+    text-align: left;
+    font-size: 14px;
+}
 .delegate-field {
     color: #A5A5A5;
     text-align: right;

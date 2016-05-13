@@ -7,7 +7,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.absenceTypes = [];
     $scope.note = "";
     $scope.isRetireSet = false;
-    $scope.modifyBefore = $rootScope.absenceLimit;
+    $scope.modifyBeforeHours = $rootScope.absenceLimitHours;
+    $scope.modifyBeforeMinutes = $rootScope.absenceLimitMinutes;
 
     function setDateFromWidget() {
         $scope.datePickerFromObject = {
@@ -279,7 +280,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         var today = new Date();
         today.setHours(0, 0, 0, 0);
         var todayMax = new Date();
-        todayMax.setHours($scope.modifyBefore, 0, 0, 0);
+        todayMax.setHours($scope.modifyBeforeHours, $scope.modifyBeforeMinutes, 0, 0);
         var dateFrom = $scope.resetTime($scope.illness.dateFrom);
         var dateTo = $scope.resetTime($scope.illness.dateTo);
         if ((dateFrom <= today) && (today <= dateTo)) {
@@ -288,7 +289,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 go = false;
                 var myPopup = $ionicPopup.show({
                     title: $filter('translate')('assenza_popup_toolate_title'),
-                    template: $filter('translate')('assenza_popup_toolate_text') + " " + $scope.modifyBefore + ".",
+                    template: $filter('translate')('assenza_popup_toolate_text') + " " + $scope.modifyBeforeHours + "."+$scope.modifyBeforeMinutes + ".",
                     buttons: [
                         {
                             text: $filter('translate')('assenza_popup_retire_cancel'),

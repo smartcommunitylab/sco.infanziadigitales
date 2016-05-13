@@ -15,8 +15,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.dailyFermata = null;
     $scope.dailyRitiro = null;
     $rootScope.allowed = true;
-    $rootScope.absenceLimit = 9;
-    $rootScope.retireLimit = 10;
+    $rootScope.absenceLimitHours = 8;
+    $rootScope.absenceLimitMinutes = 25;
+    $rootScope.retireLimit = 9;
     $scope.refresh = function () {
         //window.location.reload(true);
         $scope.getConfiguration();
@@ -92,7 +93,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         $scope.elements.push({
             click: "app.absence",
             string: $filter('translate')('home_assenza'),
-            note: $filter('translate')('home_absence_before') + $rootScope.absenceLimit,
+            note: $filter('translate')('home_absence_before') + $rootScope.absenceLimitHours + '.' + $rootScope.absenceLimitMinutes,
             class: style,
             img: 'img/assenza.png',
             disabled: false
@@ -247,7 +248,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                                             $scope.toTime = profileService.getSchoolProfile().posticipoTiming.toTime;
                                         }
                                         if ($scope.dailyFermata) {
-                                            $scope.toTime = $scope.toTime + " con il servizio bus";
+                                            //                                            $scope.toTime = $scope.toTime + " con il servizio bus";
+                                            $scope.toTime = " con il servizio bus";
                                         }
                                     }
                                 } else {

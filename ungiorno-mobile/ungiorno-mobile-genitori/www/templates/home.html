@@ -13,11 +13,14 @@
         <div class="home-info" ng-show="isPresent">
             {{date | date:'EEEE, d MMMM yyyy'}}
             <!--            Entrata: {{fromTime}} Uscita: {{toTime}}-->
-            <br/>{{'home_entry_to' | translate}} {{fromTime}}{{'home_exit_to' | translate}}{{toTime}}
+            <div ng-if="!dailyFermata">
+                {{'home_entry_to' | translate}} {{fromTime}}{{'home_exit_to' | translate}}{{toTime}}</div>
+            <div ng-if="dailyFermata">
+                {{'home_entry_to' | translate}} {{fromTime}}{{'go_home_by_bus' | translate}}</div>
 
         </div>
         <div class="home-info" ng-show="!isPresent">
-            {{kidProfile.firstName}} e' assente
+            {{date | date:'EEEE, d MMMM yyyy'}} {{kidProfile.firstName}} e' assente
         </div>
         <ion-scroll class="home-area" style="height:95%">
             <div ng-repeat="element in elements | limitTo: (elements.length-elements.length%2)" ng-if="$index % 2 == 0" class="row">

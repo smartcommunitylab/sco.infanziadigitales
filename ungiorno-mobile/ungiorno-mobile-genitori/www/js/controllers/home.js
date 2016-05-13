@@ -18,10 +18,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $rootScope.absenceLimit = 9;
     $rootScope.retireLimit = 10;
     $scope.refresh = function () {
-        window.location.reload(true);
+        //window.location.reload(true);
+        $scope.getConfiguration();
     }
 
     $scope.goTo = function (location) {
+
         window.location.assign(location);
     }
 
@@ -98,9 +100,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         style = getButtonStyle("disabled");
         $scope.elements.push({
             click: function () {
-               Toast.show($filter('translate')('home_disabledbutton'), 'long', 'center');
+                Toast.show($filter('translate')('home_disabledbutton'), 'long', 'bottom');
             },
-						string: $filter('translate')('home_calendario'),
+            string: $filter('translate')('home_calendario'),
             class: style,
             img: 'img/calendario.png',
             disabled: false
@@ -161,7 +163,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
 
     $scope.execute = function (element) {
-				if (element.class != "button-stable") {
+        if (element.class != "button-stable") {
             if (typeof element.click == "string") {
                 $state.go(element.click);
             } else {
@@ -255,6 +257,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                                 }
                                 buildHome();
                                 $ionicLoading.hide();
+                                Toast.show($filter('translate')('data_updated'), 'short', 'bottom');
+
                             }, function (error) {
                                 console.log("ERROR -> " + error);
                                 Toast.show($filter('translate')('communication_error'), 'short', 'bottom');

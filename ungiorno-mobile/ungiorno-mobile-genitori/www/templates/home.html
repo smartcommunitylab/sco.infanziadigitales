@@ -1,7 +1,8 @@
 <ion-view id="home">
 
     <ion-nav-title ng-init="getDateString()">
-        {{date | date:'EEEE, d MMMM yyyy'}}
+        <!--        {{date | date:'EEEE, d MMMM yyyy'}}-->
+        Il giorno di {{kidProfile.firstName}}
     </ion-nav-title>
     <ion-nav-buttons side="right">
         <button class="button" ng-click="refresh()">
@@ -10,7 +11,10 @@
     </ion-nav-buttons>
     <ion-content has-header="true" scroll="false">
         <div class="home-info" ng-show="isPresent">
-            {{kidProfile.firstName}} {{'home_entry_to' | translate}} {{fromTime}}{{'home_exit_to' | translate}}{{toTime}}
+            {{date | date:'EEEE, d MMMM yyyy'}}
+            <!--            Entrata: {{fromTime}} Uscita: {{toTime}}-->
+            <br/>{{'home_entry_to' | translate}} {{fromTime}}{{'home_exit_to' | translate}}{{toTime}}
+
         </div>
         <div class="home-info" ng-show="!isPresent">
             {{kidProfile.firstName}} e' assente
@@ -53,10 +57,11 @@
                     <div ng-repeat="schoolNotes in notes.schoolNotes">
                         {{schoolNotes.note}}
                     </div>
-                    <div ng-if="!notes.schoolNotes || notes.schoolNotes.length == 0">{{'noinfo' | translate}}</div>
+                    <div ng-if="!notes.schoolNotes || notes.schoolNotes.length == 0">{{'home_no_personal_information' | translate}}{{kidProfile.firstName}}.</div>
                 </div>
                 <p class="home-info-title">{{'home_school_information' | translate}}</p>
-                <div ng-if="!communications || communications.length == 0">{{'noinfo' | translate}}</div>
+                <div ng-if="!communications || communications.length == 0">{{'home_no_school_information' | translate}}</div>
+
 
 
                 <ul class="home-info-content">

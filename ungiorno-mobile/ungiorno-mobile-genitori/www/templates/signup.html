@@ -11,10 +11,8 @@
         </div>
         <div class="login-buttons">
             <div class="stuffcontainer">
-                <div class="login-title-top">{{'signup_subtitle' | translate}}</div>
+                <div class="signup-title-top">{{'signup_subtitle' | translate}}</div>
 
-                {{'signup_title' | translate}}
-                <br/>
                 <label class="item item-input item-floating-label">
                     <span class="input-label login-label">{{'signup_name'|translate}}</span>
                     <input type="text" class="login-label" placeholder="{{'signup_name'|translate}}" ng-model="user.name">
@@ -25,11 +23,11 @@
                 </label>
                 <label class="item item-input item-floating-label">
                     <span class="input-label login-label">{{'signup_email'|translate}}</span>
-                    <input type="email" class="login-label" placeholder="{{'signup_email'|translate}}" ng-model="user.email">
+                    <input type="email" class="login-label input-login" placeholder="{{'signup_email'|translate}}" ng-model="user.email">
                 </label>
                 <label class="item item-input item-floating-label">
                     <span class="input-label login-label">{{'signup_pwd'|translate}}</span>
-                    <input type="password" class="login-label" type="password" placeholder="{{'signup_pwd'|translate}}" ng-model="user.password">
+                    <input type="password" class="login-label input-login" type="password" placeholder="{{'signup_pwd'|translate}}" ng-model="user.password">
                 </label>
 
                 <!--
@@ -45,8 +43,8 @@
                 </label>
                 <label class="item item-input login-input">
                     <input type="password" placeholder="{{'signup_pwd'|translate}}" ng-model="user.password">
-                </label>
--->
+                </label>-->
+
                 <button class="button button-block login-button-internal login-margin" ng-click="register()">
                     <!--<i class="ion ion-social-facebook"></i>-->
                     {{'signup_signup' | translate}}

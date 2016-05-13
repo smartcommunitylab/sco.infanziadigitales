@@ -54,15 +54,28 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
 .controller('AppCtrl', function ($scope, $rootScope, $cordovaDevice, $ionicModal, $ionicHistory, $timeout, $filter, $ionicPopover, $state, $ionicSideMenuDelegate, Toast, Config, profileService) {
     $scope.profilesOpen = false;
-    $scope.toggleProfile = function() {
+    $scope.toggleProfile = function () {
         $scope.profilesOpen = !$scope.profilesOpen;
     }
-    $scope.changeKid = function(kid) {
+    $scope.changeKid = function (kid) {
         $scope.selectBaby(kid);
         $scope.toggleProfile();
         $ionicSideMenuDelegate.toggleLeft();
     }
-
+    $ionicModal.fromTemplateUrl('templates/credits.html', {
+        id: '3',
+        scope: $scope,
+        backdropClickToClose: false,
+        animation: 'slide-in-up'
+    }).then(function (modal) {
+        $scope.creditsModal = modal;
+    });
+    $scope.closeCredits = function () {
+        $scope.creditsModal.hide();
+    };
+    $scope.openCredits = function () {
+        $scope.creditsModal.show();
+    }
 
     $scope.babyselected = null;
     $scope.babies = [];
@@ -121,85 +134,84 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         }
     };
 
-//    $scope.bringmethere = function (loc) {
-//        if (device != undefined && device.platform == "Android") {
-//            setTimeout(function () {
-//                window.open("http://maps.google.com/maps?daddr=" + loc[0] + "," + loc[1], "_system");
-//            }, 10);
-//        } else if (device != undefined && device.platform == "iOS") {
-//            var url = "maps:daddr=" + loc[0] + "," + loc[1];
-//            //successFn();
-//            setTimeout(function () {
-//                window.location = url;
-//            }, 10);
-//        } else {
-//            //console.error("Unknown platform");
-//            setTimeout(function () {
-//                window.open('http://maps.google.com/maps?daddr=' + loc[0] + ',' + loc[1], '_system');
-//            }, 10);
-//        }
-//        return false;
-//    };
+    //    $scope.bringmethere = function (loc) {
+    //        if (device != undefined && device.platform == "Android") {
+    //            setTimeout(function () {
+    //                window.open("http://maps.google.com/maps?daddr=" + loc[0] + "," + loc[1], "_system");
+    //            }, 10);
+    //        } else if (device != undefined && device.platform == "iOS") {
+    //            var url = "maps:daddr=" + loc[0] + "," + loc[1];
+    //            //successFn();
+    //            setTimeout(function () {
+    //                window.location = url;
+    //            }, 10);
+    //        } else {
+    //            //console.error("Unknown platform");
+    //            setTimeout(function () {
+    //                window.open('http://maps.google.com/maps?daddr=' + loc[0] + ',' + loc[1], '_system');
+    //            }, 10);
+    //        }
+    //        return false;
+    //    };
 
-//    updateRadiobutton = function () {
-//        for (var index = 0; index < $scope.babies.length; index++) {
-//            if ($scope.babyselected.kidId != $scope.babies[index].kidId) {
-//                $scope.babies[index].checked = false;
-//            } else {
-//                $scope.babies[index].checked = true;
-//            }
-//        }
-//    }
+    //    updateRadiobutton = function () {
+    //        for (var index = 0; index < $scope.babies.length; index++) {
+    //            if ($scope.babyselected.kidId != $scope.babies[index].kidId) {
+    //                $scope.babies[index].checked = false;
+    //            } else {
+    //                $scope.babies[index].checked = true;
+    //            }
+    //        }
+    //    }
     $scope.selectBaby = function (item) {
-        //changeNewProfile
-        $scope.babyselected = item;
-        profileService.setBabyProfile(item);
-        $rootScope.loadConfiguration($scope.babyselected.schoolId, $scope.babyselected.kidId);
-//
-//        updateRadiobutton();
-//        setTimeout(function () {
-//            $scope.closePopover();
-//        }, 500);
-    }
-//    $scope.popover = $ionicPopover.fromTemplateUrl('templates/dropdown.html', {
-//        scope: $scope
-//    }).then(function (popover) {
-//        $scope.popover = popover;
-//    });
-//    $scope.selectActualKid = function () {
-//        updateRadiobutton();
-//    }
-//
-//    $scope.openPopover = function ($event) {
-//        $scope.popover.show($event);
-//    };
-//    $scope.closePopover = function () {
-//        $scope.popover.hide();
-//    };
-//    //Cleanup the popover when we're done with it!
-//    $scope.$on('$destroy', function () {
-//        $scope.popover.remove();
-//    });
-//    // Execute action on hide popover
-//    $scope.$on('popover.hidden', function () {
-//        // Execute action
-//    });
-//    // Execute action on remove popover
-//    $scope.$on('popover.removed', function () {
-//        // Execute action
-//    });
+            //changeNewProfile
+            $scope.babyselected = item;
+            profileService.setBabyProfile(item);
+            $rootScope.loadConfiguration($scope.babyselected.schoolId, $scope.babyselected.kidId);
+            //
+            //        updateRadiobutton();
+            //        setTimeout(function () {
+            //            $scope.closePopover();
+            //        }, 500);
+        }
+        //    $scope.popover = $ionicPopover.fromTemplateUrl('templates/dropdown.html', {
+        //        scope: $scope
+        //    }).then(function (popover) {
+        //        $scope.popover = popover;
+        //    });
+        //    $scope.selectActualKid = function () {
+        //        updateRadiobutton();
+        //    }
+        //
+        //    $scope.openPopover = function ($event) {
+        //        $scope.popover.show($event);
+        //    };
+        //    $scope.closePopover = function () {
+        //        $scope.popover.hide();
+        //    };
+        //    //Cleanup the popover when we're done with it!
+        //    $scope.$on('$destroy', function () {
+        //        $scope.popover.remove();
+        //    });
+        //    // Execute action on hide popover
+        //    $scope.$on('popover.hidden', function () {
+        //        // Execute action
+        //    });
+        //    // Execute action on remove popover
+        //    $scope.$on('popover.removed', function () {
+        //        // Execute action
+        //    });
     $scope.gotoSetting = function (id) {
         $state.go('app.babysetting', {
             id: id
         });
     }
-		
-		$scope.getProfileImage = function(kid) {
-			var image = Config.URL() + "/" + Config.app() + "/student/" + Config.appId() + "/" + kid.schoolId + "/" + kid.kidId
-			+ "/false/images";
-			return image;
-		}
-		
+
+    $scope.getProfileImage = function (kid) {
+        var image = Config.URL() + "/" + Config.app() + "/student/" + Config.appId() + "/" + kid.schoolId + "/" + kid.kidId + "/false/images";
+        return image;
+    }
+
 });
 
 function showNoPlace() {

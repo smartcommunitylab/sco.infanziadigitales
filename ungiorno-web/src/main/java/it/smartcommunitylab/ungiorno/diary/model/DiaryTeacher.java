@@ -1,5 +1,6 @@
 package it.smartcommunitylab.ungiorno.diary.model;
 
+
 public class DiaryTeacher {
 
 	private String teacherId;
@@ -17,5 +18,4 @@ public class DiaryTeacher {
 	public void setPrimary(boolean primary) {
 		this.primary = primary;
 	}
-	
 }

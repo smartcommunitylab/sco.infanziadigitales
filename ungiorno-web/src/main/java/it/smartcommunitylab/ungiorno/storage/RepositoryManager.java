@@ -18,6 +18,8 @@ package it.smartcommunitylab.ungiorno.storage;
 
 import it.smartcommunitylab.ungiorno.config.exception.ProfileNotFoundException;
 import it.smartcommunitylab.ungiorno.diary.model.DiaryEntry;
+import it.smartcommunitylab.ungiorno.diary.model.DiaryKid;
+import it.smartcommunitylab.ungiorno.diary.model.DiaryKid.DiaryKidPerson;
 import it.smartcommunitylab.ungiorno.diary.model.DiaryKidProfile;
 import it.smartcommunitylab.ungiorno.diary.model.DiaryTeacher;
 import it.smartcommunitylab.ungiorno.diary.model.MultimediaEntry;
@@ -61,6 +63,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -71,11 +75,12 @@ import org.springframework.stereotype.Component;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
-import com.google.common.collect.Lists;
 
 @Component
 public class RepositoryManager {
 
+	private static final Logger logger = LoggerFactory.getLogger(RepositoryManager.class);
+	
 	@Autowired
 	private AppSetup appSetup;
 
@@ -158,23 +163,38 @@ public class RepositoryManager {
 		template.remove(schoolQuery(appId, schoolId), KidProfile.class);
 		template.insertAll(children);
 		
-		template.remove(schoolQuery(appId, schoolId), DiaryKidProfile.class);
 		for (KidProfile kp: children) {
-			DiaryKidProfile dkp = new DiaryKidProfile();
-			dkp.setAppId(kp.getAppId());
-			dkp.setSchoolId(kp.getSchoolId());
-			dkp.setKidId(kp.getKidId());
-			
-			List<String> auth = Lists.newArrayList();
-			for (AuthPerson ap: kp.getPersons()) {
-				auth.add(ap.getPersonId());
+			Query q = kidQuery(appId, schoolId, kp.getKidId());
+			DiaryKid kid = template.findOne(q, DiaryKid.class);
+			if (kid != null) {
+				// TODO, currently assume that the kid is not overwritten, do nothing
+			} else {
+				DiaryKid dk = new DiaryKid();
+				dk.setAppId(kp.getAppId());
+				dk.setSchoolId(kp.getSchoolId());
+				dk.setKidId(kp.getKidId());
+				dk.setFirstName(kp.getFirstName());
+				dk.setLastName(kp.getLastName());
+				dk.setFullName(kp.getFullName());
+				dk.setImage(kp.getImage());
+				dk.setPersons(new ArrayList<DiaryKid.DiaryKidPerson>());
+				
+				if (kp.getPersons() != null) {
+					for (AuthPerson ap: kp.getPersons()) {
+						dk.getPersons().add(ap.toDiaryKidPerson(true));
+					}
+				} else {
+					logger.error("No persons for kid "+ kp.getKidId());
+				}
+				if (kp.getDiaryTeachers() != null) {
+					for (DiaryTeacher dt: kp.getDiaryTeachers()) {
+						Teacher teacher = getTeacher(dt.getTeacherId(), appId, schoolId);
+						dk.getPersons().add(teacher.toDiaryKidPerson(true));
+					}			
+				}
+				template.insert(dk);
 			}
-			for (DiaryTeacher dt: kp.getDiaryTeachers()) {
-				auth.add(dt.getTeacherId());
-			}			
-			dkp.setAuthorizedPersonsIds(auth);
 			
-			template.insert(dkp);
 		}
 	}
 	/**
@@ -292,10 +312,23 @@ public class RepositoryManager {
 	 * @param username
 	 * @return
 	 */
-	public List<DiaryKidProfile> getDiaryKidProfilesByAuthId(String appId, String schoolId, String authId) {
+	public List<DiaryKidProfile> getDiaryKidProfilesByAuthId(String appId, String schoolId, String authId, boolean isTeacher) {
 		Query q = schoolQuery(appId, schoolId);
-		q.addCriteria(new Criteria("authorizedPersonsIds").is(authId));
-		return template.find(q, DiaryKidProfile.class);
+		q.addCriteria(new Criteria("persons").elemMatch(new Criteria("personId").is(authId).and("parent").is(!isTeacher)));
+		List<DiaryKid> kids = template.find(q, DiaryKid.class);
+		List<DiaryKidProfile> profiles = new ArrayList<DiaryKidProfile>();
+		for (DiaryKid kid : kids) {
+			DiaryKidProfile p = new DiaryKidProfile();
+			p.setAppId(kid.getAppId());
+			p.setSchoolId(kid.getSchoolId());
+			p.setKidId(kid.getKidId());
+			p.setAuthorizedPersonsIds(new ArrayList<String>());
+			for (DiaryKidPerson ap : kid.getPersons()) {
+				if (ap.isAuthorized()) p.getAuthorizedPersonsIds().add(ap.getPersonId());
+			}
+			profiles.add(p);
+		}
+		return profiles;
 	}	
 	
 
@@ -1043,5 +1076,66 @@ public class RepositoryManager {
 			};
 			Collections.sort(notes,	comparator);
 		}
+	}
+
+	/**
+	 * @param appId
+	 * @param schoolId
+	 * @param kidId
+	 * @return
+	 */
+	public DiaryKid getDiaryKid(String appId, String schoolId, String kidId) {
+		DiaryKid kid = template.findOne(kidQuery(appId, schoolId, kidId), DiaryKid.class);
+		return kid;
+	}
+
+	/**
+	 * @param kid
+	 * @param isTeacher
+	 * @return
+	 */
+	public DiaryKid updateDiaryKid(DiaryKid kid, boolean isTeacher) {
+		DiaryKid old = template.findOne(kidQuery(kid.getAppId(), kid.getSchoolId(), kid.getKidId()), DiaryKid.class);
+		if (old != null) {
+			kid.set_id(old.get_id());
+		}
+		template.save(kid);
+		return kid;
+	}
+
+	/**
+	 * @param appId
+	 * @param schoolId
+	 * @param kidId
+	 * @param skip
+	 * @param pageSize
+	 * @param from
+	 * @param to
+	 * @return
+	 */
+	public List<MultimediaEntry> getMultimediaEntries(String appId,
+			String schoolId, String kidId, Integer skip, Integer pageSize,
+			Long from, Long to) {
+
+		Query q = kidQuery(appId, schoolId, kidId);
+
+		if (from != null || to != null) {
+			Criteria dateCriteria = new Criteria("timestamp");
+			if (from != null) {
+				dateCriteria = dateCriteria.gte(from);
+			}
+			if (to != null) {
+				dateCriteria = dateCriteria.lte(to);
+			}
+			q.addCriteria(dateCriteria);
+		}
+		
+		if (skip != null) {
+			q = q.skip(skip);
+		}
+		if (pageSize != null) {
+			q = q.limit(pageSize);
+		}
+		return template.find(q, MultimediaEntry.class);
 	}
 }

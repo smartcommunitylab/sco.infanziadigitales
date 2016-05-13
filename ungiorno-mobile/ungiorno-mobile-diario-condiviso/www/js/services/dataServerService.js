@@ -61,28 +61,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
     }
 
     /**
-     * Retrieve configuration of a specific child
-     */
-    dataServerService.getBabyConfiguration = function (babyId) {
-        var deferred = $q.defer();
-
-        /*temp*/
-        if (babyConfiguration == null) {
-            $http.get('data/bambino-configurazione.json').success(function (data) {
-                babyConfiguration = data.data;
-                deferred.resolve(babyConfiguration);
-            }).error(function (data, status, headers, config) {
-                console.log(data + status + headers + config);
-                //deferred.reject(err);
-            });
-
-            /*temp*/
-        } else deferred.resolve(babyConfiguration);
-        return deferred.promise;
-    }
-
-
-    /**
      * Retrieve profiles of the logged parent/teacher
      */
     dataServerService.getBabyProfiles = function () {

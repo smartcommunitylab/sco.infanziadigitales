@@ -15,6 +15,8 @@
  ******************************************************************************/
 package it.smartcommunitylab.ungiorno.model;
 
+import it.smartcommunitylab.ungiorno.diary.model.DiaryKid.DiaryKidPerson;
+
 import java.util.List;
 
 /**
@@ -108,6 +110,24 @@ public class AuthPerson {
 	}
 	public void setDefault(boolean _default) {
 		this._default = _default;
+	}
+	/**
+	 * @return
+	 */
+	public DiaryKidPerson toDiaryKidPerson(boolean authorized) {
+		DiaryKidPerson p = new DiaryKidPerson();
+		p.setAdult(adult);
+		p.setAuthorized(authorized);
+		p.setDefault(_default);
+		p.setEmail(email);
+		p.setFirstName(firstName);
+		p.setFullName(fullName);
+		p.setLastName(lastName);
+		p.setParent(parent);
+		p.setPersonId(personId);
+		p.setPhone(phone);
+		p.setRelation(relation);
+		return p;
 	}
 
 

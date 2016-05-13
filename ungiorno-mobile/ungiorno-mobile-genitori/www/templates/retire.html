@@ -36,8 +36,8 @@
                     <ion-list class="padlist">
                         <ion-checkbox ng-repeat="item in retirePersons" ng-model="item.checked" ng-checked="item.checked" ng-change="selectPerson(item)">
                             <div class="retire">
-                                <div class="retireFullName">{{item.fullName}}</div>
-                                <div class="delegate-field">{{item.authorizationDeadline | date:'d MMMM yyyy'}}</div>
+                                <div class="row retireFullName">{{item.fullName}}</div>
+                                <div class="row delegate-field">{{item.authorizationDeadline | date:'d MMMM yyyy'}}</div>
                             </div>
                         </ion-checkbox>
                     </ion-list>

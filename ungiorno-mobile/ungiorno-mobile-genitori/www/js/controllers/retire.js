@@ -276,8 +276,18 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.send = function () {
         $scope.setRetire();
         if (!retireConfiguration.personId) {
-            alert("Indica chi ritira il bambino");
-            return;
+            //alert("Indica chi ritira il bambino");
+            var myPopup = $ionicPopup.show({
+                title: $filter('translate')('retire_popup_absent_title'),
+                template: "Indica chi ritira il bambino",
+                buttons: [
+                    {
+                        text: $filter('translate')('retire_popup_absent_cancel'),
+                        type: 'button-positive'
+						}
+					]
+            });
+            //return;
         }
         if ($scope.useBus) {
             var dataConfiguration = {

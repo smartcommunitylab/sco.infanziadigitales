@@ -10,6 +10,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
     'pascalprecht.translate',
     'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.filters',
     'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.directives',
+
+    'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.services.conf',
     'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.controllers.common',
     'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.controllers.home',
     'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.controllers.dettaglidiario',
@@ -21,16 +23,66 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
     'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.services.profileService',
     'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.services.teachersService',
     'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.services.galleryService',
+
+ 'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.services.loginService',
     'it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.services.diaryservice',
     'pickadate',
     'ionic-datepicker',
     'angularMoment'
 ])
 
-.run(function ($ionicPlatform, $rootScope, $cordovaSplashscreen, $state, $translate, $q, $ionicHistory, $ionicConfig, $ionicSideMenuDelegate) {
+.run(function ($ionicPlatform, $rootScope, $cordovaSplashscreen, $state, $translate, $q, $ionicHistory, $ionicConfig, $ionicSideMenuDelegate, loginService) {
+
+    $rootScope.getUserId = function () {
+        return localStorage.userId;
+    };
+
+    $rootScope.userIsLogged = function () {
+        return (localStorage.userId != null && localStorage.userId != "null");
+    };
+
+    $rootScope.loginStarted = false;
+    $rootScope.authWindow = null;
+
+    $rootScope.login = function () {
+        $ionicHistory.nextViewOptions({
+            historyRoot: true
+        });
+
+        $state.go('app.login', null, {
+            reload: true
+        });
+    };
+
+    $rootScope.logout = function () {
+        loginService.logout().then(
+            function (data) {
+                //ionic.Platform.exitApp();
+                window.location.reload(true);
+                Utils.loading();
+            },
+            function (error) {
+                Utils.toast(Utils.getErrorMsg(error));
+            }
+        );
+    };
+
+    $rootScope.logout = function () {
+        loginService.logout().then(
+            function (data) {
+                localStorage.userId = null;
+                window.location.hash = '/login';
+                window.location.reload(true);
+            },
+            function (error) {
+                //TODO toast
+                //Utils.toast();
+                localStorage.userId = null;
+            }
+        );
+    };
+
     $ionicPlatform.ready(function () {
-        // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-        // for form inputs)
         if (window.cordova && window.cordova.plugins.Keyboard) {
             cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
         }
@@ -53,6 +105,19 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
         $rootScope.platform = ionic.Platform;
         $rootScope.backButtonStyle = $ionicConfig.backButton.icon();
         // $rootScope.getConfiguration();
+        $rootScope.login_googlelocal = 'google';
+        $rootScope.login_facebooklocal = 'facebook';
+        if (loginService.userIsLogged()) {
+            console.log("user is logged");
+
+            if (localStorage.provider == 'internal') {
+                $rootScope.login();
+            } else {
+               $state.go("app.home");
+            };
+        } else {
+            $state.go("app.home");
+        }
     });
 
 
@@ -73,8 +138,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
 })
 
 .config(function ($stateProvider, $urlRouterProvider, $translateProvider, $ionicConfigProvider, pickadateI18nProvider) {
-    
-        
+
+
     $ionicConfigProvider.tabs.position('top');
     $ionicConfigProvider.backButton.text('').previousTitleText(false);
 
@@ -166,7 +231,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
 
 
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/app/home');
+    $urlRouterProvider.otherwise('/login');
 
     $translateProvider.translations('it', {
         menu_home: 'Home',
@@ -175,9 +240,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
         data: 'Dati del bambino',
         data_family: 'Dati famiglia',
         name: 'Nome del bambino',
-        setLabel:'Set',
-        todayLabel:'Today',
-        closeLabel:'Close',
+        setLabel: 'Set',
+        todayLabel: 'Today',
+        closeLabel: 'Close',
         surname: 'Cognome del bambino',
         date_birth: 'Data di nascita',
         add_family_component: 'Aggiungi un componente',
@@ -211,7 +276,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
         gender: 'Sesso',
         male: 'Maschio',
         female: 'Femmina',
-
+        gmail_login: 'Google',
+        facebook_login: 'Facebook',
         register: 'Registrazione',
         gallery: 'Galleria',
         logout: 'Esci',

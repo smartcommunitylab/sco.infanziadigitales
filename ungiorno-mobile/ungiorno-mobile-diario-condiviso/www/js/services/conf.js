@@ -1,11 +1,11 @@
-angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.conf', [])
+angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.services.conf', [])
 
 .factory('Config', function ($q, $http, $window, $filter, $rootScope) {
 
     var DEVELOPMENT = false;
     var URL = 'https://' + (DEVELOPMENT ? 'dev' : 'tn') + '.smartcommunitylab.it';
     var AAC_URL = 'https://tn.smartcommunitylab.it/aac';
-    //var URL = 'http://192.168.42.60:8080';
+    // var URL = 'http://192.168.42.60:8080';
     var fakeId = '23655';
     var app = 'ungiorno2';
     // var appId = 'trento'

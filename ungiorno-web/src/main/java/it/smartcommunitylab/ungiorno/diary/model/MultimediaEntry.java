@@ -6,6 +6,7 @@ public class MultimediaEntry extends SchoolObject{
 
 	private String kidId;
 	private String multimediaId;
+	private Long timestamp;
 	
 	public String getKidId() {
 		return kidId;
@@ -19,6 +20,13 @@ public class MultimediaEntry extends SchoolObject{
 	public void setMultimediaId(String imageId) {
 		this.multimediaId = imageId;
 	}
+	public Long getTimestamp() {
+		return timestamp;
+	}
+	public void setTimestamp(Long timestamp) {
+		this.timestamp = timestamp;
+	}
+
 	
 	
 	

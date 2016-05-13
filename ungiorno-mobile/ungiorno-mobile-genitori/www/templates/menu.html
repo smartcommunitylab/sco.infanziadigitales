@@ -21,7 +21,7 @@
                 </button>
             </ion-item>
             <ion-list>
-                <div class="menu-profile-open text-right"  ng-if="babies && babies.length > 1">
+                <div class="menu-profile-open text-right" ng-if="babies && babies.length > 1">
                     <button class="button button-clear" ng-click="toggleProfile()">
                         <i class="icon icon-light" ng-class="{'ion-chevron-down':!profilesOpen, 'ion-chevron-up':profilesOpen}"></i>
                     </button>
@@ -36,8 +36,11 @@
                     <i class="icon voice-menu  inf_digaccount"></i>{{'menu_exit' | translate}}
                 </ion-item>
 
-                <ion-item nav-clear menu-close class="item item-icon-left"  ng-click="login()" ng-if="!userIsLogged">
+                <ion-item nav-clear menu-close class="item item-icon-left" ng-click="login()" ng-if="!userIsLogged">
                     <i class="icon voice-menu  inf_digaccount"></i>{{'menu_enter' | translate}}
+                </ion-item>
+                <ion-item nav-clear menu-close ng-click="openCredits()" class="menu-last item-icon-left">
+                    <i class="icon ion-information-circled"></i>{{'menu_credits' | translate}}
                 </ion-item>
             </ion-list>
         </ion-content>

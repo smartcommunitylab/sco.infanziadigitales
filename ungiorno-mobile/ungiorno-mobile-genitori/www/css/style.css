@@ -1549,3 +1549,6 @@ $dark: #444 !default;
     text-align: center;
     width: 100%;
 }
+.signup-title-top {
+    font-size: 20px;
+}

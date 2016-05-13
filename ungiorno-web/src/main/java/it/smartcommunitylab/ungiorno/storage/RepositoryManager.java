@@ -421,40 +421,40 @@ public class RepositoryManager {
 	 * @return
 	 */
 	public KidConfig saveAbsence(KidCalAssenza absence) {
-		Calendar calendar = GregorianCalendar.getInstance();
-		calendar.setTimeInMillis(absence.getDateFrom());
-		calendar.set(Calendar.MILLISECOND, 0);
-    calendar.set(Calendar.SECOND, 0);
-    calendar.set(Calendar.MINUTE, 0);
-    calendar.set(Calendar.HOUR, 0);
-		Date dateFrom = calendar.getTime();
-		calendar.setTimeInMillis(absence.getDateTo());
-		calendar.set(Calendar.MILLISECOND, 0);
-    calendar.set(Calendar.SECOND, 59);
-    calendar.set(Calendar.MINUTE, 59);
-    calendar.set(Calendar.HOUR, 23);
-		Date dateTo = calendar.getTime();
-
 		Query q = kidQuery(absence.getAppId(), absence.getSchoolId(), absence.getKidId());
 		q.addCriteria(new Criteria().andOperator(
-				new Criteria("dateFrom").gte(dateFrom.getTime()),
-				new Criteria("dateTo").lte(dateTo.getTime())));
+				new Criteria("dateFrom").gte(absence.getDateFrom()),
+				new Criteria("dateTo").lte(absence.getDateTo())));
 		template.remove(q, KidCalAssenza.class);
 		
 		Calendar c = Calendar.getInstance();
 		c.setTimeInMillis(absence.getDateFrom());
 		while (c.getTimeInMillis() <= absence.getDateTo()) {
+			c.set(Calendar.MILLISECOND, 0);
+	    c.set(Calendar.SECOND, 0);
+	    c.set(Calendar.MINUTE, 0);
+	    c.set(Calendar.HOUR, 0);
+			Date startDay = c.getTime();
+			c.set(Calendar.MILLISECOND, 0);
+	    c.set(Calendar.SECOND, 59);
+	    c.set(Calendar.MINUTE, 59);
+	    c.set(Calendar.HOUR, 23);
+			Date endDay = c.getTime();
+			
 			// delete bus stop and ritiro for that day
 			q = kidQuery(absence.getAppId(), absence.getSchoolId(), absence.getKidId());
-			q.addCriteria(new Criteria("date").is(c.getTimeInMillis()));
+			//q.addCriteria(new Criteria("date").is(c.getTimeInMillis()));
+			q.addCriteria(new Criteria().andOperator(
+					new Criteria("date").gte(startDay.getTime()),
+					new Criteria("date").lte(endDay.getTime())));
 			template.remove(q, KidCalFermata.class);
 			template.remove(q, KidCalRitiro.class);
 
-			
 			KidCalAssenza copy = absence.copy();
-			copy.setDateFrom(c.getTimeInMillis());
-			copy.setDateTo(c.getTimeInMillis());
-			template.save(absence);
+			copy.setDateFrom(startDay.getTime());
+			copy.setDateTo(endDay.getTime());
+			template.save(copy);
+			c.setTimeInMillis(startDay.getTime());
 			c.add(Calendar.DATE, 1);
 		}
 		return getKidConfig(absence.getAppId(), absence.getSchoolId(), absence.getKidId());
@@ -476,7 +476,10 @@ public class RepositoryManager {
 		template.remove(q, KidCalFermata.class);
 		// delete ansence for that date
 		q = kidQuery(ritiro.getAppId(), ritiro.getSchoolId(), ritiro.getKidId());
-		q.addCriteria(new Criteria("dateFrom").is(timestampToDate(ritiro.getDate())));
+		//q.addCriteria(new Criteria("dateFrom").is(timestampToDate(ritiro.getDate())));
+		q.addCriteria(new Criteria().andOperator(
+				new Criteria("dateFrom").lte(ritiro.getDate()),
+				new Criteria("dateTo").gte(ritiro.getDate())));
 		template.remove(q, KidCalAssenza.class);
 
 		template.save(ritiro);

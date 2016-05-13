@@ -61,8 +61,7 @@ public class DiaryController {
 		SchoolProfile schoolProfile = storage.getSchoolProfileForUser(appId, userId);
 		DiaryUser du = permissions.getDiaryUser(
 				appId, 
-				schoolProfile != null ? schoolProfile.getSchoolId() : null, 
-				schoolProfile != null ? true: false);
+				schoolProfile != null ? schoolProfile.getSchoolId() : null, null);
 
 		if (du == null) {
 			throw new ProfileNotFoundException();
@@ -92,8 +91,16 @@ public class DiaryController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/diary/{appId}/{schoolId}/{kidId}/entries")
-	public Response<List<DiaryEntry>> getDiary(@PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId, @RequestParam boolean isTeacher,
-			@RequestParam(required=false) String search, @RequestParam(required=false) Integer skip, @RequestParam(required=false) Integer pageSize, @RequestParam(required=false) Long from, @RequestParam(required=false) Long to,
+	public Response<List<DiaryEntry>> getDiary(
+			@PathVariable String appId, 
+			@PathVariable String schoolId, 
+			@PathVariable String kidId, 
+			@RequestParam boolean isTeacher,
+			@RequestParam(required=false) String search, 
+			@RequestParam(required=false) Integer skip, 
+			@RequestParam(required=false) Integer pageSize, 
+			@RequestParam(required=false) Long from, 
+			@RequestParam(required=false) Long to,
 			@RequestParam(required=false) String tag) {
 
 			checkKidDiaryEnabled(appId, schoolId, kidId, isTeacher);
@@ -155,10 +162,9 @@ public class DiaryController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/diary/{appId}/{schoolId}/{kidId}/{imageId}/image")
-	public void getImage(HttpServletResponse response, @PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId, @PathVariable String imageId,
-			@RequestParam boolean isTeacher) throws Exception {
+	public void getImage(HttpServletResponse response, @PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId, @PathVariable String imageId) throws Exception {
 
-		checkKidDiaryEnabled(appId, schoolId, kidId, isTeacher);
+		checkKidDiaryEnabled(appId, schoolId, kidId, null);
 
 
 		MultimediaEntry multimedia = storage.getMultimediaEntry(appId, schoolId, kidId, imageId);
@@ -172,6 +178,30 @@ public class DiaryController {
 			}
 		}
 
+	}	
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/diary/{appId}/{schoolId}/{kidId}/gallery")
+	public Response<List<MultimediaEntry>> getGallery(
+			@PathVariable String appId, 
+			@PathVariable String schoolId, 
+			@PathVariable String kidId, 
+			@RequestParam boolean isTeacher,
+			@RequestParam(required=false) Integer skip, 
+			@RequestParam(required=false) Integer pageSize, 
+			@RequestParam(required=false) Long from, 
+			@RequestParam(required=false) Long to) throws Exception {
+
+		checkKidDiaryEnabled(appId, schoolId, kidId, isTeacher);
+
+		List<MultimediaEntry> multimedia = storage.getMultimediaEntries(
+				appId, 
+				schoolId, 
+				kidId, 
+				skip,
+				pageSize,
+				from, 
+				to);
+		return new Response<List<MultimediaEntry>>(multimedia);
 	}	
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/diary/{appId}/{schoolId}/{kidId}/image")
@@ -191,7 +221,7 @@ public class DiaryController {
 				String fullName = null;
 				String name = null;
 				do {
-					name = Base64.encodeBase64URLSafeString((System.currentTimeMillis() + "_" + file.getOriginalFilename()).getBytes()) + ext;
+					name = Base64.encodeBase64URLSafeString((kidId+"_"+System.currentTimeMillis() + "_" + file.getOriginalFilename()).getBytes()) + ext;
 					fullName = appSetup.getUploadDirectory() + "/" + name;
 				} while (new File(fullName).exists());
 				
@@ -205,6 +235,7 @@ public class DiaryController {
 				me.setSchoolId(schoolId);
 				me.setKidId(kidId);
 				me.setMultimediaId(name);
+				me.setTimestamp(System.currentTimeMillis());
 				
 				storage.saveMultimediaEntry(me);
 
@@ -224,11 +255,11 @@ public class DiaryController {
 	 */
 	private DiaryUser checkKidDiaryEnabled(String appId, String schoolId, String kidId, Boolean isTeacher) {
 		KidProfile kid = storage.getKidProfile(appId, schoolId, kidId);
-		if (kid == null || !kid.getSharedDiary()) {
+		if (kid == null) {
 			throw new SecurityException("No access to kid "+kidId);
 		}
 		DiaryUser du = permissions.getDiaryUser(appId, schoolId, isTeacher);
-		if (permissions.hasAccess(du, kidId, schoolId)) {
+		if (!permissions.hasAccess(du, kidId, schoolId)) {
 			throw new SecurityException("No access to kid "+kidId);
 		}
 		return du;

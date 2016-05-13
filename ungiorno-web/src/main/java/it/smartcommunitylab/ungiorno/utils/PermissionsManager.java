@@ -63,7 +63,7 @@ public class PermissionsManager {
 			du.setFullname(teacher.getTeacherFullname());
 			if (teacher != null) {
 				du.setTeacher(DiaryUser.DiaryUserTeacher.fromTeacher(teacher));
-				List<DiaryKidProfile> kids = storage.getDiaryKidProfilesByAuthId(appId, schoolId, teacher.getTeacherId());
+				List<DiaryKidProfile> kids = storage.getDiaryKidProfilesByAuthId(appId, schoolId, teacher.getTeacherId(), true);
 				du.setStudents(kids);
 			}
 		}
@@ -75,7 +75,7 @@ public class PermissionsManager {
 				du.setFullname(parent.getFullName());
 
 				du.setParent(DiaryUser.DiaryUserParent.fromParent(parent));
-				List<DiaryKidProfile> kids = storage.getDiaryKidProfilesByAuthId(appId, schoolId, parent.getPersonId());
+				List<DiaryKidProfile> kids = storage.getDiaryKidProfilesByAuthId(appId, schoolId, parent.getPersonId(), false);
 				du.setKids(kids);
 			}
 		}

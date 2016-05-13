@@ -173,11 +173,31 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     }
     $scope.send = function () {
         if ($scope.illness.dateFrom > $scope.illness.dateTo) {
-            alert($filter('translate')('absence_date_wrong'));
+            //alert($filter('translate')('absence_date_wrong'));
+            var myPopup = $ionicPopup.show({
+                title: $filter('translate')('retire_popup_absent_title'),
+                template: $filter('translate')('absence_date_wrong'),
+                buttons: [
+                    {
+                        text: $filter('translate')('retire_popup_absent_cancel'),
+                        type: 'button-positive'
+						}
+					]
+            });
             return;
         }
         if (!getReason()) {
-            alert($filter('translate')('absence_choose'));
+            // alert($filter('translate')('absence_choose'));
+            var myPopup = $ionicPopup.show({
+                title: $filter('translate')('retire_popup_absent_title'),
+                template: $filter('translate')('absence_choose'),
+                buttons: [
+                    {
+                        text: $filter('translate')('retire_popup_absent_cancel'),
+                        type: 'button-positive'
+						}
+					]
+            });
             return;
         }
         //da settare i valori esatti
@@ -242,7 +262,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
     $scope.showConfirm = function () {
         if (!getReason()) {
-            alert($filter('translate')('absence_choose'));
+            // alert($filter('translate')('retire_popup_absent_title'));
+            var myPopup = $ionicPopup.show({
+                title: $filter('translate')('retire_popup_absent_title'),
+                template: $filter('translate')('absence_choose'),
+                buttons: [
+                    {
+                        text: $filter('translate')('retire_popup_absent_cancel'),
+                        type: 'button-positive'
+						}
+					]
+            });
             return;
         }
         var go = true;
@@ -258,7 +288,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 go = false;
                 var myPopup = $ionicPopup.show({
                     title: $filter('translate')('assenza_popup_toolate_title'),
-                    template: $filter('translate')('assenza_popup_toolate_text') + " " + $scope.modifyBefore,
+                    template: $filter('translate')('assenza_popup_toolate_text') + " " + $scope.modifyBefore + ".",
                     buttons: [
                         {
                             text: $filter('translate')('assenza_popup_retire_cancel'),

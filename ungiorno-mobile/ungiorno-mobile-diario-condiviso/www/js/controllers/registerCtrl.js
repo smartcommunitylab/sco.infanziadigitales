@@ -1,5 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.controllers.register', [])
 
+/*
 .controller('RegisterCtrl', function ($scope, dataServerService) {
 
     $scope.enterEmail = false;
@@ -85,3 +86,4 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         updateToStep(currentStep);
     }
 });
+*/

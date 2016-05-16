@@ -113,7 +113,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
             if (localStorage.provider == 'internal') {
                 $rootScope.login();
             } else {
-               $state.go("app.home");
+                $state.go("app.home");
             };
         } else {
             $state.go("app.home");
@@ -216,18 +216,25 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
 
     })
 
-    .state('app.register', {
-        cache: false,
-        url: "/register",
+    .state('app.signupsuccess', {
+        url: '/signupsuccess',
         views: {
             'menuContent': {
-                templateUrl: "templates/register.html",
+                templateUrl: 'templates/signupsuccess.html',
                 controller: 'RegisterCtrl'
             }
         }
-
     })
 
+    .state('app.signup', {
+        url: '/signup',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/signup.html',
+                controller: 'RegisterCtrl'
+            }
+        }
+    })
 
 
     // if none of the above states are matched, use this as the fallback
@@ -287,7 +294,30 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
         profile_teacher_used: 'Stai utilizzando il profilo insegnante',
         profile_parent_used: 'Stai utilizzando il profilo genitore',
         no_profiles: 'Nessun profilo presente',
-        access_with: 'Accedi con:'
+        access_with: 'Oppure accedi con:',
+        access_with_credentials: 'Accedi con le tue credenziali:',
+        signup_email: 'Email',
+        signup_pwd: 'Password',
+        signin_pwd_reset: 'Password dimenticata?',
+        login_signin: 'Entra',
+        login_signup: 'REGISTRATI',
+        signup_signup: 'Registrati',
+        signup_subtitle: 'Registrati a Smart Community ',
+        signup_name: 'Nome',
+        signup_surname: 'Cognome',
+        signup_email: 'Email',
+        signup_pwd: 'Password',
+        cancel_signup: "ANNULLA",
+        error_popup_title: 'Errore',
+        error_generic: 'La registrazione non Ã¨ andata a buon fine. Riprova piÃ¹ tardi.',
+        error_email_inuse: 'L\'indirizzo email Ã¨ giÃ  in uso.',
+        error_required_fields: 'Tutti i campi sono obbligatori',
+        error_password_short: 'La lunghezza della password deve essere di almeno 6 caratteri',
+        signup_success_title: 'Registrazione completata!',
+        signup_success_text: 'Completa la registrazione cliccando sul link che trovi nella email che ti abbiamo inviato.',
+        signup_resend: 'Re-inviare l\'email di conferma',
+        signin_pwd_reset: 'Password dimenticata?',
+        error_signin: 'Username/password non validi'
     });
 
     $translateProvider.preferredLanguage("it");

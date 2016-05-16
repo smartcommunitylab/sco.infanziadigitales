@@ -524,7 +524,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         credits_project: 'Realizzato da:',
         title1: 'Un Giorno A Scuola - Genitori',
         //        title2: 'Genitore',
-        credits_sponsored: 'Nell\'ambito del progetto "Inf@nzia DIGI tales 3.6" finanziato dal:',
+        credits_sponsored: 'Nell\'ambito del progetto "Inf@nzia DIGI.tales 3.6" finanziato dal:',
         credits_collaboration: 'In collaborazione con il Dipartimento della Conoscenza della:',
         credits_students: 'Hanno partecipato allo sviluppo:',
         credits_parents: 'Si ringraziano per la collaborazione:',

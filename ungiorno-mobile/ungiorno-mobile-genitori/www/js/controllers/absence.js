@@ -73,12 +73,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         });
 
     }
-    $scope.absenceTypes.push({
-        typeId: "Other",
-        name: $filter('translate')('absence_other'),
-        checked: false
-
-    });
+//    $scope.absenceTypes.push({
+//        typeId: "Other",
+//        name: $filter('translate')('absence_other'),
+//        checked: false
+//
+//    });
     $scope.illness = {
         appId: $scope.schoolProfile.appId,
         schooldId: $scope.schoolProfile.schoolId,

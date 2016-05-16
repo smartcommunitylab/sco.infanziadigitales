@@ -1409,16 +1409,16 @@ ion-content .scroll {
 
 .menu-profile {
     background-color: #7b9e2a !important;
-    height: 100px;
+    height: 90px;
 }
 
 .menu-profile h2 {
     color: white !important;
-    line-height: 40px;
+    line-height: 30px;
 }
 
 .menu-profile button {
-    min-height: 40px !important;
+    min-height: 30px !important;
     top: 16px !important;
     color: white !important;
 }
@@ -1550,4 +1550,8 @@ ion-content .scroll {
 
 .text-gray {
     color: gray;
+}
+
+.delivered {
+    opacity: 0.2;
 }

@@ -395,7 +395,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
         scadenze: " scadenze",
         login_title: 'Un giorno a scuola',
         login_subtitle: 'sperimentazione',
-        login_google: 'Google',
+        login_google: 'Accedi',
         exit_to: 'Esce alle ',
         loading_data: 'Caricamento dati',
         authentication_error: 'Problemi di autenticazione. Verificare la connessione',
@@ -436,7 +436,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
         absence_type: 'Motivazione: ',
         not_allowed_popup_title: 'Errore',
         not_allowed_signin: 'Utente non autorizzato',
-        child_not_partecipate: 'Il bambino non partecipa alla sperimentazione'
+        child_not_partecipate: 'Il bambino non partecipa alla sperimentazione',
+        home_scadenze: "Seleziona i bambini che hanno effettuato la consegna",
+        data_updated: "Dati aggiornati"
 
 
 

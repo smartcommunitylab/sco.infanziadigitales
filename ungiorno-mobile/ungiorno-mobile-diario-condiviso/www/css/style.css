@@ -3,20 +3,22 @@
     #9A0122
     #239B77
 */
+
+
 /* Empty. Add your own CSS if you like */
+
 .login-bar {
     background-color: #BD0F34;
 }
-
-.bar-ungiorno, .bar-ungiorno h1 {
+.bar-ungiorno,
+.bar-ungiorno h1 {
     background-color: #BD0F34 !important;
     color: #ffffff;
+    border-bottom-color: #BD0F34;
 }
-
-.bar-ungiorno .button-clear .icon::before{
+.bar-ungiorno .button-clear .icon::before {
     color: #ffffff;
 }
-
 .menu-profile {
     background-color: #9A0122 !important;
 }
@@ -24,7 +26,6 @@
     color: white !important;
     line-height: 40px;
 }
-
 .menu-profile-open {
     background-color: #9A0122 !important;
     padding-right: 8px;
@@ -32,18 +33,17 @@
 .menu-profile-open button {
     color: white !important;
     min-height: 16px !important;
-   line-height: 18px !important;
-}}
-.menu-profile-open button .icon::before{
     line-height: 18px !important;
 }
 
-
+}
+.menu-profile-open button .icon::before {
+    line-height: 18px !important;
+}
 .menu-profile button {
     min-height: 40px !important;
     top: 16px !important;
     color: white !important;
-
 }
 .leftmenu {
     background-color: #BD0F34;
@@ -51,31 +51,27 @@
 .leftmenu .item-icon-left i::before {
     font-size: 24px;
 }
-
 a.item-content {
     background-color: #BD0F34 !important;
 }
-.leftmenu .item, .leftmenu .item p {
+.leftmenu .item,
+.leftmenu .item p {
     background-color: #BD0F34;
     color: #ffffff;
     border: 0;
 }
-
 .leftmenu .icon-light::before {
     color: #ffffff !important;
 }
-
 .calendar {
     padding-left: 16px;
     padding-right: 16px;
     background-color: #BD0F34;
 }
-
 .calendar-button {
     color: #ffffff;
     font-size: 20px;
 }
-
 #calendar-button-div {
     height: 25px;
     width: 100%;
@@ -91,15 +87,14 @@ a.item-content {
     width: 100%;
 }
 .calendar-button-inner {
-    width:100px;
-    height:100px;
+    width: 100px;
+    height: 100px;
     background-color: #BD0F34;
     border-radius: 50px;
     text-align: center;
-    padding-top:75px;
+    padding-top: 75px;
     margin: auto;
 }
-
 .stream-item {
     padding: 4px 16px;
     white-space: inherit;
@@ -110,13 +105,14 @@ a.item-content {
 .stream.post-baby-age {
     margin-top: 8px;
 }
-
 .stream.post-action-container {
     display: inline-block;
     float: right;
     min-width: 130px;
 }
-.stream.post-action-container button, .post-create-photo-remove, .diary-form button{
+.stream.post-action-container button,
+.post-create-photo-remove,
+.diary-form button {
     float: right;
     line-height: 24px !important;
     min-height: 24px;
@@ -126,46 +122,43 @@ a.item-content {
 .stream.post-action-container button i::before {
     color: #239B77;
 }
-.stream.post-action-container button i::before, .post-create-photo-remove i::before, .diary-form button i::before{
+.stream.post-action-container button i::before,
+.post-create-photo-remove i::before,
+.diary-form button i::before {
     line-height: 24px !important;
 }
-
 .stream.post-text {
     margin-top: 16px;
     margin-bottom: 8px;
     font-size: 14px;
 }
-
 .stream.post-author {
     text-align: right;
     font-style: italic;
 }
-
 .stream.post-tag {
     display: inline-block;
     margin-left: 5px;
     font-style: italic;
     font-size: 14px;
 }
-
 .stream.post-creation-details {
     display: inline-block;
 }
-
-.stream.post-photo, .gallery-square {
-/*
+.stream.post-photo,
+.gallery-square {
+    /*
     display: inline-block;
     vertical-align: middle;
     margin-right: 8px;
 */
+
     max-height: 100%;
     max-width: 100%;
 }
-
 .gallery-tile {
     position: relative;
 }
-
 .gallery-tile span {
     position: absolute;
     bottom: 0px;
@@ -176,26 +169,21 @@ a.item-content {
     padding-right: 8px;
     opacity: 0.4;
 }
-
 .stream.post-photo-more {
     display: inline-block;
     vertical-align: middle;
     font-size: 24px;
 }
-
 .stream.photo-big-size {
     max-height: 300px;
 }
-
 .stream.photo-small-size {
     max-height: 150px;
 }
-
 .stream.icon::before {
     color: #9A0122;
     font-size: 18px;
 }
-
 .stream.fab {
     background-color: #239B77;
     color: #fff;
@@ -204,20 +192,18 @@ a.item-content {
     -moz-border-radius: 54px;
     -webkit-border-radius: 54px;
     border-radius: 54px;
-
     vertical-align: middle;
     text-align: center;
-
     position: absolute;
     right: 16px;
     bottom: 16px;
     box-shadow: 0px 0px 10px #888888;
     padding-left: 20px;
     padding-right: 20px;
+    -webkit-transition: bottom 0.2s;
+    /* For Safari 3.1 to 6.0 */
 
-    -webkit-transition: bottom 0.2s; /* For Safari 3.1 to 6.0 */
     transition: bottom 0.2s;
-
     display: -webkit-flexbox;
     display: -ms-flexbox;
     display: -webkit-flex;
@@ -227,70 +213,59 @@ a.item-content {
     -webkit-align-items: center;
     align-items: center;
     justify-content: center;
-
 }
-
 .stream.fab:hover {
     box-shadow: 0px 5px 20px #888888;
 }
-
 .stream.fab.hidden {
     bottom: -60px;
 }
-
 .stream.fab-icon::before {
     color: #ffffff;
 }
-
 .post-create-element {
     display: inline-block;
     vertical-align: middle;
     margin-left: 16px;
 }
-
-.post-create-element.icon, .post-create-element .icon{
+.post-create-element.icon,
+.post-create-element .icon {
     font-size: 24px;
 }
-
 .item-input {
     border: 0;
 }
-
+.item.item-input.item-floating-label {
+    margin-right: 1em;
+}
 .post-create-element-row {
     margin-top: 8px;
     margin-bottom: 8px;
 }
-
 .post-create-element-row i {
     color: #9A0122;
 }
-
 .mood-container {
     text-align: center;
 }
-
 .post-create-mood {
     font-size: 60px;
     padding: 0px 16px;
     color: #9A0122;
 }
-
 .post-create-photo-container {
     margin-right: 8px;
     position: relative;
     vertical-align: middle;
 }
-
 .post-create-photo {
     width: 150px;
 }
-
 .post-create-photo-remove {
     position: absolute;
     top: 8px;
     right: 8px;
 }
-
 .post-create-add-photo {
     border: 0;
     margin-left: 32px;
@@ -302,23 +277,18 @@ a.item-content {
 .inline {
     display: inline-block;
 }
-
 .vertical-middle {
     vertical-align: middle;
 }
-
 ion-content#gallery-container .scroll {
     height: 100%;
 }
-
 ion-content#gallery-container {
     background-color: #000;
 }
-
 .gallery-slider {
     height: 100%;
 }
-
 .gallery-photo-container {
     height: 100%;
     width: 100%;
@@ -335,21 +305,15 @@ ion-content#gallery-container {
     align-items: center;
     justify-content: center;
 }
-
 .gallery-photo-view {
-
     max-height: 100%;
     max-width: 100%;
 }
-
-
-
 .tag-element-remove {
     font-size: 24px;
     margin-left: 4px;
     margin-right: 16px;
 }
-
 .person-details {
     display: inline-block;
     vertical-align: middle;
@@ -362,112 +326,134 @@ ion-content#gallery-container {
     margin-top: 5px;
     margin-bottom: 5px;
 }
-.headerdata{
+.headerdata {
     color: mediumvioletred;
     font-size: 20px;
     margin-left: 10px;
     margin-bottom: 5px;
     margin-top: 5px;
 }
-.topdata{
+.topdata {
     color: #BD0F34;
     font-size: 13px;
     margin-left: 10px;
     clear: right;
     margin-top: 5px;
 }
-.textdata{
+.textdata {
     font-size: 14px;
 }
-.sizeImage{
+.sizeImage {
     width: 150px;
     height: 150px;
     margin-left: 10px;
     margin-top: 5px;
 }
-.sizeIcon{
+.sizeIcon {
     font-size: 40px;
     margin-left: 10px;
 }
-.alignRight{
-   padding-right: 10px;
+.alignRight {
+    padding-right: 10px;
 }
-.alignRightIcon{
+.alignRightIcon {
     float: right;
 }
-.alignRightIcon i{
+.alignRightIcon i {
     color: #239B77;
 }
-.selectrole{
+.selectrole {
     margin-right: 10px;
     margin-left: 10px;
 }
-.addComponent{
+.addComponent {
     margin-right: 10px;
     margin-left: 10px;
 }
-.asterisk{
+.asterisk {
     color: mediumvioletred;
     font-size: 13px;
     margin-left: 10px;
 }
-
 #children-content {
-  display: inline-block;
+    display: inline-block;
 }
 img {
-  vertical-align: middle;
+    vertical-align: middle;
 }
 span {
-  display: inline-block;
-  vertical-align: middle;
+    display: inline-block;
+    vertical-align: middle;
 }
-.children-edit{
+.children-edit {
     width: 100%;
     border: 0;
-     height: 40px;
+    height: 40px;
     padding-right: 0px;
 }
 .input-children {
     border: 0;
     padding-right: 30px;
 }
-
 .login-container {
     margin: auto;
-    background-color:#BD0F34;
+    background-color: #BD0F34;
 }
-
-.login-container h3, .login-container .login-title {
+.login-container h3,
+.login-container h4,
+.login-container .login-title {
     color: #ffffff;
 }
-
+.login-container h4 {
+    margin-top: 30px;
+    text-align: center;
+}
 .login-buttons {
-    margin-top: 50px;
-/*    height: 50px;*/
+    margin-top: 30px;
+    /*    height: 50px;*/
+
     background-color: #239B77;
-/*    display: block;*/
+    /*    display: block;*/
+
     color: #ffffff;
     width: 60%;
     border: 0;
     line-height: 47px;
     border-radius: 0;
 }
-
 .login-title {
-    text-align:center;
-    font-family:Arial;
-    margin-top:30px;
+    text-align: center;
+    font-family: Arial;
+    margin-top: 30px;
     font-size: 40px;
 }
-
+.login-label {
+    color: #fff!important;
+}
+.login-link {
+    display: block;
+    color: #fff;
+    padding: 0 1em;
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+}
+.input-login {
+    border-bottom: 1px solid #B0B0B0!important;
+}
+.login-button-internal {
+    text-transform: uppercase;
+    border-color: #f8ab15;
+    background-color: #f8ab15;
+    color: #FFFFFF;
+    margin: 0;
+    width: 70%;
+}
 .enter_credentials {
     margin-top: 75px;
     text-align: center;
     font-family: Arial;
     font-size: 25px;
 }
-
 .register-container {
     display: -webkit-flexbox;
     display: -ms-flexbox;
@@ -476,23 +462,20 @@ span {
     -webkit-flex-align: center;
     -ms-flex-align: center;
     justify-content: center;
-    background-color:#BD0F34;
+    background-color: #BD0F34;
 }
-
 .register-title {
-    text-align:center;
-    font-family:Arial;
-    margin-top:30px;
+    text-align: center;
+    font-family: Arial;
+    margin-top: 30px;
     font-size: 40px;
 }
-
 .sub-title-register {
     margin-top: 90px;
     text-align: center;
     font-family: Arial;
     font-size: 25px;
 }
-
 .register-buttons {
     margin-top: 40px;
     height: 50px;
@@ -501,19 +484,14 @@ span {
     color: #000000;
     margin-left: 15px;
     margin-right: 10px;
-
 }
-
-
 .id-container {
-    background-color:#BD0F34;
-    margin-top:50px;
+    background-color: #BD0F34;
+    margin-top: 50px;
 }
-
 .password-container {
-    background-color:#BD0F34;
+    background-color: #BD0F34;
 }
-
 .steps-indicator-container {
     width: 100%;
     display: -webkit-flexbox;
@@ -526,7 +504,6 @@ span {
     position: fixed;
     bottom: 8px;
 }
-
 .step-indicator {
     width: 25px;
     height: 25px;
@@ -535,30 +512,25 @@ span {
     margin: 2px;
     border-radius: 25px;
     border: 2px solid #000;
-
 }
-
 .step-indicator-done {
     background-color: #000;
 }
-
-input[type=text], textarea, input[type=date] {
+input[type=text],
+textarea,
+input[type=date] {
     border-bottom: 1px solid #CECECE;
     width: 100%;
     font-size: 14px;
     margin-right: 10px;
 }
-
-
 .diary-form .item {
     border: 0;
 }
-
 .diary-form .item-divider {
     background-color: transparent;
     color: #9A0122;
 }
-
 .diary-form .input-label {
     font-size: 12px;
     color: grey;
@@ -566,13 +538,12 @@ input[type=text], textarea, input[type=date] {
 .diary-form .textdata {
     display: block;
 }
-
 .diary-form .form-icon::before {
     font-size: 24px;
     margin-right: 8px;
 }
-
-.diary-form .item-contact.item-icon-left i, .form-icon {
+.diary-form .item-contact.item-icon-left i,
+.form-icon {
     color: #9A0122;
     width: 52px;
 }
@@ -583,57 +554,72 @@ input[type=text], textarea, input[type=date] {
     padding-top: 4px;
     padding-bottom: 4px;
 }
-.diary-form .item-contact i{
+.diary-form .item-contact i {
     font-size: 24px;
 }
-
-.slide-animation.ng-enter, .slide-animation.ng-leave {
+.slide-animation.ng-enter,
+.slide-animation.ng-leave {
     -webkit-transition: 0.3s linear all;
     -moz-transition: 0.3s linear all;
     -o-transition: 0.3s linear all;
     transition: 0.3s linear all;
-    position:relative;
+    position: relative;
 }
-
 .slide-animation.ng-enter {
-  z-index:100;
-  top:-100px;
-  opacity:0;
+    z-index: 100;
+    top: -100px;
+    opacity: 0;
 }
-
 .slide-animation.ng-enter.ng-enter-active {
-  top:0;
-  opacity:1;
+    top: 0;
+    opacity: 1;
 }
-
 .slide-animation.ng-leave {
-  z-index:101;
-  opacity:1;
-  top:0;
+    z-index: 101;
+    opacity: 1;
+    top: 0;
 }
-
 .slide-animation.ng-leave.ng-leave-active {
-  top:-100px;
-  opacity:0;
+    top: -100px;
+    opacity: 0;
 }
-
 .ion-asterisk {
     font-size: 10px;
     color: #9A0122;
 }
-
 .gallery-modal-container {
     width: 100%;
     height: 100%;
     background-color: black;
     vertical-align: middle;
 }
-
 .gallery-modal-container img {
     max-width: 100%;
     margin: auto;
 }
-
-#dettaglidiario > ion-content > div.scroll > div > label > select{
+#dettaglidiario > ion-content > div.scroll > div > label > select {
     padding-top: 10px !important;
+}
+.login .signup-title-top {
+    font-size: 20px;
+    color: #fff;
+    padding-top: 2em;
+    text-align: center;
+}
+.login .signup-container {
+    background-color: #9A0122;
+    height: 100% !important;
+    margin: 0 !important;
+    padding-left: 2em;
+    padding-right: 2em;
+}
+
+.delete-login {
+    text-transform: uppercase;
+    border-color: #5dc3de;
+    background-color: #5dc3de;
+    color: #FFFFFF;
+}
+.login{
+    background-color: #9A0122;
 }

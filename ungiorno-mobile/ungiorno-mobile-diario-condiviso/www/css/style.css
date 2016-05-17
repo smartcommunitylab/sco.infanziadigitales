@@ -10,31 +10,38 @@
 .login-bar {
     background-color: #BD0F34;
 }
+
 .bar-ungiorno,
 .bar-ungiorno h1 {
     background-color: #BD0F34 !important;
     color: #ffffff;
     border-bottom-color: #BD0F34;
 }
+
 .bar-ungiorno .button-clear .icon::before {
     color: #ffffff;
 }
+
 .menu-profile {
     background-color: #9A0122 !important;
 }
+
 .menu-profile h2 {
     color: white !important;
     line-height: 40px;
 }
+
 .menu-profile-open {
     background-color: #9A0122 !important;
     padding-right: 8px;
 }
+
 .menu-profile-open button {
     color: white !important;
     min-height: 16px !important;
     line-height: 18px !important;
 }
+
 
 }
 .menu-profile-open button .icon::before {
@@ -152,7 +159,7 @@ a.item-content {
     vertical-align: middle;
     margin-right: 8px;
 */
-
+    
     max-height: 100%;
     max-width: 100%;
 }
@@ -202,7 +209,7 @@ a.item-content {
     padding-right: 20px;
     -webkit-transition: bottom 0.2s;
     /* For Safari 3.1 to 6.0 */
-
+    
     transition: bottom 0.2s;
     display: -webkit-flexbox;
     display: -ms-flexbox;
@@ -411,10 +418,10 @@ span {
 .login-buttons {
     margin-top: 30px;
     /*    height: 50px;*/
-
+    
     background-color: #239B77;
     /*    display: block;*/
-
+    
     color: #ffffff;
     width: 60%;
     border: 0;
@@ -535,6 +542,12 @@ input[type=date] {
     font-size: 12px;
     color: grey;
 }
+
+.diary-form .input-label {
+    font-size: 14px;
+    color: black;
+}
+
 .diary-form .textdata {
     display: block;
 }
@@ -613,13 +626,33 @@ input[type=date] {
     padding-left: 2em;
     padding-right: 2em;
 }
-
 .delete-login {
     text-transform: uppercase;
     border-color: #5dc3de;
     background-color: #5dc3de;
     color: #FFFFFF;
 }
-.login{
+.login {
     background-color: #9A0122;
+}
+.form-success {
+    background-color: #BD0F34;
+}
+.success-container {
+    height: 100% !important;
+    margin: 0 !important;
+    padding-left: 2em;
+    padding-right: 2em;
+}
+.success-container p {
+    color: white;
+    padding: 30px 0px;
+    font-size: 16px;
+}
+a.success-link {
+    display: block;
+    color: #fff;
+    padding: 0 1em;
+    margin-top: 2em;
+    margin-bottom: 1.5em;
 }

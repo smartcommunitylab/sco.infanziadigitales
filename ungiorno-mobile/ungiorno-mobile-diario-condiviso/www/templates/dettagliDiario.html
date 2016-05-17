@@ -34,20 +34,19 @@
                 <span class="textdata">{{babyCopy.lastName}}</span>
             </label>
 
-            <label class="item item-input" ng-if="!isViewMode()">
+            <!-- <label class="item item-input" ng-if="!isViewMode()">
                 <input type="date" ng-model="babyCopy.birthday" />
                 <i class="ion-asterisk alignRight inline vertical-middle"></i>
-            </label>
+            </label> -->
             
-            <label class="item item-input item-stacked-label" ng-if="isViewMode()">
-             <!-- <label class="item item-input"  ng-if="!isViewMode()">
+            <!--<label class="item item-input item-stacked-label" ng-if="isViewMode()">
+              <label class="item item-input"  ng-if="!isViewMode()">
                 <input type="date" ng-model="babyCopy.birthday"/>
                 <i class="ion-asterisk alignRight inline vertical-middle"></i>
--->
-            </label> 
+            </label> -->
 
              <label class="item item-input" ng-click="openDatePicker()" ng-if="!isViewMode(data)">
-                <span type="date" class="input-label">{{baby.birthday | date:'d-MMMM-yyyy'}}</span>
+                <span type="date" class="input-label date">{{baby.birthday | date:'d-MMMM-yyyy'}}</span>
                 <i class="ion-asterisk alignRight inline vertical-middle"></i>
                 </label>
 
@@ -86,16 +85,15 @@
                     <input type="text" placeholder="{{'surname'|translate}}" ng-model="data.lastName" />
                     <i class="ion-asterisk alignRight inline vertical-middle"></i>
                 </label>
-                <label class="item item-input" ng-if="!isViewMode(data)">
+                <!-- <label class="item item-input" ng-if="!isViewMode(data)">
                     <input type="date" ng-model="babyCopy.birthday" />
-                <!-- <label class="item item-input"  ng-if="!isViewMode(data)">
+                 <label class="item item-input"  ng-if="!isViewMode(data)">
                     <input type="date" ng-model="babyCopy.birthday"/>
->>>>>>> origin/master
-                    <i class="ion-asterisk alignRight inline vertical-middle"></i>
-                </label> -->
+                    <i class="ion-asterisk alignRight inline vertical-middle"></i> 
+                </label>-->
 
                 <label class="item item-input" ng-click="openDatePicker()" ng-if="!isViewMode(data)">
-                <span type="date" class="input-label">{{baby.birthday | date:'d-MMMM-yyyy'}}</span>
+                <span type="date" class="input-label date">{{baby.birthday | date:'d-MMMM-yyyy'}}</span>
                 <i class="ion-asterisk alignRight inline vertical-middle"></i>
                 </label>
 

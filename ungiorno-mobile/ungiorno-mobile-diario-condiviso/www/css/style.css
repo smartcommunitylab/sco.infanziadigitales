@@ -542,6 +542,12 @@ input[type=date] {
     font-size: 12px;
     color: grey;
 }
+
+.diary-form .input-label {
+    font-size: 14px;
+    color: black;
+}
+
 .diary-form .textdata {
     display: block;
 }

@@ -261,6 +261,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                                 $ionicLoading.hide();
                                 Toast.show($filter('translate')('data_updated'), 'short', 'bottom');
 
+
                             }, function (error) {
                                 console.log("ERROR -> " + error);
                                 Toast.show($filter('translate')('communication_error'), 'short', 'bottom');

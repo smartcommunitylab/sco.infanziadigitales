@@ -82,42 +82,29 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.bus'
 
 
     $scope.print = function () {
-        var doc = "<html><body>";
-        doc += "<p>";
-        doc += "<h2>" + $scope.selectedBus.busName + "</h2>";
-        var babyNumber = $scope.selectedBus.children.length;
-        if ($scope.selectedBus.lastChildIsFake) {
-            babyNumber -= 1;
-        }
-        for (var babyIndex = 0; babyIndex < babyNumber; babyIndex++) {
-            doc += "<h3 style=\"margin: 2px 0px 2px 8px;\">" + $scope.selectedBus.children[babyIndex].fullName + "</h3>";
-            doc += "<h4 style=\"margin: 2px 0px 2px 16px;\">" + $scope.selectedBus.children[babyIndex].busStop + "</h4>";
-            doc += "<h4 style=\"margin: 2px 0px 8px 16px;\">" + $scope.selectedBus.children[babyIndex].personWhoWaitName + " (" + $scope.selectedBus.children[babyIndex].personWhoWaitRelation + ")" + "</h4>";
-        }
-        doc += "</p>";
 
+        Toast.show($filter('translate')('function_disabled'), 'short', 'bottom');
 
-        doc += "</body></html>";
+        //        printer disabled
         //        var doc = "<html><body>";
-        //        for (var busIndex = 0; busIndex < $scope.buses.length; busIndex++) {
-        //            doc += "<p>";
-        //            doc += "<h2>" + $scope.buses[busIndex].busName + "</h2>";
-        //            var babyNumber = $scope.buses[busIndex].children.length;
-        //            if ($scope.buses[busIndex].lastChildIsFake) {
-        //                babyNumber -= 1;
-        //            }
-        //            for (var babyIndex = 0; babyIndex < babyNumber; babyIndex++) {
-        //                doc += "<h3 style=\"margin: 2px 0px 2px 8px;\">" + $scope.buses[busIndex].children[babyIndex].fullName + "</h3>";
-        //                doc += "<h4 style=\"margin: 2px 0px 2px 16px;\">" + $scope.buses[busIndex].children[babyIndex].busStop + "</h4>";
-        //                doc += "<h4 style=\"margin: 2px 0px 8px 16px;\">" + $scope.buses[busIndex].children[babyIndex].personWhoWaitName + " (" + $scope.buses[busIndex].children[babyIndex].personWhoWaitRelation + ")" + "</h4>";
-        //            }
-        //            doc += "</p>";
-        //
+        //        doc += "<p>";
+        //        doc += "<h2>" + $scope.selectedBus.busName + "</h2>";
+        //        var babyNumber = $scope.selectedBus.children.length;
+        //        if ($scope.selectedBus.lastChildIsFake) {
+        //            babyNumber -= 1;
         //        }
+        //        for (var babyIndex = 0; babyIndex < babyNumber; babyIndex++) {
+        //            doc += "<h3 style=\"margin: 2px 0px 2px 8px;\">" + $scope.selectedBus.children[babyIndex].fullName + "</h3>";
+        //            doc += "<h4 style=\"margin: 2px 0px 2px 16px;\">" + $scope.selectedBus.children[babyIndex].busStop + "</h4>";
+        //            doc += "<h4 style=\"margin: 2px 0px 8px 16px;\">" + $scope.selectedBus.children[babyIndex].personWhoWaitName + " (" + $scope.selectedBus.children[babyIndex].personWhoWaitRelation + ")" + "</h4>";
+        //        }
+        //        doc += "</p>";
+        //
+        //
         //        doc += "</body></html>";
-        console.log(doc);
-        var printerAvail = $cordovaPrinter.isAvailable();
-        $cordovaPrinter.print(doc);
+        //        console.log(doc);
+        //        var printerAvail = $cordovaPrinter.isAvailable();
+        //        $cordovaPrinter.print(doc);
     }
 
     $scope.getChildImage = function (child) {

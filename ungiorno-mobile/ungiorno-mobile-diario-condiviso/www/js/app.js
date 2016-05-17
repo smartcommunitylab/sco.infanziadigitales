@@ -31,7 +31,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
     'angularMoment'
 ])
 
-.run(function ($ionicPlatform, $rootScope, $cordovaSplashscreen, $state, $translate, $q, $ionicHistory, $ionicConfig, $ionicSideMenuDelegate, loginService) {
+.run(function ($ionicPlatform, $rootScope, $cordovaSplashscreen, $state, $translate, $q, $ionicHistory, $ionicConfig, $ionicSideMenuDelegate, loginService, dataServerService,$ionicLoading) {
 
     $rootScope.getUserId = function () {
         return localStorage.userId;
@@ -109,14 +109,46 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
         $rootScope.login_facebooklocal = 'facebook';
         if (loginService.userIsLogged()) {
             console.log("user is logged");
-
+            //
             if (localStorage.provider == 'internal') {
                 $rootScope.login();
             } else {
-                $state.go("app.home");
+                loginService.login(localStorage.provider).then(
+                    function (data) {
+                        dataServerService.getBabyProfiles().then(function (data) {
+                            $state.go('app.home');
+                            $ionicHistory.nextViewOptions({
+                                disableBack: true,
+                                historyRoot: true
+                            });
+
+                        }, function (error) {
+                            console.log("ERROR -> " + error);
+                            // Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+                            $ionicLoading.hide();
+                            if (error == 406) {
+                                loginService.logout();
+                                $ionicPopup.alert({
+                                    title: $filter('translate')('not_allowed_popup_title'),
+                                    template: $filter('translate')('not_allowed_signin')
+                                });
+                                $state.go('app.login');
+                                $ionicHistory.nextViewOptions({
+                                    disableBack: true,
+                                    historyRoot: true
+                                });
+                            }
+                        });
+                        //                        $state.go('app.home');
+                        //                        $ionicHistory.nextViewOptions({
+                        //                            disableBack: true,
+                        //                            historyRoot: true
+                        //                                //                });
+                        //                        });
+                    })
             };
         } else {
-            $state.go("app.home");
+            $rootScope.login();
         }
     });
 

@@ -24,7 +24,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
     $scope.login = function (provider) {
         loginService.login(provider).then(
             function (data) {
-                dataServerService.getProfile().then(function (data) {
+                dataServerService.getBabyProfiles().then(function (data) {
                     // loginStarted = false;
 
                     $state.go('app.home');

@@ -73,7 +73,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
         return deferred.promise;
     }*/
 
-    dataServerService.getProfile = function () {
+    dataServerService.getBabyProfiles = function () {
         var deferred = $q.defer();
         $http({
             method: 'GET',

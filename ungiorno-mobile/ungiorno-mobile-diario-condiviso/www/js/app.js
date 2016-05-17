@@ -115,7 +115,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
             } else {
                 loginService.login(localStorage.provider).then(
                     function (data) {
-                        dataServerService.getProfile().then(function (data) {
+                        dataServerService.getBabyProfiles().then(function (data) {
                             $state.go('app.home');
                             $ionicHistory.nextViewOptions({
                                 disableBack: true,

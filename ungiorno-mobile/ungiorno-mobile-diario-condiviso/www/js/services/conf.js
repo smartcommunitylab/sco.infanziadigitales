@@ -8,8 +8,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
     // var URL = 'http://192.168.42.60:8080';
     var fakeId = '23655';
     var app = 'ungiorno2';
-    //    var appId = 'trento';
-    //    var appId = $rootScope.appId;
+    /*var appId = 'trento';
+    var appId = $rootScope.appId;*/
 
     var httpTimeout = 10000;
 

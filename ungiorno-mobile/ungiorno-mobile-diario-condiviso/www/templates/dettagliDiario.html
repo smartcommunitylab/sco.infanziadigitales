@@ -38,11 +38,13 @@
                 <input type="date" ng-model="babyCopy.birthday" />
                 <i class="ion-asterisk alignRight inline vertical-middle"></i>
             </label>
+            
             <label class="item item-input item-stacked-label" ng-if="isViewMode()">
              <!-- <label class="item item-input"  ng-if="!isViewMode()">
                 <input type="date" ng-model="babyCopy.birthday"/>
                 <i class="ion-asterisk alignRight inline vertical-middle"></i>
-            </label> -->
+-->
+            </label> 
 
              <label class="item item-input" ng-click="openDatePicker()" ng-if="!isViewMode(data)">
                 <span type="date" class="input-label">{{baby.birthday | date:'d-MMMM-yyyy'}}</span>
@@ -103,7 +105,7 @@
                 </label>
 
             </div>
-            </div>
+                
             <label class="item item-input item-select" ng-if="!isViewMode()">
                 <div class="input-label">{{ 'add_family_component' | translate}}</div>
                 <select ng-model="access.relation">
@@ -205,6 +207,6 @@
             </label>
             <div class="item item-divider text-center" ng-if="!isViewMode()"><i class="icon ion-asterisk"></i> {{'asterisk' | translate}}</div>
 
-        </div>
+        </div> 
     </ion-content>
 </ion-view>

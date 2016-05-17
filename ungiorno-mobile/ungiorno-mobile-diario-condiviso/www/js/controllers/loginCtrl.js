@@ -24,23 +24,38 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
     $scope.login = function (provider) {
         loginService.login(provider).then(
             function (data) {
-                dataServerService.login(provider, function () {
+                dataServerService.getProfile().then(function (data) {
+                    // loginStarted = false;
+
                     $state.go('app.home');
-                })
+                    $ionicHistory.nextViewOptions({
+                        disableBack: true,
+                        historyRoot: true
+                    });
+                    console.log(data);
+
+                }, function (error) {
+                    //loginStarted = false;
+
+                    console.log("ERROR -> " + error);
+                    // Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+                    $ionicLoading.hide();
+                    if (error == 406) {
+                        loginService.logout();
+                        $ionicPopup.alert({
+                            title: $filter('translate')('not_allowed_popup_title'),
+                            template: $filter('translate')('not_allowed_signin')
+                        });
+                    }
+                });
+
             },
             function (error) {
-                //loginStarted = false;
-
-                console.log("ERROR -> " + error);
-                // Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
-                $ionicLoading.hide();
-                if (error == 406) {
-                    loginService.logout();
-                    $ionicPopup.alert({
-                        title: $filter('translate')('not_allowed_popup_title'),
-                        template: $filter('translate')('not_allowed_signin')
-                    });
-                }
+                // loginStarted = false;
+                //Utils.toast(Utils.getErrorMsg(error));
+                // StorageSrv.saveUser(null);
+                localStorage.userId = null;
+                ionic.Platform.exitApp();
             }
         );
     };
@@ -81,7 +96,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
             },
             function (error) {
                 localStorage.userId = null;
-                $scope.user.password= '';
+                $scope.user.password = '';
                 $ionicPopup.alert({
                     title: $filter('translate')('error_popup_title'),
                     template: $filter('translate')('error_signin')

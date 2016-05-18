@@ -221,14 +221,21 @@ public class SchoolController {
 
 	@RequestMapping(method = RequestMethod.GET, value = "/school/{appId}/{schoolId}/sections")
 	public @ResponseBody Response<List<SectionData>> getSections(@PathVariable String appId, @PathVariable String schoolId, @RequestParam long date) {
-
 		try {
-
 			Collection<String> sections = storage.getTeacher(permissions.getUserId(), appId, schoolId).getSectionIds();
+			if(logger.isInfoEnabled()) {
+				logger.info("getSections(sections):" + JsonUtil.convertObject(sections));
+			}
 			List<SectionData> list = storage.getSections(appId, schoolId, sections , date);
+			if(logger.isInfoEnabled()) {
+				logger.info("getSections(list):" + JsonUtil.convertObject(list));
+			}
 			return new Response<>(list);
 		} catch (Exception e) {
-			e.printStackTrace();
+			if(logger.isWarnEnabled()) {
+				logger.warn("getSections:" + appId + " - " + schoolId);
+				logger.warn("erro", e);
+			}
 			return new Response<>(e.getMessage());
 		}
 	}

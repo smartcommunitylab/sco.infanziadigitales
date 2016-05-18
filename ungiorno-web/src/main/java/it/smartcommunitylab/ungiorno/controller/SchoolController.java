@@ -26,6 +26,7 @@ import it.smartcommunitylab.ungiorno.model.SectionData;
 import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.model.TeacherCalendar;
 import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
+import it.smartcommunitylab.ungiorno.utils.JsonUtil;
 import it.smartcommunitylab.ungiorno.utils.PermissionsManager;
 
 import java.util.Collection;
@@ -79,7 +80,7 @@ public class SchoolController {
 			String userId = permissions.getUserId();
 			SchoolProfile profile = storage.getSchoolProfileForUser(appId, userId);
 			if(logger.isInfoEnabled()) {
-				logger.info("getSchoolProfileForTeacher:" + userId + " - " + profile);
+				logger.info("getSchoolProfileForTeacher:" + userId + " - " + JsonUtil.convertObject(profile));
 			}
 			return new Response<SchoolProfile>(profile);
 		} catch (Exception e) {

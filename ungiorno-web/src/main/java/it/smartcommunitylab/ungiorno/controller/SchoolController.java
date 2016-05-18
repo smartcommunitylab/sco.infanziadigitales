@@ -26,6 +26,7 @@ import it.smartcommunitylab.ungiorno.model.SectionData;
 import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.model.TeacherCalendar;
 import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
+import it.smartcommunitylab.ungiorno.utils.JsonUtil;
 import it.smartcommunitylab.ungiorno.utils.PermissionsManager;
 
 import java.util.Collection;
@@ -67,8 +68,15 @@ public class SchoolController {
 	public @ResponseBody Response<SchoolProfile> getSchoolProfile(@PathVariable String appId, @PathVariable String schoolId) {
 		try {
 			SchoolProfile profile = storage.getSchoolProfile(appId, schoolId);
+			if(logger.isInfoEnabled()) {
+				logger.info("getSchoolProfile:" + appId + " - " + schoolId + " - " + JsonUtil.convertObject(profile));
+			}
 			return new Response<SchoolProfile>(profile);
 		} catch (Exception e) {
+			if(logger.isWarnEnabled()) {
+				logger.warn("getSchoolProfile:" + appId + " - " + schoolId);
+				logger.warn("erro", e);
+			}
 			return new Response<>(e.getMessage());
 		}
 	}
@@ -79,7 +87,7 @@ public class SchoolController {
 			String userId = permissions.getUserId();
 			SchoolProfile profile = storage.getSchoolProfileForUser(appId, userId);
 			if(logger.isInfoEnabled()) {
-				logger.info("getSchoolProfileForTeacher:" + userId + " - " + profile);
+				logger.info("getSchoolProfileForTeacher:" + userId + " - " + JsonUtil.convertObject(profile));
 			}
 			return new Response<SchoolProfile>(profile);
 		} catch (Exception e) {
@@ -213,14 +221,21 @@ public class SchoolController {
 
 	@RequestMapping(method = RequestMethod.GET, value = "/school/{appId}/{schoolId}/sections")
 	public @ResponseBody Response<List<SectionData>> getSections(@PathVariable String appId, @PathVariable String schoolId, @RequestParam long date) {
-
 		try {
-
 			Collection<String> sections = storage.getTeacher(permissions.getUserId(), appId, schoolId).getSectionIds();
+			if(logger.isInfoEnabled()) {
+				logger.info("getSections(sections):" + JsonUtil.convertObject(sections));
+			}
 			List<SectionData> list = storage.getSections(appId, schoolId, sections , date);
+			if(logger.isInfoEnabled()) {
+				logger.info("getSections(list):" + JsonUtil.convertObject(list));
+			}
 			return new Response<>(list);
 		} catch (Exception e) {
-			e.printStackTrace();
+			if(logger.isWarnEnabled()) {
+				logger.warn("getSections:" + appId + " - " + schoolId);
+				logger.warn("erro", e);
+			}
 			return new Response<>(e.getMessage());
 		}
 	}

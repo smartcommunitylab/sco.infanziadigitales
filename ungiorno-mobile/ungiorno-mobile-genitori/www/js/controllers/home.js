@@ -15,9 +15,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.dailyFermata = null;
     $scope.dailyRitiro = null;
     $rootScope.allowed = true;
-    $rootScope.absenceLimitHours = 8;
-    $rootScope.absenceLimitMinutes = 25;
-    $rootScope.retireLimit = 9;
+    $rootScope.absenceLimitHours = 9;
+    $rootScope.absenceLimitMinutes = 15;
+    $rootScope.retireLimit = 10;
     $scope.refresh = function () {
         //window.location.reload(true);
         $scope.getConfiguration();
@@ -260,6 +260,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                                 buildHome();
                                 $ionicLoading.hide();
                                 Toast.show($filter('translate')('data_updated'), 'short', 'bottom');
+
 
                             }, function (error) {
                                 console.log("ERROR -> " + error);

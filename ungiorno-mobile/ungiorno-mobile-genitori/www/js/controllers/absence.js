@@ -73,12 +73,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         });
 
     }
-//    $scope.absenceTypes.push({
-//        typeId: "Other",
-//        name: $filter('translate')('absence_other'),
-//        checked: false
-//
-//    });
+    $scope.absenceTypes.push({
+        typeId: "Altro",
+        name: $filter('translate')('absence_other'),
+        checked: false
+
+    });
     $scope.illness = {
         appId: $scope.schoolProfile.appId,
         schooldId: $scope.schoolProfile.schoolId,
@@ -187,20 +187,20 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             });
             return;
         }
-        if (!getReason()) {
-            // alert($filter('translate')('absence_choose'));
-            var myPopup = $ionicPopup.show({
-                title: $filter('translate')('retire_popup_absent_title'),
-                template: $filter('translate')('absence_choose'),
-                buttons: [
-                    {
-                        text: $filter('translate')('retire_popup_absent_cancel'),
-                        type: 'button-positive'
-						}
-					]
-            });
-            return;
-        }
+        //        if (!getReason()) {
+        //            // alert($filter('translate')('absence_choose'));
+        //            var myPopup = $ionicPopup.show({
+        //                title: $filter('translate')('retire_popup_absent_title'),
+        //                template: $filter('translate')('absence_choose'),
+        //                buttons: [
+        //                    {
+        //                        text: $filter('translate')('retire_popup_absent_cancel'),
+        //                        type: 'button-positive'
+        //						}
+        //					]
+        //            });
+        //            return;
+        //        }
         //da settare i valori esatti
         var illness = {
             kidId: $scope.babyProfile.kidId,
@@ -262,20 +262,20 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
 
     $scope.showConfirm = function () {
-        if (!getReason()) {
-            // alert($filter('translate')('retire_popup_absent_title'));
-            var myPopup = $ionicPopup.show({
-                title: $filter('translate')('retire_popup_absent_title'),
-                template: $filter('translate')('absence_choose'),
-                buttons: [
-                    {
-                        text: $filter('translate')('retire_popup_absent_cancel'),
-                        type: 'button-positive'
-						}
-					]
-            });
-            return;
-        }
+        //        if (!getReason()) {
+        //            // alert($filter('translate')('retire_popup_absent_title'));
+        //            var myPopup = $ionicPopup.show({
+        //                title: $filter('translate')('retire_popup_absent_title'),
+        //                template: $filter('translate')('absence_choose'),
+        //                buttons: [
+        //                    {
+        //                        text: $filter('translate')('retire_popup_absent_cancel'),
+        //                        type: 'button-positive'
+        //						}
+        //					]
+        //            });
+        //            return;
+        //        }
         var go = true;
         var today = new Date();
         today.setHours(0, 0, 0, 0);
@@ -289,7 +289,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 go = false;
                 var myPopup = $ionicPopup.show({
                     title: $filter('translate')('assenza_popup_toolate_title'),
-                    template: $filter('translate')('assenza_popup_toolate_text') + " " + $scope.modifyBeforeHours + "."+$scope.modifyBeforeMinutes + ".",
+                    template: $filter('translate')('assenza_popup_toolate_text') + " " + $scope.modifyBeforeHours + "." + $scope.modifyBeforeMinutes + ".",
                     buttons: [
                         {
                             text: $filter('translate')('assenza_popup_retire_cancel'),

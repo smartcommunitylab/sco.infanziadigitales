@@ -31,16 +31,23 @@
 
 </p>
 -->
-                <ion-item class="item item-avatar item-button-right menu-profile" ng-if="babies && babies.length > 0">
-                    <!--                    <img ng-src="http://static.guide.supereva.it/guide/portoghese/insegnante.jpg">-->
-                    <h2>{{teacherName}}</h2>
+                <!--                <ion-item class="item item-avatar item-button-right menu-profile" ng-if="babies && babies.length > 0">-->
+                <!--                    <img ng-src="http://static.guide.supereva.it/guide/portoghese/insegnante.jpg">-->
+                <!--                    <h2>{{teacherName}}</h2>-->
+                <!--                </ion-item>-->
+                <ion-item menu-close item-icon-left class="menu-item-insegnante menu-profile" ng-if="babies && babies.length > 0">
+                    <div>
+                        <h2>UGAS - Insegnanti</h2>
+                    </div>
+                    <div>
+                        <h2>{{teacherName}}</h2></div>
                 </ion-item>
                 <ion-item menu-close item-icon-left class="menu-item-insegnante" ng-click="goto('app.home')">
                     <i class="icon voice-menu  icon-menu-insegnante inf_dighome"></i>Home
                 </ion-item>
 
                 <ion-item menu-close item-icon-left class="menu-item-insegnante" ng-click="goto('app.communications')">
-                    <i class="icon voice-menu  icon-menu-insegnante inf_dignote"></i>Comunicazione per i genitori
+                    <i class="icon voice-menu  icon-menu-insegnante inf_dignote"></i>{{'parent_communications'|translate}}
                 </ion-item>
                 <ion-item menu-close item-icon-left class="menu-item-insegnante" ng-click="goto('app.bus')">
                     <i class="icon voice-menu icon-menu-insegnante  inf_digbus"></i>Bus
@@ -53,6 +60,9 @@
 -->
                 <ion-item menu-close item-icon-left class="menu-item-insegnante" ng-click="logout()">
                     <i class="icon voice-menu  icon-menu-insegnante inf_diglog-out"></i>Esci
+                </ion-item>
+                <ion-item menu-close item-icon-left class="menu-item-insegnante" ng-click="openCredits()">
+                    <i class="icon voice-menu  icon-menu-insegnante ion-information-circled"></i>{{'menu_credits' | translate}}
                 </ion-item>
             </ion-list>
         </ion-content>

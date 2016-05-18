@@ -68,6 +68,9 @@ public class SchoolController {
 	public @ResponseBody Response<SchoolProfile> getSchoolProfile(@PathVariable String appId, @PathVariable String schoolId) {
 		try {
 			SchoolProfile profile = storage.getSchoolProfile(appId, schoolId);
+			if(logger.isInfoEnabled()) {
+				logger.info("getSchoolProfile:" + appId + " - " + schoolId + " - " + JsonUtil.convertObject(profile));
+			}
 			return new Response<SchoolProfile>(profile);
 		} catch (Exception e) {
 			return new Response<>(e.getMessage());

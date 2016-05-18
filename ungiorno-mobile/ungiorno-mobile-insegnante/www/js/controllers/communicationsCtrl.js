@@ -87,7 +87,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
 //        }
         {
             typeId: "0",
-            name: "Consegna Documenti",
+            name: "Aggiungi scadenza",
             checked: false
         }
     ];

@@ -528,7 +528,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         credits_collaboration: 'In collaborazione con il Dipartimento della Conoscenza della:',
         credits_students: 'Hanno partecipato allo sviluppo:',
         credits_parents: 'Si ringraziano per la collaborazione:',
-        credits_info: 'Per informazioni',
+        credits_info: 'Per informazioni: ',
         credits_licenses_button: 'VEDI LICENZE',
         data_updated: 'Dati aggiornati'
 
@@ -677,7 +677,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         credits_collaboration: 'In collaborazione con il Dipartimento della Conoscenza della:',
         credits_students: 'Hanno partecipato allo sviluppo:',
         credits_parents: 'Si ringraziano per la collaborazione:',
-        credits_info: 'Per informazioni',
+        credits_info: 'Per informazioni: ',
         credits_licenses_button: 'VEDI LICENZE',
         data_updated: 'Dati aggiornati'
 
@@ -836,7 +836,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         credits_collaboration: 'In collaborazione con il Dipartimento della Conoscenza della:',
         credits_students: 'Hanno partecipato allo sviluppo:',
         credits_parents: 'Si ringraziano per la collaborazione:',
-        credits_info: 'Per informazioni',
+        credits_info: 'Per informazioni: ',
         credits_licenses_button: 'VEDI LICENZE',
         data_updated: 'Dati aggiornati'
 

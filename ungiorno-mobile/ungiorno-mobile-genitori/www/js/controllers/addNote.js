@@ -60,11 +60,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             alert("Attenzione: nota non inserita");
         } else {
             dataServerService.sendNota(profileService.getBabyProfile().schoolId, profileService.getBabyProfile().kidId, noteToSend).then(function (data) {
-                Toast.show("Invio Nota Riuscito!!", 'short', 'bottom');
+                Toast.show("Invio messaggio riuscito!!", 'short', 'bottom');
                 console.log("SENDING OK -> " + data);
                 $ionicHistory.goBack();
             }, function (error) {
-                Toast.show("Invio Nota Non Riuscito!!", 'short', 'bottom');
+                Toast.show("Invio messaggio non riuscito!!", 'short', 'bottom');
                 console.log("SENDING ERROR -> " + error);
             });
 

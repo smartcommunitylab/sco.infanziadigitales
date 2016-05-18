@@ -73,6 +73,10 @@ public class SchoolController {
 			}
 			return new Response<SchoolProfile>(profile);
 		} catch (Exception e) {
+			if(logger.isWarnEnabled()) {
+				logger.warn("getSchoolProfile:" + appId + " - " + schoolId);
+				logger.warn("erro", e);
+			}
 			return new Response<>(e.getMessage());
 		}
 	}

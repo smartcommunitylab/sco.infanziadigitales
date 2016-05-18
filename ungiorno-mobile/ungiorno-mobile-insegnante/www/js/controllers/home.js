@@ -238,6 +238,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
                         $scope.getChildrenByCurrentSection();
                         $scope.loadNotes();
                         $ionicLoading.hide();
+                        Toast.show($filter('translate')('data_updated'), 'short', 'bottom');
                     }
                 }, function (err) {
                     //manage error sections

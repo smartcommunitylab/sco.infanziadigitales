@@ -63,8 +63,20 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
         $scope.teacherName = teachersService.getSelectedTeacher().teacherName;
         $ionicSideMenuDelegate.toggleLeft();
     };
-
-
+    $ionicModal.fromTemplateUrl('templates/credits.html', {
+        id: '3',
+        scope: $scope,
+        backdropClickToClose: false,
+        animation: 'slide-in-up'
+    }).then(function (modal) {
+        $scope.creditsModal = modal;
+    });
+    $scope.closeCredits = function () {
+        $scope.creditsModal.hide();
+    };
+    $scope.openCredits = function () {
+        $scope.creditsModal.show();
+    }
     $scope.initialize = function () {
         $scope.menuItems = [
             {

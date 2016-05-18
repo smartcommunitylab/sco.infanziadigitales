@@ -3,7 +3,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
 .controller('HomeCtrl', function ($scope, $filter, $rootScope, $ionicModal, $cordovaCamera, $ionicPopover, $state, galleryService, profileService, dataServerService, ionicDatePicker) {
 
     /* START IONIC DATEPICKER */
-
     $scope.date = new Date();
     console.log($scope.date);
 
@@ -40,10 +39,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
 
     /* END IONIC DATEPICKER */
 
-    if (!dataServerService.userIsLogged()) {
+    /*if (!dataServerService.userIsLogged()) {
         $state.go('app.login');
         return;
-    }
+    }*/
 
     var init = function () {
         profileService.init().then(function (data) {

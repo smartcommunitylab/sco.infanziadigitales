@@ -1176,7 +1176,7 @@ select {
     border: 1px solid #bd3e4d;
     display: inline-block;
     cursor: pointer;
-    color: black;
+    color: #fff;
     font-family: Arial;
     font-size: 15px;
     padding: 10px 25px;
@@ -1320,6 +1320,7 @@ ion-content .scroll {
 
 .new-note-assign-container {
     margin-top: 24px;
+    border-width: 0px!important;
 }
 
 .new-note-kid-image {
@@ -1346,6 +1347,7 @@ ion-content .scroll {
 
 .associated-kid-delete-btn {
     float: right;
+    font-size: 14px!important;
 }
 
 .nothing-to-show-placeholder-wrapper {
@@ -1376,7 +1378,7 @@ ion-content .scroll {
 
 .menu-item-insegnante {
     border-style: hidden;
-    color: #3e5421;
+    color: #fff;
 }
 
 .icon-menu-insegnante {
@@ -1409,16 +1411,16 @@ ion-content .scroll {
 
 .menu-profile {
     background-color: #7b9e2a !important;
-    height: 100px;
+    height: 90px;
 }
 
 .menu-profile h2 {
     color: white !important;
-    line-height: 40px;
+    line-height: 30px;
 }
 
 .menu-profile button {
-    min-height: 40px !important;
+    min-height: 30px !important;
     top: 16px !important;
     color: white !important;
 }
@@ -1550,4 +1552,25 @@ ion-content .scroll {
 
 .text-gray {
     color: gray;
+}
+
+.delivered {
+    opacity: 0.2;
+}
+
+.btn_disabled {
+    opacity: 0.4;
+}
+
+.assigned_babies {
+    margin: 8px;
+}
+
+.row-voce {
+    padding: 1px!important;
+}
+
+.studente {
+    text-align: center;
+    width: 100%;
 }

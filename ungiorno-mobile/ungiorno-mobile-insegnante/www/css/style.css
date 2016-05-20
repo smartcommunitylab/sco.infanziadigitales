@@ -1585,3 +1585,7 @@ ion-content .scroll {
     margin-bottom: 4px;
     text-align: center;
 }
+
+.note-text {
+    text-align: justify;
+}

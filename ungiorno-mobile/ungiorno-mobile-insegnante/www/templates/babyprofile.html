@@ -27,7 +27,7 @@
                         <div class="babyProfile detailsTitle" id="parentsNotes" style="margin-top: 24px;">{{'parents_notes' | translate}}</div>
                         <ion-list ng-if="notes.parentNotes.length>0">
                             <ion-item ng-repeat="note in notes.parentNotes">
-                                <div class="babyProfile detailItem">{{note.note}}</div>
+                                <div class="item-text-wrap babyProfile detailItem note-text">{{note.note}}</div>
                             </ion-item>
                         </ion-list>
                         <div ng-if="!notes.parentNotes ||  notes.parentNotes.length==0">
@@ -39,7 +39,7 @@
                         <div class="babyProfile detailsTitle" id="teachersNotes" style="margin-top: 24px;">{{'teachers_notes' | translate}}</div>
                         <ion-list ng-if="notes.schoolNotes.length>0">
                             <ion-item ng-repeat="note in notes.schoolNotes">
-                                <div class="babyProfile detailItem">{{note.note}}</div>
+                                <div class="item item-text-wrap babyProfile detailItem note-text">{{note.note}}</div>
                             </ion-item>
                         </ion-list>
                         <div ng-if="!notes.schoolNotes  || notes.schoolNotes.length==0">

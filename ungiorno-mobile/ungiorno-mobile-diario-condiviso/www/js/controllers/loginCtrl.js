@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.controllers.login', [])
 
-.controller('LoginCtrl', function ($scope, $rootScope, $state, $filter, $ionicPopup, $ionicHistory, $ionicLoading, Config, loginService, dataServerService) {
+.controller('LoginCtrl', function ($scope, $rootScope, $state, $filter, $ionicPopup, $ionicHistory, $ionicLoading, Config, loginService, dataServerService, profileService) {
     /*$scope.errorMsg = null;
     $scope.login = function(provider) {
         $scope.errorMsg = null;
@@ -24,7 +24,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
     $scope.login = function (provider) {
         loginService.login(provider).then(
             function (data) {
-                dataServerService.getBabyProfiles().then(function (data) {
+                profileService.getUserProfile().then(function (data) {
                     // loginStarted = false;
 
                     $state.go('app.home');
@@ -75,7 +75,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         $ionicLoading.show();
         loginService.signin($scope.user).then(
             function (data) {
-                dataServerService.getBabyProfiles().then(function (data) {
+                profileService.getUserProfile().then(function (data) {
                     $state.go('app.home');
                     $ionicHistory.nextViewOptions({
                         disableBack: true,

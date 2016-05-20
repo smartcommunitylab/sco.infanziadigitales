@@ -284,6 +284,7 @@ public class DiaryController {
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	@ResponseBody
 	public String handleError(HttpServletRequest request, Exception exception) {
+		exception.printStackTrace();
 		return "{\"error\":\"" + exception.getMessage() + "\"}";
 	}
 

@@ -55,7 +55,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -167,7 +166,29 @@ public class RepositoryManager {
 			Query q = kidQuery(appId, schoolId, kp.getKidId());
 			DiaryKid kid = template.findOne(q, DiaryKid.class);
 			if (kid != null) {
-				// TODO, currently assume that the kid is not overwritten, do nothing
+				Set<String> existing = new HashSet<String>();
+				Set<String> existingTeachers = new HashSet<String>();
+				for (DiaryKidPerson p : kid.getPersons()) {
+					if (p.isParent()) existing.add(p.getPersonId());
+					else existingTeachers.add(p.getPersonId());
+				}
+				// TODO, currently assume that the kid is not overwritten, add new persons only
+				if (kp.getPersons() != null) {
+					for (AuthPerson ap: kp.getPersons()) {
+						if (!existing.contains(ap.getPersonId())) {
+							kid.getPersons().add(ap.toDiaryKidPerson(true));
+						}
+					}
+				}
+				if (kp.getDiaryTeachers() != null) {
+					for (DiaryTeacher dt: kp.getDiaryTeachers()) {
+						if (!existingTeachers.contains(dt.getTeacherId())) {
+							Teacher teacher = getTeacher(dt.getTeacherId(), appId, schoolId);
+							kid.getPersons().add(teacher.toDiaryKidPerson(true));
+						}
+					}			
+				}
+				template.save(kid);
 			} else {
 				DiaryKid dk = new DiaryKid();
 				dk.setAppId(kp.getAppId());

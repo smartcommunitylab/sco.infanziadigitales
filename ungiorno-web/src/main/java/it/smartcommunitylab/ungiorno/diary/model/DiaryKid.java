@@ -17,6 +17,7 @@ package it.smartcommunitylab.ungiorno.diary.model;
 
 import it.smartcommunitylab.ungiorno.model.SchoolObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -112,6 +113,7 @@ public class DiaryKid extends SchoolObject {
 
 
 	public List<DiaryKidPerson> getPersons() {
+		if (persons == null) persons = new ArrayList<DiaryKid.DiaryKidPerson>();
 		return persons;
 	}
 

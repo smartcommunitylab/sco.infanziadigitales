@@ -1,3 +1,42 @@
+angular.module('ngIOS9UIWebViewPatch', ['ng']).config(['$provide', function ($provide) {
+    'use strict';
+
+    $provide.decorator('$browser', ['$delegate', '$window', function ($delegate, $window) {
+
+        if (isIOS9UIWebView($window.navigator.userAgent)) {
+            return applyIOS9Shim($delegate);
+        }
+
+        return $delegate;
+
+        function isIOS9UIWebView(userAgent) {
+            return /(iPhone|iPad|iPod).* OS 9_\d/.test(userAgent) && !/Version\/9\./.test(userAgent);
+        }
+
+        function applyIOS9Shim(browser) {
+            var pendingLocationUrl = null;
+            var originalUrlFn = browser.url;
+
+            browser.url = function () {
+                if (arguments.length) {
+                    pendingLocationUrl = arguments[0];
+                    return originalUrlFn.apply(browser, arguments);
+                }
+
+                return pendingLocationUrl || originalUrlFn.apply(browser, arguments);
+            };
+
+            window.addEventListener('popstate', clearPendingLocationUrl, false);
+            window.addEventListener('hashchange', clearPendingLocationUrl, false);
+
+            function clearPendingLocationUrl() {
+                pendingLocationUrl = null;
+            }
+
+            return browser;
+        }
+  }]);
+}]);
 // Ionic Starter App
 
 // angular.module is a global place for creating, registering and retrieving Angular modules
@@ -7,6 +46,7 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     'ionic',
     'ngCordova',
+    'ngIOS9UIWebViewPatch',
     'pascalprecht.translate',
     'it.smartcommunitylab.infanziadigitales.diario.parents.filters',
     'it.smartcommunitylab.infanziadigitales.diario.parents.directives',
@@ -528,7 +568,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         credits_collaboration: 'In collaborazione con il Dipartimento della Conoscenza della:',
         credits_students: 'Hanno partecipato allo sviluppo:',
         credits_parents: 'Si ringraziano per la collaborazione:',
-        credits_info: 'Per informazioni',
+        credits_info: 'Per informazioni: ',
         credits_licenses_button: 'VEDI LICENZE',
         data_updated: 'Dati aggiornati'
 
@@ -677,7 +717,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         credits_collaboration: 'In collaborazione con il Dipartimento della Conoscenza della:',
         credits_students: 'Hanno partecipato allo sviluppo:',
         credits_parents: 'Si ringraziano per la collaborazione:',
-        credits_info: 'Per informazioni',
+        credits_info: 'Per informazioni: ',
         credits_licenses_button: 'VEDI LICENZE',
         data_updated: 'Dati aggiornati'
 
@@ -836,7 +876,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         credits_collaboration: 'In collaborazione con il Dipartimento della Conoscenza della:',
         credits_students: 'Hanno partecipato allo sviluppo:',
         credits_parents: 'Si ringraziano per la collaborazione:',
-        credits_info: 'Per informazioni',
+        credits_info: 'Per informazioni: ',
         credits_licenses_button: 'VEDI LICENZE',
         data_updated: 'Dati aggiornati'
 

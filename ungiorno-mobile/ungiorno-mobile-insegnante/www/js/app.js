@@ -378,7 +378,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
         absent: 'Assente',
         new_note: 'Nuova voce',
         create_new_note: 'Crea una nuova voce',
-        associate_to_childs: 'Associa a dei bambini',
+        associate_to_childs: 'Associa bambini',
         new_note_fail: 'Nuova voce non inviata',
         new_note_sent: 'Nuova voce inviata',
         associated_kids: 'Bambini associati:',
@@ -431,7 +431,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
         send_note_type: 'Tipologia di nota: ',
         profile_no_parents_notes1: 'I genitori di ',
         profile_no_parents_notes2: ' non hanno inviato nessun messaggio oggi',
-        profile_no_teacher_notes: 'Oggi non è stato inviato nessun messaggioai genitori di ',
+        profile_no_teacher_notes: 'Oggi non è stato inviato nessun messaggio ai genitori di ',
         baby_not_monitored: ' non è monitorato dal sistema ',
         communication_error: 'Errore di connessione',
         absence_type: 'Motivazione: ',
@@ -440,7 +440,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
         child_not_partecipate: 'Il bambino non partecipa alla sperimentazione',
         home_scadenze: "Seleziona i bambini che hanno effettuato la consegna",
         data_updated: "Dati aggiornati",
-        function_disabled: 'Funzione disabilita',
+        function_disabled: 'Funzione disabilitata',
         credits_project: 'Realizzato da:',
         title1: 'Un Giorno A Scuola - Insegnati',
         //        title2: 'Genitore',
@@ -448,9 +448,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
         credits_collaboration: 'In collaborazione con il Dipartimento della Conoscenza della:',
         credits_students: 'Hanno partecipato allo sviluppo:',
         credits_parents: 'Si ringraziano per la collaborazione:',
-        credits_info: 'Per informazioni',
+        credits_info: 'Per informazioni: ',
         credits_licenses_button: 'VEDI LICENZE',
         menu_credits: "Credits",
+        relation_parent: 'Genitore',
+        comm_you_must_save_title: 'Attenzione',
+        comm_you_must_save_text: 'Le modifiche effettuate sono state salvate localmente ma non sono definitive. Premi "SALVA" per confermarle.'
 
 
     });

@@ -4,7 +4,7 @@
         </ion-nav-back-button>
         <ion-nav-buttons side="right">
 
-            <button class="button icon button-clear inf_digcheck" ng-click="showConfirm()"></button>
+            <button class="button icon button-clear " ng-click="showConfirm()">{{'send'|translate}}</button>
         </ion-nav-buttons>
     </ion-nav-bar>
     <ion-content has-header="true" class="page-padding">
@@ -38,9 +38,10 @@
 -->
 
         </ion-list>
-
-        <label class="item item-input">
-            <input type="text" ng-model="note" placeholder="Inserire una motivazione" ng-hide="!isOther">
-        </label>
+        <!--
+<label class="item item-input">
+    <input type="text" ng-model="note" placeholder="Inserire una motivazione" ng-hide="!isOther">
+</label>
+-->
     </ion-content>
 </ion-view>

@@ -14,7 +14,7 @@
                         <div class="col">
                             <div class="babyProfile detailItem" ng-if="babyInformations.active">{{babyProfile.firstName}} {{'is' | translate}} {{babyStatus | uppercase}}</div>
                             <div class="babyProfile detailItem" ng-if="!babyInformations.active">{{babyProfile.firstName}}{{'baby_not_monitored' | translate}}</div>
-                            <div class="babyProfile detailItem" ng-if="babyInformations.exitTime == null">{{'absence_type' | translate}} {{babyInformations.absenceType}}</div>
+                            <div class="babyProfile detailItem" ng-if="babyInformations.exitTime == null && babyInformations.absenceType!=null">{{'absence_type' | translate}} {{babyInformations.absenceType}}</div>
                             <div class="babyProfile detailItem" ng-if="babyInformations.exitTime !== null">{{'enter_at' | translate}} {{babyEnterHour}}</div>
                             <div class="babyProfile detailItem" ng-if="checkBusServiceActive() && babyInformations.exitTime !== null">{{'bus_stop_back' | translate}} {{babyBusStopBackName}}</div>
                             <div class="babyProfile detailItem" ng-if="babyInformations.exitTime !== null && !checkBusServiceActive()">{{'exit_at' | translate}}{{babyInformations.exitTime | date:'HH:mm'}}</div>
@@ -27,7 +27,7 @@
                         <div class="babyProfile detailsTitle" id="parentsNotes" style="margin-top: 24px;">{{'parents_notes' | translate}}</div>
                         <ion-list ng-if="notes.parentNotes.length>0">
                             <ion-item ng-repeat="note in notes.parentNotes">
-                                <div class="babyProfile detailItem">{{note.note}}</div>
+                                <div class="item-text-wrap babyProfile detailItem note-text">{{note.note}}</div>
                             </ion-item>
                         </ion-list>
                         <div ng-if="!notes.parentNotes ||  notes.parentNotes.length==0">
@@ -39,7 +39,7 @@
                         <div class="babyProfile detailsTitle" id="teachersNotes" style="margin-top: 24px;">{{'teachers_notes' | translate}}</div>
                         <ion-list ng-if="notes.schoolNotes.length>0">
                             <ion-item ng-repeat="note in notes.schoolNotes">
-                                <div class="babyProfile detailItem">{{note.note}}</div>
+                                <div class="item item-text-wrap babyProfile detailItem note-text">{{note.note}}</div>
                             </ion-item>
                         </ion-list>
                         <div ng-if="!notes.schoolNotes  || notes.schoolNotes.length==0">

@@ -82,7 +82,7 @@
                 <div class=" children-home " ng-repeat="child in childrenProfiles[selectedPeriod] track by $index " ng-click="detailOrCommunication(child) ">
                     <div class="badge-msg " ng-if="child.calNotes && !communicationExpanded "><i class="icon center icon-message ion-document-text "></i>
                     </div>
-                    <img ng-src="{{getChildImage(child)}} " ng-class="{ 'img-assente':child.exitTime==null, 'img-presente':child.exitTime !=null, 'img-not-active':!child.active, 'img-communication':communicationExpanded, 'delivered':(!getChildrenDeliveryByID(child.kidId) && communicationExpanded) } ">
+                    <img ng-src="{{getChildImage(child)}} " ng-class="{ 'img-assente':child.exitTime==null || (child.exitTime < getTime(selectedPeriod)), 'img-presente':child.exitTime !=null, 'img-not-active':!child.active, 'img-communication':communicationExpanded, 'delivered':(!getChildrenDeliveryByID(child.kidId) && communicationExpanded) } ">
 
                     <!--            <img ng-src="{{child.image}} ">-->
                     <div class="name-of-child " ng-if="!child.image || child.image=='' ">{{child.childrenName}}</div>
@@ -118,7 +118,7 @@
                         </div>
 
                     </div>
-<!--
+                    <!--
                     <div ng-hide="!parentsNote " class="parents-notes " ng-class="{ 'changing-notes-parents-to-teachers': (!parentsNote && teachersNote)} ">
     <ion-list>
         <ion-item class="item-text-complete " ng-repeat="babyWithNotes in parentNotes track by $index ">

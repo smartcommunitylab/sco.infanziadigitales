@@ -1013,10 +1013,11 @@ select {
 }
 
 .children-presenza {
-    position: absolute;
+    /*    position: absolute;
+
     bottom: 0px;
     left: 0;
-    width: 100%;
+    width: 100%;*/
 }
 
 . .section-tab-notpressed {
@@ -1573,4 +1574,18 @@ ion-content .scroll {
 .studente {
     text-align: center;
     width: 100%;
+}
+
+.close-modal {
+    font-size: 24px;
+    padding-left: 16px;
+    padding-top: 4px;
+    line-height: 40px;
+    padding-right: 16px;
+    margin-bottom: 4px;
+    text-align: center;
+}
+
+.note-text {
+    text-align: justify;
 }

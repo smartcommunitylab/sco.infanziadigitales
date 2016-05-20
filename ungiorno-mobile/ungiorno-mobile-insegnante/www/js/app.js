@@ -442,7 +442,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
         data_updated: "Dati aggiornati",
         function_disabled: 'Funzione disabilitata',
         credits_project: 'Realizzato da:',
-        title1: 'Un Giorno A Scuola - Insegnati',
+        title1: 'Un Giorno A Scuola - Insegnanti',
         //        title2: 'Genitore',
         credits_sponsored: 'Nell\'ambito del progetto "Inf@nzia DIGI tales 3.6" finanziato dal:',
         credits_collaboration: 'In collaborazione con il Dipartimento della Conoscenza della:',

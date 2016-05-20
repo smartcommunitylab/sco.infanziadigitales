@@ -1,12 +1,12 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.controllers.home', [])
 
-.controller('HomeCtrl', function ($scope, $filter, $rootScope, $ionicModal, $cordovaCamera, $ionicPopover, $state, galleryService, profileService, dataServerService, ionicDatePicker) {
+.controller('HomeCtrl', function ($scope, $filter, $rootScope, $ionicModal, $cordovaCamera, $ionicPopover, $state, galleryService, profileService, dataServerService, ionicDatePicker, $ionicHistory) {
 
     /* START IONIC DATEPICKER */
     $scope.date = new Date();
     console.log($scope.date);
-
     $scope.dateFormat = $filter('date')('yyyy-MM-dd');
+
     var ipObj1 = {
         callback: function (val) { //Mandatory
             console.log('Return value from the datepicker popup is : ' + val, new Date(val));
@@ -45,12 +45,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
     }*/
 
     var init = function () {
-        profileService.init().then(function (data) {
-            $rootScope.kidProfiles = data;
+        profileService.init().then(function () {
+            $rootScope.kidProfiles = profileService.getAllBabyProfiles();
+            /*console.log("kidprofiles");console.log($rootScope.kidProfiles);*/
             profileService.getCurrentBaby().then(function (data) {
                 if ($rootScope.selectedKid) {
                     $scope.baby = data;
-                    dataServerService.getPostsByBabyId($scope.baby.kidId).then(function (posts) {
+                    dataServerService.getPostsByBabyId('scuola2', $scope.baby.kidId, true).then(function (posts) {
                         $scope.posts = posts;
                     });
                 }

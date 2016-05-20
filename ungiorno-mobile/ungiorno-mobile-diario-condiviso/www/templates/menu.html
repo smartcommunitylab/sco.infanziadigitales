@@ -14,7 +14,7 @@
     <ion-side-menu side="left">
         <ion-content class="leftmenu">
             <ion-list>
-                <ion-item menu-close class="item item-avatar item-button-right menu-profile" ng-if="kidProfiles && kidProfiles.length > 0">
+                <ion-item menu-close class="item item-avatar item-button-right menu-profile" ng-if="!!kidProfiles">
                     <img ng-src="{{selectedKid.image}}">
                     <h2>{{selectedKid.fullName}}</h2>
                     <button menu-close class="button button-clear" id="babysetting" ng-click="gotodiary(false)">

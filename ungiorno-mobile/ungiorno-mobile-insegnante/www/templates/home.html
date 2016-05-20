@@ -228,8 +228,8 @@
                 <ion-content class="under-bar ">
                     <div class="scadenze "> <i class="icon ion-android-alarm-clock "></i>{{'scadenze' | translate|uppercase}}</div>
                     <div class="list list-inset " ng-if="communications.length> 0">
-                        <ion-radio ng-repeat="item in communications |orderBy:'-creationDate'" ng-if="item.doCheck != null" ng-value="item.communicationId" ng-model="data.communication" ng-click="changeCommunication(item.communicationId)">
-                            {{ item.description }}
+                        <ion-radio class="radio-home" ng-repeat="item in communications |orderBy:'-creationDate'" ng-if="item.doCheck != null" ng-value="item.communicationId" ng-model="data.communication" ng-click="changeCommunication(item.communicationId)">
+                            <div class="communication-home item-text-wrap">{{ item.description }}</div>
                         </ion-radio>
                     </div>
                     <div class="nothing-to-show-placeholder-wrapper">

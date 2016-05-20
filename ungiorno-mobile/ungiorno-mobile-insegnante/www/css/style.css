@@ -1589,3 +1589,14 @@ ion-content .scroll {
 .note-text {
     text-align: justify;
 }
+
+.communication-home {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    padding-bottom: 4px;
+}
+
+.radio-home .item-content {
+    padding-bottom: 0px!important;
+}

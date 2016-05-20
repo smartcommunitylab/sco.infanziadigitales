@@ -14,14 +14,14 @@
     <ion-side-menu side="left">
         <ion-content class="leftmenu">
             <ion-list>
-                <ion-item menu-close class="item item-avatar item-button-right menu-profile" ng-if="!!kidProfiles">
+                <ion-item menu-close class="item item-avatar item-button-right menu-profile" ng-if="!!kidProfiles && babyNum>0">
                     <img ng-src="{{selectedKid.image}}">
                     <h2>{{selectedKid.fullName}}</h2>
                     <button menu-close class="button button-clear" id="babysetting" ng-click="gotodiary(false)">
                         <i class="icon inf_digsettings icon-light"></i>
                     </button>
                 </ion-item>
-                <div class="menu-profile-open text-right"  ng-if="kidProfiles && kidProfiles.length > 1">
+                <div class="menu-profile-open text-right" ng-show="kidProfiles && babyNum > 1">
                     <button class="button button-clear" ng-click="toggleProfile()">
                         <i class="icon icon-light" ng-class="{'ion-chevron-down':!profilesOpen, 'ion-chevron-up':profilesOpen}"></i>
                     </button>
@@ -35,14 +35,15 @@
                     <i class="icon inf_dighome "></i>{{'home'|translate}}
                 </ion-item>
                 <ion-item menu-close class="item item-icon-left" ng-click="changeProfileType()" ng-if="isMultiProfile()">
-                    <i class="icon inf_digchildren_list "></i>{{'change_profile'|translate}}<p style="font-size:12px;">{{isParent() ? 'profile_parent_used':'profile_teacher_used'|translate}}</p>
+                    <i class="icon inf_digchildren_list "></i>{{'change_profile'|translate}}
+                    <p style="font-size:12px;">{{isParent() ? 'profile_parent_used':'profile_teacher_used'|translate}}</p>
                 </ion-item>
-<!--
+                <!--
                 <ion-item menu-close item-icon-left ng-click="gotodiary(false)">
                     <i class="icon voice-menu  inf_digaccount"></i>Dettaglidiario
                 </ion-item>
 -->
-<!--
+                <!--
                 <ion-item menu-close class="item item-icon-left" ng-click="gotodiary(true)">
                     <i class="icon voice-menu  inf_digaccount"></i>{{'create_diary'|translate}}
                 </ion-item>
@@ -50,7 +51,7 @@
                 <ion-item menu-close class="item item-icon-left" href="#/app/gallery" ng-if="isParent()">
                     <i class="icon voice-menu  inf_digimage "></i>{{'gallery'|translate}}
                 </ion-item>
-<!--
+                <!--
                 <ion-item menu-close item-icon-left ng-click="goto('app.register')">
                     <i class="icon voice-menu  inf_digaccount"></i>Registrati
                 </ion-item>

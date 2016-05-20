@@ -6,6 +6,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
     $scope.date = new Date();
     console.log($scope.date);
     $scope.dateFormat = $filter('date')('yyyy-MM-dd');
+    $rootScope.babyNum = 0;
 
     var ipObj1 = {
         callback: function (val) { //Mandatory
@@ -47,7 +48,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
     var init = function () {
         profileService.init().then(function () {
             $rootScope.kidProfiles = profileService.getAllBabyProfiles();
-            /*console.log("kidprofiles");console.log($rootScope.kidProfiles);*/
+            $rootScope.babyNum = Object.keys($rootScope.kidProfiles).length;
+            /*console.log($scope.babyNum);
+            console.log("kidprofiles");console.log($rootScope.kidProfiles);*/
             profileService.getCurrentBaby().then(function (data) {
                 if ($rootScope.selectedKid) {
                     $scope.baby = data;

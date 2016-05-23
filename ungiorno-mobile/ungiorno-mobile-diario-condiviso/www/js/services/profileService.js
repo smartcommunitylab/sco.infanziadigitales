@@ -14,21 +14,23 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
     profileService.init = function () {
         var deferred = $q.defer();
         profileService.getUserProfile().then(function (data) {
-            userData = data;
-            if (localStorage.currentProfile == "parent") {
+            userData = angular.copy(data);
+            if (!!userData.parent && !!userData.parent.userId) {
+                localStorage.currentProfile = 'parent';
                 kidType = userData.kids;
             } else {
+                localStorage.currentProfile = 'teacher';
                 kidType = userData.students;
             }
             babyProfiles = {};
             if (data == null || data.length == 0) return;
-            var calls=[];
+            var calls = [];
             for (var i = 0; i < kidType.length; i++) {
                 calls.push(profileService.getBabyById(kidType[i].kidId, kidType[i].schoolId).then(function (data) {
                     babyProfiles[data.kidId] = data;
                 }));
             }
-            $q.all(calls).then(function(values){
+            $q.all(calls).then(function (values) {
                 deferred.resolve(babyProfiles);
             })
             if (!localStorage.currentBabyID) profileService.setCurrentBabyID(kidType[0].kidId);
@@ -91,7 +93,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
         var deferred = $q.defer();
         $http({
             method: 'GET',
-            url: Config.URL() + '/' + Config.app() + '/diary/' + Config.appId() + '/scuola2/kids/'+localStorage.currentBabyID+'?isTeacher=true',
+            url: Config.URL() + '/' + Config.app() + '/diary/' + Config.appId() + '/scuola2/kids/' + localStorage.currentBabyID + '?isTeacher=true',
             headers: {
                 'Accept': 'application/json'
             },
@@ -140,19 +142,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
         if (storedProfile && storedProfile != 'null') {
             return storedProfile == 'parent';
         } else {
-            profileService.getUserProfile().then(function (data) {
-                var user = data;
-                if (user) {
-                    if (user.parent && user.parent.userId) {
-                        localStorage.currentProfile = 'parent';
-                        return true;
-                    } else {
-                        localStorage.currentProfile = 'teacher';
-                        return false;
-                    }
-                }
-                return null;
-            });
+            if (localStorage.currentProfile = 'parent') {
+                return true;
+            } else {
+                return false;
+            }
         }
     };
 

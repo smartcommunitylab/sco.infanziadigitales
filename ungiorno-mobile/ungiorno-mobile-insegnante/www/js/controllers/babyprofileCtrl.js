@@ -91,7 +91,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
         }
         for (var i = 0; i < $scope.babyProfile.persons.length; i++) {
             if ($scope.babyProfile.persons[i].personId == $scope.babyInformations.personId)
-                $scope.relation = $scope.babyProfile.persons[i].relation;
+                if (!$scope.babyProfile.persons[i].parent) {
+                    $scope.relation = $scope.babyProfile.persons[i].relation;
+                } else {
+                    $scope.relation = $filter('translate')('relation_parent');
+
+                }
         }
     }
 

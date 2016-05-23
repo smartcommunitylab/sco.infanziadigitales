@@ -31,7 +31,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
     'angularMoment'
 ])
 
-.run(function ($ionicPlatform, $rootScope, $cordovaSplashscreen, $state, $translate, $q, $ionicHistory, $ionicConfig, $ionicSideMenuDelegate, loginService, dataServerService,$ionicLoading) {
+.run(function ($ionicPlatform, $rootScope, $cordovaSplashscreen, $state, $translate, $q, $ionicHistory, $ionicConfig, $ionicSideMenuDelegate, loginService, dataServerService,$ionicLoading,profileService) {
 
     $rootScope.getUserId = function () {
         return localStorage.userId;
@@ -115,7 +115,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
             } else {
                 loginService.login(localStorage.provider).then(
                     function (data) {
-                        dataServerService.getBabyProfiles().then(function (data) {
+                        profileService.getUserProfile().then(function (data) {
                             $state.go('app.home');
                             $ionicHistory.nextViewOptions({
                                 disableBack: true,

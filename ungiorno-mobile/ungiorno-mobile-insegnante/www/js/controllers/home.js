@@ -53,11 +53,38 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
     }
 
     $scope.closeNotesAndComm = function () {
-        $scope.noteExpanded = false;
-        $scope.communicationExpanded = false;
-        $scope.teachersNote = true;
-        $scope.parentsNote = false;
-        $scope.newNoteExpandend = false;
+        if ($scope.communicationExpanded) {
+            //popup;
+            var myPopup = $ionicPopup.show({
+                title: $filter('translate')('comm_you_must_save_title'),
+                template: $filter('translate')('comm_you_must_save_text'),
+                scope: $scope,
+                buttons: [
+                    {
+                        text: $filter('translate')('ok'),
+                        type: 'cancel-button',
+                        onTap: function (e) {
+                            $scope.communicationExpanded = false;
+
+                        }
+                    }
+//                    ,
+//                    {
+//                        text: '<b>' + $filter('translate')('retry') + '</b>',
+//                        type: 'create-button',
+//                        onTap: function (e) {
+//                            $scope.sendNewNote();
+//                        }
+//                    }
+                ]
+            });
+
+        } else {
+            $scope.noteExpanded = false;
+            $scope.teachersNote = true;
+            $scope.parentsNote = false;
+            $scope.newNoteExpandend = false;
+        }
         //put the same list of children on the check
     }
 
@@ -261,6 +288,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
                     //                }
                     teachersService.setSelectedTeacher($scope.selectedTeacher);
                     console.log($scope.selectedTeacher);
+                    $ionicLoading.hide();
+
                 }, function (err) {
                     //manage error teachers
                     Toast.show($filter('translate')('communication_error'), 'short', 'bottom');

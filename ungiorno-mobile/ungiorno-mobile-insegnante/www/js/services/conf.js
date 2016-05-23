@@ -15,7 +15,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.conf', 
 
 
     //    var credits = 'credits.html';
-    var APP_VERSION = '1.0.0RC1';
+    var APP_VERSION = '1.0.1';
 
     return {
         getFakeId: function () {

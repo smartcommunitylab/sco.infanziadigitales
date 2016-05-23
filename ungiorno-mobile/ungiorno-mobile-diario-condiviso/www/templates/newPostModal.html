@@ -28,11 +28,11 @@
         </div>
         <div class="post-create-element-row">
             <i class="icon inf_digclock post-create-element"></i>
+            
             <div class="post-create-element">
-                <item class="item-input">
-                 <label type="date" ng-click="openDatePicker()">{{date | date:'yyyy-MM-dd'}}</label>
-                <!-- <input class="post-create-element" type="date" ng-click="openDatePicker()"> -->
-                </item>
+             <label class="item item-input" ng-click="openDatePicker()">
+                <span type="date" class="input-label date">{{date | date:'yyyy-MM-dd'}}</span>
+                </label>
             </div>
         </div>
         <!--

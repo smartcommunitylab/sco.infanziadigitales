@@ -129,6 +129,27 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
         return deferred.promise;
     }
 
+    profileService.saveChildProfile = function (babyProfile) {
+        var deferred = $q.defer();
+        $http({
+            method: 'POST',
+            url: Config.URL() + '/' + Config.app() + '/diary/' + Config.appId() + '/scuola2/kids/kid2?isTeacher=true',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            data: babyProfile,
+        }).
+        success(function (data, status, headers, config) {
+            deferred.resolve(data);
+        }).
+        error(function (data, status, headers, config) {
+            console.log(data + status + headers + config);
+            deferred.reject(data);
+        });
+        return deferred.promise;
+    }
+
     profileService.getBabyProfileById = function (babyId) {
         return babyProfiles[babyId];
     }

@@ -1,34 +1,34 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.controllers.dettaglidiario', [])
 
-.controller('dettaglidiarioCtrl', function ($scope, profileService, $filter, $location, $ionicScrollDelegate, diaryService, $state, Toast, ionicDatePicker) {
+.controller('dettaglidiarioCtrl', function ($scope, profileService, $filter, $location, $ionicScrollDelegate, diaryService, $state, Toast, ionicDatePicker, profileService) {
 
-    $scope.access = {
-        relation: '',
-        firstName: '',
-        lastName: '',
-        telephone: [],
-        email: [],
-        gender: '',
-        birthday: ''
-    };
-    $scope.accessCopy = {
+    // ELEMENTO PERSONA
+    $scope.copiedaccess = {
         lastName: '',
         firstName: '',
         phone: [],
         email: [],
         relation: '',
         gender: '',
-        isParent: '',
-        birthday: '',
+        parent: '',
+        birthday: null,
         default: '',
-        authorizationDeadline: '',
-        authorizationUrl: '',
         adult: '',
         authorized: ''
     };
 
+    // OGGETTI DI APPOGGIO PER L'INSERIMENTO
+    $scope.access = {
+        lastName: '',
+        firstName: '',
+        relation: '',
+        phone: '',
+        email: '',
+        birthday: null
+    };
+
     $scope.isParent = function () {
-        if ($scope.access.relation == 'parent1' || $scope.access.relation == 'parent2' || $scope.access.relation == 'brother' || $scope.access.relation == 'sister') {
+        if ($scope.copiedaccess.relation == 'parent1' || $scope.copiedaccess.relation == 'parent2' || $scope.copiedaccess.relation == 'brother' || $scope.copiedaccess.relation == 'sister') {
             return true;
         }
     };
@@ -38,40 +38,54 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         }
     };
 
+    // AGGIUNGE UN ELEMENTO PERSON AL BAMBINO
     var addAccessComponent = function () {
         /*$scope.addedComponents.splice(index, 1);*/
         copyAccess();
-        $scope.babyCopy.persons.push($scope.accessCopy);
+        if ($scope.access.firstName != "" && $scope.access.lastName != "") {
+            $scope.babyCopy.persons.push($scope.copiedaccess);
+        }
         clearAccess();
     }
 
+    // POPOLA UN ELEMENTO PERSON DEL BAMBINO
     var copyAccess = function () {
-        $scope.accessCopy.personId == "personId1asa";
-        $scope.accessCopy.fullName = $scope.access.firstName + " " + $scope.access.lastName;
-        $scope.accessCopy.lastName = $scope.access.lastName;
-        $scope.accessCopy.firstName = $scope.access.firstName;
-        $scope.accessCopy.phone.push($scope.access.telephone);
-        $scope.accessCopy.email.push($scope.access.email);
-        $scope.accessCopy.relation = $scope.access.relation;
-        $scope.accessCopy.gender = "Maschio";
-        $scope.accessCopy.isParent = true;
-        $scope.accessCopy.birthday = 1308967200;
-        $scope.accessCopy.default = true;
-        $scope.accessCopy.authorizationDeadline = 1534964475576;
-        $scope.accessCopy.authorizationUrl = "url1";
-        $scope.accessCopy.adult = true;
-        $scope.accessCopy.authorized = true;
+        $scope.copiedaccess.fullName = $scope.access.firstName + " " + $scope.access.lastName;
+        $scope.copiedaccess.lastName = $scope.access.lastName;
+        $scope.copiedaccess.firstName = $scope.access.firstName;
+        $scope.copiedaccess.phone.push($scope.access.phone);
+        $scope.copiedaccess.email.push($scope.access.email);
+        $scope.copiedaccess.relation = $scope.access.relation;
+        $scope.copiedaccess.gender = "Maschio";
+        $scope.copiedaccess.parent = $scope.isParent();
+        $scope.copiedaccess.default = true;
+        $scope.copiedaccess.adult = true;
+        $scope.copiedaccess.authorized = true;
+        $scope.copiedaccess.birthday = null;
     };
 
+    // PULISCE UN ELEMENTO PERSON DEL BAMBINO
     var clearAccess = function () {
-        $scope.access = {
-            relation: '',
-            firstName: '',
+        $scope.copiedaccess = {
             lastName: '',
-            telephone: '',
-            email: '',
+            firstName: '',
+            phone: [],
+            email: [],
+            relation: '',
             gender: '',
-            birthday: ''
+            birthday: null,
+            isParent: '',
+            default: '',
+            adult: '',
+            authorized: ''
+        };
+        $scope.access = {
+            lastName: '',
+            firstName: '',
+            relation: '',
+            phone: '',
+            email: '',
+            birthday: null
         };
     }
 
@@ -105,12 +119,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
             console.log('No date selected');
         } else {
             console.log('Selected date is : ', val)
-            $scope.baby.birthday = val;
+                /*$scope.baby.birthday = val;*/
         }
     };
 
     /* END IONIC DATEPICKER */
 
+    // MODIFICA E SALVA IN DETTAGLI DIARIO
     var mode = "view";
     $scope.createMode = diaryService.getCreateDiaryMode();
     $scope.modify = function () {
@@ -123,13 +138,22 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         if (!error) {
             $scope.baby = $scope.babyCopy;
             if ($scope.createMode) {
-                $state.go('app.home')
+                $state.go('app.home');
             } else {
-                addAccessComponent();
+                if (!!$scope.access.relation) {
+                    addAccessComponent()
+                };
+                $scope.babyCopy.fullName = $scope.babyCopy.firstName + ' ' + $scope.babyCopy.lastName;
+                profileService.saveChildProfile($scope.babyCopy).then(function (data) {
+                    $scope.babyCopy = data.data;
+                    $ionicScrollDelegate.scrollTop();
+                });
                 mode = "view";
             }
         }
     }
+    // END MODIFICA E SALVA DETTAGLIO DIARIO
+
     var checkDataError = function (objectToCheck) {
         var error = false;
         for (var key in objectToCheck) {
@@ -156,14 +180,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         return mode === "view";
     }
     $scope.isMale = function (gender) {
-        return gender === "Maschio";
-    }
-    $scope.isTeacher = function (relation) {
-        return relation === "maestra";
-    }
-    $scope.isFamily = function (relation) {
-        return relation === "mamma" || relation === "papà" || relation === "sorella" || relation === "fratello" || relation.startsWith('Genitore');
-    }
+            return gender === "Maschio";
+        }
+        /*  $scope.isTeacher = function (relation) {
+              return relation === "maestra";
+          }
+          $scope.isFamily = function (relation) {
+              return relation === "mamma" || relation === "papà" || relation === "sorella" || relation === "fratello" || relation.startsWith('Genitore');
+          }*/
     $scope.getBaby = function (gender) {
         var baby;
         if (gender === "Femmina") {
@@ -235,9 +259,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
 
         profileService.getCurrentBaby().then(function (data) {
             $scope.baby = data;
-            $scope.baby.birthday = new Date($scope.baby.birthday * 1000);
+            /*$scope.baby.birthday = new Date($scope.baby.birthday * 1000);*/
             for (var i = 0; i < $scope.baby.persons.length; i++) {
-                $scope.baby.persons[i].birthday = new Date($scope.baby.persons[i].birthday * 1000);
+                if (!!$scope.baby.persons[i].birthday) {
+                    $scope.baby.persons[i].birthday = new Date($scope.baby.persons[i].birthday * 1000);
+                }
             }
             $scope.babyCopy = clone($scope.baby);
 

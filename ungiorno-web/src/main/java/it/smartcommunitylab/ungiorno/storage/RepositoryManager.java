@@ -57,6 +57,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -163,8 +164,12 @@ public class RepositoryManager {
 			KidProfile old = template.findOne(kidQuery(appId, schoolId, kid.getKidId()), KidProfile.class);
 			if (old != null) {
 				Set<String> persons = new HashSet<String>();
-				for (AuthPerson ap: old.getPersons()) {
-					persons.add(ap.getPersonId());
+				for (Iterator<AuthPerson> iter = old.getPersons().iterator(); iter.hasNext();) {
+					AuthPerson ap = iter.next();
+					if (!ap.isParent()) iter.remove();
+					else {
+						persons.add(ap.getPersonId());
+					}
 				}
 				for (AuthPerson ap: kid.getPersons()) {
 					if (!persons.contains(ap.getPersonId())) {

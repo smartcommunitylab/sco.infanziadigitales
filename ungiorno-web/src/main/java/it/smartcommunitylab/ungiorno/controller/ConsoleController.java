@@ -101,6 +101,28 @@ public class ConsoleController {
 		return res;
 	}
 
+	@RequestMapping(value = "/updateauthorizations", method = RequestMethod.POST)
+	public @ResponseBody String uploadAuthoriz(MultipartHttpServletRequest req) throws Exception {
+		MultiValueMap<String, MultipartFile> multiFileMap = req.getMultiFileMap();
+		String res = "";
+
+		try {
+			String schoolId = req.getParameter("schoolId");
+			String appId = getAppId();
+			
+			Importer importer = new Importer();
+			
+			if (multiFileMap.containsKey("childrenData")) {
+				importer.importChildrenData(appId, schoolId, multiFileMap.getFirst("childrenData").getInputStream());
+				storage.updateAuthorizations(appId, schoolId, importer.getChildren());
+			}
+		} catch (ImportError e) {
+			System.err.println("ERROR:" + e.getMessage());
+			res = new ObjectMapper().writeValueAsString(e);
+		}
+		return res;
+	}
+
 	private String getAppId() {
 		AppDetails details = (AppDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String app = details.getUsername();

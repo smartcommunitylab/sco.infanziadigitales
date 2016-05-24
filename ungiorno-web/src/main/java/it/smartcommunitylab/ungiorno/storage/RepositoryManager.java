@@ -158,6 +158,31 @@ public class RepositoryManager {
 	 * @param schoolId
 	 * @param children
 	 */
+	public void updateAuthorizations(String appId, String schoolId, List<KidProfile> children) {
+		for (KidProfile kid : children) {
+			KidProfile old = template.findOne(kidQuery(appId, schoolId, kid.getKidId()), KidProfile.class);
+			if (old != null) {
+				Set<String> persons = new HashSet<String>();
+				for (AuthPerson ap: old.getPersons()) {
+					persons.add(ap.getPersonId());
+				}
+				for (AuthPerson ap: kid.getPersons()) {
+					if (!persons.contains(ap.getPersonId())) {
+						old.getPersons().add(ap);
+					}
+				}
+				template.save(old);
+			} else {
+				template.insert(kid); 
+			}
+		}
+	}
+
+	/**
+	 * @param appId
+	 * @param schoolId
+	 * @param children
+	 */
 	public void updateChildren(String appId, String schoolId, List<KidProfile> children) {
 		template.remove(schoolQuery(appId, schoolId), KidProfile.class);
 		template.insertAll(children);

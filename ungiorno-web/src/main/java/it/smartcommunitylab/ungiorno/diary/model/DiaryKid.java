@@ -135,6 +135,8 @@ public class DiaryKid extends SchoolObject {
 		private String personId, gender, fullName, firstName, lastName, relation;
 		private List<String> phone, email;
 		private boolean parent, _default, authorized, adult;
+		private Long birthday;
+
 		public String getPersonId() {
 			return personId;
 		}
@@ -206,6 +208,12 @@ public class DiaryKid extends SchoolObject {
 		}
 		public void setAdult(boolean adult) {
 			this.adult = adult;
+		}
+		public Long getBirthday() {
+			return birthday;
+		}
+		public void setBirthday(Long birthday) {
+			this.birthday = birthday;
 		}
 		
 		

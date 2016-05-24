@@ -133,7 +133,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
         var deferred = $q.defer();
         $http({
             method: 'POST',
-            url: Config.URL() + '/' + Config.app() + '/diary/' + Config.appId() + '/scuola2/kids/kid2?isTeacher=true',
+            url: Config.URL() + '/' + Config.app() + '/diary/' + Config.appId() + '/' + babyProfile.schoolId + '/' + 'kids/' + babyProfile.kidId + '?isTeacher=false',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'

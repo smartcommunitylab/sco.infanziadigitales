@@ -28,10 +28,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
     };
 
     $scope.isParent = function () {
-        if ($scope.copiedaccess.relation == 'parent1' || $scope.copiedaccess.relation == 'parent2' || $scope.copiedaccess.relation == 'brother' || $scope.copiedaccess.relation == 'sister') {
+        if ($scope.access.relation == 'parent1' || $scope.access.relation == 'parent2' || $scope.access.relation == 'brother' || $scope.access.relation == 'sister') {
             return true;
         }
     };
+    //    $scope.isAccess = function () {
+    //        if ($scope.access.relation == 'parent1' || $scope.access.relation == 'parent2' || $scope.access.relation == 'brother' || $scope.access.relation == 'sister' || $scope.access.relation == 'parent') {
+    //            return true;
+    //        }
+    //    };
+
+    // FUNZIONE PER PERMESSI MODIFICA
     $scope.isAccess = function () {
         if ($scope.access.relation == 'parent' || $scope.access.relation == 'teacher') {
             return true;
@@ -60,7 +67,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         $scope.copiedaccess.parent = $scope.isParent();
         $scope.copiedaccess.default = true;
         $scope.copiedaccess.adult = true;
-        $scope.copiedaccess.authorized = true;
+        $scope.copiedaccess.authorized = $scope.isAccess();
         $scope.copiedaccess.birthday = null;
     };
 
@@ -133,26 +140,26 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         mode = "edit";
     }
     $scope.save = function () {
-        var error = false;
-        error = checkDataError($scope.babyCopy);
-        if (!error) {
-            $scope.baby = $scope.babyCopy;
-            if ($scope.createMode) {
-                $state.go('app.home');
-            } else {
-                if (!!$scope.access.relation) {
-                    addAccessComponent()
-                };
-                $scope.babyCopy.fullName = $scope.babyCopy.firstName + ' ' + $scope.babyCopy.lastName;
-                profileService.saveChildProfile($scope.babyCopy).then(function (data) {
-                    $scope.babyCopy = data.data;
-                    $ionicScrollDelegate.scrollTop();
-                });
-                mode = "view";
+            var error = false;
+            error = checkDataError($scope.babyCopy);
+            if (!error) {
+                $scope.baby = $scope.babyCopy;
+                if ($scope.createMode) {
+                    $state.go('app.home');
+                } else {
+                    if (!!$scope.access.relation) {
+                        addAccessComponent()
+                    };
+                    $scope.babyCopy.fullName = $scope.babyCopy.firstName + ' ' + $scope.babyCopy.lastName;
+                    profileService.saveChildProfile($scope.babyCopy).then(function (data) {
+                        $scope.babyCopy = data.data;
+                        $ionicScrollDelegate.scrollTop();
+                    });
+                    mode = "view";
+                }
             }
         }
-    }
-    // END MODIFICA E SALVA DETTAGLIO DIARIO
+        // END MODIFICA E SALVA DETTAGLIO DIARIO
 
     var checkDataError = function (objectToCheck) {
         var error = false;
@@ -180,14 +187,24 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         return mode === "view";
     }
     $scope.isMale = function (gender) {
-            return gender === "Maschio";
-        }
-        /*  $scope.isTeacher = function (relation) {
-              return relation === "maestra";
-          }
-          $scope.isFamily = function (relation) {
-              return relation === "mamma" || relation === "papà" || relation === "sorella" || relation === "fratello" || relation.startsWith('Genitore');
-          }*/
+        return gender === "Maschio";
+    }
+
+    // DA ERRORE
+//    $scope.isTeacher = function (relation) {
+//        if (relation == 'teacher') {
+//            return true;
+//            //return relation === "teacher";
+//        }
+//    }
+//
+//    $scope.isFamily = function (relation) {
+//        if (relation == 'parent1' || relation == 'parent2' || relation == 'brother' || relation == 'sister' || relation == 'parent') {
+//            return true;
+//        }
+//        //              return relation === "parent1" || relation === "parent2" || relation === "sister" || relation === "brother" || relation === "parent";
+//    }
+
     $scope.getBaby = function (gender) {
         var baby;
         if (gender === "Femmina") {
@@ -229,23 +246,55 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         }
     }
 
-    $scope.getPreposition = function (gender, relation) {
-        var toRtn;
-        switch (gender) {
-            case 'Maschio':
-                toRtn = "del";
-                break;
-            case 'Femmina':
-                toRtn = "della";
-                break;
-            default:
-                toRtn = "del";
-        }
-        if (relation === "zio") {
-            toRtn = "dello";
-        }
-        return toRtn;
-    }
+    //    $scope.getPreposition = function (gender, relation) {
+    //        var toRtn;
+    //        switch (gender) {
+    //            case 'Maschio':
+    //                toRtn = "del";
+    //                break;
+    //            case 'Femmina':
+    //                toRtn = "della";
+    //                break;
+    //            default:
+    //                toRtn = "del";
+    //        }
+    //        if (relation === "zio") {
+    //            toRtn = "dello";
+    //        }
+    //        return toRtn;
+    //    }
+
+    //    $scope.getPreposition = function (relation) {
+    //        var toRtn;
+    //        switch (relation) {
+    //        case 'parent1':
+    //            toRtn = "Nome del genitore";
+    //            break;
+    //        case 'parent2':
+    //            toRtn = "Nome del genitore";
+    //            break;
+    //        case 'brother':
+    //            toRtn = "Nome del fratello";
+    //            break;
+    //        case 'sister':
+    //            toRtn = "Nome della sorella";
+    //            break;
+    //        case 'parent':
+    //            toRtn = "Nome del ";
+    //            break;
+    //        case 'teacher':
+    //            toRtn = "sorella";
+    //            break;
+    //        default:
+    //            toRtn = "del";
+    //        }
+    //        if (relation === "zio") {
+    //            toRtn = "dello";
+    //        }
+    //        return toRtn;
+    //    }
+
+
     $scope.getString = function (firstString, gender, relation) {
         var string;
         string = $filter('translate')(firstString) + $scope.getPreposition(gender, relation);
@@ -266,7 +315,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
                 }
             }
             $scope.babyCopy = clone($scope.baby);
-
+            console.log($scope.babyCopy);
         });
     }
 

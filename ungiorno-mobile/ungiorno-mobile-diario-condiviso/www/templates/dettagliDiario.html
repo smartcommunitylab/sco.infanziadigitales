@@ -46,7 +46,7 @@
             </label> -->
 
              <label class="item item-input" ng-click="openDatePicker()" ng-if="!isViewMode(data)">
-                <span type="date" class="input-label date">{{baby.birthday | date:'d-MMMM-yyyy'}}</span>
+                <span type="date" class="input-label date">{{babyCopy.birthday | date:'d-MMMM-yyyy'}}</span>
                 <i class="ion-asterisk alignRight inline vertical-middle"></i>
                 </label>
 
@@ -67,7 +67,7 @@
 
             <img ng-src="{{babyCopy.image}}" class="sizeImage" ng-click="changeImage()">
 
-            <div class="item item-divider">{{'data_family' | translate}}:</div>
+             <div class="item item-divider">{{'data_family' | translate}}:</div>
 
             <div ng-repeat="data in babyCopy.persons track by $index" ng-if="isFamily(data.relation)">
                 <!--                <div class="separator" ng-if="$index > 0"></div>-->
@@ -135,9 +135,9 @@
                 <!--                <div class="separator" ng-if="$index > 0"></div>-->
                 <label class="item item-input item-stacked-label" ng-if="!isViewMode(data, true)">
                     <span class="input-label">{{data.relation}}:</span>
-                    <button class="button button-clear alignRightIcon" ng-click="deleteComponent($index)" ng-if="!readOnly(data, true)">
+                    <!-- <button class="button button-clear alignRightIcon" ng-click="deleteComponent($index)" ng-if="!readOnly(data, true)">
                         <i class="icon ion-trash-b"></i>
-                    </button>
+                    </button> -->
                 </label>
                 <label class="item item-input" ng-if="!isViewMode(data, true)">
                     <input type="text" placeholder="{{'name'|translate}}" ng-model="data.firstName" />

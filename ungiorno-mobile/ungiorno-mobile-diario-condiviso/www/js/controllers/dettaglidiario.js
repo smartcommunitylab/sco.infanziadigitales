@@ -9,7 +9,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         phone: [],
         email: [],
         relation: '',
-        parent: '',
         birthday: null,
     };
 
@@ -23,14 +22,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         birthday: null
     };
 
-    $scope.isParent = function () {
+    /*$scope.isParent = function () {
         if ($scope.access.relation == 'parent') {
             return true;
         }
-    };
+    };*/
 
-    $scope.noDelete = function (relation) {
-            if (relation === "teacher" || relation === "parent") {
+    $scope.noDelete = function (data) {
+            if (data.teacher == true || data.parent == true) {
                 return true;
             }
         }
@@ -41,11 +40,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         //    };
 
     // FUNZIONE PER PERMESSI MODIFICA
-    $scope.isAccess = function () {
+    /*$scope.isAccess = function () {
         if ($scope.access.relation == 'parent' || $scope.access.relation == 'teacher') {
             return true;
         }
-    };
+    };*/
 
     // AGGIUNGE UN ELEMENTO PERSON AL BAMBINO
     var addAccessComponent = function () {
@@ -65,7 +64,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         $scope.copiedaccess.phone.push($scope.access.phone);
         $scope.copiedaccess.email.push($scope.access.email);
         $scope.copiedaccess.relation = $scope.access.relation;
-        $scope.copiedaccess.parent = $scope.isParent();
         $scope.copiedaccess.birthday = null;
     };
 
@@ -78,7 +76,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
             email: [],
             relation: '',
             birthday: null,
-            parent: '',
         };
         $scope.access = {
             lastName: '',
@@ -193,26 +190,27 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
     //        }
     //    }
     //
-    $scope.isFamily = function (relation) {
-        if (relation == 'brother' || relation == 'sister' || relation == 'parent') {
+    $scope.isFamily = function (data) {
+        if (data.relation == 'brother' || data.relation == 'sister' || data.parent == true) {
             return true;
         }
     }
 
-    $scope.relationType = function (relation) {
-        switch (relation) {
-            case 'parent':
-                toRtn = "Genitore";
-                break;
-            case 'sister':
-                toRtn = "Sorella";
-                break;
-            case 'brother':
-                toRtn = "Fratello";
-                break;
-            case 'teacher':
-                toRtn = "Insegnante";
-                break;
+    $scope.relationType = function (data) {
+        var toRtn;
+        if (data.teacher == true) {
+            toRtn = "Insegnante"
+        } else if (data.parent == true) {
+            toRtn = "Genitore"
+        } else {
+            switch (data.relation) {
+                case 'sister':
+                    toRtn = "Sorella";
+                    break;
+                case 'brother':
+                    toRtn = "Fratello";
+                    break;
+            }
         }
         return toRtn;
     }
@@ -276,29 +274,23 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
     //        return toRtn;
     //    }
 
-    $scope.getPreposition = function (relation) {
+    $scope.getPreposition = function (data) {
         var toRtn;
-        switch (relation) {
-            case 'parent':
-                toRtn = "del genitore";
-                break;
-            case 'parent':
-                toRtn = "del genitore";
-                break;
-            case 'brother':
-                toRtn = "del fratello";
-                break;
-            case 'sister':
-                toRtn = "della sorella";
-                break;
-            case 'parent':
-                toRtn = "del genitore";
-                break;
-            case 'teacher':
-                toRtn = "dell'insengante";
-                break;
-            default:
-                toRtn = "";
+        if (data.teacher == true) {
+            toRtn = "dell'insegnante"
+        } else if (data.parent == true) {
+            toRtn = "dell'insegnante"
+        } else {
+            switch (data.relation) {
+                case 'brother':
+                    toRtn = "del fratello";
+                    break;
+                case 'sister':
+                    toRtn = "della sorella";
+                    break;
+                default:
+                    toRtn = "";
+            }
         }
         return toRtn;
     }

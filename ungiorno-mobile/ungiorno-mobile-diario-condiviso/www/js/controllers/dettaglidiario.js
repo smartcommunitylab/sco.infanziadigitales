@@ -9,12 +9,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         phone: [],
         email: [],
         relation: '',
-        gender: '',
         parent: '',
         birthday: null,
-        default: '',
-        adult: '',
-        authorized: ''
     };
 
     // OGGETTI DI APPOGGIO PER L'INSERIMENTO
@@ -22,13 +18,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         lastName: '',
         firstName: '',
         relation: '',
-        phone: '',
-        email: '',
+        phone: null,
+        email: null,
         birthday: null
     };
 
     $scope.isParent = function () {
-        if ($scope.access.relation == 'parent1' || $scope.access.relation == 'parent2' || $scope.access.relation == 'brother' || $scope.access.relation == 'sister') {
+        if ($scope.access.relation == 'parent') {
             return true;
         }
     };
@@ -63,11 +59,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         $scope.copiedaccess.phone.push($scope.access.phone);
         $scope.copiedaccess.email.push($scope.access.email);
         $scope.copiedaccess.relation = $scope.access.relation;
-        $scope.copiedaccess.gender = "Maschio";
         $scope.copiedaccess.parent = $scope.isParent();
-        $scope.copiedaccess.default = true;
-        $scope.copiedaccess.adult = true;
-        $scope.copiedaccess.authorized = $scope.isAccess();
         $scope.copiedaccess.birthday = null;
     };
 
@@ -79,12 +71,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
             phone: [],
             email: [],
             relation: '',
-            gender: '',
             birthday: null,
-            isParent: '',
-            default: '',
-            adult: '',
-            authorized: ''
+            parent: '',
         };
         $scope.access = {
             lastName: '',
@@ -199,12 +187,30 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
     //        }
     //    }
     //
-    //    $scope.isFamily = function (relation) {
-    //        if (relation == 'parent1' || relation == 'parent2' || relation == 'brother' || relation == 'sister' || relation == 'parent') {
-    //            return true;
-    //        }
-    //        //              return relation === "parent1" || relation === "parent2" || relation === "sister" || relation === "brother" || relation === "parent";
-    //    }
+    $scope.isFamily = function (relation) {
+        if (relation == 'parent1' || relation == 'parent2' || relation == 'brother' || relation == 'sister' || relation == 'parent') {
+            return true;
+        }
+        //              return relation === "parent1" || relation === "parent2" || relation === "sister" || relation === "brother" || relation === "parent";
+    }
+
+    $scope.relationType = function (relation) {
+        switch (relation) {
+            case 'parent':
+                toRtn = "Genitore";
+                break;
+            case 'sister':
+                toRtn = "Sorella";
+                break;
+            case 'brother':
+                toRtn = "Fratello";
+                break;
+            case 'teacher':
+                toRtn = "Insegnante";
+                break;
+        }
+        return toRtn;
+    }
 
     $scope.getBaby = function (gender) {
         var baby;

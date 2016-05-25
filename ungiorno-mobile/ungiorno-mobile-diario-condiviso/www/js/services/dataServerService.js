@@ -24,6 +24,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
         return deferred.promise;
     };
 
+     /* Check if current profile is a teacher or not */
+    dataServerService.isATeacher = function () {
+        return localStorage.currentProfile === "teacher";
+    };
 
 
     /**
@@ -73,25 +77,25 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
         return deferred.promise;
     }*/
 
-   /* dataServerService.getBabyProfiles = function () {
-        var deferred = $q.defer();
-        $http({
-            method: 'GET',
-            url: Config.URL() + '/' + Config.app() + '/diary/' + Config.appId() + '/scuola2/kids/kid2?isTeacher=true',
-            headers: {
-                'Accept': 'application/json'
-            },
-            timeout: Config.httpTimout()
-        }).
-        success(function (data, status, headers, config) {
-            deferred.resolve(data.data);
-        }).
-        error(function (data, status, headers, config) {
-            console.log(data + status + headers + config);
-            deferred.reject(status);
-        });
-        return deferred.promise;
-    }*/
+    /* dataServerService.getBabyProfiles = function () {
+         var deferred = $q.defer();
+         $http({
+             method: 'GET',
+             url: Config.URL() + '/' + Config.app() + '/diary/' + Config.appId() + '/scuola2/kids/kid2?isTeacher=true',
+             headers: {
+                 'Accept': 'application/json'
+             },
+             timeout: Config.httpTimout()
+         }).
+         success(function (data, status, headers, config) {
+             deferred.resolve(data.data);
+         }).
+         error(function (data, status, headers, config) {
+             console.log(data + status + headers + config);
+             deferred.reject(status);
+         });
+         return deferred.promise;
+     }*/
 
     dataServerService.save = function (post) {
         return dataServerService.getPostsByBabyId();
@@ -139,11 +143,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
          return deferred.promise;
      };
      */
-    dataServerService.addPost = function (schoolId, kidId, nota, isTeacher) {
+    dataServerService.addPost = function (schoolId, kidId, nota) {
         var deferred = $q.defer();
         $http({
             method: 'POST',
-            url: Config.URL() + '/' + Config.app() + '/diary/' + Config.appId() + '/' + schoolId + '/' + kidId + '/entry?isTeacher=' + isTeacher,
+            url: Config.URL() + '/' + Config.app() + '/diary/' + Config.appId() + '/' + schoolId + '/' + kidId + '/entry?isTeacher=' + dataServerService.isATeacher(),
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -160,11 +164,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
         return deferred.promise;
     }
 
-    dataServerService.getPostsByBabyId = function (schoolId, kidId, isTeacher) {
+    dataServerService.getPostsByBabyId = function (schoolId, kidId) {
         var deferred = $q.defer();
         $http({
             method: 'GET',
-            url: Config.URL() + '/' + Config.app() + '/diary/' + Config.appId() + '/' + schoolId + '/' + kidId + '/entries?isTeacher=' + isTeacher,
+            url: Config.URL() + '/' + Config.app() + '/diary/' + Config.appId() + '/' + schoolId + '/' + kidId + '/entries?isTeacher=' + dataServerService.isATeacher(),
             headers: {
                 'Accept': 'application/json'
             },

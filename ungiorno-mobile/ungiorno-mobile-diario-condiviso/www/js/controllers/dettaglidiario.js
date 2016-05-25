@@ -127,6 +127,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         } else {
             console.log('Selected date is : ', val)
                 /*$scope.baby.birthday = val;*/
+            $scope.babyCopy.birthday = val;
         }
     };
 
@@ -191,19 +192,19 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
     }
 
     // DA ERRORE
-//    $scope.isTeacher = function (relation) {
-//        if (relation == 'teacher') {
-//            return true;
-//            //return relation === "teacher";
-//        }
-//    }
-//
-//    $scope.isFamily = function (relation) {
-//        if (relation == 'parent1' || relation == 'parent2' || relation == 'brother' || relation == 'sister' || relation == 'parent') {
-//            return true;
-//        }
-//        //              return relation === "parent1" || relation === "parent2" || relation === "sister" || relation === "brother" || relation === "parent";
-//    }
+    //    $scope.isTeacher = function (relation) {
+    //        if (relation == 'teacher') {
+    //            return true;
+    //            //return relation === "teacher";
+    //        }
+    //    }
+    //
+    //    $scope.isFamily = function (relation) {
+    //        if (relation == 'parent1' || relation == 'parent2' || relation == 'brother' || relation == 'sister' || relation == 'parent') {
+    //            return true;
+    //        }
+    //        //              return relation === "parent1" || relation === "parent2" || relation === "sister" || relation === "brother" || relation === "parent";
+    //    }
 
     $scope.getBaby = function (gender) {
         var baby;

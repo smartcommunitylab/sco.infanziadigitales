@@ -54,7 +54,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
             profileService.getCurrentBaby().then(function (data) {
                 if ($rootScope.selectedKid) {
                     $scope.baby = data;
-                    dataServerService.getPostsByBabyId('scuola2', $scope.baby.kidId, true).then(function (posts) {
+                    dataServerService.getPostsByBabyId('scuola2', $scope.baby.kidId).then(function (posts) {
                         $scope.posts = posts;
                     });
                 }

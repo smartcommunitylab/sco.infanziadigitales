@@ -7,7 +7,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
     var profileService = {};
     var kidType = [];
 
-
     /**
      * Prepare the data downloading from server the kid profies of the current parent/teacher
      */
@@ -38,6 +37,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
         });
         return deferred.promise;
     };
+
 
     /*Get user profile after login*/
 
@@ -93,7 +93,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
         var deferred = $q.defer();
         $http({
             method: 'GET',
-            url: Config.URL() + '/' + Config.app() + '/diary/' + Config.appId() + '/scuola2/kids/' + localStorage.currentBabyID + '?isTeacher=true',
+            url: Config.URL() + '/' + Config.app() + '/diary/' + Config.appId() + '/scuola2/kids/' + localStorage.currentBabyID + '?isTeacher=' + dataServerService.isATeacher(),
             headers: {
                 'Accept': 'application/json'
             },
@@ -113,7 +113,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
         var deferred = $q.defer();
         $http({
             method: 'GET',
-            url: Config.URL() + '/' + Config.app() + '/diary/' + Config.appId() + '/' + schoolId + '/kids/' + kidId + '?isTeacher=true',
+            url: Config.URL() + '/' + Config.app() + '/diary/' + Config.appId() + '/' + schoolId + '/kids/' + kidId + '?isTeacher=' + dataServerService.isATeacher(),
             headers: {
                 'Accept': 'application/json'
             },
@@ -133,7 +133,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
         var deferred = $q.defer();
         $http({
             method: 'POST',
-            url: Config.URL() + '/' + Config.app() + '/diary/' + Config.appId() + '/' + babyProfile.schoolId + '/' + 'kids/' + babyProfile.kidId + '?isTeacher=false',
+            url: Config.URL() + '/' + Config.app() + '/diary/' + Config.appId() + '/' + babyProfile.schoolId + '/' + 'kids/' + babyProfile.kidId + '?isTeacher=' + dataServerService.isATeacher(),
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'

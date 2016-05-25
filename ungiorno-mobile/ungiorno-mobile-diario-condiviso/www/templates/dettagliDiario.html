@@ -73,16 +73,16 @@
                 <!--                <div class="separator" ng-if="$index > 0"></div>-->
                 <label class="item item-input item-stacked-label" ng-if="!isViewMode(data)">
                     <span class="input-label">{{relationType(data.relation)}}:</span>
-                    <button class="button button-clear alignRightIcon" ng-click="deleteComponent($index)" ng-if="!readOnly(data)">
+                    <button class="button button-clear alignRightIcon" ng-click="deleteComponent($index)" ng-if="!readOnly(data) && !noDelete(data.relation)">
                         <i class="icon ion-trash-b"></i>
                     </button>
                 </label>
                 <label class="item item-input" ng-if="!isViewMode(data)">
-                    <input type="text" placeholder="{{'name'|translate}}" ng-model="data.firstName" />
+                    <input type="text" placeholder="{{'pname'|translate}} {{getPreposition(data.relation)}}" ng-model="data.firstName" />
                     <i class="ion-asterisk alignRight inline vertical-middle"></i>
                 </label>
                 <label class="item item-input" ng-if="!isViewMode(data)">
-                    <input type="text" placeholder="{{'surname'|translate}}" ng-model="data.lastName" />
+                    <input type="text" placeholder="{{'psname'|translate}} {{getPreposition(data.relation)}}" ng-model="data.lastName" />
                     <i class="ion-asterisk alignRight inline vertical-middle"></i>
                 </label>
                 <!-- <label class="item item-input" ng-if="!isViewMode(data)">
@@ -113,12 +113,12 @@
                     <option value="sister">{{ 'sister' | translate}}</option>
                 </select>
             </label>
-            <div ng-if="!!isParent()">
+            <div ng-if="!!isFamily(access.relation)">
                 <label class="item item-input" ng-if="!isViewMode(data, true)">
-                    <input type="text" placeholder="{{'name'|translate}}" ng-model="access.firstName" />
+                    <input type="text" placeholder="{{'pname'|translate}} {{getPreposition(access.relation)}}" ng-model="access.firstName" />
                 </label>
                 <label class="item item-input" ng-if="!isViewMode(data, true)">
-                    <input type="text" placeholder="{{'surname'|translate}}" ng-model="access.lastName" />
+                    <input type="text" placeholder="{{'psname'|translate}} {{getPreposition(access.relation)}}" ng-model="access.lastName" />
                 </label>
                 <!--<label class="item item-input" ng-if="!isViewMode(data, true)">
                     <input type="text" placeholder="{{'number_parents'|translate}}" ng-model="access.phone" />
@@ -139,11 +139,11 @@
                     </button> -->
                 </label>
                 <label class="item item-input" ng-if="!isViewMode(data, true)">
-                    <input type="text" placeholder="{{'name'|translate}}" ng-model="data.firstName" />
+                    <input type="text" placeholder="{{'pname'|translate}} {{getPreposition(data.relation)}}" ng-model="data.firstName" />
                     <i class="ion-asterisk alignRight inline vertical-middle"></i>
                 </label>
                 <label class="item item-input" ng-if="!isViewMode(data, true)">
-                    <input type="text" placeholder="{{'surname'|translate}}" ng-model="data.lastName" />
+                    <input type="text" placeholder="{{'psname'|translate}} {{getPreposition(data.relation)}}" ng-model="data.lastName" />
                     <i class="ion-asterisk alignRight inline vertical-middle"></i>
                 </label>
                 <label class="item item-input" ng-if="!isViewMode(data, true)">
@@ -170,7 +170,7 @@
                     </a>
                 </div>
             </div>
-            <label class="item item-input item-select" ng-if="!isViewMode(null, true)">
+            <!--<label class="item item-input item-select" ng-if="!isViewMode(null, true)">
                 <div class="input-label">{{ 'add_authorized' | translate}}</div>
                 <select ng-model="access.relation">
                     <option value=""></option>
@@ -180,10 +180,10 @@
             </label>
             <div ng-if="!!isAccess()">
                 <label class="item item-input" ng-if="!isViewMode(data, true)">
-                    <input type="text" placeholder="{{'name'|translate}}" ng-model="access.firstName" />
+                    <input type="text" placeholder="{{'pname'|translate}} {{getPreposition(access.relation)}}" ng-model="access.firstName" />
                 </label>
                 <label class="item item-input" ng-if="!isViewMode(data, true)">
-                    <input type="text" placeholder="{{'surname'|translate}}" ng-model="access.lastName" />
+                    <input type="text" placeholder="{{'psname'|translate}} {{getPreposition(access.relation)}}" ng-model="access.lastName" />
                 </label>
                 <label class="item item-input" ng-if="!isViewMode(data, true)">
                     <input type="text" placeholder="{{'number_parents'|translate}}" ng-model="access.phone" />
@@ -191,7 +191,7 @@
                 <label class="item item-input" ng-if="!isViewMode(data, true)">
                     <input type="text" placeholder="{{'mail_parents'|translate}}" ng-model="access.email" />
                 </label>
-            </div>
+            </div>-->
 
 
             <div class="item item-divider">{{'notes' | translate}}:</div>

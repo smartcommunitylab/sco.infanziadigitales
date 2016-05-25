@@ -28,11 +28,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
             return true;
         }
     };
-    //    $scope.isAccess = function () {
-    //        if ($scope.access.relation == 'parent1' || $scope.access.relation == 'parent2' || $scope.access.relation == 'brother' || $scope.access.relation == 'sister' || $scope.access.relation == 'parent') {
-    //            return true;
-    //        }
-    //    };
+
+    $scope.noDelete = function (relation) {
+            if (relation === "teacher" || relation === "parent") {
+                return true;
+            }
+        }
+        //    $scope.isAccess = function () {
+        //        if ($scope.access.relation == 'parent1' || $scope.access.relation == 'parent2' || $scope.access.relation == 'brother' || $scope.access.relation == 'sister' || $scope.access.relation == 'parent') {
+        //            return true;
+        //        }
+        //    };
 
     // FUNZIONE PER PERMESSI MODIFICA
     $scope.isAccess = function () {
@@ -188,10 +194,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
     //    }
     //
     $scope.isFamily = function (relation) {
-        if (relation == 'parent1' || relation == 'parent2' || relation == 'brother' || relation == 'sister' || relation == 'parent') {
+        if (relation == 'brother' || relation == 'sister' || relation == 'parent') {
             return true;
         }
-        //              return relation === "parent1" || relation === "parent2" || relation === "sister" || relation === "brother" || relation === "parent";
     }
 
     $scope.relationType = function (relation) {
@@ -271,35 +276,32 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
     //        return toRtn;
     //    }
 
-    //    $scope.getPreposition = function (relation) {
-    //        var toRtn;
-    //        switch (relation) {
-    //        case 'parent1':
-    //            toRtn = "Nome del genitore";
-    //            break;
-    //        case 'parent2':
-    //            toRtn = "Nome del genitore";
-    //            break;
-    //        case 'brother':
-    //            toRtn = "Nome del fratello";
-    //            break;
-    //        case 'sister':
-    //            toRtn = "Nome della sorella";
-    //            break;
-    //        case 'parent':
-    //            toRtn = "Nome del ";
-    //            break;
-    //        case 'teacher':
-    //            toRtn = "sorella";
-    //            break;
-    //        default:
-    //            toRtn = "del";
-    //        }
-    //        if (relation === "zio") {
-    //            toRtn = "dello";
-    //        }
-    //        return toRtn;
-    //    }
+    $scope.getPreposition = function (relation) {
+        var toRtn;
+        switch (relation) {
+            case 'parent':
+                toRtn = "del genitore";
+                break;
+            case 'parent':
+                toRtn = "del genitore";
+                break;
+            case 'brother':
+                toRtn = "del fratello";
+                break;
+            case 'sister':
+                toRtn = "della sorella";
+                break;
+            case 'parent':
+                toRtn = "del genitore";
+                break;
+            case 'teacher':
+                toRtn = "dell'insengante";
+                break;
+            default:
+                toRtn = "";
+        }
+        return toRtn;
+    }
 
 
     $scope.getString = function (firstString, gender, relation) {

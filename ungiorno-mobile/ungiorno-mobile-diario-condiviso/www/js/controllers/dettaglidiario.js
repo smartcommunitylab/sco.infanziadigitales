@@ -120,17 +120,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         } else {
             console.log('Selected date is : ', val)
                 /*$scope.baby.birthday = val;*/
-            
+
         }
         $scope.babyCopy.persons[$scope.CurrentIndex].birthday = val;
-        
+
     };
 
     /* END DATEPICKER PERSON */
-    
+
     /* DATEPICKER BAMBINO */
-    
-     $scope.dateFormat = $filter('date')('yyyy-MM-dd');
+
+    $scope.dateFormat = $filter('date')('yyyy-MM-dd');
     var ipObj2 = {
         callback: function (val) { //Mandatory
             console.log('Return value from the datepicker popup is : ' + val, new Date(val));
@@ -156,14 +156,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         } else {
             console.log('Selected date is : ', val)
                 /*$scope.baby.birthday = val;*/
-             $scope.babyCopy.birthday = val;
+            $scope.babyCopy.birthday = val;
         }
-       
-        
+
+
     };
-    
+
     /* END DATEPICKER BAMBINO */
-    
+
 
     // MODIFICA E SALVA IN DETTAGLI DIARIO
     var mode = "view";
@@ -232,7 +232,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
     //    }
     //
     $scope.isFamily = function (data) {
-        if (data.relation == 'brother' || data.relation == 'sister' || data.parent == true) {
+        if (data.relation == 'brother' || data.relation == 'sister' || data.relation == 'grandfather' || data.relation == 'grandmother' || data.relation == 'uncle' || data.relation == 'aunt' || data.parent == true) {
             return true;
         }
     }
@@ -245,12 +245,24 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
             toRtn = "Genitore"
         } else {
             switch (data.relation) {
-                case 'sister':
-                    toRtn = "Sorella";
-                    break;
-                case 'brother':
-                    toRtn = "Fratello";
-                    break;
+            case 'sister':
+                toRtn = "Sorella";
+                break;
+            case 'brother':
+                toRtn = "Fratello";
+                break;
+            case 'grandfather':
+                toRtn = "Nonno";
+                break;
+            case 'grandmother':
+                toRtn = "Nonna";
+                break;
+            case 'uncle':
+                toRtn = "Zio";
+                break;
+            case 'aunt':
+                toRtn = "Zia";
+                break;
             }
         }
         return toRtn;
@@ -323,14 +335,26 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
             toRtn = "dell'insegnante"
         } else {
             switch (data.relation) {
-                case 'brother':
-                    toRtn = "del fratello";
-                    break;
-                case 'sister':
-                    toRtn = "della sorella";
-                    break;
-                default:
-                    toRtn = "";
+            case 'brother':
+                toRtn = "del fratello";
+                break;
+            case 'sister':
+                toRtn = "della sorella";
+                break;
+            case 'grandfather':
+                toRtn = "del nonno";
+                break;
+            case 'grandmother':
+                toRtn = "della nonna";
+                break;
+            case 'uncle':
+                toRtn = "dello zio";
+                break;
+            case 'aunt':
+                toRtn = "della zia";
+                break;
+            default:
+                toRtn = "";
             }
         }
         return toRtn;
@@ -351,11 +375,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         profileService.getCurrentBaby().then(function (data) {
             $scope.baby = data;
             /*$scope.baby.birthday = new Date($scope.baby.birthday * 1000);*/
-//            for (var i = 0; i < $scope.baby.persons.length; i++) {
-//                if (!!$scope.baby.persons[i].birthday) {
-//                    $scope.baby.persons[i].birthday = new Date($scope.baby.persons[i].birthday );
-//                }
-//            }
+            //            for (var i = 0; i < $scope.baby.persons.length; i++) {
+            //                if (!!$scope.baby.persons[i].birthday) {
+            //                    $scope.baby.persons[i].birthday = new Date($scope.baby.persons[i].birthday );
+            //                }
+            //            }
             $scope.babyCopy = clone($scope.baby);
             console.log($scope.babyCopy);
         });

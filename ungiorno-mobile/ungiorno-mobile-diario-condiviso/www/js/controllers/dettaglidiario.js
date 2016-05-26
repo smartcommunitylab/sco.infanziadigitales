@@ -236,6 +236,48 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
             return true;
         }
     }
+    
+    // AGGIUNTA NUMERO DI TELEFONO
+    $scope.addPhone = function(person){
+        var phones = person.phone;
+        console.log(phones);
+        if(phones== null || []){
+            person.phone = [];
+            person.phone[0]= null;
+        } else {
+            if(phones.length === 1){
+                person.phone.push(null); 
+            }
+        }
+    }
+    // END AGGIUNTA NUMERO DI TELEFONO
+    
+    // REMOVE NUMERO DI TELEFONO
+    $scope.deletePhone = function(index, person){
+      person.phone.splice(index,1);
+    }
+    // END REMOVE NUMERO DI TELEFONO
+    
+     // AGGIUNTA EMAIL
+    $scope.addEmail = function(person){
+        var emails = person.email;
+        console.log(emails);
+        if(emails == null){
+            person.email = [];
+            person.email[0]= null;
+        } else {
+            if(emails.length === 1){
+                person.email.push(null); 
+            }
+        }
+    }
+    // END AGGIUNTA EMAIL    
+    
+    // REMOVE EMAIL
+    $scope.deleteEmail = function(index, person){
+      person.email.splice(index,1);
+    }
+    // END REMOVE EMAIL
 
     $scope.relationType = function (data) {
         var toRtn;

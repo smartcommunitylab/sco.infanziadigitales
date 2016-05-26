@@ -127,9 +127,11 @@
                 <!--<label class="item item-input" ng-if="!isViewMode(data, true)">
                     <input type="text" placeholder="{{'number_parents'|translate}}" ng-model="access.phone" />
                 </label>-->
+<!--
                 <label class="item item-input" ng-if="!isViewMode(data, true)">
                     <input type="text" placeholder="{{'mail_parents'|translate}}" ng-model="access.email" />
                 </label>
+-->
             </div>
 
             <div class="item item-divider">{{'acces_diary' | translate}}:</div>
@@ -150,16 +152,33 @@
                     <input type="text" placeholder="{{'psname'|translate}} {{getPreposition(data)}}" ng-model="data.lastName" />
                     <i class="ion-asterisk alignRight inline vertical-middle"></i>
                 </label>
-                <label class="item item-input" ng-if="!isViewMode(data, true)">
+               
+               
+                <div class="item item-input" ng-if="!isViewMode(data, true)" ng-repeat="tel in data.phone track by $index">
                     <i class="form-icon icon inf_digcall "></i>
-                    <input type="text" placeholder="{{'number_parents'|translate}}" ng-model="data.phone" />
+                    <input type="tel" placeholder="{{'number_parents'|translate}}" ng-model="data.phone[$index]" />
                     <i class="ion-asterisk alignRight inline vertical-middle"></i>
+                     <div><i class="alignRight inline vertical-middle ion-minus-circled" ng-click="deletePhone($index,data)"></i></div>
+                </div>
+                   
+                <label class="item item-input add-btn" ng-click="addPhone(data)" ng-if="!isViewMode(data, true) && data.phone.length<2">
+                    <i class="form-icon icon ion-plus-circled"></i>
+                    <span class="add">Aggiungi numero di telefono</span>
                 </label>
-                <label class="item item-input" ng-if="!isViewMode(data, true)">
+                
+                <div class="item item-input" ng-if="!isViewMode(data, true)" ng-repeat="mail in data.email track by $index">
                     <i class="form-icon icon ion-android-mail"></i>
-                    <input type="text" placeholder="{{'mail_parents'|translate}}" ng-model="data.email" />
+                    <input type="email" placeholder="{{'mail_parents'|translate}}" ng-model="data.email" />
                     <i class="ion-asterisk alignRight inline vertical-middle"></i>
+                    <div><i class="alignRight inline vertical-middle ion-minus-circled" ng-click="deleteEmail($index,data)"></i>
+                </div>
+                </div>
+                
+                <label class="item item-input add-btn" ng-click="addEmail(data)" ng-if="!isViewMode(data, true) && (data.email.length<2 || data.email === null)">
+                    <i class="form-icon icon ion-plus-circled"></i>
+                    <span class="add">Aggiungi email</span>
                 </label>
+                
 
                 <label class="item item-input item-stacked-label" ng-if="isViewMode(data, true)">
                     <span class="input-label">{{relationType(data)}}:</span>

@@ -9,7 +9,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         phone: [],
         email: [],
         relation: '',
-        parent: '',
         birthday: null,
     };
 
@@ -23,23 +22,29 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         birthday: null
     };
 
-    $scope.isParent = function () {
+    /*$scope.isParent = function () {
         if ($scope.access.relation == 'parent') {
             return true;
         }
-    };
-    //    $scope.isAccess = function () {
-    //        if ($scope.access.relation == 'parent1' || $scope.access.relation == 'parent2' || $scope.access.relation == 'brother' || $scope.access.relation == 'sister' || $scope.access.relation == 'parent') {
-    //            return true;
-    //        }
-    //    };
+    };*/
+
+    $scope.noDelete = function (data) {
+            if (data.teacher == true || data.parent == true) {
+                return true;
+            }
+        }
+        //    $scope.isAccess = function () {
+        //        if ($scope.access.relation == 'parent1' || $scope.access.relation == 'parent2' || $scope.access.relation == 'brother' || $scope.access.relation == 'sister' || $scope.access.relation == 'parent') {
+        //            return true;
+        //        }
+        //    };
 
     // FUNZIONE PER PERMESSI MODIFICA
-    $scope.isAccess = function () {
+    /*$scope.isAccess = function () {
         if ($scope.access.relation == 'parent' || $scope.access.relation == 'teacher') {
             return true;
         }
-    };
+    };*/
 
     // AGGIUNGE UN ELEMENTO PERSON AL BAMBINO
     var addAccessComponent = function () {
@@ -59,7 +64,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         $scope.copiedaccess.phone.push($scope.access.phone);
         $scope.copiedaccess.email.push($scope.access.email);
         $scope.copiedaccess.relation = $scope.access.relation;
-        $scope.copiedaccess.parent = $scope.isParent();
         $scope.copiedaccess.birthday = null;
     };
 
@@ -72,7 +76,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
             email: [],
             relation: '',
             birthday: null,
-            parent: '',
         };
         $scope.access = {
             lastName: '',
@@ -84,16 +87,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         };
     }
 
-    /* START IONIC DATEPICKER */
+    /* START DATEPICKER PERSON */
 
     $scope.date = new Date();
-    console.log($scope.date);
+    $scope.CurrentIndex = [];
+    //console.log($scope.date);
 
     $scope.dateFormat = $filter('date')('yyyy-MM-dd');
     var ipObj1 = {
         callback: function (val) { //Mandatory
             console.log('Return value from the datepicker popup is : ' + val, new Date(val));
-            datePickerCallback(val);
+            datePickerCallbackPerson(val);
         },
         disabledDates: [],
         from: new Date(2012, 1, 1), //Optional
@@ -105,11 +109,48 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         templateType: 'popup' //Optional
     };
 
-    $scope.openDatePicker = function () {
+    $scope.openDatePicker = function (index) {
+        $scope.CurrentIndex = index;
         ionicDatePicker.openDatePicker(ipObj1);
     };
 
-    var datePickerCallback = function (val) {
+    var datePickerCallbackPerson = function (val) {
+        if (typeof (val) === 'undefined') {
+            console.log('No date selected');
+        } else {
+            console.log('Selected date is : ', val)
+                /*$scope.baby.birthday = val;*/
+
+        }
+        $scope.babyCopy.persons[$scope.CurrentIndex].birthday = val;
+
+    };
+
+    /* END DATEPICKER PERSON */
+
+    /* DATEPICKER BAMBINO */
+
+    $scope.dateFormat = $filter('date')('yyyy-MM-dd');
+    var ipObj2 = {
+        callback: function (val) { //Mandatory
+            console.log('Return value from the datepicker popup is : ' + val, new Date(val));
+            datePickerCallbackBaby(val);
+        },
+        disabledDates: [],
+        from: new Date(2012, 1, 1), //Optional
+        to: new Date(2016, 10, 30), //Optional
+        inputDate: new Date(), //Optional
+        mondayFirst: true, //Optional
+        disableWeekdays: [0], //Optional
+        closeOnSelect: false, //Optional
+        templateType: 'popup' //Optional
+    };
+
+    $scope.openDatePickerBaby = function () {
+        ionicDatePicker.openDatePicker(ipObj2);
+    };
+
+    var datePickerCallbackBaby = function (val) {
         if (typeof (val) === 'undefined') {
             console.log('No date selected');
         } else {
@@ -117,9 +158,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
                 /*$scope.baby.birthday = val;*/
             $scope.babyCopy.birthday = val;
         }
+
+
     };
 
-    /* END IONIC DATEPICKER */
+    /* END DATEPICKER BAMBINO */
+
 
     // MODIFICA E SALVA IN DETTAGLI DIARIO
     var mode = "view";
@@ -187,27 +231,39 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
     //        }
     //    }
     //
-    $scope.isFamily = function (relation) {
-        if (relation == 'parent1' || relation == 'parent2' || relation == 'brother' || relation == 'sister' || relation == 'parent') {
+    $scope.isFamily = function (data) {
+        if (data.relation == 'brother' || data.relation == 'sister' || data.relation == 'grandfather' || data.relation == 'grandmother' || data.relation == 'uncle' || data.relation == 'aunt' || data.parent == true) {
             return true;
         }
-        //              return relation === "parent1" || relation === "parent2" || relation === "sister" || relation === "brother" || relation === "parent";
     }
 
-    $scope.relationType = function (relation) {
-        switch (relation) {
-            case 'parent':
-                toRtn = "Genitore";
-                break;
+    $scope.relationType = function (data) {
+        var toRtn;
+        if (data.teacher == true) {
+            toRtn = "Insegnante"
+        } else if (data.parent == true) {
+            toRtn = "Genitore"
+        } else {
+            switch (data.relation) {
             case 'sister':
                 toRtn = "Sorella";
                 break;
             case 'brother':
                 toRtn = "Fratello";
                 break;
-            case 'teacher':
-                toRtn = "Insegnante";
+            case 'grandfather':
+                toRtn = "Nonno";
                 break;
+            case 'grandmother':
+                toRtn = "Nonna";
+                break;
+            case 'uncle':
+                toRtn = "Zio";
+                break;
+            case 'aunt':
+                toRtn = "Zia";
+                break;
+            }
         }
         return toRtn;
     }
@@ -271,35 +327,38 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
     //        return toRtn;
     //    }
 
-    //    $scope.getPreposition = function (relation) {
-    //        var toRtn;
-    //        switch (relation) {
-    //        case 'parent1':
-    //            toRtn = "Nome del genitore";
-    //            break;
-    //        case 'parent2':
-    //            toRtn = "Nome del genitore";
-    //            break;
-    //        case 'brother':
-    //            toRtn = "Nome del fratello";
-    //            break;
-    //        case 'sister':
-    //            toRtn = "Nome della sorella";
-    //            break;
-    //        case 'parent':
-    //            toRtn = "Nome del ";
-    //            break;
-    //        case 'teacher':
-    //            toRtn = "sorella";
-    //            break;
-    //        default:
-    //            toRtn = "del";
-    //        }
-    //        if (relation === "zio") {
-    //            toRtn = "dello";
-    //        }
-    //        return toRtn;
-    //    }
+    $scope.getPreposition = function (data) {
+        var toRtn;
+        if (data.teacher == true) {
+            toRtn = "dell'insegnante"
+        } else if (data.parent == true) {
+            toRtn = "dell'insegnante"
+        } else {
+            switch (data.relation) {
+            case 'brother':
+                toRtn = "del fratello";
+                break;
+            case 'sister':
+                toRtn = "della sorella";
+                break;
+            case 'grandfather':
+                toRtn = "del nonno";
+                break;
+            case 'grandmother':
+                toRtn = "della nonna";
+                break;
+            case 'uncle':
+                toRtn = "dello zio";
+                break;
+            case 'aunt':
+                toRtn = "della zia";
+                break;
+            default:
+                toRtn = "";
+            }
+        }
+        return toRtn;
+    }
 
 
     $scope.getString = function (firstString, gender, relation) {
@@ -316,11 +375,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         profileService.getCurrentBaby().then(function (data) {
             $scope.baby = data;
             /*$scope.baby.birthday = new Date($scope.baby.birthday * 1000);*/
-            for (var i = 0; i < $scope.baby.persons.length; i++) {
-                if (!!$scope.baby.persons[i].birthday) {
-                    $scope.baby.persons[i].birthday = new Date($scope.baby.persons[i].birthday * 1000);
-                }
-            }
+            //            for (var i = 0; i < $scope.baby.persons.length; i++) {
+            //                if (!!$scope.baby.persons[i].birthday) {
+            //                    $scope.baby.persons[i].birthday = new Date($scope.baby.persons[i].birthday );
+            //                }
+            //            }
             $scope.babyCopy = clone($scope.baby);
             console.log($scope.babyCopy);
         });

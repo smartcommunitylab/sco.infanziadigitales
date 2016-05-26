@@ -202,13 +202,22 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
                 if (typeof objectToCheck[key] === 'string' && objectToCheck[key].length === 0) {
                     Toast.show('string must be inserted', 'short', 'bottom');
                     error = true;
+                } else if ((objectToCheck[key] == null || objectToCheck[key] == []) && (key == "phone" || key == "email")) {
+                    Toast.show('string must be inserted', 'short', 'bottom');
+                    error = true;
                 } else if (objectToCheck[key] instanceof Date && objectToCheck[key] > new Date()) {
                     Toast.show("date must be before today", 'short', 'bottom');
                     error = true;
                 } else if (objectToCheck[key] instanceof Array) {
                     for (var i = 0; i < objectToCheck[key].length; i++) {
-                        error = checkDataError(objectToCheck[key][i]);
-                        if (error) return true;
+                        if ((key == "phone" && (objectToCheck[key][i] == null || objectToCheck[key][i] == "")) || (key == "email" && (objectToCheck[key][i] == null || objectToCheck[key][i] == ""))) {
+                            error = true;
+                            Toast.show('string must be inserted', 'short', 'bottom');
+                            return error;
+                        } else {
+                            error = checkDataError(objectToCheck[key][i]);
+                            if (error) return true;
+                        }
                     }
                 }
                 if (error) return true;
@@ -236,48 +245,48 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
             return true;
         }
     }
-    
+
     // AGGIUNTA NUMERO DI TELEFONO
-    $scope.addPhone = function(person){
-        var phones = person.phone;
-        console.log(phones);
-        if(phones== null || []){
-            person.phone = [];
-            person.phone[0]= null;
-        } else {
-            if(phones.length === 1){
-                person.phone.push(null); 
+    $scope.addPhone = function (person) {
+            var phones = person.phone;
+            console.log(phones);
+            if (phones == null || phones == [] || phones.length == 0) {
+                person.phone = [];
+                person.phone[0] = null;
+            } else {
+                if (phones.length === 1) {
+                    person.phone.push(null);
+                }
             }
         }
-    }
-    // END AGGIUNTA NUMERO DI TELEFONO
-    
+        // END AGGIUNTA NUMERO DI TELEFONO
+
     // REMOVE NUMERO DI TELEFONO
-    $scope.deletePhone = function(index, person){
-      person.phone.splice(index,1);
-    }
-    // END REMOVE NUMERO DI TELEFONO
-    
-     // AGGIUNTA EMAIL
-    $scope.addEmail = function(person){
-        var emails = person.email;
-        console.log(emails);
-        if(emails == null){
-            person.email = [];
-            person.email[0]= null;
-        } else {
-            if(emails.length === 1){
-                person.email.push(null); 
+    $scope.deletePhone = function (index, person) {
+            person.phone.splice(index, 1);
+        }
+        // END REMOVE NUMERO DI TELEFONO
+
+    // AGGIUNTA EMAIL
+    $scope.addEmail = function (person) {
+            var emails = person.email;
+            console.log(emails);
+            if (emails == null || emails == [] || emails.length == 0) {
+                person.email = [];
+                person.email[0] = null;
+            } else {
+                if (emails.length === 1) {
+                    person.email.push(null);
+                }
             }
         }
-    }
-    // END AGGIUNTA EMAIL    
-    
+        // END AGGIUNTA EMAIL
+
     // REMOVE EMAIL
-    $scope.deleteEmail = function(index, person){
-      person.email.splice(index,1);
-    }
-    // END REMOVE EMAIL
+    $scope.deleteEmail = function (index, person) {
+            person.email.splice(index, 1);
+        }
+        // END REMOVE EMAIL
 
     $scope.relationType = function (data) {
         var toRtn;
@@ -287,24 +296,24 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
             toRtn = "Genitore"
         } else {
             switch (data.relation) {
-            case 'sister':
-                toRtn = "Sorella";
-                break;
-            case 'brother':
-                toRtn = "Fratello";
-                break;
-            case 'grandfather':
-                toRtn = "Nonno";
-                break;
-            case 'grandmother':
-                toRtn = "Nonna";
-                break;
-            case 'uncle':
-                toRtn = "Zio";
-                break;
-            case 'aunt':
-                toRtn = "Zia";
-                break;
+                case 'sister':
+                    toRtn = "Sorella";
+                    break;
+                case 'brother':
+                    toRtn = "Fratello";
+                    break;
+                case 'grandfather':
+                    toRtn = "Nonno";
+                    break;
+                case 'grandmother':
+                    toRtn = "Nonna";
+                    break;
+                case 'uncle':
+                    toRtn = "Zio";
+                    break;
+                case 'aunt':
+                    toRtn = "Zia";
+                    break;
             }
         }
         return toRtn;
@@ -377,26 +386,26 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
             toRtn = "dell'insegnante"
         } else {
             switch (data.relation) {
-            case 'brother':
-                toRtn = "del fratello";
-                break;
-            case 'sister':
-                toRtn = "della sorella";
-                break;
-            case 'grandfather':
-                toRtn = "del nonno";
-                break;
-            case 'grandmother':
-                toRtn = "della nonna";
-                break;
-            case 'uncle':
-                toRtn = "dello zio";
-                break;
-            case 'aunt':
-                toRtn = "della zia";
-                break;
-            default:
-                toRtn = "";
+                case 'brother':
+                    toRtn = "del fratello";
+                    break;
+                case 'sister':
+                    toRtn = "della sorella";
+                    break;
+                case 'grandfather':
+                    toRtn = "del nonno";
+                    break;
+                case 'grandmother':
+                    toRtn = "della nonna";
+                    break;
+                case 'uncle':
+                    toRtn = "dello zio";
+                    break;
+                case 'aunt':
+                    toRtn = "della zia";
+                    break;
+                default:
+                    toRtn = "";
             }
         }
         return toRtn;

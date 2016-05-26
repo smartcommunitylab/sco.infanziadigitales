@@ -87,16 +87,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         };
     }
 
-    /* START IONIC DATEPICKER */
+    /* START DATEPICKER PERSON */
 
     $scope.date = new Date();
-    console.log($scope.date);
+    $scope.CurrentIndex = [];
+    //console.log($scope.date);
 
     $scope.dateFormat = $filter('date')('yyyy-MM-dd');
     var ipObj1 = {
         callback: function (val) { //Mandatory
             console.log('Return value from the datepicker popup is : ' + val, new Date(val));
-            datePickerCallback(val);
+            datePickerCallbackPerson(val);
         },
         disabledDates: [],
         from: new Date(2012, 1, 1), //Optional
@@ -108,21 +109,61 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         templateType: 'popup' //Optional
     };
 
-    $scope.openDatePicker = function () {
+    $scope.openDatePicker = function (index) {
+        $scope.CurrentIndex = index;
         ionicDatePicker.openDatePicker(ipObj1);
     };
 
-    var datePickerCallback = function (val) {
+    var datePickerCallbackPerson = function (val) {
         if (typeof (val) === 'undefined') {
             console.log('No date selected');
         } else {
             console.log('Selected date is : ', val)
                 /*$scope.baby.birthday = val;*/
-            $scope.babyCopy.birthday = val;
+            
         }
+        $scope.babyCopy.persons[$scope.CurrentIndex].birthday = val;
+        
     };
 
-    /* END IONIC DATEPICKER */
+    /* END DATEPICKER PERSON */
+    
+    /* DATEPICKER BAMBINO */
+    
+     $scope.dateFormat = $filter('date')('yyyy-MM-dd');
+    var ipObj2 = {
+        callback: function (val) { //Mandatory
+            console.log('Return value from the datepicker popup is : ' + val, new Date(val));
+            datePickerCallbackBaby(val);
+        },
+        disabledDates: [],
+        from: new Date(2012, 1, 1), //Optional
+        to: new Date(2016, 10, 30), //Optional
+        inputDate: new Date(), //Optional
+        mondayFirst: true, //Optional
+        disableWeekdays: [0], //Optional
+        closeOnSelect: false, //Optional
+        templateType: 'popup' //Optional
+    };
+
+    $scope.openDatePickerBaby = function () {
+        ionicDatePicker.openDatePicker(ipObj2);
+    };
+
+    var datePickerCallbackBaby = function (val) {
+        if (typeof (val) === 'undefined') {
+            console.log('No date selected');
+        } else {
+            console.log('Selected date is : ', val)
+                /*$scope.baby.birthday = val;*/
+             $scope.babyCopy.birthday = val;
+        }
+       
+        
+    };
+    
+    /* END DATEPICKER BAMBINO */
+    
 
     // MODIFICA E SALVA IN DETTAGLI DIARIO
     var mode = "view";
@@ -310,11 +351,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         profileService.getCurrentBaby().then(function (data) {
             $scope.baby = data;
             /*$scope.baby.birthday = new Date($scope.baby.birthday * 1000);*/
-            for (var i = 0; i < $scope.baby.persons.length; i++) {
-                if (!!$scope.baby.persons[i].birthday) {
-                    $scope.baby.persons[i].birthday = new Date($scope.baby.persons[i].birthday * 1000);
-                }
-            }
+//            for (var i = 0; i < $scope.baby.persons.length; i++) {
+//                if (!!$scope.baby.persons[i].birthday) {
+//                    $scope.baby.persons[i].birthday = new Date($scope.baby.persons[i].birthday );
+//                }
+//            }
             $scope.babyCopy = clone($scope.baby);
             console.log($scope.babyCopy);
         });

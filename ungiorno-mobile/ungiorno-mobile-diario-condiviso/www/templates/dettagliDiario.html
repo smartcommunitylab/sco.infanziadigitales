@@ -45,7 +45,7 @@
                 <i class="ion-asterisk alignRight inline vertical-middle"></i>
             </label> -->
 
-             <label class="item item-input" ng-click="openDatePicker()" ng-if="!isViewMode(data)">
+             <label class="item item-input" ng-click="openDatePickerBaby()" ng-if="!isViewMode(data)">
                 <span type="date" class="input-label date">{{babyCopy.birthday | date:'d-MMMM-yyyy'}}</span>
                 <i class="ion-asterisk alignRight inline vertical-middle"></i>
                 </label>
@@ -92,14 +92,14 @@
                     <i class="ion-asterisk alignRight inline vertical-middle"></i> 
                 </label>-->
 
-                <label class="item item-input" ng-click="openDatePicker()" ng-if="!isViewMode(data)">
-                <span type="date" class="input-label date">{{babyCopy.birthday | date:'d-MMMM-yyyy'}}</span>
+                <label class="item item-input" ng-click="openDatePicker($index)" ng-if="!isViewMode(data)">
+                <span type="date" class="input-label date">{{data.birthday | date:'d-MMMM-yyyy'}}</span>
                 <i class="ion-asterisk alignRight inline vertical-middle"></i>
                 </label>
 
                 <label class="item item-input item-stacked-label" ng-if="isViewMode(data)">
                     <span class="input-label">{{relationType(data)}}:</span>
-                    <span class="textdata">{{data.firstName}} {{data.lastName}} ({{babyCopy.birthday | date:"d MMMM yyyy"}})</span>
+                    <span class="textdata">{{data.firstName}} {{data.lastName}} ({{data.birthday | date:"d MMMM yyyy"}})</span>
                 </label>
 
             </div>

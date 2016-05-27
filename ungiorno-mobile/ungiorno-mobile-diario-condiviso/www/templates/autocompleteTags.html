@@ -1,12 +1,13 @@
 <div>
     <i class="icon inf_digtags"></i>
     <label class="post-create-element item-input">
-        <input type="text" ng-model="tagsInserted" ng-change="inputChanged($event)" ng-click="openPopover($event)"></input>
         <div>
             <div class="tag-element inline" ng-repeat="tag in attachedTags">
                 <div class="inline vertical-middle">{{tag.name}}</div>
                 <i class="tag-element-remove vertical-middle icon ion-android-close inline" ng-click="removeTag(tag)"></i>
             </div>
         </div>
+        <input type="text" ng-model="tagsInserted" ng-change="inputChanged($event)" ng-click="openPopover($event)"></input>
     </label>
+
 </div>

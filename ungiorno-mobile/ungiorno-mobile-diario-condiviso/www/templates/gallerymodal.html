@@ -1,15 +1,15 @@
 <ion-modal-view class="gallery-modal" ng-click="closeModal()">
-	<ion-header-bar class="bar-ungiorno">
+    <ion-header-bar class="bar-ungiorno">
         <button class="button back-button button-clear" ng-click="closeModal()">
             <i class="icon inf_digarrow_back "></i>
         </button>
-		<h1 class="title">{{'gallery' | translate}}</h1>
-	</ion-header-bar>
+        <h1 class="title">{{'gallery' | translate}}</h1>
+    </ion-header-bar>
     <ion-content scroll="false">
         <div class="gallery-modal-container">
-                    <img ng-src="{{photo.url}}" />
+            <img ng-src="{{photo}}" />
         </div>
-<!--
+        <!--
         <ion-slide-box show-pager="false">
             <ion-slide ng-repeat="image in photos">
                 <ion-content>

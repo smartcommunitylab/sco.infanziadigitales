@@ -1,11 +1,11 @@
 <div class="stream">
     <div class="stream post-creation-details">
-        <div class="stream post-date"><span>{{post.date * 1000 | date:"EEEE" | capitalize}}</span></div>
-        <div class="stream post-date"><span>{{post.date * 1000 | date:"d MMMM yyyy"}}</span></div>
+        <div class="stream post-date"><span>{{post.date  | date:"EEEE" | capitalize}}</span></div>
+        <div class="stream post-date"><span>{{post.date  | date:"d MMMM yyyy"}}</span></div>
         <div class="stream post-baby-age">{{baby.firstName}} {{'has' | translate}} {{getBabyAgeString(baby.birthday, post.date)}}</div>
     </div>
     <div class="stream post-action-container">
-<!--
+        <!--
         <button class="button button-clear" ng-click="sharePost(post)">
             <i class="icon ion-android-share-alt"></i>
         </button>
@@ -24,12 +24,12 @@
 
     <div class="stream post-photos-container">
         <div class="row">
-            <div class="col" ng-repeat="photo in post.pictures | limitTo:2 track by $index" >
-                <img class="stream post-photo" ng-src="{{photo.url}}" ng-click="viewPhotos(post.pictures, $index)">
+            <div class="col" ng-repeat="photo in post.pictures | limitTo:2 track by $index">
+                <img class="stream post-photo" ng-src="{{photo}}" ng-click="viewPhotos(post.pictures, $index)">
             </div>
         </div>
         <button class="button button-clear stream post-photo-more" ng-click="viewPhotos(post.pictures)" ng-if="post.pictures.length > 2">
-        <i class="stream icon ion-android-more-horizontal" ></i>
+            <i class="stream icon ion-android-more-horizontal"></i>
         </button>
     </div>
 </div>

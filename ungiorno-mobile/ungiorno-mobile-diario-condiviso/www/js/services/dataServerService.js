@@ -24,7 +24,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
         return deferred.promise;
     };
 
-     /* Check if current profile is a teacher or not */
+    /* Check if current profile is a teacher or not */
     dataServerService.isATeacher = function () {
         return localStorage.currentProfile === "teacher";
     };
@@ -97,9 +97,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
          return deferred.promise;
      }*/
 
-    dataServerService.save = function (post) {
-        return dataServerService.getPostsByBabyId();
-    }
+    //    dataServerService.save = function (post) {
+    //        return dataServerService.getPostsByBabyId();
+    //    }
 
     /**
      * Retrieve tags to be used
@@ -143,24 +143,156 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
          return deferred.promise;
      };
      */
+
+
+
+    /*
+
+    Upload a photo:
+	POST
+     /diary/{appId}/{schoolId}/{kidId}/image?isTeacher=<true|false>
+	Multipart request (‘image’ param)
+	Upload a new photo.
+
+	Return imageId
+
+
+    */
+    function imageIsLocal(schoolId, kidId, file) {
+        if (file.startsWith(Config.URL() + '/' + Config.app() + '/diary/' + Config.appId() + '/' + schoolId + '/' + kidId))
+            return false;
+        return true;
+    }
+
+    function getImageId(schoolId, kidId, file) {
+        file.substring((Config.URL() + '/' + Config.app() + '/diary/' + Config.appId() + '/' + schoolId + '/' + kidId).length + 1, file.length - '/image'.length);
+    }
+    dataServerService.addPicture = function (schoolId, kidId, file) {
+        var deferred = $q.defer();
+
+        var win = function (r) {
+            console.log("Code = " + r.responseCode);
+            console.log("Response = " + r.response);
+            console.log("Sent = " + r.bytesSent);
+            if (r.response) {
+                try {
+                    var data = JSON.parse(r.response);
+                    deferred.resolve(data.data);
+
+                } catch (e) {
+                    deferred.reject();
+                }
+            } else {
+                deferred.reject();
+            }
+        }
+
+        var fail = function (error) {
+            alert("An error has occurred: Code = " + error.code);
+            console.log("upload error source " + error.source);
+            console.log("upload error target " + error.target);
+            deferred.reject(error);
+        }
+
+        var options = new FileUploadOptions();
+        options.fileKey = "image";
+
+
+        var ft = new FileTransfer();
+        if (imageIsLocal(schoolId, kidId, file)) {
+            ft.upload(file, Config.URL() + '/' + Config.app() + '/diary/' + Config.appId() + '/' + schoolId + '/' + kidId + '/image?isTeacher=' + dataServerService.isATeacher(), win, fail, options);
+        } else {
+            deferred.resolve(getImageId(schoolId, kidId, file));
+        }
+        return deferred.promise;
+    };
+
+    function setTagsAttribute(tagsObject) {
+        var arrayOfTags = [];
+        for (var k = 0; k < tagsObject.length; k++) {
+            arrayOfTags.push(tagsObject[k].name);
+        }
+        return arrayOfTags;
+
+    }
+
     dataServerService.addPost = function (schoolId, kidId, nota) {
         var deferred = $q.defer();
-        $http({
-            method: 'POST',
-            url: Config.URL() + '/' + Config.app() + '/diary/' + Config.appId() + '/' + schoolId + '/' + kidId + '/entry?isTeacher=' + dataServerService.isATeacher(),
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            data: nota,
-        }).
-        success(function (data, status, headers, config) {
-            deferred.resolve(data);
-        }).
-        error(function (data, status, headers, config) {
-            console.log(data + status + headers + config);
-            deferred.reject(data);
-        });
+        //upload all images and after create note with url of images
+        var immaginiUrl = [];
+        var urlCall, methodCall;
+        if (nota.entryId) {
+            urlCall = Config.URL() + '/' + Config.app() + '/diary/' + Config.appId() + '/' + schoolId + '/' + kidId + '/' + nota.entryId + '/entry?isTeacher=' + dataServerService.isATeacher();
+            methodCall = 'PUT';
+        } else {
+            urlCall = Config.URL() + '/' + Config.app() + '/diary/' + Config.appId() + '/' + schoolId + '/' + kidId + '/entry?isTeacher=' + dataServerService.isATeacher();
+            methodCall = 'POST';
+        }
+        if (!nota.pictures || nota.pictures.length == 0) {
+            nota.tags = setTagsAttribute(nota.tags);
+            $http({
+                method: methodCall,
+                url: urlCall,
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                data: {
+                    "schoolId": schoolId,
+                    "kidId": kidId,
+                    "date": nota.date.getTime(),
+                    "text": nota.text,
+                    "tags": nota.tags,
+                    "authorId": nota.authorId
+                }
+            }).
+            success(function (data, status, headers, config) {
+                deferred.resolve(data);
+            }).
+            error(function (data, status, headers, config) {
+                console.log(data + status + headers + config);
+                deferred.reject(data);
+            });
+        } else
+            for (var k = 0; k < nota.pictures.length; k++) {
+                $q.all([
+                            dataServerService.addPicture(schoolId, kidId, nota.pictures[k]).then(function (pictureId) {
+                            ///diary/{appId}/{schoolId}/{kidId}/{imageId}/image
+                            immaginiUrl.push(Config.URL() + '/' + Config.app() + '/diary/' + Config.appId() + '/' + schoolId + '/' + kidId + '/' + pictureId + '/image');
+                        }),
+                        ])
+                    .then(function (values) {
+                        //create nota with new url
+                        nota.tags = setTagsAttribute(nota.tags);
+
+                        $http({
+                            method: methodCall,
+                            url: urlCall,
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            },
+                            data: {
+                                "schoolId": schoolId,
+                                "kidId": kidId,
+                                "date": nota.date.getTime(),
+                                "text": nota.text,
+                                "tags": nota.tags,
+                                "pictures": immaginiUrl,
+                                "authorId": nota.authorId
+                            }
+                        }).
+                        success(function (data, status, headers, config) {
+                            deferred.resolve(data);
+                        }).
+                        error(function (data, status, headers, config) {
+                            console.log(data + status + headers + config);
+                            deferred.reject(data);
+                        });
+                        //return values;
+                    });
+            }
+
         return deferred.promise;
     }
 
@@ -187,22 +319,37 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
     /**
      * Retrieve child posts
      */
-    dataServerService.getGalleryByBabyId = function (babyId, start, count) {
+    dataServerService.getGalleryByBabyId = function (schoolId, kidId, start, count) {
         var deferred = $q.defer();
-        dataServerService.getPostsByBabyId(babyId, start, count).then(function (posts) {
-            var res = [];
-            for (var i = 0; i < posts.length; i++) {
-                if (posts[i].pictures) {
-                    for (var j = 0; j < posts[i].pictures.length; j++) {
-                        res.push({
-                            url: posts[i].pictures[j].url,
-                            date: posts[i].date
-                        });
-                    }
-                }
-            }
-            deferred.resolve(res);
+        $http({
+            method: 'GET',
+            url: Config.URL() + '/' + Config.app() + '/diary/' + Config.appId() + '/' + schoolId + '/' + kidId + '/gallery?isTeacher=' + dataServerService.isATeacher(),
+            headers: {
+                'Accept': 'application/json'
+            },
+            timeout: Config.httpTimout()
+        }).
+        success(function (data, status, headers, config) {
+            deferred.resolve(data);
+        }).
+        error(function (data, status, headers, config) {
+            console.log(data + status + headers + config);
+            deferred.reject(status);
         });
+        //        dataServerService.getPostsByBabyId(babyId, start, count).then(function (posts) {
+        //            var res = [];
+        //            for (var i = 0; i < posts.length; i++) {
+        //                if (posts[i].pictures) {
+        //                    for (var j = 0; j < posts[i].pictures.length; j++) {
+        //                        res.push({
+        //                            url: posts[i].pictures[j].url,
+        //                            date: posts[i].date
+        //                        });
+        //                    }
+        //                }
+        //            }
+        //            deferred.resolve(res);
+        //        });
         return deferred.promise;
     }
 

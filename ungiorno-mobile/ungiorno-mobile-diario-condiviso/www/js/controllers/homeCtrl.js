@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.controllers.home', [])
 
-.controller('HomeCtrl', function ($scope, $filter, $rootScope, $ionicModal, $cordovaCamera, $ionicPopover, $state, galleryService, profileService, dataServerService, ionicDatePicker, $ionicHistory) {
+.controller('HomeCtrl', function ($scope, $filter, $rootScope, $ionicModal, $cordovaCamera, $ionicPopover, $state, galleryService, profileService, dataServerService, $ionicPopup, ionicDatePicker, $ionicHistory) {
 
     /* START IONIC DATEPICKER */
     $scope.date = new Date();
@@ -54,7 +54,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
             profileService.getCurrentBaby().then(function (data) {
                 if ($rootScope.selectedKid) {
                     $scope.baby = data;
-                    dataServerService.getPostsByBabyId('scuola2', $scope.baby.kidId).then(function (posts) {
+                    dataServerService.getPostsByBabyId($scope.baby.schoolId, $scope.baby.kidId).then(function (posts) {
                         $scope.posts = posts;
                     });
                 }
@@ -104,21 +104,34 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         editPostMode = false;
 
         $scope.currentPost = {};
+        $scope.currentPost.schoolId = $scope.baby.schoolId;
+        $scope.currentPost.kidId = $scope.baby.kidId;
+
         $scope.currentPost.date = new Date();
-        $scope.currentPost.description = "";
-        $scope.currentPost.photos = [];
-        $scope.currentPost.attachedTags = [];
-        $scope.setMood(0);
+        $scope.currentPost.text = "";
+        $scope.currentPost.pictures = [];
+        $scope.currentPost.tags = [];
+        $scope.currentPost.authorId = localStorage.user.userId;
+
+        //$scope.setMood(0);
         $scope.newPostModal.show();
     }
     $scope.cancel = function () {
         $scope.newPostModal.hide();
     }
 
-    $scope.save = function (post) { //function called when a new post is submitted and also when a post is edited
-        dataServerService.save(post).then(
+    $scope.save = function () { //function called when a new post is submitted and also when a post is edited
+
+        //add check params and return true or false if all data are correct
+        //        var timeInMilisecond = $scope.currentPost.date.getTime();
+        //        $scope.currentPost.date = timeInMilisecond;
+        dataServerService.addPost($scope.baby.schoolId, $scope.baby.kidId, $scope.currentPost).then(
             function (posts) {
-                $scope.posts = posts;
+                //$scope.posts = posts;
+                //update post
+                dataServerService.getPostsByBabyId($scope.baby.schoolId, $scope.baby.kidId).then(function (posts) {
+                    $scope.posts = posts;
+                });
                 $scope.newPostModal.hide();
             },
             function (err) {
@@ -146,46 +159,104 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
 
         if (photoSrc === undefined) {
             //Maybe is better a ActionSheet? http://codepen.io/mhartington/pen/KwBpRq
-            var template = '<ion-popover-view><ion-content><ion-list><ion-item ng-click="addPhoto($event, \'Camera\')">Camera</ion-item><ion-item ng-click="addPhoto($event, \'Gallery\')">Gallery</ion-item></ion-list></ion-content></ion-popover-view>';
+            photoSrcSelect = $ionicPopup.show({
+                title: 'Aggiungi foto',
+                scope: $scope,
+                buttons: [
+                    {
+                        text: 'Gallery',
+                        type: 'button-add-picture',
+                        onTap: function (e) {
+                            return $scope.addPhoto($event, 'Gallery')
+                        }
 
-            if (photoSrcSelect === undefined) {
-                photoSrcSelect = $ionicPopover.fromTemplate(template, {
-                    scope: $scope
-                });
-            }
+                      },
+                    {
+                        text: 'Camera',
+                        type: 'button-add-picture',
+                        onTap: function (e) {
+                            return $scope.addPhoto($event, 'Camera')
+                        }
+                    }
+                                    ]
+            });
 
-            photoSrcSelect.show($event);
+
+
+            //            var template = '<ion-popover-view><ion-content><ion-list><ion-item ng-click="addPhoto($event, \'Camera\')">Camera</ion-item><ion-item ng-click="addPhoto($event, \'Gallery\')">Gallery</ion-item></ion-list></ion-content></ion-popover-view>';
+            //
+            //            if (photoSrcSelect === undefined) {
+            //                photoSrcSelect = $ionicPopover.fromTemplate(template, {
+            //                    scope: $scope
+            //                });
+            //            }
+            //
+            //            photoSrcSelect.show($event);
         } else {
             if (photoSrcSelect !== undefined) {
-                photoSrcSelect.hide();
+                photoSrcSelect.close();
             }
             var options = {};
 
             if (photoSrc === 'Camera') {
                 options = {
-                    destinationType: Camera.DestinationType.DATA_URL,
-                    sourceType: Camera.PictureSourceType.CAMERA, // Camera.PictureSourceType.PHOTOLIBRARY
-                    allowEdit: false,
-                    encodingType: Camera.EncodingType.JPEG,
-                    popoverOptions: CameraPopoverOptions,
-                    saveToPhotoAlbum: false
-                };
+                        quality: 50,
+                        //destinationType: Camera.DestinationType.DATA_URL,
+                        destinationType: Camera.DestinationType.FILE_URI,
+                        // In this app, dynamically set the picture source, Camera or photo gallery
+                        sourceType: Camera.PictureSourceType.CAMERA,
+                        encodingType: Camera.EncodingType.JPEG,
+                        mediaType: Camera.MediaType.PICTURE,
+                        allowEdit: false,
+                        correctOrientation: true //Corrects Android orientation quirks
+                    }
+                    //                options = {
+                    //                    destinationType: Camera.DestinationType.DATA_URL,
+                    //                    sourceType: Camera.PictureSourceType.CAMERA, // Camera.PictureSourceType.PHOTOLIBRARY
+                    //                    allowEdit: false,
+                    //                    encodingType: Camera.EncodingType.JPEG,
+                    //                    popoverOptions: CameraPopoverOptions,
+                    //                    saveToPhotoAlbum: false
+                    //                };
             } else {
                 options = {
-                    destinationType: Camera.DestinationType.DATA_URL,
-                    sourceType: Camera.PictureSourceType.PHOTOLIBRARY, // Camera.PictureSourceType.PHOTOLIBRARY
-                    allowEdit: false,
+                    quality: 50,
+                    //destinationType: Camera.DestinationType.DATA_URL,
+                    destinationType: Camera.DestinationType.FILE_URI,
+
+                    // In this app, dynamically set the picture source, Camera or photo gallery
+                    sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
                     encodingType: Camera.EncodingType.JPEG,
-                    popoverOptions: CameraPopoverOptions,
-                    saveToPhotoAlbum: false
-                };
+                    mediaType: Camera.MediaType.PICTURE,
+                    allowEdit: false,
+                    correctOrientation: true //Corrects Android orientation quirks
+                }
             }
+            // options = {
+            //                    destinationType: Camera.DestinationType.DATA_URL,
+            //                    sourceType: Camera.PictureSourceType.PHOTOLIBRARY, // Camera.PictureSourceType.PHOTOLIBRARY
+            //                    allowEdit: false,
+            //                    encodingType: Camera.EncodingType.JPEG,
+            //                    popoverOptions: CameraPopoverOptions,
+            //                    saveToPhotoAlbum: false
+            //                };
+            // }
 
             $cordovaCamera.getPicture(options).then(function (imageData) {
                 var image;
-                image = "data:image/jpeg;base64," + imageData;
-                $scope.postToCreate.photos.push(image);
+                // image = "data:image/jpeg;base64," + imageData;
+                image = imageData;
+                if ($scope.currentPost) {
+                    if (!$scope.currentPost.pictures) {
+                        $scope.currentPost.pictures = [];
+                    }
+                    $scope.currentPost.pictures.push(image);
+                }
+                if (!$scope.imageBase64) {
+                    $scope.imageBase64 = [];
+                }
                 $scope.imageBase64.push(imageData);
+
             }, function (err) {
                 console.log(err);
             });
@@ -193,18 +264,23 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
     }
 
     $scope.removePhoto = function (index) {
-        $scope.postToCreate.photos.splice(index, 1);
+        $scope.currentPost.pictures.splice(index, 1);
     }
 
     $scope.openEditPost = function (post) {
         editPostMode = true;
 
         $scope.currentPost = {};
-        $scope.currentPost.date = new Date(post.date * 1000);
-        $scope.currentPost.description = post.text;
-        $scope.currentPost.photos = post.pictures;
-        $scope.currentPost.attachedTags = post.tags;
-        $scope.setMood(post.mood);
+        $scope.currentPost.schoolId = $scope.baby.schoolId;
+        $scope.currentPost.entryId = post.entryId;
+        $scope.currentPost.kidId = $scope.baby.kidId;
+        $scope.currentPost.date = new Date(post.date);
+        $scope.date = $scope.currentPost.date;
+        $scope.currentPost.text = post.text;
+        $scope.currentPost.pictures = post.pictures;
+        $scope.currentPost.tags = post.tags;
+        $scope.currentPost.authorId = localStorage.user.userId;
+        // $scope.setMood(post.mood);
         $scope.newPostModal.show();
     }
 

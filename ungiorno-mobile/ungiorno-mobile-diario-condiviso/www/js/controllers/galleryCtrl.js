@@ -1,12 +1,17 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.controllers.gallery', [])
 
-.controller('GalleryCtrl', function ($scope, dataServerService, profileService, $ionicModal, $ionicSlideBoxDelegate) {
-    dataServerService.getGalleryByBabyId(profileService.getCurrentBabyID()).then(function(images) {
-        $scope.photos = images;
+.controller('GalleryCtrl', function ($scope, dataServerService, profileService, $ionicModal, $ionicSlideBoxDelegate, Config) {
+    $scope.photos = [];
+    dataServerService.getGalleryByBabyId(profileService.getBabyProfileById(localStorage.currentBabyID).schoolId, localStorage.currentBabyID).then(function (images) {
+        if (images.data) {
+            for (var i = 0; i < images.data.length; i++) {
+                $scope.photos.push(Config.URL() + '/' + Config.app() + '/diary/' + Config.appId() + '/' + profileService.getBabyProfileById(localStorage.currentBabyID).schoolId + '/' + localStorage.currentBabyID + '/' + images.data[i].multimediaId + '/image');
+            }
+        }
     });
 
-    $scope.getImageAction = function(index) {
-            $scope.openModal(index);
+    $scope.getImageAction = function (index) {
+        $scope.openModal(index);
     };
 
 

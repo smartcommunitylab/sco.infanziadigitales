@@ -1,12 +1,13 @@
-<ion-popover-view>
+<ion-popover-view class="popover_tags">
     <ion-content>
         <ion-list>
-            <ion-item ng-repeat="tag in filteredTags track by $index" ng-click="completeTag($index)">
-                {{tag.name}}
-            </ion-item>
             <ion-item ng-click="addTag(tagsInserted)" ng-if="tagsInserted">
                 {{'add_tag' | translate}} {{tagsInserted}}
             </ion-item>
+            <ion-item ng-repeat="tag in filteredTags track by $index" ng-click="completeTag($index)">
+                {{tag.name}}
+            </ion-item>
+
         </ion-list>
     </ion-content>
 </ion-popover-view>

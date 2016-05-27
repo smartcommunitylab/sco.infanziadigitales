@@ -78,7 +78,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.di
         link: function (scope, elem, attrs) {
             scope.getBabyAgeString = function (birthday, postDate) {
                 var difference = postDate - birthday;
-                difference = new Date(difference * 1000);
+                difference = new Date(difference);
                 var toRtn = (difference.getFullYear() - 1970) + "a " +
                     difference.getMonth() + "m " +
                     difference.getDate() + "g";
@@ -127,14 +127,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.di
 //    }
 //})
 
-.directive('fabButton', function($document) {
+.directive('fabButton', function ($document) {
     return {
         restrict: 'E',
         template: '<i class="icon stream fab-icon ion-android-add"></i>',
         scope: {
             attachedTo: "@"
         },
-        link: function(scope, element, attrs) {
+        link: function (scope, element, attrs) {
             var scrollView = angular.element(document.querySelector('#' + scope.attachedTo));
             element.addClass("button");
             element.addClass("stream");
@@ -142,14 +142,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.di
 
             var start = 0;
             var lastDirection = -1; //0 = bottom, 1 = top
-            scrollView.bind('scroll', function(e) {
-                if(e.detail.scrollTop > start) {
+            scrollView.bind('scroll', function (e) {
+                if (e.detail.scrollTop > start) {
                     if (lastDirection !== 0) {
                         element.addClass("hidden");
                         //element.style.display = "hidden";
                     }
                     lastDirection = 0;
-                } else if (e.detail.scrollTop < start){
+                } else if (e.detail.scrollTop < start) {
                     if (lastDirection !== 1) {
                         element.removeClass("hidden");
                     }
@@ -161,7 +161,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.di
     }
 })
 
-.directive('autocompleteTags', function($document, $ionicPopover, dataServerService, $ionicPopup, $filter) {
+.directive('autocompleteTags', function ($document, $ionicPopover, dataServerService, $ionicPopup, $filter) {
     return {
         restrict: 'E',
         templateUrl: 'templates/autocompleteTags.html',
@@ -169,7 +169,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.di
             tags: "=",
             attachedTags: "="
         },
-        link: function(scope, element, attrs) {
+        link: function (scope, element, attrs) {
             //This is not working! Work in progress!
             var alreadyOpen = false;
             var tagsPopover;
@@ -178,15 +178,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.di
                 var lastTag = scope.tagsInserted.split(",");
                 lastTag = scope.tagsInserted.trim().toLowerCase();
                 return value.value.toLowerCase().indexOf(lastTag) > -1;
+
+
             }
 
-            scope.completeTag = function ( index) {
+            scope.completeTag = function (index) {
                 if (scope.attachedTags.indexOf(scope.tags[index]) === -1) { //check if tag is already added
                     scope.attachedTags.push(scope.tags[index]);
                 }
                 scope.tagsInserted = "";
                 scope.filteredTags = scope.tags.slice(); //workaround for a bug on android, after adding a tag the input text is empty but the tagsInserted is badly filtered
-                //scope.closePopover();
+                scope.closePopover();
             }
 
             scope.removeTag = function (tag) {
@@ -212,14 +214,19 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.di
                     title: $filter('translate')('add_tag_title'),
                     template: name + ' ' + $filter('translate')('add_tag_description')
                 });
-                addTagPopup.then(function(result) {
-                    if(result) {
-                        //TODO: add tag to the server list of tags
+                addTagPopup.then(function (result) {
+                    if (result) {
+                        //TODO: add tag to the server list of tags, right now it adds tag to the object
                         scope.closePopover();
-                        scope.tagsInserted = "";
+                        //scope.tagsInserted = name;
+                        var newTag = {
+                            name: name,
+                            tagId: name
+                        }
+                        scope.filteredTags.push(newTag);
+                        scope.attachedTags.push(newTag);
                         scope.filteredTags = scope.tags.slice(); //workaround for a bug on android, after adding a tag the input text is empty but the tagsInserted is badly filtered
-                    } else {
-                    }
+                    } else {}
                 });
             }
 

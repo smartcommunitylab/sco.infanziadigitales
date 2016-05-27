@@ -281,6 +281,10 @@ a.item-content {
     color: #ffffff;
     border-radius: 0;
 }
+.button-add-picture {
+    background-color: #239B77;
+    color: #ffffff;
+}
 .inline {
     display: inline-block;
 }
@@ -542,12 +546,10 @@ input[type=date] {
     font-size: 12px;
     color: grey;
 }
-
 .diary-form .input-label {
     font-size: 14px;
     color: black;
 }
-
 .diary-form .textdata {
     display: block;
 }
@@ -655,4 +657,7 @@ a.success-link {
     padding: 0 1em;
     margin-top: 2em;
     margin-bottom: 1.5em;
+}
+.popover_tags {
+    top: 215px!important;
 }

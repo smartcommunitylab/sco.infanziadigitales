@@ -198,21 +198,30 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         var error = false;
         for (var key in objectToCheck) {
             if (objectToCheck.hasOwnProperty(key)) {
-
-                if (typeof objectToCheck[key] === 'string' && objectToCheck[key].length === 0) {
-                    Toast.show('string must be inserted', 'short', 'bottom');
+                if (key === 'firstName' && (objectToCheck[key].length === 0 || objectToCheck[key] == null)) {
+                    Toast.show('Inserire nome', 'short', 'bottom');
                     error = true;
-                } else if ((objectToCheck[key] == null || objectToCheck[key] == []) && (key == "phone" || key == "email")) {
-                    Toast.show('string must be inserted', 'short', 'bottom');
+                } else if (key === 'lastName' && (objectToCheck[key].length === 0 || objectToCheck[key] == null)) {
+                    Toast.show('Inserire cognome', 'short', 'bottom');
+                    error = true;
+                } else if ((objectToCheck[key] == null || objectToCheck[key] == []) && key == "phone") {
+                    Toast.show('Inserire numero di telefono', 'short', 'bottom');
+                    error = true;
+                } else if ((objectToCheck[key] == null || objectToCheck[key] == []) && key == "email") {
+                    Toast.show('Inserire indirizzo email', 'short', 'bottom');
                     error = true;
                 } else if (objectToCheck[key] instanceof Date && objectToCheck[key] > new Date()) {
-                    Toast.show("date must be before today", 'short', 'bottom');
+                    Toast.show("La data deve essere prima di oggi", 'short', 'bottom');
                     error = true;
                 } else if (objectToCheck[key] instanceof Array) {
                     for (var i = 0; i < objectToCheck[key].length; i++) {
-                        if ((key == "phone" && (objectToCheck[key][i] == null || objectToCheck[key][i] == "")) || (key == "email" && (objectToCheck[key][i] == null || objectToCheck[key][i] == ""))) {
+                        if (key == "phone" && (objectToCheck[key][i] == null || objectToCheck[key][i] == "")) {
                             error = true;
-                            Toast.show('string must be inserted', 'short', 'bottom');
+                            Toast.show('Inserire numero di telefono', 'short', 'bottom');
+                            return error;
+                        } else if (key == "email" && (objectToCheck[key][i] == null || objectToCheck[key][i] == "")) {
+                            error = true;
+                            Toast.show('Inserire indirizzo email', 'short', 'bottom');
                             return error;
                         } else {
                             error = checkDataError(objectToCheck[key][i]);

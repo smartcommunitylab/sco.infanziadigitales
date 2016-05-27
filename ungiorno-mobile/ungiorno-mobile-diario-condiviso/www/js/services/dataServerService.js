@@ -165,7 +165,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
     }
 
     function getImageId(schoolId, kidId, file) {
-        file.substring((Config.URL() + '/' + Config.app() + '/diary/' + Config.appId() + '/' + schoolId + '/' + kidId).length + 1, file.length - '/image'.length);
+        return file.substring((Config.URL() + '/' + Config.app() + '/diary/' + Config.appId() + '/' + schoolId + '/' + kidId).length + 1, file.length - '/image'.length);
     }
     dataServerService.addPicture = function (schoolId, kidId, file) {
         var deferred = $q.defer();
@@ -210,7 +210,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
     function setTagsAttribute(tagsObject) {
         var arrayOfTags = [];
         for (var k = 0; k < tagsObject.length; k++) {
-            arrayOfTags.push(tagsObject[k].name);
+            if (tagsObject[k] && tagsObject[k].name)
+                arrayOfTags.push(tagsObject[k].name);
         }
         return arrayOfTags;
 
@@ -253,45 +254,48 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
                 console.log(data + status + headers + config);
                 deferred.reject(data);
             });
-        } else
+        } else {
+            var uploadFunction = [];
             for (var k = 0; k < nota.pictures.length; k++) {
-                $q.all([
-                            dataServerService.addPicture(schoolId, kidId, nota.pictures[k]).then(function (pictureId) {
-                            ///diary/{appId}/{schoolId}/{kidId}/{imageId}/image
-                            immaginiUrl.push(Config.URL() + '/' + Config.app() + '/diary/' + Config.appId() + '/' + schoolId + '/' + kidId + '/' + pictureId + '/image');
-                        }),
-                        ])
-                    .then(function (values) {
-                        //create nota with new url
-                        nota.tags = setTagsAttribute(nota.tags);
+                uploadFunction.push(
+                    dataServerService.addPicture(schoolId, kidId, nota.pictures[k]).then(function (pictureId) {
+                        ///diary/{appId}/{schoolId}/{kidId}/{imageId}/image
+                        immaginiUrl.push(Config.URL() + '/' + Config.app() + '/diary/' + Config.appId() + '/' + schoolId + '/' + kidId + '/' + pictureId + '/image');
+                    }))
+            };
+            $q.all(uploadFunction)
+                .then(function (values) {
+                    //create nota with new url
+                    nota.tags = setTagsAttribute(nota.tags);
 
-                        $http({
-                            method: methodCall,
-                            url: urlCall,
-                            headers: {
-                                'Accept': 'application/json',
-                                'Content-Type': 'application/json'
-                            },
-                            data: {
-                                "schoolId": schoolId,
-                                "kidId": kidId,
-                                "date": nota.date.getTime(),
-                                "text": nota.text,
-                                "tags": nota.tags,
-                                "pictures": immaginiUrl,
-                                "authorId": nota.authorId
-                            }
-                        }).
-                        success(function (data, status, headers, config) {
-                            deferred.resolve(data);
-                        }).
-                        error(function (data, status, headers, config) {
-                            console.log(data + status + headers + config);
-                            deferred.reject(data);
-                        });
-                        //return values;
+                    $http({
+                        method: methodCall,
+                        url: urlCall,
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        data: {
+                            "schoolId": schoolId,
+                            "kidId": kidId,
+                            "date": nota.date.getTime(),
+                            "text": nota.text,
+                            "tags": nota.tags,
+                            "pictures": immaginiUrl,
+                            "authorId": nota.authorId
+                        }
+                    }).
+                    success(function (data, status, headers, config) {
+                        deferred.resolve(data);
+                    }).
+                    error(function (data, status, headers, config) {
+                        console.log(data + status + headers + config);
+                        deferred.reject(data);
                     });
-            }
+                    //return values;
+                });
+
+        }
 
         return deferred.promise;
     }

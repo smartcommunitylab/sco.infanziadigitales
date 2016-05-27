@@ -206,13 +206,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
                         } else if (key === 'lastName' && (objectToCheck[key].length === 0 || objectToCheck[key] == null)) {
                             Toast.show('Inserire cognome', 'short', 'bottom');
                             error = true;
-                        } else if ((objectToCheck[key] == null || objectToCheck[key] == []) && key == "phone") {
+                        } /*else if ((objectToCheck[key] == null || objectToCheck[key] == []) && key == "phone") {
                             Toast.show('Inserire numero di telefono', 'short', 'bottom');
                             error = true;
                         } else if ((objectToCheck[key] == null || objectToCheck[key] == []) && key == "email") {
                             Toast.show('Inserire indirizzo email', 'short', 'bottom');
                             error = true;
-                        } else if (objectToCheck[key] instanceof Date && objectToCheck[key] > new Date()) {
+                        }*/ else if (objectToCheck[key] instanceof Date && objectToCheck[key] > new Date()) {
                             Toast.show("La data deve essere prima di oggi", 'short', 'bottom');
                             error = true;
                         } else if (objectToCheck[key] instanceof Array) {

@@ -392,7 +392,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         if (data.teacher == true) {
             toRtn = "dell'insegnante"
         } else if (data.parent == true) {
-            toRtn = "dell'insegnante"
+            toRtn = "del genitore"
         } else {
             switch (data.relation) {
                 case 'brother':

@@ -184,9 +184,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
                         addAccessComponent()
                     };
                     $scope.babyCopy.fullName = $scope.babyCopy.firstName + ' ' + $scope.babyCopy.lastName;
+                    $ionicLoading.show();
                     profileService.saveChildProfile($scope.babyCopy).then(function (data) {
                         $scope.babyCopy = data.data;
                         $ionicScrollDelegate.scrollTop();
+                        $ionicLoading.hide();
                     });
                     mode = "view";
                 }
@@ -196,42 +198,42 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
 
     var checkDataError = function (objectToCheck) {
         var error = false;
-        for (var key in objectToCheck) {
-            if (objectToCheck.hasOwnProperty(key)) {
-                if (key === 'firstName' && (objectToCheck[key].length === 0 || objectToCheck[key] == null)) {
-                    Toast.show('Inserire nome', 'short', 'bottom');
-                    error = true;
-                } else if (key === 'lastName' && (objectToCheck[key].length === 0 || objectToCheck[key] == null)) {
-                    Toast.show('Inserire cognome', 'short', 'bottom');
-                    error = true;
-                } else if ((objectToCheck[key] == null || objectToCheck[key] == []) && key == "phone") {
-                    Toast.show('Inserire numero di telefono', 'short', 'bottom');
-                    error = true;
-                } else if ((objectToCheck[key] == null || objectToCheck[key] == []) && key == "email") {
-                    Toast.show('Inserire indirizzo email', 'short', 'bottom');
-                    error = true;
-                } else if (objectToCheck[key] instanceof Date && objectToCheck[key] > new Date()) {
-                    Toast.show("La data deve essere prima di oggi", 'short', 'bottom');
-                    error = true;
-                } else if (objectToCheck[key] instanceof Array) {
-                    for (var i = 0; i < objectToCheck[key].length; i++) {
-                        if (key == "phone" && (objectToCheck[key][i] == null || objectToCheck[key][i] == "")) {
+                for (var key in objectToCheck) {
+                    if (objectToCheck.hasOwnProperty(key)) {
+                        if (key === 'firstName' && (objectToCheck[key].length === 0 || objectToCheck[key] == null)) {
+                            Toast.show('Inserire nome', 'short', 'bottom');
                             error = true;
+                        } else if (key === 'lastName' && (objectToCheck[key].length === 0 || objectToCheck[key] == null)) {
+                            Toast.show('Inserire cognome', 'short', 'bottom');
+                            error = true;
+                        } else if ((objectToCheck[key] == null || objectToCheck[key] == []) && key == "phone") {
                             Toast.show('Inserire numero di telefono', 'short', 'bottom');
-                            return error;
-                        } else if (key == "email" && (objectToCheck[key][i] == null || objectToCheck[key][i] == "")) {
                             error = true;
+                        } else if ((objectToCheck[key] == null || objectToCheck[key] == []) && key == "email") {
                             Toast.show('Inserire indirizzo email', 'short', 'bottom');
-                            return error;
-                        } else {
-                            error = checkDataError(objectToCheck[key][i]);
-                            if (error) return true;
+                            error = true;
+                        } else if (objectToCheck[key] instanceof Date && objectToCheck[key] > new Date()) {
+                            Toast.show("La data deve essere prima di oggi", 'short', 'bottom');
+                            error = true;
+                        } else if (objectToCheck[key] instanceof Array) {
+                            for (var i = 0; i < objectToCheck[key].length; i++) {
+                                if (key == "phone" && (objectToCheck[key][i] == null || objectToCheck[key][i] == "")) {
+                                    error = true;
+                                    Toast.show('Inserire numero di telefono', 'short', 'bottom');
+                                    return error;
+                                } else if (key == "email" && (objectToCheck[key][i] == null || objectToCheck[key][i] == "")) {
+                                    error = true;
+                                    Toast.show('Inserire indirizzo email', 'short', 'bottom');
+                                    return error;
+                                } else {
+                                    error = checkDataError(objectToCheck[key][i]);
+                                    if (error) return true;
+                                }
+                            }
                         }
+                        if (error) return true;
                     }
                 }
-                if (error) return true;
-            }
-        }
         return false;
     }
     $scope.isViewMode = function () {
@@ -305,24 +307,24 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
             toRtn = "Genitore"
         } else {
             switch (data.relation) {
-                case 'sister':
-                    toRtn = "Sorella";
-                    break;
-                case 'brother':
-                    toRtn = "Fratello";
-                    break;
-                case 'grandfather':
-                    toRtn = "Nonno";
-                    break;
-                case 'grandmother':
-                    toRtn = "Nonna";
-                    break;
-                case 'uncle':
-                    toRtn = "Zio";
-                    break;
-                case 'aunt':
-                    toRtn = "Zia";
-                    break;
+            case 'sister':
+                toRtn = "Sorella";
+                break;
+            case 'brother':
+                toRtn = "Fratello";
+                break;
+            case 'grandfather':
+                toRtn = "Nonno";
+                break;
+            case 'grandmother':
+                toRtn = "Nonna";
+                break;
+            case 'uncle':
+                toRtn = "Zio";
+                break;
+            case 'aunt':
+                toRtn = "Zia";
+                break;
             }
         }
         return toRtn;
@@ -395,26 +397,26 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
             toRtn = "del genitore"
         } else {
             switch (data.relation) {
-                case 'brother':
-                    toRtn = "del fratello";
-                    break;
-                case 'sister':
-                    toRtn = "della sorella";
-                    break;
-                case 'grandfather':
-                    toRtn = "del nonno";
-                    break;
-                case 'grandmother':
-                    toRtn = "della nonna";
-                    break;
-                case 'uncle':
-                    toRtn = "dello zio";
-                    break;
-                case 'aunt':
-                    toRtn = "della zia";
-                    break;
-                default:
-                    toRtn = "";
+            case 'brother':
+                toRtn = "del fratello";
+                break;
+            case 'sister':
+                toRtn = "della sorella";
+                break;
+            case 'grandfather':
+                toRtn = "del nonno";
+                break;
+            case 'grandmother':
+                toRtn = "della nonna";
+                break;
+            case 'uncle':
+                toRtn = "dello zio";
+                break;
+            case 'aunt':
+                toRtn = "della zia";
+                break;
+            default:
+                toRtn = "";
             }
         }
         return toRtn;
@@ -432,17 +434,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         $scope.modify();
     } else {
 
+        $ionicLoading.show();
         profileService.getCurrentBaby().then(function (data) {
             $scope.baby = data;
-            /*$scope.baby.birthday = new Date($scope.baby.birthday * 1000);*/
-            //            for (var i = 0; i < $scope.baby.persons.length; i++) {
-            //                if (!!$scope.baby.persons[i].birthday) {
-            //                    $scope.baby.persons[i].birthday = new Date($scope.baby.persons[i].birthday );
-            //                }
-            //            }
             $scope.babyCopy = clone($scope.baby);
             console.log($scope.babyCopy);
+            $ionicLoading.hide();
         });
+
     }
 
     function clone(obj) {

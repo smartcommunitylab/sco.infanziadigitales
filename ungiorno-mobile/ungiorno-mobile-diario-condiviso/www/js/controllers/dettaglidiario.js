@@ -309,24 +309,24 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
             toRtn = "Genitore"
         } else {
             switch (data.relation) {
-            case 'sister':
-                toRtn = "Sorella";
-                break;
-            case 'brother':
-                toRtn = "Fratello";
-                break;
-            case 'grandfather':
-                toRtn = "Nonno";
-                break;
-            case 'grandmother':
-                toRtn = "Nonna";
-                break;
-            case 'uncle':
-                toRtn = "Zio";
-                break;
-            case 'aunt':
-                toRtn = "Zia";
-                break;
+                case 'sister':
+                    toRtn = "Sorella";
+                    break;
+                case 'brother':
+                    toRtn = "Fratello";
+                    break;
+                case 'grandfather':
+                    toRtn = "Nonno";
+                    break;
+                case 'grandmother':
+                    toRtn = "Nonna";
+                    break;
+                case 'uncle':
+                    toRtn = "Zio";
+                    break;
+                case 'aunt':
+                    toRtn = "Zia";
+                    break;
             }
         }
         return toRtn;
@@ -371,19 +371,19 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
 
     // CAN MODIFY PERMISSION FUNCTION
 
-    $scope.modifyComponent = function (index) {
+    $scope.modifyComponent = function (data) {
         var myUserID = getMyProfileID();
 
-        if (myUserID === $scope.babyCopy.persons[index].personId) {
+        if (myUserID === data.personId) {
             return true;
         } else {
 
-            if (localStorage.currentProfile === "parent" && $scope.babyCopy.persons[index].teacher === false) {
+            if (localStorage.currentProfile === "parent" && data.teacher === false) {
                 return true;
+            } else {
+                return false;
             }
-
         }
-        return false;
     }
 
     // CAN MODIFY KID PERMISSION FUNCTION
@@ -391,7 +391,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
     $scope.modifyComponentKid = function () {
         if (localStorage.currentProfile === "teacher") {
             return false;
-        } else if (localStorage.currentProfile === "parent"){
+        } else if (localStorage.currentProfile === "parent") {
 
             return true;
         }
@@ -442,26 +442,26 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
             toRtn = "del genitore"
         } else {
             switch (data.relation) {
-            case 'brother':
-                toRtn = "del fratello";
-                break;
-            case 'sister':
-                toRtn = "della sorella";
-                break;
-            case 'grandfather':
-                toRtn = "del nonno";
-                break;
-            case 'grandmother':
-                toRtn = "della nonna";
-                break;
-            case 'uncle':
-                toRtn = "dello zio";
-                break;
-            case 'aunt':
-                toRtn = "della zia";
-                break;
-            default:
-                toRtn = "";
+                case 'brother':
+                    toRtn = "del fratello";
+                    break;
+                case 'sister':
+                    toRtn = "della sorella";
+                    break;
+                case 'grandfather':
+                    toRtn = "del nonno";
+                    break;
+                case 'grandmother':
+                    toRtn = "della nonna";
+                    break;
+                case 'uncle':
+                    toRtn = "dello zio";
+                    break;
+                case 'aunt':
+                    toRtn = "della zia";
+                    break;
+                default:
+                    toRtn = "";
             }
         }
         return toRtn;

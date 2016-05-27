@@ -52,7 +52,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
     };
 })
 
-.controller('AppCtrl', function ($scope, $rootScope, $location, $cordovaDevice, $ionicModal, $ionicHistory, $timeout, $filter, $ionicPopover, $state, $ionicSideMenuDelegate, diaryService, dataServerService, profileService) {
+.controller('AppCtrl', function ($scope, $rootScope, $location, $cordovaDevice, $ionicModal, $ionicHistory, $timeout, $filter, $ionicPopover, $state, $ionicSideMenuDelegate, diaryService, dataServerService, profileService, $window) {
 
     $scope.profilesOpen = false;
     $scope.toggleProfile = function() {
@@ -66,6 +66,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
 
     $scope.logout = function() {
         dataServerService.logout();
+        $window.localStorage.clear();
         $state.go('app.login');
     };
 

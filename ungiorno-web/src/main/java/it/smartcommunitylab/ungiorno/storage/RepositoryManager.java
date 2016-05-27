@@ -1100,6 +1100,14 @@ public class RepositoryManager {
 		q.addCriteria(new Criteria("entryId").is(entryId));
 		return template.findOne(q, DiaryEntry.class);
 	}
+
+	public void deleteDiaryEntry(String appId, String schoolId, String kidId, String entryId) {
+		// TODO cleanup multimedia 
+		Query q = kidQuery(appId, schoolId, kidId);
+		q.addCriteria(new Criteria("entryId").is(entryId));
+		template.remove(q, DiaryEntry.class);
+	}
+
 	
 	public void saveDiaryEntry(DiaryEntry diary) {
 		Query q = kidQuery(diary.getAppId(), diary.getSchoolId(), diary.getKidId());

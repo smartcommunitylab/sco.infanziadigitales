@@ -90,6 +90,7 @@ public class Teacher extends SchoolObject {
 	public DiaryKidPerson toDiaryKidPerson(boolean authorized) {
 		DiaryKidPerson p = new DiaryKidPerson();
 		p.setAdult(true);
+		p.setTeacher(true);
 		p.setAuthorized(authorized);
 		p.setFirstName(teacherName);
 		p.setFullName(teacherFullname);

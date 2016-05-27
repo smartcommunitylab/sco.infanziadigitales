@@ -1,6 +1,7 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.controllers.home', [])
 
-.controller('HomeCtrl', function ($scope, $filter, $rootScope, $ionicModal, $cordovaCamera, $ionicPopover, $state, galleryService, profileService, dataServerService, $ionicPopup, ionicDatePicker, $ionicHistory) {
+
+.controller('HomeCtrl', function ($scope, $filter, $rootScope, $ionicModal, $cordovaCamera, $ionicPopover, $ionicLoading, $state, galleryService, profileService, dataServerService, $ionicPopup, ionicDatePicker, $ionicHistory) {
 
     /* START IONIC DATEPICKER */
     $scope.date = new Date();
@@ -45,8 +46,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         return;
     }*/
 
+
+
     var init = function () {
         profileService.init().then(function () {
+            $ionicLoading.show();
             $rootScope.kidProfiles = profileService.getAllBabyProfiles();
             $rootScope.babyNum = Object.keys($rootScope.kidProfiles).length;
             /*console.log($scope.babyNum);*/
@@ -56,6 +60,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
                     $scope.baby = data;
                     dataServerService.getPostsByBabyId($scope.baby.schoolId, $scope.baby.kidId).then(function (posts) {
                         $scope.posts = posts;
+                        $ionicLoading.hide();
                     });
                 }
             });
@@ -111,7 +116,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         $scope.currentPost.text = "";
         $scope.currentPost.pictures = [];
         $scope.currentPost.tags = [];
-        $scope.currentPost.authorId = localStorage.user.userId;
+        $scope.currentPost.authorId = profileService.getMyProfileID();
 
         //$scope.setMood(0);
         $scope.newPostModal.show();
@@ -279,7 +284,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         $scope.currentPost.text = post.text;
         $scope.currentPost.pictures = post.pictures;
         $scope.currentPost.tags = post.tags;
-        $scope.currentPost.authorId = localStorage.user.userId;
+        $scope.currentPost.authorId = profileService.getMyProfileID();
         // $scope.setMood(post.mood);
         $scope.newPostModal.show();
     }

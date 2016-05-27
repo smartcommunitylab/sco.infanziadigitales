@@ -661,3 +661,15 @@ a.success-link {
 .popover_tags {
     top: 215px!important;
 }
+.add-btn span.add {
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+.ion-minus-circled {
+    font-size: 25px;
+    color: red;
+}
+.ion-plus-circled {
+    font-size: 25px;
+    color: green;
+}

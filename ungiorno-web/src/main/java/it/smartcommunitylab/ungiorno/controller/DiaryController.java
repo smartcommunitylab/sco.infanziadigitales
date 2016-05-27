@@ -27,6 +27,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -161,18 +162,17 @@ public class DiaryController {
 		}
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/diary/{appId}/{schoolId}/{kidId}/{imageId}/image")
+	@RequestMapping(method = RequestMethod.GET, value = "/diary/{appId}/{schoolId}/{kidId}/{imageId}/image", produces = MediaType.IMAGE_JPEG_VALUE)
 	public void getImage(HttpServletResponse response, @PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId, @PathVariable String imageId) throws Exception {
 
-		checkKidDiaryEnabled(appId, schoolId, kidId, null);
-
+//		checkKidDiaryEnabled(appId, schoolId, kidId, null);
 
 		MultimediaEntry multimedia = storage.getMultimediaEntry(appId, schoolId, kidId, imageId);
 		if (multimedia != null) {
 			File f = new File(appSetup.getUploadDirectory() + "/" + imageId);
 			if (f.exists()) {
-				String ext = f.getName().substring(f.getName().lastIndexOf(".") + 1);
-				response.setContentType("image/" + ext);
+//				String ext = f.getName().substring(f.getName().lastIndexOf(".") + 1);
+				response.setContentType(MediaType.IMAGE_JPEG_VALUE);
 			    InputStream is = new FileInputStream(f);
 			    IOUtils.copy(is, response.getOutputStream());
 			}

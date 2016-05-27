@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.services.profileService', [])
 
-.factory('profileService', function ($http, $q, dataServerService, $rootScope, Config) {
+.factory('profileService', function ($http, $q, dataServerService, $rootScope, Config, $window, $state) {
     var babyProfiles = null;
     var schoolProfile = null;
     var userData = null;
@@ -14,12 +14,22 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
         var deferred = $q.defer();
         profileService.getUserProfile().then(function (data) {
             userData = angular.copy(data);
-            if (!!userData.parent && !!userData.parent.userId) {
-                localStorage.currentProfile = 'parent';
+            if (localStorage.currentProfile === "parent") {
                 kidType = userData.kids;
-            } else {
-                localStorage.currentProfile = 'teacher';
+            } else if (localStorage.currentProfile === "teacher") {
                 kidType = userData.students;
+            } else {
+                if (!!userData.parent && !!userData.parent.userId && !!userData.teacher && !!userData.teacher.userId) {
+                    if (!!userData.parent && !!userData.parent.userId) {
+                        localStorage.isMultiProfile = true;
+                    }
+                    localStorage.currentProfile = 'parent';
+                    kidType = userData.kids;
+
+                } else {
+                    localStorage.currentProfile = 'teacher';
+                    kidType = userData.students;
+                }
             }
             babyProfiles = {};
             if (data == null || data.length == 0) return;
@@ -44,7 +54,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
     profileService.getUserData = function () {
         return userData;
     };
-
+    profileService.getMyProfileID = function () {
+        if (localStorage.currentProfile === "teacher") {
+            return profileService.getUserData().teacher.userId;
+        } else {
+            return profileService.getUserData().parent.userId;
+        }
+    }
     profileService.setCurrentBabyID = function (babyId) {
         localStorage.currentBabyID = babyId;
         profileService.getBabyById(localStorage.currentBabyID, 'scuola2').then(function (data) {
@@ -163,7 +179,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
         if (storedProfile && storedProfile != 'null') {
             return storedProfile == 'parent';
         } else {
-            if (localStorage.currentProfile = 'parent') {
+            if (localStorage.currentProfile === 'parent') {
                 return true;
             } else {
                 return false;
@@ -175,14 +191,24 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
         /*var user = dataServerService.getUser();
         return user && user.parent && user.parent.userId && user.teacher && user.teacher.userId;*/
         /*TODO: check if it is multyprofile*/
-        return true;
+        if (localStorage.isMultiProfile == "true") {
+            return true;
+        }
     }
 
     profileService.toggleUserProfile = function () {
         if (profileService.isParentProfile()) {
             localStorage.currentProfile = 'teacher';
+            localStorage.removeItem('currentBabyID');
+            $state.go('app.home', null, {
+                reload: true
+            });
         } else {
             localStorage.currentProfile = 'parent';
+            localStorage.removeItem('currentBabyID');
+            $state.go('app.home', null, {
+                reload: true
+            });
         }
     };
 

@@ -34,7 +34,7 @@
                 <ion-item menu-close class="item item-icon-left" href="#/app/home">
                     <i class="icon inf_dighome "></i>{{'home'|translate}}
                 </ion-item>
-                <ion-item menu-close class="item item-icon-left" ng-click="changeProfileType()" ng-if="isMultiProfile()">
+                <ion-item menu-close class="item item-icon-left" ng-click="changeProfileType()" ng-if="!!isMultiProfile()">
                     <i class="icon inf_digchildren_list "></i>{{'change_profile'|translate}}
                     <p style="font-size:12px;">{{isParent() ? 'profile_parent_used':'profile_teacher_used'|translate}}</p>
                 </ion-item>

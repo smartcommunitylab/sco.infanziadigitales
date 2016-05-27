@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.controllers.dettaglidiario', [])
 
-.controller('dettaglidiarioCtrl', function ($scope, profileService, $filter, $location, $ionicScrollDelegate, diaryService, $state, Toast, ionicDatePicker, profileService) {
+.controller('dettaglidiarioCtrl', function ($scope, profileService, $filter, $location, $ionicScrollDelegate, $ionicLoading, diaryService, $state, Toast, ionicDatePicker, profileService) {
 
     // ELEMENTO PERSONA
     $scope.copiedaccess = {

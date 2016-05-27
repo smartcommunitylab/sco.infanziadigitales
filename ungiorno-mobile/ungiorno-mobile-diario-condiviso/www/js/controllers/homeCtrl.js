@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.controllers.home', [])
 
-.controller('HomeCtrl', function ($scope, $filter, $rootScope, $ionicModal, $cordovaCamera, $ionicPopover, $state, galleryService, profileService, dataServerService, ionicDatePicker, $ionicHistory) {
+.controller('HomeCtrl', function ($scope, $filter, $rootScope, $ionicModal, $cordovaCamera, $ionicPopover, $ionicLoading, $state, galleryService, profileService, dataServerService, ionicDatePicker, $ionicHistory) {
 
     /* START IONIC DATEPICKER */
     $scope.date = new Date();
@@ -44,9 +44,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         $state.go('app.login');
         return;
     }*/
+    
+    
 
     var init = function () {
         profileService.init().then(function () {
+            $ionicLoading.show();
             $rootScope.kidProfiles = profileService.getAllBabyProfiles();
             $rootScope.babyNum = Object.keys($rootScope.kidProfiles).length;
             /*console.log($scope.babyNum);*/
@@ -56,6 +59,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
                     $scope.baby = data;
                     dataServerService.getPostsByBabyId('scuola2', $scope.baby.kidId).then(function (posts) {
                         $scope.posts = posts;
+                        $ionicLoading.hide();
                     });
                 }
             });

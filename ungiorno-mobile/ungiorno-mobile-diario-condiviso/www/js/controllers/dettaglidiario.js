@@ -198,42 +198,44 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
 
     var checkDataError = function (objectToCheck) {
         var error = false;
-                for (var key in objectToCheck) {
-                    if (objectToCheck.hasOwnProperty(key)) {
-                        if (key === 'firstName' && (objectToCheck[key].length === 0 || objectToCheck[key] == null)) {
-                            Toast.show('Inserire nome', 'short', 'bottom');
+        for (var key in objectToCheck) {
+            if (objectToCheck.hasOwnProperty(key)) {
+                if (key === 'firstName' && (objectToCheck[key].length === 0 || objectToCheck[key] == null)) {
+                    Toast.show('Inserire nome', 'short', 'bottom');
+                    error = true;
+                } else if (key === 'lastName' && (objectToCheck[key].length === 0 || objectToCheck[key] == null)) {
+                    Toast.show('Inserire cognome', 'short', 'bottom');
+                    error = true;
+                }
+                /*else if ((objectToCheck[key] == null || objectToCheck[key] == []) && key == "phone") {
+                                           Toast.show('Inserire numero di telefono', 'short', 'bottom');
+                                           error = true;
+                                       } else if ((objectToCheck[key] == null || objectToCheck[key] == []) && key == "email") {
+                                           Toast.show('Inserire indirizzo email', 'short', 'bottom');
+                                           error = true;
+                                       }*/
+                else if (objectToCheck[key] instanceof Date && objectToCheck[key] > new Date()) {
+                    Toast.show("La data deve essere prima di oggi", 'short', 'bottom');
+                    error = true;
+                } else if (objectToCheck[key] instanceof Array) {
+                    for (var i = 0; i < objectToCheck[key].length; i++) {
+                        if (key == "phone" && (objectToCheck[key][i] == null || objectToCheck[key][i] == "")) {
                             error = true;
-                        } else if (key === 'lastName' && (objectToCheck[key].length === 0 || objectToCheck[key] == null)) {
-                            Toast.show('Inserire cognome', 'short', 'bottom');
-                            error = true;
-                        } /*else if ((objectToCheck[key] == null || objectToCheck[key] == []) && key == "phone") {
                             Toast.show('Inserire numero di telefono', 'short', 'bottom');
+                            return error;
+                        } else if (key == "email" && (objectToCheck[key][i] == null || objectToCheck[key][i] == "")) {
                             error = true;
-                        } else if ((objectToCheck[key] == null || objectToCheck[key] == []) && key == "email") {
                             Toast.show('Inserire indirizzo email', 'short', 'bottom');
-                            error = true;
-                        }*/ else if (objectToCheck[key] instanceof Date && objectToCheck[key] > new Date()) {
-                            Toast.show("La data deve essere prima di oggi", 'short', 'bottom');
-                            error = true;
-                        } else if (objectToCheck[key] instanceof Array) {
-                            for (var i = 0; i < objectToCheck[key].length; i++) {
-                                if (key == "phone" && (objectToCheck[key][i] == null || objectToCheck[key][i] == "")) {
-                                    error = true;
-                                    Toast.show('Inserire numero di telefono', 'short', 'bottom');
-                                    return error;
-                                } else if (key == "email" && (objectToCheck[key][i] == null || objectToCheck[key][i] == "")) {
-                                    error = true;
-                                    Toast.show('Inserire indirizzo email', 'short', 'bottom');
-                                    return error;
-                                } else {
-                                    error = checkDataError(objectToCheck[key][i]);
-                                    if (error) return true;
-                                }
-                            }
+                            return error;
+                        } else {
+                            error = checkDataError(objectToCheck[key][i]);
+                            if (error) return true;
                         }
-                        if (error) return true;
                     }
                 }
+                if (error) return true;
+            }
+        }
         return false;
     }
     $scope.isViewMode = function () {
@@ -340,29 +342,72 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         }
         return baby;
     }
+
     $scope.addedComponents = [];
+
     $scope.addComponent = function () {
         $scope.scrollTo("selezion-button");
         $scope.addedComponents.push({});
     }
+
     $scope.addedPeople = [];
 
     $scope.addPeople = function () {
         $scope.scrollTo("selezion-button");
         $scope.addedPeople.push({})
     }
+
+    var getMyProfileID = function () {
+        if (localStorage.currentProfile === "teacher") {
+            return profileService.getUserData().teacher.userId;
+        } else {
+            return profileService.getUserData().parent.userId;
+        }
+    }
+
     $scope.deleteComponent = function (index) {
-        /*$scope.addedComponents.splice(index, 1);*/
         $scope.babyCopy.persons.splice(index, 1);
     }
+
+    // CAN MODIFY PERMISSION FUNCTION
+
+    $scope.modifyComponent = function (index) {
+        var myUserID = getMyProfileID();
+
+        if (myUserID === $scope.babyCopy.persons[index].personId) {
+            return true;
+        } else {
+
+            if (localStorage.currentProfile === "parent" && $scope.babyCopy.persons[index].teacher === false) {
+                return true;
+            }
+
+        }
+        return false;
+    }
+
+    // CAN MODIFY KID PERMISSION FUNCTION
+
+    $scope.modifyComponentKid = function () {
+        if (localStorage.currentProfile === "teacher") {
+            return false;
+        } else if (localStorage.currentProfile === "parent"){
+
+            return true;
+        }
+
+    }
+
     $scope.deletePeople = function (index) {
         $scope.addedPeople.splice(index, 1);
         $ionicScrollDelegate.scrollBottom("bottom-button");
     }
+
     $scope.scrollTo = function (id) {
         $location.hash(id)
         $ionicScrollDelegate.anchorScroll(true);
     };
+
     $scope.isEmptyNote = function (note) {
         if (note === "") {
             return true

@@ -5,9 +5,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
 
     /* START IONIC DATEPICKER */
     $scope.date = new Date();
-    console.log($scope.date);
+    /*console.log($scope.date);*/
     $scope.dateFormat = $filter('date')('yyyy-MM-dd');
     $rootScope.babyNum = 0;
+    var isloaded = false;
 
     var ipObj1 = {
         callback: function (val) { //Mandatory
@@ -58,12 +59,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
             profileService.getCurrentBaby().then(function (data) {
                 if ($rootScope.selectedKid) {
                     $scope.baby = data;
-                    dataServerService.getPostsByBabyId($scope.baby.schoolId, $scope.baby.kidId).then(function (posts) {
+                    dataServerService.getPostsByBabyId($scope.baby.schoolId, $scope.baby.kidId, 0).then(function (posts) {
                         $scope.posts = posts;
                         $ionicLoading.hide();
                     });
                 }
             });
+            isloaded = true;
         });
     }
     init();
@@ -90,6 +92,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         }, 300);
     }
 
+    $scope.changeToday = function (today) {
+        /*console.log(today);*/
+        if (isloaded == true) {
+            $ionicLoading.show();
+            dataServerService.getPostsByBabyId($scope.baby.schoolId, $scope.baby.kidId, Date.parse(today)).then(function (posts) {
+                $scope.posts = posts;
+                $ionicLoading.hide();
+            });
+        }
+    }
 
     $scope.attachedTags = [];
 
@@ -134,8 +146,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
             function (posts) {
                 //$scope.posts = posts;
                 //update post
-                dataServerService.getPostsByBabyId($scope.baby.schoolId, $scope.baby.kidId).then(function (posts) {
+                $ionicLoading.show();
+                dataServerService.getPostsByBabyId($scope.baby.schoolId, $scope.baby.kidId, 0).then(function (posts) {
                     $scope.posts = posts;
+                    $ionicLoading.hide();
                 });
                 $scope.newPostModal.hide();
             },

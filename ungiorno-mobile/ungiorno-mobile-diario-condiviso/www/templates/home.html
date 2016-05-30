@@ -28,9 +28,13 @@
                     <baby-post post="post" baby="baby" edit-callback="openEditPost" remove-callback="removePost" share-callback="sharePost"></baby-post>
                 </li>
             </ul>
+
             <h4 class="text-center" ng-if="!baby">{{'no_profiles'|translate}}</h4>
             <h4 class="text-center" ng-if="baby && !posts">{{'nothing_note'|translate}}</h4>
         </ion-scroll>
+        <!--        <ion-infinite-scroll on-infinite="loadMore()" distance="10%">-->
+        <ion-infinite-scroll ng-if="!noMoreEntriesAvailable" on-infinite="loadMore()" distance="10%">
+        </ion-infinite-scroll>
     </ion-content>
 
 

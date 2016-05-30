@@ -10,16 +10,20 @@
             <i class="icon ion-android-share-alt"></i>
         </button>
 -->
+        <button class="button button-clear" ng-click="removePost(post)">
+            <i class="icon ion-trash-a"></i>
+        </button>
         <button class="button button-clear" ng-click="editPost(post)">
             <i class="icon inf_digedit "></i>
         </button>
+
     </div>
 
     <div class="stream post-text">{{post.text}}</div>
     <div class="stream post-author">{{post.author.firstName}} - {{post.author.relation}}</div>
     <div class="stream post-tags-container">
         <i class="stream icon ion-pricetag post-tag"></i>
-        <div class="stream post-tag" ng-repeat="tag in post.tags">{{tag.name}}</div>
+        <div class="stream post-tag" ng-repeat="tag in post.tags">{{tag}}</div>
     </div>
 
     <div class="stream post-photos-container">

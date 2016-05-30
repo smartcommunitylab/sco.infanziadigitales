@@ -31,7 +31,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
     'angularMoment'
 ])
 
-.run(function ($ionicPlatform, $rootScope, $cordovaSplashscreen, $state, $translate, $q, $ionicHistory, $ionicConfig, $ionicSideMenuDelegate, loginService, dataServerService,$ionicLoading,profileService) {
+.run(function ($ionicPlatform, $rootScope, $cordovaSplashscreen, $state, $translate, $q, $ionicHistory, $ionicConfig, $ionicSideMenuDelegate, loginService, dataServerService, $ionicLoading, profileService) {
 
     $rootScope.getUserId = function () {
         return localStorage.userId;
@@ -291,7 +291,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
         acces_diary: 'Hanno accesso al diario',
         has: 'ha',
         name_parents: 'Nome del genitore',
-        create_post: 'Crea un elemento',
+        create_post: 'Crea nuova voce',
         description: 'Inserisci il testo',
         add_photo: 'Aggiungi foto',
         number_parents: 'n° di telefono ',
@@ -355,7 +355,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
         signup_success_text: 'Completa la registrazione cliccando sul link che trovi nella email che ti abbiamo inviato.',
         signup_resend: 'Re-inviare l\'email di conferma',
         signin_pwd_reset: 'Password dimenticata?',
-        error_signin: 'Username/password non validi'
+        error_signin: 'Username/password non validi',
+        delete_confirm: 'OK',
+        delete_cancel: 'Annulla',
+        delete_done: 'Voce cancellata',
+        delete_error: 'Errore nella cancellazione della voce'
     });
 
     $translateProvider.preferredLanguage("it");

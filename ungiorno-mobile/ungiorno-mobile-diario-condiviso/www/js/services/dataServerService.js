@@ -221,22 +221,22 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
         return arrayOfTags;
 
     }
-    dataServerService.removePost = function (schoolId, kidId, nota) {
+    dataServerService.removePost = function (schoolId, kidId, notaId) {
         var deferred = $q.defer();
         $http({
             method: 'DELETE',
-            url: Config.URL() + '/' + Config.app() + '/diary/' + Config.appId() + '/' + schoolId + '/' + kidId + '/entry?isTeacher=' + dataServerService.isATeacher(),
+            url: Config.URL() + '/' + Config.app() + '/diary/' + Config.appId() + '/' + schoolId + '/' + kidId + '/' + notaId + '/entry?isTeacher=' + dataServerService.isATeacher(),
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             }
         }).
         success(function (data, status, headers, config) {
-            deferred.resolve(data);
+            deferred.resolve();
         }).
         error(function (data, status, headers, config) {
             console.log(data + status + headers + config);
-            deferred.reject(data);
+            deferred.reject();
         });
         return deferred.promise;
     };
@@ -324,7 +324,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
         return deferred.promise;
     }
 
-     dataServerService.getPostsByBabyId = function (schoolId, kidId, currentDate) {
+    dataServerService.getPostsByBabyId = function (schoolId, kidId, currentDate) {
         var deferred = $q.defer();
         $http({
             method: 'GET',

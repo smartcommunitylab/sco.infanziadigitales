@@ -312,21 +312,41 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
     }
 
     $scope.removePost = function (post) {
-        $ionicLoading.show();
-        dataServerService.removePost($scope.baby.schoolId, $scope.baby.kidId).then(function (posts) {
-            dataServerService.getPostsByBabyId($scope.baby.schoolId, $scope.baby.kidId).then(function (posts) {
-                $scope.posts = posts;
-                $ionicLoading.hide();
-                Toast.show($filter('translate')('post cancellato'), 'short', 'bottom');
+        photoSrcSelect = $ionicPopup.show({
+            title: 'Rimuovi post',
+            scope: $scope,
+            buttons: [
+                {
 
-            }, function (err) {
-                $ionicLoading.hide();
-                Toast.show($filter('translate')('errore'), 'short', 'bottom');
-            });
-        }, function (err) {
-            $ionicLoading.hide();
-            Toast.show($filter('translate')('errore'), 'short', 'bottom');
+                    text: $filter('translate')('delete_cancel'),
+                    type: 'button-add-picture',
+
+
+                      },
+                {
+                    text: $filter('translate')('delete_confirm'),
+                    type: 'button-add-picture',
+                    onTap: function (e) {
+                        $ionicLoading.show();
+                        dataServerService.removePost($scope.baby.schoolId, $scope.baby.kidId, post.entryId).then(function (posts) {
+                            dataServerService.getPostsByBabyId($scope.baby.schoolId, $scope.baby.kidId, 0).then(function (posts) {
+                                $scope.posts = posts;
+                                $ionicLoading.hide();
+                                Toast.show($filter('translate')('delete_done'), 'short', 'bottom');
+
+                            }, function (err) {
+                                $ionicLoading.hide();
+                                Toast.show($filter('translate')('delete_error'), 'short', 'bottom');
+                            });
+                        }, function (err) {
+                            $ionicLoading.hide();
+                            Toast.show($filter('translate')('error_popup_title'), 'short', 'bottom');
+                        });
+                    }
+                    }
+                                    ]
         });
+
     }
 
     $scope.sharePost = function (post) {

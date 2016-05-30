@@ -359,6 +359,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
         delete_confirm: 'OK',
         delete_cancel: 'Annulla',
         delete_done: 'Voce cancellata',
+        add_post_done: 'Nuova voce aggiunta',
+            add_post_error: 'Errore nella creazioen di una nuova voce',
         delete_error: 'Errore nella cancellazione della voce'
     });
 

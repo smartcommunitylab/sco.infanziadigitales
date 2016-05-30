@@ -9,7 +9,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
     $scope.dateFormat = $filter('date')('yyyy-MM-dd');
     $rootScope.babyNum = 0;
     var isloaded = false;
-
+    $scope.baby = {};
+    $scope.posts = {};
     var ipObj1 = {
         callback: function (val) { //Mandatory
             console.log('Return value from the datepicker popup is : ' + val, new Date(val));
@@ -62,8 +63,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
                     dataServerService.getPostsByBabyId($scope.baby.schoolId, $scope.baby.kidId, 0).then(function (posts) {
                         $scope.posts = posts;
                         $ionicLoading.hide();
+                    }, function (err) {
+                        $scope.posts = null;
                     });
                 }
+            }, function (err) {
+                $scope.baby = null;
             });
             isloaded = true;
         });
@@ -153,28 +158,18 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
                 });
                 $scope.newPostModal.hide();
                 $ionicLoading.hide();
-                Toast.show($filter('translate')('tutto ok'), 'short', 'bottom');
+                Toast.show($filter('translate')('add_post_done'), 'short', 'bottom');
 
 
             },
             function (err) {
                 console.log(err);
                 $ionicLoading.hide();
-                Toast.show($filter('translate')('qualcosa non e andato'), 'short', 'bottom');
+                Toast.show($filter('translate')('add_post_error'), 'short', 'bottom');
 
 
             }
         );
-        //        if (editPostMode) {
-        //            //TODO: update server
-        //        } else {
-        //            $scope.currentPost.attachedTags.forEach(function (obj) { //hashkey generated for some random reason, remove it!
-        //                delete obj["$$hashKey"];
-        //            });
-        //            console.log(JSON.stringify($scope.currentPost));
-        //            //TODO: update server
-        //        }
-
     }
 
     $scope.setMood = function (moodCode) {
@@ -209,16 +204,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
             });
 
 
-
-            //            var template = '<ion-popover-view><ion-content><ion-list><ion-item ng-click="addPhoto($event, \'Camera\')">Camera</ion-item><ion-item ng-click="addPhoto($event, \'Gallery\')">Gallery</ion-item></ion-list></ion-content></ion-popover-view>';
-            //
-            //            if (photoSrcSelect === undefined) {
-            //                photoSrcSelect = $ionicPopover.fromTemplate(template, {
-            //                    scope: $scope
-            //                });
-            //            }
-            //
-            //            photoSrcSelect.show($event);
         } else {
             if (photoSrcSelect !== undefined) {
                 photoSrcSelect.close();
@@ -227,24 +212,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
 
             if (photoSrc === 'Camera') {
                 options = {
-                        quality: 50,
-                        //destinationType: Camera.DestinationType.DATA_URL,
-                        destinationType: Camera.DestinationType.FILE_URI,
-                        // In this app, dynamically set the picture source, Camera or photo gallery
-                        sourceType: Camera.PictureSourceType.CAMERA,
-                        encodingType: Camera.EncodingType.JPEG,
-                        mediaType: Camera.MediaType.PICTURE,
-                        allowEdit: false,
-                        correctOrientation: true //Corrects Android orientation quirks
-                    }
-                    //                options = {
-                    //                    destinationType: Camera.DestinationType.DATA_URL,
-                    //                    sourceType: Camera.PictureSourceType.CAMERA, // Camera.PictureSourceType.PHOTOLIBRARY
-                    //                    allowEdit: false,
-                    //                    encodingType: Camera.EncodingType.JPEG,
-                    //                    popoverOptions: CameraPopoverOptions,
-                    //                    saveToPhotoAlbum: false
-                    //                };
+                    quality: 50,
+                    //destinationType: Camera.DestinationType.DATA_URL,
+                    destinationType: Camera.DestinationType.FILE_URI,
+                    // In this app, dynamically set the picture source, Camera or photo gallery
+                    sourceType: Camera.PictureSourceType.CAMERA,
+                    encodingType: Camera.EncodingType.JPEG,
+                    mediaType: Camera.MediaType.PICTURE,
+                    allowEdit: false,
+                    correctOrientation: true //Corrects Android orientation quirks
+                }
             } else {
                 options = {
                     quality: 50,
@@ -259,15 +236,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
                     correctOrientation: true //Corrects Android orientation quirks
                 }
             }
-            // options = {
-            //                    destinationType: Camera.DestinationType.DATA_URL,
-            //                    sourceType: Camera.PictureSourceType.PHOTOLIBRARY, // Camera.PictureSourceType.PHOTOLIBRARY
-            //                    allowEdit: false,
-            //                    encodingType: Camera.EncodingType.JPEG,
-            //                    popoverOptions: CameraPopoverOptions,
-            //                    saveToPhotoAlbum: false
-            //                };
-            // }
+
 
             $cordovaCamera.getPicture(options).then(function (imageData) {
                 var image;

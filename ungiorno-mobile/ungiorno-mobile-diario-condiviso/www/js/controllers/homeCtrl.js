@@ -1,7 +1,7 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.controllers.home', [])
 
 
-.controller('HomeCtrl', function ($scope, $filter, $rootScope, $ionicModal, $cordovaCamera, $ionicPopover, $ionicLoading, $state, galleryService, profileService, dataServerService, $ionicPopup, ionicDatePicker, $ionicHistory) {
+.controller('HomeCtrl', function ($scope, $filter, $rootScope, $ionicModal, $cordovaCamera, $ionicPopover, $ionicLoading, $state, galleryService, profileService, Toast, dataServerService, $ionicPopup, ionicDatePicker, $ionicHistory) {
 
     /* START IONIC DATEPICKER */
     $scope.date = new Date();
@@ -126,7 +126,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
     }
 
     $scope.save = function () { //function called when a new post is submitted and also when a post is edited
-
+        $ionicLoading.show();
         //add check params and return true or false if all data are correct
         //        var timeInMilisecond = $scope.currentPost.date.getTime();
         //        $scope.currentPost.date = timeInMilisecond;
@@ -138,9 +138,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
                     $scope.posts = posts;
                 });
                 $scope.newPostModal.hide();
+                $ionicLoading.hide();
+                Toast.show($filter('translate')('tutto ok'), 'short', 'bottom');
+
+
             },
             function (err) {
                 console.log(err);
+                $ionicLoading.hide();
+                Toast.show($filter('translate')('qualcosa non e andato'), 'short', 'bottom');
+
+
             }
         );
         //        if (editPostMode) {
@@ -287,6 +295,24 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         $scope.currentPost.authorId = profileService.getMyProfileID();
         // $scope.setMood(post.mood);
         $scope.newPostModal.show();
+    }
+
+    $scope.removePost = function (post) {
+        $ionicLoading.show();
+        dataServerService.removePost($scope.baby.schoolId, $scope.baby.kidId).then(function (posts) {
+            dataServerService.getPostsByBabyId($scope.baby.schoolId, $scope.baby.kidId).then(function (posts) {
+                $scope.posts = posts;
+                $ionicLoading.hide();
+                Toast.show($filter('translate')('post cancellato'), 'short', 'bottom');
+
+            }, function (err) {
+                $ionicLoading.hide();
+                Toast.show($filter('translate')('errore'), 'short', 'bottom');
+            });
+        }, function (err) {
+            $ionicLoading.hide();
+            Toast.show($filter('translate')('errore'), 'short', 'bottom');
+        });
     }
 
     $scope.sharePost = function (post) {

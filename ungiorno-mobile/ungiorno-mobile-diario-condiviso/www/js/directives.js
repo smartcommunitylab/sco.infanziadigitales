@@ -73,6 +73,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.di
             post: '=',
             baby: '=',
             shareCallback: '&',
+            removeCallback: '&',
             editCallback: '&'
         },
         link: function (scope, elem, attrs) {
@@ -94,9 +95,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.di
 
             scope.shareCallback = scope.shareCallback();
             scope.editCallback = scope.editCallback();
+            scope.removeCallback = scope.removeCallback();
 
             scope.editPost = function (post) {
                 scope.editCallback(post);
+            }
+            scope.removePost = function (post) {
+                scope.removeCallback(post);
             }
             scope.sharePost = function (post) {
                 scope.shareCallback();
@@ -184,7 +189,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.di
 
             scope.completeTag = function (index) {
                 if (scope.attachedTags.indexOf(scope.tags[index]) === -1) { //check if tag is already added
-                    scope.attachedTags.push(scope.tags[index]);
+                    scope.attachedTags.push(scope.tags[index].name);
                 }
                 scope.tagsInserted = "";
                 scope.filteredTags = scope.tags.slice(); //workaround for a bug on android, after adding a tag the input text is empty but the tagsInserted is badly filtered
@@ -212,19 +217,20 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.di
             scope.addTag = function (name) {
                 var addTagPopup = $ionicPopup.confirm({
                     title: $filter('translate')('add_tag_title'),
-                    template: name + ' ' + $filter('translate')('add_tag_description')
+                    template: name + ' ' + $filter('translate')('add_tag_description'),
+                    okType: 'button-add-picture',
                 });
                 addTagPopup.then(function (result) {
                     if (result) {
                         //TODO: add tag to the server list of tags, right now it adds tag to the object
                         scope.closePopover();
                         //scope.tagsInserted = name;
-                        var newTag = {
-                            name: name,
-                            tagId: name
-                        }
-                        scope.filteredTags.push(newTag);
-                        scope.attachedTags.push(newTag);
+                        //                        var newTag = {
+                        //                            name: name,
+                        //                            tagId: name
+                        //                        }
+                        scope.filteredTags.push(name);
+                        scope.attachedTags.push(name);
                         scope.filteredTags = scope.tags.slice(); //workaround for a bug on android, after adding a tag the input text is empty but the tagsInserted is badly filtered
                     } else {}
                 });

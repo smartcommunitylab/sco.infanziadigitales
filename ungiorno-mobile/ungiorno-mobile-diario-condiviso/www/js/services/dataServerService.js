@@ -210,12 +210,36 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
     function setTagsAttribute(tagsObject) {
         var arrayOfTags = [];
         for (var k = 0; k < tagsObject.length; k++) {
-            if (tagsObject[k] && tagsObject[k].name)
-                arrayOfTags.push(tagsObject[k].name);
+            if (tagsObject[k]) {
+                if (tagsObject[k].name) {
+                    arrayOfTags.push(tagsObject[k].name);
+                } else {
+                    arrayOfTags.push(tagsObject[k]);
+                }
+            }
         }
         return arrayOfTags;
 
     }
+    dataServerService.removePost = function (schoolId, kidId, nota) {
+        var deferred = $q.defer();
+        $http({
+            method: 'DELETE',
+            url: Config.URL() + '/' + Config.app() + '/diary/' + Config.appId() + '/' + schoolId + '/' + kidId + '/entry?isTeacher=' + dataServerService.isATeacher(),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        }).
+        success(function (data, status, headers, config) {
+            deferred.resolve(data);
+        }).
+        error(function (data, status, headers, config) {
+            console.log(data + status + headers + config);
+            deferred.reject(data);
+        });
+        return deferred.promise;
+    };
 
     dataServerService.addPost = function (schoolId, kidId, nota) {
         var deferred = $q.defer();

@@ -324,11 +324,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
         return deferred.promise;
     }
 
-    dataServerService.getPostsByBabyId = function (schoolId, kidId) {
+     dataServerService.getPostsByBabyId = function (schoolId, kidId, currentDate) {
         var deferred = $q.defer();
         $http({
             method: 'GET',
-            url: Config.URL() + '/' + Config.app() + '/diary/' + Config.appId() + '/' + schoolId + '/' + kidId + '/entries?isTeacher=' + dataServerService.isATeacher(),
+            url: Config.URL() + '/' + Config.app() + '/diary/' + Config.appId() + '/' + schoolId + '/' + kidId + '/entries?isTeacher=' + dataServerService.isATeacher() + '&from=' + currentDate,
             headers: {
                 'Accept': 'application/json'
             },

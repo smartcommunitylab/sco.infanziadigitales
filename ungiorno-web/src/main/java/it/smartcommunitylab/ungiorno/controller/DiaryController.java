@@ -143,6 +143,13 @@ public class DiaryController {
 			storage.saveDiaryEntry(old);
 	}
 	
+	@RequestMapping(method = RequestMethod.DELETE, value = "/diary/{appId}/{schoolId}/{kidId}/{entryId}/entry")
+	public void deleteEntry(@PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId, @PathVariable String entryId,
+			@RequestParam boolean isTeacher) {
+
+			checkKidDiaryEnabled(appId, schoolId, kidId, isTeacher);
+			storage.deleteDiaryEntry(appId, schoolId, kidId, entryId);
+	}
 	@RequestMapping(method = RequestMethod.GET, value = "/diary/{appId}/{schoolId}/tags")
 	public Response<List<String>> geTags(@PathVariable String appId, @PathVariable String schoolId) {
 		try {

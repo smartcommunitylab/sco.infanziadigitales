@@ -67,6 +67,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -1079,17 +1080,18 @@ public class RepositoryManager {
 			}
 			q.addCriteria(dateCriteria);
 		}
-		
+
+		if (tag != null) {
+			q.addCriteria(new Criteria("tags").is(tag));
+		}
 		if (skip != null) {
 			q = q.skip(skip);
 		}
 		if (pageSize != null) {
 			q = q.limit(pageSize);
 		}
-		if (tag != null) {
-			q.addCriteria(new Criteria("tags").is(tag));
-		}
-
+		q.with(new Sort(Direction.DESC, "date"));
+		
 		return template.find(q, DiaryEntry.class);
 	}	
 	
@@ -1098,6 +1100,14 @@ public class RepositoryManager {
 		q.addCriteria(new Criteria("entryId").is(entryId));
 		return template.findOne(q, DiaryEntry.class);
 	}
+
+	public void deleteDiaryEntry(String appId, String schoolId, String kidId, String entryId) {
+		// TODO cleanup multimedia 
+		Query q = kidQuery(appId, schoolId, kidId);
+		q.addCriteria(new Criteria("entryId").is(entryId));
+		template.remove(q, DiaryEntry.class);
+	}
+
 	
 	public void saveDiaryEntry(DiaryEntry diary) {
 		Query q = kidQuery(diary.getAppId(), diary.getSchoolId(), diary.getKidId());

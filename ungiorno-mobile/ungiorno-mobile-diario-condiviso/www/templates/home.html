@@ -1,9 +1,9 @@
 <ion-view id="home">
     <ion-nav-title>{{baby.fullName}}</ion-nav-title>
     <ion-content id="postsScrollView" scroll="false">
-        <div ng-if="calendarOpen" class="slide-animation">
+        <div ng-show="calendarOpen" class="slide-animation">
             <div class="calendar">&nbsp;
-                <div pickadate no-extra-rows week-starts-on="1" default-date="today" ng-model="today">
+                <div pickadate no-extra-rows week-starts-on="1" ng-model="today" ng-change="changeToday(today)">
                 </div>
             </div>
             <div id="calendar-button-div">

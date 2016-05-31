@@ -271,6 +271,90 @@ public class RepositoryManager {
 	/**
 	 * @param appId
 	 * @param schoolId
+	 */
+	public List<DiaryKid> updateDiaryKidPersons(String appId, String schoolId) {
+		List<DiaryKid> result = new ArrayList<DiaryKid>();
+		List<KidProfile> profiles = template.find(schoolQuery(appId, schoolId), KidProfile.class);
+		List<Teacher> teachers = getTeachers(appId, schoolId);
+		for (KidProfile kp: profiles) {
+			Query q = kidQuery(appId, schoolId, kp.getKidId());
+			DiaryKid diaryKid = template.findOne(q, DiaryKid.class);
+			if (diaryKid != null) {
+				Set<String> existing = new HashSet<String>();
+				Set<String> existingTeachers = new HashSet<String>();
+				for (DiaryKidPerson p : diaryKid.getPersons()) {
+					if (p.isTeacher()) {
+						existingTeachers.add(p.getPersonId());
+					} else {
+						existing.add(p.getPersonId());
+					};
+				}
+				// TODO, currently assume that the kid is not overwritten, add new persons only
+				if (kp.getPersons() != null) {
+					for (AuthPerson ap: kp.getPersons()) {
+						if (!existing.contains(ap.getPersonId())) {
+							diaryKid.getPersons().add(ap.toDiaryKidPerson(true));
+						}
+					}
+				}
+				for(Teacher teacher : teachers) {
+					if(teacher.getSectionIds().contains(kp.getSection().getSectionId())) {
+						if(!existingTeachers.contains(teacher.getTeacherId())) {
+							diaryKid.getPersons().add(teacher.toDiaryKidPerson(true));
+						}
+					}
+				}
+				/*if (kp.getDiaryTeachers() != null) {
+					for (DiaryTeacher dt: kp.getDiaryTeachers()) {
+						if (!existingTeachers.contains(dt.getTeacherId())) {
+							Teacher teacher = getTeacher(dt.getTeacherId(), appId, schoolId);
+							diaryKid.getPersons().add(teacher.toDiaryKidPerson(true));
+						}
+					}			
+				}*/
+				template.save(diaryKid);
+				result.add(diaryKid);
+			} else {
+				DiaryKid dk = new DiaryKid();
+				dk.setAppId(kp.getAppId());
+				dk.setSchoolId(kp.getSchoolId());
+				dk.setKidId(kp.getKidId());
+				dk.setFirstName(kp.getFirstName());
+				dk.setLastName(kp.getLastName());
+				dk.setFullName(kp.getFullName());
+				dk.setImage(kp.getImage());
+				dk.setPersons(new ArrayList<DiaryKid.DiaryKidPerson>());
+				
+				if (kp.getPersons() != null) {
+					for (AuthPerson ap: kp.getPersons()) {
+						if((ap.getPersonId() == null) || (ap.getPersonId().equals(""))) {
+							continue;
+						}
+						dk.getPersons().add(ap.toDiaryKidPerson(true));
+					}
+				} else {
+					logger.error("No persons for kid "+ kp.getKidId());
+				}
+				for(Teacher teacher : teachers) {
+					if(teacher.getSectionIds().contains(kp.getSection().getSectionId())) {
+						dk.getPersons().add(teacher.toDiaryKidPerson(true));
+					}
+				}
+				/*if (kp.getDiaryTeachers() != null) {
+					for (DiaryTeacher dt: kp.getDiaryTeachers()) {
+						Teacher teacher = getTeacher(dt.getTeacherId(), appId, schoolId);
+						dk.getPersons().add(teacher.toDiaryKidPerson(true));
+					}			
+				}*/
+				template.insert(dk);
+				result.add(dk);
+			}
+		}
+		return result;
+	}
+	/**
+	 * @param appId
+	 * @param schoolId
 	 * @return
 	 */
 	public List<Teacher> getTeachers(String appId, String schoolId) {

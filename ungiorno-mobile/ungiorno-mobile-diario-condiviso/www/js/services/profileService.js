@@ -19,16 +19,20 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
             } else if (localStorage.currentProfile === "teacher") {
                 kidType = userData.students;
             } else {
-                if (!!userData.parent && !!userData.parent.userId && !!userData.teacher && !!userData.teacher.userId) {
-                    if (!!userData.parent && !!userData.parent.userId) {
-                        localStorage.isMultiProfile = true;
-                    }
+                if (!!userData.parent && !!userData.parent.userId && userData.kids.length != 0 && !!userData.teacher && !!userData.teacher.userId && userData.students.length != 0) {
+                    localStorage.isMultiProfile = true;
                     localStorage.currentProfile = 'parent';
                     kidType = userData.kids;
-
                 } else {
-                    localStorage.currentProfile = 'teacher';
-                    kidType = userData.students;
+                    if (!!userData.parent && !!userData.parent.userId && userData.kids.length != 0) {
+                        localStorage.isMultiProfile = false;
+                        localStorage.currentProfile = 'parent';
+                        kidType = userData.kids;
+                    } else if (!!userData.teacher && !!userData.teacher.userId && userData.students.length != 0) {
+                        localStorage.isMultiProfile = false;
+                        localStorage.currentProfile = 'teacher';
+                        kidType = userData.students;
+                    }
                 }
             }
             babyProfiles = {};
@@ -47,7 +51,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
         });
         return deferred.promise;
     };
-
 
     /*Get user profile after login*/
 

@@ -52,7 +52,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
 
     $scope.loadMore = function () {
         $ionicLoading.show();
-        var length = $scope.posts.length;
+        var length = 0;
+        if ($scope.posts) {
+            length = $scope.posts.length;
+        }
         if ($scope.baby.schoolId && $scope.baby.kidId && !dataloading) {
             dataloading = true;
             dataServerService.getPostsByBabyId($scope.baby.schoolId, $scope.baby.kidId, 0, Date.parse(todayEnd), length).then(function (posts) {

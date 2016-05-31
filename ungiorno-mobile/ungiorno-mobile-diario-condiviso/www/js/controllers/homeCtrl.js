@@ -189,34 +189,45 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         $scope.newPostModal.hide();
     }
 
+    function checkPostEntries() {
+        if ($scope.currentPost.text.length == 0) {
+            Toast.show($filter('translate')('add_post_empty_text'), 'short', 'bottom');
+            return false;
+        }
+
+        return true;
+
+    }
+
     $scope.save = function () { //function called when a new post is submitted and also when a post is edited
-        $ionicLoading.show();
         //add check params and return true or false if all data are correct
         //        var timeInMilisecond = $scope.currentPost.date.getTime();
         //        $scope.currentPost.date = timeInMilisecond;
-        dataServerService.addPost($scope.baby.schoolId, $scope.baby.kidId, $scope.currentPost).then(
-            function (posts) {
-                //$scope.posts = posts;
-                //update post
-                $ionicLoading.show();
-                dataServerService.getPostsByBabyId($scope.baby.schoolId, $scope.baby.kidId, 0, Date.parse(todayEnd)).then(function (posts) {
-                    $scope.posts = posts;
+        if (checkPostEntries()) {
+            $ionicLoading.show();
+            dataServerService.addPost($scope.baby.schoolId, $scope.baby.kidId, $scope.currentPost).then(
+                function (posts) {
+                    //$scope.posts = posts;
+                    //update post
+                    $ionicLoading.show();
+                    dataServerService.getPostsByBabyId($scope.baby.schoolId, $scope.baby.kidId, 0, Date.parse(todayEnd)).then(function (posts) {
+                        $scope.posts = posts;
+                        $ionicLoading.hide();
+                    });
+                    $scope.newPostModal.hide();
                     $ionicLoading.hide();
-                });
-                $scope.newPostModal.hide();
-                $ionicLoading.hide();
-                Toast.show($filter('translate')('add_post_done'), 'short', 'bottom');
+                    Toast.show($filter('translate')('add_post_done'), 'short', 'bottom');
 
 
-            },
-            function (err) {
-                console.log(err);
-                $ionicLoading.hide();
-                Toast.show($filter('translate')('add_post_error'), 'short', 'bottom');
+                },
+                function (err) {
+                    console.log(err);
+                    $ionicLoading.hide();
+                    Toast.show($filter('translate')('add_post_error'), 'short', 'bottom');
 
-
-            }
-        );
+                }
+            );
+        }
     }
 
     $scope.setMood = function (moodCode) {

@@ -76,6 +76,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
                 dataloading = false;
 
             }, function (reason) {
+                $ionicLoading.hide();
                 Toast.show($filter('translate')("network_problem"), "short", "bottom");
                 $scope.noMoreEntriesAvailable = true;
                 $scope.post = null;
@@ -95,14 +96,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
             profileService.getCurrentBaby().then(function (data) {
                 if ($rootScope.selectedKid) {
                     $scope.baby = data;
-                    //                    dataServerService.getPostsByBabyId($scope.baby.schoolId, $scope.baby.kidId, 0, Date.parse(todayEnd), length).then(function (posts) {
-                    //                        $scope.posts = posts;
-                    //                        $ionicLoading.hide();
-                    //                    }, function (err) {
-                    //                        $scope.posts = null;
-                    //                    });
-                    $scope.loadMore();
+                    $scope.loadMore(); //used by infinite scroll
+                    dataServerService.getTags($scope.baby.schoolId).then(function (data) {
+                        $scope.tagsFromServer = data;
+                    }, function (err) {
+                        Toast.show($filter('translate')('get_tags_error'), 'short', 'bottom');
+
+                    });
                 }
+
             }, function (err) {
                 $scope.baby = null;
             });
@@ -140,18 +142,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         $scope.noMoreEntriesAvailable = false;
         if (isloaded == true) {
             var from = today.split("-");
-            // var todayEnd = new Date();
-            //todayEnd.setHours(23, 59, 59, 999);
             todayEnd = new Date(from[0], from[1] - 1, from[2]);
             todayEnd.setHours(23, 59, 59, 999);
             console.log(todayEnd);
-            $scope.loadMore();
-            //            $ionicLoading.show();
-            //            dataServerService.getPostsByBabyId($scope.baby.schoolId, $scope.baby.kidId, 0, Date.parse(endDate), length).then(function (posts) {
-            //
-            //                $scope.posts = posts;
-            //                $ionicLoading.hide();
-            //            });
+            $scope.loadMore(); //used by infinit scroll
+
         }
     }
 
@@ -165,9 +160,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
     })
 
 
-    dataServerService.getTags().then(function (data) {
-        $scope.tagsFromServer = data.data;
-    });
 
     $scope.openCreatePost = function () {
         editPostMode = false;
@@ -180,10 +172,41 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         $scope.currentPost.text = "";
         $scope.currentPost.pictures = [];
         $scope.currentPost.tags = [];
+        dataServerService.getTags($scope.baby.schoolId).then(function (data) {
+            $scope.tagsFromServer = data;
+            $scope.newPostModal.show();
+        }, function (err) {
+            Toast.show($filter('translate')('get_tags_error'), 'short', 'bottom');
+
+        });
+        //        $scope.tagsFromServer = [{
+        //                "tagId": 1,
+        //                "name": "Gioco"
+        //        },
+        //            {
+        //                "tagId": 2,
+        //                "name": "Gruppo"
+        //        },
+        //            {
+        //                "tagId": 3,
+        //                "name": "Parco"
+        //        },
+        //            {
+        //                "tagId": 4,
+        //                "name": "Amici"
+        //        },
+        //            {
+        //                "tagId": 5,
+        //                "name": "Merenda"
+        //        },
+        //            {
+        //                "tagId": 6,
+        //                "name": "Giardino"
+        //        }];
         $scope.currentPost.authorId = profileService.getMyProfileID();
 
         //$scope.setMood(0);
-        $scope.newPostModal.show();
+
     }
     $scope.cancel = function () {
         $scope.newPostModal.hide();
@@ -270,7 +293,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
 
             if (photoSrc === 'Camera') {
                 options = {
-                    quality: 50,
+                    quality: 25,
                     //destinationType: Camera.DestinationType.DATA_URL,
                     destinationType: Camera.DestinationType.FILE_URI,
                     // In this app, dynamically set the picture source, Camera or photo gallery
@@ -282,7 +305,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
                 }
             } else {
                 options = {
-                    quality: 50,
+                    quality: 25,
                     //destinationType: Camera.DestinationType.DATA_URL,
                     destinationType: Camera.DestinationType.FILE_URI,
 

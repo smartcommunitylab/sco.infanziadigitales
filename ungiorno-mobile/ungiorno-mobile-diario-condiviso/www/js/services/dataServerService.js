@@ -7,7 +7,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
     var schoolProfile = null; //static info
     var dataServerService = {};
     var user = null;
-
+    var tags = null;
     var retrieveUser = function () {
         var deferred = $q.defer();
 
@@ -104,21 +104,45 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
     /**
      * Retrieve tags to be used
      */
-    dataServerService.getTags = function () {
-        var tags = null;
+    dataServerService.getTags = function (schoolId) {
+        //var tags = null;
         var deferred = $q.defer();
 
         // temp
         if (tags == null) {
-            $http.get('data/post-tags.json').success(function (data) {
-                tags = data;
-                deferred.resolve(tags);
+            //$http.get('data/post-tags.json').success(function (data) { /diary/{appId}/{schoolId}/tags
+            $http({
+                method: 'GET',
+                url: Config.URL() + '/' + Config.app() + '/diary/' + Config.appId() + '/' + schoolId + '/tags',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            }).
+            success(function (data, status, headers, config) {
+                if (data.data) {
+                    var tagsServer = data.data;
+                    tags = [];
+                    for (var i = 0; i < tagsServer.length; i++) {
+                        tags.push({
+                            "tagId": i,
+                            "name": tagsServer[i]
+                        });
+                    }
+                    //tags = data;
+                    deferred.resolve(tags);
+                } else {
+                    deferred.reject();
+
+                }
             }).error(function (data, status, headers, config) {
                 console.log(data + status + headers + config);
+                deferred.reject();
             });
-        } else {
-            deferred.resolve(tags);
         }
+                else {
+                    deferred.resolve(tags);
+                }
         return deferred.promise;
     };
 
@@ -159,7 +183,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
 
     */
     function imageIsLocal(schoolId, kidId, file) {
-        if (file.startsWith(Config.URL() + '/' + Config.app() + '/diary/' + Config.appId() + '/' + schoolId + '/' + kidId))
+        if (file.indexOf(Config.URL() + '/' + Config.app() + '/diary/' + Config.appId() + '/' + schoolId + '/' + kidId) === 0)
             return false;
         return true;
     }

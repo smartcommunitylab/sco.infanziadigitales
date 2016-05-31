@@ -244,6 +244,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.di
             });
 
             scope.openPopover = function ($event) {
+                if (scope.tags) {
+                    scope.filteredTags = scope.tags.slice();
+                }
                 tagsPopover.show($event);
             };
             scope.closePopover = function () {

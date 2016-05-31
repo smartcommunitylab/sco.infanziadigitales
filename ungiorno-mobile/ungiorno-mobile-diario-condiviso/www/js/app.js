@@ -362,7 +362,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
         add_post_done: 'Nuova voce aggiunta',
         add_post_error: 'Errore nella creazioen di una nuova voce',
         delete_error: 'Errore nella cancellazione della voce',
-        add_post_empty_text: 'Inserire un testo per aggiungere una nuova voce'
+        add_post_empty_text: 'Inserire un testo per aggiungere una nuova voce',
+        get_tags_error: 'Errore nella ricezione dei tags dal server'
     });
 
     $translateProvider.preferredLanguage("it");

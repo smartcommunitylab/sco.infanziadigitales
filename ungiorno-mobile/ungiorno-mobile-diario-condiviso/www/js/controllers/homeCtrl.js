@@ -1,14 +1,18 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.controllers.home', [])
 
 
-.controller('HomeCtrl', function ($scope, $filter, $rootScope, $ionicModal, $cordovaCamera, $ionicPopover, $ionicLoading, $state, galleryService, profileService, dataServerService, $ionicPopup, ionicDatePicker, $ionicHistory) {
+.controller('HomeCtrl', function ($scope, $filter, $rootScope, $ionicModal, $cordovaCamera, $ionicPopover, $ionicLoading, $state, galleryService, profileService, Toast, dataServerService, $ionicPopup, ionicDatePicker, $ionicHistory) {
 
     /* START IONIC DATEPICKER */
     $scope.date = new Date();
-    console.log($scope.date);
+    /*console.log($scope.date);*/
     $scope.dateFormat = $filter('date')('yyyy-MM-dd');
     $rootScope.babyNum = 0;
-
+    var isloaded = false;
+    var dataloading = false;
+    $scope.baby = {};
+    $scope.posts = [];
+    $scope.noMoreEntriesAvailable = false;
     var ipObj1 = {
         callback: function (val) { //Mandatory
             console.log('Return value from the datepicker popup is : ' + val, new Date(val));
@@ -46,7 +50,40 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         return;
     }*/
 
+    $scope.loadMore = function () {
+        $ionicLoading.show();
+        if ($scope.baby.schoolId && $scope.baby.kidId && !dataloading) {
+            dataloading = true;
+            var length = 0;
+            if ($scope.posts) {
+                length = $scope.posts.length;
+            }
+            dataServerService.getPostsByBabyId($scope.baby.schoolId, $scope.baby.kidId, 0, Date.parse(todayEnd), length).then(function (posts) {
+                if ($scope.posts) {
+                    $scope.posts.push.apply($scope.posts, posts);
+                    if (posts.length < 10) {
+                        $scope.noMoreEntriesAvailable = true;
+                    }
+                } else {
+                    $scope.posts = posts;
 
+                }
+                if ($scope.posts.length == 0) {
+                    $scope.posts = null;
+                }
+                $scope.$broadcast('scroll.infiniteScrollComplete');
+                $ionicLoading.hide();
+                dataloading = false;
+
+            }, function (reason) {
+                Toast.show($filter('translate')("network_problem"), "short", "bottom");
+                $scope.noMoreEntriesAvailable = true;
+                $scope.post = null;
+                dataloading = false;
+            })
+        };
+
+    }
 
     var init = function () {
         profileService.init().then(function () {
@@ -58,12 +95,18 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
             profileService.getCurrentBaby().then(function (data) {
                 if ($rootScope.selectedKid) {
                     $scope.baby = data;
-                    dataServerService.getPostsByBabyId($scope.baby.schoolId, $scope.baby.kidId).then(function (posts) {
-                        $scope.posts = posts;
-                        $ionicLoading.hide();
-                    });
+                    //                    dataServerService.getPostsByBabyId($scope.baby.schoolId, $scope.baby.kidId, 0, Date.parse(todayEnd), length).then(function (posts) {
+                    //                        $scope.posts = posts;
+                    //                        $ionicLoading.hide();
+                    //                    }, function (err) {
+                    //                        $scope.posts = null;
+                    //                    });
+                    $scope.loadMore();
                 }
+            }, function (err) {
+                $scope.baby = null;
             });
+            isloaded = true;
         });
     }
     init();
@@ -77,7 +120,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
     $scope.newPostModal;
     var photoSrcSelect;
     var editPostMode;
-
+    var todayEnd = new Date();
+    todayEnd.setHours(23, 59, 59, 999);
     $scope.today = new Date();
     $scope.calendarOpen = false;
     $scope.showCalButton = true;
@@ -90,6 +134,26 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         }, 300);
     }
 
+    $scope.changeToday = function (today) {
+        /*console.log(today);*/
+        $scope.posts = [];
+        $scope.noMoreEntriesAvailable = false;
+        if (isloaded == true) {
+            var from = today.split("-");
+            // var todayEnd = new Date();
+            //todayEnd.setHours(23, 59, 59, 999);
+            todayEnd = new Date(from[0], from[1] - 1, from[2]);
+            todayEnd.setHours(23, 59, 59, 999);
+            console.log(todayEnd);
+            $scope.loadMore();
+            //            $ionicLoading.show();
+            //            dataServerService.getPostsByBabyId($scope.baby.schoolId, $scope.baby.kidId, 0, Date.parse(endDate), length).then(function (posts) {
+            //
+            //                $scope.posts = posts;
+            //                $ionicLoading.hide();
+            //            });
+        }
+    }
 
     $scope.attachedTags = [];
 
@@ -125,34 +189,45 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         $scope.newPostModal.hide();
     }
 
-    $scope.save = function () { //function called when a new post is submitted and also when a post is edited
+    function checkPostEntries() {
+        if ($scope.currentPost.text.length == 0) {
+            Toast.show($filter('translate')('add_post_empty_text'), 'short', 'bottom');
+            return false;
+        }
 
+        return true;
+
+    }
+
+    $scope.save = function () { //function called when a new post is submitted and also when a post is edited
         //add check params and return true or false if all data are correct
         //        var timeInMilisecond = $scope.currentPost.date.getTime();
         //        $scope.currentPost.date = timeInMilisecond;
-        dataServerService.addPost($scope.baby.schoolId, $scope.baby.kidId, $scope.currentPost).then(
-            function (posts) {
-                //$scope.posts = posts;
-                //update post
-                dataServerService.getPostsByBabyId($scope.baby.schoolId, $scope.baby.kidId).then(function (posts) {
-                    $scope.posts = posts;
-                });
-                $scope.newPostModal.hide();
-            },
-            function (err) {
-                console.log(err);
-            }
-        );
-        //        if (editPostMode) {
-        //            //TODO: update server
-        //        } else {
-        //            $scope.currentPost.attachedTags.forEach(function (obj) { //hashkey generated for some random reason, remove it!
-        //                delete obj["$$hashKey"];
-        //            });
-        //            console.log(JSON.stringify($scope.currentPost));
-        //            //TODO: update server
-        //        }
+        if (checkPostEntries()) {
+            $ionicLoading.show();
+            dataServerService.addPost($scope.baby.schoolId, $scope.baby.kidId, $scope.currentPost).then(
+                function (posts) {
+                    //$scope.posts = posts;
+                    //update post
+                    $ionicLoading.show();
+                    dataServerService.getPostsByBabyId($scope.baby.schoolId, $scope.baby.kidId, 0, Date.parse(todayEnd)).then(function (posts) {
+                        $scope.posts = posts;
+                        $ionicLoading.hide();
+                    });
+                    $scope.newPostModal.hide();
+                    $ionicLoading.hide();
+                    Toast.show($filter('translate')('add_post_done'), 'short', 'bottom');
 
+
+                },
+                function (err) {
+                    console.log(err);
+                    $ionicLoading.hide();
+                    Toast.show($filter('translate')('add_post_error'), 'short', 'bottom');
+
+                }
+            );
+        }
     }
 
     $scope.setMood = function (moodCode) {
@@ -187,16 +262,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
             });
 
 
-
-            //            var template = '<ion-popover-view><ion-content><ion-list><ion-item ng-click="addPhoto($event, \'Camera\')">Camera</ion-item><ion-item ng-click="addPhoto($event, \'Gallery\')">Gallery</ion-item></ion-list></ion-content></ion-popover-view>';
-            //
-            //            if (photoSrcSelect === undefined) {
-            //                photoSrcSelect = $ionicPopover.fromTemplate(template, {
-            //                    scope: $scope
-            //                });
-            //            }
-            //
-            //            photoSrcSelect.show($event);
         } else {
             if (photoSrcSelect !== undefined) {
                 photoSrcSelect.close();
@@ -205,24 +270,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
 
             if (photoSrc === 'Camera') {
                 options = {
-                        quality: 50,
-                        //destinationType: Camera.DestinationType.DATA_URL,
-                        destinationType: Camera.DestinationType.FILE_URI,
-                        // In this app, dynamically set the picture source, Camera or photo gallery
-                        sourceType: Camera.PictureSourceType.CAMERA,
-                        encodingType: Camera.EncodingType.JPEG,
-                        mediaType: Camera.MediaType.PICTURE,
-                        allowEdit: false,
-                        correctOrientation: true //Corrects Android orientation quirks
-                    }
-                    //                options = {
-                    //                    destinationType: Camera.DestinationType.DATA_URL,
-                    //                    sourceType: Camera.PictureSourceType.CAMERA, // Camera.PictureSourceType.PHOTOLIBRARY
-                    //                    allowEdit: false,
-                    //                    encodingType: Camera.EncodingType.JPEG,
-                    //                    popoverOptions: CameraPopoverOptions,
-                    //                    saveToPhotoAlbum: false
-                    //                };
+                    quality: 50,
+                    //destinationType: Camera.DestinationType.DATA_URL,
+                    destinationType: Camera.DestinationType.FILE_URI,
+                    // In this app, dynamically set the picture source, Camera or photo gallery
+                    sourceType: Camera.PictureSourceType.CAMERA,
+                    encodingType: Camera.EncodingType.JPEG,
+                    mediaType: Camera.MediaType.PICTURE,
+                    allowEdit: false,
+                    correctOrientation: true //Corrects Android orientation quirks
+                }
             } else {
                 options = {
                     quality: 50,
@@ -237,15 +294,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
                     correctOrientation: true //Corrects Android orientation quirks
                 }
             }
-            // options = {
-            //                    destinationType: Camera.DestinationType.DATA_URL,
-            //                    sourceType: Camera.PictureSourceType.PHOTOLIBRARY, // Camera.PictureSourceType.PHOTOLIBRARY
-            //                    allowEdit: false,
-            //                    encodingType: Camera.EncodingType.JPEG,
-            //                    popoverOptions: CameraPopoverOptions,
-            //                    saveToPhotoAlbum: false
-            //                };
-            // }
+
 
             $cordovaCamera.getPicture(options).then(function (imageData) {
                 var image;
@@ -287,6 +336,46 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         $scope.currentPost.authorId = profileService.getMyProfileID();
         // $scope.setMood(post.mood);
         $scope.newPostModal.show();
+    }
+
+    $scope.removePost = function (post) {
+        photoSrcSelect = $ionicPopup.show({
+            title: 'Rimuovi post',
+            scope: $scope,
+            buttons: [
+                {
+
+                    text: $filter('translate')('delete_cancel'),
+                    type: 'button-add-picture',
+
+
+                      },
+                {
+                    text: $filter('translate')('delete_confirm'),
+                    type: 'button-add-picture',
+                    onTap: function (e) {
+                        $ionicLoading.show();
+                        dataServerService.removePost($scope.baby.schoolId, $scope.baby.kidId, post.entryId).then(function (posts) {
+                            dataServerService.getPostsByBabyId($scope.baby.schoolId, $scope.baby.kidId, 0, Date.parse(todayEnd), length).then(function (posts) {
+
+                                //dataServerService.getPostsByBabyId($scope.baby.schoolId, $scope.baby.kidId, 0,Date.parse(endDate), length).then(function (posts) {
+                                $scope.posts = posts;
+                                $ionicLoading.hide();
+                                Toast.show($filter('translate')('delete_done'), 'short', 'bottom');
+
+                            }, function (err) {
+                                $ionicLoading.hide();
+                                Toast.show($filter('translate')('delete_error'), 'short', 'bottom');
+                            });
+                        }, function (err) {
+                            $ionicLoading.hide();
+                            Toast.show($filter('translate')('error_popup_title'), 'short', 'bottom');
+                        });
+                    }
+                    }
+                                    ]
+        });
+
     }
 
     $scope.sharePost = function (post) {

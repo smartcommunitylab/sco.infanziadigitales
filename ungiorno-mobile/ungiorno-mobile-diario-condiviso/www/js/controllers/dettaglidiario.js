@@ -262,7 +262,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
     // AGGIUNTA NUMERO DI TELEFONO
     $scope.addPhone = function (person) {
             var phones = person.phone;
-            console.log(phones);
+            /*console.log(phones);*/
             if (phones == null || phones == [] || phones.length == 0) {
                 person.phone = [];
                 person.phone[0] = null;
@@ -283,7 +283,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
     // AGGIUNTA EMAIL
     $scope.addEmail = function (person) {
             var emails = person.email;
-            console.log(emails);
+            /*console.log(emails);*/
             if (emails == null || emails == [] || emails.length == 0) {
                 person.email = [];
                 person.email[0] = null;
@@ -477,7 +477,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         profileService.getCurrentBaby().then(function (data) {
             $scope.baby = data;
             $scope.babyCopy = clone($scope.baby);
-            console.log($scope.babyCopy);
+            /*console.log($scope.babyCopy);*/
             $ionicLoading.hide();
         });
 

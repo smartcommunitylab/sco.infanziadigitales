@@ -1,9 +1,9 @@
 <ion-view id="home">
     <ion-nav-title>{{baby.fullName}}</ion-nav-title>
     <ion-content id="postsScrollView" scroll="false">
-        <div ng-if="calendarOpen" class="slide-animation">
+        <div ng-show="calendarOpen" class="slide-animation">
             <div class="calendar">&nbsp;
-                <div pickadate no-extra-rows week-starts-on="1" default-date="today" ng-model="today">
+                <div pickadate no-extra-rows week-starts-on="1" ng-model="today" ng-change="changeToday(today)">
                 </div>
             </div>
             <div id="calendar-button-div">
@@ -25,12 +25,16 @@
         <ion-scroll style="height:100%">
             <ul class="list" ng-if="baby">
                 <li class="item stream-item" ng-repeat="post in posts | orderBy: '-date'">
-                    <baby-post post="post" baby="baby" edit-callback="openEditPost" share-callback="sharePost"></baby-post>
+                    <baby-post post="post" baby="baby" edit-callback="openEditPost" remove-callback="removePost" share-callback="sharePost"></baby-post>
                 </li>
             </ul>
+
             <h4 class="text-center" ng-if="!baby">{{'no_profiles'|translate}}</h4>
             <h4 class="text-center" ng-if="baby && !posts">{{'nothing_note'|translate}}</h4>
         </ion-scroll>
+        <!--        <ion-infinite-scroll on-infinite="loadMore()" distance="10%">-->
+        <ion-infinite-scroll ng-if="!noMoreEntriesAvailable" on-infinite="loadMore()" distance="10%">
+        </ion-infinite-scroll>
     </ion-content>
 
 

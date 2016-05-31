@@ -16,6 +16,7 @@
 
 package it.smartcommunitylab.ungiorno.controller;
 
+import it.smartcommunitylab.ungiorno.diary.model.DiaryKid;
 import it.smartcommunitylab.ungiorno.importer.ImportError;
 import it.smartcommunitylab.ungiorno.importer.Importer;
 import it.smartcommunitylab.ungiorno.model.SchoolProfile;
@@ -28,6 +29,7 @@ import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
 import java.util.List;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -122,7 +124,17 @@ public class ConsoleController {
 		}
 		return res;
 	}
-
+	
+	@RequestMapping(value = "/updatediary", method = RequestMethod.POST)
+	public @ResponseBody String uploadDiary(HttpServletRequest req) throws Exception {
+		String res = "";
+		String schoolId = req.getParameter("schoolId");
+		String appId = getAppId();
+		List<DiaryKid> response = storage.updateDiaryKidPersons(appId, schoolId);
+		res = new ObjectMapper().writeValueAsString(response);
+		return res;
+	}
+	
 	private String getAppId() {
 		AppDetails details = (AppDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String app = details.getUsername();

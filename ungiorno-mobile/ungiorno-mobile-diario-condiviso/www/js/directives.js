@@ -80,9 +80,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.di
             scope.getBabyAgeString = function (birthday, postDate) {
                 var difference = postDate - birthday;
                 difference = new Date(difference);
-                var toRtn = (difference.getFullYear() - 1970) + "a " +
-                    difference.getMonth() + "m " +
-                    difference.getDate() + "g";
+                var toRtn = (difference.getFullYear() - 1970) + " anni."; //+
+//                    difference.getMonth() + " mesi, " +
+//                    difference.getDate() + " giorni.";
 
 
                 return toRtn;

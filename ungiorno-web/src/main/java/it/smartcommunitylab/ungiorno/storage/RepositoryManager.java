@@ -47,6 +47,7 @@ import it.smartcommunitylab.ungiorno.model.SectionData.ServiceProfile;
 import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.model.TeacherCalendar;
 
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -61,6 +62,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
@@ -81,6 +84,7 @@ import com.google.common.collect.ListMultimap;
 public class RepositoryManager {
 
 	private static final Logger logger = LoggerFactory.getLogger(RepositoryManager.class);
+	private static final Pattern pattern = Pattern.compile(".*/([^/]*)/image");
 	
 	@Autowired
 	private AppSetup appSetup;
@@ -1204,4 +1208,61 @@ public class RepositoryManager {
 		}
 		return template.find(q, MultimediaEntry.class);
 	}
+
+	/**
+	 * @param appId
+	 * @param schoolId
+	 * @param kidId
+	 * @param entryId
+	 */
+	public void cleanImages(String appId, String schoolId, String kidId, String entryId) {
+		DiaryEntry de = getDiaryEntry(appId, schoolId, kidId, entryId);
+		if (de != null && de.getPictures() != null) {
+			cleanImages(appId, schoolId, kidId, entryId, new HashSet<String>(de.getPictures()));
+		}
+	}
+
+	/**
+	 * @param appId
+	 * @param schoolId
+	 * @param kidId
+	 * @param entryId
+	 * @param oldPics
+	 */
+	public void cleanImages(String appId, String schoolId, String kidId, String entryId, Set<String> oldPics) {
+		if (oldPics == null || oldPics.isEmpty()) return;
+		
+		Query q = kidQuery(appId, schoolId, kidId);
+		Set<String> ids = new HashSet<String>();
+		for (String p : oldPics) {
+			String id = getImageId(p);
+			if (id != null) {
+	 			ids.add(id);
+			}
+		}
+		
+		q.addCriteria(Criteria.where("multimediaId").in(ids));
+		template.remove(q, MultimediaEntry.class);
+
+		for (String id : ids) {
+			File f = new File(appSetup.getUploadDirectory() + "/" + id);
+			if (f.exists()) {
+				f.delete();
+			}
+
+		}
+	}
+
+	/**
+	 * @param p
+	 * @return
+	 */
+	private static String getImageId(String p) {
+		Matcher m = pattern.matcher(p);
+		if (m.find()) {
+			return m.group(1);
+		}
+		return null;
+	}
+
 }

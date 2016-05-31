@@ -12,14 +12,17 @@ import it.smartcommunitylab.ungiorno.model.School;
 import it.smartcommunitylab.ungiorno.model.SchoolProfile;
 import it.smartcommunitylab.ungiorno.storage.AppSetup;
 import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
+import it.smartcommunitylab.ungiorno.utils.ImageUtils;
 import it.smartcommunitylab.ungiorno.utils.PermissionsManager;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -135,6 +138,12 @@ public class DiaryController {
 
 			DiaryEntry old = storage.getDiaryEntry(appId, schoolId, kidId, entryId);
 			if (old != null) {
+				
+				Set<String> oldPics = old.getPictures() != null ? new HashSet<String>(old.getPictures()) : new HashSet<String>();
+				for (String p : diary.getPictures()) {
+					oldPics.remove(p);
+				}
+				storage.cleanImages(appId, schoolId, kidId, entryId, oldPics);
 				old.setText(diary.getText());
 				old.setTags(diary.getTags());
 				old.setPictures(diary.getPictures());
@@ -148,6 +157,7 @@ public class DiaryController {
 			@RequestParam boolean isTeacher) {
 
 			checkKidDiaryEnabled(appId, schoolId, kidId, isTeacher);
+			storage.cleanImages(appId, schoolId, kidId, entryId);
 			storage.deleteDiaryEntry(appId, schoolId, kidId, entryId);
 	}
 	@RequestMapping(method = RequestMethod.GET, value = "/diary/{appId}/{schoolId}/tags")
@@ -223,7 +233,6 @@ public class DiaryController {
 				MultipartFile file = multiFileMap.getFirst("image");
 				InputStream is = file.getInputStream();
 
-				
 				String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 				String fullName = null;
 				String name = null;
@@ -232,10 +241,11 @@ public class DiaryController {
 					fullName = appSetup.getUploadDirectory() + "/" + name;
 				} while (new File(fullName).exists());
 				
-				FileOutputStream fos = new FileOutputStream(fullName);
-				IOUtils.copy(is, fos);
-				file.getInputStream().close();
-				fos.close();
+				ImageUtils.compressImage(ImageIO.read(is), new File(fullName));
+//				FileOutputStream fos = new FileOutputStream(fullName);
+//				IOUtils.copy(is, fos);
+//				file.getInputStream().close();
+//				fos.close();
 				
 				MultimediaEntry me = new MultimediaEntry();
 				me.setAppId(appId);

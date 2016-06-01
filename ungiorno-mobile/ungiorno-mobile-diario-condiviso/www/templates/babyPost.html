@@ -1,7 +1,6 @@
 <div class="stream">
     <div class="stream post-creation-details">
-        <div class="stream post-date"><span>{{post.date  | date:"EEEE" | capitalize}}</span></div>
-        <div class="stream post-date"><span>{{post.date  | date:"d MMMM yyyy"}}</span></div>
+        <div class="stream post-date"><span>{{post.date  | date:"EEEE" | capitalize}}, {{post.date  | date:"d MMMM yyyy"}}</span></div>
         <div class="stream post-baby-age">{{baby.firstName}} {{'has' | translate}} {{getBabyAgeString(baby.birthday, post.date)}}</div>
     </div>
     <div class="stream post-action-container">

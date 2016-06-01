@@ -23,7 +23,7 @@
         </div>
 
         <ion-scroll style="height:100%">
-            <ul class="list" ng-if="baby">
+            <ul class="list list-post" ng-if="baby">
                 <li class="item stream-item" ng-repeat="post in posts | orderBy: '-date'">
                     <baby-post post="post" baby="baby" edit-callback="openEditPost" remove-callback="removePost" share-callback="sharePost"></baby-post>
                 </li>

@@ -290,7 +290,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.di
             return $sce.trustAsHtml(input);
         };
 }])
-    .directive('babyPost', function (galleryService, $state) {
+    .directive('babyPost', function (galleryService, $state, $rootScope) {
         return {
             restrict: 'E',
             templateUrl: "templates/babyPost.html",
@@ -308,7 +308,19 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.di
                     var toRtn = (difference.getFullYear() - 1970) + " anni, " + difference.getMonth() + " mesi.";
                     return toRtn;
                 };
+                scope.getAuthor = function (post) {
+                    var author = "";
+                    //cat name and relation
+                    if ($rootScope.personsProfiles[post.authorId].name) {
+                        author += $rootScope.personsProfiles[post.authorId].name
+                    }
+                    if ($rootScope.personsProfiles[post.authorId].relation) {
+                        author += ' - ' +
+                            $$rootScope.personsProfiles[post.authorId].relation
+                    }
 
+                    return author;
+                }
                 scope.viewPhotos = function (photos, index) {
                     galleryService.setSelectedGallery(photos, index);
                     $state.go("app.postgallery");

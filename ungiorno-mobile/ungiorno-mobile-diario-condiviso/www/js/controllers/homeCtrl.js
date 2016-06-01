@@ -85,6 +85,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         };
 
     }
+    var savePersonProfiles = function (data) {
+        $rootScope.personsProfiles = [];
+        if (data.persons) {
+            for (var i = 0; i < data.persons.length; i++) {
+                $rootScope.personsProfiles[data.persons[i].personId] = {
+                    name: data.persons[i].firstName,
+                    relation: data.persons[i].relation
+                }
+            }
+        }
+    }
 
     var init = function () {
         profileService.init().then(function () {
@@ -94,6 +105,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
             /*console.log($scope.babyNum);*/
             /*console.log("kidprofiles");console.log($rootScope.kidProfiles);*/
             profileService.getCurrentBaby().then(function (data) {
+                savePersonProfiles(data);
                 if ($rootScope.selectedKid) {
                     $scope.baby = data;
                     $scope.loadMore(); //used by infinite scroll

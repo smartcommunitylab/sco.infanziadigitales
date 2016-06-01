@@ -139,10 +139,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
                 console.log(data + status + headers + config);
                 deferred.reject();
             });
+        } else {
+            deferred.resolve(tags);
         }
-                else {
-                    deferred.resolve(tags);
-                }
         return deferred.promise;
     };
 
@@ -364,7 +363,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
             timeout: Config.httpTimout()
         }).
         success(function (data, status, headers, config) {
-            deferred.resolve(data.data);
+            var post = data.data;
+            //add author name and relationship
+
+            deferred.resolve(post);
         }).
         error(function (data, status, headers, config) {
             console.log(data + status + headers + config);

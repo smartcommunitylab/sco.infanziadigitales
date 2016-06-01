@@ -110,8 +110,11 @@ a.item-content {
     margin-top: 1px;
 }
 .stream.post-baby-age {
-    margin-top: 8px;
-    font-size: 12px;
+    font-size: 13px;
+}
+.stream.post-date {
+    font-weight: bold;
+    font-size: 13px;
 }
 .stream.post-action-container {
     display: inline-block;
@@ -138,7 +141,7 @@ a.item-content {
 .stream.post-text {
     margin-top: 16px;
     margin-bottom: 8px;
-    font-size: 14px;
+    font-size: 16px;
 }
 .stream.post-author {
     text-align: right;
@@ -681,8 +684,7 @@ a.success-link {
     margin-left: auto;
     margin-right: auto;
 }
-
-.item .item-input i > .icon.ion-calendar{
+.item .item-input i > .icon.ion-calendar {
     font-size: 20px;
     color: #9A0122;
 }

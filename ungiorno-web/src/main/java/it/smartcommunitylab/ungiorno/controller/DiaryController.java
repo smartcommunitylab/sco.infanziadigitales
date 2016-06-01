@@ -146,8 +146,10 @@ public class DiaryController {
 			if (old != null) {
 				
 				Set<String> oldPics = old.getPictures() != null ? new HashSet<String>(old.getPictures()) : new HashSet<String>();
-				for (String p : diary.getPictures()) {
-					oldPics.remove(p);
+				if (diary.getPictures() != null) {
+					for (String p : diary.getPictures()) {
+						oldPics.remove(p);
+					}
 				}
 				storage.cleanImages(appId, schoolId, kidId, entryId, oldPics);
 				old.setText(diary.getText());

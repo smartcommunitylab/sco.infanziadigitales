@@ -72,11 +72,14 @@
 
             <div ng-repeat="data in babyCopy.persons track by $index" ng-if="isFamily(data)">
                 <!--                <div class="separator" ng-if="$index > 0"></div>-->
-                <label class="item item-input item-stacked-label" ng-if="!isViewMode(data)">
-<!--                    <span class="input-label">{{relationType(data)}}:</span>-->
+                <label class="item item-input item-stacked-label" ng-if="!isViewMode(data) && !!canDelete(data)">
+                    <span class="input-label">{{relationType(data)}}:</span>
                     <button class="button button-clear alignRightIcon" ng-click="deleteComponent($index)" ng-if="!readOnly(data) && !noDelete(data)">
                         <i class="icon ion-trash-b"></i>
                     </button>
+                </label>
+                <label class="item item-input item-stacked-label" ng-if="!isViewMode(data) && !canDelete(data) && !!modifyComponent(data)">
+                    <span class="input-label">{{relationType(data)}}:</span>
                 </label>
                 <label class="item item-input" ng-if="!isViewMode(data) && !!modifyComponent(data)">
                     <input type="text" placeholder="{{'pname'|translate}} {{getPreposition(data)}}" ng-model="data.firstName" />
@@ -148,6 +151,9 @@
                         <i class="icon ion-trash-b"></i>
                     </button> -->
                 <!--</label>-->
+                <label class="item item-input item-stacked-label" ng-if="!isViewMode(data) && !!modifyComponent(data)">
+                    <span class="input-label">{{relationType(data)}}:</span>
+                </label>
                 <label class="item item-input" ng-if="!isViewMode(data, true) && !!modifyComponent(data)">
                     <input type="text" placeholder="{{'pname'|translate}} {{getPreposition(data)}}" ng-model="data.firstName" />
                     <i class="ion-asterisk alignRight inline vertical-middle"></i>

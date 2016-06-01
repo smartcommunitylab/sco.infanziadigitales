@@ -1,132 +1,338 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.directives', [])
 
-//.directive('backImg', function () {
-//    return function (scope, element, attrs) {
-//        var url = attrs.backImg;
-//        var content = element.find('a');
-//        content.css({
-//            'background-image': 'url(' + url + ')',
-//            'background-size': 'cover'
-//        });
-//    };
-//})
-//
-//.directive('coverImg', function () {
-//        return function (scope, element, attrs) {
-//            attrs.$observe('coverImg', function (value) {
-//                element.css({
-//                    'background-image': 'url(' + value + ')',
-//                    'background-size': 'cover'
-//                });
-//            });
-//        };
-//    })
-//    .directive('backImg', function () {
-//        return function (scope, element, attrs) {
-//            var url = attrs.backImg;
-//            element.css({
-//                'background-image': 'url(' + url + ')',
-//                'background-size': 'cover'
-//            });
-//        };
-//    })
-//    .directive('starRating', function () {
-//        return {
-//            restrict: 'A',
-//            template: '<ul class="rating">' +
-//                '<li ng-repeat="starType in stars track by $index" ng-click="toggle($index)">' +
-//                '<i class="icon vote-star" ng-class="{\'ion-android-star\': starType == \'full\', \'ion-android-star-half\': starType == \'half\', \'ion-android-star-outline\': starType == \'empty\'}"></i>' +
-//                '</li>' +
-//                '</ul>',
-//            scope: {
-//                ratingValue: '=',
-//                max: '=',
-//                onRatingSelected: '&',
-//                getRating: '&'
-//            },
-//            link: function (scope, elem, attrs) {
-//                var updateStars = function () {
-//                    scope.stars = scope.getRating();
-//                };
-//
-//                scope.toggle = function (index) {
-//                    scope.ratingValue = index + 1;
-//                    scope.onRatingSelected({
-//                        rating: index + 1
-//                    });
-//                };
-//
-//                scope.$watch('ratingValue', function (oldVal, newVal) {
-//                    /*if (newVal) {*/
-//                    updateStars();
-//                    /*}*/
-//                });
-//            }
-//        }
-//    })
+.directive('placeautocomplete', function () {
+        var index = -1;
 
-.directive('babyPost', function (galleryService, $state) {
-    return {
-        restrict: 'E',
-        templateUrl: "templates/babyPost.html",
-        scope: {
-            post: '=',
-            baby: '=',
-            shareCallback: '&',
-            removeCallback: '&',
-            editCallback: '&'
-        },
-        link: function (scope, elem, attrs) {
-            scope.getBabyAgeString = function (birthday, postDate) {
-                var difference = postDate - birthday;
-                difference = new Date(difference);
-                var toRtn = (difference.getFullYear() - 1970) + " anni, " + difference.getMonth() + " mesi.";
-                return toRtn;
-            };
+        return {
+            restrict: 'E',
+            scope: {
+                searchParam: '=ngModel',
+                suggestions: '=data',
+                onType: '=onType',
+                onSelect: '=onSelect',
+                placeautocompleteRequired: '='
+            },
+            controller: [
+            '$scope',
+            function ($scope) {
+                    // the index of the suggestions that's currently selected
+                    $scope.selectedIndex = -1;
 
-            scope.viewPhotos = function (photos, index) {
-                galleryService.setSelectedGallery(photos, index);
-                $state.go("app.postgallery");
+                    $scope.initLock = true;
+
+                    // set new index
+                    $scope.setIndex = function (i) {
+                        $scope.selectedIndex = parseInt(i);
+                    };
+
+                    this.setIndex = function (i) {
+                        $scope.setIndex(i);
+                        $scope.$apply();
+                    };
+
+                    $scope.getIndex = function (i) {
+                        return $scope.selectedIndex;
+                    };
+
+                    $scope.clear = function () {
+                        $scope.searchParam = '';
+                    };
+
+                    // watches if the parameter filter should be changed
+                    var watching = true;
+
+                    // autocompleting drop down on/off
+                    $scope.completing = false;
+
+                    // starts autocompleting on typing in something
+                    $scope.$watch('searchParam', function (newValue, oldValue) {
+                        if (oldValue === newValue || (!oldValue && $scope.initLock)) {
+                            return;
+                        }
+
+                        if (watching && typeof $scope.searchParam !== 'undefined' && $scope.searchParam !== null) {
+                            $scope.completing = true;
+                            $scope.searchFilter = $scope.searchParam;
+                            $scope.selectedIndex = -1;
+                        }
+
+                        // function thats passed to on-type attribute gets executed
+                        if ($scope.onType) {
+                            $scope.onType($scope.searchParam);
+                        }
+                    });
+
+                    // for hovering over suggestions
+                    this.preSelect = function (suggestion) {
+                        watching = false;
+
+                        // this line determines if it is shown
+                        // in the input field before it's selected:
+                        //$scope.searchParam = suggestion;
+
+                        $scope.$apply();
+                        watching = true;
+                    };
+
+                    $scope.preSelect = this.preSelect;
+
+                    this.preSelectOff = function () {
+                        watching = true;
+                    };
+
+                    $scope.preSelectOff = this.preSelectOff;
+
+                    // selecting a suggestion with RIGHT ARROW or ENTER
+                    $scope.select = function (suggestion) {
+                        if (suggestion) {
+                            $scope.searchParam = suggestion;
+                            $scope.searchFilter = suggestion;
+                            if ($scope.onSelect) {
+                                $scope.onSelect(suggestion);
+                                $scope.clear();
+                            }
+                        }
+                        watching = false;
+                        $scope.completing = false;
+                        setTimeout(function () {
+                            watching = true;
+                        }, 1000);
+                        $scope.setIndex(-1);
+                    };
             }
+        ],
+            link: function (scope, element, attrs) {
+                setTimeout(function () {
+                    scope.initLock = false;
+                    scope.$apply();
+                }, 250);
 
-            scope.shareCallback = scope.shareCallback();
-            scope.editCallback = scope.editCallback();
-            scope.removeCallback = scope.removeCallback();
+                var attr = '';
 
-            scope.editPost = function (post) {
-                scope.editCallback(post);
-            }
-            scope.removePost = function (post) {
-                scope.removeCallback(post);
-            }
-            scope.sharePost = function (post) {
-                scope.shareCallback();
-            }
+                // Default atts
+                scope.attrs = {
+                    "placeholder": "start typing...",
+                    "class": "",
+                    "id": "",
+                    "inputclass": "",
+                    "inputid": ""
+                };
 
+                for (var a in attrs) {
+                    attr = a.replace('attr', '').toLowerCase();
+                    // add attribute overriding defaults
+                    // and preventing duplication
+                    if (a.indexOf('attr') === 0) {
+                        scope.attrs[attr] = attrs[a];
+                    }
+                }
+
+                if (attrs.clickActivation) {
+                    element[0].onclick = function (e) {
+                        if (!scope.searchParam) {
+                            setTimeout(function () {
+                                scope.completing = true;
+                                scope.$apply();
+                            }, 200);
+                        }
+                    };
+                }
+
+                var key = {
+                    left: 37,
+                    up: 38,
+                    right: 39,
+                    down: 40,
+                    enter: 13,
+                    esc: 27,
+                    tab: 9
+                };
+
+                document.addEventListener("keydown", function (e) {
+                    var keycode = e.keyCode || e.which;
+
+                    switch (keycode) {
+                    case key.esc:
+                        // disable suggestions on escape
+                        scope.select();
+                        scope.setIndex(-1);
+                        scope.$apply();
+                        e.preventDefault();
+                    }
+                }, true);
+
+                document.addEventListener("blur", function (e) {
+                    // disable suggestions on blur
+                    // we do a timeout to prevent hiding it before a click event is registered
+                    setTimeout(function () {
+                        scope.select();
+                        scope.setIndex(-1);
+                        scope.$apply();
+                    }, 150);
+                }, true);
+
+                element[0].addEventListener("keydown", function (e) {
+                    var keycode = e.keyCode || e.which;
+
+                    var l = angular.element(this).find('li').length;
+
+                    // this allows submitting forms by pressing Enter in the autocompleted field
+                    if (!scope.completing || l == 0) return;
+
+                    // implementation of the up and down movement in the list of suggestions
+                    switch (keycode) {
+                    case key.up:
+                        index = scope.getIndex() - 1;
+                        if (index < -1) {
+                            index = l - 1;
+                        } else if (index >= l) {
+                            index = -1;
+                            scope.setIndex(index);
+                            scope.preSelectOff();
+                            break;
+                        }
+                        scope.setIndex(index);
+
+                        if (index !== -1)
+                            scope.preSelect(angular.element(angular.element(this).find('li')[index]).text());
+
+                        scope.$apply();
+
+                        break;
+                    case key.down:
+                        index = scope.getIndex() + 1;
+                        if (index < -1) {
+                            index = l - 1;
+                        } else if (index >= l) {
+                            index = -1;
+                            scope.setIndex(index);
+                            scope.preSelectOff();
+                            scope.$apply();
+                            break;
+                        }
+                        scope.setIndex(index);
+
+                        if (index !== -1) {
+                            scope.preSelect(angular.element(angular.element(this).find('li')[index]).text());
+                        }
+
+                        break;
+                    case key.left:
+                        break;
+                    case key.right:
+                    case key.enter:
+                    case key.tab:
+                        index = scope.getIndex();
+                        // scope.preSelectOff();
+                        if (index !== -1) {
+                            scope.select(angular.element(angular.element(this).find('li')[index]).text());
+                            if (keycode == key.enter) {
+                                e.preventDefault();
+                            }
+                        } else {
+                            if (keycode == key.enter) {
+                                scope.select();
+                            }
+                        }
+                        scope.setIndex(-1);
+                        scope.$apply();
+
+                        break;
+                    case key.esc:
+                        // disable suggestions on escape
+                        scope.select();
+                        scope.setIndex(-1);
+                        scope.$apply();
+                        e.preventDefault();
+                        break;
+                    default:
+                        return;
+                    }
+                });
+            },
+            template: '\
+        <div class="placeautocomplete {{ attrs.class }}" ng-class="{ notempty: (searchParam.length > 0) }" id="{{ attrs.id }}">\
+          <input\
+            type="text"\
+            ng-model="searchParam"\
+            placeholder="{{ attrs.placeholder }}"\
+            class="placeautocomplete-input {{ attrs.inputclass }}"\
+            id="{{ attrs.inputid }}"\
+            ng-required="{{ placeautocompleteRequired }}" />\
+            <span ng-if="searchParam.length > 0" ng-click="select(searchParam)" class="tags-add">Aggiungi {{searchParam}}</span>\
+          <ul ng-if="searchParam.length > 0" ng-show="completing && (suggestions).length > 0">\
+            <li\
+              suggestion\
+              ng-repeat="suggestion in suggestions | orderBy:\'toString()\' track by $index"\
+              index="{{ $index }}"\
+              val="{{ suggestion }}"\
+              class="suggestion suggestion-entry"\
+              ng-class="{ active: ($index === selectedIndex) }"\
+              ng-click="select(suggestion)"\
+              ng-bind-html="suggestion | highlight:searchParam"></li>\
+          </ul>\
+        </div>'
+        };
+    })
+    .filter('highlight', ['$sce', function ($sce) {
+        return function (input, searchParam) {
+            if (typeof input === 'function') return '';
+            if (searchParam) {
+                var words = '(' +
+                    searchParam.split(/\ /).join(' |') + '|' +
+                    searchParam.split(/\ /).join('|') +
+                    ')',
+                    exp = new RegExp(words, 'gi');
+                if (words.length) {
+                    input = input.replace(exp, "<span class=\"highlight\">$1</span>");
+                }
+            }
+            return $sce.trustAsHtml(input);
+        };
+}])
+    .directive('babyPost', function (galleryService, $state) {
+        return {
+            restrict: 'E',
+            templateUrl: "templates/babyPost.html",
+            scope: {
+                post: '=',
+                baby: '=',
+                shareCallback: '&',
+                removeCallback: '&',
+                editCallback: '&'
+            },
+            link: function (scope, elem, attrs) {
+                scope.getBabyAgeString = function (birthday, postDate) {
+                    var difference = postDate - birthday;
+                    difference = new Date(difference);
+                    var toRtn = (difference.getFullYear() - 1970) + " anni, " + difference.getMonth() + " mesi.";
+                    return toRtn;
+                };
+
+                scope.viewPhotos = function (photos, index) {
+                    galleryService.setSelectedGallery(photos, index);
+                    $state.go("app.postgallery");
+                }
+
+                scope.shareCallback = scope.shareCallback();
+                scope.editCallback = scope.editCallback();
+                scope.removeCallback = scope.removeCallback();
+
+                scope.editPost = function (post) {
+                    scope.editCallback(post);
+                }
+                scope.removePost = function (post) {
+                    scope.removeCallback(post);
+                }
+                scope.sharePost = function (post) {
+                    scope.shareCallback();
+                }
+
+            }
         }
-    }
-})
+    })
 
-//.directive("myDirective", function() {
-//
-//    return {
-//        restrict: "E",
-//        scope: {
-//            callback: "&"
-//        },
-//        template: "<div style='width: 200px; height: 200px; background-color: black;' ng-click='callCallback()'></div>", // call function this way...
-//        link: function(scope, element, attrs) {
-//            // unwrap the function
-//            scope.callback = scope.callback();
-//
-//            scope.data = "data from somewhere";
-//
-//            scope.callCallback = function() {
-//                scope.callback(scope.data);
-//            }
-//        }
-//    }
-//})
+
 
 .directive('fabButton', function ($document) {
     return {

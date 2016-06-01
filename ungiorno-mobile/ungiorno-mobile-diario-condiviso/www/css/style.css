@@ -250,8 +250,8 @@ a.item-content {
     margin-right: 1em;
 }
 .post-create-element-row {
-    margin-top: 8px;
-    margin-bottom: 8px;
+    margin-top: 20pxpx;
+    margin-bottom: 20px;
 }
 .post-create-element-row i {
     color: #9A0122;
@@ -689,4 +689,35 @@ label.item.item-input i.icon.ion-calendar {
     color: #9A0122;
     padding-right: 10px;
     top: -2px;
+}
+.placeautocomplete {
+    position: relative;
+}
+.placeautocomplete-input {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.placeautocomplete-input:focus {
+    text-overflow: clip;
+}
+.placeautocomplete.notempty .placeautocomplete-input {
+    padding-left: 24px;
+}
+.placeautocomplete.notempty .placeautocomplete-input-clear {
+    position: absolute;
+    top: 0.5em;
+    left: 0;
+    color: #AAAAAA;
+}
+.suggestion-entry {
+    font-size: 18px;
+    margin: 8px;
+}
+.tags-add {
+    font-size: 18px;
+    margin: 8px;
+    font-weight: bold;
+    color: green;
 }

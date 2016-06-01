@@ -267,7 +267,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
                 scope: $scope,
                 buttons: [
                     {
-                        text: 'Gallery',
+                        text: $filter('translate')('add_pic_gallery'),
                         type: 'button-add-picture',
                         onTap: function (e) {
                             return $scope.addPhoto($event, 'Gallery')
@@ -275,7 +275,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
 
                       },
                     {
-                        text: 'Camera',
+                        text: $filter('translate')('add_pic_camera'),
                         type: 'button-add-picture',
                         onTap: function (e) {
                             return $scope.addPhoto($event, 'Camera')
@@ -339,7 +339,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
             });
         }
     }
-
+    $scope.add = function (tag) {
+        $scope.currentPost.tags.push(tag);
+    }
+    $scope.removeTag = function (tag) {
+        $scope.currentPost.tags.splice($scope.currentPost.tags.indexOf(tag), 1);
+    }
     $scope.removePhoto = function (index) {
         $scope.currentPost.pictures.splice(index, 1);
     }
@@ -400,9 +405,62 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         });
 
     }
-
+    $scope.tagName = "";
     $scope.sharePost = function (post) {
         //TODO: have to define what to share
     }
+    var selectTag = function (selectTag) {
+        $scope.currentPost.tags.push(suggestion);
+        $scope.searchParam = '';
+        $scope['tags'] = [];
+    }
+
+    $scope.changeString = function (suggestion) {
+        $scope.currentPost.tags.push(suggestion);
+        $scope.searchParam = '';
+        $scope['tags'] = [];
+        //        console.log("changestringfrom");
+        //        $scope.place = 'from';
+        //        planService.setPosition($scope.place, $scope.placesandcoordinates[suggestion].latlong.split(',')[0], $scope.placesandcoordinates[suggestion].latlong.split(',')[1]);
+        //        planService.setName($scope.place, suggestion);
+        //        for (var i = 0; i < $scope.favoritePlaces.length; i++) {
+        //            if ($scope.favoritePlaces[i].name == suggestion) {
+        //                $scope.favoriteFrom = true;
+        //                break;
+        //            }
+        //        }
+
+        // selectTag(suggestion);
+    };
+    $scope.typeTag = function (typedthings) {
+        //        if (($scope.placesandcoordinates && $scope.placesandcoordinates[typedthings] == null) || typedthings == '' || $scope.placesandcoordinates == null) {
+        //            $scope.planParams[fromOrTo] = {
+        //                name: '',
+        //                lat: '',
+        //                long: ''
+        //            }
+        //            if (fromOrTo == 'from')
+        //                $scope.favoriteFrom = false;
+        //            $scope.favoriteTo = false;
+        //        };
+
+        $scope.result = typedthings;
+
+        dataServerService.getTags($scope.baby.schoolId).then(function (data) {
+            $scope['tags'] = [];
+            $scope.placesandcoordinates = [];
+            if (data.length > 0) {
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].name.toLowerCase().indexOf(typedthings.toLowerCase()) > -1) {
+                        $scope['tags'].push(data[i].name);
+                        $scope.placesandcoordinates.push(data[i].name);
+                    }
+                }
+            } else {
+                $scope['tags'] = null;
+                $scope.placesandcoordinates = null;
+            }
+        });
+    };
 
 });

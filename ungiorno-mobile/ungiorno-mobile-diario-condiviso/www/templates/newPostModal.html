@@ -8,11 +8,17 @@
     </ion-header-bar>
     <ion-content style="margin-left:10px; margin-right:10px;">
         <label class="item item-input post-create-element-row">
-            <textarea type="text" rows="8" ng-model="currentPost.text" placeholder="{{'description' | translate}}"></textarea>
+            <textarea type="text" rows="3" ng-model="currentPost.text" placeholder="{{'description' | translate}}"></textarea>
         </label>
 
         <div class="post-create-element-row">
-            <autocomplete-tags tags="tagsFromServer" attached-tags="currentPost.tags" class="post-create-element"></autocomplete-tags>
+            <!--            <autocomplete-tags tags="tagsFromServer" attached-tags="currentPost.tags" class="post-create-element"></autocomplete-tags>-->
+            <div class="tag-element inline" ng-repeat="tag in currentPost.tags track by $index">
+                <div class="inline vertical-middle">{{tag}}</div>
+                <i class="tag-element-remove vertical-middle icon ion-android-close inline" ng-click="removeTag(tag)"></i>
+            </div>
+            <placeautocomplete ng-model="tagName" attr-placeholder="{{'insert_new_tag' | translate}}" click-activation="false" data="tags" on-type="typeTag" placeholder="{{'plan_to' | translate}}" on-select="changeString" ng-blur="setNameParam"></placeautocomplete>
+
         </div>
         <div class="post-create-element-row">
             <i class="icon inf_digimage post-create-element"></i>

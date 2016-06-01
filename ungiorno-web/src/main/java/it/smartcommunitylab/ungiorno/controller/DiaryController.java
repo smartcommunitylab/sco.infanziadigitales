@@ -18,8 +18,12 @@ import it.smartcommunitylab.ungiorno.utils.PermissionsManager;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
@@ -57,6 +61,8 @@ public class DiaryController {
 
 	@Autowired
 	private AppSetup appSetup;
+	
+	private SimpleDateFormat sdfCache = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss 'GMT'XXX", Locale.US);
 
 	@RequestMapping(method = RequestMethod.GET, value = "/diary/{appId}/profile")
 	public Response<DiaryUser> getDiaryProfile(@PathVariable String appId) throws ProfileNotFoundException {
@@ -140,8 +146,10 @@ public class DiaryController {
 			if (old != null) {
 				
 				Set<String> oldPics = old.getPictures() != null ? new HashSet<String>(old.getPictures()) : new HashSet<String>();
-				for (String p : diary.getPictures()) {
-					oldPics.remove(p);
+				if (diary.getPictures() != null) {
+					for (String p : diary.getPictures()) {
+						oldPics.remove(p);
+					}
 				}
 				storage.cleanImages(appId, schoolId, kidId, entryId, oldPics);
 				old.setText(diary.getText());
@@ -179,19 +187,36 @@ public class DiaryController {
 		}
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/diary/{appId}/{schoolId}/{kidId}/{imageId}/image", produces = MediaType.IMAGE_JPEG_VALUE)
-	public void getImage(HttpServletResponse response, @PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId, @PathVariable String imageId) throws Exception {
-
+	@RequestMapping(method = RequestMethod.GET, value = "/diary/{appId}/{schoolId}/{kidId}/{imageId}/image", 
+			produces = MediaType.IMAGE_JPEG_VALUE)
+	public void getImage(HttpServletRequest request, HttpServletResponse response, 
+			@PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId, 
+			@PathVariable String imageId)	throws Exception {
 //		checkKidDiaryEnabled(appId, schoolId, kidId, null);
 
+		String isModifiedSinceString = request.getHeader("If-Modified-Since");
 		MultimediaEntry multimedia = storage.getMultimediaEntry(appId, schoolId, kidId, imageId);
 		if (multimedia != null) {
 			File f = new File(appSetup.getUploadDirectory() + "/" + imageId);
 			if (f.exists()) {
-//				String ext = f.getName().substring(f.getName().lastIndexOf(".") + 1);
-				response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+				Calendar calendar = Calendar.getInstance();
+				calendar.setTime(new Date(f.lastModified()));
+				calendar.set(Calendar.MILLISECOND, 0);
+				Date lastModified = calendar.getTime();
+				Date isModifiedSince = null;
+				if(isModifiedSinceString != null) {
+					isModifiedSince = sdfCache.parse(isModifiedSinceString); 
+				}
+				if((isModifiedSince == null) || (lastModified.compareTo(isModifiedSince) > 0)) {
+					response.setHeader("Cache-Control", "public");
+					response.setHeader("Last-Modified", sdfCache.format(lastModified));
+					response.setContentType(MediaType.IMAGE_JPEG_VALUE);
 			    InputStream is = new FileInputStream(f);
 			    IOUtils.copy(is, response.getOutputStream());
+				} else {
+					response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+				}
+//				String ext = f.getName().substring(f.getName().lastIndexOf(".") + 1);
 			}
 		}
 

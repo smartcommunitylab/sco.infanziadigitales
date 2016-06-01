@@ -102,12 +102,28 @@ a.item-content {
     padding-top: 75px;
     margin: auto;
 }
+
+.list {
+position: relative;
+padding-top: 1px;
+padding-bottom: 1px;
+padding-left: 0;
+margin-bottom: 20px;
+}
+
+.list-post{
+    background-color: #f1f1f1;
+}
+
+.stream-item:first-child {
+margin-top: 0;
+}
+
 .stream-item {
-    padding: 4px 16px;
-    white-space: inherit;
-    text-align: justify;
-    border-top: 0px;
-    margin-top: 1px;
+white-space: inherit;
+text-align: justify;
+border-top: 0px;
+margin-top: 20px;
 }
 .stream.post-baby-age {
     font-size: 13px;

@@ -28,11 +28,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         }
     };*/
 
-    $scope.noDelete = function (data) {
-            if (data.teacher == true || data.parent == true) {
-                return true;
-            }
-        }
         //    $scope.isAccess = function () {
         //        if ($scope.access.relation == 'parent1' || $scope.access.relation == 'parent2' || $scope.access.relation == 'brother' || $scope.access.relation == 'sister' || $scope.access.relation == 'parent') {
         //            return true;
@@ -254,7 +249,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
     //    }
     //
     $scope.isFamily = function (data) {
-        if (data.relation == 'brother' || data.relation == 'sister' || data.relation == 'grandfather' || data.relation == 'grandmother' || data.relation == 'uncle' || data.relation == 'aunt' || data.parent == true) {
+        if (data.relation == 'fratello' || data.relation == 'sorella' || data.relation == 'nonno' || data.relation == 'nonna' || data.relation == 'zio' || data.relation == 'zia' || data.relation == 'cugino' || data.relation == 'cugina' || data.parent == true) {
             return true;
         }
     }
@@ -369,6 +364,23 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         $scope.babyCopy.persons.splice(index, 1);
     }
 
+     // CAN I DELETE A PERSON
+
+    $scope.canDelete = function (data) {
+        var myUserID = profileService.getMyProfileID();
+
+        if (myUserID === data.personId) {
+            return false;
+        } else {
+
+            if (localStorage.currentProfile === "parent" && data.teacher === false) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
     // CAN MODIFY PERMISSION FUNCTION
 
     $scope.modifyComponent = function (data) {
@@ -442,23 +454,29 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
             toRtn = "del genitore"
         } else {
             switch (data.relation) {
-                case 'brother':
+                case 'fratello':
                     toRtn = "del fratello";
                     break;
-                case 'sister':
+                case 'sorella':
                     toRtn = "della sorella";
                     break;
-                case 'grandfather':
+                case 'nonno':
                     toRtn = "del nonno";
                     break;
-                case 'grandmother':
+                case 'nonna':
                     toRtn = "della nonna";
                     break;
-                case 'uncle':
+                case 'zio':
                     toRtn = "dello zio";
                     break;
-                case 'aunt':
+                case 'zia':
                     toRtn = "della zia";
+                    break;
+                case 'cugino':
+                    toRtn = "del cugino";
+                    break;
+                case 'cugina':
+                    toRtn = "della cugina";
                     break;
                 default:
                     toRtn = "";

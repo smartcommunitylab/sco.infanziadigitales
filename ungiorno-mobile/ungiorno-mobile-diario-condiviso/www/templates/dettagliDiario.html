@@ -46,6 +46,7 @@
             </label> -->
 
             <label class="item item-input" ng-click="openDatePickerBaby()" ng-if="!isViewMode(data) && !!modifyComponentKid()">
+                <i class="icon ion-calendar"></i>
                 <span type="date" class="input-label date">{{babyCopy.birthday | date:'d-MMMM-yyyy'}}</span>
                 <i class="ion-asterisk alignRight inline vertical-middle"></i>
             </label>
@@ -93,6 +94,7 @@
                 </label>-->
 
                 <label class="item item-input" ng-click="openDatePicker($index)" ng-if="!isViewMode(data) && !!modifyComponent(data)">
+                    <i class="icon ion-calendar"></i>
                     <span type="date" class="input-label date">{{data.birthday | date:'d-MMMM-yyyy'}}</span>
                     <i class="ion-asterisk alignRight inline vertical-middle"></i>
                 </label>

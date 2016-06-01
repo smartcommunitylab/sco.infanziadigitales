@@ -684,7 +684,9 @@ a.success-link {
     margin-left: auto;
     margin-right: auto;
 }
-.item .item-input i > .icon.ion-calendar {
+label.item.item-input i.icon.ion-calendar {
     font-size: 20px;
     color: #9A0122;
+    padding-right: 10px;
+    top: -2px;
 }

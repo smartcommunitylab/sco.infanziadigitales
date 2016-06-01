@@ -107,9 +107,12 @@ a.item-content {
 position: relative;
 padding-top: 1px;
 padding-bottom: 1px;
-background-color: #f1f1f1;
 padding-left: 0;
 margin-bottom: 20px;
+}
+
+.list-post{
+    background-color: #f1f1f1;
 }
 
 .stream-item:first-child {

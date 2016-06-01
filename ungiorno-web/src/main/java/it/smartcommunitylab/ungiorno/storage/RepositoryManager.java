@@ -1290,6 +1290,7 @@ public class RepositoryManager {
 		if (pageSize != null) {
 			q = q.limit(pageSize);
 		}
+		q.with(new Sort(Direction.DESC, "timestamp"));
 		return template.find(q, MultimediaEntry.class);
 	}
 

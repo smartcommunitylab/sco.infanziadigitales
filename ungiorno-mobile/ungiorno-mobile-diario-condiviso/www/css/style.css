@@ -102,16 +102,35 @@ a.item-content {
     padding-top: 75px;
     margin: auto;
 }
+
+.list {
+position: relative;
+padding-top: 1px;
+padding-bottom: 1px;
+padding-left: 0;
+margin-bottom: 20px;
+}
+
+.list-post{
+    background-color: #f1f1f1;
+}
+
+.stream-item:first-child {
+margin-top: 0;
+}
+
 .stream-item {
-    padding: 4px 16px;
-    white-space: inherit;
-    text-align: justify;
-    border-top: 0px;
-    margin-top: 1px;
+white-space: inherit;
+text-align: justify;
+border-top: 0px;
+margin-top: 20px;
 }
 .stream.post-baby-age {
-    margin-top: 8px;
-    font-size: 12px;
+    font-size: 13px;
+}
+.stream.post-date {
+    font-weight: bold;
+    font-size: 13px;
 }
 .stream.post-action-container {
     display: inline-block;
@@ -138,7 +157,7 @@ a.item-content {
 .stream.post-text {
     margin-top: 16px;
     margin-bottom: 8px;
-    font-size: 14px;
+    font-size: 16px;
 }
 .stream.post-author {
     text-align: right;
@@ -681,8 +700,7 @@ a.success-link {
     margin-left: auto;
     margin-right: auto;
 }
-
-label.item.item-input i.icon.ion-calendar{
+label.item.item-input i.icon.ion-calendar {
     font-size: 20px;
     color: #9A0122;
     padding-right: 10px;

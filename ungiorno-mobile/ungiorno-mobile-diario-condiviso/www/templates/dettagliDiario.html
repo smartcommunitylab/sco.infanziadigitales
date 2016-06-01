@@ -111,12 +111,14 @@
                 <select ng-model="access.relation">
                     <option value=""></option>
                     <!--<option value="parent">{{ 'parent' | translate}}</option>-->
-                    <option value="brother">{{ 'brother' | translate}}</option>
-                    <option value="sister">{{ 'sister' | translate}}</option>
-                    <option value="grandmother">{{ 'grandmother' | translate}}</option>
-                    <option value="grandfather">{{ 'grandfather' | translate}}</option>
-                    <option value="uncle">{{ 'uncle' | translate}}</option>
-                    <option value="aunt">{{ 'aunt' | translate}}</option>
+                    <option value="fratello">{{ 'brother' | translate}}</option>
+                    <option value="sorella">{{ 'sister' | translate}}</option>
+                    <option value="nonno">{{ 'grandmother' | translate}}</option>
+                    <option value="nonna">{{ 'grandfather' | translate}}</option>
+                    <option value="zio">{{ 'uncle' | translate}}</option>
+                    <option value="zia">{{ 'aunt' | translate}}</option>
+                    <option value="cugino">{{ 'cousinM' | translate}}</option>
+                    <option value="cugina">{{ 'cousinF' | translate}}</option>
                 </select>
             </label>
             <div ng-if="!!isFamily(access)">
@@ -140,12 +142,12 @@
 
             <div ng-repeat="data in babyCopy.persons track by $index" ng-if="data.authorized">
                 <!--                <div class="separator" ng-if="$index > 0"></div>-->
-                <label class="item item-input item-stacked-label" ng-if="!isViewMode(data, true)">
+                <!--<label class="item item-input item-stacked-label" ng-if="!isViewMode(data, true)">-->
 <!--                    <span class="input-label">{{relationType(data)}}:</span>-->
                     <!-- <button class="button button-clear alignRightIcon" ng-click="deleteComponent($index)" ng-if="!readOnly(data, true)">
                         <i class="icon ion-trash-b"></i>
                     </button> -->
-                </label>
+                <!--</label>-->
                 <label class="item item-input" ng-if="!isViewMode(data, true) && !!modifyComponent(data)">
                     <input type="text" placeholder="{{'pname'|translate}} {{getPreposition(data)}}" ng-model="data.firstName" />
                     <i class="ion-asterisk alignRight inline vertical-middle"></i>

@@ -52,33 +52,35 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
     };
 })
 
-.controller('AppCtrl', function ($scope, $rootScope, $location, $cordovaDevice, $ionicModal, $ionicHistory, $timeout, $filter, $ionicPopover, $state, $ionicSideMenuDelegate, diaryService, dataServerService, profileService, $window) {
+.controller('AppCtrl', function ($scope, $rootScope, $location, $cordovaDevice, $ionicModal, $ionicHistory, $timeout, Config, $filter, $ionicPopover, $state, $ionicSideMenuDelegate, diaryService, dataServerService, profileService, $window) {
 
     $scope.profilesOpen = false;
-    $scope.toggleProfile = function() {
+    $scope.toggleProfile = function () {
         $scope.profilesOpen = !$scope.profilesOpen;
     }
-    $scope.changeKid = function(kidId) {
-        profileService.setCurrentBabyID(kidId);
+    $scope.changeKid = function (kidId, schoolId) {
+        profileService.setCurrentBabyID(kidId, schoolId);
+        //I must delete posts of old children
+        $state.reload();
         $scope.toggleProfile();
         $ionicSideMenuDelegate.toggleLeft();
     }
 
-    $scope.logout = function() {
+    $scope.logout = function () {
         dataServerService.logout();
         $window.localStorage.clear();
         $state.go('app.login');
     };
 
-    $scope.isParent = function() {
+    $scope.isParent = function () {
         return profileService.isParentProfile();
     }
 
-    $scope.changeProfileType = function() {
+    $scope.changeProfileType = function () {
         profileService.toggleUserProfile();
     };
 
-    $scope.isMultiProfile = function() {
+    $scope.isMultiProfile = function () {
         return profileService.isMultiProfile();
     }
 
@@ -124,7 +126,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
             window.open(url, target);
         }
     };
-
+    $scope.getChildImage = function (child) {
+        var image = Config.URL() + "/" + Config.app() + "/student/" + Config.appId() + "/" + child.schoolId + "/" + child.kidId + "/true/images";
+        return image;
+    }
     $scope.goto = function (state) {
         $state.go(state);
     }
@@ -186,6 +191,7 @@ function showNoConnection() {
         console.log('no place');
     });
 };
+
 
 function handleNoGeolocation(errorFlag) {
     if (errorFlag) {

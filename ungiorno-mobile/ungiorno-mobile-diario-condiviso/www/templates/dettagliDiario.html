@@ -45,7 +45,7 @@
                 <span class="textdata">{{babyCopy.birthday | date:"d MMMM yyyy"}}</span>
             </label>
 
-            <img ng-src="{{babyCopy.image}}" class="sizeImage" ng-click="changeImage()">
+            <img ng-src="{{getImage(babyCopy)}}" class="sizeImage" ng-click="changeImage()">
 
             <!--<div class="item item-divider">{{'data_family' | translate}}:</div>
 
@@ -148,12 +148,12 @@
                 </label>
 
                 <!--EMAIL FORM END-->
-                
+
                 <label class="item item-input item-stacked-label" ng-if="isViewMode(data, true) || !modifyComponent(data)">
                     <span class="input-label">{{relationType(data)}}:</span>
                     <span class="textdata">{{data.firstName}} {{data.lastName}}</span>
                 </label>
-                
+
                 <div ng-if="isViewMode(data, true) || !modifyComponent(data)">
                     <a class="item item-contact item-icon-left" href="{{'tel:'+p}}" ng-repeat="p in data.phone track by $index">
                         <i class="icon inf_digcall"></i><span class="textdata">{{p}}</span>

@@ -15,7 +15,7 @@
         <ion-content class="leftmenu">
             <ion-list>
                 <ion-item menu-close class="item item-avatar item-button-right menu-profile" ng-if="!!kidProfiles && babyNum>0">
-                    <img ng-src="{{selectedKid.image}}">
+                    <img ng-src="{{getChildImage(selectedKid)}}">
                     <h2>{{selectedKid.fullName}}</h2>
                     <button menu-close class="button button-clear" id="babysetting" ng-click="gotodiary(false)">
                         <i class="icon inf_digsettings icon-light"></i>
@@ -26,38 +26,38 @@
                         <i class="icon icon-light" ng-class="{'ion-chevron-down':!profilesOpen, 'ion-chevron-up':profilesOpen}"></i>
                     </button>
                 </div>
-                <ion-item menu-close ng-click="changeKid(kp.kidId)" class="item item-avatar item-button-right menu-profile" ng-repeat="kp in kidProfiles" ng-if="profilesOpen && kp.kidId != selectedKid.kidId">
-                    <img ng-src="{{kp.image}}">
+                <ion-item menu-close ng-click="changeKid(kp.kidId,kp.schoolId)" class="item item-avatar item-button-right menu-profile" ng-repeat="kp in kidProfiles" ng-if="kp.kidId != selectedKid.kidId">
+                    <img ng-src="{{getChildImage(kp)}}">
                     <h2>{{kp.fullName}}</h2>
                 </ion-item>
 
-                <ion-item menu-close class="item item-icon-left" href="#/app/home">
+                <ion-item menu-close class=" item item-icon-left " href="#/app/home ">
                     <i class="icon inf_dighome "></i>{{'home'|translate}}
                 </ion-item>
-                <ion-item menu-close class="item item-icon-left" ng-click="changeProfileType()" ng-if="!!isMultiProfile()">
+                <ion-item menu-close class="item item-icon-left " ng-click="changeProfileType() " ng-if="!!isMultiProfile() ">
                     <i class="icon inf_digchildren_list "></i>{{'change_profile'|translate}}
-                    <p style="font-size:12px;">{{isParent() ? 'profile_parent_used':'profile_teacher_used'|translate}}</p>
+                    <p style="font-size:12px; ">{{isParent() ? 'profile_parent_used':'profile_teacher_used'|translate}}</p>
                 </ion-item>
                 <!--
-                <ion-item menu-close item-icon-left ng-click="gotodiary(false)">
-                    <i class="icon voice-menu  inf_digaccount"></i>Dettaglidiario
+                <ion-item menu-close item-icon-left ng-click="gotodiary(false) ">
+                    <i class="icon voice-menu inf_digaccount "></i>Dettaglidiario
                 </ion-item>
 -->
                 <!--
-                <ion-item menu-close class="item item-icon-left" ng-click="gotodiary(true)">
-                    <i class="icon voice-menu  inf_digaccount"></i>{{'create_diary'|translate}}
+                <ion-item menu-close class="item item-icon-left " ng-click="gotodiary(true) ">
+                    <i class="icon voice-menu inf_digaccount "></i>{{'create_diary'|translate}}
                 </ion-item>
 -->
-                <ion-item menu-close class="item item-icon-left" href="#/app/gallery" ng-if="isParent()">
-                    <i class="icon voice-menu  inf_digimage "></i>{{'gallery'|translate}}
+                <ion-item menu-close class="item item-icon-left " href="#/app/gallery " ng-if="isParent() ">
+                    <i class="icon voice-menu inf_digimage "></i>{{'gallery'|translate}}
                 </ion-item>
                 <!--
-                <ion-item menu-close item-icon-left ng-click="goto('app.register')">
-                    <i class="icon voice-menu  inf_digaccount"></i>Registrati
+                <ion-item menu-close item-icon-left ng-click="goto( 'app.register') ">
+                    <i class="icon voice-menu inf_digaccount "></i>Registrati
                 </ion-item>
 -->
-                <ion-item menu-close class="item item-icon-left" ng-click="logout()">
-                    <i class="icon voice-menu  inf_digaccount "></i>{{'logout'|translate}}
+                <ion-item menu-close class="item item-icon-left " ng-click="logout() ">
+                    <i class="icon voice-menu inf_digaccount "></i>{{'logout'|translate}}
                 </ion-item>
             </ion-list>
         </ion-content>

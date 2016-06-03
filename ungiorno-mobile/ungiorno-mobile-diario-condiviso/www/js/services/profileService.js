@@ -46,8 +46,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
             $q.all(calls).then(function (values) {
                 deferred.resolve(babyProfiles);
             })
-            if (!localStorage.currentBabyID) profileService.setCurrentBabyID(kidType[0].kidId);
-            else profileService.setCurrentBabyID(localStorage.currentBabyID);
+            if (!localStorage.currentBabyID) profileService.setCurrentBabyID(kidType[0].kidId, kidType[0].schoolId);
+            else profileService.setCurrentBabyID(localStorage.currentBabyID, localStorage.currentSchoolID);
         });
         return deferred.promise;
     };
@@ -64,9 +64,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
             return profileService.getUserData().parent.userId;
         }
     }
-    profileService.setCurrentBabyID = function (babyId) {
+
+    profileService.setCurrentSchoolID = function (schoolID) {
+        if (schoolID) {
+            localStorage.currentSchoolID = schoolID;
+        }
+    }
+    profileService.setCurrentBabyID = function (babyId, schoolID) {
         localStorage.currentBabyID = babyId;
-        profileService.getBabyById(localStorage.currentBabyID, 'scuola2').then(function (data) {
+        profileService.setCurrentSchoolID(schoolID);
+        profileService.getBabyById(localStorage.currentBabyID, schoolID).then(function (data) {
             $rootScope.selectedKid = data;
         });
 
@@ -74,6 +81,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
     }
     profileService.getCurrentBabyID = function () {
         return localStorage.currentBabyID;
+    }
+    profileService.getCurrentSchoolID = function () {
+        return localStorage.currentSchoolID;
     }
 
     profileService.getUserProfile = function () {
@@ -112,7 +122,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
         var deferred = $q.defer();
         $http({
             method: 'GET',
-            url: Config.URL() + '/' + Config.app() + '/diary/' + Config.appId() + '/scuola2/kids/' + localStorage.currentBabyID + '?isTeacher=' + dataServerService.isATeacher(),
+            url: Config.URL() + '/' + Config.app() + '/diary/' + Config.appId() + '/' + localStorage.currentSchoolID + '/kids/' + localStorage.currentBabyID + '?isTeacher=' + dataServerService.isATeacher(),
             headers: {
                 'Accept': 'application/json'
             },

@@ -2,7 +2,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
 
 .factory('Config', function ($q, $http, $window, $filter, $rootScope) {
 
-    var DEVELOPMENT = true;
+    var DEVELOPMENT = false;
     var URL = 'https://' + (DEVELOPMENT ? 'dev' : 'tn') + '.smartcommunitylab.it';
     var AAC_URL = 'https://tn.smartcommunitylab.it/aac';
     // var URL = 'http://192.168.42.60:8080';

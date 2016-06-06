@@ -13,7 +13,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
     profileService.init = function () {
         var deferred = $q.defer();
         profileService.getUserProfile().then(function (data) {
-            userData = angular.copy(data);
             if (localStorage.currentProfile === "parent") {
                 kidType = userData.kids;
             } else if (localStorage.currentProfile === "teacher") {
@@ -88,21 +87,27 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
 
     profileService.getUserProfile = function () {
         var deferred = $q.defer();
-        $http({
-            method: 'GET',
-            url: Config.URL() + '/' + Config.app() + '/diary/' + Config.appId() + '/profile',
-            headers: {
-                'Accept': 'application/json'
-            },
-            timeout: Config.httpTimout()
-        }).
-        success(function (data, status, headers, config) {
-            deferred.resolve(data.data);
-        }).
-        error(function (data, status, headers, config) {
-            console.log(data + status + headers + config);
-            deferred.reject(status);
-        });
+        Config.setAppId(localStorage.userId);
+        if (userData != null) {
+          deferred.resolve(userData);
+        } else {
+          $http({
+              method: 'GET',
+              url: Config.URL() + '/' + Config.app() + '/diary/' + Config.appId() + '/profile',
+              headers: {
+                  'Accept': 'application/json'
+              },
+              timeout: Config.httpTimout()
+          }).
+          success(function (data, status, headers, config) {
+              userData = angular.copy(data.data);
+              deferred.resolve(data.data);
+          }).
+          error(function (data, status, headers, config) {
+              console.log(data + status + headers + config);
+              deferred.reject(status);
+          });
+        }
         return deferred.promise;
     }
 

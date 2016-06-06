@@ -4,10 +4,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
         var authWindow = null;
 
         loginService.userIsLogged = function () {
-            //console.log(StorageSrv.getUserId());
-            //console.log(StorageSrv.getUser());
-            return (localStorage.userId != null && localStorage.userId != "null");
-            // return (StorageSrv.getUserId() != null && StorageSrv.getUser() != null);
+            if (localStorage.userId != null && localStorage.userId != "null") {
+              Config.setAppId(localStorage.userId);
+              return true;
+            }
+            return false;
         };
 
         loginService.login = function (provider) {

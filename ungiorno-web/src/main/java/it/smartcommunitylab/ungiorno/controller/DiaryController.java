@@ -214,6 +214,8 @@ public class DiaryController {
 			    InputStream is = new FileInputStream(f);
 			    IOUtils.copy(is, response.getOutputStream());
 				} else {
+					response.setHeader("Cache-Control", "public");
+					response.setHeader("Last-Modified", sdfCache.format(lastModified));
 					response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
 				}
 //				String ext = f.getName().substring(f.getName().lastIndexOf(".") + 1);

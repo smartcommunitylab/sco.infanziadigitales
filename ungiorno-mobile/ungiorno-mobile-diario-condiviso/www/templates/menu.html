@@ -26,10 +26,12 @@
                         <i class="icon icon-light" ng-class="{'ion-chevron-down':!profilesOpen, 'ion-chevron-up':profilesOpen}"></i>
                     </button>
                 </div>
-                <ion-item menu-close ng-click="changeKid(kp.kidId,kp.schoolId)" class="item item-avatar item-button-right menu-profile" ng-repeat="kp in kidProfiles" ng-if="kp.kidId != selectedKid.kidId">
-                    <img ng-src="{{getChildImage(kp)}}">
-                    <h2>{{kp.fullName}}</h2>
-                </ion-item>
+                <div ng-if="profilesOpen">
+                    <ion-item menu-close ng-click="changeKid(kp.kidId,kp.schoolId)" class="item item-avatar item-button-right menu-profile" ng-repeat="kp in kidProfiles" ng-if="kp.kidId != selectedKid.kidId">
+                        <img ng-src="{{getChildImage(kp)}}">
+                        <h2>{{kp.fullName}}</h2>
+                    </ion-item>
+                </div>
 
                 <ion-item menu-close class=" item item-icon-left " href="#/app/home ">
                     <i class="icon inf_dighome "></i>{{'home'|translate}}

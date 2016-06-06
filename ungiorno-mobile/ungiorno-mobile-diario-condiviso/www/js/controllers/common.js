@@ -127,8 +127,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         }
     };
     $scope.getChildImage = function (child) {
-        var image = Config.URL() + "/" + Config.app() + "/student/" + Config.appId() + "/" + child.schoolId + "/" + child.kidId + "/true/images";
-        return image;
+        if (child) {
+            var image = Config.URL() + "/" + Config.app() + "/student/" + Config.appId() + "/" + child.schoolId + "/" + child.kidId + "/true/images";
+            return image;
+        } else return null;
     }
     $scope.goto = function (state) {
         $state.go(state);

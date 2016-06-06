@@ -48,13 +48,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
     };
 
     /**
-     * Logout user
-     */
-    dataServerService.logout = function () {
-        localStorage.user = null;
-    }
-
-    /**
      * Mock login
      */
     dataServerService.login = function (provider, cb, err) {

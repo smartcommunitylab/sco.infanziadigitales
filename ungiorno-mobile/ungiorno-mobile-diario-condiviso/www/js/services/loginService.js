@@ -1,5 +1,5 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.services.loginService', [])
-    .factory('loginService', function ($rootScope, $q, $http, $window, Config) {
+    .factory('loginService', function ($rootScope, $q, $http, $window, Config, profileService) {
         var loginService = {};
         var authWindow = null;
 
@@ -170,23 +170,23 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
 
         loginService.logout = function () {
             var deferred = $q.defer();
+            loginService.reset();
+            $window.localStorage.clear();
 
-            var complete = function (response) {
-                loginService.reset().then(function () {
-                    try {
-                        cookieMaster.clear(
-                            function () {
-                                console.log('Cookies have been cleared');
-                                deferred.resolve(response.data);
-                            },
-                            function () {
-                                console.log('Cookies could not be cleared');
-                                deferred.resolve(response.data);
-                            });
-                    } catch (e) {
-                        deferred.resolve(e);
-                    }
-                });
+          var complete = function (response) {
+              try {
+                  cookieMaster.clear(
+                      function () {
+                          console.log('Cookies have been cleared');
+                          deferred.resolve(response.data);
+                      },
+                      function () {
+                          console.log('Cookies could not be cleared');
+                          deferred.resolve(response.data);
+                      });
+              } catch (e) {
+                  deferred.resolve(e);
+              }
             };
 
             $http.get(Config.getServerURL() + '/logout', {
@@ -212,6 +212,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
             localStorage.removeItem('user');
             localStorage.removeItem('profileComplete');
             localStorage.removeItem('communities');
+            profileService.reset();
             deferred.resolve(true);
             return deferred.promise;
         };

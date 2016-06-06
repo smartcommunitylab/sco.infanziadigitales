@@ -51,6 +51,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
         return deferred.promise;
     };
 
+    profileService.reset = function () {
+        userData = null;
+    };
     /*Get user profile after login*/
 
     profileService.getUserData = function () {

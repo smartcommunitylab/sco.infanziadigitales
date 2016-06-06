@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
+import org.apache.http.impl.cookie.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -205,7 +206,8 @@ public class DiaryController {
 				Date lastModified = calendar.getTime();
 				Date isModifiedSince = null;
 				if(isModifiedSinceString != null) {
-					isModifiedSince = sdfCache.parse(isModifiedSinceString); 
+					isModifiedSince = DateUtils.parseDate(isModifiedSinceString);
+//					isModifiedSince = sdfCache.parse(isModifiedSinceString); 
 				}
 				if((isModifiedSince == null) || (lastModified.compareTo(isModifiedSince) > 0)) {
 					response.setHeader("Cache-Control", "public");

@@ -22,7 +22,7 @@
             </label>
             <label class="item item-input item-stacked-label" ng-if="isViewMode() || !modifyComponentKid()">
                 <span class="input-label">{{'name'|translate}}</span>
-                <span class="textdata">{{babyCopy.firstName}}</span>
+                <span class="textdata detail-diary">{{babyCopy.firstName}}</span>
             </label>
 
             <label class="item item-input" ng-if="!isViewMode() && !!modifyComponentKid()">
@@ -31,20 +31,20 @@
             </label>
             <label class="item item-input item-stacked-label" ng-if="isViewMode() || !modifyComponentKid()">
                 <span class="input-label">{{'surname'|translate}}</span>
-                <span class="textdata">{{babyCopy.lastName}}</span>
+                <span class="textdata detail-diary">{{babyCopy.lastName}}</span>
             </label>
 
-            <label class="item item-input" ng-click="openDatePickerBaby()" ng-if="!isViewMode(data) && !!modifyComponentKid()">
+            <label class="item item-input" ng-click="openDatePickerBaby()" ng-if="babyCopy.birthday!=null && !isViewMode(data) && !!modifyComponentKid()">
                 <i class="icon ion-calendar"></i>
-                <span type="date" class="input-label date">{{babyCopy.birthday | date:'d-MMMM-yyyy'}}</span>
+                <span type="date" class="input-label date detail-diary">{{babyCopy.birthday | date:'d-MMMM-yyyy'}}</span>
                 <i class="ion-asterisk alignRight inline vertical-middle"></i>
             </label>
 
-            <label class="item item-input item-stacked-label" ng-if="isViewMode() || !modifyComponentKid()">
+            <label class="item item-input item-stacked-label" ng-if="babyCopy.birthday!=null && (isViewMode() || !modifyComponentKid())">
                 <span class="input-label">{{'date_birth'|translate}}</span>
-                <span class="textdata">{{babyCopy.birthday | date:"d MMMM yyyy"}}</span>
+                <span class="textdata detail-diary">{{babyCopy.birthday | date:"d MMMM yyyy"}}</span>
             </label>
-            <img ng-src="{{getChildImage(babyCopy)}}">
+            <img class="profile-image" ng-src="{{getChildImage(babyCopy)}}">
 
             <!--            <img ng-src="{{getImage(babyCopy)}}" class="sizeImage" ng-click="changeImage()">-->
 
@@ -94,9 +94,9 @@
 
                 <!--EMAIL FORM END-->
 
-                <label class="item item-input item-stacked-label" ng-if="isViewMode(data, true) || !modifyComponent(data)">
+                <label class="item item-input item-stacked-label detail-space" ng-if="isViewMode(data, true) || !modifyComponent(data)">
                     <span class="input-label">{{relationType(data)}}:</span>
-                    <span class="textdata">{{data.firstName}} {{data.lastName}}</span>
+                    <span class="textdata detail-diary-access">{{data.firstName}} {{data.lastName}}</span>
                 </label>
 
                 <div ng-if="isViewMode(data, true) || !modifyComponent(data)">

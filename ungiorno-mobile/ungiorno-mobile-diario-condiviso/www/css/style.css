@@ -102,28 +102,24 @@ a.item-content {
     padding-top: 75px;
     margin: auto;
 }
-
 .list {
-position: relative;
-padding-top: 1px;
-padding-bottom: 1px;
-padding-left: 0;
-margin-bottom: 20px;
+    position: relative;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-left: 0;
+    margin-bottom: 20px;
 }
-
-.list-post{
+.list-post {
     background-color: #f1f1f1;
 }
-
 .stream-item:first-child {
-margin-top: 0;
+    margin-top: 0;
 }
-
 .stream-item {
-white-space: inherit;
-text-align: justify;
-border-top: 0px;
-margin-top: 20px;
+    white-space: inherit;
+    text-align: justify;
+    border-top: 0px;
+    margin-top: 20px;
 }
 .stream.post-baby-age {
     font-size: 13px;
@@ -155,9 +151,9 @@ margin-top: 20px;
     line-height: 24px !important;
 }
 .stream.post-text {
-    margin-top: 16px;
-    margin-bottom: 8px;
-    font-size: 16px;
+    margin-top: 18px;
+    margin-bottom: 10px;
+    font-size: 18px;
 }
 .stream.post-author {
     text-align: right;
@@ -569,6 +565,10 @@ input[type=date] {
 .diary-form .input-label {
     font-size: 14px;
     color: black;
+    font-style: italic;
+}
+.diary-form .profile-image {
+    padding: 16px;
 }
 .diary-form .textdata {
     display: block;
@@ -736,4 +736,16 @@ label.item.item-input i.icon.ion-calendar {
     margin: 8px;
     font-weight: bold;
     color: green;
+}
+.detail-diary {
+    font-weight: bold;
+    margin-top: 4px;
+    font-size: large;
+}
+.detail-diary-access {
+    margin-top: 4px;
+    font-size: large;
+}
+.detail-space {
+    margin-top: 8px;
 }

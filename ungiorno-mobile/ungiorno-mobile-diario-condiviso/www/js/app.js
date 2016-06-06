@@ -129,43 +129,43 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
                     $state.go('app.login');
                 }
             });
-//            if (localStorage.provider == 'internal') {
-//                $rootScope.login();
-//            } else {
-//                loginService.login(localStorage.provider).then(
-//                    function (data) {
-//                        profileService.getUserProfile().then(function (data) {
-//                            $state.go('app.home');
-//                            $ionicHistory.nextViewOptions({
-//                                disableBack: true,
-//                                historyRoot: true
-//                            });
-//
-//                        }, function (error) {
-//                            console.log("ERROR -> " + error);
-//                            // Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
-//                            $ionicLoading.hide();
-//                            if (error == 406) {
-//                                loginService.logout();
-//                                $ionicPopup.alert({
-//                                    title: $filter('translate')('not_allowed_popup_title'),
-//                                    template: $filter('translate')('not_allowed_signin')
-//                                });
-//                                $state.go('app.login');
-//                                $ionicHistory.nextViewOptions({
-//                                    disableBack: true,
-//                                    historyRoot: true
-//                                });
-//                            }
-//                        });
-//                        //                        $state.go('app.home');
-//                        //                        $ionicHistory.nextViewOptions({
-//                        //                            disableBack: true,
-//                        //                            historyRoot: true
-//                        //                                //                });
-//                        //                        });
-//                    })
-//            };
+            //            if (localStorage.provider == 'internal') {
+            //                $rootScope.login();
+            //            } else {
+            //                loginService.login(localStorage.provider).then(
+            //                    function (data) {
+            //                        profileService.getUserProfile().then(function (data) {
+            //                            $state.go('app.home');
+            //                            $ionicHistory.nextViewOptions({
+            //                                disableBack: true,
+            //                                historyRoot: true
+            //                            });
+            //
+            //                        }, function (error) {
+            //                            console.log("ERROR -> " + error);
+            //                            // Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+            //                            $ionicLoading.hide();
+            //                            if (error == 406) {
+            //                                loginService.logout();
+            //                                $ionicPopup.alert({
+            //                                    title: $filter('translate')('not_allowed_popup_title'),
+            //                                    template: $filter('translate')('not_allowed_signin')
+            //                                });
+            //                                $state.go('app.login');
+            //                                $ionicHistory.nextViewOptions({
+            //                                    disableBack: true,
+            //                                    historyRoot: true
+            //                                });
+            //                            }
+            //                        });
+            //                        //                        $state.go('app.home');
+            //                        //                        $ionicHistory.nextViewOptions({
+            //                        //                            disableBack: true,
+            //                        //                            historyRoot: true
+            //                        //                                //                });
+            //                        //                        });
+            //                    })
+            //            };
         } else {
             $rootScope.login();
         }
@@ -174,9 +174,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
 
     // for BlackBerry 10, WP8, iOS
     setTimeout(function () {
-      if ($cordovaSplashscreen != null)  {
-        $cordovaSplashscreen.hide();
-      }
+        if ($cordovaSplashscreen != null) {
+            $cordovaSplashscreen.hide();
+        }
         //navigator.splashscreen.hide();
     }, 3000);
 
@@ -190,8 +190,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
 
 })
 
-.config(['$httpProvider', function($httpProvider) {
-  $httpProvider.defaults.withCredentials = true;
+.config(['$httpProvider', function ($httpProvider) {
+    $httpProvider.defaults.withCredentials = true;
 }])
 
 .config(function ($stateProvider, $urlRouterProvider, $translateProvider, $ionicConfigProvider, pickadateI18nProvider) {
@@ -393,7 +393,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
         get_tags_error: 'Errore nella ricezione dei tags dal server',
         insert_new_tag: 'Inserire un nuovo tag',
         add_pic_gallery: 'Galleria',
-        add_pic_camera: 'Fotocamera'
+        add_pic_camera: 'Fotocamera',
+        credits_project: 'Realizzato da:',
+        title1: 'Diario condiviso',
+        credits_sponsored: 'Nell\'ambito del progetto "Inf@nzia DIGI tales 3.6" finanziato dal:',
+        credits_collaboration: 'In collaborazione con il Dipartimento della Conoscenza della:',
+        credits_students: 'Hanno partecipato allo sviluppo:',
+        credits_parents: 'Si ringraziano per la collaborazione:',
+        credits_info: 'Per informazioni: ',
+        credits_licenses_button: 'VEDI LICENZE',
+        menu_credits: "Credits",
     });
 
     $translateProvider.preferredLanguage("it");

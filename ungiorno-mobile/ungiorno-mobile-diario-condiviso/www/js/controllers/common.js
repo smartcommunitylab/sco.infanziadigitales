@@ -133,6 +133,21 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         diaryService.setCreateDiaryMode(createMode);
         $state.go('app.dettaglidiario');
     }
+
+    $ionicModal.fromTemplateUrl('templates/credits.html', {
+        id: '3',
+        scope: $scope,
+        backdropClickToClose: false,
+        animation: 'slide-in-up'
+    }).then(function (modal) {
+        $scope.creditsModal = modal;
+    });
+    $scope.closeCredits = function () {
+        $scope.creditsModal.hide();
+    };
+    $scope.openCredits = function () {
+        $scope.creditsModal.show();
+    }
     $scope.bringmethere = function (loc) {
         if (device != undefined && device.platform == "Android") {
             setTimeout(function () {

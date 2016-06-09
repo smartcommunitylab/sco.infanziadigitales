@@ -9,10 +9,10 @@
             <i class="icon ion-android-share-alt"></i>
         </button>
 -->
-        <button class="button button-clear" ng-click="removePost(post)">
+        <button class="button button-clear" ng-if="isTheAuthor(post)" ng-click="removePost(post)">
             <i class="icon ion-trash-a"></i>
         </button>
-        <button class="button button-clear" ng-click="editPost(post)">
+        <button class="button button-clear" ng-if="isTheAuthor(post)" ng-click="editPost(post)">
             <i class="icon inf_digedit "></i>
         </button>
 

@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.controllers.gallery', [])
 
-.controller('GalleryCtrl', function ($scope, dataServerService, profileService, $ionicModal, $ionicSlideBoxDelegate, Config) {
+.controller('GalleryCtrl', function ($scope, dataServerService, profileService, $ionicModal, $ionicSlideBoxDelegate, Toast, Config) {
     $scope.photos = [];
     dataServerService.getGalleryByBabyId(profileService.getBabyProfileById(localStorage.currentBabyID).schoolId, localStorage.currentBabyID).then(function (images) {
         if (images.data) {

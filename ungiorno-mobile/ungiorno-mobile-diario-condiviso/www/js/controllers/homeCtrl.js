@@ -1,7 +1,7 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.controllers.home', [])
 
 
-.controller('HomeCtrl', function ($scope, $filter, $rootScope, $ionicModal, $cordovaCamera, $ionicPopover, $ionicLoading, $state, galleryService, profileService, Toast, dataServerService, $ionicPopup, ionicDatePicker, $ionicHistory) {
+.controller('HomeCtrl', function ($scope, $filter, $rootScope, $ionicModal, $cordovaCamera, $ionicPopover, $ionicLoading, $state, galleryService, profileService, Toast, dataServerService, $ionicPopup, ionicDatePicker, $ionicHistory, $ionicScrollDelegate) {
 
     /* START IONIC DATEPICKER */
     $scope.date = new Date();
@@ -12,6 +12,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
     var dataloading = false;
     $scope.baby = {};
     $scope.posts = [];
+    $scope.scrollViewStyle = {
+        "height": "100%"
+    };
+
     $scope.noMoreEntriesAvailable = false;
     var ipObj1 = {
         callback: function (val) { //Mandatory
@@ -19,8 +23,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
             datePickerCallback(val);
         },
         disabledDates: [],
-        from: new Date(2012, 1, 1), //Optional
-        to: new Date(2016, 10, 30), //Optional
+        weeksList: ["L", "M", "M", "G", "V", "S", "D"],
+        monthsList: ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"],
+        setLabel: 'Conferma',
+        closeLabel: 'Chiudi',
         inputDate: new Date(), //Optional
         mondayFirst: true, //Optional
         disableWeekdays: [0], //Optional
@@ -51,8 +57,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
     }*/
 
     $scope.loadMore = function () {
-        $ionicLoading.show();
-        if ($scope.baby.schoolId && $scope.baby.kidId && !dataloading) {
+        if ($scope.baby && $scope.baby.schoolId && $scope.baby.kidId && !dataloading) {
+            $ionicLoading.show();
+
             dataloading = true;
             var length = 0;
             if ($scope.posts) {
@@ -60,6 +67,20 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
             }
             dataServerService.getPostsByBabyId($scope.baby.schoolId, $scope.baby.kidId, 0, Date.parse(todayEnd), length).then(function (posts) {
                 if ($scope.posts) {
+                    //if post = [] first load. If no post for todayEnd => toast
+                    if ($scope.posts.length == 0) {
+                        var noPostForDate = true;
+                        for (var i = 0; i < posts.length; i++) {
+                            // Iterate over numeric indexes from 0 to 5, as everyone expects.
+                            if (new Date(posts[i].date).setHours(23, 59, 59, 99) == new Date(todayEnd).setHours(23, 59, 59, 99)) {
+                                noPostForDate = false;
+                                break;
+                            }
+                        }
+                        if (noPostForDate && $scope.calendarOpen) {
+                            Toast.show($filter('translate')("no_messages"), "short", "bottom");
+                        }
+                    }
                     $scope.posts.push.apply($scope.posts, posts);
                     if (posts.length < 10) {
                         $scope.noMoreEntriesAvailable = true;
@@ -70,6 +91,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
                 }
                 if ($scope.posts.length == 0) {
                     $scope.posts = null;
+                    //                    if ($scope.calendarOpen) {
+                    //                        Toast.show($filter('translate')("no_messages"), "short", "bottom");
+                    //                    }
                 }
                 $scope.$broadcast('scroll.infiniteScrollComplete');
                 $ionicLoading.hide();
@@ -77,7 +101,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
 
             }, function (reason) {
                 $ionicLoading.hide();
-                Toast.show($filter('translate')("network_problem"), "short", "bottom");
+                Toast.show($filter('translate')("communication_error"), "short", "bottom");
                 $scope.noMoreEntriesAvailable = true;
                 $scope.post = null;
                 dataloading = false;
@@ -85,13 +109,35 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         };
 
     }
+    var getPersonRelation = function (person) {
+        var personRelation = person.relation;
+        if (!personRelation) {
+            if (person.parent) {
+                personRelation = $filter('translate')('parent')
+            } else if (person.teacher) {
+                personRelation = $filter('translate')('teacher')
+
+            }
+        }
+        return personRelation;
+    }
     var savePersonProfiles = function (data) {
         $rootScope.personsProfiles = [];
         if (data.persons) {
             for (var i = 0; i < data.persons.length; i++) {
+                var personRelation = getPersonRelation(data.persons[i]);
+                //                if (!personRelation) {
+                //                    if (data.persons[i].parent) {
+                //                        $filter('translate')('parent')
+                //                    }
+                //                    if (data.persons[i].teacher) {
+                //                        $filter('translate')('teacher')
+                //
+                //                    }
+                //                }
                 $rootScope.personsProfiles[data.persons[i].personId] = {
                     name: data.persons[i].firstName,
-                    relation: data.persons[i].relation
+                    relation: personRelation
                 }
             }
         }
@@ -113,14 +159,22 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
                         $scope.tagsFromServer = data;
                     }, function (err) {
                         Toast.show($filter('translate')('get_tags_error'), 'short', 'bottom');
+                        $ionicLoading.hide();
 
                     });
                 }
 
             }, function (err) {
                 $scope.baby = null;
+                Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+                $ionicLoading.hide();
+
             });
             isloaded = true;
+        }, function (err) {
+            Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+            $ionicLoading.hide();
+
         });
     }
     init();
@@ -141,11 +195,30 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
     $scope.showCalButton = true;
     $scope.toggleCalendar = function () {
         $scope.calendarOpen = !$scope.calendarOpen;
-        if ($scope.calendarOpen) $scope.showCalButton = false;
-        else setTimeout(function () {
-            $scope.showCalButton = true;
-            $scope.$apply();
-        }, 300);
+        if ($scope.calendarOpen) {
+            $scope.showCalButton = false; //set height of list in runtime
+            setTimeout(function () {
+                // $scope.scrollViewStyle.height = "100%";
+                var totalHeight = document.getElementById('postsScrollView').clientHeight;
+                var calendarHeight = document.getElementById('idCalendar').clientHeight;
+                $scope.scrollViewStyle.height = totalHeight - calendarHeight + "px";
+                $scope.$apply();
+                //                $ionicScrollDelegate.$getByHandle('scroll-post').resize();
+                // $ionicScrollDelegate.resize();
+                //document.getElementById('idPosts').clientHeight = totalHeight - calendarHeight;
+            }, 300);
+        } else {
+            $scope.changeToday($filter('date')(new Date(), 'yyyy-MM-dd'));
+            setTimeout(function () {
+                $scope.showCalButton = true;
+                var totalHeight = document.getElementById('postsScrollView').clientHeight;
+                var calendarHeight = document.getElementById('idCalendar').clientHeight;
+                $scope.scrollViewStyle.height = totalHeight - calendarHeight + "px";
+                $scope.$apply();
+                //$ionicScrollDelegate.$getHandle('scroll-post').resize();
+
+            }, 300);
+        }
     }
 
     $scope.changeToday = function (today) {
@@ -248,6 +321,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
                     dataServerService.getPostsByBabyId($scope.baby.schoolId, $scope.baby.kidId, 0, Date.parse(todayEnd)).then(function (posts) {
                         $scope.posts = posts;
                         $ionicLoading.hide();
+                    }, function (err) {
+                        Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+                        $ionicLoading.hide();
+
                     });
                     $scope.newPostModal.hide();
                     $ionicLoading.hide();
@@ -380,7 +457,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
 
     $scope.removePost = function (post) {
         photoSrcSelect = $ionicPopup.show({
-            title: 'Rimuovi post',
+            title: $filter('translate')('delete_title'),
             scope: $scope,
             buttons: [
                 {

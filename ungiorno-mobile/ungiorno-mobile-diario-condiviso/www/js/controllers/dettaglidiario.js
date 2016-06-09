@@ -28,11 +28,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         }
     };*/
 
-        //    $scope.isAccess = function () {
-        //        if ($scope.access.relation == 'parent1' || $scope.access.relation == 'parent2' || $scope.access.relation == 'brother' || $scope.access.relation == 'sister' || $scope.access.relation == 'parent') {
-        //            return true;
-        //        }
-        //    };
+    //    $scope.isAccess = function () {
+    //        if ($scope.access.relation == 'parent1' || $scope.access.relation == 'parent2' || $scope.access.relation == 'brother' || $scope.access.relation == 'sister' || $scope.access.relation == 'parent') {
+    //            return true;
+    //        }
+    //    };
 
     // FUNZIONE PER PERMESSI MODIFICA
     /*$scope.isAccess = function () {
@@ -184,6 +184,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
                         $scope.babyCopy = data.data;
                         $ionicScrollDelegate.scrollTop();
                         $ionicLoading.hide();
+                    }, function (err) {
+                        Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+                        $ionicLoading.hide();
                     });
                     mode = "view";
                 }
@@ -304,30 +307,30 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
             toRtn = "Genitore"
         } else {
             switch (data.relation) {
-                case 'sorella':
-                    toRtn = "Sorella";
-                    break;
-                case 'fratello':
-                    toRtn = "Fratello";
-                    break;
-                case 'nonno':
-                    toRtn = "Nonno";
-                    break;
-                case 'nonna':
-                    toRtn = "Nonna";
-                    break;
-                case 'zio':
-                    toRtn = "Zio";
-                    break;
-                case 'zia':
-                    toRtn = "Zia";
-                    break;
-                case 'cugino':
-                    toRtn = "Cugino";
-                    break;
-                case 'cugina':
-                    toRtn = "Cugina";
-                    break;
+            case 'sorella':
+                toRtn = "Sorella";
+                break;
+            case 'fratello':
+                toRtn = "Fratello";
+                break;
+            case 'nonno':
+                toRtn = "Nonno";
+                break;
+            case 'nonna':
+                toRtn = "Nonna";
+                break;
+            case 'zio':
+                toRtn = "Zio";
+                break;
+            case 'zia':
+                toRtn = "Zia";
+                break;
+            case 'cugino':
+                toRtn = "Cugino";
+                break;
+            case 'cugina':
+                toRtn = "Cugina";
+                break;
             }
         }
         return toRtn;
@@ -364,7 +367,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         $scope.babyCopy.persons.splice(index, 1);
     }
 
-     // CAN I DELETE A PERSON
+    // CAN I DELETE A PERSON
 
     $scope.canDelete = function (data) {
         var myUserID = profileService.getMyProfileID();
@@ -454,32 +457,32 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
             toRtn = "del genitore"
         } else {
             switch (data.relation) {
-                case 'fratello':
-                    toRtn = "del fratello";
-                    break;
-                case 'sorella':
-                    toRtn = "della sorella";
-                    break;
-                case 'nonno':
-                    toRtn = "del nonno";
-                    break;
-                case 'nonna':
-                    toRtn = "della nonna";
-                    break;
-                case 'zio':
-                    toRtn = "dello zio";
-                    break;
-                case 'zia':
-                    toRtn = "della zia";
-                    break;
-                case 'cugino':
-                    toRtn = "del cugino";
-                    break;
-                case 'cugina':
-                    toRtn = "della cugina";
-                    break;
-                default:
-                    toRtn = "";
+            case 'fratello':
+                toRtn = "del fratello";
+                break;
+            case 'sorella':
+                toRtn = "della sorella";
+                break;
+            case 'nonno':
+                toRtn = "del nonno";
+                break;
+            case 'nonna':
+                toRtn = "della nonna";
+                break;
+            case 'zio':
+                toRtn = "dello zio";
+                break;
+            case 'zia':
+                toRtn = "della zia";
+                break;
+            case 'cugino':
+                toRtn = "del cugino";
+                break;
+            case 'cugina':
+                toRtn = "della cugina";
+                break;
+            default:
+                toRtn = "";
             }
         }
         return toRtn;
@@ -502,6 +505,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
             $scope.baby = data;
             $scope.babyCopy = clone($scope.baby);
             /*console.log($scope.babyCopy);*/
+            $ionicLoading.hide();
+        }, function (err) {
+            Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
             $ionicLoading.hide();
         });
 

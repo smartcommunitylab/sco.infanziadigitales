@@ -40,10 +40,21 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
             for (var i = 0; i < kidType.length; i++) {
                 calls.push(profileService.getBabyById(kidType[i].kidId, kidType[i].schoolId).then(function (data) {
                     babyProfiles[data.kidId] = data;
+
                 }));
             }
             $q.all(calls).then(function (values) {
+//                babyProfiles.sort(function (a, b) {
+//                    var keyA = a.lastName,
+//                        keyB = b.lastName;
+//                    // Compare the 2 dates
+//                    if (keyA < keyB) return -1;
+//                    if (keyA > keyB) return 1;
+//                    return 0;
+//                });
                 deferred.resolve(babyProfiles);
+            }, function (err) {
+                deferred.reject(err);
             })
             if (!localStorage.currentBabyID) profileService.setCurrentBabyID(kidType[0].kidId, kidType[0].schoolId);
             else profileService.setCurrentBabyID(localStorage.currentBabyID, localStorage.currentSchoolID);
@@ -92,24 +103,24 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
         var deferred = $q.defer();
         Config.setAppId(localStorage.userId);
         if (userData != null) {
-          deferred.resolve(userData);
+            deferred.resolve(userData);
         } else {
-          $http({
-              method: 'GET',
-              url: Config.URL() + '/' + Config.app() + '/diary/' + Config.appId() + '/profile',
-              headers: {
-                  'Accept': 'application/json'
-              },
-              timeout: Config.httpTimout()
-          }).
-          success(function (data, status, headers, config) {
-              userData = angular.copy(data.data);
-              deferred.resolve(data.data);
-          }).
-          error(function (data, status, headers, config) {
-              console.log(data + status + headers + config);
-              deferred.reject(status);
-          });
+            $http({
+                method: 'GET',
+                url: Config.URL() + '/' + Config.app() + '/diary/' + Config.appId() + '/profile',
+                headers: {
+                    'Accept': 'application/json'
+                },
+                timeout: Config.httpTimout()
+            }).
+            success(function (data, status, headers, config) {
+                userData = angular.copy(data.data);
+                deferred.resolve(data.data);
+            }).
+            error(function (data, status, headers, config) {
+                console.log(data + status + headers + config);
+                deferred.reject(status);
+            });
         }
         return deferred.promise;
     }
@@ -176,6 +187,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
                 'Content-Type': 'application/json'
             },
             data: babyProfile,
+            timeout: Config.httpTimout(),
+
         }).
         success(function (data, status, headers, config) {
             deferred.resolve(data);

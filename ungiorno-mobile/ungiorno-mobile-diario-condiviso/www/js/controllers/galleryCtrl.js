@@ -8,6 +8,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
                 $scope.photos.push(Config.URL() + '/' + Config.app() + '/diary/' + Config.appId() + '/' + profileService.getBabyProfileById(localStorage.currentBabyID).schoolId + '/' + localStorage.currentBabyID + '/' + images.data[i].multimediaId + '/image');
             }
         }
+    }, function (err) {
+        Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+        $ionicLoading.hide();
     });
 
     $scope.getImageAction = function (index) {

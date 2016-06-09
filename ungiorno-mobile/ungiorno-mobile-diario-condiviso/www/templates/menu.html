@@ -27,7 +27,7 @@
                     </button>
                 </div>
                 <div ng-if="profilesOpen">
-                    <ion-item menu-close ng-click="changeKid(kp.kidId,kp.schoolId)" class="item item-avatar item-button-right menu-profile" ng-repeat="kp in kidProfiles" ng-if="kp.kidId && kp.kidId != selectedKid.kidId">
+                    <ion-item menu-close ng-click="changeKid(kp.kidId,kp.schoolId)" class="item item-avatar item-button-right menu-profile" ng-repeat="kp in kidProfiles| orderObjectBy:'lastName':false" ng-if="kp.kidId && kp.kidId != selectedKid.kidId">
                         <img ng-src="{{getChildImage(kp)}}">
                         <h2>{{kp.fullName}}</h2>
                     </ion-item>

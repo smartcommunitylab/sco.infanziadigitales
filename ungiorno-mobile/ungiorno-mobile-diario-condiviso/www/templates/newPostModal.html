@@ -7,22 +7,41 @@
         <button class="button button-clear" ng-click="save()"><i class="icon inf_digcheck "></i></button>
     </ion-header-bar>
     <ion-content style="margin-left:10px; margin-right:10px;">
-        <label class="item item-input post-create-element-row">
-            <textarea type="text" rows="3" ng-model="currentPost.text" placeholder="{{'description' | translate}}"></textarea>
-        </label>
+        <div class="row post-create-element-row">
+            <i class="col col-10 center-hv icon inf_digclock post-create-element"></i>
 
-        <div class="post-create-element-row">
+            <div class="col col-90  post-create-element">
+                <label class="item item-input" ng-click="openDatePicker()">
+                    <span type="date" class="input-label date">{{date | date:'EEEE, d MMMM yyyy'}}</span>
+                </label>
+            </div>
+        </div>
+        <div class="row post-create-element-row">
+            <i class="col col-10 icon ion-document-text post-create-element"></i>
+
+            <label class="col col-90 item item-input post-create-element-row">
+                <textarea type="text" rows="5" ng-model="currentPost.text" placeholder="{{'description' | translate}}"></textarea>
+            </label>
+        </div>
+        <div class="row post-create-element-row">
+
             <!--            <autocomplete-tags tags="tagsFromServer" attached-tags="currentPost.tags" class="post-create-element"></autocomplete-tags>-->
+            <div class="col col-10 tag-space"></div>
             <div class="tag-element inline" ng-repeat="tag in currentPost.tags track by $index">
                 <div class="inline vertical-middle">{{tag}}</div>
                 <i class="tag-element-remove vertical-middle icon ion-android-close inline" ng-click="removeTag(tag)"></i>
             </div>
-            <placeautocomplete ng-model="tagName" attr-placeholder="{{'insert_new_tag' | translate}}" click-activation="false" data="tags" on-type="typeTag" placeholder="{{'plan_to' | translate}}" on-select="changeString" ng-blur="setNameParam"></placeautocomplete>
+
 
         </div>
-        <div class="post-create-element-row">
-            <i class="icon inf_digimage post-create-element"></i>
-            <button class="button post-create-add-photo post-create-element" id="new_post_photo" ng-click="addPhoto($event)">{{'add_photo' | translate}}</input>
+        <div class="row post-create-element-row">
+            <i class="col col-10 icon ion-pricetag post-create-element"></i>
+
+            <placeautocomplete class="col" ng-model="tagName" attr-placeholder="{{'insert_new_tag' | translate}}" click-activation="false" data="tags" on-type="typeTag" placeholder="{{'plan_to' | translate}}" on-select="changeString" ng-blur="setNameParam"></placeautocomplete>
+        </div>
+        <div class="row post-create-element-row">
+            <i class="col col-10 icon inf_digimage post-create-element"></i>
+            <button class="col  button post-create-add-photo post-create-element" id="new_post_photo" ng-click="addPhoto($event)">{{'add_photo' | translate}}</input>
         </div>
         <div class="post-create-gallery">
             <div class="post-create-photo-container inline" ng-repeat="img in currentPost.pictures track by $index">
@@ -41,15 +60,7 @@
             </div>
 -->
         </div>
-        <div class="post-create-element-row">
-            <i class="icon inf_digclock post-create-element"></i>
 
-            <div class="post-create-element">
-                <label class="item item-input" ng-click="openDatePicker()">
-                    <span type="date" class="input-label date">{{date | date:'EEEE, d-MMMM-yyyy'}}</span>
-                </label>
-            </div>
-        </div>
         <!--
         <div class="post-create-element-row mood-container">
             <i ng-class="{'ion-sad':currentPost.mood==-1, 'ion-sad-outline':currentPost.mood != -1}" class="post-create-mood icon" ng-click="setMood(-1)"></i>

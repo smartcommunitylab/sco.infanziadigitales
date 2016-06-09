@@ -453,7 +453,7 @@ public class RepositoryManager {
 	 * @return
 	 */
 	public List<DiaryKidProfile> getDiaryKidProfilesByAuthId(String appId, String schoolId, String authId, boolean isTeacher) {
-		Query q = schoolQuery(appId, schoolId);
+		Query q = schoolId == null ? appQuery(appId) : schoolQuery(appId, schoolId);
 		q.addCriteria(new Criteria("persons").elemMatch(new Criteria("personId").is(authId).and("parent").is(!isTeacher)));
 		List<DiaryKid> kids = template.find(q, DiaryKid.class);
 		List<DiaryKidProfile> profiles = new ArrayList<DiaryKidProfile>();

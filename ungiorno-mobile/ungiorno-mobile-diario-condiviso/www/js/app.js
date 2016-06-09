@@ -114,6 +114,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
                 disableBack: true,
                 historyRoot: true
             });
+            $ionicLoading.show();
             profileService.getUserProfile().then(function (data) {
                 $state.go('app.home');
 
@@ -126,46 +127,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
                         title: $filter('translate')('not_allowed_popup_title'),
                         template: $filter('translate')('not_allowed_signin')
                     });
-                    $state.go('app.login');
                 }
+                $state.go('app.login');
+
             });
-            //            if (localStorage.provider == 'internal') {
-            //                $rootScope.login();
-            //            } else {
-            //                loginService.login(localStorage.provider).then(
-            //                    function (data) {
-            //                        profileService.getUserProfile().then(function (data) {
-            //                            $state.go('app.home');
-            //                            $ionicHistory.nextViewOptions({
-            //                                disableBack: true,
-            //                                historyRoot: true
-            //                            });
-            //
-            //                        }, function (error) {
-            //                            console.log("ERROR -> " + error);
-            //                            // Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
-            //                            $ionicLoading.hide();
-            //                            if (error == 406) {
-            //                                loginService.logout();
-            //                                $ionicPopup.alert({
-            //                                    title: $filter('translate')('not_allowed_popup_title'),
-            //                                    template: $filter('translate')('not_allowed_signin')
-            //                                });
-            //                                $state.go('app.login');
-            //                                $ionicHistory.nextViewOptions({
-            //                                    disableBack: true,
-            //                                    historyRoot: true
-            //                                });
-            //                            }
-            //                        });
-            //                        //                        $state.go('app.home');
-            //                        //                        $ionicHistory.nextViewOptions({
-            //                        //                            disableBack: true,
-            //                        //                            historyRoot: true
-            //                        //                                //                });
-            //                        //                        });
-            //                    })
-            //            };
+
         } else {
             $rootScope.login();
         }
@@ -316,7 +282,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
         acces_diary: 'Hanno accesso al diario',
         has: 'ha',
         name_parents: 'Nome del genitore',
-        create_post: 'Crea nuova voce',
+        create_post: 'Crea/modifica voce',
         description: 'Inserisci il testo',
         add_photo: 'Aggiungi foto',
         number_parents: 'n° di telefono ',
@@ -386,6 +352,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
         delete_confirm: 'Conferma',
         delete_cancel: 'Annulla',
         delete_done: 'Voce cancellata',
+        delete_title: 'Rimuovi voce',
         add_post_done: 'Nuova voce aggiunta',
         add_post_error: 'Errore nella creazione di una nuova voce',
         delete_error: 'Errore nella cancellazione della voce',
@@ -403,6 +370,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso', 
         credits_info: 'Per informazioni: ',
         credits_licenses_button: 'VEDI LICENZE',
         menu_credits: "Credits",
+        no_messages: "Non ci sono voci in questo giorno",
+        communication_error: "Connettività assente",
+        empty_gallery: "Non sono presenti immagini"
+
     });
 
     $translateProvider.preferredLanguage("it");

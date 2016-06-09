@@ -58,10 +58,10 @@ public class PermissionsManager {
 
 		if (isTeacher == null || isTeacher) {
 			Teacher teacher = storage.getTeacher(userId, appId, schoolId);
-			du.setName(teacher.getTeacherName());
-			du.setSurname(teacher.getTeacherSurname());
-			du.setFullname(teacher.getTeacherFullname());
 			if (teacher != null) {
+				du.setName(teacher.getTeacherName());
+				du.setSurname(teacher.getTeacherSurname());
+				du.setFullname(teacher.getTeacherFullname());
 				du.setTeacher(DiaryUser.DiaryUserTeacher.fromTeacher(teacher));
 				List<DiaryKidProfile> kids = storage.getDiaryKidProfilesByAuthId(appId, schoolId, teacher.getTeacherId(), true);
 				du.setStudents(kids);

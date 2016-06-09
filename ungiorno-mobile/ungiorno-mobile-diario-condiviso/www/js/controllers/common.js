@@ -64,6 +64,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         $state.reload();
         $scope.toggleProfile();
         $ionicSideMenuDelegate.toggleLeft();
+        $scope.$apply();
     }
 
     $scope.isParent = function () {

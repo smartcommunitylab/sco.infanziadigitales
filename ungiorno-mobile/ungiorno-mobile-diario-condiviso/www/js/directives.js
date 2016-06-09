@@ -290,7 +290,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.di
             return $sce.trustAsHtml(input);
         };
 }])
-    .directive('babyPost', function (galleryService, $state, $rootScope) {
+    .directive('babyPost', function (galleryService, $state, $rootScope, profileService) {
         return {
             restrict: 'E',
             templateUrl: "templates/babyPost.html",
@@ -316,10 +316,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.di
                     }
                     if ($rootScope.personsProfiles[post.authorId].relation) {
                         author += ' - ' +
-                            $$rootScope.personsProfiles[post.authorId].relation
+                            $rootScope.personsProfiles[post.authorId].relation
                     }
 
                     return author;
+                }
+                scope.isTheAuthor = function (post) {
+                    return post.authorId == profileService.getMyProfileID();
                 }
                 scope.viewPhotos = function (photos, index) {
                     galleryService.setSelectedGallery(photos, index);

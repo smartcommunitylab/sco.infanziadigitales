@@ -44,14 +44,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
                 }));
             }
             $q.all(calls).then(function (values) {
-//                babyProfiles.sort(function (a, b) {
-//                    var keyA = a.lastName,
-//                        keyB = b.lastName;
-//                    // Compare the 2 dates
-//                    if (keyA < keyB) return -1;
-//                    if (keyA > keyB) return 1;
-//                    return 0;
-//                });
+
                 deferred.resolve(babyProfiles);
             }, function (err) {
                 deferred.reject(err);

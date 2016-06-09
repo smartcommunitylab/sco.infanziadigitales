@@ -311,7 +311,7 @@ ion-content#gallery-container .scroll {
     height: 100%;
 }
 ion-content#gallery-container {
-    background-color: #000;
+    background-color: #fff;
 }
 .gallery-slider {
     height: 100%;
@@ -834,7 +834,8 @@ label.item.item-input i.icon.ion-calendar {
     padding-left: 10px;
 }
 .post-create-element-row textarea {
-    font-size: large;
+    font-size: 18px;
+    line-height: 1.2;
 }
 .post-create-element-row .icon {
     margin-right: 10px;

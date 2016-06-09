@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.controllers.login', [])
 
-.controller('LoginCtrl', function ($scope, $rootScope, $state, $filter, $ionicPopup, $ionicHistory, $ionicLoading, Config, loginService, dataServerService, profileService) {
+.controller('LoginCtrl', function ($scope, $rootScope, $state, $filter, $ionicPopup, $ionicPlatform, $ionicHistory, $ionicLoading, Config, loginService, dataServerService, profileService, Toast) {
     /*$scope.errorMsg = null;
     $scope.login = function(provider) {
         $scope.errorMsg = null;
@@ -22,42 +22,52 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         password: ''
     };
     $scope.login = function (provider) {
-        loginService.login(provider).then(
-            function (data) {
-                profileService.getUserProfile().then(function (data) {
-                    // loginStarted = false;
+        $ionicPlatform.ready(function () {
+            if (window.Connection) {
+                if (navigator.connection.type == Connection.NONE) {
+                    Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+                } else {
+                    loginService.login(provider).then(
+                        function (data) {
+                            $ionicLoading.show();
+                            profileService.getUserProfile().then(function (data) {
+                                // loginStarted = false;
 
-                    $state.go('app.home');
-                    $ionicHistory.nextViewOptions({
-                        disableBack: true,
-                        historyRoot: true
-                    });
-                    console.log(data);
+                                $state.go('app.home');
+                                $ionicHistory.nextViewOptions({
+                                    disableBack: true,
+                                    historyRoot: true
+                                });
+                                console.log(data);
 
-                }, function (error) {
-                    //loginStarted = false;
+                            }, function (error) {
+                                //loginStarted = false;
 
-                    console.log("ERROR -> " + error);
-                    // Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
-                    $ionicLoading.hide();
-                    if (error == 406) {
-                        loginService.logout();
-                        $ionicPopup.alert({
-                            title: $filter('translate')('not_allowed_popup_title'),
-                            template: $filter('translate')('not_allowed_signin')
-                        });
-                    }
-                });
+                                console.log("ERROR -> " + error);
+                                // Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+                                $ionicLoading.hide();
+                                if (error == 406) {
+                                    loginService.logout();
+                                    $ionicPopup.alert({
+                                        title: $filter('translate')('not_allowed_popup_title'),
+                                        template: $filter('translate')('not_allowed_signin')
+                                    });
+                                }
+                            });
 
-            },
-            function (error) {
-                // loginStarted = false;
-                //Utils.toast(Utils.getErrorMsg(error));
-                // StorageSrv.saveUser(null);
-                localStorage.userId = null;
-                ionic.Platform.exitApp();
+                        },
+                        function (error) {
+                            // loginStarted = false;
+                            //Utils.toast(Utils.getErrorMsg(error));
+                            // StorageSrv.saveUser(null);
+                            localStorage.userId = null;
+                            ionic.Platform.exitApp();
+                        }
+                    );
+                }
             }
-        );
+        });
+
     };
 
     $scope.loginInternal = function () {
@@ -75,6 +85,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
         $ionicLoading.show();
         loginService.signin($scope.user).then(
             function (data) {
+                $ionicLoading.show();
                 profileService.getUserProfile().then(function (data) {
                     $state.go('app.home');
                     $ionicHistory.nextViewOptions({

@@ -93,7 +93,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.co
     $scope.m2km = function (m) {
         return Math.round((m / 1000) * 10) / 10;
     }
-
+    $scope.version = Config.getVersion();
     $scope.min2time = function (min) {
         return Math.floor(min / 60) + ':' + min % 60;
     }

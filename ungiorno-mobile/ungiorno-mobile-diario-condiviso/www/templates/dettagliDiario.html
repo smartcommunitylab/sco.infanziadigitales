@@ -52,7 +52,7 @@
             <div class="item item-divider">{{'acces_diary' | translate}}:</div>
 
             <!--<div ng-repeat="data in babyCopy.persons track by $index" ng-if="data.authorized">-->
-            <div ng-repeat="data in babyCopy.persons track by $index" ng-if="data.authorized && (!!data.teacher || !!data.parent)">
+            <div ng-repeat="data in babyCopy.persons track by $index" ng-if="data.personId!='annatava58@gmail.com' && data.personId!='smartcommunitytester@gmail.com' && data.authorized && (!!data.teacher || !!data.parent)">
                 <label class="item item-input item-stacked-label" ng-if="!isViewMode(data) && !!modifyComponent(data)">
                     <span class="input-label">{{relationType(data)}}:</span>
                 </label>

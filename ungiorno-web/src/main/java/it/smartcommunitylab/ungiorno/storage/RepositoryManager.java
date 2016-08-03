@@ -27,6 +27,7 @@ import it.smartcommunitylab.ungiorno.model.AppInfo;
 import it.smartcommunitylab.ungiorno.model.AuthPerson;
 import it.smartcommunitylab.ungiorno.model.BusData;
 import it.smartcommunitylab.ungiorno.model.CalendarItem;
+import it.smartcommunitylab.ungiorno.model.ChatMessage;
 import it.smartcommunitylab.ungiorno.model.Communication;
 import it.smartcommunitylab.ungiorno.model.InternalNote;
 import it.smartcommunitylab.ungiorno.model.KidBusData;
@@ -46,6 +47,7 @@ import it.smartcommunitylab.ungiorno.model.SectionData;
 import it.smartcommunitylab.ungiorno.model.SectionData.ServiceProfile;
 import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.model.TeacherCalendar;
+import it.smartcommunitylab.ungiorno.utils.Utils;
 
 import java.io.File;
 import java.text.ParseException;
@@ -75,6 +77,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.TextCriteria;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.ArrayListMultimap;
@@ -1350,4 +1353,79 @@ public class RepositoryManager {
 		return null;
 	}
 
+	public List<ChatMessage> getChatMessages(String appId, String schoolId, String kidId, long timestamp, int limit) {
+		List<ChatMessage> result = null;
+		Criteria criteria = new Criteria("appId").is(appId).and("schoolId").is(schoolId).and("kidId").is(kidId);
+		if(timestamp > 0) {
+			criteria = criteria.and("creationDate").lte(timestamp);
+		}
+		Query query = new Query(criteria);
+		query.with(new Sort(Sort.Direction.DESC, "creationDate"));
+		query.limit(limit);
+		result = template.find(query, ChatMessage.class);
+		return result;
+	}
+
+	public ChatMessage saveChatMessage(ChatMessage message) {
+		message.setMessageId(Utils.getUUID());
+		template.save(message);
+		return message;
+	}
+
+	public ChatMessage removeChatMessage(String appId, String schoolId, String messageId) {
+		Criteria criteria = new Criteria("appId").is(appId).and("schoolId").is(schoolId)
+				.and("messageId").is(messageId);
+		Query query = new Query(criteria);
+		ChatMessage dbMessage = template.findOne(query, ChatMessage.class);
+		if(dbMessage != null) {
+			template.remove(query, ChatMessage.class);
+		}
+		return dbMessage;
+	}
+
+	public ChatMessage updateChatMessage(ChatMessage message) {
+		Criteria criteria = new Criteria("appId").is(message.getAppId()).and("schoolId").is(message.getSchoolId())
+				.and("messageId").is(message.getMessageId());
+		Query query = new Query(criteria);
+		ChatMessage dbMessage = template.findOne(query, ChatMessage.class);
+		if(dbMessage != null) {
+			Update update = new Update();
+			update.set("text", message.getText());
+			update.set("received", message.isReceived());
+			update.set("seen", message.isSeen());
+			template.updateFirst(query, update, ChatMessage.class);
+			dbMessage.setText(message.getText());
+			dbMessage.setReceived(message.isReceived());
+			dbMessage.setSeen(message.isSeen());
+		}
+		return dbMessage;
+	}
+	
+	public ChatMessage chatMessageReceived(String appId, String schoolId, String messageId) {
+		Criteria criteria = new Criteria("appId").is(appId).and("schoolId").is(schoolId)
+				.and("messageId").is(messageId);
+		Query query = new Query(criteria);
+		ChatMessage dbMessage = template.findOne(query, ChatMessage.class);
+		if(dbMessage != null) {
+			Update update = new Update();
+			update.set("received", Boolean.TRUE);
+			template.updateFirst(query, update, ChatMessage.class);
+			dbMessage.setReceived(Boolean.TRUE);
+		}
+		return dbMessage;
+	}
+
+	public ChatMessage chatMessageSeen(String appId, String schoolId, String messageId) {
+		Criteria criteria = new Criteria("appId").is(appId).and("schoolId").is(schoolId)
+				.and("messageId").is(messageId);
+		Query query = new Query(criteria);
+		ChatMessage dbMessage = template.findOne(query, ChatMessage.class);
+		if(dbMessage != null) {
+			Update update = new Update();
+			update.set("seen", Boolean.TRUE);
+			template.updateFirst(query, update, ChatMessage.class);
+			dbMessage.setSeen(Boolean.TRUE);
+		}
+		return dbMessage;
+	}
 }

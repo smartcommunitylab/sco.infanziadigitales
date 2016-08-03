@@ -58,7 +58,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		
         http
         .authorizeRequests()
-        	.antMatchers("/diary/**", "/student/**", "/school/**")
+        	.antMatchers("/diary/**", "/student/**", "/school/**", "/chat/**")
+        	//.antMatchers("/diary/**", "/student/**", "/school/**")
         		.hasAnyAuthority(UnGiornoUserDetails.UNGIORNO).and()
         .addFilterBefore(rememberMeAuthenticationFilter(), BasicAuthenticationFilter.class)
         .addFilterBefore(oauthAuthenticationFilter(), BasicAuthenticationFilter.class);

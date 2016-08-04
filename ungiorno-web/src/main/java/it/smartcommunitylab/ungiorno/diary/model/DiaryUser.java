@@ -136,7 +136,6 @@ public class DiaryUser {
 			DiaryUserTeacher t = new DiaryUserTeacher();
 			t.setSchoolId(teacher.getSchoolId());
 			t.setUserId(teacher.getTeacherId());
-			t.setSectionIds(teacher.getSectionIds());
 			return t;
 		}
 

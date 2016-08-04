@@ -18,18 +18,15 @@ package it.smartcommunitylab.ungiorno.controller;
 
 import it.smartcommunitylab.ungiorno.model.BusData;
 import it.smartcommunitylab.ungiorno.model.Communication;
-import it.smartcommunitylab.ungiorno.model.InternalNote;
 import it.smartcommunitylab.ungiorno.model.Menu;
 import it.smartcommunitylab.ungiorno.model.Response;
 import it.smartcommunitylab.ungiorno.model.SchoolProfile;
-import it.smartcommunitylab.ungiorno.model.SectionData;
 import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.model.TeacherCalendar;
 import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
 import it.smartcommunitylab.ungiorno.utils.JsonUtil;
 import it.smartcommunitylab.ungiorno.utils.PermissionsManager;
 
-import java.util.Collection;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -101,7 +98,8 @@ public class SchoolController {
 		try {
 			comm.setAppId(appId);
 			comm.setSchoolId(schoolId);
-			return new Response<>(storage.saveCommunication(comm));
+//			return new Response<>(storage.saveCommunication(comm));
+			return new Response<>();
 		} catch (Exception e) {
 			return new Response<>(e.getMessage());
 		}
@@ -111,41 +109,6 @@ public class SchoolController {
 
 		try {
 			List<Communication> list = storage.getCommunications(appId, schoolId);
-			return new Response<>(list);
-		} catch (Exception e) {
-			return new Response<>(e.getMessage());
-		}
-	}
-
-	@RequestMapping(method = RequestMethod.POST, value = "/school/{appId}/{schoolId}/notes")
-	public @ResponseBody Response<InternalNote> sendNote(@RequestBody InternalNote comm, @PathVariable String appId, @PathVariable String schoolId, @RequestParam(required=false) String[] kidIds, @RequestParam(required=false) String[] sectionIds) {
-
-		try {
-			comm.setAppId(appId);
-			comm.setSchoolId(schoolId);
-			if (kidIds != null && kidIds.length > 0) {
-				comm.setKidIds(kidIds);
-			}
-			else if (sectionIds != null && sectionIds.length > 0) {
-				comm.setSectionIds(sectionIds);
-			} else {
-				comm.setSectionIds(storage.getTeacher(permissions.getUserId(), appId, schoolId).getSectionIds().toArray(new String[0]));
-			}
-
-			return new Response<>(storage.saveInternalNote(comm));
-		} catch (Exception e) {
-			return new Response<>(e.getMessage());
-		}
-	}
-
-	@RequestMapping(method = RequestMethod.GET, value = "/school/{appId}/{schoolId}/notes")
-	public @ResponseBody Response<List<InternalNote>> getNotes(@PathVariable String appId, @PathVariable String schoolId, @RequestParam(required=false) String[] sectionIds, @RequestParam long date) {
-
-		try {
-			if (sectionIds == null || sectionIds.length == 0) {
-				sectionIds = (String[])storage.getTeacher(permissions.getUserId(), appId, schoolId).getSectionIds().toArray(new String[0]);
-			}
-			List<InternalNote> list = storage.getInternalNotes(appId, schoolId, sectionIds, date);
 			return new Response<>(list);
 		} catch (Exception e) {
 			return new Response<>(e.getMessage());
@@ -212,30 +175,9 @@ public class SchoolController {
 	public @ResponseBody Response<BusData> getBuses(@PathVariable String appId, @PathVariable String schoolId, @RequestParam long date) {
 
 		try {
-			BusData buses = storage.getBusData(appId, schoolId, date);
-			return new Response<>(buses);
+//			BusData buses = storage.getBusData(appId, schoolId, date);
+			return new Response<>();
 		} catch (Exception e) {
-			return new Response<>(e.getMessage());
-		}
-	}
-
-	@RequestMapping(method = RequestMethod.GET, value = "/school/{appId}/{schoolId}/sections")
-	public @ResponseBody Response<List<SectionData>> getSections(@PathVariable String appId, @PathVariable String schoolId, @RequestParam long date) {
-		try {
-			Collection<String> sections = storage.getTeacher(permissions.getUserId(), appId, schoolId).getSectionIds();
-			if(logger.isInfoEnabled()) {
-				logger.info("getSections(sections):" + JsonUtil.convertObject(sections));
-			}
-			List<SectionData> list = storage.getSections(appId, schoolId, sections , date);
-			if(logger.isInfoEnabled()) {
-				logger.info("getSections(list):" + JsonUtil.convertObject(list));
-			}
-			return new Response<>(list);
-		} catch (Exception e) {
-			if(logger.isWarnEnabled()) {
-				logger.warn("getSections:" + appId + " - " + schoolId);
-				logger.warn("erro", e);
-			}
 			return new Response<>(e.getMessage());
 		}
 	}

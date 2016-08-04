@@ -5,6 +5,7 @@ import it.smartcommunitylab.ungiorno.diary.model.DiaryUser;
 import it.smartcommunitylab.ungiorno.model.AuthPerson;
 import it.smartcommunitylab.ungiorno.model.KidProfile;
 import it.smartcommunitylab.ungiorno.model.Parent;
+import it.smartcommunitylab.ungiorno.model.Person;
 import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
 
@@ -22,15 +23,17 @@ public class PermissionsManager {
 	private RepositoryManager storage;
 
 	public boolean checkKidProfile(String appId, String schoolId, String kidId, Boolean isTeacher) {
+		//TODO
 		String userId = getUserId();
 
 		KidProfile kid = storage.getKidProfile(appId, schoolId, kidId);
+		String sectionId = storage.getSectionId(kid);
 
 		if (kid != null) {
 			if (isTeacher == null || isTeacher) {
 				Teacher teacher = storage.getTeacher(userId, appId, schoolId);
 				if (teacher != null) {
-					if (teacher.getSectionIds().contains(kid.getSection().getSectionId())) {
+					if (teacher.getGroups().contains(sectionId)) {
 						return true;
 					}
 				}
@@ -38,15 +41,14 @@ public class PermissionsManager {
 			if (isTeacher == null || !isTeacher) {
 				Parent parent = storage.getParent(userId, appId, schoolId);
 				if (parent != null) {
-					for (AuthPerson person : kid.getPersons()) {
-						if (person.getPersonId().equals(parent.getPersonId())) {
+					for (String personId : kid.getAuthorizedPersons()) {
+						if (parent.getPersonId().equals(personId)) {
 							return true;
 						}
 					}
 				}
 			}
 		}
-
 		return false;
 	}
 
@@ -59,9 +61,9 @@ public class PermissionsManager {
 		if (isTeacher == null || isTeacher) {
 			Teacher teacher = storage.getTeacher(userId, appId, schoolId);
 			if (teacher != null) {
-				du.setName(teacher.getTeacherName());
-				du.setSurname(teacher.getTeacherSurname());
-				du.setFullname(teacher.getTeacherFullname());
+//				du.setName(teacher.getTeacherName());
+//				du.setSurname(teacher.getTeacherSurname());
+//				du.setFullname(teacher.getTeacherFullname());
 				du.setTeacher(DiaryUser.DiaryUserTeacher.fromTeacher(teacher));
 				List<DiaryKidProfile> kids = storage.getDiaryKidProfilesByAuthId(appId, schoolId, teacher.getTeacherId(), true);
 				du.setStudents(kids);

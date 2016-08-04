@@ -21,12 +21,9 @@ import it.smartcommunitylab.ungiorno.model.BusService;
 import it.smartcommunitylab.ungiorno.model.Contact;
 import it.smartcommunitylab.ungiorno.model.KidBusData;
 import it.smartcommunitylab.ungiorno.model.KidProfile;
-import it.smartcommunitylab.ungiorno.model.KidProfile.Allergy;
 import it.smartcommunitylab.ungiorno.model.KidServices;
 import it.smartcommunitylab.ungiorno.model.Parent;
 import it.smartcommunitylab.ungiorno.model.SchoolProfile;
-import it.smartcommunitylab.ungiorno.model.SchoolProfile.BusProfile;
-import it.smartcommunitylab.ungiorno.model.SchoolProfile.SectionProfile;
 import it.smartcommunitylab.ungiorno.model.SchoolService;
 import it.smartcommunitylab.ungiorno.model.SectionDef;
 import it.smartcommunitylab.ungiorno.model.Teacher;
@@ -154,7 +151,7 @@ public class Importer {
 				throw new ImportError("Unknown kidId for kid-bus mapping: "+kidId);
 			}
 			data.setKidId(kidId);
-			data.setStopId(kidMap.get(kidId).getServices().getBus().getStops().get(0).getStopId());
+//			data.setStopId(kidMap.get(kidId).getServices().getBus().getStops().get(0).getStopId());
 			data.setBusId(m.get("BUS"));
 			data.setPersonId(m.get("PERSON"));
 			busData.add(data);
@@ -193,10 +190,10 @@ public class Importer {
 		for (Map<String,String> m : result) {
 			String kidId = m.get("IDBAMBINO");
 			if (kidMap.containsKey(kidId)) {
-				Allergy a = new Allergy();
-				a.setName(m.get("NOME"));
-				a.setType(m.get("TIPO"));
-				kidMap.get(kidId).getAllergies().add(a);
+//				Allergy a = new Allergy();
+//				a.setName(m.get("NOME"));
+//				a.setType(m.get("TIPO"));
+//				kidMap.get(kidId).getAllergies().add(a);
 			}
 		}
 		
@@ -227,7 +224,7 @@ public class Importer {
 			}
 			String kidId = m.get("IDBAMBINO");
 			if (kidMap.containsKey(kidId)) {
-				kidMap.get(kidId).getPersons().add(p);
+//				kidMap.get(kidId).getPersons().add(p);
 			}
 		}
 		
@@ -243,11 +240,11 @@ public class Importer {
 		Multimap<String, AuthPerson> parentToPersons = ArrayListMultimap.create();
 		for (String kidId : kidMap.keySet()) {
 			KidProfile kid = kidMap.get(kidId);
-			for (AuthPerson ap: kid.getPersons()) {
-				if (ap.isParent()) {
-					parentToPersons.put(ap.getPersonId(), ap);
-				}
-			}
+//			for (AuthPerson ap: kid.getPersons()) {
+//				if (ap.isParent()) {
+//					parentToPersons.put(ap.getPersonId(), ap);
+//				}
+//			}
 		}
 		
 		for (Map<String,String> m : result) {
@@ -296,10 +293,10 @@ public class Importer {
 			if (map.containsKey("GENITORE2") && StringUtils.hasText(map.get("GENITORE2"))) {
 				parents.add(new AuthPerson(map.get("GENITORE2"), map.get("GENITORE2_RELATION"),false));
 			}
-			p.setPersons(parents);
+//			p.setPersons(parents);
 			SectionDef section = new SectionDef();
 			section.setSectionId(map.get("SEZIONE"));
-			p.setSection(section);
+//			p.setSection(section);
 			KidServices services = new KidServices();
 			services.setAnticipo(new SchoolService(map.get("ANTICIPO").equals("1")));
 			services.setPosticipo(new SchoolService(map.get("POSTICIPO").equals("1")));
@@ -378,17 +375,17 @@ public class Importer {
 				}
 				if (SHEET_TIPOLOGIE_NOTE.equals(sheet.getSheetName())) {
 					 List<TypeDef> types = parseTypes(result);
-					 schoolProfile.setTeacherNoteTypes(types); 
+//					 schoolProfile.setTeacherNoteTypes(types); 
 				}
 				if (SHEET_CIBI.equals(sheet.getSheetName())) {
 					 List<TypeDef> types = parseTypes(result);
-					 schoolProfile.setFoodTypes(types); 
+//					 schoolProfile.setFoodTypes(types); 
 				}
 				if (SHEET_BUS.equals(sheet.getSheetName())) {
-					 schoolProfile.setBuses(parseBuses(result)); 
+//					 schoolProfile.setBuses(parseBuses(result)); 
 				}
 				if (SHEET_SEZIONI.equals(sheet.getSheetName())) {
-					 schoolProfile.setSections(parseSections(result)); 
+//					 schoolProfile.setSections(parseSections(result)); 
 				}
 				if (SHEET_INSEGNANTI.equals(sheet.getSheetName())) {
 					parseTeachers(appId, schoolId, result);
@@ -407,13 +404,13 @@ public class Importer {
 			Teacher t = new Teacher();
 			t.setAppId(appId);
 			t.setSchoolId(schoolId);
-			t.setSectionIds(Arrays.asList(StringUtils.commaDelimitedListToStringArray(map.get("SEZIONI"))));
-			t.setColorToDisplay(map.get("COLOR"));
-			t.setTeacherName(map.get("NOME"));
-			t.setTeacherSurname(map.get("COGNOME"));
-			t.setTeacherFullname(t.getTeacherName() +" "+t.getTeacherSurname());
+//			t.setSectionIds(Arrays.asList(StringUtils.commaDelimitedListToStringArray(map.get("SEZIONI"))));
+//			t.setColorToDisplay(map.get("COLOR"));
+//			t.setTeacherName(map.get("NOME"));
+//			t.setTeacherSurname(map.get("COGNOME"));
+//			t.setTeacherFullname(t.getTeacherName() +" "+t.getTeacherSurname());
 			t.setTeacherId(map.get("ID"));
-			t.setUsername(map.get("USERNAME"));
+//			t.setUsername(map.get("USERNAME"));
 			teachers.add(t);
 		}
 	}
@@ -422,32 +419,32 @@ public class Importer {
 	 * @param result
 	 * @return
 	 */
-	private List<SectionProfile> parseSections(List<Map<String, String>> result) {
-		List<SectionProfile> sections = new ArrayList<SectionProfile>();
-		for (Map<String,String> map : result) {
-			SectionProfile def = new SectionProfile();
-			def.setSectionId(map.get("ID"));
-			def.setName(map.get("NOME"));
-			sections.add(def);
-		}
-		return sections;
-	}
+//	private List<SectionProfile> parseSections(List<Map<String, String>> result) {
+//		List<SectionProfile> sections = new ArrayList<SectionProfile>();
+//		for (Map<String,String> map : result) {
+//			SectionProfile def = new SectionProfile();
+//			def.setSectionId(map.get("ID"));
+//			def.setName(map.get("NOME"));
+//			sections.add(def);
+//		}
+//		return sections;
+//	}
 
 	/**
 	 * @param result
 	 * @return
 	 */
-	private List<BusProfile> parseBuses(List<Map<String, String>> result) {
-		List<BusProfile> buses = new ArrayList<BusProfile>();
-		for (Map<String,String> map : result) {
-			BusProfile def = new BusProfile();
-			def.setBusId(map.get("ID"));
-			def.setName(map.get("NOME"));
-			def.setCapacity(Integer.parseInt(map.get("CAPACITA")));
-			buses.add(def);
-		}
-		return buses;
-	}
+//	private List<BusProfile> parseBuses(List<Map<String, String>> result) {
+//		List<BusProfile> buses = new ArrayList<BusProfile>();
+//		for (Map<String,String> map : result) {
+//			BusProfile def = new BusProfile();
+//			def.setBusId(map.get("ID"));
+//			def.setName(map.get("NOME"));
+//			def.setCapacity(Integer.parseInt(map.get("CAPACITA")));
+//			buses.add(def);
+//		}
+//		return buses;
+//	}
 
 	/**
 	 * @param schoolProfile

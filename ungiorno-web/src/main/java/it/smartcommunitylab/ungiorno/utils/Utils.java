@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -17,6 +19,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 public class Utils {
+	public static final String ERRORTYPE = "errorType";
+	public static final String ERRORMSG = "errorMsg";
+	
 	private static ObjectMapper fullMapper = new ObjectMapper();
 	static {
 		Utils.fullMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -71,6 +76,13 @@ public class Utils {
 			result = false;
 		}
 		return result;
+	}
+	
+	public static Map<String,String> handleError(Exception exception) {
+		Map<String,String> errorMap = new HashMap<String,String>();
+		errorMap.put(ERRORTYPE, exception.getClass().toString());
+		errorMap.put(ERRORMSG, exception.getMessage());
+		return errorMap;
 	}
 
 }

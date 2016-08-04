@@ -1,6 +1,7 @@
 package it.smartcommunitylab.ungiorno.controller;
 
-import it.smartcommunitylab.ungiorno.config.exception.ProfileNotFoundException;
+import it.smartcommunitylab.ungiorno.config.exception.EntityNotFoundException;
+import it.smartcommunitylab.ungiorno.config.exception.UnauthorizedException;
 import it.smartcommunitylab.ungiorno.model.ChatMessage;
 import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
 import it.smartcommunitylab.ungiorno.utils.PermissionsManager;
@@ -8,6 +9,7 @@ import it.smartcommunitylab.ungiorno.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -185,17 +187,24 @@ public class ChatController {
 		return result;
 	}
 	
-	@ExceptionHandler(Exception.class)
-	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	@ExceptionHandler(EntityNotFoundException.class)
+	@ResponseStatus(value=HttpStatus.BAD_REQUEST)
 	@ResponseBody
-	public String handleError(HttpServletRequest request, Exception exception) {
-		return "{\"error\":\"" + exception.getMessage() + "\"}";
+	public Map<String,String> handleEntityNotFoundError(HttpServletRequest request, Exception exception) {
+		return Utils.handleError(exception);
 	}
 	
-	@ExceptionHandler(ProfileNotFoundException.class)
-	@ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
+	@ExceptionHandler(UnauthorizedException.class)
+	@ResponseStatus(value=HttpStatus.FORBIDDEN)
 	@ResponseBody
-	public String handleProfileNotFoundError(HttpServletRequest request, Exception exception) {
-		return "{\"error\":\"" + exception.getMessage() + "\"}";
+	public Map<String,String> handleUnauthorizedError(HttpServletRequest request, Exception exception) {
+		return Utils.handleError(exception);
+	}
+	
+	@ExceptionHandler(Exception.class)
+	@ResponseStatus(value=HttpStatus.INTERNAL_SERVER_ERROR)
+	@ResponseBody
+	public Map<String,String> handleGenericError(HttpServletRequest request, Exception exception) {
+		return Utils.handleError(exception);
 	}
 }

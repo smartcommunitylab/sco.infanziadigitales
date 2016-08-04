@@ -17,43 +17,25 @@ package it.smartcommunitylab.ungiorno.model;
 
 import it.smartcommunitylab.ungiorno.diary.model.DiaryTeacher;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import com.google.common.collect.Lists;
 
 /**
  * @author raman
  *
  */
 public class KidProfile extends SchoolObject {
-
-	public static class Allergy {
-		private String name, type;
-
-		public String getName() {
-			return name;
-		}
-
-		public void setName(String name) {
-			this.name = name;
-		}
-
-		public String getType() {
-			return type;
-		}
-
-		public void setType(String type) {
-			this.type = type;
-		}
-	}
-
-	private String kidId, fullName, lastName, firstName, image;
-	private SectionDef section;
+	private String kidId, fullName, lastName, firstName, image, gender;
 	private KidServices services;
-	private List<AuthPerson> persons;
-	private List<Allergy> allergies;
+	private List<String> authorizedPersons = Lists.newArrayList();
+	private List<String> parents = Lists.newArrayList();
+	private List<String> allergies = Lists.newArrayList();
+	private List<String> groups = Lists.newArrayList();
+	private List<String> ageGroups = Lists.newArrayList();
 	private boolean active = true;
 	
-	private List<DiaryTeacher> diaryTeachers;
+	private List<DiaryTeacher> diaryTeachers = Lists.newArrayList();
 	private Boolean sharedDiary;
 	
 	public String getKidId() {
@@ -86,11 +68,11 @@ public class KidProfile extends SchoolObject {
 	public void setImage(String image) {
 		this.image = image;
 	}
-	public SectionDef getSection() {
-		return section;
+	public String getGender() {
+		return gender;
 	}
-	public void setSection(SectionDef section) {
-		this.section = section;
+	public void setGender(String gender) {
+		this.gender = gender;
 	}
 	public KidServices getServices() {
 		return services;
@@ -98,44 +80,35 @@ public class KidProfile extends SchoolObject {
 	public void setServices(KidServices services) {
 		this.services = services;
 	}
-	public List<AuthPerson> getPersons() {
-		return persons;
+	public List<String> getAuthorizedPersons() {
+		return authorizedPersons;
 	}
-	public void setPersons(List<AuthPerson> persons) {
-		this.persons = persons;
+	public void setAuthorizedPersons(List<String> authorizedPersons) {
+		this.authorizedPersons = authorizedPersons;
 	}
-	public List<Allergy> getAllergies() {
-		if (allergies == null) {
-			allergies = new ArrayList<KidProfile.Allergy>();
-		}
+	public List<String> getParents() {
+		return parents;
+	}
+	public void setParents(List<String> parents) {
+		this.parents = parents;
+	}
+	public List<String> getAllergies() {
 		return allergies;
 	}
-	public void setAllergies(List<Allergy> allergies) {
+	public void setAllergies(List<String> allergies) {
 		this.allergies = allergies;
 	}
-	public Boolean getSharedDiary() {
-		return sharedDiary;
+	public List<String> getGroups() {
+		return groups;
 	}
-	public void setSharedDiary(Boolean sharedDiary) {
-		this.sharedDiary = sharedDiary;
+	public void setGroups(List<String> groups) {
+		this.groups = groups;
 	}
-
-	public List<DiaryTeacher> getDiaryTeachers() {
-		if (diaryTeachers == null) {
-			diaryTeachers = new ArrayList<DiaryTeacher>();
-		}
-		return diaryTeachers;
+	public List<String> getAgeGroups() {
+		return ageGroups;
 	}
-	public void setDiaryTeachers(List<DiaryTeacher> diaryTeachers) {
-		this.diaryTeachers = diaryTeachers;
-	}
-
-	private String _id;
-	public String get_id() {
-		return _id;
-	}
-	public void set_id(String _id) {
-		this._id = _id;
+	public void setAgeGroups(List<String> ageGroups) {
+		this.ageGroups = ageGroups;
 	}
 	public boolean isActive() {
 		return active;
@@ -143,5 +116,18 @@ public class KidProfile extends SchoolObject {
 	public void setActive(boolean active) {
 		this.active = active;
 	}
+	public List<DiaryTeacher> getDiaryTeachers() {
+		return diaryTeachers;
+	}
+	public void setDiaryTeachers(List<DiaryTeacher> diaryTeachers) {
+		this.diaryTeachers = diaryTeachers;
+	}
+	public Boolean getSharedDiary() {
+		return sharedDiary;
+	}
+	public void setSharedDiary(Boolean sharedDiary) {
+		this.sharedDiary = sharedDiary;
+	}
 	
+
 }

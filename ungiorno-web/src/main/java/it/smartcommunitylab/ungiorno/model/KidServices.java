@@ -21,8 +21,7 @@ package it.smartcommunitylab.ungiorno.model;
  */
 public class KidServices {
 
-	private SchoolService anticipo, posticipo, mensa;
-	private BusService bus;
+	private SchoolService anticipo, posticipo, mensa, bus;
 
 	public SchoolService getAnticipo() {
 		return anticipo;
@@ -42,10 +41,10 @@ public class KidServices {
 	public void setMensa(SchoolService mensa) {
 		this.mensa = mensa;
 	}
-	public BusService getBus() {
+	public SchoolService getBus() {
 		return bus;
 	}
-	public void setBus(BusService bus) {
+	public void setBus(SchoolService bus) {
 		this.bus = bus;
 	}
 }

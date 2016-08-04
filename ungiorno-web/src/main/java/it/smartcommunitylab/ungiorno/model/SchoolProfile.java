@@ -17,12 +17,26 @@ package it.smartcommunitylab.ungiorno.model;
 
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 /**
  * @author raman
  *
  */
 public class SchoolProfile extends SchoolObject {
-
+	private String name;
+	private Timing regularTiming, anticipoTiming, posticipoTiming;
+	private Contact contacts;
+	private List<TypeDef> absenceTypes = Lists.newArrayList();
+	private List<TypeDef> frequentIllnesses = Lists.newArrayList();
+	private List<String> groups = Lists.newArrayList();
+	private List<String> buses = Lists.newArrayList();
+	private List<String> preconfiguredTiming = Lists.newArrayList();
+	private List<String> ageGroups = Lists.newArrayList();
+	private String maxAbsenceInputTime;
+	private String maxPickupTime;
+	private List<String> teachers = Lists.newArrayList();
+	
 	public static class Timing {
 		private String fromTime, toTime;
 		public String getFromTime() {
@@ -39,124 +53,116 @@ public class SchoolProfile extends SchoolObject {
 		}
 	}
 
-	public static class SectionProfile {
-		private String sectionId, name;
-
-		public String getSectionId() {
-			return sectionId;
-		}
-
-		public void setSectionId(String sectionId) {
-			this.sectionId = sectionId;
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public void setName(String name) {
-			this.name = name;
-		}
+	public String getName() {
+		return name;
 	}
-	
-	public static class BusProfile {
-		private String busId, name;
-		private int capacity;
-		public String getBusId() {
-			return busId;
-		}
-		public void setBusId(String busId) {
-			this.busId = busId;
-		}
-		public String getName() {
-			return name;
-		}
-		public void setName(String name) {
-			this.name = name;
-		}
-		public int getCapacity() {
-			return capacity;
-		}
-		public void setCapacity(int capacity) {
-			this.capacity = capacity;
-		}
+
+	public void setName(String name) {
+		this.name = name;
 	}
-	
-	private Timing regularTiming, anticipoTiming, posticipoTiming;
-	private Contact contacts;
-	private List<TypeDef> absenceTypes;
-	private List<TypeDef> frequentIllnesses;
-	private List<TypeDef> teacherNoteTypes;
-	private List<TypeDef> foodTypes;
-	private List<SectionProfile> sections;
-	private List<BusProfile> buses;
-	
+
 	public Timing getRegularTiming() {
 		return regularTiming;
 	}
+
 	public void setRegularTiming(Timing regularTiming) {
 		this.regularTiming = regularTiming;
 	}
-	public Contact getContacts() {
-		return contacts;
-	}
-	public void setContacts(Contact contacts) {
-		this.contacts = contacts;
-	}
-	public List<TypeDef> getAbsenceTypes() {
-		return absenceTypes;
-	}
-	public void setAbsenceTypes(List<TypeDef> absenceTypes) {
-		this.absenceTypes = absenceTypes;
-	}
-	public List<TypeDef> getFrequentIllnesses() {
-		return frequentIllnesses;
-	}
-	public void setFrequentIllnesses(List<TypeDef> frequentIllnesses) {
-		this.frequentIllnesses = frequentIllnesses;
-	}
-	public List<TypeDef> getTeacherNoteTypes() {
-		return teacherNoteTypes;
-	}
-	public void setTeacherNoteTypes(List<TypeDef> teacherNoteTypes) {
-		this.teacherNoteTypes = teacherNoteTypes;
-	}
-	public List<TypeDef> getFoodTypes() {
-		return foodTypes;
-	}
-	public void setFoodTypes(List<TypeDef> foodTypes) {
-		this.foodTypes = foodTypes;
-	}
+
 	public Timing getAnticipoTiming() {
 		return anticipoTiming;
 	}
+
 	public void setAnticipoTiming(Timing anticipoTiming) {
 		this.anticipoTiming = anticipoTiming;
 	}
+
 	public Timing getPosticipoTiming() {
 		return posticipoTiming;
 	}
+
 	public void setPosticipoTiming(Timing posticipoTiming) {
 		this.posticipoTiming = posticipoTiming;
 	}
-	public List<SectionProfile> getSections() {
-		return sections;
+
+	public Contact getContacts() {
+		return contacts;
 	}
-	public void setSections(List<SectionProfile> sections) {
-		this.sections = sections;
+
+	public void setContacts(Contact contacts) {
+		this.contacts = contacts;
 	}
-	public List<BusProfile> getBuses() {
+
+	public List<TypeDef> getAbsenceTypes() {
+		return absenceTypes;
+	}
+
+	public void setAbsenceTypes(List<TypeDef> absenceTypes) {
+		this.absenceTypes = absenceTypes;
+	}
+
+	public List<TypeDef> getFrequentIllnesses() {
+		return frequentIllnesses;
+	}
+
+	public void setFrequentIllnesses(List<TypeDef> frequentIllnesses) {
+		this.frequentIllnesses = frequentIllnesses;
+	}
+
+	public List<String> getGroups() {
+		return groups;
+	}
+
+	public void setGroups(List<String> groups) {
+		this.groups = groups;
+	}
+
+	public List<String> getBuses() {
 		return buses;
 	}
-	public void setBuses(List<BusProfile> buses) {
+
+	public void setBuses(List<String> buses) {
 		this.buses = buses;
 	}
 
-	private String _id;
-	public String get_id() {
-		return _id;
+	public List<String> getPreconfiguredTiming() {
+		return preconfiguredTiming;
 	}
-	public void set_id(String _id) {
-		this._id = _id;
+
+	public void setPreconfiguredTiming(List<String> preconfiguredTiming) {
+		this.preconfiguredTiming = preconfiguredTiming;
 	}
+
+	public List<String> getAgeGroups() {
+		return ageGroups;
+	}
+
+	public void setAgeGroups(List<String> ageGroups) {
+		this.ageGroups = ageGroups;
+	}
+
+	public String getMaxAbsenceInputTime() {
+		return maxAbsenceInputTime;
+	}
+
+	public void setMaxAbsenceInputTime(String maxAbsenceInputTime) {
+		this.maxAbsenceInputTime = maxAbsenceInputTime;
+	}
+
+	public String getMaxPickupTime() {
+		return maxPickupTime;
+	}
+
+	public void setMaxPickupTime(String maxPickupTime) {
+		this.maxPickupTime = maxPickupTime;
+	}
+
+	public List<String> getTeachers() {
+		return teachers;
+	}
+
+	public void setTeachers(List<String> teachers) {
+		this.teachers = teachers;
+	}
+	
 }

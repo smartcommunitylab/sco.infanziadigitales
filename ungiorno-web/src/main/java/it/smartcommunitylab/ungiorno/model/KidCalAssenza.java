@@ -20,80 +20,27 @@ package it.smartcommunitylab.ungiorno.model;
  *
  */
 public class KidCalAssenza extends SchoolObject {
-
-	public static class Reason {
-		private String type;
-		private String subtype;
-		public String getType() {
-			return type;
-		}
-		public void setType(String type) {
-			this.type = type;
-		}
-		public String getSubtype() {
-			return subtype;
-		}
-		public void setSubtype(String subtype) {
-			this.subtype = subtype;
-		}
-	}
-
-	private String kidId, note;
-	private long dateFrom, dateTo;
-	private Reason reason;
-
-
+	private String kidId;
+	private long date;
+	private String reason;
+	
 	public String getKidId() {
 		return kidId;
 	}
 	public void setKidId(String kidId) {
 		this.kidId = kidId;
 	}
-	public String getNote() {
-		return note;
+	public long getDate() {
+		return date;
 	}
-	public void setNote(String note) {
-		this.note = note;
+	public void setDate(long date) {
+		this.date = date;
 	}
-	public long getDateFrom() {
-		return dateFrom;
-	}
-	public void setDateFrom(long dateFrom) {
-		this.dateFrom = dateFrom;
-	}
-	public long getDateTo() {
-		return dateTo;
-	}
-	public void setDateTo(long dateTo) {
-		this.dateTo = dateTo;
-	}
-	public Reason getReason() {
+	public String getReason() {
 		return reason;
 	}
-	public void setReason(Reason reason) {
+	public void setReason(String reason) {
 		this.reason = reason;
 	}
 
-	private String _id;
-
-	public String get_id() {
-		return _id;
-	}
-	public void set_id(String _id) {
-		this._id = _id;
-	}
-	/**
-	 * @return
-	 */
-	public KidCalAssenza copy() {
-		KidCalAssenza copy = new KidCalAssenza();
-		copy.kidId = kidId;
-		copy.setAppId(getAppId());
-		copy.setSchoolId(getSchoolId());
-		copy.dateFrom = dateFrom;
-		copy.dateTo = dateTo;
-		copy.note = note;
-		copy.reason = reason;
-		return copy;
-	}
 }

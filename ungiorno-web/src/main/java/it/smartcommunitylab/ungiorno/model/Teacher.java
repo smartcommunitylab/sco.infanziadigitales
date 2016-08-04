@@ -15,88 +15,48 @@
  ******************************************************************************/
 package it.smartcommunitylab.ungiorno.model;
 
-import it.smartcommunitylab.ungiorno.diary.model.DiaryKid.DiaryKidPerson;
-
 import java.util.List;
+
+import com.google.common.collect.Lists;
 
 /**
  * @author raman
  *
  */
 public class Teacher extends SchoolObject {
-	private String teacherId, username, teacherFullname, teacherSurname, teacherName, colorToDisplay;
-	private List<String> sectionIds;
-
+	private String teacherId, fullname, furname, firstName;
+	private List<String> groups = Lists.newArrayList();
+	
 	public String getTeacherId() {
 		return teacherId;
 	}
-
 	public void setTeacherId(String teacherId) {
 		this.teacherId = teacherId;
 	}
-
-	public List<String> getSectionIds() {
-		return sectionIds;
+	public String getFullname() {
+		return fullname;
+	}
+	public void setFullname(String fullname) {
+		this.fullname = fullname;
+	}
+	public String getFurname() {
+		return furname;
+	}
+	public void setFurname(String furname) {
+		this.furname = furname;
+	}
+	public String getFirstName() {
+		return firstName;
+	}
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+	public List<String> getGroups() {
+		return groups;
+	}
+	public void setGroups(List<String> groups) {
+		this.groups = groups;
 	}
 
-	public void setSectionIds(List<String> sectionIds) {
-		this.sectionIds = sectionIds;
-	}
 
-	public String getTeacherFullname() {
-		return teacherFullname;
-	}
-
-	public void setTeacherFullname(String teacherFullname) {
-		this.teacherFullname = teacherFullname;
-	}
-
-	public String getTeacherSurname() {
-		return teacherSurname;
-	}
-
-	public void setTeacherSurname(String teacherSurname) {
-		this.teacherSurname = teacherSurname;
-	}
-
-	public String getTeacherName() {
-		return teacherName;
-	}
-
-	public void setTeacherName(String teacherName) {
-		this.teacherName = teacherName;
-	}
-
-	public String getColorToDisplay() {
-		return colorToDisplay;
-	}
-
-	public void setColorToDisplay(String colorToDisplay) {
-		this.colorToDisplay = colorToDisplay;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	/**
-	 * @param b
-	 * @return
-	 */
-	public DiaryKidPerson toDiaryKidPerson(boolean authorized) {
-		DiaryKidPerson p = new DiaryKidPerson();
-		p.setAdult(true);
-		p.setTeacher(true);
-		p.setAuthorized(authorized);
-		p.setFirstName(teacherName);
-		p.setFullName(teacherFullname);
-		p.setLastName(teacherSurname);
-		p.setParent(false);
-		p.setPersonId(teacherId);
-		return p;
-	}
 }

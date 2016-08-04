@@ -22,23 +22,33 @@ import java.util.List;
  *
  */
 public class Communication extends SchoolObject {
-
-	private String communicationId, description;
-	private long creationDate, dateToCheck;
-	private List<String> children;
-	private boolean doCheck;
-
+	private String communicationId;
+	private String text;
+	private String teacherId;
+	private long creationDate, expireDate;
+	private List<String> recipientsChild;
+	private List<String> recipientsGroup;
+	private boolean deliveringDocument;
+	private long dateToCheck;
+	private List<String> deliveryChildren;
+	
 	public String getCommunicationId() {
 		return communicationId;
 	}
 	public void setCommunicationId(String communicationId) {
 		this.communicationId = communicationId;
 	}
-	public String getDescription() {
-		return description;
+	public String getText() {
+		return text;
 	}
-	public void setDescription(String description) {
-		this.description = description;
+	public void setText(String text) {
+		this.text = text;
+	}
+	public String getTeacherId() {
+		return teacherId;
+	}
+	public void setTeacherId(String teacherId) {
+		this.teacherId = teacherId;
 	}
 	public long getCreationDate() {
 		return creationDate;
@@ -46,31 +56,41 @@ public class Communication extends SchoolObject {
 	public void setCreationDate(long creationDate) {
 		this.creationDate = creationDate;
 	}
+	public long getExpireDate() {
+		return expireDate;
+	}
+	public void setExpireDate(long expireDate) {
+		this.expireDate = expireDate;
+	}
+	public List<String> getRecipientsChild() {
+		return recipientsChild;
+	}
+	public void setRecipientsChild(List<String> recipientsChild) {
+		this.recipientsChild = recipientsChild;
+	}
+	public List<String> getRecipientsGroup() {
+		return recipientsGroup;
+	}
+	public void setRecipientsGroup(List<String> recipientsGroup) {
+		this.recipientsGroup = recipientsGroup;
+	}
+	public boolean isDeliveringDocument() {
+		return deliveringDocument;
+	}
+	public void setDeliveringDocument(boolean deliveringDocument) {
+		this.deliveringDocument = deliveringDocument;
+	}
 	public long getDateToCheck() {
 		return dateToCheck;
 	}
 	public void setDateToCheck(long dateToCheck) {
 		this.dateToCheck = dateToCheck;
 	}
-	public List<String> getChildren() {
-		return children;
+	public List<String> getDeliveryChildren() {
+		return deliveryChildren;
 	}
-	public void setChildren(List<String> children) {
-		this.children = children;
+	public void setDeliveryChildren(List<String> deliveryChildren) {
+		this.deliveryChildren = deliveryChildren;
 	}
-	public boolean isDoCheck() {
-		return doCheck;
-	}
-	public void setDoCheck(boolean doCheck) {
-		this.doCheck = doCheck;
-	}
-	
-	private String _id;
 
-	public String get_id() {
-		return _id;
-	}
-	public void set_id(String _id) {
-		this._id = _id;
-	}
 }

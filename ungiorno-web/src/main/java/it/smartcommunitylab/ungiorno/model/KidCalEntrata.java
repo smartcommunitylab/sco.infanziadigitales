@@ -19,57 +19,42 @@ package it.smartcommunitylab.ungiorno.model;
  * @author raman
  *
  */
-public class KidCalFermata extends SchoolObject {
-
-	private String kidId, personId, note;
+public class KidCalEntrata extends SchoolObject {
 	private long date;
-	private String stopId, busId;
-
-	public String getKidId() {
-		return kidId;
-	}
-	public void setKidId(String kidId) {
-		this.kidId = kidId;
-	}
-	public String getPersonId() {
-		return personId;
-	}
-	public void setPersonId(String personId) {
-		this.personId = personId;
-	}
-	public String getNote() {
-		return note;
-	}
-	public void setNote(String note) {
-		this.note = note;
-	}
+	private String kidId;
+	private String arrivalTime;
+	private boolean fromDefault;
+	private boolean modified;
+	
 	public long getDate() {
 		return date;
 	}
 	public void setDate(long date) {
 		this.date = date;
 	}
-	public String getStopId() {
-		return stopId;
+	public String getKidId() {
+		return kidId;
 	}
-	public void setStopId(String stopId) {
-		this.stopId = stopId;
+	public void setKidId(String kidId) {
+		this.kidId = kidId;
 	}
-	public String getBusId() {
-		return busId;
+	public String getArrivalTime() {
+		return arrivalTime;
 	}
-	public void setBusId(String busId) {
-		this.busId = busId;
+	public void setArrivalTime(String arrivalTime) {
+		this.arrivalTime = arrivalTime;
 	}
-
-	private String _id;
-
-	public String get_id() {
-		return _id;
+	public boolean isFromDefault() {
+		return fromDefault;
 	}
-	public void set_id(String _id) {
-		this._id = _id;
+	public void setFromDefault(boolean fromDefault) {
+		this.fromDefault = fromDefault;
 	}
-
-
+	public boolean isModified() {
+		return modified;
+	}
+	public void setModified(boolean modified) {
+		this.modified = modified;
+	}
+	
 }

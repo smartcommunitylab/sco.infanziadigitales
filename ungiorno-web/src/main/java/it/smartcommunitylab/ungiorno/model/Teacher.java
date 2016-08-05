@@ -24,7 +24,7 @@ import com.google.common.collect.Lists;
  *
  */
 public class Teacher extends SchoolObject {
-	private String teacherId, fullname, furname, firstName;
+	private String teacherId, fullName, furname, firstName;
 	private List<String> groups = Lists.newArrayList();
 	
 	public String getTeacherId() {
@@ -32,12 +32,6 @@ public class Teacher extends SchoolObject {
 	}
 	public void setTeacherId(String teacherId) {
 		this.teacherId = teacherId;
-	}
-	public String getFullname() {
-		return fullname;
-	}
-	public void setFullname(String fullname) {
-		this.fullname = fullname;
 	}
 	public String getFurname() {
 		return furname;
@@ -56,6 +50,12 @@ public class Teacher extends SchoolObject {
 	}
 	public void setGroups(List<String> groups) {
 		this.groups = groups;
+	}
+	public String getFullName() {
+		return fullName;
+	}
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
 	}
 
 

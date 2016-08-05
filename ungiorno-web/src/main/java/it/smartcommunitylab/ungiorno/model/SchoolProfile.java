@@ -29,13 +29,10 @@ public class SchoolProfile extends SchoolObject {
 	private Contact contacts;
 	private List<TypeDef> absenceTypes = Lists.newArrayList();
 	private List<TypeDef> frequentIllnesses = Lists.newArrayList();
-	private List<String> groups = Lists.newArrayList();
-	private List<String> buses = Lists.newArrayList();
 	private List<String> preconfiguredTiming = Lists.newArrayList();
 	private List<String> ageGroups = Lists.newArrayList();
 	private String maxAbsenceInputTime;
 	private String maxPickupTime;
-	private List<String> teachers = Lists.newArrayList();
 	
 	public static class Timing {
 		private String fromTime, toTime;
@@ -109,22 +106,6 @@ public class SchoolProfile extends SchoolObject {
 		this.frequentIllnesses = frequentIllnesses;
 	}
 
-	public List<String> getGroups() {
-		return groups;
-	}
-
-	public void setGroups(List<String> groups) {
-		this.groups = groups;
-	}
-
-	public List<String> getBuses() {
-		return buses;
-	}
-
-	public void setBuses(List<String> buses) {
-		this.buses = buses;
-	}
-
 	public List<String> getPreconfiguredTiming() {
 		return preconfiguredTiming;
 	}
@@ -155,14 +136,6 @@ public class SchoolProfile extends SchoolObject {
 
 	public void setMaxPickupTime(String maxPickupTime) {
 		this.maxPickupTime = maxPickupTime;
-	}
-
-	public List<String> getTeachers() {
-		return teachers;
-	}
-
-	public void setTeachers(List<String> teachers) {
-		this.teachers = teachers;
 	}
 	
 }

@@ -1426,6 +1426,7 @@ public class RepositoryManager {
 	public List<SchoolProfile> getSchoolProfileByAppId(String appId) {
 		Criteria criteria = new Criteria("appId").is(appId);
 		Query query = new Query(criteria);
+		query.with(new Sort(Sort.Direction.ASC, "name"));
 		List<SchoolProfile> result = template.find(query, SchoolProfile.class);
 		return result;
 	}
@@ -1433,6 +1434,7 @@ public class RepositoryManager {
 	public List<KidProfile> getKidProfileBySchoolId(String appId, String schoolId) {
 		Criteria criteria = new Criteria("appId").is(appId).and("schoolId").is(schoolId);
 		Query query = new Query(criteria);
+		query.with(new Sort(Sort.Direction.ASC, "fullName"));
 		List<KidProfile> result = template.find(query, KidProfile.class);
 		return result;
 	}
@@ -1440,6 +1442,7 @@ public class RepositoryManager {
 	public List<Bus> getBusDataBySchoolId(String appId, String schoolId) {
 		Criteria criteria = new Criteria("appId").is(appId).and("schoolId").is(schoolId);
 		Query query = new Query(criteria);
+		query.with(new Sort(Sort.Direction.ASC, "name"));
 		List<Bus> result = template.find(query, Bus.class);
 		return result;
 	}
@@ -1447,6 +1450,7 @@ public class RepositoryManager {
 	public List<Group> getGroupDataBySchoolId(String appId, String schoolId) {
 		Criteria criteria = new Criteria("appId").is(appId).and("schoolId").is(schoolId);
 		Query query = new Query(criteria);
+		query.with(new Sort(Sort.Direction.ASC, "name"));
 		List<Group> result = template.find(query, Group.class);
 		return result;
 	}
@@ -1454,6 +1458,7 @@ public class RepositoryManager {
 	public List<Person> getPersonDataBySchoolId(String appId, String schoolId) {
 		Criteria criteria = new Criteria("appId").is(appId).and("schoolId").is(schoolId);
 		Query query = new Query(criteria);
+		query.with(new Sort(Sort.Direction.ASC, "fullName"));
 		List<Person> result = template.find(query, Person.class);
 		return result;
 	}
@@ -1461,6 +1466,7 @@ public class RepositoryManager {
 	public List<Teacher> getTeacherDataBySchoolId(String appId, String schoolId) {
 		Criteria criteria = new Criteria("appId").is(appId).and("schoolId").is(schoolId);
 		Query query = new Query(criteria);
+		query.with(new Sort(Sort.Direction.ASC, "fullName"));
 		List<Teacher> result = template.find(query, Teacher.class);
 		return result;
 	}

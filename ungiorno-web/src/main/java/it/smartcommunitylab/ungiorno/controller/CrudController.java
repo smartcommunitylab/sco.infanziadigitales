@@ -55,8 +55,7 @@ public class CrudController {
 	}
 	
 	@RequestMapping(method=RequestMethod.GET, value="/api/{appId}/school")
-	public @ResponseBody List<SchoolProfile> getSchooclProfilesByAppId(@PathVariable String appId, 
-			@PathVariable String schoolId) throws Exception {
+	public @ResponseBody List<SchoolProfile> getSchooclProfilesByAppId(@PathVariable String appId) throws Exception {
 		List<SchoolProfile> result = null;
 		result = storage.getSchoolProfileByAppId(appId);
 		if(logger.isInfoEnabled()) {

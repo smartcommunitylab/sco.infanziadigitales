@@ -49,7 +49,7 @@ public class CrudController {
 			logger.info(String.format("getSchoolProfile[%s]: %s", appId, schoolId));
 		}
 		if(result == null) {
-			throw new EntityNotFoundException(String.format("Entity with id %d not found", schoolId));
+			throw new EntityNotFoundException(String.format("Entity with id %s not found", schoolId));
 		}
 		return result;
 	}

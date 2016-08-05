@@ -26,6 +26,7 @@ import it.smartcommunitylab.ungiorno.diary.model.MultimediaEntry;
 import it.smartcommunitylab.ungiorno.model.AppInfo;
 import it.smartcommunitylab.ungiorno.model.AuthPerson;
 import it.smartcommunitylab.ungiorno.model.Bus;
+import it.smartcommunitylab.ungiorno.model.BusData;
 import it.smartcommunitylab.ungiorno.model.CalendarItem;
 import it.smartcommunitylab.ungiorno.model.ChatMessage;
 import it.smartcommunitylab.ungiorno.model.Communication;
@@ -42,6 +43,7 @@ import it.smartcommunitylab.ungiorno.model.Menu;
 import it.smartcommunitylab.ungiorno.model.Parent;
 import it.smartcommunitylab.ungiorno.model.Person;
 import it.smartcommunitylab.ungiorno.model.SchoolProfile;
+import it.smartcommunitylab.ungiorno.model.SchoolUser;
 import it.smartcommunitylab.ungiorno.model.SectionData;
 import it.smartcommunitylab.ungiorno.model.SectionData.ServiceProfile;
 import it.smartcommunitylab.ungiorno.model.Teacher;
@@ -76,6 +78,8 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
+
+import com.google.common.collect.Lists;
 
 @Component
 public class RepositoryManager {
@@ -148,11 +152,11 @@ public class RepositoryManager {
 	 */
 	public SchoolProfile getSchoolProfileForUser(String appId, String username) {
 		Query query = Query.query(new Criteria("appId").is(appId).and("username").is(username));
-		Teacher teacher = template.findOne(query, Teacher.class);
-		if (teacher != null) {
-			return getSchoolProfile(appId, teacher.getSchoolId());
+		SchoolUser user = template.findOne(query, SchoolUser.class);
+		if (user != null) {
+			return getSchoolProfile(appId, user.getSchoolId());
 		}
-		return getSchoolProfile(appId, null);
+		return null;
 	}
 
 
@@ -215,7 +219,7 @@ public class RepositoryManager {
 				if (kp.getDiaryTeachers() != null) {
 					for (DiaryTeacher dt: kp.getDiaryTeachers()) {
 						if (!existingTeachers.contains(dt.getTeacherId())) {
-							Teacher teacher = getTeacher(dt.getTeacherId(), appId, schoolId);
+//							Teacher teacher = getTeacher(dt.getTeacherId(), appId, schoolId);
 //							kid.getPersons().add(teacher.toDiaryKidPerson(true));
 						}
 					}			
@@ -241,7 +245,7 @@ public class RepositoryManager {
 //				}
 				if (kp.getDiaryTeachers() != null) {
 					for (DiaryTeacher dt: kp.getDiaryTeachers()) {
-						Teacher teacher = getTeacher(dt.getTeacherId(), appId, schoolId);
+//						Teacher teacher = getTeacher(dt.getTeacherId(), appId, schoolId);
 //						dk.getPersons().add(teacher.toDiaryKidPerson(true));
 					}			
 				}
@@ -704,7 +708,10 @@ public class RepositoryManager {
 	 * @return
 	 */
 	public List<Communication> getCommunications(String appId, String schoolId) {
-		return template.find(schoolQuery(appId, schoolId), Communication.class);
+		Query query = schoolQuery(appId, schoolId);
+		query.addCriteria(new Criteria("expireDate").gte(System.currentTimeMillis()));
+		query.with(new Sort(Sort.Direction.ASC, "creationDate"));
+		return template.find(query, Communication.class);
 	}
 	/**
 	 * @param appId
@@ -713,30 +720,37 @@ public class RepositoryManager {
 	 * @return
 	 */
 	public List<Communication> getKidCommunications(String appId, String schoolId, String kidId) {
-		Query q = schoolQuery(appId, schoolId);
-		q.addCriteria(new Criteria("children").is(kidId));
-		return template.find(q, Communication.class);
+		//TODO test this code
+		Query query = schoolQuery(appId, schoolId);
+		query.addCriteria(new Criteria("expireDate").gte(System.currentTimeMillis()));
+		query.addCriteria(new Criteria("recipientsChild").is(kidId));
+		query.with(new Sort(Sort.Direction.ASC, "creationDate"));
+		return template.find(query, Communication.class);
 	}
 
 	/**
 	 * @param comm
 	 * @return
 	 */
-//	public Communication saveCommunication(Communication comm) {
-//		Query q = schoolQuery(comm.getAppId(), comm.getSchoolId());
-//		q.addCriteria(new Criteria("communicationId").is(comm.getCommunicationId()));
-//		Communication old = template.findOne(q, Communication.class);
-//		if (old != null) {
-//			comm.set_id(old.get_id());
-//			comm.setCommunicationId(comm.getCommunicationId());
-//		} else {
-//			comm.set_id(ObjectId.get().toString());
-//			comm.setCommunicationId(comm.get_id());
-//		}
-//		comm.setCreationDate(System.currentTimeMillis());
-//		template.save(comm);
-//		return comm;
-//	}
+		public Communication saveCommunication(Communication communication) {
+			List<String> resultRecipients = Lists.newArrayList(communication.getRecipientsChild());
+			//expand group into list of kids
+			//TODO test this code
+			for(String groupId : communication.getRecipientsGroup()) {
+				Query query = schoolQuery(communication.getAppId(), communication.getSchoolId());
+				query.addCriteria(new Criteria("groups").is(groupId)); 
+				List<KidProfile> kids = template.find(query, KidProfile.class);
+				for(KidProfile kidProfile : kids) {
+					if(!resultRecipients.contains(kidProfile.getKidId())) {
+						resultRecipients.add(kidProfile.getKidId());
+					}
+				}
+			}
+			communication.setCommunicationId(Utils.getUUID());
+			communication.setCreationDate(System.currentTimeMillis());
+			template.save(communication);
+			return communication;
+		}
 
 	/**
 	 * @param appId
@@ -807,71 +821,72 @@ public class RepositoryManager {
 	 * @param date
 	 * @return
 	 */
-//	public BusData getBusData(String appId, String schoolId, long date) {
-//		Query q = schoolQuery(appId, schoolId);
-////		q.addCriteria(new Criteria("dateFrom").is(timestampToDate(date)));
-//		List<KidBusData> kidBusData = template.find(q, KidBusData.class);
-//		ListMultimap<String, BusData.KidProfile> mm = ArrayListMultimap.create();
-//		
-//		Map<String, KidCalAssenza> assenzeMap = readAssenze(appId, schoolId, date);
-//		Map<String, KidCalRitiro> ritiriMap = readRitiri(appId, schoolId, date);
-//		Map<String, KidCalFermata> stopsMap = readFermate(appId, schoolId, date);
-//
-//		for (KidBusData kbd : kidBusData) {
-//			BusData.KidProfile busKidProfile = new BusData.KidProfile();
-//			KidProfile kp = getKidProfile(appId, schoolId, kbd.getKidId());
-//			KidConfig conf = getKidConfig(appId, schoolId, kbd.getKidId());
-//			
-//			busKidProfile.setFullName(kp.getFullName());
-//			busKidProfile.setImage(kp.getImage());
-//			busKidProfile.setKidId(kbd.getKidId());
-//
-//			KidCalAssenza assenza = assenzeMap.get(kbd.getKidId());
-//			if (conf != null && !conf.getServices().getBus().isActive() || assenza != null) {
-//				busKidProfile.setVariation(true);
-//				busKidProfile.setBusStop(null);
-//			} else {
-//				KidCalFermata stop = stopsMap.get(kp.getKidId());
-//				String personId = null;
-//				if (stop != null) {
-//					busKidProfile.setVariation(true);
-//					busKidProfile.setBusStop(stop.getStopId());
-//					personId = stop.getPersonId();
-//				} else {
-//					KidCalRitiro ritiro = ritiriMap.get(kp.getKidId());
-//					if (ritiro != null) {
-//						busKidProfile.setVariation(true);
-//						busKidProfile.setBusStop(null);
-//					} else {
-//						personId = conf != null ? conf.getDefaultPerson() : findDefaultPerson(kp);
-//						busKidProfile.setBusStop(conf != null ? conf.getServices().getBus().getDefaultIdBack() : kp.getServices().getBus().getStops().get(0).getStopId());
-//					}
-//				}
-//				if (personId != null) {
-//					busKidProfile.setPersonWhoWaitId(personId);
-//					AuthPerson ap = getPerson(personId, conf, kp);
-//					busKidProfile.setPersonWhoWaitName(ap.getFullName());
-//					busKidProfile.setPersonWhoWaitRelation(ap.getRelation());
-//				}
-//			}
-//			mm.put(kbd.getBusId(), busKidProfile);
-//		}
-//		BusData data = new BusData();
-//		data.setAppId(appId);
-//		data.setSchoolId(schoolId);
-//		data.setDate(timestampToDate(date));
-//		data.setBuses(new ArrayList<BusData.Bus>());
-//		SchoolProfile profile = getSchoolProfile(appId, schoolId);
-//
-//		for (BusProfile p : profile.getBuses()) {
-//			BusData.Bus b = new BusData.Bus();
-//			b.setBusId(p.getBusId());
-//			b.setBusName(p.getName());
-//			b.setChildren(mm.get(b.getBusId()));
-//			data.getBuses().add(b);
-//		}
-//		return data;
-//	}
+		public BusData getBusData(String appId, String schoolId, long date) {
+			//TODO
+			Query q = schoolQuery(appId, schoolId);
+	//		q.addCriteria(new Criteria("dateFrom").is(timestampToDate(date)));
+			List<KidBusData> kidBusData = template.find(q, KidBusData.class);
+			ListMultimap<String, BusData.KidProfile> mm = ArrayListMultimap.create();
+			
+			Map<String, KidCalAssenza> assenzeMap = readAssenze(appId, schoolId, date);
+			Map<String, KidCalRitiro> ritiriMap = readRitiri(appId, schoolId, date);
+			Map<String, KidCalFermata> stopsMap = readFermate(appId, schoolId, date);
+	
+			for (KidBusData kbd : kidBusData) {
+				BusData.KidProfile busKidProfile = new BusData.KidProfile();
+				KidProfile kp = getKidProfile(appId, schoolId, kbd.getKidId());
+				KidConfig conf = getKidConfig(appId, schoolId, kbd.getKidId());
+				
+				busKidProfile.setFullName(kp.getFullName());
+				busKidProfile.setImage(kp.getImage());
+				busKidProfile.setKidId(kbd.getKidId());
+	
+				KidCalAssenza assenza = assenzeMap.get(kbd.getKidId());
+				if (conf != null && !conf.getServices().getBus().isActive() || assenza != null) {
+					busKidProfile.setVariation(true);
+					busKidProfile.setBusStop(null);
+				} else {
+					KidCalFermata stop = stopsMap.get(kp.getKidId());
+					String personId = null;
+					if (stop != null) {
+						busKidProfile.setVariation(true);
+						busKidProfile.setBusStop(stop.getStopId());
+						personId = stop.getPersonId();
+					} else {
+						KidCalRitiro ritiro = ritiriMap.get(kp.getKidId());
+						if (ritiro != null) {
+							busKidProfile.setVariation(true);
+							busKidProfile.setBusStop(null);
+						} else {
+							personId = conf != null ? conf.getDefaultPerson() : findDefaultPerson(kp);
+							busKidProfile.setBusStop(conf != null ? conf.getServices().getBus().getDefaultIdBack() : kp.getServices().getBus().getStops().get(0).getStopId());
+						}
+					}
+					if (personId != null) {
+						busKidProfile.setPersonWhoWaitId(personId);
+						AuthPerson ap = getPerson(personId, conf, kp);
+						busKidProfile.setPersonWhoWaitName(ap.getFullName());
+						busKidProfile.setPersonWhoWaitRelation(ap.getRelation());
+					}
+				}
+				mm.put(kbd.getBusId(), busKidProfile);
+			}
+			BusData data = new BusData();
+			data.setAppId(appId);
+			data.setSchoolId(schoolId);
+			data.setDate(timestampToDate(date));
+			data.setBuses(new ArrayList<BusData.Bus>());
+			SchoolProfile profile = getSchoolProfile(appId, schoolId);
+	
+			for (BusProfile p : profile.getBuses()) {
+				BusData.Bus b = new BusData.Bus();
+				b.setBusId(p.getBusId());
+				b.setBusName(p.getName());
+				b.setChildren(mm.get(b.getBusId()));
+				data.getBuses().add(b);
+			}
+			return data;
+		}
 
 	/**
 	 * @param appId
@@ -1126,15 +1141,6 @@ public class RepositoryManager {
 			e.printStackTrace();
 			return date;
 		}
-	}
-
-	/**
-	 * @return
-	 */
-	public Teacher getTeacher(String username, String appId, String schoolId) {
-		Query q = schoolQuery(appId, schoolId);
-		q.addCriteria(new Criteria("username").is(username));
-		return template.findOne(q, Teacher.class);
 	}
 
 	/**

@@ -16,6 +16,8 @@
 
 package it.smartcommunitylab.ungiorno.controller;
 
+import it.smartcommunitylab.ungiorno.config.exception.EntityNotFoundException;
+import it.smartcommunitylab.ungiorno.config.exception.UnauthorizedException;
 import it.smartcommunitylab.ungiorno.model.BusData;
 import it.smartcommunitylab.ungiorno.model.Communication;
 import it.smartcommunitylab.ungiorno.model.Menu;
@@ -26,8 +28,10 @@ import it.smartcommunitylab.ungiorno.model.TeacherCalendar;
 import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
 import it.smartcommunitylab.ungiorno.utils.JsonUtil;
 import it.smartcommunitylab.ungiorno.utils.PermissionsManager;
+import it.smartcommunitylab.ungiorno.utils.Utils;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -36,12 +40,15 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -79,34 +86,29 @@ public class SchoolController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/school/{appId}/profile")
-	public @ResponseBody Response<SchoolProfile> getSchoolProfileForTeacher(@PathVariable String appId) {
-		try {
-			String userId = permissions.getUserId();
-			SchoolProfile profile = storage.getSchoolProfileForUser(appId, userId);
-			if(logger.isInfoEnabled()) {
-				logger.info("getSchoolProfileForTeacher:" + userId + " - " + JsonUtil.convertObject(profile));
-			}
-			return new Response<SchoolProfile>(profile);
-		} catch (Exception e) {
-			return new Response<>(e.getMessage());
+	public @ResponseBody Response<SchoolProfile> getSchoolProfileForTeacher(@PathVariable String appId) 
+		throws Exception {
+		String userId = permissions.getUserId();
+		SchoolProfile profile = storage.getSchoolProfileForUser(appId, userId);
+		if(profile == null) {
+			throw new EntityNotFoundException(String.format("Profile for user with id %s not found", userId));
 		}
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("getSchoolProfileForTeacher[%s]: %s", appId, userId));
+		}
+		return new Response<SchoolProfile>(profile);
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/school/{appId}/{schoolId}/communications")
-	public @ResponseBody Response<Communication> sendCommunication(@RequestBody Communication comm, @PathVariable String appId, @PathVariable String schoolId) {
-
-		try {
-			comm.setAppId(appId);
-			comm.setSchoolId(schoolId);
-//			return new Response<>(storage.saveCommunication(comm));
-			return new Response<>();
-		} catch (Exception e) {
-			return new Response<>(e.getMessage());
-		}
+	public @ResponseBody Response<Communication> sendCommunication(@RequestBody Communication comm, 
+			@PathVariable String appId, @PathVariable String schoolId) throws Exception {
+		comm.setAppId(appId);
+		comm.setSchoolId(schoolId);
+		return new Response<>(storage.saveCommunication(comm));
 	}
+	
 	@RequestMapping(method = RequestMethod.GET, value = "/school/{appId}/{schoolId}/communications")
 	public @ResponseBody Response<List<Communication>> getComms(@PathVariable String appId, @PathVariable String schoolId) {
-
 		try {
 			List<Communication> list = storage.getCommunications(appId, schoolId);
 			return new Response<>(list);
@@ -116,23 +118,11 @@ public class SchoolController {
 	}
 
 	@RequestMapping(method = RequestMethod.DELETE, value = "/school/{appId}/{schoolId}/communications/{commId}")
-	public @ResponseBody Response<Void> deleteCommunication(@PathVariable String appId, @PathVariable String schoolId, @PathVariable String commId) {
-
+	public @ResponseBody Response<Void> deleteCommunication(@PathVariable String appId, @PathVariable String schoolId, 
+			@PathVariable String commId) {
 		try {
 			storage.deleteCommunication(appId, schoolId, commId);
 			return new Response<>((Void)null);
-		} catch (Exception e) {
-			return new Response<>(e.getMessage());
-		}
-	}
-
-
-	@RequestMapping(method = RequestMethod.GET, value = "/school/{appId}/{schoolId}/menu")
-	public @ResponseBody Response<List<Menu>> getMeals(@PathVariable String appId, @PathVariable String schoolId, @RequestParam long from, @RequestParam long to) {
-
-		try {
-			List<Menu> list = storage.getMeals(appId, schoolId, from, to);
-			return new Response<>(list);
 		} catch (Exception e) {
 			return new Response<>(e.getMessage());
 		}
@@ -149,37 +139,36 @@ public class SchoolController {
 		}
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/school/{appId}/{schoolId}/teacher")
-	public @ResponseBody Response<Teacher> getTeacher(@PathVariable String appId, @PathVariable String schoolId) {
-		String username = permissions.getUserId();
+	@RequestMapping(method = RequestMethod.GET, value = "/school/{appId}/{schoolId}/buses")
+	public @ResponseBody Response<BusData> getBuses(@PathVariable String appId, @PathVariable String schoolId, @RequestParam long date) {
+		//TODO
 		try {
-			Teacher result = storage.getTeacher(username, appId, schoolId);
-			return new Response<>(result);
+			BusData buses = storage.getBusData(appId, schoolId, date);
+			return new Response<>();
 		} catch (Exception e) {
 			return new Response<>(e.getMessage());
 		}
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/school/{appId}/{schoolId}/teachercalendar")
-	public @ResponseBody Response<List<TeacherCalendar>> getTeacherCalendar(@PathVariable String appId, @PathVariable String schoolId, @RequestParam long from, @RequestParam long to) {
-
-		try {
-			List<TeacherCalendar> list = storage.getTeacherCalendar(appId, schoolId, from, to);
-			return new Response<>(list);
-		} catch (Exception e) {
-			return new Response<>(e.getMessage());
-		}
+	@ExceptionHandler(EntityNotFoundException.class)
+	@ResponseStatus(value=HttpStatus.BAD_REQUEST)
+	@ResponseBody
+	public Map<String,String> handleEntityNotFoundError(HttpServletRequest request, Exception exception) {
+		return Utils.handleError(exception);
 	}
-
-	@RequestMapping(method = RequestMethod.GET, value = "/school/{appId}/{schoolId}/buses")
-	public @ResponseBody Response<BusData> getBuses(@PathVariable String appId, @PathVariable String schoolId, @RequestParam long date) {
-
-		try {
-//			BusData buses = storage.getBusData(appId, schoolId, date);
-			return new Response<>();
-		} catch (Exception e) {
-			return new Response<>(e.getMessage());
-		}
+	
+	@ExceptionHandler(UnauthorizedException.class)
+	@ResponseStatus(value=HttpStatus.FORBIDDEN)
+	@ResponseBody
+	public Map<String,String> handleUnauthorizedError(HttpServletRequest request, Exception exception) {
+		return Utils.handleError(exception);
+	}
+	
+	@ExceptionHandler(Exception.class)
+	@ResponseStatus(value=HttpStatus.INTERNAL_SERVER_ERROR)
+	@ResponseBody
+	public Map<String,String> handleGenericError(HttpServletRequest request, Exception exception) {
+		return Utils.handleError(exception);
 	}
 
 }

@@ -15,7 +15,6 @@
  ******************************************************************************/
 package it.smartcommunitylab.ungiorno.model;
 
-import java.util.List;
 
 /**
  * @author raman
@@ -24,29 +23,18 @@ import java.util.List;
 public class KidConfig extends SchoolObject {
 
 	private String kidId;
-	private ConfigServices services;
-	private List<AuthPerson> extraPersons;
-
 	private String exitTime;
+	private String enterTime;
 	private String defaultPerson;
-	private boolean receiveNotification;
+	private boolean useBus;
+	private String busId;
+	private String busStop;
+	
 	public String getKidId() {
 		return kidId;
 	}
 	public void setKidId(String kidId) {
 		this.kidId = kidId;
-	}
-	public ConfigServices getServices() {
-		return services;
-	}
-	public void setServices(ConfigServices services) {
-		this.services = services;
-	}
-	public List<AuthPerson> getExtraPersons() {
-		return extraPersons;
-	}
-	public void setExtraPersons(List<AuthPerson> extraPersons) {
-		this.extraPersons = extraPersons;
 	}
 	public String getExitTime() {
 		return exitTime;
@@ -54,38 +42,36 @@ public class KidConfig extends SchoolObject {
 	public void setExitTime(String exitTime) {
 		this.exitTime = exitTime;
 	}
+	public String getEnterTime() {
+		return enterTime;
+	}
+	public void setEnterTime(String enterTime) {
+		this.enterTime = enterTime;
+	}
 	public String getDefaultPerson() {
 		return defaultPerson;
 	}
 	public void setDefaultPerson(String defaultPerson) {
 		this.defaultPerson = defaultPerson;
 	}
-	public boolean isReceiveNotification() {
-		return receiveNotification;
+	public boolean isUseBus() {
+		return useBus;
 	}
-	public void setReceiveNotification(boolean receiveNotification) {
-		this.receiveNotification = receiveNotification;
+	public void setUseBus(boolean useBus) {
+		this.useBus = useBus;
 	}
-
-	private String _id;
-	public String get_id() {
-		return _id;
+	public String getBusId() {
+		return busId;
 	}
-	public void set_id(String _id) {
-		this._id = _id;
+	public void setBusId(String busId) {
+		this.busId = busId;
 	}
-
-	public boolean anticipoActive() {
-		return services != null && services.getAnticipo() != null && services.getAnticipo().isActive();
+	public String getBusStop() {
+		return busStop;
 	}
-	public boolean posticipoActive() {
-		return services != null && services.getPosticipo() != null && services.getPosticipo().isActive();
+	public void setBusStop(String busStop) {
+		this.busStop = busStop;
 	}
-	public boolean mensaActive() {
-		return services != null && services.getMensa() != null && services.getMensa().isActive();
-	}
-	public boolean busActive() {
-		return services != null && services.getBus() != null && services.getBus().isActive();
-	}
+	
 
 }

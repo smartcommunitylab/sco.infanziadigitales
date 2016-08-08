@@ -79,6 +79,8 @@ import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Lists;
 
 @Component
@@ -823,14 +825,16 @@ public class RepositoryManager {
 	 */
 		public BusData getBusData(String appId, String schoolId, long date) {
 			//TODO
-			Query q = schoolQuery(appId, schoolId);
-	//		q.addCriteria(new Criteria("dateFrom").is(timestampToDate(date)));
-			List<KidBusData> kidBusData = template.find(q, KidBusData.class);
 			ListMultimap<String, BusData.KidProfile> mm = ArrayListMultimap.create();
+			Map<String, Person> personMap = new HashMap<String, Person>();
+			Map<String, KidProfile> kidMap = new HashMap<String, KidProfile>();
+			
+			Query q = schoolQuery(appId, schoolId);
+			q.addCriteria(new Criteria("useBus").is(true));
+			List<KidConfig> kidConfigList = template.find(q, KidConfig.class);  
 			
 			Map<String, KidCalAssenza> assenzeMap = readAssenze(appId, schoolId, date);
 			Map<String, KidCalRitiro> ritiriMap = readRitiri(appId, schoolId, date);
-			Map<String, KidCalFermata> stopsMap = readFermate(appId, schoolId, date);
 	
 			for (KidBusData kbd : kidBusData) {
 				BusData.KidProfile busKidProfile = new BusData.KidProfile();

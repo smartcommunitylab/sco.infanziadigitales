@@ -824,69 +824,75 @@ public class RepositoryManager {
 	 * @return
 	 */
 		public BusData getBusData(String appId, String schoolId, long date) {
-			//TODO
 			ListMultimap<String, BusData.KidProfile> mm = ArrayListMultimap.create();
-			Map<String, Person> personMap = new HashMap<String, Person>();
-			Map<String, KidProfile> kidMap = new HashMap<String, KidProfile>();
 			
-			Query q = schoolQuery(appId, schoolId);
-			q.addCriteria(new Criteria("useBus").is(true));
-			List<KidConfig> kidConfigList = template.find(q, KidConfig.class);  
+			Query queryConfig = schoolQuery(appId, schoolId);
+			queryConfig.addCriteria(new Criteria("useBus").is(true));
+			List<KidConfig> kidConfigList = template.find(queryConfig, KidConfig.class);
+			
+			Map<String, Person> personMap = getPersonMap(appId, schoolId);
+			Map<String, KidProfile> kidProfileMap = getKidProfileMap(appId, schoolId);
 			
 			Map<String, KidCalAssenza> assenzeMap = readAssenze(appId, schoolId, date);
 			Map<String, KidCalRitiro> ritiriMap = readRitiri(appId, schoolId, date);
 	
-			for (KidBusData kbd : kidBusData) {
+			for (KidConfig conf : kidConfigList) {
 				BusData.KidProfile busKidProfile = new BusData.KidProfile();
-				KidProfile kp = getKidProfile(appId, schoolId, kbd.getKidId());
-				KidConfig conf = getKidConfig(appId, schoolId, kbd.getKidId());
+				KidProfile kp = kidProfileMap.get(conf.getKidId());
 				
 				busKidProfile.setFullName(kp.getFullName());
 				busKidProfile.setImage(kp.getImage());
-				busKidProfile.setKidId(kbd.getKidId());
+				busKidProfile.setKidId(kp.getKidId());
 	
-				KidCalAssenza assenza = assenzeMap.get(kbd.getKidId());
-				if (conf != null && !conf.getServices().getBus().isActive() || assenza != null) {
-					busKidProfile.setVariation(true);
-					busKidProfile.setBusStop(null);
+				//if assenza continue
+				KidCalAssenza assenza = assenzeMap.get(kp.getKidId());
+				//check assenza
+				if (assenza != null) {
+					continue;
 				} else {
-					KidCalFermata stop = stopsMap.get(kp.getKidId());
-					String personId = null;
-					if (stop != null) {
-						busKidProfile.setVariation(true);
-						busKidProfile.setBusStop(stop.getStopId());
-						personId = stop.getPersonId();
-					} else {
-						KidCalRitiro ritiro = ritiriMap.get(kp.getKidId());
-						if (ritiro != null) {
+					//check ritiro
+					KidCalRitiro ritiro = ritiriMap.get(kp.getKidId());
+					if(ritiro != null) {
+						if(!ritiro.isUsingBus()) {
+							continue;
+						}
+						Person person = personMap.get(ritiro.getPersonId());
+						if(person != null) {
 							busKidProfile.setVariation(true);
-							busKidProfile.setBusStop(null);
-						} else {
-							personId = conf != null ? conf.getDefaultPerson() : findDefaultPerson(kp);
-							busKidProfile.setBusStop(conf != null ? conf.getServices().getBus().getDefaultIdBack() : kp.getServices().getBus().getStops().get(0).getStopId());
+							busKidProfile.setPersonWhoWaitId(person.getPersonId());
+							busKidProfile.setPersonWhoWaitName(person.getFullName());
+							busKidProfile.setPersonWhoWaitRelation(Utils.getPersonRelation(person));
+							busKidProfile.setBusStop(ritiro.getBusStop());
+							mm.put(conf.getBusId(), busKidProfile);
+						}
+					} else {
+						//default conf
+						Person person = personMap.get(conf.getDefaultPerson());
+						if(person != null) {
+							busKidProfile.setVariation(true);
+							busKidProfile.setPersonWhoWaitId(person.getPersonId());
+							busKidProfile.setPersonWhoWaitName(person.getFullName());
+							busKidProfile.setPersonWhoWaitRelation(Utils.getPersonRelation(person));
+							busKidProfile.setBusStop(conf.getBusStop());
+							mm.put(conf.getBusId(), busKidProfile);
 						}
 					}
-					if (personId != null) {
-						busKidProfile.setPersonWhoWaitId(personId);
-						AuthPerson ap = getPerson(personId, conf, kp);
-						busKidProfile.setPersonWhoWaitName(ap.getFullName());
-						busKidProfile.setPersonWhoWaitRelation(ap.getRelation());
-					}
 				}
-				mm.put(kbd.getBusId(), busKidProfile);
 			}
+			
 			BusData data = new BusData();
 			data.setAppId(appId);
 			data.setSchoolId(schoolId);
 			data.setDate(timestampToDate(date));
 			data.setBuses(new ArrayList<BusData.Bus>());
-			SchoolProfile profile = getSchoolProfile(appId, schoolId);
-	
-			for (BusProfile p : profile.getBuses()) {
+			
+			Query queryBus = schoolQuery(appId, schoolId);
+			List<Bus> busList = template.find(queryBus, Bus.class);
+			for (Bus bus : busList) {
 				BusData.Bus b = new BusData.Bus();
-				b.setBusId(p.getBusId());
-				b.setBusName(p.getName());
-				b.setChildren(mm.get(b.getBusId()));
+				b.setBusId(bus.getBusId());
+				b.setBusName(bus.getName());
+				b.setChildren(mm.get(bus.getBusId()));
 				data.getBuses().add(b);
 			}
 			return data;
@@ -1018,7 +1024,6 @@ public class RepositoryManager {
 			long date) {
 		Query q = schoolQuery(appId, schoolId);
 		addDayCriteria(date, q);
-		
 		List<KidCalRitiro> ritiri = template.find(q, KidCalRitiro.class);
 		Map<String, KidCalRitiro> ritiriMap = new HashMap<String, KidCalRitiro>();
 		for (KidCalRitiro r : ritiri) {
@@ -1027,12 +1032,9 @@ public class RepositoryManager {
 		return ritiriMap;
 	}
 
-	private Map<String, KidCalAssenza> readAssenze(String appId,
-			String schoolId, long date) {
+	private Map<String, KidCalAssenza> readAssenze(String appId, String schoolId, long date) {
 		Query q = schoolQuery(appId, schoolId);
-		q.addCriteria(new Criteria().andOperator(
-				new Criteria("dateFrom").lte(date),
-				new Criteria("dateTo").gte(date)));
+		addDayCriteria(date, q);
 		List<KidCalAssenza> assenze = template.find(q, KidCalAssenza.class);
 		Map<String, KidCalAssenza> assenzeMap = new HashMap<String, KidCalAssenza>();
 		for (KidCalAssenza a : assenze) {
@@ -1623,4 +1625,25 @@ public class RepositoryManager {
 		}
 		return null;
 	}
+	
+	public Map<String, Person> getPersonMap(String appId, String schoolId) {
+		Map<String, Person> result = new HashMap<String, Person>();
+		Query query = schoolQuery(appId, schoolId);
+		List<Person> persons = template.find(query, Person.class);
+		for(Person person : persons) {
+			result.put(person.getPersonId(), person);
+		}
+		return result;
+	}
+	
+	public Map<String, KidProfile> getKidProfileMap(String appId, String schoolId) {
+		Map<String, KidProfile> result = new HashMap<String, KidProfile>();
+		Query query = schoolQuery(appId, schoolId);
+		List<KidProfile> profiles = template.find(query, KidProfile.class);
+		for(KidProfile profile : profiles) {
+			result.put(profile.getKidId(), profile);
+		}
+		return result;
+	}
+
 }

@@ -1,5 +1,7 @@
 package it.smartcommunitylab.ungiorno.utils;
 
+import it.smartcommunitylab.ungiorno.model.Person;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -76,6 +78,16 @@ public class Utils {
 			result = false;
 		}
 		return result;
+	}
+	
+	public static String getPersonRelation(Person person) {
+		String relation = null;
+		if(person.isParent()) {
+			relation = "parent";
+		} else {
+			relation = person.getRelation();
+		}
+		return relation;
 	}
 	
 	public static Map<String,String> handleError(Exception exception) {

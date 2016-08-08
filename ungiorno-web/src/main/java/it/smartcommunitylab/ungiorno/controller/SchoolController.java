@@ -20,11 +20,9 @@ import it.smartcommunitylab.ungiorno.config.exception.EntityNotFoundException;
 import it.smartcommunitylab.ungiorno.config.exception.UnauthorizedException;
 import it.smartcommunitylab.ungiorno.model.BusData;
 import it.smartcommunitylab.ungiorno.model.Communication;
-import it.smartcommunitylab.ungiorno.model.Menu;
 import it.smartcommunitylab.ungiorno.model.Response;
 import it.smartcommunitylab.ungiorno.model.SchoolProfile;
 import it.smartcommunitylab.ungiorno.model.Teacher;
-import it.smartcommunitylab.ungiorno.model.TeacherCalendar;
 import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
 import it.smartcommunitylab.ungiorno.utils.JsonUtil;
 import it.smartcommunitylab.ungiorno.utils.PermissionsManager;
@@ -141,10 +139,9 @@ public class SchoolController {
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/school/{appId}/{schoolId}/buses")
 	public @ResponseBody Response<BusData> getBuses(@PathVariable String appId, @PathVariable String schoolId, @RequestParam long date) {
-		//TODO
 		try {
-			BusData buses = storage.getBusData(appId, schoolId, date);
-			return new Response<>();
+			BusData busData = storage.getBusData(appId, schoolId, date);
+			return new Response<>(busData);
 		} catch (Exception e) {
 			return new Response<>(e.getMessage());
 		}

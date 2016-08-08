@@ -408,10 +408,10 @@ public class RepositoryManager {
 	 * @return
 	 */
 	public KidConfig saveConfig(KidConfig config) {
-		// TODO: MERGE of data?
-		KidConfig old = getKidConfig(config.getAppId(), config.getSchoolId(), config.getKidId());
+		Query query = kidQuery(config.getAppId(), config.getSchoolId(), config.getKidId());
+		KidConfig old = template.findOne(query, KidConfig.class);
 		if (old != null) {
-			config.set_id(old.get_id());
+			template.remove(query, KidConfig.class);
 		}
 		template.save(config);
 		return config;
@@ -425,13 +425,12 @@ public class RepositoryManager {
 	public List<KidProfile> getKidProfilesByParent(String appId, String username) throws ProfileNotFoundException {
 		Query q = appQuery(appId);
 		q.addCriteria(new Criteria("username").is(username));
-		Parent p = template.findOne(q, Parent.class);
+		Person p = template.findOne(q, Person.class);
 		if(p == null) {
 			throw new ProfileNotFoundException("Profile not found");
 		}
-		
 		q = appQuery(appId);
-		q.addCriteria(new Criteria("persons").elemMatch(new Criteria("personId").is(p.getPersonId()).and("parent").is(true)));
+		q.addCriteria(new Criteria("parents").is(p.getPersonId()));
 		return template.find(q, KidProfile.class);
 	}
 	
@@ -476,52 +475,6 @@ public class RepositoryManager {
 	
 
 	/**
-	 * @param stop
-	 * @return
-	 */
-//	public KidConfig saveStop(KidCalFermata stop) {
-//		stop.setDate(timestampToDate(stop.getDate()));
-//		Query q = kidQuery(stop.getAppId(), stop.getSchoolId(), stop.getKidId());
-//		q.addCriteria(new Criteria("date").is(stop.getDate()));
-//		template.remove(q, KidCalFermata.class);
-//		
-//		// delete direct ritiro
-//		q = kidQuery(stop.getAppId(), stop.getSchoolId(), stop.getKidId());
-//		addDayCriteria(stop.getDate(), q);
-//		template.remove(q, KidCalRitiro.class);
-//		// delete absence for that date
-//		q = kidQuery(stop.getAppId(), stop.getSchoolId(), stop.getKidId());
-//		q.addCriteria(new Criteria("dateFrom").is(stop.getDate()));
-//		template.remove(q, KidCalAssenza.class);
-//		
-//		template.save(stop);
-//		return getKidConfig(stop.getAppId(), stop.getSchoolId(), stop.getKidId());
-//	}
-
-	/**
-	 * @param appId
-	 * @param schoolId
-	 * @param kidId
-	 * @param date
-	 * @return
-	 */
-//	public KidCalFermata getStop(String appId, String schoolId, String kidId, long date) {
-//		Query q = kidQuery(appId, schoolId, kidId);
-//		q.addCriteria(new Criteria("date").is(timestampToDate(date)));
-//		return template.findOne(q, KidCalFermata.class);
-//	}
-
-//	public List<KidCalFermata> getStop(String appId, String schoolId, String kidId, long dateFrom, long dateTo) {
-//		Query q = kidQuery(appId, schoolId, kidId);
-//		long dateTimestampFrom = timestampToDate(dateFrom);
-//		long dateTimestampTo = timestampToDate(dateTo);
-//		q.addCriteria(new Criteria().andOperator(
-//				new Criteria("date").gte(dateTimestampFrom),
-//				new Criteria("date").lte(dateTimestampTo)));
-//		return template.find(q, KidCalFermata.class);
-//	}
-
-	/**
 	 * @param appId
 	 * @param schoolId
 	 * @param kidId
@@ -530,9 +483,7 @@ public class RepositoryManager {
 	 */
 	public KidCalAssenza getAbsence(String appId, String schoolId, String kidId, long date) {
 		Query q = kidQuery(appId, schoolId, kidId);
-		q.addCriteria(new Criteria().andOperator(
-				new Criteria("dateFrom").lte(date),
-				new Criteria("dateTo").gte(date)));
+		addDayCriteria(date, q);
 		return template.findOne(q, KidCalAssenza.class);
 	}
 
@@ -557,76 +508,6 @@ public class RepositoryManager {
 				new Criteria("date").gte(dateTimestampFrom),
 				new Criteria("date").lte(dateTimestampTo)));
 		return template.find(q, KidCalRitiro.class);
-	}
-
-	/**
-	 * @param absence
-	 * @return
-	 */
-//	public KidConfig saveAbsence(KidCalAssenza absence) {
-//		Query q = kidQuery(absence.getAppId(), absence.getSchoolId(), absence.getKidId());
-//		q.addCriteria(new Criteria().andOperator(
-//				new Criteria("dateFrom").gte(absence.getDateFrom()),
-//				new Criteria("dateTo").lte(absence.getDateTo())));
-//		template.remove(q, KidCalAssenza.class);
-//		
-//		Calendar c = Calendar.getInstance();
-//		c.setTimeInMillis(absence.getDateFrom());
-//		while (c.getTimeInMillis() <= absence.getDateTo()) {
-//			c.set(Calendar.MILLISECOND, 0);
-//	    c.set(Calendar.SECOND, 0);
-//	    c.set(Calendar.MINUTE, 0);
-//	    c.set(Calendar.HOUR, 0);
-//			Date startDay = c.getTime();
-//			c.set(Calendar.MILLISECOND, 0);
-//	    c.set(Calendar.SECOND, 59);
-//	    c.set(Calendar.MINUTE, 59);
-//	    c.set(Calendar.HOUR, 23);
-//			Date endDay = c.getTime();
-//			
-//			// delete bus stop and ritiro for that day
-//			q = kidQuery(absence.getAppId(), absence.getSchoolId(), absence.getKidId());
-//			//q.addCriteria(new Criteria("date").is(c.getTimeInMillis()));
-//			q.addCriteria(new Criteria().andOperator(
-//					new Criteria("date").gte(startDay.getTime()),
-//					new Criteria("date").lte(endDay.getTime())));
-//			template.remove(q, KidCalFermata.class);
-//			template.remove(q, KidCalRitiro.class);
-//
-//			KidCalAssenza copy = absence.copy();
-//			copy.setDateFrom(startDay.getTime());
-//			copy.setDateTo(endDay.getTime());
-//			template.save(copy);
-//			c.setTimeInMillis(startDay.getTime());
-//			c.add(Calendar.DATE, 1);
-//		}
-//		return getKidConfig(absence.getAppId(), absence.getSchoolId(), absence.getKidId());
-//	}
-
-	/**
-	 * @param ritiro
-	 * @return
-	 */
-	public KidConfig saveReturn(KidCalRitiro ritiro) {
-		Query q = kidQuery(ritiro.getAppId(), ritiro.getSchoolId(), ritiro.getKidId());
-
-		addDayCriteria(ritiro.getDate(), q);
-		template.remove(q, KidCalRitiro.class);
-
-		// delete bus stop for that day
-		q = kidQuery(ritiro.getAppId(), ritiro.getSchoolId(), ritiro.getKidId());
-		q.addCriteria(new Criteria("date").is(timestampToDate(ritiro.getDate())));
-//		template.remove(q, KidCalFermata.class);
-		// delete ansence for that date
-		q = kidQuery(ritiro.getAppId(), ritiro.getSchoolId(), ritiro.getKidId());
-		//q.addCriteria(new Criteria("dateFrom").is(timestampToDate(ritiro.getDate())));
-		q.addCriteria(new Criteria().andOperator(
-				new Criteria("dateFrom").lte(ritiro.getDate()),
-				new Criteria("dateTo").gte(ritiro.getDate())));
-		template.remove(q, KidCalAssenza.class);
-
-		template.save(ritiro);
-		return getKidConfig(ritiro.getAppId(), ritiro.getSchoolId(), ritiro.getKidId());
 	}
 
 	private void addDayCriteria(long date, Query q) {
@@ -1153,9 +1034,16 @@ public class RepositoryManager {
 	 * @return
 	 */
 	public Parent getParent(String username, String appId, String schoolId) {
-		Query q = appQuery(appId);
+		Query q = schoolQuery(appId, schoolId);
 		q.addCriteria(new Criteria("username").is(username));
 		Parent p = template.findOne(q, Parent.class);
+		return p;
+	}
+	
+	public Person getPerson(String username, String appId, String schoolId) {
+		Query q = schoolQuery(appId, schoolId);
+		q.addCriteria(new Criteria("username").is(username));
+		Person p = template.findOne(q, Person.class);
 		return p;
 	}
 	
@@ -1644,6 +1532,107 @@ public class RepositoryManager {
 			result.put(profile.getKidId(), profile);
 		}
 		return result;
+	}
+
+	public Teacher getTeacher(String teacherId, String appId, String schoolId) {
+		Query query = schoolQuery(appId, schoolId);
+		query.addCriteria(new Criteria("teacherId").is(teacherId));
+		return template.findOne(query, Teacher.class);
+	}
+
+	public KidCalRitiro saveRitiro(String username, KidCalRitiro ritiro) {
+		removeAbsence(ritiro.getAppId(), ritiro.getSchoolId(), ritiro.getKidId(), ritiro.getDate());
+		Person person = getPerson(username, ritiro.getAppId(), ritiro.getSchoolId());
+		if(person != null) {
+ 			if(person.isUsingDefault()) {
+ 				ritiro.setModified(true);
+ 				ritiro.setFromDefault(true);
+ 			} else {
+ 				ritiro.setModified(true);
+ 				ritiro.setFromDefault(false);
+ 			}
+		}
+		return saveRitiro(ritiro);
+	}
+	
+	public KidCalRitiro saveRitiro(KidCalRitiro ritiro) {
+		Query query = kidQuery(ritiro.getAppId(), ritiro.getSchoolId(), ritiro.getKidId());
+		addDayCriteria(ritiro.getDate(), query);
+		KidCalRitiro old = template.findOne(query, KidCalRitiro.class);
+		if (old != null) {
+			template.remove(query, KidCalRitiro.class);
+		}
+		template.save(ritiro);
+		return ritiro;
+	}
+	
+	public KidCalAssenza removeAbsence(String appId, String schoolId, String kidId, long date) {
+		Query q = kidQuery(appId, schoolId, kidId);
+		addDayCriteria(date, q);
+		KidCalAssenza assenza = template.findOne(q, KidCalAssenza.class);
+		if(assenza != null) {
+			template.remove(q, KidCalAssenza.class);
+		}
+		return assenza;
+	}
+
+	public KidCalRitiro removeRitiro(String appId, String schoolId, String kidId, long date) {
+		Query q = kidQuery(appId, schoolId, kidId);
+		addDayCriteria(date, q);
+		KidCalRitiro ritiro = template.findOne(q, KidCalRitiro.class);
+		if(ritiro != null) {
+			template.remove(q, KidCalRitiro.class);
+		}
+		return ritiro;
+	}
+	
+	public KidCalRitiro getRitiro(String username, String appId, String schoolId, String kidId, long date) {
+		Person person = getPerson(username, appId, schoolId);
+		Query query = kidQuery(appId, schoolId, kidId);
+		addDayCriteria(date, query);
+		KidCalRitiro dbRitiro = template.findOne(query, KidCalRitiro.class);
+		if(dbRitiro != null) {
+			return dbRitiro;
+		} else {
+			if(person.isUsingDefault()) {
+				KidConfig config = getKidConfig(appId, schoolId, kidId);
+				if(config != null) {
+					KidCalRitiro ritiro = new KidCalRitiro();
+					ritiro.setAppId(appId);
+					ritiro.setSchoolId(schoolId);
+					ritiro.setKidId(kidId);
+					ritiro.setDate(date);
+					ritiro.setPersonId(config.getDefaultPerson());
+					if(config.isUseBus()) {
+						ritiro.setUsingBus(true);
+						ritiro.setBusId(config.getBusId());
+						ritiro.setBusStop(config.getBusStop());
+					} else {
+						ritiro.setUsingBus(false);
+						ritiro.setExitTime(config.getExitTime());
+					}
+					ritiro.setFromDefault(true);
+					ritiro.setModified(false);
+					return ritiro;
+				} else {
+					return null;
+				}
+			} else {
+				return null;
+			}
+		}
+	}
+
+	public KidCalAssenza saveAbsence(KidCalAssenza absence) {
+		removeRitiro(absence.getAppId(), absence.getSchoolId(), absence.getKidId(), absence.getDate());
+		Query query = kidQuery(absence.getAppId(), absence.getSchoolId(), absence.getKidId());
+		addDayCriteria(absence.getDate(), query);
+		KidCalAssenza old = template.findOne(query, KidCalAssenza.class);
+		if(old != null) {
+			template.remove(query, KidCalAssenza.class);
+		}
+		template.save(absence);
+		return absence;
 	}
 
 }

@@ -23,6 +23,7 @@ public class KidCalRitiro extends SchoolObject {
 	private long date;
 	private String kidId;
 	private String personId;
+	private String exitTime;
 	private boolean usingBus;
 	private String busId;
 	private String busStop;
@@ -76,6 +77,12 @@ public class KidCalRitiro extends SchoolObject {
 	}
 	public void setModified(boolean modified) {
 		this.modified = modified;
+	}
+	public String getExitTime() {
+		return exitTime;
+	}
+	public void setExitTime(String exitTime) {
+		this.exitTime = exitTime;
 	}
 
 }

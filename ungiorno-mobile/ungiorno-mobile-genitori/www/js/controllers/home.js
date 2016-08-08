@@ -52,30 +52,34 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         return false
     }
     var getButtonStyle = function (button) {
-        if (button == "default") {
-            return "button-norm"
-        }
-        if (button == "retire") {
-            if (isRetireSet()) {
-                return "button-norm";
+            if (button == "default") {
+                return "button-norm"
             }
-            return "button-alrt";
-        }
-        if (button == "bus") {
-            if (isBusDisabled()) {
-                return "button-stab";
+            if (button == "retire") {
+                if (isRetireSet()) {
+                    return "button-norm";
+                }
+                return "button-alrt";
             }
-            if (isRetireSet()) {
-                return "button-norm";
-            }
-            return "button-alrt";
+            if (button == "bus") {
+                if (isBusDisabled()) {
+                    return "button-stab";
+                }
+                if (isRetireSet()) {
+                    return "button-norm";
+                }
+                return "button-alrt";
 
+            }
+            if (button == "disabled") {
+                return "button-norm disabled";
+            }
         }
-        if (button == "disabled") {
-            return "button-norm disabled";
-        }
-    }
-
+        //!dailyFermata">
+        //        {{'home_entry_to' | translate}} {{fromTime}}{{'home_exit_to' | translate}}{{toTime}}</div>
+        //    <div ng-if="dailyFermata">
+        //        {{'home_entry_to' | translate}} {{fromTime}}{{'go_home_by_bus' | translate}}
+        //
     var buildHome = function () {
         var style = null;
         //build the array
@@ -83,8 +87,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         style = getButtonStyle("retire");
         $scope.elements.push({
             click: "app.retire",
-            string: $filter('translate')('home_retire'),
-            note: $filter('translate')('home_retire_before') + $rootScope.retireLimit,
+            string: $filter('translate')('home_retire') + $scope.kidProfile.firstName,
+            note: ($scope.dailyFermata ? $filter('translate')('home_entry_to') + $scope.fromTime + $filter('translate')('home_exit_to') + $scope.fromTime : $filter('translate')('home_entry_to') + $scope.fromTime + $filter('translate')('go_home_by_bus')),
             class: style,
             img: 'img/ritiro.png',
             disabled: false
@@ -93,19 +97,30 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         $scope.elements.push({
             click: "app.absence",
             string: $filter('translate')('home_assenza'),
-            note: $filter('translate')('home_absence_before') + $rootScope.absenceLimitHours + '.' + $rootScope.absenceLimitMinutes,
+            //            note: $filter('translate')('home_absence_before') + $rootScope.absenceLimitHours + '.' + $rootScope.absenceLimitMinutes,
             class: style,
             img: 'img/assenza.png',
             disabled: false
         });
-        style = getButtonStyle("disabled");
+
+        style = getButtonStyle("default");
         $scope.elements.push({
             click: function () {
-                Toast.show($filter('translate')('home_disabledbutton'), 'long', 'bottom');
+                contact();
             },
-            string: $filter('translate')('home_calendario'),
+            string: $filter('translate')('home_comunicazioni'),
             class: style,
-            img: 'img/calendario.png',
+            img: 'img/contattaLaScuola.png',
+            disabled: false
+        });
+        style = getButtonStyle("default");
+        $scope.elements.push({
+            click: function () {
+                contact();
+            },
+            string: $filter('translate')('home_messaggi'),
+            class: style,
+            img: 'img/contattaLaScuola.png',
             disabled: false
         });
         style = getButtonStyle("default");

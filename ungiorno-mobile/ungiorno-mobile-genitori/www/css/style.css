@@ -57,6 +57,9 @@ a.item-content {
 .bar-ungiorno .button-clear .icon::before {
     color: #ffffff;
 }
+#home .title {
+    font-size: 18px;
+}
 .home-area {
     /*    padding: 8px 16px;*/
 }
@@ -89,12 +92,23 @@ a.item-content {
     background-color: #5FC3DF;
     color: #ffffff;
     border: 0;
+    margin: 0px 10px 0px 10px!important;
+}
+.button-norm img {
+    top: 20px!important;
+    left: 20px!important;
 }
 .button-norm:hover {
     color: #ffffff;
 }
 .button-alrt {
     background-color: #FFAD00;
+    color: #ffffff;
+    margin: 0px 10px 0px 10px!important;
+}
+.button-alrt img {
+    top: 20px!important;
+    left: 20px!important;
 }
 .disabled {
     opacity: 0.5;

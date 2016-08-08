@@ -54,6 +54,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
 .controller('AppCtrl', function ($scope, $rootScope, $cordovaDevice, $ionicModal, $ionicHistory, $timeout, $filter, $ionicPopover, $state, $ionicSideMenuDelegate, Toast, Config, profileService) {
     $scope.profilesOpen = false;
+    $scope.expandProfiles = false;
+
     $scope.toggleProfile = function () {
         $scope.profilesOpen = !$scope.profilesOpen;
     }

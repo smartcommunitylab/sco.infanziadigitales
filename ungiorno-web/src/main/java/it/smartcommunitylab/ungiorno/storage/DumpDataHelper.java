@@ -24,7 +24,7 @@ import it.smartcommunitylab.ungiorno.model.KidConfig;
 import it.smartcommunitylab.ungiorno.model.KidProfile;
 import it.smartcommunitylab.ungiorno.model.Menu;
 import it.smartcommunitylab.ungiorno.model.SchoolProfile;
-import it.smartcommunitylab.ungiorno.model.SectionData;
+import it.smartcommunitylab.ungiorno.model.GroupData;
 import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.model.TeacherCalendar;
 
@@ -94,8 +94,8 @@ public class DumpDataHelper {
 	public static BusData dummyBusData(String appId, String schoolId) {
 		return readObject("calendario-bus.json", BusData.class);
 	}
-	public static List<SectionData> dummySections(String appId, String schoolId) {
-		return readList("sections-profile.json", SectionData.class);
+	public static List<GroupData> dummySections(String appId, String schoolId) {
+		return readList("sections-profile.json", GroupData.class);
 	}
 	public static List<TeacherCalendar> dummyTecherCalendar(String appId, String schoolId) {
 		return readList("calendario-docenti.json", TeacherCalendar.class);

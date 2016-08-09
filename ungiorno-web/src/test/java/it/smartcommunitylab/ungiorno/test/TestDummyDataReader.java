@@ -25,7 +25,7 @@ import it.smartcommunitylab.ungiorno.model.KidConfig;
 import it.smartcommunitylab.ungiorno.model.KidProfile;
 import it.smartcommunitylab.ungiorno.model.Menu;
 import it.smartcommunitylab.ungiorno.model.SchoolProfile;
-import it.smartcommunitylab.ungiorno.model.SectionData;
+import it.smartcommunitylab.ungiorno.model.GroupData;
 import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.model.TeacherCalendar;
 import it.smartcommunitylab.ungiorno.storage.DumpDataHelper;
@@ -105,7 +105,7 @@ public class TestDummyDataReader {
 	}
 	@Test
 	public void testSections() {
-		List<SectionData> obj = DumpDataHelper.dummySections("", "");
+		List<GroupData> obj = DumpDataHelper.dummySections("", "");
 		System.err.println(obj.toString());
 		assertNotNull(obj);
 	}

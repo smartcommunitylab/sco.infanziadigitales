@@ -2,10 +2,10 @@ package it.smartcommunitylab.ungiorno.utils;
 
 import it.smartcommunitylab.ungiorno.diary.model.DiaryKidProfile;
 import it.smartcommunitylab.ungiorno.diary.model.DiaryUser;
-import it.smartcommunitylab.ungiorno.model.AuthPerson;
 import it.smartcommunitylab.ungiorno.model.KidProfile;
 import it.smartcommunitylab.ungiorno.model.Parent;
 import it.smartcommunitylab.ungiorno.model.Person;
+import it.smartcommunitylab.ungiorno.model.SchoolUser;
 import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
 
@@ -23,28 +23,22 @@ public class PermissionsManager {
 	private RepositoryManager storage;
 
 	public boolean checkKidProfile(String appId, String schoolId, String kidId, Boolean isTeacher) {
-		//TODO
 		String userId = getUserId();
-
 		KidProfile kid = storage.getKidProfile(appId, schoolId, kidId);
-		String sectionId = storage.getSectionId(kid);
 
 		if (kid != null) {
-			if (isTeacher == null || isTeacher) {
-				Teacher teacher = storage.getTeacher(userId, appId, schoolId);
-				if (teacher != null) {
-					if (teacher.getGroups().contains(sectionId)) {
-						return true;
-					}
+			if (isTeacher) {
+				//check if is a user for that school
+				SchoolUser schoolUser = storage.getSchoolUser(userId, appId, schoolId);
+				if(schoolUser != null) {
+					return true;
 				}
-			}
-			if (isTeacher == null || !isTeacher) {
-				Parent parent = storage.getParent(userId, appId, schoolId);
+			} else {
+				//check if parent
+				Person parent = storage.getPersonByUsername(userId, appId, schoolId);
 				if (parent != null) {
-					for (String personId : kid.getAuthorizedPersons()) {
-						if (parent.getPersonId().equals(personId)) {
-							return true;
-						}
+					if(kid.getParents().contains(parent.getPersonId())) {
+						return true;
 					}
 				}
 			}
@@ -53,13 +47,14 @@ public class PermissionsManager {
 	}
 
 	public DiaryUser getDiaryUser(String appId, String schoolId, Boolean isTeacher) {
+		//TODO
 		String userId = getUserId();
 
 		DiaryUser du = new DiaryUser();
 		du.setAppId(appId);
 
 		if (isTeacher == null || isTeacher) {
-			Teacher teacher = storage.getTeacher(userId, appId, schoolId);
+			Teacher teacher = storage.getTeacher(appId, schoolId, userId);
 			if (teacher != null) {
 //				du.setName(teacher.getTeacherName());
 //				du.setSurname(teacher.getTeacherSurname());

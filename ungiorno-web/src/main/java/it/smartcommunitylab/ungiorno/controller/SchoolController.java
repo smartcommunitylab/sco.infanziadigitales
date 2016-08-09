@@ -20,6 +20,8 @@ import it.smartcommunitylab.ungiorno.config.exception.EntityNotFoundException;
 import it.smartcommunitylab.ungiorno.config.exception.UnauthorizedException;
 import it.smartcommunitylab.ungiorno.model.BusData;
 import it.smartcommunitylab.ungiorno.model.Communication;
+import it.smartcommunitylab.ungiorno.model.Group;
+import it.smartcommunitylab.ungiorno.model.GroupData;
 import it.smartcommunitylab.ungiorno.model.Response;
 import it.smartcommunitylab.ungiorno.model.SchoolProfile;
 import it.smartcommunitylab.ungiorno.model.Teacher;
@@ -83,11 +85,12 @@ public class SchoolController {
 		}
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/school/{appId}/profile")
-	public @ResponseBody Response<SchoolProfile> getSchoolProfileForTeacher(@PathVariable String appId) 
+	@RequestMapping(method = RequestMethod.GET, value = "/school/{appId}/{schoolId}/profile")
+	public @ResponseBody Response<SchoolProfile> getSchoolProfileForTeacher(@PathVariable String appId,
+			@PathVariable String schoolId) 
 		throws Exception {
 		String userId = permissions.getUserId();
-		SchoolProfile profile = storage.getSchoolProfileForUser(appId, userId);
+		SchoolProfile profile = storage.getSchoolProfileForUser(appId, schoolId, userId);
 		if(profile == null) {
 			throw new EntityNotFoundException(String.format("Profile for user with id %s not found", userId));
 		}
@@ -146,6 +149,17 @@ public class SchoolController {
 			return new Response<>(e.getMessage());
 		}
 	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/school/{appId}/{schoolId}/groups")
+	public @ResponseBody Response<GroupData> getGroups(@PathVariable String appId, 
+			@PathVariable String schoolId, @RequestParam long date) {
+		
+		GroupData result = storage.getSections(appId, schoolId, date);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("getGroups[%s]: %s", appId, schoolId));
+		}
+		return new Response<>(result);
+	}	
 	
 	@ExceptionHandler(EntityNotFoundException.class)
 	@ResponseStatus(value=HttpStatus.BAD_REQUEST)

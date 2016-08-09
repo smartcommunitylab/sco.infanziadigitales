@@ -35,6 +35,7 @@ import it.smartcommunitylab.ungiorno.model.InternalNote;
 import it.smartcommunitylab.ungiorno.model.KidBusData;
 import it.smartcommunitylab.ungiorno.model.KidCalAssenza;
 import it.smartcommunitylab.ungiorno.model.KidCalNote;
+import it.smartcommunitylab.ungiorno.model.KidData;
 import it.smartcommunitylab.ungiorno.model.KidCalNote.Note;
 import it.smartcommunitylab.ungiorno.model.KidCalRitiro;
 import it.smartcommunitylab.ungiorno.model.KidConfig;
@@ -44,8 +45,8 @@ import it.smartcommunitylab.ungiorno.model.Parent;
 import it.smartcommunitylab.ungiorno.model.Person;
 import it.smartcommunitylab.ungiorno.model.SchoolProfile;
 import it.smartcommunitylab.ungiorno.model.SchoolUser;
-import it.smartcommunitylab.ungiorno.model.SectionData;
-import it.smartcommunitylab.ungiorno.model.SectionData.ServiceProfile;
+import it.smartcommunitylab.ungiorno.model.GroupData;
+import it.smartcommunitylab.ungiorno.model.GroupData.ServiceProfile;
 import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.model.TeacherCalendar;
 import it.smartcommunitylab.ungiorno.utils.Utils;
@@ -152,8 +153,8 @@ public class RepositoryManager {
 	 * @param username
 	 * @return
 	 */
-	public SchoolProfile getSchoolProfileForUser(String appId, String username) {
-		Query query = Query.query(new Criteria("appId").is(appId).and("username").is(username));
+	public SchoolProfile getSchoolProfileForUser(String appId, String schoolId, String username) {
+		Query query = Query.query(new Criteria("appId").is(appId).and("schoolId").is(schoolId).and("username").is(username));
 		SchoolUser user = template.findOne(query, SchoolUser.class);
 		if (user != null) {
 			return getSchoolProfile(appId, user.getSchoolId());
@@ -782,13 +783,40 @@ public class RepositoryManager {
 	/**
 	 * @param appId
 	 * @param schoolId
-	 * @param sections 
+	 * @param groupDataList 
 	 * @param date
 	 * @return
 	 */
-	public List<SectionData> getSections(String appId, String schoolId, Collection<String> sections, long date) {
+	public GroupData getSections(String appId, String schoolId, long date) {
+		//TODO getSections
+		GroupData result = new GroupData();
+		List<KidData> kidDataList = Lists.newArrayList();
+		Map<String, Group> groupMap = new HashMap<String, Group>();
+		
+		Map<String, Person> personMap = getPersonMap(appId, schoolId);
+		Map<String, KidProfile> kidProfileMap = getKidProfileMap(appId, schoolId);
+		Map<String, KidCalAssenza> assenzeMap = readAssenze(appId, schoolId, date);
+		Map<String, KidCalRitiro> ritiriMap = readRitiri(appId, schoolId, date);
+		
+		List<Group> groupList = getGroupDataBySchoolId(appId, schoolId);
+		for(Group group : groupList) {
+			groupMap.put(group.getGroupId(), group);
+		}
+		
+		List<KidProfile> kidProfileList = getKidProfileBySchoolId(appId, schoolId);
+		for(KidProfile profile : kidProfileList) {
+			KidData kidData = new KidData();
+			kidData.setProfile(profile);
+			KidCalAssenza absence = getAbsence(appId, schoolId, profile.getKidId(), date);
+			if(absence != null) {
+				kidData.setAssenza(absence);
+			} else {
+				getRitiro(username, appId, schoolId, kidId, date);
+			}
+		}
+		
 		SchoolProfile profile = getSchoolProfile(appId, schoolId);
-		Map<String, SectionData> map = new HashMap<String, SectionData>();
+		Map<String, GroupData> map = new HashMap<String, GroupData>();
 //		for (SectionProfile p : profile.getSections()) {
 //			if (!sections.contains(p.getSectionId())) continue;
 //			
@@ -801,7 +829,7 @@ public class RepositoryManager {
 //			map.put(p.getSectionId(), sd);
 //		}
 		
-		List<KidProfile> kids = readKidsForSections(appId, schoolId, sections);
+		
 		Map<String, KidCalAssenza> assenzeMap = readAssenze(appId, schoolId, date);
 		Map<String, KidCalRitiro> ritiriMap = readRitiri(appId, schoolId, date);
 //		Map<String, KidCalFermata> stopsMap = readFermate(appId, schoolId, date);
@@ -810,7 +838,7 @@ public class RepositoryManager {
 		for (KidProfile kp : kids) {
 			KidConfig conf = configMap.get(kp.getKidId());
 
-			SectionData.KidProfile skp = new SectionData.KidProfile();
+			GroupData.KidProfile skp = new GroupData.KidProfile();
 			skp.setKidId(kp.getKidId());
 			skp.setChildrenName(kp.getFullName());
 			skp.setImage(kp.getImage());
@@ -875,7 +903,7 @@ public class RepositoryManager {
 //			map.get(kp.getSection().getSectionId()).getChildren().add(skp);
 		}
 		
-		return new ArrayList<SectionData>(map.values());
+		return new ArrayList<GroupData>(map.values());
 	}
 
 	private Map<String, KidConfig> readConfigurations(String appId,
@@ -924,13 +952,11 @@ public class RepositoryManager {
 		return assenzeMap;
 	}
 
-	private List<KidProfile> readKidsForSections(String appId, String schoolId,
-			Collection<String> sections) {
-		Query q = schoolQuery(appId, schoolId);
-		if (sections != null) {
-			q.addCriteria(new Criteria("section.sectionId").in(sections));
-		}
-		List<KidProfile> kids = template.find(q, KidProfile.class);
+	private List<KidProfile> readKidsForGroup(String appId, String schoolId, String groupId) {
+		//TODO test this code
+		Query query = schoolQuery(appId, schoolId);
+		query.addCriteria(new Criteria("groups").is(groupId)); 
+		List<KidProfile> kids = template.find(query, KidProfile.class);
 		return kids;
 	}
 
@@ -948,7 +974,8 @@ public class RepositoryManager {
 	 * @param kp
 	 * @return 
 	 */
-	private AuthPerson getPerson(String personId, KidConfig conf, KidProfile kp) {
+	private Person getPerson(String personId, KidConfig conf, KidProfile kp) {
+		
 //		for (AuthPerson ap: kp.getPersons()) {
 //			if (ap.getPersonId().equals(personId)) return ap;
 //		}
@@ -1040,11 +1067,30 @@ public class RepositoryManager {
 		return p;
 	}
 	
-	public Person getPerson(String username, String appId, String schoolId) {
+	public Person getPersonByUsername(String username, String appId, String schoolId) {
 		Query q = schoolQuery(appId, schoolId);
 		q.addCriteria(new Criteria("username").is(username));
 		Person p = template.findOne(q, Person.class);
 		return p;
+	}
+	
+	public Person getPerson(String appId, String schoolId, String personId) {
+		Query q = schoolQuery(appId, schoolId);
+		q.addCriteria(new Criteria("personId").is(personId));
+		Person p = template.findOne(q, Person.class);
+		return p;
+	}
+	
+	public Teacher getTeacher(String appId, String schoolId, String teacherId) {
+		Query query = schoolQuery(appId, schoolId);
+		query.addCriteria(new Criteria("teacherId").is(teacherId));
+		return template.findOne(query, Teacher.class);
+	}
+
+	public SchoolUser getSchoolUser(String username, String appId, String schoolId) {
+		Query query = Query.query(new Criteria("appId").is(appId).and("schoolId").is(schoolId).and("username").is(username));
+		SchoolUser user = template.findOne(query, SchoolUser.class);
+		return user;
 	}
 	
 	public List<DiaryEntry> getDiary(String appId, String schoolId, String kidId, String search, Integer skip, Integer pageSize, Long from, Long to, String tag) {
@@ -1534,15 +1580,9 @@ public class RepositoryManager {
 		return result;
 	}
 
-	public Teacher getTeacher(String teacherId, String appId, String schoolId) {
-		Query query = schoolQuery(appId, schoolId);
-		query.addCriteria(new Criteria("teacherId").is(teacherId));
-		return template.findOne(query, Teacher.class);
-	}
-
 	public KidCalRitiro saveRitiro(String username, KidCalRitiro ritiro) {
 		removeAbsence(ritiro.getAppId(), ritiro.getSchoolId(), ritiro.getKidId(), ritiro.getDate());
-		Person person = getPerson(username, ritiro.getAppId(), ritiro.getSchoolId());
+		Person person = getPersonByUsername(username, ritiro.getAppId(), ritiro.getSchoolId());
 		if(person != null) {
  			if(person.isUsingDefault()) {
  				ritiro.setModified(true);
@@ -1587,7 +1627,7 @@ public class RepositoryManager {
 	}
 	
 	public KidCalRitiro getRitiro(String username, String appId, String schoolId, String kidId, long date) {
-		Person person = getPerson(username, appId, schoolId);
+		Person person = getPersonByUsername(username, appId, schoolId);
 		Query query = kidQuery(appId, schoolId, kidId);
 		addDayCriteria(date, query);
 		KidCalRitiro dbRitiro = template.findOne(query, KidCalRitiro.class);

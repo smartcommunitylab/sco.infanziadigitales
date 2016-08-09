@@ -77,7 +77,7 @@ public class KidController {
 	public @ResponseBody Response<KidProfile> getProfile(@PathVariable String appId,
 			@PathVariable String schoolId, @PathVariable String kidId) {
 
-		if (!permissions.checkKidProfile(appId, schoolId, kidId, null)) {
+		if (!permissions.checkKidProfile(appId, schoolId, kidId, false)) {
 			return new Response<>();
 		}
 
@@ -89,7 +89,7 @@ public class KidController {
 	public @ResponseBody Response<KidConfig> getConfig(@PathVariable String appId,
 			@PathVariable String schoolId, @PathVariable String kidId) {
 		
-		if (!permissions.checkKidProfile(appId, schoolId, kidId, null)) {
+		if (!permissions.checkKidProfile(appId, schoolId, kidId, false)) {
 			return new Response<>();
 		}
 
@@ -101,7 +101,7 @@ public class KidController {
 	public @ResponseBody Response<KidConfig> sendConfig(@RequestBody KidConfig config,
 			@PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId) {
 		
-		if (!permissions.checkKidProfile(appId, schoolId, kidId, null)) {
+		if (!permissions.checkKidProfile(appId, schoolId, kidId, false)) {
 			return new Response<>();
 		}
 
@@ -117,7 +117,7 @@ public class KidController {
 	public @ResponseBody Response<KidCalRitiro> sendStop(@RequestBody KidCalRitiro ritiro,
 			@PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId) {
 		try {
-			if (!permissions.checkKidProfile(appId, schoolId, kidId, null)) {
+			if (!permissions.checkKidProfile(appId, schoolId, kidId, false)) {
 				return new Response<>();
 			}
 			String username = permissions.getUserId();
@@ -135,7 +135,7 @@ public class KidController {
 	public @ResponseBody Response<KidCalRitiro> getStop(@PathVariable String appId,
 			@PathVariable String schoolId, @PathVariable String kidId, @RequestParam long date) {
 		try {
-			if (!permissions.checkKidProfile(appId, schoolId, kidId, null)) {
+			if (!permissions.checkKidProfile(appId, schoolId, kidId, false)) {
 				return new Response<>();
 			}
 			String username = permissions.getUserId();
@@ -166,7 +166,7 @@ public class KidController {
 			@PathVariable String schoolId, @PathVariable String kidId, @RequestParam long date) {
 
 		try {
-			if (!permissions.checkKidProfile(appId, schoolId, kidId, null)) {
+			if (!permissions.checkKidProfile(appId, schoolId, kidId, false)) {
 				return new Response<>();
 			}
 
@@ -181,7 +181,7 @@ public class KidController {
 	public @ResponseBody Response<List<Communication>> getComms(@PathVariable String appId,
 			@PathVariable String schoolId, @PathVariable String kidId) {
 
-		if (!permissions.checkKidProfile(appId, schoolId, kidId, null)) {
+		if (!permissions.checkKidProfile(appId, schoolId, kidId, false)) {
 			return new Response<>();
 		}
 

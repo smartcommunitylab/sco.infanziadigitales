@@ -105,12 +105,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
         style = getButtonStyle("default");
         $scope.elements.push({
-            click: function () {
-                contact();
-            },
+            click: "app.communications",
             string: $filter('translate')('home_comunicazioni'),
             class: style,
-            img: 'img/contattaLaScuola.png',
+            img: 'img/comunicazioni.png',
             disabled: false
         });
         style = getButtonStyle("default");
@@ -120,7 +118,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             },
             string: $filter('translate')('home_messaggi'),
             class: style,
-            img: 'img/contattaLaScuola.png',
+            img: 'img/chat.png',
             disabled: false
         });
         style = getButtonStyle("default");
@@ -305,14 +303,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
                     $ionicLoading.hide();
                 });
-                dataServerService.getCommunications(schoolId, kidId).then(function (data) {
-                    $scope.communications = data;
-                }, function (error) {
-                    console.log("ERROR -> " + error);
-                    Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
 
-                    $ionicLoading.hide();
-                });
             }, function (error) {
                 console.log("ERROR -> " + error);
                 Toast.show($filter('translate')('communication_error'), 'short', 'bottom');

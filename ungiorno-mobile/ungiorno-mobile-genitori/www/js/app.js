@@ -56,6 +56,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.babysetting',
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.retire',
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.authorization',
+    'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.communications',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.conf',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.assenzaService',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.retireService',
@@ -70,7 +71,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.canteen',
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.login',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.canteenService',
-		'it.smartcommunitylab.infanziadigitales.diario.parents.services.loginService',
+    'it.smartcommunitylab.infanziadigitales.diario.parents.services.loginService',
+    'it.smartcommunitylab.infanziadigitales.diario.parents.services.communicationsService',
     'angularMoment'
 ])
 
@@ -409,6 +411,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
                     controller: 'RegisterCtrl'
                 }
             }
+        }).state('app.communications', {
+            url: '/communications',
+            views: {
+                'menuContent': {
+                    templateUrl: 'templates/communications.html',
+                    controller: 'CommunicationsCtrl'
+                }
+            }
         });
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/login');
@@ -432,6 +442,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         go_home_by_bus: ' e torna a casa con il bus.',
         menu_exit: 'Esci',
         menu_enter: 'Entra',
+        menu_impostazioni: 'Impostazioni',
         babysetting_intro: 'Informazioni relative al bambino.',
         babysetting_services: 'Servizi',
         babysetting_hours: 'Orario di uscita:',
@@ -486,7 +497,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         setting_sendno: "Problemi di invio dati",
         send_note: "Messaggio",
         send_note_title: "Invia un messaggio all\'insegnante",
-
+        communications_title: "Comunicazioni della scuola",
         text: "Testo",
         send: "Invia",
         contact_school: "Contatta la scuola",
@@ -573,7 +584,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         credits_info: 'Per informazioni: ',
         credits_licenses_button: 'VEDI LICENZE',
         data_updated: 'Dati aggiornati',
-
+        communication_before: 'Da consegnare entro:',
+        communication_done: 'FATTO',
+        communication_undone: 'DA FARE'
 
 
     });
@@ -595,6 +608,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         go_home_by_bus: ' e torna a casa con il bus.',
         menu_exit: 'Esci',
         menu_enter: 'Entra',
+        menu_impostazioni: 'Impostazioni',
         babysetting_intro: 'Definisci i seguenti dati relativi all\'orario scolastico del bambino.',
         babysetting_services: 'Servizi',
         babysetting_hours: 'Orario di uscita:',
@@ -724,8 +738,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         credits_parents: 'Si ringraziano per la collaborazione:',
         credits_info: 'Per informazioni: ',
         credits_licenses_button: 'VEDI LICENZE',
-        data_updated: 'Dati aggiornati'
-
+        data_updated: 'Dati aggiornati',
+        communications_title: "Comunicazioni della scuola",
+        communication_before: 'Da consegnare entro:',
+        communication_done: 'FATTO',
+        communication_undone: 'DA FARE'
 
     });
 
@@ -746,6 +763,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         go_home_by_bus: ' e torna a casa con il bus.',
         menu_exit: 'Esci',
         menu_enter: 'Entra',
+        menu_impostazioni: 'Impostazioni',
         babysetting_intro: 'Definisci i seguenti dati relativi all\'orario scolastico del bambino.',
         babysetting_services: 'Servizi',
         babysetting_hours: 'Orario di uscita:',
@@ -885,7 +903,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         credits_parents: 'Si ringraziano per la collaborazione:',
         credits_info: 'Per informazioni: ',
         credits_licenses_button: 'VEDI LICENZE',
-        data_updated: 'Dati aggiornati'
+        data_updated: 'Dati aggiornati',
+        communications_title: "Comunicazioni della scuola",
+        communication_before: 'Da consegnare entro:',
+        communication_done: 'FATTO',
+        communication_undone: 'DA FARE'
+
 
 
 

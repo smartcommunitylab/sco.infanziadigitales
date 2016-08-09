@@ -61,7 +61,7 @@ a.item-content {
     font-size: 18px;
 }
 .home-area {
-    /*    padding: 8px 16px;*/
+    display: grid!important;
 }
 .home-info {
     background-color: #FFAD00;
@@ -535,13 +535,17 @@ p {
     border-width: 0 0 4px !important;
     border-color: #01B2C4;
 }
+
+/*
 .card {
     margin: 5px;
     box-shadow: none;
 }
+
 .card:last-child {
     margin-bottom: 0;
 }
+*/
 #categories .card .item-content {
     padding: 0;
 }
@@ -1326,15 +1330,26 @@ select {
 .ionic_datepicker_popup .popup-body .year_select:after {
     color: #5FC3DF;
 }
-.note-date {
-    color: gray;
+#communications .note-date {
+    color: gray!important;
+    text-align: right;
 }
-.note-text {
+#communications .note-text {
+    font-size: 16px;
     margin-left: 12px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
-.note-pointer {
+#communications .note-pointer {
     margin-right: 6px;
     float: left;
+}
+#communications .note-date-to-check {
+    color: gray!important;
+}
+#communications .button-communication {
+    float: right;
+    margin-bottom: 10px;
 }
 
 /* Login */

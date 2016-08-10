@@ -12,7 +12,7 @@ public class Person extends SchoolObject {
 	private String relation;
 	private String username;
 	private long authorizationDeadline;
-	private boolean usingDefault;
+	
 	
 	public String getPersonId() {
 		return personId;
@@ -79,12 +79,6 @@ public class Person extends SchoolObject {
 	}
 	public void setAuthorizationDeadline(long authorizationDeadline) {
 		this.authorizationDeadline = authorizationDeadline;
-	}
-	public boolean isUsingDefault() {
-		return usingDefault;
-	}
-	public void setUsingDefault(boolean usingDefault) {
-		this.usingDefault = usingDefault;
 	}
 	
 }

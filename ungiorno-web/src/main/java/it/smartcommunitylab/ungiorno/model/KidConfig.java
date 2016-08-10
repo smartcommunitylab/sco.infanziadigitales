@@ -29,6 +29,7 @@ public class KidConfig extends SchoolObject {
 	private boolean useBus;
 	private String busId;
 	private String busStop;
+	private boolean usingDefault;
 	
 	public String getKidId() {
 		return kidId;
@@ -71,6 +72,12 @@ public class KidConfig extends SchoolObject {
 	}
 	public void setBusStop(String busStop) {
 		this.busStop = busStop;
+	}
+	public boolean isUsingDefault() {
+		return usingDefault;
+	}
+	public void setUsingDefault(boolean usingDefault) {
+		this.usingDefault = usingDefault;
 	}
 	
 

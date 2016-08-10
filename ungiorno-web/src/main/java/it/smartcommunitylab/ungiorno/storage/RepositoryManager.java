@@ -24,29 +24,28 @@ import it.smartcommunitylab.ungiorno.diary.model.DiaryKidProfile;
 import it.smartcommunitylab.ungiorno.diary.model.DiaryTeacher;
 import it.smartcommunitylab.ungiorno.diary.model.MultimediaEntry;
 import it.smartcommunitylab.ungiorno.model.AppInfo;
-import it.smartcommunitylab.ungiorno.model.AuthPerson;
 import it.smartcommunitylab.ungiorno.model.Bus;
 import it.smartcommunitylab.ungiorno.model.BusData;
 import it.smartcommunitylab.ungiorno.model.CalendarItem;
 import it.smartcommunitylab.ungiorno.model.ChatMessage;
 import it.smartcommunitylab.ungiorno.model.Communication;
 import it.smartcommunitylab.ungiorno.model.Group;
+import it.smartcommunitylab.ungiorno.model.GroupData;
 import it.smartcommunitylab.ungiorno.model.InternalNote;
 import it.smartcommunitylab.ungiorno.model.KidBusData;
 import it.smartcommunitylab.ungiorno.model.KidCalAssenza;
+import it.smartcommunitylab.ungiorno.model.KidCalEntrata;
 import it.smartcommunitylab.ungiorno.model.KidCalNote;
-import it.smartcommunitylab.ungiorno.model.KidData;
 import it.smartcommunitylab.ungiorno.model.KidCalNote.Note;
 import it.smartcommunitylab.ungiorno.model.KidCalRitiro;
 import it.smartcommunitylab.ungiorno.model.KidConfig;
+import it.smartcommunitylab.ungiorno.model.KidData;
 import it.smartcommunitylab.ungiorno.model.KidProfile;
 import it.smartcommunitylab.ungiorno.model.Menu;
 import it.smartcommunitylab.ungiorno.model.Parent;
 import it.smartcommunitylab.ungiorno.model.Person;
 import it.smartcommunitylab.ungiorno.model.SchoolProfile;
 import it.smartcommunitylab.ungiorno.model.SchoolUser;
-import it.smartcommunitylab.ungiorno.model.GroupData;
-import it.smartcommunitylab.ungiorno.model.GroupData.ServiceProfile;
 import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.model.TeacherCalendar;
 import it.smartcommunitylab.ungiorno.utils.Utils;
@@ -56,7 +55,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -805,18 +803,23 @@ public class RepositoryManager {
 		
 		List<KidProfile> kidProfileList = getKidProfileBySchoolId(appId, schoolId);
 		for(KidProfile profile : kidProfileList) {
+			String kidId = profile.getKidId();
 			KidData kidData = new KidData();
 			kidData.setProfile(profile);
-			KidCalAssenza absence = getAbsence(appId, schoolId, profile.getKidId(), date);
+			KidCalAssenza absence = getAbsence(appId, schoolId, kidId, date);
 			if(absence != null) {
 				kidData.setAssenza(absence);
 			} else {
-				getRitiro(username, appId, schoolId, kidId, date);
+				KidCalRitiro ritiro = getRitiro(appId, schoolId, kidId, date);
+				if(ritiro != null) {
+					kidData.setRitiro(ritiro);
+				}
+				KidCalEntrata entrata = getEntrata(appId, schoolId, kidId, date);
 			}
 		}
 		
-		SchoolProfile profile = getSchoolProfile(appId, schoolId);
-		Map<String, GroupData> map = new HashMap<String, GroupData>();
+//		SchoolProfile profile = getSchoolProfile(appId, schoolId);
+//		Map<String, GroupData> map = new HashMap<String, GroupData>();
 //		for (SectionProfile p : profile.getSections()) {
 //			if (!sections.contains(p.getSectionId())) continue;
 //			
@@ -830,80 +833,98 @@ public class RepositoryManager {
 //		}
 		
 		
-		Map<String, KidCalAssenza> assenzeMap = readAssenze(appId, schoolId, date);
-		Map<String, KidCalRitiro> ritiriMap = readRitiri(appId, schoolId, date);
-//		Map<String, KidCalFermata> stopsMap = readFermate(appId, schoolId, date);
-		Map<String, KidConfig> configMap = readConfigurations(appId, schoolId);
-		
-		for (KidProfile kp : kids) {
-			KidConfig conf = configMap.get(kp.getKidId());
-
-			GroupData.KidProfile skp = new GroupData.KidProfile();
-			skp.setKidId(kp.getKidId());
-			skp.setChildrenName(kp.getFullName());
-			skp.setImage(kp.getImage());
-			skp.setActive(kp.isActive());
-
-			// merge service state from config and from profile
-			skp.setAnticipo(new ServiceProfile(kp.getServices().getAnticipo().isEnabled(), conf != null ? conf.anticipoActive() : true));
-			skp.setPosticipo(new ServiceProfile(kp.getServices().getPosticipo().isEnabled(), conf != null ? conf.posticipoActive() : true));
-			skp.setMensa(new ServiceProfile(kp.getServices().getMensa().isEnabled(), conf != null ? conf.mensaActive() : true));
-			skp.setBus(new ServiceProfile(kp.getServices().getBus().isEnabled(), conf != null ? conf.busActive() : true));
-
-			// if absent, set exit time to null
-			if (assenzeMap.containsKey(kp.getKidId())) {
-				KidCalAssenza a = assenzeMap.get(kp.getKidId());
-				skp.setExitTime(null);
-//				skp.setNote(a.getNote());
-				if(a.getReason() != null) {
-//					skp.setAbsenceType(a.getReason().getType());
-				}
-			} else if (ritiriMap.containsKey(kp.getKidId())){
-				KidCalRitiro r = ritiriMap.get(kp.getKidId());
-				skp.setExitTime(r.getDate());
-			} else {
-				skp.setExitTime(computeTime(date, conf,kp, profile));
-			}
-			
-			// read from ritiro object
-			String personId = null;
-			if (ritiriMap.containsKey(kp.getKidId())) {
-				KidCalRitiro r = ritiriMap.get(kp.getKidId());
-//				skp.setPersonException(r.isExceptional());
-//				skp.setNote(r.getNote());
-				personId = r.getPersonId();
-			}
-			// if no explicit return, read stop from stop object, otherwise from config, otherwise from profile
-			else if (skp.getBus().isActive()) {
-//				if (stopsMap.containsKey(kp.getKidId())) {
-//					KidCalFermata fermata = stopsMap.get(kp.getKidId());
-//					skp.setNote(fermata.getNote());
-//					skp.setStopId(fermata.getStopId());
-//					skp.setStopException(true);
-//					personId = fermata.getPersonId();
-//				} else {
-//					skp.setStopId(conf != null ? conf.getServices().getBus().getDefaultIdBack() : kp.getServices().getBus().getStops().get(0).getStopId());
+//		for (KidProfile kp : kids) {
+//			KidConfig conf = configMap.get(kp.getKidId());
+//
+//			GroupData.KidProfile skp = new GroupData.KidProfile();
+//			skp.setKidId(kp.getKidId());
+//			skp.setChildrenName(kp.getFullName());
+//			skp.setImage(kp.getImage());
+//			skp.setActive(kp.isActive());
+//
+//			// merge service state from config and from profile
+//			skp.setAnticipo(new ServiceProfile(kp.getServices().getAnticipo().isEnabled(), conf != null ? conf.anticipoActive() : true));
+//			skp.setPosticipo(new ServiceProfile(kp.getServices().getPosticipo().isEnabled(), conf != null ? conf.posticipoActive() : true));
+//			skp.setMensa(new ServiceProfile(kp.getServices().getMensa().isEnabled(), conf != null ? conf.mensaActive() : true));
+//			skp.setBus(new ServiceProfile(kp.getServices().getBus().isEnabled(), conf != null ? conf.busActive() : true));
+//
+//			// if absent, set exit time to null
+//			if (assenzeMap.containsKey(kp.getKidId())) {
+//				KidCalAssenza a = assenzeMap.get(kp.getKidId());
+//				skp.setExitTime(null);
+////				skp.setNote(a.getNote());
+//				if(a.getReason() != null) {
+////					skp.setAbsenceType(a.getReason().getType());
 //				}
-			}
-			
-			if (personId == null) {
-				personId = conf != null ? conf.getDefaultPerson() : findDefaultPerson(kp);
-			}
-			
-			skp.setPersonId(personId);
-			skp.setPersonName(getPerson(personId, conf, kp).getFullName());
-			
-			//set if extist some KidCalNote
-			List<KidCalNote> list = getKidCalNotes(appId, schoolId, skp.getKidId(), date);
-			if((list != null) && (list.size() > 0)) {
-				skp.setCalNotes(true);
-			} else {
-				skp.setCalNotes(false);
-			}
-//			map.get(kp.getSection().getSectionId()).getChildren().add(skp);
-		}
+//			} else if (ritiriMap.containsKey(kp.getKidId())){
+//				KidCalRitiro r = ritiriMap.get(kp.getKidId());
+//				skp.setExitTime(r.getDate());
+//			} else {
+//				skp.setExitTime(computeTime(date, conf,kp, profile));
+//			}
+//			
+//			// read from ritiro object
+//			String personId = null;
+//			if (ritiriMap.containsKey(kp.getKidId())) {
+//				KidCalRitiro r = ritiriMap.get(kp.getKidId());
+////				skp.setPersonException(r.isExceptional());
+////				skp.setNote(r.getNote());
+//				personId = r.getPersonId();
+//			}
+//			// if no explicit return, read stop from stop object, otherwise from config, otherwise from profile
+//			else if (skp.getBus().isActive()) {
+////				if (stopsMap.containsKey(kp.getKidId())) {
+////					KidCalFermata fermata = stopsMap.get(kp.getKidId());
+////					skp.setNote(fermata.getNote());
+////					skp.setStopId(fermata.getStopId());
+////					skp.setStopException(true);
+////					personId = fermata.getPersonId();
+////				} else {
+////					skp.setStopId(conf != null ? conf.getServices().getBus().getDefaultIdBack() : kp.getServices().getBus().getStops().get(0).getStopId());
+////				}
+//			}
+//			
+//			if (personId == null) {
+//				personId = conf != null ? conf.getDefaultPerson() : findDefaultPerson(kp);
+//			}
+//			
+//			skp.setPersonId(personId);
+//			skp.setPersonName(getPerson(personId, conf, kp).getFullName());
+//			
+//			//set if extist some KidCalNote
+//			List<KidCalNote> list = getKidCalNotes(appId, schoolId, skp.getKidId(), date);
+//			if((list != null) && (list.size() > 0)) {
+//				skp.setCalNotes(true);
+//			} else {
+//				skp.setCalNotes(false);
+//			}
+////			map.get(kp.getSection().getSectionId()).getChildren().add(skp);
+//		}
 		
-		return new ArrayList<GroupData>(map.values());
+		return result;
+	}
+
+	public KidCalEntrata getEntrata(String appId, String schoolId, String kidId, long date) {
+		Query query = kidQuery(appId, schoolId, kidId);
+		addDayCriteria(date, query);
+		KidCalEntrata dbEntrata = template.findOne(query, KidCalEntrata.class);
+		if(dbEntrata != null) {
+			return dbEntrata;
+		} else {
+			KidConfig config = getKidConfig(appId, schoolId, kidId);
+			if(config == null) {
+				return null;
+			}
+			KidCalEntrata entrata = new KidCalEntrata();
+			entrata.setAppId(appId);
+			entrata.setSchoolId(schoolId);
+			entrata.setKidId(kidId);
+			entrata.setDate(date);
+			entrata.setArrivalTime(config.getEnterTime());
+			entrata.setModified(false);
+			entrata.setFromDefault(config.isUsingDefault());
+			return entrata;
+		}
 	}
 
 	private Map<String, KidConfig> readConfigurations(String appId,
@@ -966,30 +987,6 @@ public class RepositoryManager {
 	 */
 	private String findDefaultPerson(KidProfile kp) {
 		return kp.getAuthorizedPersons().get(0);
-	}
-
-	/**
-	 * @param personId
-	 * @param conf
-	 * @param kp
-	 * @return 
-	 */
-	private Person getPerson(String personId, KidConfig conf, KidProfile kp) {
-		
-//		for (AuthPerson ap: kp.getPersons()) {
-//			if (ap.getPersonId().equals(personId)) return ap;
-//		}
-		if (conf != null && conf.getExtraPersons() != null) {
-			for (AuthPerson ap : conf.getExtraPersons()) {
-				if (ap.getPersonId().equals(personId)) return ap;
-			}
-		}
-		personId = conf != null ? conf.getDefaultPerson() : findDefaultPerson(kp);
-//		for (AuthPerson ap: kp.getPersons()) {
-//			if (ap.getPersonId().equals(personId)) return ap;
-//		}
-
-		return null;
 	}
 
 	/**
@@ -1582,9 +1579,9 @@ public class RepositoryManager {
 
 	public KidCalRitiro saveRitiro(String username, KidCalRitiro ritiro) {
 		removeAbsence(ritiro.getAppId(), ritiro.getSchoolId(), ritiro.getKidId(), ritiro.getDate());
-		Person person = getPersonByUsername(username, ritiro.getAppId(), ritiro.getSchoolId());
-		if(person != null) {
- 			if(person.isUsingDefault()) {
+		KidConfig config = getKidConfig(ritiro.getAppId(), ritiro.getSchoolId(), ritiro.getKidId());
+		if(config != null) {
+ 			if(config.isUsingDefault()) {
  				ritiro.setModified(true);
  				ritiro.setFromDefault(true);
  			} else {
@@ -1626,40 +1623,34 @@ public class RepositoryManager {
 		return ritiro;
 	}
 	
-	public KidCalRitiro getRitiro(String username, String appId, String schoolId, String kidId, long date) {
-		Person person = getPersonByUsername(username, appId, schoolId);
+	public KidCalRitiro getRitiro(String appId, String schoolId, String kidId, long date) {
 		Query query = kidQuery(appId, schoolId, kidId);
 		addDayCriteria(date, query);
 		KidCalRitiro dbRitiro = template.findOne(query, KidCalRitiro.class);
 		if(dbRitiro != null) {
 			return dbRitiro;
 		} else {
-			if(person.isUsingDefault()) {
-				KidConfig config = getKidConfig(appId, schoolId, kidId);
-				if(config != null) {
-					KidCalRitiro ritiro = new KidCalRitiro();
-					ritiro.setAppId(appId);
-					ritiro.setSchoolId(schoolId);
-					ritiro.setKidId(kidId);
-					ritiro.setDate(date);
-					ritiro.setPersonId(config.getDefaultPerson());
-					if(config.isUseBus()) {
-						ritiro.setUsingBus(true);
-						ritiro.setBusId(config.getBusId());
-						ritiro.setBusStop(config.getBusStop());
-					} else {
-						ritiro.setUsingBus(false);
-						ritiro.setExitTime(config.getExitTime());
-					}
-					ritiro.setFromDefault(true);
-					ritiro.setModified(false);
-					return ritiro;
-				} else {
-					return null;
-				}
-			} else {
+			KidConfig config = getKidConfig(appId, schoolId, kidId);
+			if(config == null) {
 				return null;
 			}
+			KidCalRitiro ritiro = new KidCalRitiro();
+			ritiro.setAppId(appId);
+			ritiro.setSchoolId(schoolId);
+			ritiro.setKidId(kidId);
+			ritiro.setDate(date);
+			ritiro.setPersonId(config.getDefaultPerson());
+			if(config.isUseBus()) {
+				ritiro.setUsingBus(true);
+				ritiro.setBusId(config.getBusId());
+				ritiro.setBusStop(config.getBusStop());
+			} else {
+				ritiro.setUsingBus(false);
+				ritiro.setExitTime(config.getExitTime());
+			}
+			ritiro.setModified(false);
+			ritiro.setFromDefault(config.isUsingDefault());
+			return ritiro;
 		}
 	}
 

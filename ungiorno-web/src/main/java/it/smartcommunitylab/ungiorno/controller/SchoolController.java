@@ -20,7 +20,6 @@ import it.smartcommunitylab.ungiorno.config.exception.EntityNotFoundException;
 import it.smartcommunitylab.ungiorno.config.exception.UnauthorizedException;
 import it.smartcommunitylab.ungiorno.model.BusData;
 import it.smartcommunitylab.ungiorno.model.Communication;
-import it.smartcommunitylab.ungiorno.model.Group;
 import it.smartcommunitylab.ungiorno.model.GroupData;
 import it.smartcommunitylab.ungiorno.model.Response;
 import it.smartcommunitylab.ungiorno.model.SchoolProfile;

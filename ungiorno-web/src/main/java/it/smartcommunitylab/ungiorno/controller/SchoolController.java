@@ -68,23 +68,6 @@ public class SchoolController {
 
 
 	@RequestMapping(method = RequestMethod.GET, value = "/school/{appId}/{schoolId}/profile")
-	public @ResponseBody Response<SchoolProfile> getSchoolProfile(@PathVariable String appId, @PathVariable String schoolId) {
-		try {
-			SchoolProfile profile = storage.getSchoolProfile(appId, schoolId);
-			if(logger.isInfoEnabled()) {
-				logger.info("getSchoolProfile:" + appId + " - " + schoolId + " - " + JsonUtil.convertObject(profile));
-			}
-			return new Response<SchoolProfile>(profile);
-		} catch (Exception e) {
-			if(logger.isWarnEnabled()) {
-				logger.warn("getSchoolProfile:" + appId + " - " + schoolId);
-				logger.warn("erro", e);
-			}
-			return new Response<>(e.getMessage());
-		}
-	}
-
-	@RequestMapping(method = RequestMethod.GET, value = "/school/{appId}/{schoolId}/profile")
 	public @ResponseBody Response<SchoolProfile> getSchoolProfileForTeacher(@PathVariable String appId,
 			@PathVariable String schoolId) 
 		throws Exception {

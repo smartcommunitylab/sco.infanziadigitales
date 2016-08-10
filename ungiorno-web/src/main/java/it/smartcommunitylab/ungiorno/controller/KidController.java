@@ -138,8 +138,7 @@ public class KidController {
 			if (!permissions.checkKidProfile(appId, schoolId, kidId, false)) {
 				return new Response<>();
 			}
-			String username = permissions.getUserId();
-			KidCalRitiro ritiro = storage.getRitiro(username, appId, schoolId, kidId, date);
+			KidCalRitiro ritiro = storage.getRitiro(appId, schoolId, kidId, date);
 			return new Response<>(ritiro);
 		} catch (Exception e) {
 			return new Response<>(e.getMessage());

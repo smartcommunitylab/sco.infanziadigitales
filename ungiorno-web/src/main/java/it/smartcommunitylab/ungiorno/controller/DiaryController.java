@@ -69,7 +69,7 @@ public class DiaryController {
 	public Response<DiaryUser> getDiaryProfile(@PathVariable String appId) throws ProfileNotFoundException {
 
 		String userId = permissions.getUserId();
-		SchoolProfile schoolProfile = storage.getSchoolProfileForUser(appId, userId);
+		SchoolProfile schoolProfile = storage.getSchoolProfileForUser(appId, userId, userId);
 		DiaryUser du = permissions.getDiaryUser(
 				appId, 
 				schoolProfile != null ? schoolProfile.getSchoolId() : null, null);

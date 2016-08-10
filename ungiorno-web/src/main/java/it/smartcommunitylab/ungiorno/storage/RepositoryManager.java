@@ -279,6 +279,7 @@ public class RepositoryManager {
 	 * @param schoolId
 	 */
 	public List<DiaryKid> updateDiaryKidPersons(String appId, String schoolId) {
+		//TODO updateDiaryKidPersons
 		List<DiaryKid> result = new ArrayList<DiaryKid>();
 		List<KidProfile> profiles = template.find(schoolQuery(appId, schoolId), KidProfile.class);
 		List<Teacher> teachers = getTeachers(appId, schoolId);
@@ -786,15 +787,9 @@ public class RepositoryManager {
 	 * @return
 	 */
 	public GroupData getSections(String appId, String schoolId, long date) {
-		//TODO getSections
 		GroupData result = new GroupData();
 		List<KidData> kidDataList = Lists.newArrayList();
 		Map<String, Group> groupMap = new HashMap<String, Group>();
-		
-		Map<String, Person> personMap = getPersonMap(appId, schoolId);
-		Map<String, KidProfile> kidProfileMap = getKidProfileMap(appId, schoolId);
-		Map<String, KidCalAssenza> assenzeMap = readAssenze(appId, schoolId, date);
-		Map<String, KidCalRitiro> ritiriMap = readRitiri(appId, schoolId, date);
 		
 		List<Group> groupList = getGroupDataBySchoolId(appId, schoolId);
 		for(Group group : groupList) {
@@ -815,92 +810,15 @@ public class RepositoryManager {
 					kidData.setRitiro(ritiro);
 				}
 				KidCalEntrata entrata = getEntrata(appId, schoolId, kidId, date);
+				if(entrata != null) {
+					kidData.setEntrata(entrata);
+				}
 			}
+			kidDataList.add(kidData);
 		}
 		
-//		SchoolProfile profile = getSchoolProfile(appId, schoolId);
-//		Map<String, GroupData> map = new HashMap<String, GroupData>();
-//		for (SectionProfile p : profile.getSections()) {
-//			if (!sections.contains(p.getSectionId())) continue;
-//			
-//			SectionData sd = new SectionData();
-//			sd.setSectionId(p.getSectionId());
-//			sd.setSectionName(p.getName());
-//			sd.setAppId(appId);
-//			sd.setSchoolId(schoolId);
-//			sd.setChildren(new ArrayList<SectionData.KidProfile>());
-//			map.put(p.getSectionId(), sd);
-//		}
-		
-		
-//		for (KidProfile kp : kids) {
-//			KidConfig conf = configMap.get(kp.getKidId());
-//
-//			GroupData.KidProfile skp = new GroupData.KidProfile();
-//			skp.setKidId(kp.getKidId());
-//			skp.setChildrenName(kp.getFullName());
-//			skp.setImage(kp.getImage());
-//			skp.setActive(kp.isActive());
-//
-//			// merge service state from config and from profile
-//			skp.setAnticipo(new ServiceProfile(kp.getServices().getAnticipo().isEnabled(), conf != null ? conf.anticipoActive() : true));
-//			skp.setPosticipo(new ServiceProfile(kp.getServices().getPosticipo().isEnabled(), conf != null ? conf.posticipoActive() : true));
-//			skp.setMensa(new ServiceProfile(kp.getServices().getMensa().isEnabled(), conf != null ? conf.mensaActive() : true));
-//			skp.setBus(new ServiceProfile(kp.getServices().getBus().isEnabled(), conf != null ? conf.busActive() : true));
-//
-//			// if absent, set exit time to null
-//			if (assenzeMap.containsKey(kp.getKidId())) {
-//				KidCalAssenza a = assenzeMap.get(kp.getKidId());
-//				skp.setExitTime(null);
-////				skp.setNote(a.getNote());
-//				if(a.getReason() != null) {
-////					skp.setAbsenceType(a.getReason().getType());
-//				}
-//			} else if (ritiriMap.containsKey(kp.getKidId())){
-//				KidCalRitiro r = ritiriMap.get(kp.getKidId());
-//				skp.setExitTime(r.getDate());
-//			} else {
-//				skp.setExitTime(computeTime(date, conf,kp, profile));
-//			}
-//			
-//			// read from ritiro object
-//			String personId = null;
-//			if (ritiriMap.containsKey(kp.getKidId())) {
-//				KidCalRitiro r = ritiriMap.get(kp.getKidId());
-////				skp.setPersonException(r.isExceptional());
-////				skp.setNote(r.getNote());
-//				personId = r.getPersonId();
-//			}
-//			// if no explicit return, read stop from stop object, otherwise from config, otherwise from profile
-//			else if (skp.getBus().isActive()) {
-////				if (stopsMap.containsKey(kp.getKidId())) {
-////					KidCalFermata fermata = stopsMap.get(kp.getKidId());
-////					skp.setNote(fermata.getNote());
-////					skp.setStopId(fermata.getStopId());
-////					skp.setStopException(true);
-////					personId = fermata.getPersonId();
-////				} else {
-////					skp.setStopId(conf != null ? conf.getServices().getBus().getDefaultIdBack() : kp.getServices().getBus().getStops().get(0).getStopId());
-////				}
-//			}
-//			
-//			if (personId == null) {
-//				personId = conf != null ? conf.getDefaultPerson() : findDefaultPerson(kp);
-//			}
-//			
-//			skp.setPersonId(personId);
-//			skp.setPersonName(getPerson(personId, conf, kp).getFullName());
-//			
-//			//set if extist some KidCalNote
-//			List<KidCalNote> list = getKidCalNotes(appId, schoolId, skp.getKidId(), date);
-//			if((list != null) && (list.size() > 0)) {
-//				skp.setCalNotes(true);
-//			} else {
-//				skp.setCalNotes(false);
-//			}
-////			map.get(kp.getSection().getSectionId()).getChildren().add(skp);
-//		}
-		
+		result.setGroups(groupMap);
+		result.setKids(kidDataList);
 		return result;
 	}
 
@@ -938,18 +856,6 @@ public class RepositoryManager {
 		return configMap;
 	}
 
-//	private Map<String, KidCalFermata> readFermate(String appId,
-//			String schoolId, long date) {
-//		Query q = schoolQuery(appId, schoolId);
-//		q.addCriteria(new Criteria("date").is(timestampToDate(date)));
-//		List<KidCalFermata> stops = template.find(q, KidCalFermata.class);
-//		Map<String, KidCalFermata> stopsMap = new HashMap<String, KidCalFermata>();
-//		for (KidCalFermata s : stops) {
-//			stopsMap.put(s.getKidId(), s);
-//		}
-//		return stopsMap;
-//	}
-
 	private Map<String, KidCalRitiro> readRitiri(String appId, String schoolId,
 			long date) {
 		Query q = schoolQuery(appId, schoolId);
@@ -962,6 +868,18 @@ public class RepositoryManager {
 		return ritiriMap;
 	}
 
+	private Map<String, KidCalEntrata> readEntrate(String appId, String schoolId,
+			long date) {
+		Query q = schoolQuery(appId, schoolId);
+		addDayCriteria(date, q);
+		List<KidCalEntrata> entrate = template.find(q, KidCalEntrata.class);
+		Map<String, KidCalEntrata> entrateMap = new HashMap<String, KidCalEntrata>();
+		for (KidCalEntrata entrata : entrate) {
+			entrateMap.put(entrata.getKidId(), entrata);
+		}
+		return entrateMap;
+	}
+	
 	private Map<String, KidCalAssenza> readAssenze(String appId, String schoolId, long date) {
 		Query q = schoolQuery(appId, schoolId);
 		addDayCriteria(date, q);
@@ -973,30 +891,12 @@ public class RepositoryManager {
 		return assenzeMap;
 	}
 
-	private List<KidProfile> readKidsForGroup(String appId, String schoolId, String groupId) {
-		//TODO test this code
-		Query query = schoolQuery(appId, schoolId);
-		query.addCriteria(new Criteria("groups").is(groupId)); 
-		List<KidProfile> kids = template.find(query, KidProfile.class);
-		return kids;
-	}
-
 	/**
 	 * @param kp
 	 * @return
 	 */
 	private String findDefaultPerson(KidProfile kp) {
 		return kp.getAuthorizedPersons().get(0);
-	}
-
-	/**
-	 * @param appId
-	 * @param schoolId
-	 * @return
-	 */
-	public List<TeacherCalendar> getTeacherCalendar(String appId, String schoolId, long from, long to) {
-		// TODO 
-		return DumpDataHelper.dummyTecherCalendar(appId, schoolId);
 	}
 
 	private long timestampToDate(long timestamp) {

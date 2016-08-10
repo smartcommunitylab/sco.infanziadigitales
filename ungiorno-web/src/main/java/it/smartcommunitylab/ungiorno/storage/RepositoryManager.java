@@ -1477,7 +1477,7 @@ public class RepositoryManager {
 		return result;
 	}
 
-	public KidCalRitiro saveRitiro(String username, KidCalRitiro ritiro) {
+	public KidCalRitiro saveRitiro(KidCalRitiro ritiro) {
 		removeAbsence(ritiro.getAppId(), ritiro.getSchoolId(), ritiro.getKidId(), ritiro.getDate());
 		KidConfig config = getKidConfig(ritiro.getAppId(), ritiro.getSchoolId(), ritiro.getKidId());
 		if(config != null) {
@@ -1489,10 +1489,6 @@ public class RepositoryManager {
  				ritiro.setFromDefault(false);
  			}
 		}
-		return saveRitiro(ritiro);
-	}
-	
-	public KidCalRitiro saveRitiro(KidCalRitiro ritiro) {
 		Query query = kidQuery(ritiro.getAppId(), ritiro.getSchoolId(), ritiro.getKidId());
 		addDayCriteria(ritiro.getDate(), query);
 		KidCalRitiro old = template.findOne(query, KidCalRitiro.class);
@@ -1564,6 +1560,28 @@ public class RepositoryManager {
 		}
 		template.save(absence);
 		return absence;
+	}
+
+	public KidCalEntrata saveEntrata(KidCalEntrata entrata) {
+		removeAbsence(entrata.getAppId(), entrata.getSchoolId(), entrata.getKidId(), entrata.getDate());
+		KidConfig config = getKidConfig(entrata.getAppId(), entrata.getSchoolId(), entrata.getKidId());
+		if(config != null) {
+ 			if(config.isUsingDefault()) {
+ 				entrata.setModified(true);
+ 				entrata.setFromDefault(true);
+ 			} else {
+ 				entrata.setModified(true);
+ 				entrata.setFromDefault(false);
+ 			}
+		}
+		Query query = kidQuery(entrata.getAppId(), entrata.getSchoolId(), entrata.getKidId());
+		addDayCriteria(entrata.getDate(), query);
+		KidCalEntrata old = template.findOne(query, KidCalEntrata.class);
+		if (old != null) {
+			template.remove(query, KidCalEntrata.class);
+		}
+		template.save(entrata);
+		return entrata;
 	}
 
 }

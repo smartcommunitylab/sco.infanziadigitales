@@ -19,6 +19,7 @@ package it.smartcommunitylab.ungiorno.controller;
 import it.smartcommunitylab.ungiorno.config.exception.ProfileNotFoundException;
 import it.smartcommunitylab.ungiorno.model.Communication;
 import it.smartcommunitylab.ungiorno.model.KidCalAssenza;
+import it.smartcommunitylab.ungiorno.model.KidCalEntrata;
 import it.smartcommunitylab.ungiorno.model.KidCalRitiro;
 import it.smartcommunitylab.ungiorno.model.KidConfig;
 import it.smartcommunitylab.ungiorno.model.KidProfile;
@@ -35,6 +36,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -53,7 +56,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class KidController {
-
+	private static final transient Logger logger = LoggerFactory.getLogger(KidController.class);
+			
 	@Autowired
 	@Value("${image.download.dir}")
 	private String imageDownloadDir;
@@ -113,18 +117,43 @@ public class KidController {
 		return new Response<>(config);
 	}
 
+	@RequestMapping(method = RequestMethod.POST, value = "/student/{appId}/{schoolId}/{kidId}/entrata")
+	public @ResponseBody Response<KidCalEntrata> sendEntrata(@RequestBody KidCalEntrata entrata,
+			@PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId) {
+			if (!permissions.checkKidProfile(appId, schoolId, kidId, false)) {
+				return new Response<>();
+			}
+			entrata.setAppId(appId);
+			entrata.setSchoolId(schoolId);
+			entrata.setKidId(kidId);
+			KidCalEntrata result = storage.saveEntrata(entrata);
+			if(logger.isInfoEnabled()) {
+				logger.info(String.format("sendEntrata[%s]: %s - %s", appId, schoolId, kidId));
+			}
+			return new Response<>(result);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/student/{appId}/{schoolId}/{kidId}/entrata")
+	public @ResponseBody Response<KidCalEntrata> getEntrata(@PathVariable String appId,
+			@PathVariable String schoolId, @PathVariable String kidId, @RequestParam long date) {
+		if (!permissions.checkKidProfile(appId, schoolId, kidId, false)) {
+			return new Response<>();
+		}
+		KidCalEntrata entrata = storage.getEntrata(appId, schoolId, kidId, date);
+		return new Response<>(entrata);
+	}
+	
 	@RequestMapping(method = RequestMethod.POST, value = "/student/{appId}/{schoolId}/{kidId}/ritiro")
-	public @ResponseBody Response<KidCalRitiro> sendStop(@RequestBody KidCalRitiro ritiro,
+	public @ResponseBody Response<KidCalRitiro> sendRitiro(@RequestBody KidCalRitiro ritiro,
 			@PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId) {
 		try {
 			if (!permissions.checkKidProfile(appId, schoolId, kidId, false)) {
 				return new Response<>();
 			}
-			String username = permissions.getUserId();
 			ritiro.setAppId(appId);
 			ritiro.setSchoolId(schoolId);
 			ritiro.setKidId(kidId);
-			KidCalRitiro result = storage.saveRitiro(username, ritiro);
+			KidCalRitiro result = storage.saveRitiro(ritiro);
 			return new Response<>(result);
 		} catch (Exception e) {
 			return new Response<>(e.getMessage());
@@ -132,7 +161,7 @@ public class KidController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/student/{appId}/{schoolId}/{kidId}/ritiro")
-	public @ResponseBody Response<KidCalRitiro> getStop(@PathVariable String appId,
+	public @ResponseBody Response<KidCalRitiro> getRitiro(@PathVariable String appId,
 			@PathVariable String schoolId, @PathVariable String kidId, @RequestParam long date) {
 		try {
 			if (!permissions.checkKidProfile(appId, schoolId, kidId, false)) {

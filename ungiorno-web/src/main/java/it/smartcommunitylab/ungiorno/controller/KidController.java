@@ -72,8 +72,12 @@ public class KidController {
 	public @ResponseBody Response<List<KidProfile>> getProfiles(@PathVariable String appId) 
 			throws ProfileNotFoundException {
 		
+		//TODO come mai manca controllo dei permessi?
 		String userId = permissions.getUserId();
 		List<KidProfile> profiles = storage.getKidProfilesByParent(appId, userId);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("getProfiles[%s]", appId));
+		}
 		return new Response<>(profiles);
 	}
 
@@ -84,8 +88,10 @@ public class KidController {
 		if (!permissions.checkKidProfile(appId, schoolId, kidId, false)) {
 			return new Response<>();
 		}
-
 		KidProfile profile = storage.getKidProfile(appId, schoolId, kidId);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("getProfile[%s]: %s - %s", appId, schoolId, kidId));
+		}
 		return new Response<>(profile);
 	}
 
@@ -96,8 +102,10 @@ public class KidController {
 		if (!permissions.checkKidProfile(appId, schoolId, kidId, false)) {
 			return new Response<>();
 		}
-
 		KidConfig profile = storage.getKidConfig(appId, schoolId, kidId);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("getConfig[%s]: %s - %s", appId, schoolId, kidId));
+		}		
 		return new Response<>(profile);
 	}
 
@@ -114,6 +122,9 @@ public class KidController {
 		config.setSchoolId(schoolId);
 
 		config = storage.saveConfig(config);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("sendConfig[%s]: %s - %s", appId, schoolId, kidId));
+		}		
 		return new Response<>(config);
 	}
 
@@ -140,6 +151,9 @@ public class KidController {
 			return new Response<>();
 		}
 		KidCalEntrata entrata = storage.getEntrata(appId, schoolId, kidId, date);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("getEntrata[%s]: %s - %s", appId, schoolId, kidId));
+		}		
 		return new Response<>(entrata);
 	}
 	
@@ -154,6 +168,9 @@ public class KidController {
 			ritiro.setSchoolId(schoolId);
 			ritiro.setKidId(kidId);
 			KidCalRitiro result = storage.saveRitiro(ritiro);
+			if(logger.isInfoEnabled()) {
+				logger.info(String.format("sendRitiro[%s]: %s - %s", appId, schoolId, kidId));
+			}			
 			return new Response<>(result);
 		} catch (Exception e) {
 			return new Response<>(e.getMessage());
@@ -168,6 +185,9 @@ public class KidController {
 				return new Response<>();
 			}
 			KidCalRitiro ritiro = storage.getRitiro(appId, schoolId, kidId, date);
+			if(logger.isInfoEnabled()) {
+				logger.info(String.format("getRitiro[%s]: %s - %s", appId, schoolId, kidId));
+			}			
 			return new Response<>(ritiro);
 		} catch (Exception e) {
 			return new Response<>(e.getMessage());
@@ -181,11 +201,13 @@ public class KidController {
 		if (!permissions.checkKidProfile(appId, schoolId, kidId, false)) {
 			return new Response<>();
 		}
-
 		absence.setAppId(appId);
 		absence.setKidId(kidId);
 		absence.setSchoolId(schoolId);
 		KidCalAssenza assenza = storage.saveAbsence(absence);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("sendAssenza[%s]: %s - %s", appId, schoolId, kidId));
+		}		
 		return new Response<>(assenza);
 	}
 
@@ -197,8 +219,10 @@ public class KidController {
 			if (!permissions.checkKidProfile(appId, schoolId, kidId, false)) {
 				return new Response<>();
 			}
-
 			KidCalAssenza obj = storage.getAbsence(appId, schoolId, kidId, date);
+			if(logger.isInfoEnabled()) {
+				logger.info(String.format("getAssenza[%s]: %s - %s", appId, schoolId, kidId));
+			}			
 			return new Response<>(obj);
 		} catch (Exception e) {
 			return new Response<>(e.getMessage());
@@ -212,8 +236,10 @@ public class KidController {
 		if (!permissions.checkKidProfile(appId, schoolId, kidId, false)) {
 			return new Response<>();
 		}
-
 		List<Communication> list = storage.getKidCommunications(appId, schoolId, kidId);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("getComms[%s]: %s - %s - %d", appId, schoolId, kidId, list.size()));
+		}		
 		return new Response<>(list);
 	}
 

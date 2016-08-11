@@ -25,7 +25,6 @@ import it.smartcommunitylab.ungiorno.model.Response;
 import it.smartcommunitylab.ungiorno.model.SchoolProfile;
 import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
-import it.smartcommunitylab.ungiorno.utils.JsonUtil;
 import it.smartcommunitylab.ungiorno.utils.PermissionsManager;
 import it.smartcommunitylab.ungiorno.utils.Utils;
 
@@ -87,13 +86,20 @@ public class SchoolController {
 			@PathVariable String appId, @PathVariable String schoolId) throws Exception {
 		comm.setAppId(appId);
 		comm.setSchoolId(schoolId);
-		return new Response<>(storage.saveCommunication(comm));
+		Communication communication = storage.saveCommunication(comm);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("sendCommunication[%s]: %s", appId, schoolId));
+		}
+		return new Response<>(communication);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/school/{appId}/{schoolId}/communications")
 	public @ResponseBody Response<List<Communication>> getComms(@PathVariable String appId, @PathVariable String schoolId) {
 		try {
 			List<Communication> list = storage.getCommunications(appId, schoolId);
+			if(logger.isInfoEnabled()) {
+				logger.info(String.format("getComms[%s]: %s", appId, schoolId, list.size()));
+			}
 			return new Response<>(list);
 		} catch (Exception e) {
 			return new Response<>(e.getMessage());
@@ -105,6 +111,9 @@ public class SchoolController {
 			@PathVariable String commId) {
 		try {
 			storage.deleteCommunication(appId, schoolId, commId);
+			if(logger.isInfoEnabled()) {
+				logger.info(String.format("deleteCommunication[%s]: %s - %s", appId, schoolId, commId));
+			}			
 			return new Response<>((Void)null);
 		} catch (Exception e) {
 			return new Response<>(e.getMessage());
@@ -116,6 +125,9 @@ public class SchoolController {
 
 		try {
 			List<Teacher> list = storage.getTeachers(appId, schoolId);
+			if(logger.isInfoEnabled()) {
+				logger.info(String.format("getTeachers[%s]: %s - %d", appId, schoolId, list.size()));
+			}			
 			return new Response<>(list);
 		} catch (Exception e) {
 			return new Response<>(e.getMessage());
@@ -126,6 +138,9 @@ public class SchoolController {
 	public @ResponseBody Response<BusData> getBuses(@PathVariable String appId, @PathVariable String schoolId, @RequestParam long date) {
 		try {
 			BusData busData = storage.getBusData(appId, schoolId, date);
+			if(logger.isInfoEnabled()) {
+				logger.info(String.format("getBuses[%s]: %s", appId, schoolId));
+			}			
 			return new Response<>(busData);
 		} catch (Exception e) {
 			return new Response<>(e.getMessage());

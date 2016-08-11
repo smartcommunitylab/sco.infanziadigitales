@@ -17,6 +17,8 @@ package it.smartcommunitylab.ungiorno.model;
 
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 /**
  * @author raman
  *
@@ -26,11 +28,11 @@ public class Communication extends SchoolObject {
 	private String text;
 	private String teacherId;
 	private long creationDate, expireDate;
-	private List<String> recipientsChild;
-	private List<String> recipientsGroup;
+	private List<String> recipientsChild = Lists.newArrayList();
+	private List<String> recipientsGroup = Lists.newArrayList();
 	private boolean deliveringDocument;
 	private long dateToCheck;
-	private List<String> deliveryChildren;
+	private List<String> deliveryChildren = Lists.newArrayList();
 	
 	public String getCommunicationId() {
 		return communicationId;

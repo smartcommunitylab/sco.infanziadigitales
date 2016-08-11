@@ -47,7 +47,7 @@ public class PermissionsManager {
 	}
 
 	public DiaryUser getDiaryUser(String appId, String schoolId, Boolean isTeacher) {
-		//TODO
+		//TODO check getDiaryUser
 		String userId = getUserId();
 
 		DiaryUser du = new DiaryUser();

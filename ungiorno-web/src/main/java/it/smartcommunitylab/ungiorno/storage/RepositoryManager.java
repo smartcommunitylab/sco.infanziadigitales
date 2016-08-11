@@ -26,7 +26,6 @@ import it.smartcommunitylab.ungiorno.diary.model.MultimediaEntry;
 import it.smartcommunitylab.ungiorno.model.AppInfo;
 import it.smartcommunitylab.ungiorno.model.Bus;
 import it.smartcommunitylab.ungiorno.model.BusData;
-import it.smartcommunitylab.ungiorno.model.CalendarItem;
 import it.smartcommunitylab.ungiorno.model.ChatMessage;
 import it.smartcommunitylab.ungiorno.model.Communication;
 import it.smartcommunitylab.ungiorno.model.Group;
@@ -41,13 +40,11 @@ import it.smartcommunitylab.ungiorno.model.KidCalRitiro;
 import it.smartcommunitylab.ungiorno.model.KidConfig;
 import it.smartcommunitylab.ungiorno.model.KidData;
 import it.smartcommunitylab.ungiorno.model.KidProfile;
-import it.smartcommunitylab.ungiorno.model.Menu;
 import it.smartcommunitylab.ungiorno.model.Parent;
 import it.smartcommunitylab.ungiorno.model.Person;
 import it.smartcommunitylab.ungiorno.model.SchoolProfile;
 import it.smartcommunitylab.ungiorno.model.SchoolUser;
 import it.smartcommunitylab.ungiorno.model.Teacher;
-import it.smartcommunitylab.ungiorno.model.TeacherCalendar;
 import it.smartcommunitylab.ungiorno.utils.Utils;
 
 import java.io.File;
@@ -130,6 +127,7 @@ public class RepositoryManager {
 	 * @param profile
 	 */
 	public void storeSchoolProfile(SchoolProfile profile) {
+		//TODO check storeSchoolProfile
 		SchoolProfile old = template.findOne(schoolQuery(profile.getAppId(), profile.getSchoolId()), SchoolProfile.class);
 		if (old != null) { 
 //			profile.set_id(old.get_id());
@@ -167,6 +165,7 @@ public class RepositoryManager {
 	 * @param children
 	 */
 	public void updateAuthorizations(String appId, String schoolId, List<KidProfile> children) {
+		//TODO check updateAuthorizations
 		for (KidProfile kid : children) {
 			KidProfile old = template.findOne(kidQuery(appId, schoolId, kid.getKidId()), KidProfile.class);
 			if (old != null) {
@@ -196,6 +195,7 @@ public class RepositoryManager {
 	 * @param children
 	 */
 	public void updateChildren(String appId, String schoolId, List<KidProfile> children) {
+		//TODO check updateChildren
 		template.remove(schoolQuery(appId, schoolId), KidProfile.class);
 		template.insertAll(children);
 		
@@ -279,7 +279,7 @@ public class RepositoryManager {
 	 * @param schoolId
 	 */
 	public List<DiaryKid> updateDiaryKidPersons(String appId, String schoolId) {
-		//TODO updateDiaryKidPersons
+		//TODO check updateDiaryKidPersons
 		List<DiaryKid> result = new ArrayList<DiaryKid>();
 		List<KidProfile> profiles = template.find(schoolQuery(appId, schoolId), KidProfile.class);
 		List<Teacher> teachers = getTeachers(appId, schoolId);
@@ -359,6 +359,7 @@ public class RepositoryManager {
 		}
 		return result;
 	}
+	
 	/**
 	 * @param appId
 	 * @param schoolId
@@ -366,21 +367,6 @@ public class RepositoryManager {
 	 */
 	public List<Teacher> getTeachers(String appId, String schoolId) {
 		return template.find(schoolQuery(appId, schoolId), Teacher.class);
-	}
-
-	/**
-	 * @param appId
-	 * @param schoolId
-	 * @param studentId
-	 * @param from
-	 * @param to
-	 * @return
-	 */
-	public List<CalendarItem> getCalendar(String appId, String schoolId, String kidId, long from, long to) {
-		// TODO
-		// read school calendar
-		// merge assenze
-		return DumpDataHelper.dummyCalendar(appId, schoolId, kidId, from, to);
 	}
 
 	/**
@@ -440,13 +426,12 @@ public class RepositoryManager {
 	 * @return
 	 */
 	public List<KidProfile> getKidProfilesByTeacher(String appId, String username) {
-		Query q = appQuery(appId);
-		q.addCriteria(new Criteria("username").is(username));
-		Teacher p = template.findOne(q, Teacher.class);
-		
-		q = appQuery(appId);
-		q.addCriteria(new Criteria("teacherId").is(p.getTeacherId()));
-		return template.find(q, KidProfile.class);
+		Query queryTeacher = appQuery(appId);
+		queryTeacher.addCriteria(new Criteria("username").is(username));
+		Teacher p = template.findOne(queryTeacher, Teacher.class);
+		Query queryKid = appQuery(appId);
+		queryKid.addCriteria(new Criteria("teacherId").is(p.getTeacherId()));
+		return template.find(queryKid, KidProfile.class);
 	}	
 	
 	/**
@@ -596,6 +581,7 @@ public class RepositoryManager {
 		query.with(new Sort(Sort.Direction.ASC, "creationDate"));
 		return template.find(query, Communication.class);
 	}
+	
 	/**
 	 * @param appId
 	 * @param schoolId
@@ -603,7 +589,6 @@ public class RepositoryManager {
 	 * @return
 	 */
 	public List<Communication> getKidCommunications(String appId, String schoolId, String kidId) {
-		//TODO test this code
 		Query query = schoolQuery(appId, schoolId);
 		query.addCriteria(new Criteria("expireDate").gte(System.currentTimeMillis()));
 		query.addCriteria(new Criteria("recipientsChild").is(kidId));
@@ -618,7 +603,6 @@ public class RepositoryManager {
 		public Communication saveCommunication(Communication communication) {
 			List<String> resultRecipients = Lists.newArrayList(communication.getRecipientsChild());
 			//expand group into list of kids
-			//TODO test this code
 			for(String groupId : communication.getRecipientsGroup()) {
 				Query query = schoolQuery(communication.getAppId(), communication.getSchoolId());
 				query.addCriteria(new Criteria("groups").is(groupId)); 
@@ -629,6 +613,7 @@ public class RepositoryManager {
 					}
 				}
 			}
+			communication.setRecipientsChild(resultRecipients);
 			communication.setCommunicationId(Utils.getUUID());
 			communication.setCreationDate(System.currentTimeMillis());
 			template.save(communication);
@@ -683,19 +668,6 @@ public class RepositoryManager {
 			q.with(new Sort(Sort.Direction.DESC, "date"));
 			return template.find(q, InternalNote.class);
 		}
-	}
-
-	/**
-	 * @param appId
-	 * @param schoolId
-	 * @param from
-	 * @param to
-	 * @return
-	 */
-	public List<Menu> getMeals(String appId, String schoolId, long from, long to) {
-		// TODO
-		return DumpDataHelper.dummyMenu(appId, schoolId);
-
 	}
 
 	/**
@@ -845,8 +817,7 @@ public class RepositoryManager {
 		}
 	}
 
-	private Map<String, KidConfig> readConfigurations(String appId,
-			String schoolId) {
+	public Map<String, KidConfig> readConfigurations(String appId, String schoolId) {
 		Query q = schoolQuery(appId, schoolId);
 		List<KidConfig> configs = template.find(q, KidConfig.class);
 		Map<String, KidConfig> configMap = new HashMap<String, KidConfig>();
@@ -856,7 +827,7 @@ public class RepositoryManager {
 		return configMap;
 	}
 
-	private Map<String, KidCalRitiro> readRitiri(String appId, String schoolId,
+	public Map<String, KidCalRitiro> readRitiri(String appId, String schoolId,
 			long date) {
 		Query q = schoolQuery(appId, schoolId);
 		addDayCriteria(date, q);
@@ -868,8 +839,7 @@ public class RepositoryManager {
 		return ritiriMap;
 	}
 
-	private Map<String, KidCalEntrata> readEntrate(String appId, String schoolId,
-			long date) {
+	public Map<String, KidCalEntrata> readEntrate(String appId, String schoolId, long date) {
 		Query q = schoolQuery(appId, schoolId);
 		addDayCriteria(date, q);
 		List<KidCalEntrata> entrate = template.find(q, KidCalEntrata.class);
@@ -880,7 +850,7 @@ public class RepositoryManager {
 		return entrateMap;
 	}
 	
-	private Map<String, KidCalAssenza> readAssenze(String appId, String schoolId, long date) {
+	public Map<String, KidCalAssenza> readAssenze(String appId, String schoolId, long date) {
 		Query q = schoolQuery(appId, schoolId);
 		addDayCriteria(date, q);
 		List<KidCalAssenza> assenze = template.find(q, KidCalAssenza.class);
@@ -889,14 +859,6 @@ public class RepositoryManager {
 			assenzeMap.put(a.getKidId(), a);
 		}
 		return assenzeMap;
-	}
-
-	/**
-	 * @param kp
-	 * @return
-	 */
-	private String findDefaultPerson(KidProfile kp) {
-		return kp.getAuthorizedPersons().get(0);
 	}
 
 	private long timestampToDate(long timestamp) {

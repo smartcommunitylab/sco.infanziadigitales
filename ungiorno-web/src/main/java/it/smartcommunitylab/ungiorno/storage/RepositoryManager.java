@@ -1302,6 +1302,20 @@ public class RepositoryManager {
 		Group dbEntry = template.findOne(query, Group.class);
 		if(dbEntry != null) {
 			template.remove(query, Group.class);
+			List<KidProfile> kidList = getKidProfileBySchoolId(appId, schoolId);
+			for(KidProfile profile : kidList) {
+				if(profile.getGroups().contains(groupId)) {
+					profile.getGroups().remove(groupId);
+					saveKidProfile(profile);
+				}
+			}
+			List<Teacher> teacherList = getTeacherDataBySchoolId(appId, schoolId);
+			for(Teacher teacher : teacherList) {
+				if(teacher.getGroups().contains(groupId)) {
+					teacher.getGroups().remove(groupId);
+					saveTeacher(teacher);
+				}
+			}
 		}
 		return dbEntry;
 	}
@@ -1322,6 +1336,21 @@ public class RepositoryManager {
 		Person dbEntry = template.findOne(query, Person.class);
 		if(dbEntry != null) {
 			template.remove(query, Person.class);
+			List<KidProfile> kidList = getKidProfileBySchoolId(appId, schoolId);
+			for(KidProfile profile : kidList) {
+				boolean saveKid = false;
+				if(profile.getParents().contains(personId)) {
+					profile.getParents().remove(personId);
+					saveKid = true;
+				}
+				if(profile.getAuthorizedPersons().contains(personId)) {
+					profile.getAuthorizedPersons().remove(personId);
+					saveKid = true;
+				}
+				if(saveKid) {
+					saveKidProfile(profile);
+				}
+			}
 		}
 		return dbEntry;
 	}

@@ -26,7 +26,7 @@ import com.google.common.collect.Lists;
  *
  */
 public class KidProfile extends SchoolObject {
-	private String kidId, fullName, lastName, firstName, image, gender;
+	private String kidId, fullName, lastName, firstName, image, gender, birthday;
 	private KidServices services;
 	private List<String> authorizedPersons = Lists.newArrayList();
 	private List<String> parents = Lists.newArrayList();
@@ -127,6 +127,12 @@ public class KidProfile extends SchoolObject {
 	}
 	public void setSharedDiary(Boolean sharedDiary) {
 		this.sharedDiary = sharedDiary;
+	}
+	public String getBirthday() {
+		return birthday;
+	}
+	public void setBirthday(String birthday) {
+		this.birthday = birthday;
 	}
 	
 

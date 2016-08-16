@@ -38,6 +38,7 @@ import it.smartcommunitylab.ungiorno.model.KidCalNote.Note;
 import it.smartcommunitylab.ungiorno.model.KidCalRitiro;
 import it.smartcommunitylab.ungiorno.model.KidConfig;
 import it.smartcommunitylab.ungiorno.model.KidProfile;
+import it.smartcommunitylab.ungiorno.model.LoginData;
 import it.smartcommunitylab.ungiorno.model.Menu;
 import it.smartcommunitylab.ungiorno.model.Parent;
 import it.smartcommunitylab.ungiorno.model.SchoolProfile;
@@ -1427,5 +1428,12 @@ public class RepositoryManager {
 			dbMessage.setSeen(Boolean.TRUE);
 		}
 		return dbMessage;
+	}
+	
+	public LoginData getTokenData(String username) {
+		return template.findOne(new Query(new Criteria("username").is(username)), LoginData.class);
+	}
+	public void saveTokenData(LoginData loginData) {
+		template.save(loginData);
 	}
 }

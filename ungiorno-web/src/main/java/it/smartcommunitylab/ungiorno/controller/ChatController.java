@@ -163,7 +163,7 @@ public class ChatController {
 		return result;
 	}
 	
-	@RequestMapping(method=RequestMethod.GET, value="/chat/{appId}/{schoolId}/message/{messageId}/received")
+	@RequestMapping(method=RequestMethod.PUT, value="/chat/{appId}/{schoolId}/message/{messageId}/received")
 	public @ResponseBody ChatMessage receivedMessage(@PathVariable String appId, @PathVariable String schoolId,
 			@PathVariable String messageId) {
 		ChatMessage result = null;
@@ -174,7 +174,7 @@ public class ChatController {
 		return result;
 	}
 	
-	@RequestMapping(method=RequestMethod.GET, value="/chat/{appId}/{schoolId}/message/{messageId}/seen")
+	@RequestMapping(method=RequestMethod.PUT, value="/chat/{appId}/{schoolId}/message/{messageId}/seen")
 	public @ResponseBody ChatMessage seenMessage(@PathVariable String appId, @PathVariable String schoolId,
 			@PathVariable String messageId) {
 		ChatMessage result = null;

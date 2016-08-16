@@ -7,6 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.params.ConnManagerParams;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -65,12 +74,27 @@ public class Utils {
 		return result;
 	}
 	
-	public static boolean isEmpty(String value) {
-		boolean result = true;
-		if ((value != null) && (!value.isEmpty())) {
-			result = false;
-		}
-		return result;
-	}
 
+	public static HttpResponse postJSON(String url, String body) throws Exception {
+
+		final HttpResponse resp;
+		final HttpPost post = new HttpPost(url);
+
+		post.setHeader("Accept", "application/json");
+		post.setHeader("Content-Type", "application/json");
+
+		StringEntity input = new StringEntity(body, "UTF-8");
+		input.setContentType("application/json");
+		post.setEntity(input);
+
+		HttpClient httpClient = new DefaultHttpClient();
+		final HttpParams params = httpClient.getParams();
+		HttpConnectionParams.setConnectionTimeout(params, 30000);
+		HttpConnectionParams.setSoTimeout(params, 30000);
+		ConnManagerParams.setTimeout(params, 30000);
+
+		
+		resp = httpClient.execute(post);
+		return resp;
+	}
 }

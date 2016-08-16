@@ -10,20 +10,11 @@
         </button>
     </ion-nav-buttons>
     <ion-content has-header="true" scroll="false">
-        <!--
-<div class="home-info" ng-show="isPresent">
-    <div ng-if="!dailyFermata">
-        {{'home_entry_to' | translate}} {{fromTime}}{{'home_exit_to' | translate}}{{toTime}}</div>
-    <div ng-if="dailyFermata">
-        {{'home_entry_to' | translate}} {{fromTime}}{{'go_home_by_bus' | translate}}</div>
-</div>-->
-        <div class="home-info" ng-show="!isPresent">
-            {{date | date:'EEEE, d MMMM yyyy'}} {{kidProfile.firstName}} e' assente
-        </div>
         <ion-scroll class="home-area" style="height:95%">
-            <div ng-repeat="element in elements" class="list">
+            <div ng-repeat="element in elements track by $index" class="list">
                 <div class="card" ng-class="elements[$index].class">
                     <a class=" button-block item-thumbnail-left" ng-click="execute(elements[$index])" ng-disabled="elements[$index].disabled">
+                        <!--
                         <img src="{{elements[$index].img}}">
                         <div class="row">
                             <div class="col">
@@ -32,37 +23,17 @@
 
                             </div>
                         </div>
-                    </a>
-                </div>
-            </div>
-            <div class="home_informations">
-                <p class="home-info-title">{{'home_personal_information' | translate}} {{kidProfile.firstName}}</p>
-                <div class="home-info-content">
-                    <div ng-repeat="schoolNotes in notes.schoolNotes">
-                        {{schoolNotes.note}}
-                    </div>
-                    <div ng-if="!notes.schoolNotes || notes.schoolNotes.length == 0">{{'home_no_personal_information' | translate}}{{kidProfile.firstName}}.</div>
-                </div>
-                <p class="home-info-title">{{'home_school_information' | translate}}</p>
-                <div ng-if="!communications || communications.length == 0">{{'home_no_school_information' | translate}}</div>
-
-
-
-                <ul class="home-info-content">
-                    <li ng-repeat="communication in communications | orderBy:'-creationDate' " class="home-comm row">
+-->
+                        <img src="{{element.img}}">
                         <div class="row">
                             <div class="col">
-                                <p class="note-date"><i class="icon ion-arrow-right-b note-pointer"></i>
-                                    <p class="note-date" ng-show="communication.doCheck">{{communication.dateToCheck | date:'EEEE, d MMMM yyyy'}}</p>
-                                </p>
-                                <p class="note-text">{{communication.description}}</p>
+                                <p class="title">{{element.string|uppercase}}</p>
+                                <p class="note">{{element.note}}</p>
+
                             </div>
                         </div>
-
-
-                    </li>
-
-                </ul>
+                    </a>
+                </div>
             </div>
         </ion-scroll>
     </ion-content>

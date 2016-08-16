@@ -16,9 +16,11 @@
             <ion-item class="item item-avatar item-button-right menu-profile" ng-if="babies && babies.length > 0">
                 <img ng-src="{{getProfileImage(babyselected)}}">
                 <h2>{{babyselected.fullName}}</h2>
+                <!--
                 <button menu-close class="button button-clear" id="babysetting" ng-click="gotoSetting({{babyselected.id}})">
                     <i class="icon inf_digsettings icon-light"></i>
                 </button>
+-->
             </ion-item>
             <ion-list>
                 <div class="menu-profile-open text-right" ng-if="babies && babies.length > 1">
@@ -31,7 +33,9 @@
                     <h2>{{kp.fullName}}</h2>
                 </ion-item>
 
-
+                <ion-item nav-clear menu-close class="item item-icon-left" ng-click="gotoSetting({{babyselected.id}})" ng-if="userIsLogged">
+                    <i class="icon voice-menu  inf_digsettings"></i>{{'menu_impostazioni' | translate}}
+                </ion-item>
                 <ion-item nav-clear menu-close class="item item-icon-left" ng-click="logout()" ng-if="userIsLogged">
                     <i class="icon voice-menu  inf_digaccount"></i>{{'menu_exit' | translate}}
                 </ion-item>

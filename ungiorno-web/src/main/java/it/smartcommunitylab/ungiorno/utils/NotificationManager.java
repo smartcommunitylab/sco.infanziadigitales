@@ -109,6 +109,7 @@ public class NotificationManager {
 		content.put("type", "chat");
 		content.put("kidId", kidId);
 		content.put("teacherId", teacherId);
+		content.put("schoolId", schoolId);
 		
 		Notification n = prepareMessage(message, content);
 		

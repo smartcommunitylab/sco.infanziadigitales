@@ -547,7 +547,12 @@ p {
     text-align: center;
 }
 
-.sectionBabyIndicator {
+#home .sectionBabyIndicator-notnow {
+    max-height: 150px;
+    max-width: 150px;
+}
+
+#home .sectionBabyIndicator-now {
     max-height: 200px;
     max-width: 200px;
 }

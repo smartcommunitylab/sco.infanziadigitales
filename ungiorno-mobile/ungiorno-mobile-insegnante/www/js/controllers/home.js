@@ -218,7 +218,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
 
     var getPeriodToNow = function () {
         var period;
-        var now = $filter('date')(new Date(), 'H:mm'); //bad workaround, but current schoolprofile timings aren't timestamps!
+        var now = $filter('date')(new Date(), 'HH:mm'); //bad workaround, but current schoolprofile timings aren't timestamps!
         if (now >= $scope.schoolProfile.regularTiming.fromTime && now < $scope.schoolProfile.regularTiming.toTime) {
             period = 'mensa';
         } else if (now >= $scope.schoolProfile.posticipoTiming.fromTime && now < $scope.schoolProfile.posticipoTiming.toTime) {
@@ -691,11 +691,34 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
         }
     }
 
-    //    .directive('section', function () {
-    //        return {
-    //            template: '<svg id="svg" viewbox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="#ddd" /><path fill="none" stroke-linecap="round" stroke-width="5" stroke="#fff" stroke-dasharray="100,250" d="M50 10 a 40 40 0 0 1 0 80 a 40 40 0 0 1 0 -80" /><text x="50" y="50" text-anchor="middle" dy="7" font-size="20">{{sections.length}}</text></svg>'
-    //        };
-    //    });
+
+
+    //    return true if the actual time is the same of the period
+    $scope.isNow = function (periodOfTheDay) {
+        if ($scope.schoolProfile) {
+            var now = $filter('date')(new Date(), 'HH:mm'); //bad workaround, but current schoolprofile timings aren't timestamps!
+            switch (periodOfTheDay) {
+            case 'anticipo':
+                if (now >= $scope.schoolProfile.anticipoTiming.fromTime && now < $scope.schoolProfile.anticipoTiming.toTime) {
+                    return true;
+                }
+                break;
+            case 'posticipo':
+                if (now >= $scope.schoolProfile.posticipoTiming.fromTime && now < $scope.schoolProfile.posticipoTiming.toTime) {
+                    return true;
+                }
+                break;
+            case 'mensa':
+                if (now >= $scope.schoolProfile.regularTiming.fromTime && now < $scope.schoolProfile.regularTiming.toTime) {
+                    return true;
+                }
+
+                break;
+            }
+        }
+
+    }
+
     $scope.getLineStroke = function (getNumberChildren, totalNumberOfChildren) {
         var lineStroke = null;
         lineStroke = (250 / totalNumberOfChildren) * getNumberChildren;
@@ -703,13 +726,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
     }
 
     $scope.sectionColor = function (period) {
-            if (period == $scope.selectedPeriod)
-                return '#abc';
-            return '#ddd';
-        }
-        //    $scope.changeSection = function (sectionId) {
-        //        sectionService.setSection(sectionId)
-        //    }
+        if (period == $scope.selectedPeriod)
+            return '#abc';
+        return '#ddd';
+    }
+
     $scope.changeSectionPeriod = function (period) {
         $scope.selectedPeriod = period;
         $scope.getChildrenProfilesByPeriod(period);

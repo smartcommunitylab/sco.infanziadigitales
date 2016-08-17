@@ -113,9 +113,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         });
         style = getButtonStyle("default");
         $scope.elements.push({
-            click: function () {
-                contact();
-            },
+            click: "app.messages",
             string: $filter('translate')('home_messaggi'),
             class: style,
             img: 'img/chat.png',

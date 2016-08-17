@@ -116,6 +116,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.directives
                 ionic.on('$destroy', cleanUp, element[0]);
             }
         };
+    }).filter('reverse', function () {
+        return function (items) {
+            return items.slice().reverse();
+        };
     });
 //    .directive('preventDrag', function ($ionicGesture, $ionicSlideBoxDelegate) {
 //        return {

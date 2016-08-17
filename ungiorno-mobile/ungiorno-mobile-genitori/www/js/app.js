@@ -57,6 +57,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.retire',
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.authorization',
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.communications',
+    'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.messages',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.conf',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.assenzaService',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.retireService',
@@ -73,6 +74,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.canteenService',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.loginService',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.communicationsService',
+    'it.smartcommunitylab.infanziadigitales.diario.parents.services.messagesService',
     'angularMoment'
 ])
 
@@ -419,6 +421,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
                     controller: 'CommunicationsCtrl'
                 }
             }
+        }).state('app.messages', {
+            url: '/messages',
+            views: {
+                'menuContent': {
+                    templateUrl: 'templates/messages.html',
+                    controller: 'MessagesCtrl'
+                }
+            }
         });
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/login');
@@ -586,7 +596,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         data_updated: 'Dati aggiornati',
         communication_before: 'Da consegnare entro:',
         communication_done: 'FATTO',
-        communication_undone: 'DA FARE'
+        communication_undone: 'DA FARE',
+        lbl_today: 'OGGI',
+        lbl_yesterday: 'IERI'
 
 
     });
@@ -742,7 +754,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         communications_title: "Comunicazioni della scuola",
         communication_before: 'Da consegnare entro:',
         communication_done: 'FATTO',
-        communication_undone: 'DA FARE'
+        communication_undone: 'DA FARE',
+        lbl_today: 'OGGI',
+        lbl_yesterday: 'IERI'
 
     });
 
@@ -896,7 +910,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         menu_credits: "Credits",
         credits_project: 'Realizzato da:',
         title1: 'Un Giorno A Scuola - Genitori',
-        //        title2: 'Genitore',
         credits_sponsored: 'Nell\'ambito del progetto "Inf@nzia DIGI tales 3.6" finanziato dal:',
         credits_collaboration: 'In collaborazione con il Dipartimento della Conoscenza della:',
         credits_students: 'Hanno partecipato allo sviluppo:',
@@ -907,10 +920,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         communications_title: "Comunicazioni della scuola",
         communication_before: 'Da consegnare entro:',
         communication_done: 'FATTO',
-        communication_undone: 'DA FARE'
-
-
-
+        communication_undone: 'DA FARE',
+        lbl_today: 'OGGI',
+        lbl_yesterday: 'IERI'
 
     });
 

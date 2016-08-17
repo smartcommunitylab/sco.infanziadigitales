@@ -1,0 +1,46 @@
+<ion-view id="chat" title="{{'communications_title' | translate}}">
+    <ion-nav-bar class="bar bar-ungiorno">
+        <ion-nav-back-button>
+        </ion-nav-back-button>
+    </ion-nav-bar>
+    <ion-content has-header="true" class="page-padding" delegate-handle="handler" on-scroll="refresh()">
+        <!--
+        <ion-infinite-scroll ng-if="!end_reached" on-infinite="loadMore()" distance="1%">
+        </ion-infinite-scroll>
+-->
+        <ion-spinner ng-if="loading" icon="spiral"></ion-spinner>
+        <ion-list>
+            <!--            <ion-item ng-repeat="ms in messages | orderBy: 'creationDate' track by $index">-->
+            <!--            <ion-item ng-repeat="ms in messages | reverse">-->
+            <ion-item ng-repeat="ms in messages">
+
+                <div class="dateOfChatMessage">
+                    <label ng-if="isToday(ms.creationDate) && isANewDate($index)">{{'lbl_today' | translate}} </label>
+                    <label ng-if="isYesterday(ms.creationDate) && isANewDate($index)">{{'lbl_yesterday' | translate}} </label>
+                    <label ng-if="!isToday(ms.creationDate) && !isYesterday(ms.creationDate) && isANewDate($index)">{{ ms.creationDate | date: dateDayMask }} </label>
+                </div>
+                <div ng-class="{'message-container-parent': isMe(ms.sender), 'message-container-teacher': !isMe(ms.sender) }" class="message-container">
+                    <div id="{{ ms.creationDate }}" class="card-chat" ng-class="{'card-chat-my': (isMe(ms.sender) && !chatExtraLength(ms.text)), 'card-chat-my-extra': (isMe(ms.sender) && chatExtraLength(ms.text))}">
+                        <div ng-if="!isMe(ms.sender)" class="item item-divider">
+                            <span>{{ ms.teacherId }} </span>
+                        </div>
+                        <div class="item">
+                            <span>{{ ms.text }}</span>
+                        </div>
+                        <div class="item item-divider">
+                            <span ng-if="isMe(ms.sender)"><i class="icon ion-checkmark-round" ng-class="{'message-flag': ms.seen}"></i><i class="icon ion-checkmark-round" ng-class="{'message-flag':  ms.received}"></i></span> {{ ms.creationDate | date:'HH:mm' }}
+                            <span ng-if="!isMe(ms.sender)"><i class="icon ion-checkmark-round" ng-class="{'message-flag': ms.seen}"></i><i class="icon ion-checkmark-round" ng-class="{'message-flag':  ms.received}"></i></spanspan>
+                        </div>
+                    </div>
+                </div>
+            </ion-item>
+        </ion-list>
+
+    </ion-content>
+    <ion-footer-bar keyboard-attach class="bar-stable item-input input-chat">
+        <input type="text" placeholder="{{'send_msg_placeholder' | translate}}" ng-model="new_message" ng-focus="inputUp()" ng-blur="inputDown()">
+        <button class="button button-carpooling icon ion-android-send" ng-click="sendMessage(new_message)">
+
+        </button>
+    </ion-footer-bar>
+</ion-view>

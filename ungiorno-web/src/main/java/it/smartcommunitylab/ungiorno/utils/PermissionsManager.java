@@ -249,7 +249,7 @@ public class PermissionsManager {
 		
 		String username = getEmail(accountProfile);
 		
-		LoginData loginData = new LoginData(username, tokenData);
+		LoginData loginData = new LoginData(username, basicProfile.getUserId(), tokenData);
 		
 		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
 				username, loginData, UnGiornoUserDetails.UNGIORNO_AUTHORITIES);			

@@ -3,6 +3,7 @@ package it.smartcommunitylab.ungiorno.controller;
 import it.smartcommunitylab.ungiorno.config.exception.ProfileNotFoundException;
 import it.smartcommunitylab.ungiorno.model.ChatMessage;
 import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
+import it.smartcommunitylab.ungiorno.utils.NotificationManager;
 import it.smartcommunitylab.ungiorno.utils.PermissionsManager;
 import it.smartcommunitylab.ungiorno.utils.Utils;
 
@@ -36,6 +37,8 @@ public class ChatController {
 
 	@Autowired
 	private PermissionsManager permissions;
+	@Autowired
+	private NotificationManager notificationManager;
 	
 	@RequestMapping(method=RequestMethod.GET, value="/chat/{appId}/{schoolId}/message/{kidId}")
 	public @ResponseBody List<ChatMessage> getMessages(@PathVariable String appId, @PathVariable String schoolId,
@@ -100,6 +103,9 @@ public class ChatController {
 		message.setText(text);
 		message.setSender(ChatMessage.SENT_BY_TEACHER);
 		result = storage.saveChatMessage(message);
+		
+		notificationManager.sendDirectMessageToParents(appId, schoolId, kidId, teacherId, text);
+		
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("sendMessageToParent[%s]: %s - %s - %s", appId, schoolId, kidId, teacherId));
 		}
@@ -129,6 +135,7 @@ public class ChatController {
 			message.setSender(ChatMessage.SENT_BY_TEACHER);
 			message.setText(text);
 			ChatMessage dbMessage = storage.saveChatMessage(message);
+			notificationManager.sendDirectMessageToParents(appId, schoolId, kidId, teacherId, text);
 			result.add(dbMessage);
 		}
 		if(logger.isInfoEnabled()) {

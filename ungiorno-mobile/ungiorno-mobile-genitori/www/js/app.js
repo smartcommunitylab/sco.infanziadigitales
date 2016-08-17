@@ -75,11 +75,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.loginService',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.communicationsService',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.messagesService',
+    'it.smartcommunitylab.infanziadigitales.diario.parents.services.notification',
     'angularMoment'
 ])
 
 .run(function ($ionicPlatform, $rootScope, $ionicLoading, $ionicPopup, $filter, $cordovaSplashscreen, $state, $translate, $q, $window, $ionicHistory, $ionicConfig, Config,
-    configurationService, profileService, dataServerService, loginService, Toast) {
+    configurationService, profileService, dataServerService, loginService, pushNotificationService, Toast) {
 
     $rootScope.getUserId = function () {
         return localStorage.userId;
@@ -210,6 +211,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
                 loginService.login(localStorage.provider).then(
                     function (data) {
                         dataServerService.getBabyProfiles().then(function (data) {
+                            pushNotificationService.register();
                             $state.go('app.home');
                             $ionicHistory.nextViewOptions({
                                 disableBack: true,

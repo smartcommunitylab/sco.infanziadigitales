@@ -94,14 +94,27 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         $scope.babies = profileService.getBabiesProfiles();
     }
     $scope.isToday = function (date) {
-            var today = new Date();
-            today.setHours(0);
-            today.setMinutes(0);
-            today.setSeconds(0);
-            if (date < today.getTime()) {
-                return false;
-            }
+        var inputDate = new Date(date);
+        inputDate.setHours(0, 0, 0, 0);
+
+        inputDate.setMilliseconds
+        var today = new Date();
+        today.setHours(0, 0, 0, 0);
+        if (inputDate.getTime() == today.getTime()) {
             return true;
+        }
+        return false;
+    }
+    $scope.isYesterday = function (date) {
+            var inputDate = new Date(date);
+            inputDate.setHours(0, 0, 0, 0);
+            var yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            yesterday.setHours(0, 0, 0, 0);
+            if (inputDate.getTime() == yesterday.getTime()) {
+                return true;
+            }
+            return false;
         }
         /* Utils */
     $scope.m2km = function (m) {

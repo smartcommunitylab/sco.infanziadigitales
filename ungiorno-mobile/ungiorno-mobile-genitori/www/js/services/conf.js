@@ -8,7 +8,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.c
     var AAC_URL = 'https://' + (DEVELOPMENT ? 'dev' : 'it') + '.smartcommunitylab.it/aac';
     var fakeId = '23655';
     var app = 'ungiorno2';
-
+    var senderId = 453601816446;
     // var appId = 'trento'
     //    var appId = $rootScope.appId;
 
@@ -20,6 +20,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.c
 
 
     return {
+        getSenderID: function () {
+            return senderId;
+        },
         getFakeId: function () {
             return fakeId;
         },

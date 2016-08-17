@@ -1,5 +1,6 @@
 package it.smartcommunitylab.ungiorno.controller;
 
+
 import it.smartcommunitylab.ungiorno.config.exception.ProfileNotFoundException;
 import it.smartcommunitylab.ungiorno.model.ChatMessage;
 import it.smartcommunitylab.ungiorno.storage.RepositoryManager;

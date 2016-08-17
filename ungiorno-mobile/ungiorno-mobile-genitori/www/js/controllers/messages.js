@@ -86,6 +86,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                     // init(); temporary commented. why reinitialize the list?
                     $scope.messages = $scope.messages.concat(msg);
                     $ionicLoading.hide();
+                    $ionicScrollDelegate.scrollBottom();
                 },
                 function (err) {
                     $ionicLoading.hide();

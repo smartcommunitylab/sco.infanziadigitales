@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.login', [])
 
-.controller('LoginCtrl', function ($scope, $rootScope, $state, $filter, $ionicPopup, $ionicHistory, $ionicLoading, Config, loginService, dataServerService) {
+.controller('LoginCtrl', function ($scope, $rootScope, $state, $filter, $ionicPopup, $ionicHistory, $ionicLoading, Config, loginService, dataServerService, pushNotificationService) {
     var loginStarted = false;
     $scope.user = {
         email: '',
@@ -17,7 +17,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             function (data) {
                 dataServerService.getBabyProfiles().then(function (data) {
                     // loginStarted = false;
-
+                    pushNotificationService.register();
                     $state.go('app.home');
                     $ionicHistory.nextViewOptions({
                         disableBack: true,

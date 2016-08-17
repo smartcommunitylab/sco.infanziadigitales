@@ -25,7 +25,14 @@
     "ionic-plugin-keyboard@2.0.1",
     "cordova-plugin-x-toast@2.5.0",
     "cordova-plugin-whitelist",
-    "com.cordova.plugins.cookiemaster"
+    "com.cordova.plugins.cookiemaster",
+    {
+      "variables": {
+        "SENDER_ID": "453601816446"
+      },
+      "locator": "phonegap-plugin-push@~1.7.4",
+      "id": "phonegap-plugin-push"
+    }
   ],
   "cordovaPlatforms": [
     "ios",

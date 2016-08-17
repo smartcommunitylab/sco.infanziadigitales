@@ -407,7 +407,25 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
         });
         return deferred.promise;
     };
-
+    dataServerService.pushNotificationRegister = function (registrationId) {
+        var deferred = $q.defer();
+        $http({
+            method: 'PUT',
+            url: Config.URL() + '/' + Config.app() + '/parent/' + Config.appId() + '/register?registrationId=' + registrationId,
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        }).
+        success(function (data, status, headers, config) {
+            deferred.resolve(data);
+        }).
+        error(function (data, status, headers, config) {
+            console.log(data + status + headers + config);
+            deferred.reject(data);
+        });
+        return deferred.promise;
+    }
 
     return dataServerService;
 })

@@ -29,9 +29,10 @@ public class LoginData implements Serializable {
 	private static final long serialVersionUID = -2910531818686092824L;
 	
 	private TokenData tokenData;
-	@Id
 	private String username;
-	
+	@Id
+	private String userAACId;
+
 	public LoginData() {
 		super();
 	}
@@ -39,9 +40,10 @@ public class LoginData implements Serializable {
 	 * @param username
 	 * @param tokenData
 	 */
-	public LoginData(String username, TokenData tokenData) {
+	public LoginData(String username, String userAACId, TokenData tokenData) {
 		this.username = username;
 		this.tokenData = tokenData;
+		this.userAACId = userAACId;
 	}
 	public TokenData getTokenData() {
 		return tokenData;
@@ -55,6 +57,11 @@ public class LoginData implements Serializable {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	
+	public String getUserAACId() {
+		return userAACId;
+	}
+	public void setUserId(String userAACId) {
+		this.userAACId = userAACId;
+	}
 	
 }

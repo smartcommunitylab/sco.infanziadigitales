@@ -99,7 +99,9 @@ public class NotificationManager {
 		for (AuthPerson p : kid.getPersons()) {
 			if (p.isParent()) {
 				LoginData loginData = storage.getTokenData(p.getPersonId());
-				userIds.add(loginData.getUserAACId());
+				if (loginData != null) {
+					userIds.add(loginData.getUserAACId());
+				}
 			}
 		}
 		

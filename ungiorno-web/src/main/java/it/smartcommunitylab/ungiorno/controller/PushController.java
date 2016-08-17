@@ -77,15 +77,15 @@ public class PushController {
 		registerApps();
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/parent/{appId}/register")
+	@RequestMapping(method = RequestMethod.PUT, value = "/parent/{appId}/register")
 	public @ResponseBody Response<Void> registerUgasParent(@PathVariable String appId, @RequestParam String registrationId) {
 		return registerUser(appId, registrationId, APP_UGAS_PARENT);
 	}
-	@RequestMapping(method = RequestMethod.GET, value = "/teacher/{appId}/register")
+	@RequestMapping(method = RequestMethod.PUT, value = "/teacher/{appId}/register")
 	public @ResponseBody Response<Void> registerUgasTeacher(@PathVariable String appId, @RequestParam String registrationId) {
 		return registerUser(appId, registrationId, APP_UGAS_TEACHER);
 	}
-	@RequestMapping(method = RequestMethod.GET, value = "/diary/{appId}/register")
+	@RequestMapping(method = RequestMethod.PUT, value = "/diary/{appId}/register")
 	public @ResponseBody Response<Void> registerDiaryUser(@PathVariable String appId, @RequestParam String registrationId) {
 		return registerUser(appId, registrationId, APP_UGAS_DIARY);
 	}

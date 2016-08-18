@@ -27,6 +27,7 @@ import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.model.TeacherCalendar;
 import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
 import it.smartcommunitylab.ungiorno.utils.JsonUtil;
+import it.smartcommunitylab.ungiorno.utils.NotificationManager;
 import it.smartcommunitylab.ungiorno.utils.PermissionsManager;
 
 import java.util.Collection;
@@ -56,6 +57,9 @@ public class SchoolController {
 	
 	@Autowired
 	private PermissionsManager permissions;		
+
+	@Autowired
+	private NotificationManager notificationManager;
 
 	@RequestMapping(method = RequestMethod.GET, value = "/ping")
 	public @ResponseBody
@@ -101,7 +105,11 @@ public class SchoolController {
 		try {
 			comm.setAppId(appId);
 			comm.setSchoolId(schoolId);
-			return new Response<>(storage.saveCommunication(comm));
+			Communication result = storage.saveCommunication(comm);
+			
+			notificationManager.sendCommunicationMessage(appId, schoolId, comm);
+			
+			return new Response<>(result);
 		} catch (Exception e) {
 			return new Response<>(e.getMessage());
 		}

@@ -81,6 +81,7 @@ public class ChatController {
 		message.setText(text);
 		message.setSender(ChatMessage.SENT_BY_PARENT);
 		result = storage.saveChatMessage(message);
+		notificationManager.sendDirectMessageToSchool(appId, schoolId, kidId, text, result.getMessageId());
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("sendMessageToTeacher[%s]: %s - %s", appId, schoolId, kidId));
 		}
@@ -105,7 +106,7 @@ public class ChatController {
 		message.setSender(ChatMessage.SENT_BY_TEACHER);
 		result = storage.saveChatMessage(message);
 		
-		notificationManager.sendDirectMessageToParents(appId, schoolId, kidId, teacherId, text);
+		notificationManager.sendDirectMessageToParents(appId, schoolId, kidId, teacherId, text, result.getMessageId());
 		
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("sendMessageToParent[%s]: %s - %s - %s", appId, schoolId, kidId, teacherId));
@@ -136,7 +137,7 @@ public class ChatController {
 			message.setSender(ChatMessage.SENT_BY_TEACHER);
 			message.setText(text);
 			ChatMessage dbMessage = storage.saveChatMessage(message);
-			notificationManager.sendDirectMessageToParents(appId, schoolId, kidId, teacherId, text);
+			notificationManager.sendDirectMessageToParents(appId, schoolId, kidId, teacherId, text, dbMessage.getMessageId());
 			result.add(dbMessage);
 		}
 		if(logger.isInfoEnabled()) {

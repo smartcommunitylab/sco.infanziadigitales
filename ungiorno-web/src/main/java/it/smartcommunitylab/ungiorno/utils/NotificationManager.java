@@ -104,7 +104,7 @@ public class NotificationManager {
 		String appName = channelName(appSetup.getAppsMap().get(appId).getMessagingAppId(), schoolId, APP_UGAS_COMMS);
 		communicator.sendAppNotification(n, appName, Collections.<String>emptyList(), permissions.getAppToken());
 	}
-	public void sendDirectMessageToParents(String appId, String schoolId, String kidId, String teacherId, String message) throws CommunicatorConnectorException, AACException {
+	public void sendDirectMessageToParents(String appId, String schoolId, String kidId, String teacherId, String message, String messageId) throws CommunicatorConnectorException, AACException {
 		KidProfile kid = storage.getKidProfile(appId, schoolId, kidId);
 		List<String> userIds = new ArrayList<String>();
 		for (AuthPerson p : kid.getPersons()) {
@@ -121,18 +121,20 @@ public class NotificationManager {
 		content.put("kidId", kidId);
 		content.put("teacherId", teacherId);
 		content.put("schoolId", schoolId);
-		
+		content.put("messageId", messageId);
+
 		Notification n = prepareMessage(message, content);
 		
 		String appName = appSetup.getAppsMap().get(appId).getMessagingAppId() + APP_UGAS_PARENT;
 		communicator.sendAppNotification(n, appName, userIds, permissions.getAppToken());
 	}
-	public void sendDirectMessageToSchool(String appId, String schoolId, String kidId, String message) throws CommunicatorConnectorException, AACException {
+	public void sendDirectMessageToSchool(String appId, String schoolId, String kidId, String message, String messageId) throws CommunicatorConnectorException, AACException {
 		Map<String, Object> content = new TreeMap<String, Object>();
 		content.put("type", "chat");
 		content.put("schoolId", schoolId);
 		content.put("kidId", kidId);
-		
+		content.put("messageId", messageId);
+			
 		Notification n = prepareMessage(message, content);
 		String appName = channelName(appSetup.getAppsMap().get(appId).getMessagingAppId(), schoolId, APP_UGAS_TEACHER);
 		communicator.sendAppNotification(n, appName, Collections.<String>emptyList(), permissions.getAppToken());

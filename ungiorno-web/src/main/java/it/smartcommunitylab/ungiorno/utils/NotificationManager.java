@@ -101,6 +101,8 @@ public class NotificationManager {
 		content.put("dateToCheck", message.getDateToCheck());
 		
 		Notification n = prepareMessage(message.getDescription(), content);
+		n.setTitle("Nuova communicazione");
+
 		String appName = channelName(appSetup.getAppsMap().get(appId).getMessagingAppId(), schoolId, APP_UGAS_COMMS);
 		communicator.sendAppNotification(n, appName, Collections.<String>emptyList(), permissions.getAppToken());
 	}
@@ -124,6 +126,7 @@ public class NotificationManager {
 		content.put("messageId", messageId);
 
 		Notification n = prepareMessage(message, content);
+		n.setTitle("Nuovo messaggio");
 		
 		String appName = appSetup.getAppsMap().get(appId).getMessagingAppId() + APP_UGAS_PARENT;
 		communicator.sendAppNotification(n, appName, userIds, permissions.getAppToken());
@@ -136,6 +139,8 @@ public class NotificationManager {
 		content.put("messageId", messageId);
 			
 		Notification n = prepareMessage(message, content);
+		n.setTitle("Nuovo messaggio");
+
 		String appName = channelName(appSetup.getAppsMap().get(appId).getMessagingAppId(), schoolId, APP_UGAS_TEACHER);
 		communicator.sendAppNotification(n, appName, Collections.<String>emptyList(), permissions.getAppToken());
 	}

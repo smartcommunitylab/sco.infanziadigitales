@@ -171,9 +171,6 @@ public class NotificationManager {
 							appId = cred.getMessagingAppId()+APP_UGAS_PARENT;
 							signature.setAppId(appId);
 							communicator.registerApp(signature, appId, token);
-							appId = cred.getMessagingAppId()+APP_UGAS_TEACHER;
-							signature.setAppId(appId);
-							communicator.registerApp(signature, appId, token);
 							appId = cred.getMessagingAppId()+APP_UGAS_DIARY;
 							signature.setAppId(appId);
 							communicator.registerApp(signature, appId, token);

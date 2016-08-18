@@ -20,6 +20,7 @@ import it.smartcommunitylab.ungiorno.model.AuthPerson;
 import it.smartcommunitylab.ungiorno.model.Communication;
 import it.smartcommunitylab.ungiorno.model.KidProfile;
 import it.smartcommunitylab.ungiorno.model.LoginData;
+import it.smartcommunitylab.ungiorno.model.School;
 import it.smartcommunitylab.ungiorno.storage.AppSetup;
 import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
 
@@ -176,6 +177,17 @@ public class NotificationManager {
 							appId = cred.getMessagingAppId()+APP_UGAS_DIARY;
 							signature.setAppId(appId);
 							communicator.registerApp(signature, appId, token);
+							
+							if (cred.getSchools() != null) {
+								for (School school : cred.getSchools()) {
+									appId = channelName(cred.getMessagingAppId(), school.getSchoolId(), APP_UGAS_COMMS);
+									signature.setAppId(appId);
+									communicator.registerApp(signature, appId, token);
+									appId = channelName(cred.getMessagingAppId(), school.getSchoolId(), APP_UGAS_TEACHER);
+									signature.setAppId(appId);
+									communicator.registerApp(signature, appId, token);
+								}
+							}
 							
 							ok = true;
 						} catch (CommunicatorConnectorException e) {

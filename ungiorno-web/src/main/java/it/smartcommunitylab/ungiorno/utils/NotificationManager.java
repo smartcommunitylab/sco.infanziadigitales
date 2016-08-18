@@ -24,6 +24,7 @@ import it.smartcommunitylab.ungiorno.storage.AppSetup;
 import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
@@ -55,9 +56,11 @@ import eu.trentorise.smartcampus.communicator.model.UserSignature;
 public class NotificationManager {
 
 	public static final String APP_UGAS_PARENT = ".parent";
-	public static final String APP_UGAS_TEACHER = ".teacher";
 	public static final String APP_UGAS_DIARY = ".diary";
 
+	public static final String APP_UGAS_COMMS = "%s.comms.%s";
+	public static final String APP_UGAS_TEACHER = "%s.teacher.%s";
+	
 	private static final Logger logger = LoggerFactory.getLogger(NotificationManager.class);
 
 	@Autowired
@@ -90,8 +93,15 @@ public class NotificationManager {
 		communicator.registerUserToPush(signature, appName, permissions.getUserAccessToken());
 	}
 
-	public void sendCommunicationMessage(String appId, String schoolId, Communication message) {
-		// TODO
+	public void sendCommunicationMessage(String appId, String schoolId, Communication message) throws CommunicatorConnectorException, AACException {
+		Map<String, Object> content = new TreeMap<String, Object>();
+		content.put("type", "communication");
+		content.put("schoolId", schoolId);
+		content.put("dateToCheck", message.getDateToCheck());
+		
+		Notification n = prepareMessage(message.getDescription(), content);
+		String appName = channelName(appSetup.getAppsMap().get(appId).getMessagingAppId(), schoolId, APP_UGAS_COMMS);
+		communicator.sendAppNotification(n, appName, Collections.<String>emptyList(), permissions.getAppToken());
 	}
 	public void sendDirectMessageToParents(String appId, String schoolId, String kidId, String teacherId, String message) throws CommunicatorConnectorException, AACException {
 		KidProfile kid = storage.getKidProfile(appId, schoolId, kidId);
@@ -116,8 +126,15 @@ public class NotificationManager {
 		String appName = appSetup.getAppsMap().get(appId).getMessagingAppId() + APP_UGAS_PARENT;
 		communicator.sendAppNotification(n, appName, userIds, permissions.getAppToken());
 	}
-	public void sendDirectMessageToSchool(String appId, String schoolId, String kidId, String message) {
+	public void sendDirectMessageToSchool(String appId, String schoolId, String kidId, String message) throws CommunicatorConnectorException, AACException {
+		Map<String, Object> content = new TreeMap<String, Object>();
+		content.put("type", "chat");
+		content.put("schoolId", schoolId);
+		content.put("kidId", kidId);
 		
+		Notification n = prepareMessage(message, content);
+		String appName = channelName(appSetup.getAppsMap().get(appId).getMessagingAppId(), schoolId, APP_UGAS_TEACHER);
+		communicator.sendAppNotification(n, appName, Collections.<String>emptyList(), permissions.getAppToken());
 	}
 	
 	private void registerApps() throws CommunicatorConnectorException {
@@ -187,4 +204,8 @@ public class NotificationManager {
 		return not;
 	}
 
+	private String channelName(String appId, String schoolId, String template) {
+		return String.format(template, appId, schoolId);
+	}
+	
 }

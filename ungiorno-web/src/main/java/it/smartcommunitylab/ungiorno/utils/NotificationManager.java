@@ -98,6 +98,7 @@ public class NotificationManager {
 		Map<String, Object> content = new TreeMap<String, Object>();
 		content.put("type", "communication");
 		content.put("schoolId", schoolId);
+		content.put("communicationId", message.getCommunicationId());
 		content.put("dateToCheck", message.getDateToCheck());
 		
 		Notification n = prepareMessage(message.getDescription(), content);

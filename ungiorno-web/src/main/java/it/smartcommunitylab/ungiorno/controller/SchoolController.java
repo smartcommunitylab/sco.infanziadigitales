@@ -25,6 +25,7 @@ import it.smartcommunitylab.ungiorno.model.Response;
 import it.smartcommunitylab.ungiorno.model.SchoolProfile;
 import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
+import it.smartcommunitylab.ungiorno.utils.NotificationManager;
 import it.smartcommunitylab.ungiorno.utils.PermissionsManager;
 import it.smartcommunitylab.ungiorno.utils.Utils;
 
@@ -58,6 +59,9 @@ public class SchoolController {
 	
 	@Autowired
 	private PermissionsManager permissions;		
+	
+	@Autowired
+	private NotificationManager notificationManager;
 
 	@RequestMapping(method = RequestMethod.GET, value = "/ping")
 	public @ResponseBody
@@ -90,6 +94,7 @@ public class SchoolController {
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("sendCommunication[%s]: %s", appId, schoolId));
 		}
+		notificationManager.sendCommunicationMessage(appId, schoolId, comm);
 		return new Response<>(communication);
 	}
 	

@@ -16,28 +16,23 @@
 
 package it.smartcommunitylab.ungiorno.security;
 
+import it.smartcommunitylab.ungiorno.utils.PermissionsManager;
+
 import java.io.IOException;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.RememberMeServices;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.web.filter.GenericFilterBean;
 
-import eu.trentorise.smartcampus.profileservice.BasicProfileService;
-import eu.trentorise.smartcampus.profileservice.model.AccountProfile;
-import eu.trentorise.smartcampus.profileservice.model.BasicProfile;
+import eu.trentorise.smartcampus.aac.model.TokenData;
 
 /**
  * 
@@ -48,19 +43,9 @@ public class OAuthFilter extends GenericFilterBean {
 	private static final String BEARER_TYPE = "bearer ";
 	private static final String AUTHORIZATION = "Authorization";
 
-	@Autowired
-	private AuthenticationManager authenticationManager;
-	@Autowired
-	private RememberMeServices rememberMeServices;
-	@Autowired
-	private Environment env;
 
-	private BasicProfileService profileService;
-
-	@PostConstruct
-	private void init() {
-		profileService = new BasicProfileService(env.getProperty("ext.aacURL"));
-	}
+	@Autowired
+	private PermissionsManager permissions;
 
 	@Override
 	public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
@@ -71,17 +56,10 @@ public class OAuthFilter extends GenericFilterBean {
 
 				if (authToken != null) {
 
-					BasicProfile basicProfile = profileService.getBasicProfile(authToken);
-					AccountProfile accountProfile = profileService.getAccountProfile(authToken);
-
-					UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(accountProfile.getAttribute("google", "openid.ext1.value.email"), basicProfile.getUserId(),
-							UnGiornoUserDetails.UNGIORNO_AUTHORITIES);
-
-					token.setDetails(new WebAuthenticationDetails((HttpServletRequest) request));
-					Authentication authenticatedUser = authenticationManager.authenticate(token);
-					SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
-
-					SecurityContextHolder.getContext().setAuthentication(token);
+					TokenData tokenData = new TokenData();
+					tokenData.setAccess_token(authToken);
+					tokenData.setExpires_in(Integer.MAX_VALUE);
+					permissions.authenticate((HttpServletRequest)request, (HttpServletResponse)response, tokenData, false);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

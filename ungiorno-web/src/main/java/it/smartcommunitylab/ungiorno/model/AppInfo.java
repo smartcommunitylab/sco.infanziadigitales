@@ -9,6 +9,10 @@ public class AppInfo implements Serializable{
 
 	private String appId;
     private String password;
+    private String messagingAppId;
+    private String gcmSenderApiKey;
+    private String gcmSenderId;
+
     private List<School> schools;
 
 	public String getAppId() {
@@ -26,6 +30,30 @@ public class AppInfo implements Serializable{
     public void setPassword(String password) {
         this.password = password;
     }
+
+	public String getMessagingAppId() {
+		return messagingAppId;
+	}
+
+	public void setMessagingAppId(String messagingAppId) {
+		this.messagingAppId = messagingAppId;
+	}
+
+	public String getGcmSenderApiKey() {
+		return gcmSenderApiKey;
+	}
+
+	public void setGcmSenderApiKey(String gcmSenderApiKey) {
+		this.gcmSenderApiKey = gcmSenderApiKey;
+	}
+
+	public String getGcmSenderId() {
+		return gcmSenderId;
+	}
+
+	public void setGcmSenderId(String gcmSenderId) {
+		this.gcmSenderId = gcmSenderId;
+	}
 
 	public List<School> getSchools() {
 		return schools;

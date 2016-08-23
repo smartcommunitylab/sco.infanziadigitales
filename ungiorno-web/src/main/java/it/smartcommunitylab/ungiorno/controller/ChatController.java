@@ -1,15 +1,15 @@
 package it.smartcommunitylab.ungiorno.controller;
 
-import it.smartcommunitylab.ungiorno.config.exception.EntityNotFoundException;
-import it.smartcommunitylab.ungiorno.config.exception.UnauthorizedException;
+
+import it.smartcommunitylab.ungiorno.config.exception.ProfileNotFoundException;
 import it.smartcommunitylab.ungiorno.model.ChatMessage;
 import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
+import it.smartcommunitylab.ungiorno.utils.NotificationManager;
 import it.smartcommunitylab.ungiorno.utils.PermissionsManager;
 import it.smartcommunitylab.ungiorno.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -38,24 +39,18 @@ public class ChatController {
 
 	@Autowired
 	private PermissionsManager permissions;
+	@Autowired
+	private NotificationManager notificationManager;
 	
 	@RequestMapping(method=RequestMethod.GET, value="/chat/{appId}/{schoolId}/message/{kidId}")
 	public @ResponseBody List<ChatMessage> getMessages(@PathVariable String appId, @PathVariable String schoolId,
-			@PathVariable String kidId, HttpServletRequest request) {
+			@PathVariable String kidId, @RequestParam(required=false) Long timestamp, @RequestParam(required=false) Integer limit) {
 		List<ChatMessage> result = new ArrayList<ChatMessage>();
-		long timestamp = 0;
-		int limit = 10;
-		if(Utils.isNotEmpty(request.getParameter("timestamp"))) {
-			try {
-				timestamp = Long.valueOf(request.getParameter("timestamp"));
-			} catch (Exception e) {
-			}
+		if(timestamp == null) {
+			timestamp = 0L;
 		}
-		if(Utils.isNotEmpty(request.getParameter("limit"))) {
-			try {
-				limit = Integer.valueOf(request.getParameter("limit"));
-			} catch (Exception e) {
-			}
+		if(limit == null) {
+			limit = 10;
 		}
 		result = storage.getChatMessages(appId, schoolId, kidId, timestamp, limit);
 		if(logger.isInfoEnabled()) {
@@ -63,6 +58,16 @@ public class ChatController {
 		}
 		return result;
 	}
+
+	@RequestMapping(method=RequestMethod.GET, value="/chat/{appId}/{schoolId}/message/{kidId}/unread")
+	public @ResponseBody Long getUnreadCount(@PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId) {
+		Long result = storage.getUnreadChatMessageCount(appId, schoolId, kidId);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("getUnreadChatMessageCount[%s]: %s - %s - %d", appId, schoolId, kidId, result));
+		}
+		return result;
+	}
+
 	
 	@RequestMapping(method=RequestMethod.POST, value="/chat/{appId}/{schoolId}/message/fromparent")
 	public @ResponseBody ChatMessage sendMessageToTeacher(@PathVariable String appId, @PathVariable String schoolId,
@@ -79,6 +84,7 @@ public class ChatController {
 		message.setText(text);
 		message.setSender(ChatMessage.SENT_BY_PARENT);
 		result = storage.saveChatMessage(message);
+		notificationManager.sendDirectMessageToSchool(appId, schoolId, kidId, text, result.getMessageId());
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("sendMessageToTeacher[%s]: %s - %s", appId, schoolId, kidId));
 		}
@@ -102,6 +108,9 @@ public class ChatController {
 		message.setText(text);
 		message.setSender(ChatMessage.SENT_BY_TEACHER);
 		result = storage.saveChatMessage(message);
+		
+		notificationManager.sendDirectMessageToParents(appId, schoolId, kidId, teacherId, text, result.getMessageId());
+		
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("sendMessageToParent[%s]: %s - %s - %s", appId, schoolId, kidId, teacherId));
 		}
@@ -131,6 +140,7 @@ public class ChatController {
 			message.setSender(ChatMessage.SENT_BY_TEACHER);
 			message.setText(text);
 			ChatMessage dbMessage = storage.saveChatMessage(message);
+			notificationManager.sendDirectMessageToParents(appId, schoolId, kidId, teacherId, text, dbMessage.getMessageId());
 			result.add(dbMessage);
 		}
 		if(logger.isInfoEnabled()) {
@@ -165,7 +175,7 @@ public class ChatController {
 		return result;
 	}
 	
-	@RequestMapping(method=RequestMethod.GET, value="/chat/{appId}/{schoolId}/message/{messageId}/received")
+	@RequestMapping(method=RequestMethod.PUT, value="/chat/{appId}/{schoolId}/message/{messageId}/received")
 	public @ResponseBody ChatMessage receivedMessage(@PathVariable String appId, @PathVariable String schoolId,
 			@PathVariable String messageId) {
 		ChatMessage result = null;
@@ -176,7 +186,7 @@ public class ChatController {
 		return result;
 	}
 	
-	@RequestMapping(method=RequestMethod.GET, value="/chat/{appId}/{schoolId}/message/{messageId}/seen")
+	@RequestMapping(method=RequestMethod.PUT, value="/chat/{appId}/{schoolId}/message/{messageId}/seen")
 	public @ResponseBody ChatMessage seenMessage(@PathVariable String appId, @PathVariable String schoolId,
 			@PathVariable String messageId) {
 		ChatMessage result = null;
@@ -187,24 +197,18 @@ public class ChatController {
 		return result;
 	}
 	
-	@ExceptionHandler(EntityNotFoundException.class)
-	@ResponseStatus(value=HttpStatus.BAD_REQUEST)
-	@ResponseBody
-	public Map<String,String> handleEntityNotFoundError(HttpServletRequest request, Exception exception) {
-		return Utils.handleError(exception);
-	}
-	
-	@ExceptionHandler(UnauthorizedException.class)
-	@ResponseStatus(value=HttpStatus.FORBIDDEN)
-	@ResponseBody
-	public Map<String,String> handleUnauthorizedError(HttpServletRequest request, Exception exception) {
-		return Utils.handleError(exception);
-	}
-	
 	@ExceptionHandler(Exception.class)
-	@ResponseStatus(value=HttpStatus.INTERNAL_SERVER_ERROR)
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	@ResponseBody
-	public Map<String,String> handleGenericError(HttpServletRequest request, Exception exception) {
-		return Utils.handleError(exception);
+	public String handleError(HttpServletRequest request, Exception exception) {
+		exception.printStackTrace();
+		return "{\"error\":\"" + exception.getMessage() + "\"}";
+	}
+	
+	@ExceptionHandler(ProfileNotFoundException.class)
+	@ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
+	@ResponseBody
+	public String handleProfileNotFoundError(HttpServletRequest request, Exception exception) {
+		return "{\"error\":\"" + exception.getMessage() + "\"}";
 	}
 }

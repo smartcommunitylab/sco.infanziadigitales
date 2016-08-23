@@ -40,6 +40,7 @@ import it.smartcommunitylab.ungiorno.model.KidCalRitiro;
 import it.smartcommunitylab.ungiorno.model.KidConfig;
 import it.smartcommunitylab.ungiorno.model.KidData;
 import it.smartcommunitylab.ungiorno.model.KidProfile;
+import it.smartcommunitylab.ungiorno.model.LoginData;
 import it.smartcommunitylab.ungiorno.model.Parent;
 import it.smartcommunitylab.ungiorno.model.Person;
 import it.smartcommunitylab.ungiorno.model.SchoolProfile;
@@ -1160,7 +1161,9 @@ public class RepositoryManager {
 		}
 		Query query = new Query(criteria);
 		query.with(new Sort(Sort.Direction.DESC, "creationDate"));
-		query.limit(limit);
+		if (limit > 0) {
+			query.limit(limit);
+		}
 		result = template.find(query, ChatMessage.class);
 		return result;
 	}
@@ -1574,5 +1577,29 @@ public class RepositoryManager {
 		template.save(entrata);
 		return entrata;
 	}
-
+	
+	public LoginData getTokenData(String username) {
+		return template.findOne(new Query(new Criteria("username").is(username)), LoginData.class);
+	}
+	
+	public void saveTokenData(LoginData loginData) {
+		template.save(loginData);
+	}
+	
+	/**
+	 * @param appId
+	 * @param schoolId
+	 * @param kidId
+	 * @return
+	 */
+	public Long getUnreadChatMessageCount(String appId, String schoolId, String kidId) {
+		Criteria criteria = 
+				new Criteria("appId").is(appId)
+				.and("schoolId").is(schoolId)
+				.and("kidId").is(kidId)
+				.and("seen").is(false);
+		Query query = new Query(criteria);
+		query.with(new Sort(Sort.Direction.DESC, "creationDate"));
+		return template.count(query, ChatMessage.class);
+	}
 }

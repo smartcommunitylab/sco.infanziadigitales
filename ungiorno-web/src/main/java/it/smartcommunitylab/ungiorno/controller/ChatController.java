@@ -59,15 +59,23 @@ public class ChatController {
 		return result;
 	}
 
-	@RequestMapping(method=RequestMethod.GET, value="/chat/{appId}/{schoolId}/message/{kidId}/unread")
-	public @ResponseBody Long getUnreadCount(@PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId) {
-		Long result = storage.getUnreadChatMessageCount(appId, schoolId, kidId);
+	@RequestMapping(method=RequestMethod.GET, value="/chat/{appId}/{schoolId}/message/{kidId}/unread/fromparent")
+	public @ResponseBody Long getUnreadCountFromParent(@PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId) {
+		Long result = storage.getUnreadChatMessageCount(appId, schoolId, kidId, ChatMessage.SENT_BY_PARENT);
 		if(logger.isInfoEnabled()) {
-			logger.info(String.format("getUnreadChatMessageCount[%s]: %s - %s - %d", appId, schoolId, kidId, result));
+			logger.info(String.format("getUnreadCountFromParent[%s]: %s - %s - %d", appId, schoolId, kidId, result));
 		}
 		return result;
 	}
 
+	@RequestMapping(method=RequestMethod.GET, value="/chat/{appId}/{schoolId}/message/{kidId}/unread/fromteacher")
+	public @ResponseBody Long getUnreadCountFromTeacher(@PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId) {
+		Long result = storage.getUnreadChatMessageCount(appId, schoolId, kidId, ChatMessage.SENT_BY_TEACHER);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("getUnreadCountFromTeacher[%s]: %s - %s - %d", appId, schoolId, kidId, result));
+		}
+		return result;
+	}
 	
 	@RequestMapping(method=RequestMethod.POST, value="/chat/{appId}/{schoolId}/message/fromparent")
 	public @ResponseBody ChatMessage sendMessageToTeacher(@PathVariable String appId, @PathVariable String schoolId,

@@ -1,13 +1,15 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.home', [])
 
-.controller('HomeCtrl', function ($scope, $rootScope, $location, $state, $filter, $ionicPopup, $ionicLoading, dataServerService, profileService, configurationService, retireService, busService, Toast, Config) {
+.controller('HomeCtrl', function ($scope, $rootScope, $location, $state, $filter, $ionicPopup, $ionicLoading, dataServerService, profileService, configurationService, retireService, busService, Toast, Config, pushNotificationService, messagesService, communicationsService) {
 
     $scope.date = "";
     $scope.kidProfile = {};
     $scope.kidConfiguration = {};
     $scope.school = {};
     $scope.notes = {};
-    $scope.communications = []
+    $scope.communications = [];
+    $rootScope.numberCommunicationsUnread = 0;
+    $rootScope.numberMessagesUnread = 0;
     $scope.fromTime = "";
     $scope.toTime = "";
     //build options
@@ -103,22 +105,37 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             disabled: false
         });
 
-        style = getButtonStyle("default");
-        $scope.elements.push({
-            click: "app.communications",
-            string: $filter('translate')('home_comunicazioni'),
-            class: style,
-            img: 'img/comunicazioni.png',
-            disabled: false
-        });
-        style = getButtonStyle("default");
-        $scope.elements.push({
+        //        style = getButtonStyle("default");
+        //        $scope.elements.push({
+        //            click: "app.communications",
+        //            string: $filter('translate')('home_comunicazioni'),
+        //            note: $filter('translate')('home_comunicazioni') + $rootScope.numberCommunicationsUnread,
+        //            class: style,
+        //            img: 'img/comunicazioni.png',
+        //            disabled: false
+        //        });
+        style = ($rootScope.numberCommunicationsUnread ? "button-alrt" : "button-norm");
+        $rootScope.buttonHomeCommunication = {
+                    click: "app.communications",
+                 string: $filter('translate')('home_comunicazioni'),
+                 note: $filter('translate')('home_comunicazioni_unread') + $rootScope.numberCommunicationsUnread,
+                 class: style,
+                 img: 'img/comunicazioni.png',
+                 disabled: false
+        };
+
+        $scope.elements.push($rootScope.buttonHomeCommunication);
+        style = ($rootScope.numberMessageUnread ? "button-alrt" : "button-norm");
+        $rootScope.buttonHomeMessage = {
             click: "app.messages",
             string: $filter('translate')('home_messaggi'),
+            note: $filter('translate')('home_messaggi_unread') + $rootScope.numberMessageUnread,
             class: style,
             img: 'img/chat.png',
             disabled: false
-        });
+        };
+
+        $scope.elements.push($rootScope.buttonHomeMessage);
         style = getButtonStyle("default");
         $scope.elements.push({
             click: function () {
@@ -186,99 +203,103 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         }
     }
 
-    $rootScope.loadConfiguration = function (schoolId, kidId) {
-            $scope.kidProfile = profileService.getBabyProfile();
-            dataServerService.getBabyConfigurationById(schoolId, kidId).then(function (data) {
-                var config = data;
+    var checkNewCommunication = function (communications) {
+        var newComunications = 0;
+        for (var i = 0; i < communications.length; i++) {
+            //checklocal storage if I have unread communications
+        }
+        return newComunications;
+    }
 
-                $scope.kidConfiguration = config;
-                configurationService.setBabyConfiguration(config);
-                //getSchoolProfile(appId, schoolId) puo' essere diversa in base al bambino
-                //ottengo
-                //ottengo la scuola in base alla schoolId del bambino
-                dataServerService.getSchoolProfile(schoolId, kidId).then(function (data) {
-                    var profile = data;
-                    profileService.setSchoolProfile(profile);
-                    $scope.school = profile;
-                    dataServerService.getRitiro($scope.kidProfile.schoolId, $scope.kidProfile.kidId, new Date().getTime()).then(function (data) {
-                        $scope.dailyRitiro = data;
-                        dataServerService.getFermata($scope.kidProfile.schoolId, $scope.kidProfile.kidId, new Date().getTime()).then(function (data) {
-                            $scope.dailyFermata = data;
-                            if (config == null) {
-                                //use default data from profile to create config
-                                var exitTime = null;
-                                if (!$scope.kidProfile.services.posticipo.enabled) {
-                                    exitTime = $filter('date')(new Date(profileService.getSchoolProfile().regularTiming.toTime), 'H:mm');
-                                } else {
-                                    exitTime = $filter('date')(new Date(profileService.getSchoolProfile().posticipoTiming.toTime), 'H:mm');
-                                }
-                                config = {
-                                    "appId": Config.appId(),
-                                    "schoolId": schoolId,
-                                    "kidId": kidId,
-                                    "services": {
-                                        "anticipo": {
-                                            "active": $scope.kidProfile.services.anticipo.enabled
-                                        },
-                                        "posticipo": {
-                                            "active": $scope.kidProfile.services.posticipo.enabled
-                                        },
-                                        "bus": {
-                                            "active": $scope.kidProfile.services.bus.enabled,
-                                            "defaultIdGo": $scope.kidProfile.services.bus.stops[0].stopId,
-                                            "defaultIdBack": $scope.kidProfile.services.bus.stops[0].stopId
-                                        },
-                                        "mensa": {
-                                            "active": $scope.kidProfile.services.mensa.enabled
-                                        }
-                                    },
-                                    "exitTime": exitTime,
-                                    "defaultPerson": $scope.kidProfile.persons[0].personId,
-                                    "receiveNotification": true,
-                                    "extraPersons": null
-                                }
-                                $scope.kidConfiguration = config;
-                                configurationService.setBabyConfiguration(config);
+    $rootScope.loadConfiguration = function () {
+        $scope.kidProfile = profileService.getBabyProfile();
+        var schoolId = $scope.kidProfile.schoolId;
+        var kidId = $scope.kidProfile.kidId;
+        dataServerService.getBabyConfigurationById(schoolId, kidId).then(function (data) {
+            var config = data;
+
+            $scope.kidConfiguration = config;
+            configurationService.setBabyConfiguration(config);
+            //getSchoolProfile(appId, schoolId) puo' essere diversa in base al bambino
+            //ottengo
+            //ottengo la scuola in base alla schoolId del bambino
+            dataServerService.getSchoolProfile(schoolId, kidId).then(function (data) {
+                var profile = data;
+                profileService.setSchoolProfile(profile);
+                $scope.school = profile;
+                dataServerService.getRitiro($scope.kidProfile.schoolId, $scope.kidProfile.kidId, new Date().getTime()).then(function (data) {
+                    $scope.dailyRitiro = data;
+                    dataServerService.getFermata($scope.kidProfile.schoolId, $scope.kidProfile.kidId, new Date().getTime()).then(function (data) {
+                        $scope.dailyFermata = data;
+                        if (config == null) {
+                            //use default data from profile to create config
+                            var exitTime = null;
+                            if (!$scope.kidProfile.services.posticipo.enabled) {
+                                exitTime = $filter('date')(new Date(profileService.getSchoolProfile().regularTiming.toTime), 'H:mm');
+                            } else {
+                                exitTime = $filter('date')(new Date(profileService.getSchoolProfile().posticipoTiming.toTime), 'H:mm');
                             }
-                            dataServerService.getAbsence($scope.kidProfile.schoolId, $scope.kidProfile.kidId, new Date().getTime()).then(function (data) {
-                                if (data.data == null) {
-                                    $scope.isPresent = true;
-
-                                    if (($scope.kidProfile.services.anticipo.enabled && !$scope.kidConfiguration) || ($scope.kidProfile.services.anticipo.enabled && $scope.kidConfiguration.services.anticipo.active)) {
-                                        $scope.fromTime = $scope.school.anticipoTiming.fromTime;
-                                    } else {
-                                        $scope.fromTime = $scope.school.regularTiming.fromTime;
+                            config = {
+                                "appId": Config.appId(),
+                                "schoolId": schoolId,
+                                "kidId": kidId,
+                                "services": {
+                                    "anticipo": {
+                                        "active": $scope.kidProfile.services.anticipo.enabled
+                                    },
+                                    "posticipo": {
+                                        "active": $scope.kidProfile.services.posticipo.enabled
+                                    },
+                                    "bus": {
+                                        "active": $scope.kidProfile.services.bus.enabled,
+                                        "defaultIdGo": $scope.kidProfile.services.bus.stops[0].stopId,
+                                        "defaultIdBack": $scope.kidProfile.services.bus.stops[0].stopId
+                                    },
+                                    "mensa": {
+                                        "active": $scope.kidProfile.services.mensa.enabled
                                     }
+                                },
+                                "exitTime": exitTime,
+                                "defaultPerson": $scope.kidProfile.persons[0].personId,
+                                "receiveNotification": true,
+                                "extraPersons": null
+                            }
+                            $scope.kidConfiguration = config;
+                            configurationService.setBabyConfiguration(config);
+                        }
+                        dataServerService.getAbsence($scope.kidProfile.schoolId, $scope.kidProfile.kidId, new Date().getTime()).then(function (data) {
+                            if (data.data == null) {
+                                $scope.isPresent = true;
 
-                                    if ($scope.dailyRitiro) {
-                                        $scope.toTime = new Date($scope.dailyRitiro.date).toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1").substr(0, 5);
-                                    } else {
-                                        if (!$scope.kidProfile.services.posticipo.enabled) {
-                                            $scope.toTime = profileService.getSchoolProfile().regularTiming.toTime;
-                                        } else {
-                                            $scope.toTime = profileService.getSchoolProfile().posticipoTiming.toTime;
-                                        }
-                                        if ($scope.dailyFermata) {
-                                            //                                            $scope.toTime = $scope.toTime + " con il servizio bus";
-                                            $scope.toTime = " con il servizio bus";
-                                        }
-                                    }
+                                if (($scope.kidProfile.services.anticipo.enabled && !$scope.kidConfiguration) || ($scope.kidProfile.services.anticipo.enabled && $scope.kidConfiguration.services.anticipo.active)) {
+                                    $scope.fromTime = $scope.school.anticipoTiming.fromTime;
                                 } else {
-                                    //il ragazzo e' assente
-                                    $scope.isPresent = false;
-
+                                    $scope.fromTime = $scope.school.regularTiming.fromTime;
                                 }
-                                buildHome();
-                                $ionicLoading.hide();
-                                Toast.show($filter('translate')('data_updated'), 'short', 'bottom');
+
+                                if ($scope.dailyRitiro) {
+                                    $scope.toTime = new Date($scope.dailyRitiro.date).toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1").substr(0, 5);
+                                } else {
+                                    if (!$scope.kidProfile.services.posticipo.enabled) {
+                                        $scope.toTime = profileService.getSchoolProfile().regularTiming.toTime;
+                                    } else {
+                                        $scope.toTime = profileService.getSchoolProfile().posticipoTiming.toTime;
+                                    }
+                                    if ($scope.dailyFermata) {
+                                        //                                            $scope.toTime = $scope.toTime + " con il servizio bus";
+                                        $scope.toTime = " con il servizio bus";
+                                    }
+                                }
+                            } else {
+                                //il ragazzo e' assente
+                                $scope.isPresent = false;
+
+                            }
+                            buildHome();
+                            $ionicLoading.hide();
+                            //Toast.show($filter('translate')('data_updated'), 'short', 'bottom');
 
 
-                            }, function (error) {
-                                console.log("ERROR -> " + error);
-                                Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
-
-                                $ionicLoading.hide();
-                            });
                         }, function (error) {
                             console.log("ERROR -> " + error);
                             Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
@@ -291,56 +312,108 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
                         $ionicLoading.hide();
                     });
-                });
-                //recupero le note
-                dataServerService.getNotes(schoolId, kidId, new Date().getTime()).then(function (data) {
-                    $scope.notes = data[0];
                 }, function (error) {
                     console.log("ERROR -> " + error);
                     Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
 
                     $ionicLoading.hide();
                 });
-
-            }, function (error) {
-                console.log("ERROR -> " + error);
-                Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
-                $ionicLoading.hide();
             });
-        }
-        //corretto tutte e tre annidate? cosa succede se una salta? ma come faccio a settare il profilo temporaneo senza avere conf, prof????
-    $scope.getConfiguration = function () {
-        $ionicLoading.show();
-        //parto da getBabyProfiles()(appid incluso nel server e qui ottengo schoolId e kidId
-        dataServerService.getBabyProfiles().then(function (data) {
-            //in data ho tutti i profili dei kids: memorizzo in locale e ottengo le configurazioni
-            //tmp default $scope.kidConfiguration = data[0]; poi dovro' gestire un refresh delle informazioni quando switcho da profilo ad un altro
-            //se non settato prendo il primo
-            if (profileService.getBabyProfile() == null) {
-                $scope.kidProfile = data[0];
-                profileService.setBabiesProfiles(data);
-                profileService.setBabyProfile(data[0]);
-            } else {
-                $scope.kidProfile = profileService.getBabyProfile();
-            }
-            $scope.loadConfiguration($scope.kidProfile.schoolId, $scope.kidProfile.kidId);
-            $rootScope.allowed = true;
+
 
 
         }, function (error) {
             console.log("ERROR -> " + error);
             Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
             $ionicLoading.hide();
-            if (error == 406) {
-                $rootScope.allowed = false;
-            }
         });
+    }
+    var registerPushNotification = function (data) {
+        if (data) {
+            var arrayOfSchoolId = [];
+            for (var i = 0; i < data.length; i++) {
+                arrayOfSchoolId.push(data[i].schoolId);
+            }
+            pushNotificationService.register(arrayOfSchoolId);
+
+        }
+    }
+
+    //corretto tutte e tre annidate? cosa succede se una salta? ma come faccio a settare il profilo temporaneo senza avere conf, prof????
+    $scope.getConfiguration = function () {
+        if (profileService.getBabiesProfiles().length == 0) {
+            //parto da getBabyProfiles()(appid incluso nel server e qui ottengo schoolId e kidId
+            $ionicLoading.show();
+            dataServerService.getBabyProfiles().then(function (data) {
+                    //in data ho tutti i profili dei kids: memorizzo in locale e ottengo le configurazioni
+                    //tmp default $scope.kidConfiguration = data[0]; poi dovro' gestire un refresh delle informazioni quando switcho da profilo ad un altro
+                    //se non settato prendo il primo
+                    if (profileService.getBabyProfile() == null) {
+                        $scope.kidProfile = data[0];
+                        profileService.setBabiesProfiles(data);
+                        profileService.setBabyProfile(data[0]);
+                        registerPushNotification(data);
+                    } else {
+                        $scope.kidProfile = profileService.getBabyProfile();
+                    }
+                    //                    $scope.loadConfiguration($scope.kidProfile.schoolId, $scope.kidProfile.kidId);
+                    $scope.loadConfiguration();
+                    $rootScope.allowed = true;
+                    //get messages from last time
+
+                    messagesService.getUnreadMessages($scope.kidProfile.schoolId, $scope.kidProfile.kidId).then(function (data) {
+                        $rootScope.numberMessageUnread = data;
+
+                    });
+                    //get communication from last time
+
+                    communicationsService.getCommunications($scope.kidProfile.schoolId, $scope.kidProfile.kidId).then(function (data) {
+                        //all comunications
+                        //undesrtand if there are new communications unread
+                        $rootScope.numberCommunicationsUnread = checkNewCommunication(data);
+                    });
+                },
+                function (error) {
+                    console.log("ERROR -> " + error);
+                    Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+                    $ionicLoading.hide();
+                    if (error == 406) {
+                        $rootScope.allowed = false;
+                    }
+                });
+        } else {
+            $scope.loadConfiguration();
+            $rootScope.allowed = true;
+
+            messagesService.getUnreadMessages($scope.kidProfile.schoolId, $scope.kidProfile.kidId).then(function (data) {
+                $rootScope.numberMessageUnread = data;
+
+            });
+            //get communication from last time
+
+            communicationsService.getCommunications($scope.kidProfile.schoolId, $scope.kidProfile.kidId).then(function (data) {
+                //all comunications
+                //undesrtand if there are new communications unread
+                $rootScope.numberCommunicationsUnread = checkNewCommunication(data);
+            });
+        }
 
 
     }
-
-
-
+    $scope.$watch('numberMessageUnread', function () {
+        var style = ($rootScope.numberMessageUnread ? "button-alrt" : "button-norm");
+        if ($rootScope.buttonHomeMessage) {
+            $rootScope.buttonHomeMessage.note = $filter('translate')('home_messaggi') + $rootScope.numberMessageUnread;
+            $rootScope.buttonHomeMessage.class = style;
+        }
+    });
+    $scope.$watch('numberCommunicationsUnread', function () {
+        var style = ($rootScope.numberCommunicationsUnread ? "button-alrt" : "button-norm");
+        if ($rootScope.buttonHomeCommunication) {
+            $rootScope.buttonHomeCommunication.note = $filter('translate')('home_communications') + $rootScope.numberCommunicationsUnread;
+            $rootScope.buttonHomeMessage.class = style;
+        }
+    });
     $scope.getConfiguration();
 
 });

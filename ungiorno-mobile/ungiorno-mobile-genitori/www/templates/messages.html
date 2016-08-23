@@ -21,7 +21,7 @@
                 </div>
                 <div ng-class="{'message-container-parent': isMe(ms.sender), 'message-container-teacher': !isMe(ms.sender) }" class="message-container">
                     <div id="{{ ms.creationDate }}" class="card-chat" ng-class="{'card-chat-my': (isMe(ms.sender) && !chatExtraLength(ms.text)), 'card-chat-my-extra': (isMe(ms.sender) && chatExtraLength(ms.text))}">
-                        <div ng-if="!isMe(ms.sender)" class="item item-divider">
+                        <div ng-if="!isMe(ms.sender)" class="item item-divider" ng-init="checkMessage(ms)">
                             <span>{{ ms.teacherId }} </span>
                         </div>
                         <div class="item">
@@ -29,7 +29,6 @@
                         </div>
                         <div class="item item-divider">
                             <span ng-if="isMe(ms.sender)"><i class="icon ion-checkmark-round" ng-class="{'message-flag': ms.seen}"></i><i class="icon ion-checkmark-round" ng-class="{'message-flag':  ms.received}"></i></span> {{ ms.creationDate | date:'HH:mm' }}
-                            <span ng-if="!isMe(ms.sender)"><i class="icon ion-checkmark-round" ng-class="{'message-flag': ms.seen}"></i><i class="icon ion-checkmark-round" ng-class="{'message-flag':  ms.received}"></i></spanspan>
                         </div>
                     </div>
                 </div>

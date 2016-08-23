@@ -15,7 +15,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
 
     var APP_BUILD = '';
 
-    var APP_VERSION = '1.0.0';
+    var APP_VERSION = '1.0.1';
 
 
     return {

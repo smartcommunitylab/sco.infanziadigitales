@@ -370,7 +370,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
         var deferred = $q.defer();
         $http({
             method: 'GET',
-            url: Config.URL() + '/' + Config.app() + '/chat/' + Config.appId() + '/' + schoolId + '/message/' + kidId + '?timestamp=' + timestamp + '&limit=' + limit,
+            url: Config.URL() + '/' + Config.app() + '/chat/' + Config.appId() + '/' + schoolId + '/message/' + kidId + (timestamp ? ('?timestamp=' + timestamp) : '') + (limit ? ('&limit=' + limit) : ''),
             headers: {
                 'Accept': 'application/json'
             },
@@ -386,6 +386,27 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
         });
         return deferred.promise;
     };
+    dataServerService.getUnreadMessages = function (schoolId, kidId) {
+        var deferred = $q.defer();
+        $http({
+            method: 'GET',
+            url: Config.URL() + '/' + Config.app() + '/chat/' + Config.appId() + '/' + schoolId + '/message/' + kidId + '/unread',
+            headers: {
+                'Accept': 'application/json'
+            },
+            timeout: Config.httpTimout()
+
+        }).
+        success(function (data, status, headers, config) {
+            deferred.resolve(data);
+        }).
+        error(function (data, status, headers, config) {
+            console.log(data + status + headers + config);
+            deferred.reject(data);
+        });
+        return deferred.promise;
+    };
+
     dataServerService.sendMessage = function (schoolId, kidId, msg) {
         var deferred = $q.defer();
         $http({
@@ -407,6 +428,47 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
         });
         return deferred.promise;
     };
+    dataServerService.receivedMessage = function (schoolId, kidId, msgId) {
+        var deferred = $q.defer();
+        $http({
+            method: 'PUT',
+            url: Config.URL() + '/' + Config.app() + '/chat/' + Config.appId() + '/' + schoolId + '/message/' + msgId + '/received',
+            headers: {
+                'Accept': 'application/json'
+            },
+            timeout: Config.httpTimout()
+
+        }).
+        success(function (data, status, headers, config) {
+            deferred.resolve(data);
+        }).
+        error(function (data, status, headers, config) {
+            console.log(data + status + headers + config);
+            deferred.reject(data);
+        });
+        return deferred.promise;
+    };
+    dataServerService.seenMessage = function (schoolId, kidId, msgId) {
+        var deferred = $q.defer();
+        $http({
+            method: 'PUT',
+            url: Config.URL() + '/' + Config.app() + '/chat/' + Config.appId() + '/' + schoolId + '/message/' + msgId + '/seen',
+            headers: {
+                'Accept': 'application/json'
+            },
+            timeout: Config.httpTimout()
+
+        }).
+        success(function (data, status, headers, config) {
+            deferred.resolve(data);
+        }).
+        error(function (data, status, headers, config) {
+            console.log(data + status + headers + config);
+            deferred.reject(data);
+        });
+        return deferred.promise;
+    }
+
     dataServerService.pushNotificationRegister = function (registrationId) {
         var deferred = $q.defer();
         $http({

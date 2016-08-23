@@ -17,7 +17,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             function (data) {
                 dataServerService.getBabyProfiles().then(function (data) {
                     // loginStarted = false;
-                    pushNotificationService.register();
+                    //pushNotificationService.register();
                     $state.go('app.home');
                     $ionicHistory.nextViewOptions({
                         disableBack: true,

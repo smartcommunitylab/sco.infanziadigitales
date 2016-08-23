@@ -162,90 +162,93 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     $ionicPlatform.ready(function () {
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
         // for form inputs)
-        if (window.cordova && window.cordova.plugins.Keyboard) {
-            cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-        }
+        Config.init().then(function () {
+            if (window.cordova && window.cordova.plugins.Keyboard) {
+                cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+            }
 
-        if (window.StatusBar) {
-            // org.apache.cordova.statusbar required
-            StatusBar.styleDefault();
-        }
+            if (window.StatusBar) {
+                // org.apache.cordova.statusbar required
+                StatusBar.styleDefault();
+            }
 
-        if (typeof navigator.globalization !== "undefined") {
-            navigator.globalization.getPreferredLanguage(function (language) {
-                $translate.use((language.value).split("-")[0]).then(function (data) {
-                    console.log("SUCCESS -> " + data);
-                    $rootScope.lang = data;
-                }, function (error) {
-                    console.log("ERROR -> " + error);
-                });
-            }, null);
-        }
-        $rootScope.platform = ionic.Platform;
-        $rootScope.backButtonStyle = $ionicConfig.backButton.icon();
-        // $rootScope.getConfiguration();
+            if (typeof navigator.globalization !== "undefined") {
+                navigator.globalization.getPreferredLanguage(function (language) {
+                    $translate.use((language.value).split("-")[0]).then(function (data) {
+                        console.log("SUCCESS -> " + data);
+                        $rootScope.lang = data;
+                    }, function (error) {
+                        console.log("ERROR -> " + error);
+                    });
+                }, null);
+            }
+            $rootScope.platform = ionic.Platform;
+            $rootScope.backButtonStyle = $ionicConfig.backButton.icon();
+            // $rootScope.getConfiguration();
 
-        $rootScope.login_googlelocal = 'google';
-        $rootScope.login_facebooklocal = 'facebook';
+            $rootScope.login_googlelocal = 'google';
+            $rootScope.login_facebooklocal = 'facebook';
 
-        //        if (!!window.plugins && !!window.plugins.googleplus) {
-        //            window.plugins.googleplus.isAvailable(
-        //                function (available) {
-        //                    if (available) $rootScope.login_googlelocal = 'googlelocal';
-        //                    console.log('login_googlelocal available!');
-        //                }
-        //            );
-        //        }
+            //        if (!!window.plugins && !!window.plugins.googleplus) {
+            //            window.plugins.googleplus.isAvailable(
+            //                function (available) {
+            //                    if (available) $rootScope.login_googlelocal = 'googlelocal';
+            //                    console.log('login_googlelocal available!');
+            //                }
+            //            );
+            //        }
 
-        //        if (window.cordova && window.cordova.platformId == 'browser') {
-        //            facebookConnectPlugin.browserInit('1031028236933030');
-        //            //facebookConnectPlugin.browserInit(appId, version);
-        //            // version is optional. It refers to the version of API you may want to use.
-        //        }
-        if (loginService.userIsLogged()) {
-            console.log("user is logged");
-            //
-            if (localStorage.provider == 'internal') {
-                $rootScope.login();
-            } else {
-                loginService.login(localStorage.provider).then(
-                    function (data) {
-                        dataServerService.getBabyProfiles().then(function (data) {
-                            pushNotificationService.register();
-                            $state.go('app.home');
-                            $ionicHistory.nextViewOptions({
-                                disableBack: true,
-                                historyRoot: true
-                            });
-
-                        }, function (error) {
-                            console.log("ERROR -> " + error);
-                            // Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
-                            $ionicLoading.hide();
-                            if (error == 406) {
-                                loginService.logout();
-                                $ionicPopup.alert({
-                                    title: $filter('translate')('not_allowed_popup_title'),
-                                    template: $filter('translate')('not_allowed_signin')
-                                });
-                                $state.go('app.login');
+            //        if (window.cordova && window.cordova.platformId == 'browser') {
+            //            facebookConnectPlugin.browserInit('1031028236933030');
+            //            //facebookConnectPlugin.browserInit(appId, version);
+            //            // version is optional. It refers to the version of API you may want to use.
+            //        }
+            if (loginService.userIsLogged()) {
+                console.log("user is logged");
+                //
+                if (localStorage.provider == 'internal') {
+                    $rootScope.login();
+                } else {
+                    loginService.login(localStorage.provider).then(
+                        function (data) {
+                            dataServerService.getBabyProfiles().then(function (data) {
+                                //pushNotificationService.register();
+                                $state.go('app.home');
                                 $ionicHistory.nextViewOptions({
                                     disableBack: true,
                                     historyRoot: true
                                 });
-                            }
-                        });
-                        //                        $state.go('app.home');
-                        //                        $ionicHistory.nextViewOptions({
-                        //                            disableBack: true,
-                        //                            historyRoot: true
-                        //                                //                });
-                        //                        });
-                    })
-            };
-        } else {
-            $rootScope.login();
-        }
+
+                            }, function (error) {
+                                console.log("ERROR -> " + error);
+                                // Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+                                $ionicLoading.hide();
+                                if (error == 406) {
+                                    loginService.logout();
+                                    $ionicPopup.alert({
+                                        title: $filter('translate')('not_allowed_popup_title'),
+                                        template: $filter('translate')('not_allowed_signin')
+                                    });
+                                    $state.go('app.login');
+                                    $ionicHistory.nextViewOptions({
+                                        disableBack: true,
+                                        historyRoot: true
+                                    });
+                                }
+                            });
+                            //                        $state.go('app.home');
+                            //                        $ionicHistory.nextViewOptions({
+                            //                            disableBack: true,
+                            //                            historyRoot: true
+                            //                                //                });
+                            //                        });
+                        })
+                };
+            } else {
+                $rootScope.login();
+            }
+        });
+
     });
 
 
@@ -443,7 +446,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         home_mensa: 'Mensa',
         home_calendario: 'Calendario',
         home_comunicazioni: 'Comunicazioni della scuola',
+        home_comunicazioni_unread: 'Comunicazioni non lette: ',
         home_messaggi: 'Messaggi',
+        home_messaggi_unread: 'Messaggi non letti: ',
         home_contatta: 'Chiama la scuola',
         home_personal_information: 'La giornata di ',
         home_school_information: 'Comunicazioni della scuola',

@@ -8,7 +8,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.c
     var AAC_URL = 'https://' + (DEVELOPMENT ? 'dev' : 'it') + '.smartcommunitylab.it/aac';
     var fakeId = '23655';
     var app = 'ungiorno2';
-    var senderId = 453601816446;
+    //var senderId = 453601816446;
     // var appId = 'trento'
     //    var appId = $rootScope.appId;
 
@@ -17,14 +17,27 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.c
     var APP_BUILD = '';
 
     var APP_VERSION = '1.0.0';
+    var mapJsonConfig = null;
 
 
     return {
+        init: function () {
+            var deferred = $q.defer();
+            if (mapJsonConfig != null) deferred.resolve(true);
+            else $http.get('data/config.json').success(function (response) {
+                mapJsonConfig = response;
+                deferred.resolve(true);
+            });
+            return deferred.promise;
+        },
         getSenderID: function () {
-            return senderId;
+            return mapJsonConfig['senderID'];;
         },
         getFakeId: function () {
             return fakeId;
+        },
+        getMessagingAppId: function () {
+            return mapJsonConfig['messagingAppId']
         },
         setAppId: function (userId) {
             if (userId == this.getFakeId()) {

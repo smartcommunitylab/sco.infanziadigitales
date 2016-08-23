@@ -5,16 +5,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     var babyProfile = profileService.getBabyProfile();
     var IS_PARENT = 'parent';
     var IS_TEACHER = 'teacher';
+    $scope.all = 10;
+
     $scope.status = {
         loading: false,
         loaded: false
     };
     $scope.init = function () {
-        $scope.messages = [];
-        $scope.all = 10;
+        $rootScope.messages = [];
         $scope.end_reached = false;
         messagesService.getMessages(null, null, babyProfile.schoolId, babyProfile.kidId).then(function (data) {
-            $scope.messages = data.slice().reverse(); //turn the order from top to bottom
+            $rootScope.messages = data.slice().reverse(); //turn the order from top to bottom
             $ionicScrollDelegate.scrollBottom();
         }, function (error) {
             $ionicLoading.hide();
@@ -28,24 +29,34 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         return false;
     }
     var counter = 0;
+    $scope.checkMessage = function (message) {
 
+        if (!message.received) {
+            //set received
+            messagesService.receivedMessage(message.schoolId, message.kidId, message.messageId);
+        }
+        if (!message.seen) {
+            //set seen
+            messagesService.seenMessage(message.schoolId, message.kidId, message.messageId);
+        }
+    }
     $scope.loadMore = function () {
         if (!$scope.loading) {
             $scope.loading = true;
 
-            messagesService.getMessages($scope.messages[0].creationDate - 1, $scope.all, babyProfile.schoolId, babyProfile.kidId).then(function (data) {
+            messagesService.getMessages($rootScope.messages[0].creationDate - 1, $scope.all, babyProfile.schoolId, babyProfile.kidId).then(function (data) {
                 if (data) {
                     var newmessages = data.slice();
                     //var newmessages = data;
 
-                    if (!!$scope.messages) {
+                    if (!!$rootScope.messages) {
                         for (var i = 0; i < newmessages.length; i++)
-                            $scope.messages.unshift(newmessages[i]);
+                            $rootScope.messages.unshift(newmessages[i]);
                     } else {
-                        $scope.messages = newmessages;
+                        $rootScope.messages = newmessages;
                     }
-                    // $scope.messages = !!$scope.messages ? $scope.messages.concat(newmessages) : newmessages;
-                    if ($scope.messages.length == 0) {
+                    // $rootScope.messages = !!$rootScope.messages ? $rootScope.messages.concat(newmessages) : newmessages;
+                    if ($rootScope.messages.length == 0) {
                         $scope.emptylist = true;
                     }
                     if (data.length >= $scope.all) {
@@ -84,7 +95,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             messagesService.sendMessage(babyProfile.schoolId, babyProfile.kidId, text).then(
                 function (msg) {
                     // init(); temporary commented. why reinitialize the list?
-                    $scope.messages = $scope.messages.concat(msg);
+                    $rootScope.messages = $rootScope.messages.concat(msg);
                     $ionicLoading.hide();
                     $ionicScrollDelegate.scrollBottom();
                 },
@@ -102,8 +113,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             if (indexOfMessage == 0) {
                 return true;
             }
-            var date = $filter('date')($scope.messages[indexOfMessage].creationDate, 'dd,MM,yyyy');
-            var previousdate = $filter('date')($scope.messages[indexOfMessage - 1].creationDate, 'dd,MM,yyyy');
+            var date = $filter('date')($rootScope.messages[indexOfMessage].creationDate, 'dd,MM,yyyy');
+            var previousdate = $filter('date')($rootScope.messages[indexOfMessage - 1].creationDate, 'dd,MM,yyyy');
 
             if (date != previousdate) {
                 return true;
@@ -113,8 +124,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         }
         //    var updateChat = function () {
         //        messagesService.getDiscussion(null, null, babyProfile.schoolId, babyProfile.kidId).then(function (discussion) {
-        //            $scope.messages = discussion.messages ? discussion.messages : [];
-        //            if ($scope.messages.length > 10) {
+        //            $rootScope.messages = discussion.messages ? discussion.messages : [];
+        //            if ($rootScope.messages.length > 10) {
         //                $scope.oldMsgPresent = true;
         //            }
         //        });

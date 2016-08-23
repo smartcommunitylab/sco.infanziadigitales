@@ -1592,11 +1592,12 @@ public class RepositoryManager {
 	 * @param kidId
 	 * @return
 	 */
-	public Long getUnreadChatMessageCount(String appId, String schoolId, String kidId) {
+	public Long getUnreadChatMessageCount(String appId, String schoolId, String kidId, String sender) {
 		Criteria criteria = 
 				new Criteria("appId").is(appId)
 				.and("schoolId").is(schoolId)
 				.and("kidId").is(kidId)
+				.and("sender").is(sender)
 				.and("seen").is(false);
 		Query query = new Query(criteria);
 		query.with(new Sort(Sort.Direction.DESC, "creationDate"));

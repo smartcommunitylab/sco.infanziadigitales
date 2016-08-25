@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.home', [])
 
-.controller('HomeCtrl', function ($scope, $rootScope, $location, $state, $filter, $ionicPopup, $ionicLoading, dataServerService, profileService, configurationService, retireService, busService, Toast, Config, pushNotificationService, messagesService, communicationsService) {
+.controller('HomeCtrl', function ($scope, $rootScope, $location, $state, $filter, $q, $ionicPopup, $ionicLoading, dataServerService, profileService, configurationService, retireService, busService, Toast, Config, pushNotificationService, messagesService, communicationsService) {
 
     $scope.date = "";
     $scope.kidProfile = {};
@@ -8,8 +8,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.school = {};
     $scope.notes = {};
     $scope.communications = [];
-    $rootScope.numberCommunicationsUnread = 0;
-    $rootScope.numberMessagesUnread = 0;
+    $rootScope.numberCommunicationsUnread = {};
+    $rootScope.numberMessageUnread = {};
     $scope.fromTime = "";
     $scope.toTime = "";
     //build options
@@ -17,8 +17,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.dailyFermata = null;
     $scope.dailyRitiro = null;
     $rootScope.allowed = true;
-    $rootScope.absenceLimitHours = 9;
-    $rootScope.absenceLimitMinutes = 15;
+    //$rootScope.absenceLimitHours = 9;
+    //$rootScope.absenceLimitMinutes = 15;
     $rootScope.retireLimit = 10;
     $scope.refresh = function () {
         //window.location.reload(true);
@@ -105,31 +105,23 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             disabled: false
         });
 
-        //        style = getButtonStyle("default");
-        //        $scope.elements.push({
-        //            click: "app.communications",
-        //            string: $filter('translate')('home_comunicazioni'),
-        //            note: $filter('translate')('home_comunicazioni') + $rootScope.numberCommunicationsUnread,
-        //            class: style,
-        //            img: 'img/comunicazioni.png',
-        //            disabled: false
-        //        });
-        style = ($rootScope.numberCommunicationsUnread ? "button-alrt" : "button-norm");
+
+        style = ($rootScope.numberCommunicationsUnread[$scope.kidProfile.schoolId] ? "button-alrt" : "button-norm");
         $rootScope.buttonHomeCommunication = {
-                    click: "app.communications",
-                 string: $filter('translate')('home_comunicazioni'),
-                 note: $filter('translate')('home_comunicazioni_unread') + $rootScope.numberCommunicationsUnread,
-                 class: style,
-                 img: 'img/comunicazioni.png',
-                 disabled: false
+            click: "app.communications",
+            string: $filter('translate')('home_comunicazioni'),
+            note: $filter('translate')('home_comunicazioni_unread') + $rootScope.numberCommunicationsUnread[$scope.kidProfile.schoolId],
+            class: style,
+            img: 'img/comunicazioni.png',
+            disabled: false
         };
 
         $scope.elements.push($rootScope.buttonHomeCommunication);
-        style = ($rootScope.numberMessageUnread ? "button-alrt" : "button-norm");
+        style = ($rootScope.numberMessageUnread[$scope.kidProfile.kidId] ? "button-alrt" : "button-norm");
         $rootScope.buttonHomeMessage = {
             click: "app.messages",
             string: $filter('translate')('home_messaggi'),
-            note: $filter('translate')('home_messaggi_unread') + $rootScope.numberMessageUnread,
+            note: $filter('translate')('home_messaggi_unread') + $rootScope.numberMessageUnread[$scope.kidProfile.kidId],
             class: style,
             img: 'img/chat.png',
             disabled: false
@@ -139,7 +131,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         style = getButtonStyle("default");
         $scope.elements.push({
             click: function () {
-                contact();
+                $scope.call();
             },
             string: $filter('translate')('home_contatta'),
             class: style,
@@ -177,6 +169,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 type: 'button-norm',
                 onTap: function (e) {
                     $scope.contactPopup.close();
+                    $scope.call();
                 }
               }]
         });
@@ -203,12 +196,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         }
     }
 
-    var checkNewCommunication = function (communications) {
-        var newComunications = 0;
-        for (var i = 0; i < communications.length; i++) {
-            //checklocal storage if I have unread communications
-        }
-        return newComunications;
+    var checkNewCommunication = function (Allcommunications, schoolId) {
+        //return number of comunications from localstorage (all the new omunication not visualized get from push)
+        return pushNotificationService.getNewComunications(schoolId);
     }
 
     $rootScope.loadConfiguration = function () {
@@ -338,8 +328,32 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
         }
     }
+    var getMessages = function () {
+        var messagePromises = [];
+        for (var i = 0; i < profileService.getBabiesProfiles().length; i++) {
+            var kidProfile = profileService.getBabiesProfiles()[i];
+            messagePromises.push(messagesService.getUnreadMessages(kidProfile.schoolId, kidProfile.kidId));
+        }
+        $q.all(messagePromises).then(function (values) {
+            for (var i = 0; i < values.length; i++) {
+                $rootScope.numberMessageUnread[profileService.getBabiesProfiles()[i].kidId] = values[i];
+            }
+        });
+    }
+    var getCommunication = function () {
+            var communicationPromises = [];
 
-    //corretto tutte e tre annidate? cosa succede se una salta? ma come faccio a settare il profilo temporaneo senza avere conf, prof????
+            for (var i = 0; i < profileService.getBabiesProfiles().length; i++) {
+                var kidProfile = profileService.getBabiesProfiles()[i];
+                communicationPromises.push(communicationsService.getCommunications($scope.kidProfile.schoolId, $scope.kidProfile.kidId));
+            }
+            $q.all(communicationPromises).then(function (values) {
+                for (var i = 0; i < values.length; i++) {
+                    $rootScope.numberCommunicationsUnread[profileService.getBabiesProfiles()[i].schoolId] = checkNewCommunication(values[i], profileService.getBabiesProfiles()[i].schoolId);
+                }
+            });
+        }
+        //corretto tutte e tre annidate? cosa succede se una salta? ma come faccio a settare il profilo temporaneo senza avere conf, prof????
     $scope.getConfiguration = function () {
         if (profileService.getBabiesProfiles().length == 0) {
             //parto da getBabyProfiles()(appid incluso nel server e qui ottengo schoolId e kidId
@@ -359,19 +373,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                     //                    $scope.loadConfiguration($scope.kidProfile.schoolId, $scope.kidProfile.kidId);
                     $scope.loadConfiguration();
                     $rootScope.allowed = true;
+
                     //get messages from last time
+                    //load all message from all profiles
+                    getMessages();
 
-                    messagesService.getUnreadMessages($scope.kidProfile.schoolId, $scope.kidProfile.kidId).then(function (data) {
-                        $rootScope.numberMessageUnread = data;
 
-                    });
                     //get communication from last time
+                    getCommunications();
 
-                    communicationsService.getCommunications($scope.kidProfile.schoolId, $scope.kidProfile.kidId).then(function (data) {
-                        //all comunications
-                        //undesrtand if there are new communications unread
-                        $rootScope.numberCommunicationsUnread = checkNewCommunication(data);
-                    });
+
                 },
                 function (error) {
                     console.log("ERROR -> " + error);
@@ -384,36 +395,36 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         } else {
             $scope.loadConfiguration();
             $rootScope.allowed = true;
+            getMessages();
+            getCommunication();
 
-            messagesService.getUnreadMessages($scope.kidProfile.schoolId, $scope.kidProfile.kidId).then(function (data) {
-                $rootScope.numberMessageUnread = data;
-
-            });
-            //get communication from last time
-
-            communicationsService.getCommunications($scope.kidProfile.schoolId, $scope.kidProfile.kidId).then(function (data) {
-                //all comunications
-                //undesrtand if there are new communications unread
-                $rootScope.numberCommunicationsUnread = checkNewCommunication(data);
-            });
         }
-
-
     }
-    $scope.$watch('numberMessageUnread', function () {
-        var style = ($rootScope.numberMessageUnread ? "button-alrt" : "button-norm");
-        if ($rootScope.buttonHomeMessage) {
-            $rootScope.buttonHomeMessage.note = $filter('translate')('home_messaggi') + $rootScope.numberMessageUnread;
-            $rootScope.buttonHomeMessage.class = style;
-        }
-    });
+
+    //watch the root variables which changes in case of notifications
     $scope.$watch('numberCommunicationsUnread', function () {
-        var style = ($rootScope.numberCommunicationsUnread ? "button-alrt" : "button-norm");
-        if ($rootScope.buttonHomeCommunication) {
-            $rootScope.buttonHomeCommunication.note = $filter('translate')('home_communications') + $rootScope.numberCommunicationsUnread;
-            $rootScope.buttonHomeMessage.class = style;
+        if ($scope.kidProfile && $scope.kidProfile.kidId) {
+            var style = ($rootScope.numberCommunicationsUnread[$scope.kidProfile.schoolId] ? "button-alrt" : "button-norm");
+            if ($rootScope.buttonHomeCommunication) {
+                $rootScope.buttonHomeCommunication.note = $filter('translate')('home_comunicazioni_unread') + $rootScope.numberCommunicationsUnread[$scope.kidProfile.schoolId];
+                $rootScope.buttonHomeCommunication.class = style;
+            }
         }
+    }, true);
+    $scope.$watch('numberMessageUnread', function () {
+        if ($scope.kidProfile && $scope.kidProfile.kidId) {
+            var style = ($rootScope.numberMessageUnread[$scope.kidProfile.kidId] ? "button-alrt" : "button-norm");
+            if ($rootScope.buttonHomeMessage) {
+                $rootScope.buttonHomeMessage.note = $filter('translate')('home_messaggi_unread') + $rootScope.numberMessageUnread[$scope.kidProfile.kidId];
+                $rootScope.buttonHomeMessage.class = style;
+            }
+        }
+    }, true);
+    Config.init().then(function () {
+        $rootScope.absenceLimitHours = Config.getAbsenceLimitHours();
+        $rootScope.absenceLimitMinutes = Config.getAbsenceLimitMinutes();
     });
+
     $scope.getConfiguration();
 
 });

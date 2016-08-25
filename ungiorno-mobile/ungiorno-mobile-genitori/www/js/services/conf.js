@@ -39,6 +39,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.c
         getMessagingAppId: function () {
             return mapJsonConfig['messagingAppId']
         },
+        getAbsenceLimitHours: function () {
+            return mapJsonConfig['absenceLimitHours']
+        },
+        getAbsenceLimitMinutes: function () {
+            return mapJsonConfig['absenceLimitMinutes']
+        },
         setAppId: function (userId) {
             if (userId == this.getFakeId()) {
                 $rootScope.appId = 'test';

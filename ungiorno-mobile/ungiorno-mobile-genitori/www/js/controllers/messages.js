@@ -2,7 +2,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
 .controller('MessagesCtrl', function ($scope, $rootScope, $filter, messagesService, Toast, profileService, $interval, $ionicScrollDelegate, $ionicLoading, $ionicScrollDelegate) {
 
-    var babyProfile = profileService.getBabyProfile();
+    $scope.babyProfile = profileService.getBabyProfile();
     var IS_PARENT = 'parent';
     var IS_TEACHER = 'teacher';
     $scope.all = 10;
@@ -12,10 +12,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         loaded: false
     };
     $scope.init = function () {
-        $rootScope.messages = [];
+        $rootScope.messages = {};
         $scope.end_reached = false;
-        messagesService.getMessages(null, null, babyProfile.schoolId, babyProfile.kidId).then(function (data) {
-            $rootScope.messages = data.slice().reverse(); //turn the order from top to bottom
+        messagesService.getMessages(null, null, $scope.babyProfile.schoolId, $scope.babyProfile.kidId).then(function (data) {
+            $rootScope.messages[$scope.babyProfile.kidId] = data.slice().reverse(); //turn the order from top to bottom
             $ionicScrollDelegate.scrollBottom();
         }, function (error) {
             $ionicLoading.hide();
@@ -44,40 +44,41 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         if (!$scope.loading) {
             $scope.loading = true;
 
-            messagesService.getMessages($rootScope.messages[0].creationDate - 1, $scope.all, babyProfile.schoolId, babyProfile.kidId).then(function (data) {
-                if (data) {
-                    var newmessages = data.slice();
-                    //var newmessages = data;
+            messagesService.getMessages($rootScope.messages[$scope.babyProfile.kidId][0].creationDate - 1, $scope.all, $scope.babyProfile.schoolId, $scope.babyProfile.kidId).then(function (data) {
+                    if (data) {
+                        var newmessages = data.slice();
+                        //var newmessages = data;
 
-                    if (!!$rootScope.messages) {
-                        for (var i = 0; i < newmessages.length; i++)
-                            $rootScope.messages.unshift(newmessages[i]);
+                        if (!!$rootScope.messages[$scope.babyProfile.kidId]) {
+                            for (var i = 0; i < newmessages.length; i++)
+                                $rootScope.messages[$scope.babyProfile.kidId].unshift(newmessages[i]);
+                        } else {
+                            $rootScope.messages[$scope.babyProfile.kidId] = newmessages;
+                        }
+                        // $rootScope.messages = !!$rootScope.messages ? $rootScope.messages.concat(newmessages) : newmessages;
+                        if ($rootScope.messages[$scope.babyProfile.kidId].length == 0) {
+                            $scope.emptylist = true;
+                        }
+                        if (data.length >= $scope.all) {
+                            $scope.end_reached = false;
+                        } else {
+                            $scope.end_reached = true;
+                        }
                     } else {
-                        $rootScope.messages = newmessages;
-                    }
-                    // $rootScope.messages = !!$rootScope.messages ? $rootScope.messages.concat(newmessages) : newmessages;
-                    if ($rootScope.messages.length == 0) {
                         $scope.emptylist = true;
-                    }
-                    if (data.length >= $scope.all) {
-                        $scope.end_reached = false;
-                    } else {
                         $scope.end_reached = true;
+                        Toast.show($filter('translate')("pop_up_error_server_template"), "short", "bottom");
+
                     }
-                } else {
-                    $scope.emptylist = true;
+                    $scope.loading = false;
+
+                },
+                function (err) {
+
                     $scope.end_reached = true;
-                    Toast.show($filter('translate')("pop_up_error_server_template"), "short", "bottom");
+                    $scope.loading = false;
 
-                }
-                $scope.loading = false;
-
-            }, function (err) {
-
-                $scope.end_reached = true;
-                $scope.loading = false;
-
-            });
+                });
         }
     };
     $scope.refresh = function () {
@@ -92,10 +93,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
 
             $ionicLoading.show();
-            messagesService.sendMessage(babyProfile.schoolId, babyProfile.kidId, text).then(
+            messagesService.sendMessage($scope.babyProfile.schoolId, $scope.babyProfile.kidId, text).then(
                 function (msg) {
                     // init(); temporary commented. why reinitialize the list?
-                    $rootScope.messages = $rootScope.messages.concat(msg);
+                    $rootScope.messages[$scope.babyProfile.kidId] = $rootScope.messages[$scope.babyProfile.kidId].concat(msg);
                     $ionicLoading.hide();
                     $ionicScrollDelegate.scrollBottom();
                 },
@@ -113,8 +114,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             if (indexOfMessage == 0) {
                 return true;
             }
-            var date = $filter('date')($rootScope.messages[indexOfMessage].creationDate, 'dd,MM,yyyy');
-            var previousdate = $filter('date')($rootScope.messages[indexOfMessage - 1].creationDate, 'dd,MM,yyyy');
+            var date = $filter('date')($rootScope.messages[$scope.babyProfile.kidId][indexOfMessage].creationDate, 'dd,MM,yyyy');
+            var previousdate = $filter('date')($rootScope.messages[$scope.babyProfile.kidId][indexOfMessage - 1].creationDate, 'dd,MM,yyyy');
 
             if (date != previousdate) {
                 return true;
@@ -123,7 +124,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             return false;
         }
         //    var updateChat = function () {
-        //        messagesService.getDiscussion(null, null, babyProfile.schoolId, babyProfile.kidId).then(function (discussion) {
+        //        messagesService.getDiscussion(null, null, $scope.babyProfile.schoolId, $scope.babyProfile.kidId).then(function (discussion) {
         //            $rootScope.messages = discussion.messages ? discussion.messages : [];
         //            if ($rootScope.messages.length > 10) {
         //                $scope.oldMsgPresent = true;

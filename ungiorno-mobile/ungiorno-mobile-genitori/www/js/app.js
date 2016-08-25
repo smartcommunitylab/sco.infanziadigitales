@@ -236,12 +236,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
                                     });
                                 }
                             });
-                            //                        $state.go('app.home');
-                            //                        $ionicHistory.nextViewOptions({
-                            //                            disableBack: true,
-                            //                            historyRoot: true
-                            //                                //                });
-                            //                        });
                         })
                 };
             } else {

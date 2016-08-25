@@ -12,7 +12,7 @@
         <ion-list>
             <!--            <ion-item ng-repeat="ms in messages | orderBy: 'creationDate' track by $index">-->
             <!--            <ion-item ng-repeat="ms in messages | reverse">-->
-            <ion-item ng-repeat="ms in messages">
+            <ion-item ng-repeat="ms in messages[babyProfile.kidId]">
 
                 <div class="dateOfChatMessage">
                     <label ng-if="isToday(ms.creationDate) && isANewDate($index)">{{'lbl_today' | translate}} </label>

@@ -390,7 +390,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
         var deferred = $q.defer();
         $http({
             method: 'GET',
-            url: Config.URL() + '/' + Config.app() + '/chat/' + Config.appId() + '/' + schoolId + '/message/' + kidId + '/unread',
+            url: Config.URL() + '/' + Config.app() + '/chat/' + Config.appId() + '/' + schoolId + '/message/' + kidId + '/unread/fromteacher',
             headers: {
                 'Accept': 'application/json'
             },

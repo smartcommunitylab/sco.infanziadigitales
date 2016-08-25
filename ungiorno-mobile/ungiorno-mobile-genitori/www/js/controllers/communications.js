@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.communications', [])
 
-.controller('CommunicationsCtrl', function ($scope, $rootScope, communicationsService, profileService, $filter, $ionicLoading) {
+.controller('CommunicationsCtrl', function ($scope, $rootScope, communicationsService, profileService, $filter, $ionicLoading, pushNotificationService) {
     $scope.getCommunications = function (schoolId, kidId) {
         $ionicLoading.show();
         communicationsService.getCommunications(schoolId, kidId).then(function (data) {
@@ -31,5 +31,5 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         comunication.action = (comunication.done ? $filter('translate')('communication_done') : $filter('translate')('communication_undone'));
     };
     $scope.getCommunications(profileService.getSchoolProfile().schoolId, profileService.getBabyProfile().kidId);
-
+    pushNotificationService.resetNewComunications();
 });

@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -43,25 +44,35 @@ public class ChatController {
 	
 	@RequestMapping(method=RequestMethod.GET, value="/chat/{appId}/{schoolId}/message/{kidId}")
 	public @ResponseBody List<ChatMessage> getMessages(@PathVariable String appId, @PathVariable String schoolId,
-			@PathVariable String kidId, HttpServletRequest request) {
+			@PathVariable String kidId, @RequestParam(required=false) Long timestamp, @RequestParam(required=false) Integer limit) {
 		List<ChatMessage> result = new ArrayList<ChatMessage>();
-		long timestamp = 0;
-		int limit = 10;
-		if(Utils.isNotEmpty(request.getParameter("timestamp"))) {
-			try {
-				timestamp = Long.valueOf(request.getParameter("timestamp"));
-			} catch (Exception e) {
-			}
+		if(timestamp == null) {
+			timestamp = 0L;
 		}
-		if(Utils.isNotEmpty(request.getParameter("limit"))) {
-			try {
-				limit = Integer.valueOf(request.getParameter("limit"));
-			} catch (Exception e) {
-			}
+		if(limit == null) {
+			limit = 10;
 		}
 		result = storage.getChatMessages(appId, schoolId, kidId, timestamp, limit);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("getMessages[%s]: %s - %s - %d", appId, schoolId, kidId, result.size()));
+		}
+		return result;
+	}
+
+	@RequestMapping(method=RequestMethod.GET, value="/chat/{appId}/{schoolId}/message/{kidId}/unread/fromparent")
+	public @ResponseBody Long getUnreadCountFromParent(@PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId) {
+		Long result = storage.getUnreadChatMessageCount(appId, schoolId, kidId, ChatMessage.SENT_BY_PARENT);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("getUnreadCountFromParent[%s]: %s - %s - %d", appId, schoolId, kidId, result));
+		}
+		return result;
+	}
+
+	@RequestMapping(method=RequestMethod.GET, value="/chat/{appId}/{schoolId}/message/{kidId}/unread/fromteacher")
+	public @ResponseBody Long getUnreadCountFromTeacher(@PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId) {
+		Long result = storage.getUnreadChatMessageCount(appId, schoolId, kidId, ChatMessage.SENT_BY_TEACHER);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("getUnreadCountFromTeacher[%s]: %s - %s - %d", appId, schoolId, kidId, result));
 		}
 		return result;
 	}
@@ -81,6 +92,7 @@ public class ChatController {
 		message.setText(text);
 		message.setSender(ChatMessage.SENT_BY_PARENT);
 		result = storage.saveChatMessage(message);
+		notificationManager.sendDirectMessageToSchool(appId, schoolId, kidId, text, result.getMessageId());
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("sendMessageToTeacher[%s]: %s - %s", appId, schoolId, kidId));
 		}
@@ -105,7 +117,7 @@ public class ChatController {
 		message.setSender(ChatMessage.SENT_BY_TEACHER);
 		result = storage.saveChatMessage(message);
 		
-		notificationManager.sendDirectMessageToParents(appId, schoolId, kidId, teacherId, text);
+		notificationManager.sendDirectMessageToParents(appId, schoolId, kidId, teacherId, text, result.getMessageId());
 		
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("sendMessageToParent[%s]: %s - %s - %s", appId, schoolId, kidId, teacherId));
@@ -136,7 +148,7 @@ public class ChatController {
 			message.setSender(ChatMessage.SENT_BY_TEACHER);
 			message.setText(text);
 			ChatMessage dbMessage = storage.saveChatMessage(message);
-			notificationManager.sendDirectMessageToParents(appId, schoolId, kidId, teacherId, text);
+			notificationManager.sendDirectMessageToParents(appId, schoolId, kidId, teacherId, text, dbMessage.getMessageId());
 			result.add(dbMessage);
 		}
 		if(logger.isInfoEnabled()) {

@@ -30,17 +30,21 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.n
                 //                $rootScope.loadConfiguration(item.schoolId, item.kidId);
                 //manage kind of notification if message or communication
                 if (JSON.parse(notification.data)["content.type"] == "chat") {
-                    switchProfileFromBackground(notification, true, true);
+                    switchProfileFromBackground(notification, true, true).then(function () {
+                        $state.go("app.messages");
+                        deleteMessageFromStorage(notification.id, JSON.parse(notification.data)["content.kidId"]);
+                    });
 
-                    $state.go("app.messages");
-                    deleteMessageFromStorage(notification.id, JSON.parse(notification.data)["content.kidId"]);
+
                 } //manage different kids
                 else {
-                    switchProfileFromBackground(notification, false, true);
+                    switchProfileFromBackground(notification, false, true).then(function () {
+                        $state.go("app.communications");
+                        deleteCommunicationFromStorage(notification.id, JSON.parse(notification.data)["content.schoolId"]);
+                        //delete entry from localstorage});
 
-                    $state.go("app.communications");
-                    deleteCommunicationFromStorage(notification.id, JSON.parse(notification.data)["content.schoolId"]);
-                    //delete entry from localstorage
+
+                    });
                 }
             }
         });
@@ -107,6 +111,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.n
     }
 
     var switchProfileFromBackground = function (notification, chat, local) {
+        var deferred = $q.defer();
         var profiles = profileService.getBabiesProfiles();
         var item = null;
         var kidId = null;
@@ -139,9 +144,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.n
         }
         if (item) {
             profileService.setBabyProfile(item);
+            $rootScope.loadConfiguration(item.schoolId, item.kidId).then(function () {
+                deferred.resolve();
+            }, function (err) {
+                deferred.reject(err);
+            });
         }
-        $rootScope.loadConfiguration(item.schoolId, item.kidId);
+
+        return deferred.promise;
     }
+
     pushNotificationService.getNewComunications = function (schoolId) {
         var received_communications = JSON.parse(localStorage.getItem(RECEIVED_COMMUNICATIONS));
         if (!received_communications || received_communications.length == 0) {
@@ -214,26 +226,48 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.n
 
                 } else {
                     //switch profile and go to
-                    switchProfileFromBackground(notification, true, false);
-                    //if coldstart first send a received
-                    if (notification.additionalData["coldstart"]) {
-                        dataServerService.receivedMessage(notification.additionalData["content.schoolId"], notification.additionalData["content.kidId"], notification.additionalData["content.messageId"])
-                    }
-                    //already received-> go, seen and delete from localstorage
-                    if (!$state.is("app.messages")) {
-                        $state.go("app.messages");
-                    } //manage different kids
-                    else {
-                        //updateChat
-                        $rootScope.$apply(function () {
-                            dataServerService.getMessages(null, null, notification.additionalData["content.schoolId"], notification.additionalData["content.kidId"]).then(function (notifications) {
-                                $rootScope.messages[notification.additionalData["content.kidId"]].push(notifications[0]);
-                                $ionicScrollDelegate.scrollBottom();
+                    switchProfileFromBackground(notification, true, false).then(function () {
+                        //if coldstart first send a received
+                        if (notification.additionalData["coldstart"]) {
+                            dataServerService.receivedMessage(notification.additionalData["content.schoolId"], notification.additionalData["content.kidId"], notification.additionalData["content.messageId"])
+                        }
+                        //already received-> go, seen and delete from localstorage
+                        if (!$state.is("app.messages")) {
+                            $state.go("app.messages");
+                        } //manage different kids
+                        else {
+                            //updateChat
+                            $rootScope.$apply(function () {
+                                dataServerService.getMessages(null, null, notification.additionalData["content.schoolId"], notification.additionalData["content.kidId"]).then(function (notifications) {
+                                    $rootScope.messages[notification.additionalData["content.kidId"]].push(notifications[0]);
+                                    $ionicScrollDelegate.scrollBottom();
+
+                                });
 
                             });
+                        }
+                    }, function (error) {
 
-                        });
-                    }
+                    });
+                    //                    //if coldstart first send a received
+                    //                    if (notification.additionalData["coldstart"]) {
+                    //                        dataServerService.receivedMessage(notification.additionalData["content.schoolId"], notification.additionalData["content.kidId"], notification.additionalData["content.messageId"])
+                    //                    }
+                    //                    //already received-> go, seen and delete from localstorage
+                    //                    if (!$state.is("app.messages")) {
+                    //                        $state.go("app.messages");
+                    //                    } //manage different kids
+                    //                    else {
+                    //                        //updateChat
+                    //                        $rootScope.$apply(function () {
+                    //                            dataServerService.getMessages(null, null, notification.additionalData["content.schoolId"], notification.additionalData["content.kidId"]).then(function (notifications) {
+                    //                                $rootScope.messages[notification.additionalData["content.kidId"]].push(notifications[0]);
+                    //                                $ionicScrollDelegate.scrollBottom();
+                    //
+                    //                            });
+                    //
+                    //                        });
+                    //                    }
                 }
             } else if (notification && notification.additionalData && notification.additionalData["content.type"] == "communication") {
                 //check if contained in localStorage
@@ -260,27 +294,49 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.n
 
                 } else {
                     //switch profile and go to
-                    switchProfileFromBackground(notification, false, false);
+                    switchProfileFromBackground(notification, false, false).then(function () {
+                        //if coldstart first send a received
+                        if (notification.additionalData["coldstart"]) {
+                            //                        dataServerService.receivedCommunications(notification.additionalData["content.schoolId"], notification.additionalData["content.kidId"], notification.additionalData["content.communicationId"])
+                        }
+                        //already received-> go, seen and delete from localstorage
+                        if (!$state.is("app.communications")) {
+                            $state.go("app.communications");
+                        } //manage different kids
+                        else {
+                            //updateCommuincations
+                            $rootScope.$apply(function () {
+                                dataServerService.getMessages(null, null, notification.additionalData["content.schoolId"], notification.additionalData["content.kidId"]).then(function (notifications) {
+                                    $rootScope.messages[notification.additionalData["content.kidId"]].push(notifications[0]);
+                                    $ionicScrollDelegate.scrollBottom();
+                                });
 
-                    //if coldstart first send a received
-                    if (notification.additionalData["coldstart"]) {
-                        //                        dataServerService.receivedCommunications(notification.additionalData["content.schoolId"], notification.additionalData["content.kidId"], notification.additionalData["content.communicationId"])
-                    }
-                    //already received-> go, seen and delete from localstorage
-                    if (!$state.is("app.communications")) {
-                        $state.go("app.communications");
-                    } //manage different kids
-                    else {
-                        //updateCommuincations
-                        $rootScope.$apply(function () {
-                            dataServerService.getMessages(null, null, notification.additionalData["content.schoolId"], notification.additionalData["content.kidId"]).then(function (notifications) {
-                                $rootScope.messages[notification.additionalData["content.kidId"]].push(notifications[0]);
-                                $ionicScrollDelegate.scrollBottom();
                             });
 
-                        });
+                        }
+                    }, function (err) {
 
-                    }
+                    });
+
+                    //                    //if coldstart first send a received
+                    //                    if (notification.additionalData["coldstart"]) {
+                    //                        //                        dataServerService.receivedCommunications(notification.additionalData["content.schoolId"], notification.additionalData["content.kidId"], notification.additionalData["content.communicationId"])
+                    //                    }
+                    //                    //already received-> go, seen and delete from localstorage
+                    //                    if (!$state.is("app.communications")) {
+                    //                        $state.go("app.communications");
+                    //                    } //manage different kids
+                    //                    else {
+                    //                        //updateCommuincations
+                    //                        $rootScope.$apply(function () {
+                    //                            dataServerService.getMessages(null, null, notification.additionalData["content.schoolId"], notification.additionalData["content.kidId"]).then(function (notifications) {
+                    //                                $rootScope.messages[notification.additionalData["content.kidId"]].push(notifications[0]);
+                    //                                $ionicScrollDelegate.scrollBottom();
+                    //                            });
+                    //
+                    //                        });
+                    //
+                    //                    }
                 }
             }
         });

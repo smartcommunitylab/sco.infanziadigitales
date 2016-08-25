@@ -509,6 +509,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         send_note: "Messaggio",
         send_note_title: "Invia un messaggio all\'insegnante",
         communications_title: "Comunicazioni della scuola",
+        messages_title: "Messaggi",
         text: "Testo",
         send: "Invia",
         contact_school: "Contatta la scuola",
@@ -753,6 +754,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         credits_licenses_button: 'VEDI LICENZE',
         data_updated: 'Dati aggiornati',
         communications_title: "Comunicazioni della scuola",
+        messages_title: "Messaggi",
+
         communication_before: 'Da consegnare entro:',
         communication_done: 'FATTO',
         communication_undone: 'DA FARE',
@@ -919,6 +922,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         credits_licenses_button: 'VEDI LICENZE',
         data_updated: 'Dati aggiornati',
         communications_title: "Comunicazioni della scuola",
+        messages_title: "Messaggi",
+
         communication_before: 'Da consegnare entro:',
         communication_done: 'FATTO',
         communication_undone: 'DA FARE',

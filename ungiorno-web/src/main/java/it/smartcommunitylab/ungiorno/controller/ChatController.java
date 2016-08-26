@@ -191,6 +191,11 @@ public class ChatController {
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("receivedMessage[%s]: %s - %s", appId, schoolId, messageId));
 		}
+		if (ChatMessage.SENT_BY_TEACHER.equals(result.getSender())) {
+			notificationManager.notifyMessageStatusByParent(appId, schoolId, result.getKidId(), messageId, "received");
+		} else {
+			notificationManager.notifyMessageStatusByTeacher(appId, schoolId, result.getKidId(), messageId, "received");
+		}
 		return result;
 	}
 	
@@ -201,6 +206,11 @@ public class ChatController {
 		result = storage.chatMessageSeen(appId, schoolId, messageId);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("seenMessage[%s]: %s - %s", appId, schoolId, messageId));
+		}
+		if (ChatMessage.SENT_BY_TEACHER.equals(result.getSender())) {
+			notificationManager.notifyMessageStatusByParent(appId, schoolId, result.getKidId(), messageId, "seen");
+		} else {
+			notificationManager.notifyMessageStatusByTeacher(appId, schoolId, result.getKidId(), messageId, "seen");
 		}
 		return result;
 	}

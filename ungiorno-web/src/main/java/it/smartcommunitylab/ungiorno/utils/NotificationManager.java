@@ -112,6 +112,14 @@ public class NotificationManager {
 		String appName = channelName(appSetup.getAppsMap().get(appId).getMessagingAppId(), schoolId, APP_UGAS_COMMS);
 		communicator.sendAppNotification(n, appName, Collections.<String>emptyList(), permissions.getAppToken());
 	}
+	
+	public void notifyMessageStatusByParent(String appId, String schoolId, String kidId, String messageId, String status) {
+		simpMessagingTemplate.convertAndSend("/topic/toteacher."+appId+"."+kidId+"."+status, messageId);
+	}
+	public void notifyMessageStatusByTeacher(String appId, String schoolId, String kidId, String messageId, String status) {
+		simpMessagingTemplate.convertAndSend("/topic/toparent."+appId+"."+kidId+"."+status, messageId);
+	}
+	
 	public void sendDirectMessageToParents(String appId, String schoolId, String kidId, String teacherId, String message, String messageId) throws CommunicatorConnectorException, AACException {
 		KidProfile kid = storage.getKidProfile(appId, schoolId, kidId);
 		List<String> userIds = new ArrayList<String>();

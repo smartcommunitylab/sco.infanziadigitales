@@ -202,6 +202,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     }
 
     $rootScope.loadConfiguration = function () {
+        var deferred = $q.defer();
         $scope.kidProfile = profileService.getBabyProfile();
         var schoolId = $scope.kidProfile.schoolId;
         var kidId = $scope.kidProfile.kidId;
@@ -288,25 +289,30 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                             buildHome();
                             $ionicLoading.hide();
                             //Toast.show($filter('translate')('data_updated'), 'short', 'bottom');
-
+                            deferred.resolve();
 
                         }, function (error) {
                             console.log("ERROR -> " + error);
                             Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
 
                             $ionicLoading.hide();
+                            deferred.reject();
+
                         });
                     }, function (error) {
                         console.log("ERROR -> " + error);
                         Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
 
                         $ionicLoading.hide();
+                        deferred.reject();
+
                     });
                 }, function (error) {
                     console.log("ERROR -> " + error);
                     Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
 
                     $ionicLoading.hide();
+                    deferred.reject();
                 });
             });
 
@@ -317,6 +323,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
             $ionicLoading.hide();
         });
+        return deferred.promise;
     }
     var registerPushNotification = function (data) {
         if (data) {
@@ -340,7 +347,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             }
         });
     }
-    var getCommunication = function () {
+    var getCommunications = function () {
             var communicationPromises = [];
 
             for (var i = 0; i < profileService.getBabiesProfiles().length; i++) {
@@ -396,7 +403,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             $scope.loadConfiguration();
             $rootScope.allowed = true;
             getMessages();
-            getCommunication();
+            getCommunications();
 
         }
     }

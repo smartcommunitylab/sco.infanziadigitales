@@ -1369,6 +1369,9 @@ public class RepositoryManager {
 	}
 	
 	public SchoolProfile saveSchoolProfile(SchoolProfile profile) {
+		if(Utils.isEmpty(profile.getSchoolId())) {
+			profile.setSchoolId(Utils.getUUID());
+		}
 		Criteria criteria = new Criteria("appId").is(profile.getAppId()).and("schoolId").is(profile.getSchoolId());
 		Query query = new Query(criteria);
 		SchoolProfile dbEntry = template.findOne(query, SchoolProfile.class);

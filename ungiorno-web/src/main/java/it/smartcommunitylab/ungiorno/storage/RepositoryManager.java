@@ -1380,6 +1380,9 @@ public class RepositoryManager {
 	}
 
 	public KidProfile saveKidProfile(KidProfile profile) {
+		if(Utils.isEmpty(profile.getKidId())) {
+			profile.setKidId(Utils.getUUID());
+		}
 		Criteria criteria = new Criteria("appId").is(profile.getAppId()).and("schoolId").is(profile.getSchoolId())
 				.and("kidId").is(profile.getKidId());
 		Query query = new Query(criteria);
@@ -1392,6 +1395,9 @@ public class RepositoryManager {
 	}
 
 	public Group saveGroup(Group profile) {
+		if(Utils.isEmpty(profile.getGroupId())) {
+			profile.setGroupId(Utils.getUUID());
+		}
 		Criteria criteria = new Criteria("appId").is(profile.getAppId()).and("schoolId").is(profile.getSchoolId())
 				.and("groupId").is(profile.getGroupId());
 		Query query = new Query(criteria);
@@ -1404,6 +1410,9 @@ public class RepositoryManager {
 	}
 
 	public Bus saveBus(Bus profile) {
+		if(Utils.isEmpty(profile.getBusId())) {
+			profile.setBusId(Utils.getUUID());
+		}
 		Criteria criteria = new Criteria("appId").is(profile.getAppId()).and("schoolId").is(profile.getSchoolId())
 				.and("busId").is(profile.getBusId());
 		Query query = new Query(criteria);
@@ -1416,6 +1425,9 @@ public class RepositoryManager {
 	}
 
 	public Person savePerson(Person profile) {
+		if(Utils.isEmpty(profile.getPersonId())) {
+			profile.setPersonId(Utils.getUUID());
+		}
 		Criteria criteria = new Criteria("appId").is(profile.getAppId()).and("schoolId").is(profile.getSchoolId())
 				.and("busId").is(profile.getPersonId());
 		Query query = new Query(criteria);
@@ -1428,6 +1440,9 @@ public class RepositoryManager {
 	}
 
 	public Teacher saveTeacher(Teacher profile) {
+		if(Utils.isEmpty(profile.getTeacherId())) {
+			profile.setTeacherId(Utils.getUUID());
+		}
 		Criteria criteria = new Criteria("appId").is(profile.getAppId()).and("schoolId").is(profile.getSchoolId())
 				.and("busId").is(profile.getTeacherId());
 		Query query = new Query(criteria);

@@ -144,7 +144,7 @@ public class NotificationManager {
 		
 		String appName = appSetup.getAppsMap().get(appId).getMessagingAppId() + APP_UGAS_PARENT;
 		communicator.sendAppNotification(n, appName, userIds, permissions.getAppToken());
-		simpMessagingTemplate.convertAndSend("/topic/toteacher."+appId+"."+kidId, n);
+		simpMessagingTemplate.convertAndSend("/topic/toparent."+appId+"."+kidId, n);
 	}
 	
 	public void sendDirectMessageToSchool(String appId, String schoolId, String kidId, String message, String messageId) throws CommunicatorConnectorException, AACException {

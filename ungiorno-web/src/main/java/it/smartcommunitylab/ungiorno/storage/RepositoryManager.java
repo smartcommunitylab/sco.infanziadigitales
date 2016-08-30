@@ -1456,4 +1456,45 @@ public class RepositoryManager {
 		query.with(new Sort(Sort.Direction.DESC, "creationDate"));
 		return template.count(query, ChatMessage.class);
 	}
+
+	/**
+	 * @param appId
+	 * @param schoolId
+	 * @param sentByParent
+	 * @return
+	 */
+	public Map<String, Map<String, Integer>> getAllUnreadChatMessageCount(String appId, String schoolId, String sender) {
+		Map<String, Map<String, Integer>> result = new HashMap<String, Map<String,Integer>>();
+		Criteria criteria = 
+				new Criteria("appId").is(appId)
+				.and("schoolId").is(schoolId)
+				.and("sender").is(sender)
+				.and("seen").is(false);
+		Query query = new Query(criteria);
+		query.fields().include("kidId");
+		List<ChatMessage> found = template.find(query, ChatMessage.class);
+		Map<String,String> sections = new HashMap<String, String>();
+		for (ChatMessage msg : found) {
+			String section = sections.get(msg.getKidId());
+			if (section == null) {
+				KidProfile profile = getKidProfile(appId, schoolId, msg.getKidId());
+				if (profile == null || profile.getSection() == null) continue;
+				section = profile.getSection().getSectionId();
+				sections.put(msg.getKidId(), section);
+			}
+			Map<String, Integer> sectionCounts = result.get(section);
+			if (sectionCounts == null) {
+				sectionCounts = new HashMap<String, Integer>();
+				result.put(section, sectionCounts);
+			}
+			Integer count = sectionCounts.get(msg.getKidId());
+			if (count == null) {
+				sectionCounts.put(msg.getKidId(), 1);
+			} else {
+				sectionCounts.put(msg.getKidId(), count + 1);
+			}
+		}
+		
+		return result;
+	}
 }

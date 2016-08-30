@@ -10,6 +10,7 @@ import it.smartcommunitylab.ungiorno.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -64,6 +65,15 @@ public class ChatController {
 		Long result = storage.getUnreadChatMessageCount(appId, schoolId, kidId, ChatMessage.SENT_BY_PARENT);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("getUnreadCountFromParent[%s]: %s - %s - %d", appId, schoolId, kidId, result));
+		}
+		return result;
+	}
+
+	@RequestMapping(method=RequestMethod.GET, value="/chat/{appId}/{schoolId}/message/unread/fromparent")
+	public @ResponseBody Map<String, Map<String, Integer>> getAllUnreadCountFromParent(@PathVariable String appId, @PathVariable String schoolId) {
+		Map<String, Map<String, Integer>> result = storage.getAllUnreadChatMessageCount(appId, schoolId, ChatMessage.SENT_BY_PARENT);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("getAllUnreadCountFromParent[%s]: %s - %d", appId, schoolId, result));
 		}
 		return result;
 	}

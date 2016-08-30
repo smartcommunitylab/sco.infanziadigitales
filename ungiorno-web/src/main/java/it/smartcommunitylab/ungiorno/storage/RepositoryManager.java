@@ -1447,7 +1447,7 @@ public class RepositoryManager {
 			profile.setTeacherId(Utils.getUUID());
 		}
 		Criteria criteria = new Criteria("appId").is(profile.getAppId()).and("schoolId").is(profile.getSchoolId())
-				.and("busId").is(profile.getTeacherId());
+				.and("teacherId").is(profile.getTeacherId());
 		Query query = new Query(criteria);
 		Teacher dbEntry = template.findOne(query, Teacher.class);
 		if(dbEntry != null) {

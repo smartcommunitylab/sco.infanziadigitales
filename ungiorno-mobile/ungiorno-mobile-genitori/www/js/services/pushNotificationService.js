@@ -31,7 +31,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.n
                 //manage kind of notification if message or communication
                 if (JSON.parse(notification.data)["content.type"] == "chat") {
                     switchProfileFromBackground(notification, true, true).then(function () {
-                        $state.go("app.messages");
+                        if ($state.is('app.messages')) {
+                            $state.go($state.current, {}, {
+                                reload: true
+                            });
+                        } else {
+                            $state.go("app.messages");
+                        }
+
                         deleteMessageFromStorage(notification.id, JSON.parse(notification.data)["content.kidId"]);
                     });
 
@@ -39,7 +46,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.n
                 } //manage different kids
                 else {
                     switchProfileFromBackground(notification, false, true).then(function () {
-                        $state.go("app.communications");
+                        if ($state.is('app.communications')) {
+                            $state.go($state.current, {}, {
+                                reload: true
+                            });
+                        } else {
+                            $state.go("app.communications");
+                        }
                         deleteCommunicationFromStorage(notification.id, JSON.parse(notification.data)["content.schoolId"]);
                         //delete entry from localstorage});
 
@@ -202,7 +215,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.n
             //send received to server
             if (notification && notification.additionalData && notification.additionalData["content.type"] == "chat") {
                 //check if contained in localStorage
-                if (!isChatMessageReceived(notification.additionalData["content.messageId"], notification.additionalData["content.kidId"]) && !notification.additionalData["coldstart"] && (notification.additionalData["content.kidId"] != profileService.getBabyProfile().kidIs && !$state.is("app.messages"))) {
+                if (!isChatMessageReceived(notification.additionalData["content.messageId"], notification.additionalData["content.kidId"]) && !notification.additionalData["coldstart"] && !(notification.additionalData["content.kidId"] == profileService.getBabyProfile().kidId && $state.is("app.messages"))) {
                     messagesService.receivedMessage(notification.additionalData["content.schoolId"], notification.additionalData["content.kidId"], notification.additionalData["content.messageId"]);
                     chatMessageReceived(notification.additionalData["content.messageId"], notification.additionalData["content.kidId"]);
                     if (!isBackground()) {
@@ -216,8 +229,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.n
                             autoClear: false,
                             at: new Date(),
                             data: notification.additionalData
-
-
                         });
                         $rootScope.$apply(function () {
                             $rootScope.numberMessageUnread[notification.additionalData["content.kidId"]]++;
@@ -235,17 +246,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.n
                         if (!$state.is("app.messages")) {
                             $state.go("app.messages");
                         } //manage different kids
-                        else {
-                            //updateChat
-                            $rootScope.$apply(function () {
-                                dataServerService.getMessages(null, null, notification.additionalData["content.schoolId"], notification.additionalData["content.kidId"]).then(function (notifications) {
-                                    $rootScope.messages[notification.additionalData["content.kidId"]].push(notifications[0]);
-                                    $ionicScrollDelegate.scrollBottom();
-
-                                });
-
-                            });
-                        }
+                        //                        else {
+                        //                            //updateChat
+                        //                            $rootScope.$apply(function () {
+                        //                                dataServerService.getMessages(null, null, notification.additionalData["content.schoolId"], notification.additionalData["content.kidId"]).then(function (notifications) {
+                        //                                    $rootScope.messages[notification.additionalData["content.kidId"]].push(notifications[0]);
+                        //                                    $ionicScrollDelegate.scrollBottom();
+                        //
+                        //                                });
+                        //
+                        //                            });
+                        //                        }
                     }, function (error) {
 
                     });

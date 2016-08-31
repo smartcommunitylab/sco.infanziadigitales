@@ -422,6 +422,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
             }
         }).state('app.messages', {
             url: '/messages',
+            cache: false,
             views: {
                 'menuContent': {
                     templateUrl: 'templates/messages.html',
@@ -760,7 +761,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         communication_done: 'FATTO',
         communication_undone: 'DA FARE',
         lbl_today: 'OGGI',
-        lbl_yesterday: 'IERI'
+        lbl_yesterday: 'IERI',
+        send_msg_placeholder: 'Scrivi messaggio'
 
     });
 
@@ -928,7 +930,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         communication_done: 'FATTO',
         communication_undone: 'DA FARE',
         lbl_today: 'OGGI',
-        lbl_yesterday: 'IERI'
+        lbl_yesterday: 'IERI',
+        send_msg_placeholder: 'Scrivi messaggio'
 
     });
 

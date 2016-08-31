@@ -329,7 +329,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         if (data) {
             var arrayOfSchoolId = [];
             for (var i = 0; i < data.length; i++) {
-                arrayOfSchoolId.push(data[i].schoolId);
+                if (arrayOfSchoolId.indexOf(data[i].schoolId) == -1) {
+                    arrayOfSchoolId.push(data[i].schoolId);
+                }
             }
             pushNotificationService.register(arrayOfSchoolId);
 

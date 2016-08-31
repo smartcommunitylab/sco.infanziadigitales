@@ -1,8 +1,10 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.messagesService', [])
 
-.factory('messagesService', function ($http, $q, dataServerService) {
+.factory('messagesService', function ($http, $q, $rootScope, dataServerService) {
     var messagesService = {};
     var cacheMessages = [];
+    var stompClient;
+    var subscriptions = [];
 
     messagesService.getMessages = function (timestamp, numbers, schoolId, kidId) {
         var deferred = $q.defer();
@@ -60,6 +62,51 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.m
         });
         return deferred.promise;
 
+    }
+    messagesService.getByValue = function (arr, value) {
+
+        var result = arr.filter(function (o) {
+            return o.messageId == value;
+        });
+
+        return result ? result[0] : null; // or undefined
+
+    }
+
+    //    init socket
+    messagesService.init = function (url) {
+        subscriptions = [];
+
+        stompClient = Stomp.over(new SockJS(url));
+    }
+    messagesService.finish = function (url) {
+        subscriptions.forEach(function (sub) {
+            sub.unsubscribe();
+        });
+        stompClient.disconnect();
+    }
+    messagesService.connect = function (successCallback, errorCallback) {
+
+        stompClient.connect({}, function (frame) {
+            $rootScope.$apply(function () {
+                successCallback(frame);
+            });
+        }, function (error) {
+            $rootScope.$apply(function () {
+                errorCallback(error);
+            });
+        });
+    }
+
+    messagesService.subscribe = function (destination, callback) {
+        subscriptions.push(stompClient.subscribe(destination, function (message) {
+            $rootScope.$apply(function () {
+                callback(message);
+            });
+        }));
+    }
+    messagesService.send = function (destination, headers, object) {
+        stompClient.send(destination, headers, object);
     }
     return messagesService;
 })

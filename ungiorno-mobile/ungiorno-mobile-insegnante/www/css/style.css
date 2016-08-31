@@ -896,30 +896,153 @@ select {
     cursor: pointer;
 }
 
-.babyProfile.detailsTitle {
+#babyprofile .detailsTitle {
     color: #7b9e2a;
     font-size: 18px;
 }
 
-.babyProfile.card {
+#babyprofile .card {
+    /*    padding: 32px;
+    */
+}
+
+#babyprofile .note {
     padding: 32px;
 }
 
-.babyProfile.note {
-    padding: 32px;
-}
-
-.babyProfile #parentsNotes {
+#babyprofile #parentsNotes {
     color: #7b9e2a;
 }
 
-.babyProfile #teachersNotes {
+#babyprofile #teachersNotes {
     color: #7b9e2a;
 }
 
-.babyProfile.detailItem {
+#babyprofile .detailItem {
     font-size: 18px;
     margin: 16px;
+}
+
+#babyprofile #chat-box {
+    position: relative!important;
+}
+
+#babyprofile #kid-profile {
+    /*    height: 100%;*/
+}
+
+#babyprofile .profile-column {
+    /*    height: 100%!important;
+    */
+}
+
+#babyprofile #chat-box .input-chat {
+    padding-right: 10px;
+    border: 0;
+    position: absolute;
+    width: 100%;
+    bottom: 0px;
+    min-height: 60px;
+    background-color: #fff;
+}
+
+#babyprofile #chat-box .input-chat input[type='text'] {
+    border-bottom: 1px solid #ddd;
+    padding: 10px;
+}
+
+#babyprofile #chat-box .input-chat button {
+    padding: 0 0 0 0;
+    min-height: 50px;
+    min-width: 65px;
+    margin-left: 5px;
+}
+
+#babyprofile #chat-box ion-item {
+    border-style: none;
+}
+
+#babyprofile #chat-box .message-container-teacher {
+    color: #F8A913;
+    border-left: 3px;
+    border-style: solid;
+}
+
+#babyprofile #chat-box .message-container-parent {
+    color: #189BA9;
+    border-right: 3px;
+    border-style: solid;
+}
+
+#babyprofile #chat-box .card-chat {
+    box-shadow: none;
+}
+
+#babyprofile #chat-box .card-chat .item {
+    background-color: #FFFFFF;
+    border: 0;
+    padding: 0px 8px 0px 8px;
+    text-align: left;
+    white-space: normal;
+}
+
+#babyprofile #chat-box .card-chat .item-divider {
+    text-align: left;
+    font-size: small;
+    color: #A0A0A0;
+}
+
+#babyprofile #chat-box .card-chat .item-divider span {
+    text-align: left;
+    font-size: small;
+}
+
+#babyprofile #chat-box .card-chat.card-chat-my .item {
+    border: 0;
+    text-align: right;
+    margin-left: 50px;
+    white-space: normal;
+}
+
+#babyprofile #chat-box .card-chat.card-chat-my-extra .item {
+    border: 0;
+    text-align: left;
+    margin-left: 50px;
+    white-space: normal;
+}
+
+#babyprofile #chat-box .card-chat.card-chat-my .item-divider {
+    text-align: right;
+    font-size: small;
+    color: #A0A0A0;
+}
+
+#babyprofile #chat-box .card-chat.card-chat-my-extra .item-divider {
+    text-align: right;
+    font-size: small;
+    color: #A0A0A0;
+}
+
+#babyprofile #chat-box .dateOfChatMessage {
+    width: 100%;
+    text-align: center;
+}
+
+#babyprofile .chat-teacher-input {
+    display: block;
+    height: auto;
+    bottom: 0px;
+}
+
+#babyprofile #chat-box label {
+    background-color: #EDEDED;
+    color: #979797;
+    padding: 2px 10px 2px 10px;
+    border-radius: 25px;
+}
+
+#babyprofile #chat-box .message-flag {
+    color: #80D0E6;
 }
 
 .section-text {

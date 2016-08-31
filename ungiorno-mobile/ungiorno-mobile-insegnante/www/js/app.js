@@ -27,6 +27,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
     'it.smartcommunitylab.infanziadigitales.teachers.controllers.login',
 		'it.smartcommunitylab.infanziadigitales.teachers.services.loginService',
 		'it.smartcommunitylab.infanziadigitales.teachers.services.storageService',
+		'it.smartcommunitylab.infanziadigitales.teachers.services.pushNotificationService',
+		'it.smartcommunitylab.infanziadigitales.teachers.services.messagesService',
     'angularMoment'
 ])
 
@@ -453,9 +455,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
         menu_credits: "Credits",
         relation_parent: 'Genitore',
         comm_you_must_save_title: 'Attenzione',
-        comm_you_must_save_text: 'Le modifiche effettuate sono state salvate localmente ma non sono definitive. Premi "SALVA" per confermarle.'
-
-
+        comm_you_must_save_text: 'Le modifiche effettuate sono state salvate localmente ma non sono definitive. Premi "SALVA" per confermarle.',
+        parent: 'Genitore ',
+        lbl_today: 'OGGI',
+        lbl_yesterday: 'IERI',
+        send_msg_placeholder: 'Scrivi messaggio',
+        chat_teacher_label: 'Maestra ',
+        chat_write_label: ' scrive...'
     });
 
     $translateProvider.preferredLanguage("it");

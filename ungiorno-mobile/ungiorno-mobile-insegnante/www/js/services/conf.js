@@ -2,7 +2,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.conf', 
 
 .factory('Config', function ($q, $http, $window, $filter, $rootScope) {
 
-    var DEVELOPMENT = false;
+    var DEVELOPMENT = true;
     var URL = 'https://' + (DEVELOPMENT ? 'dev' : 'tn') + '.smartcommunitylab.it';
     //var URL = 'http://192.168.42.60:8080';
     var timeout = 100000;
@@ -13,11 +13,26 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.conf', 
 
     var APP_BUILD = '';
 
-
+    var mapJsonConfig = null;
     //    var credits = 'credits.html';
     var APP_VERSION = '1.0.1';
 
     return {
+        init: function () {
+            var deferred = $q.defer();
+            if (mapJsonConfig != null) deferred.resolve(true);
+            else $http.get('data/config.json').success(function (response) {
+                mapJsonConfig = response;
+                deferred.resolve(true);
+            });
+            return deferred.promise;
+        },
+        getSenderID: function () {
+            return mapJsonConfig['senderID'];;
+        },
+        getMessagingAppId: function () {
+            return mapJsonConfig['messagingAppId']
+        },
         getFakeId: function () {
             return fakeId;
         },

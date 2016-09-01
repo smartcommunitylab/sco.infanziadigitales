@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home', [])
 
-.controller('HomeCtrl', function ($scope, $location, dataServerService, profileService, babyConfigurationService, $filter, $state, Toast, $ionicModal, $ionicLoading, moment, teachersService, sectionService, communicationService, Config, $ionicSideMenuDelegate, $ionicPopup, loginService) {
+.controller('HomeCtrl', function ($scope, $location, dataServerService, profileService, babyConfigurationService, $filter, $state, Toast, $ionicModal, $ionicLoading, moment, teachersService, sectionService, communicationService, Config, $ionicSideMenuDelegate, $ionicPopup, loginService, pushNotificationService) {
     $scope.sections = null;
     $scope.section = null;
     $scope.childrenConfigurations = [];
@@ -25,6 +25,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
     $scope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
         //if I come from login, initialize
         if (fromState.name == 'app.login') {
+
             $scope.initialize();
             sectionService.setSection(null);
 
@@ -251,6 +252,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
                 if ($scope.selectedPeriod == null) {
                     $scope.selectedPeriod = getPeriodToNow();
                 }
+                pushNotificationService.register($scope.schoolProfile.schoolId);
+
                 loginService.getTeacherName($scope.schoolProfile.schoolId);
 
                 dataServerService.getSections($scope.schoolProfile.schoolId).then(function (data) {
@@ -302,9 +305,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
             if ($scope.schoolProfile) {
                 communicationService.getCommunicationsFromServer($scope.schoolProfile.schoolId).then(function (data) {
                     $scope.communications = [];
-                    for (var i = 0; i < data.length; i++) {
-                        if (data[i].doCheck) {
-                            $scope.communications.push(data[i]);
+                    if (data) {
+                        for (var i = 0; i < data.length; i++) {
+                            if (data[i].doCheck) {
+                                $scope.communications.push(data[i]);
+                            }
                         }
                     }
                     //manage kids' profiles with notifications for messages

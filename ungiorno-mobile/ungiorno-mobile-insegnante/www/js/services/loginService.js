@@ -248,6 +248,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.loginSe
         });
     };
 
+
     loginService.logout = function () {
         var deferred = $q.defer();
 

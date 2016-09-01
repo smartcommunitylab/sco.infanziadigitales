@@ -7,7 +7,9 @@
   "dependencies": {
     "ngCordova": "*",
     "angular-filter": "*",
-    "angular-translate": "*"
+    "angular-translate": "*",
+    "stomp-websocket": "~2.3.4",
+    "sockjs-client": "~1.1.1"
   },
   "install": {
     "path": "www/lib",

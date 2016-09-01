@@ -1,6 +1,6 @@
-angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.messagesService', [])
+angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.messagesService', [])
 
-.factory('messagesService', function ($http, $q, $rootScope, dataServerService) {
+.factory('messagesService', function ($http, $q, dataServerService, $rootScope) {
     var messagesService = {};
     var cacheMessages = [];
     var stompClient;
@@ -8,9 +8,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.m
 
     messagesService.getMessages = function (timestamp, numbers, schoolId, kidId) {
         var deferred = $q.defer();
-        //        if (!timestamp) {
-        //            timestamp = new Date().getTime();
-        //        }
 
         dataServerService.getMessages(timestamp, numbers, schoolId, kidId).then(function (messages) {
             deferred.resolve(messages);
@@ -19,13 +16,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.m
         });
         return deferred.promise;
     }
-    messagesService.sendMessage = function (schoolId, kidId, text) {
+    messagesService.sendMessage = function (schoolId, kidId, teacherId, text) {
         var deferred = $q.defer();
         var msg = {
+            "teacherId": teacherId,
             "kidId": kidId,
             "text": text
         }
-        dataServerService.sendMessage(schoolId, kidId, msg).then(function (message) {
+        dataServerService.sendMessage(schoolId, msg).then(function (message) {
             deferred.resolve(message);
         }, function (err) {
             deferred.reject(err);
@@ -35,11 +33,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.m
 
     messagesService.getUnreadMessages = function (schoolId, kidId) {
         var deferred = $q.defer();
-        dataServerService.getUnreadMessages(schoolId, kidId).then(function (message) {
-            deferred.resolve(message);
-        }, function (err) {
-            deferred.reject(err);
-        });
+        //        dataServerService.getUnreadMessages(schoolId, kidId).then(function (message) {
+        //            deferred.resolve(message);
+        //        }, function (err) {
+        //            deferred.reject(err);
+        //        });
         return deferred.promise;
 
     };

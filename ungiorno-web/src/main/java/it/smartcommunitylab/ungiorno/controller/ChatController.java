@@ -73,7 +73,7 @@ public class ChatController {
 	public @ResponseBody Map<String, Map<String, Integer>> getAllUnreadCountFromParent(@PathVariable String appId, @PathVariable String schoolId) {
 		Map<String, Map<String, Integer>> result = storage.getAllUnreadChatMessageCount(appId, schoolId, ChatMessage.SENT_BY_PARENT);
 		if(logger.isInfoEnabled()) {
-			logger.info(String.format("getAllUnreadCountFromParent[%s]: %s - %d", appId, schoolId, result));
+			logger.info(String.format("getAllUnreadCountFromParent[%s]: %s", appId, schoolId));
 		}
 		return result;
 	}

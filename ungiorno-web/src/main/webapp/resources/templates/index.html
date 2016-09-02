@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="it" ng-app="routerApp">
+<head>
+<title>Home</title>
+<link rel="stylesheet" type="text/css" href="../css/css.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script
+	src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<script
+	src="http://angular-ui.github.io/ui-router/release/angular-ui-router.js"></script>
+<script src="http://code.angularjs.org/1.2.13/angular.js"></script>
+<script
+	src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+<script src="../js/route.js"></script>
+</head>
+<body>
+	<div id="menu">
+		<div class="container-fluid">
+			<div class="row">
+				<div class=" col-md-1" id="immagine">
+					<img src="icona_navbar.png">
+				</div>
+				<div class="col-md-11">
+					<div class="row">
+						<div class="col-md-4 col-md-offset-8">
+							<div class="row" id="menu-right-box">
+								<div class="menu-right" id="school-name">Nome della scuola</div>
+								<div class="menu-right button-text">
+									<a href="#">Esci</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12" id="menu-nav-box">
+							<ul class="nav nav-tabs menu-nav nav-justified">
+								<li class="header-text" ui-sref-active="active" ng-class="{'active' : view == 'home'}" ng-click="view = 'home'"><a ui-sref="home">HOME</a></li>
+								<li class="header-text" ng-class="{'active' : view == 'school'}"><a ui-sref="school" ng-click="view = 'school'">SCUOLA</a></li>
+								<li class="header-text" ng-class="{'active' : view == 'teacher'}"><a ui-sref="teacher_list" ng-click="view = 'teacher'">INSEGNANTI</a></li>
+								<li class="header-text" ng-class="{'active' : view == 'child'}"><a ui-sref="child_list" ng-click="view = 'child'">BAMBINI</a></li>
+								<li class="header-text" ng-class="{'active' : view == 'group'}"><a ui-sref="group_list" ng-click="view = 'group'">SEZIONI
+										E GRUPPI</a></li>
+								<li class="header-text" ng-class="{'active' : view == 'bus'}"><a ui-sref="bus" ng-click="view = 'bus'">AUTOBUS</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div ui-view></div>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<div class="container" id="group-list" ng-controller="ctrl">
+	<div class="green-button-list">
+		<a ui-sref="group_create"><button
+				class="menu-button-text green-button pull-right">Crea nuovo gruppo</button></a>
+	</div>
+	<div class="row section">
+		<div class="col-md-7">
+			<div class="row">
+				<div class="col-md-1">
+					<label class="header-text">Ordine:</label>
+				</div>
+				<div class="col-md-5">
+					<button class="btn drop-menu-button dropdown-toggle" type="button"
+						data-toggle="dropdown">
+						ordina per:<span class="glyphicon glyphicon-menu-down pull-right"></span>
+					</button>
+					<ul class="dropdown-menu">
+						<li><a ng-click="ordina('-name')">Alfabetico</a></li>
+						<li><a ng-click="ordina('section')">prima sezioni</a></li>
+					</ul>
+				</div>
+				<div class="col-md-1">
+					<label class="header-text">Filtro:</label>
+				</div>
+				<div class="col-md-5">
+					<button class="btn drop-menu-button dropdown-toggle" type="button"
+						data-toggle="dropdown">
+						mostra:<span class="glyphicon glyphicon-menu-down pull-right"></span>
+					</button>
+					<ul class="dropdown-menu">
+						<li><a ng-click="filtra()">Tutti</a></li>
+						<li><a ng-click="filtra(true)">Sezioni</a></li>
+						<li><a ng-click="filtra(false)">Gruppi</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4 pull-right">
+			<div class="input-group">
+				<input class="form-control ricerca-input" ng-model="search"
+					type="text" placeholder="Cerca per nome">
+				<div class="input-group-addon ricerca-icon-box">
+					<span class=" glyphicon glyphicon-search"></span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="section-small col-md-12">
+			<p class="pull-right header-text">Totale Gruppi:
+				{{grouplist.length}}</p>
+		</div>
+	</div>
+	<div ng-repeat="group in grouplist | filter:searchGroups |filter:filterGroups | orderBy:ordine:true"
+		class="section-small">
+		<div class="person-group-box input-div">
+			<div class="row">
+				<div
+					class="section-part menu-button-text group-part input-group-left col-md-1"
+					ng-show="{{group.section}}">Sezione</div>
+				<div class="col-md-6 group-part">
+					<div>{{group.name}}</div>
+				</div>
+				<div class="col-md-2 pull-right group-part">
+					<span onclick="window.location.reload()"
+						ng-click="deleteGroup(group.groupId)"
+						class=" glyphicon glyphicon-trash edit-delete-icon"></span> <span
+						class="glyphicon glyphicon-pencil edit-delete-icon"
+						ui-sref="group_create" ng-click="selectgroup(grouplist.indexOf(group))"></span>
+				</div>
+				<div class="col-md-3 pull-right group-part">
+					<div class="input-div-row">
+						<div class="num-box menu-button-text input-div-row">
+							<label>{{teacherlist.length}}</label>
+						</div>
+						<label class="align-text input-div-row">Insegnanti</label>
+					</div>
+					<div class="input-div-row">
+						<div class="num-box menu-button-text input-div-row">
+							<label>{{kidlist.length}}</label>
+						</div>
+						<label class="align-text input-div-row">Bambini</label>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

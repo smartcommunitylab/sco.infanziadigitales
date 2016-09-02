@@ -1,0 +1,19 @@
+<div class="container">
+	<div>
+		<div class="section-small link-back">
+			<a ui-sref="child_list" ng-click="resetId()" class="header-text"><span
+				class="glyphicon glyphicon-arrow-left"></span>Crea/modifica un 
+				bambino</a>
+		</div>
+		<div id="menu">
+			<div id="menu-nav-box">
+				<ul class="nav nav-tabs menu-nav nav-justified">
+					<li class="header-text" ui-sref-active="active" ng-class="{'active' : view == 'info'}"><a ui-sref=".child_create_1" ng-click="view = 'info'">INFORMAZIONI</a></li>
+					<li class="header-text" ng-class="{'active' : view == 'parent'}"><a ui-sref=".child_create_2" ng-click="view = 'parent'">GENITORI</a></li>
+					<li class="header-text" ng-class="{'active' : view == 'person'}"><a ui-sref=".child_create_3" ng-click="view = 'person'">PERSONE AUTORIZZATE</a></li>
+				</ul>
+			</div>
+		</div>
+		<div ui-view></div>
+	</div>
+</div>

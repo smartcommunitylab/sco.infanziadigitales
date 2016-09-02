@@ -1,0 +1,120 @@
+<div id="bambino-edit">
+	<div class="green-button-list">
+		<a><button class="menu-button-text green-button pull-right">Aggiungi
+				Persona</button></a>
+	</div>
+	<div class="section-small">
+		<p class="p-info indent">
+			<span class="glyphicon glyphicon-question-sign"></span>Tutti i campi
+			contrassegnati da simbolo * sono obbligatori. Compila tutti i campi
+			prima di salvare.
+		</p>
+	</div>
+	<div class="section">
+		<div class=" person-group-box input-div">
+			<div class="form-group section">
+				<label class="col-md-1">Ruolo *:</label>
+				<div class="col-md-3">
+					<select class="form-control input-div" ng-model="selkid_parent.relation">
+						<option>Nonno</option>
+						<option>Nonna</option>
+						<option>Mamma</option>
+						<option>Papà</option>
+						<option>Fratello</option>
+						<option>Sorella</option>
+					</select>
+				</div>
+			</div>
+			<div class="section-small">
+				<div class="title title-text header-text">Informazione di base</div>
+			</div>
+			<div class="section">
+				<form class="form-horizontal" role="form">
+					<div class="form-group">
+						<label class="control-label col-md-2">Nome *:</label>
+						<div class="col-md-9">
+							<input type="text" class="form-control input-div" ng-model="selkid_person.firstName"
+								placeholder="Inserisci il nome">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-md-2">Cognome *:</label>
+						<div class="col-md-9">
+							<input type="text" class="form-control input-div" ng-model="selkid_person.lastName"
+								placeholder="Inserisci il cognome">
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="title title-text header-text">Contatti</div>
+			<div class="section">
+				<form class="form-horizontal" role="form">
+					<div class="form-group">
+						<label class="control-label col-md-2">Telefono *:</label>
+						<div class="col-md-9">
+							<input type="tel" class="form-control input-div" ng-model="selkid_person.phone"
+								placeholder="Inserisci il numero di telefono">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-md-2">Indirizzo email *:</label>
+						<div class="col-md-9">
+							<input type="text" class="form-control input-div" ng-model="selkid_person.email"
+								placeholder="Inserisci l'indirizzo email">
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="title title-text header-text">Autorizzazione</div>
+			<div class="section">
+				<div class="row indent">
+					<label class="pull-left">Scadenza autorizzazione *:</label>
+				<div class="col-sm-2">
+					<div class="input-group">
+						<input type="date" class="form-control input-group-left"
+							value="2016-01-01" min="2016-01-01" max="2020-12-31" ng-model="selkid_person.authorizationDeadline">
+						<div class="input-group-addon input-group-right time-icon-box">
+							<span class="glyphicon glyphicon-calendar"></span>
+						</div>
+					</div>
+				</div>
+				</div>
+				<div class="section-small indent">
+					<input type="checkbox">La persona autorizzata dichiara di
+					essere maggiorenne
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6 col-sm-8 col-xs-12 pull-right">
+			<div class="row">
+				<div class="col-md-6 col-sm-6 col-xs-6">
+					<button type="button"
+						class="btn btn-default button-anulla menu-button-text"
+						data-toggle="modal" data-target="#modal">Annulla
+						Modifiche</button>
+				</div>
+				<div class="col-md-6 col-sm-6 col-xs-6">
+					<button type="button"
+						class="btn btn-default button-save menu-button-text"
+						ng-click="saveChild(3)" ui-sref="child_list">Salva</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="modal" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-body">
+				<p>Sei sicuro di voler annulare le modifiche?</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn" onClick="window.location.reload()"
+					data-dismiss="modal">Si</button>
+				<button type="button" class="btn" data-dismiss="modal">no</button>
+			</div>
+		</div>
+	</div>
+</div>

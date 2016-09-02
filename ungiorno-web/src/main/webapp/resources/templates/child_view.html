@@ -1,0 +1,81 @@
+
+<div id="bambino-edit">
+	<div class="container">
+		<div class="section-small link-back header-text">
+			<a ui-sref="child_list"><span
+				class="glyphicon glyphicon-arrow-left"></span>Detagli di un bambino</a>
+		</div>
+		<div class="section-small">
+			<p class="p-info">
+				<span class="glyphicon glyphicon-question-sign"></span>Tutti i campi
+				contrassegnati da simbolo * sono obbligatori. Compila tutti i campi
+				prima di salvare.
+			</p>
+		</div>
+		<div class="title title-text">Informazioni di base</div>
+
+		<div class="section">
+			<div class="row section">
+				<label class="col-md-2">Nome *</label>
+				<div class="col-md-9">{{selkid.firstName}}</div>
+			</div>
+			<div class="row section">
+				<label class="col-md-2">Cognome *:</label>
+				<div class="col-md-9">{{selkid.lastName}}</div>
+			</div>
+			<div class="row section">
+				<label class="col-sm-2">Sesso *:</label>
+				<div class="col-sm-2">{{selkid.gender}}</div>
+			</div>
+			<div class="row section">
+				<label class="col-sm-2">Data di nascita*:</label>
+				<div class="col-sm-2">{{selkid.birthday}}</div>
+			</div>
+		</div>
+		<div class="title title-text">Foto del bambino</div>
+		<div class="section">
+			<img src="{{selkid.image}}" class="img-circle" alt="baby" width="100"
+				height="100">
+		</div>
+		<div class="title title-text">Allergie</div>
+		<div class="section">
+			<div data-ng-repeat="allergy in selkid.allergies">
+				<label>{{allergy.type}}</label>
+			</div>
+		</div>
+		<div class="title title-text">Informazioni Scolastiche</div>
+		<div class="section"><label>Fascia d'età: {{selkid.ageGroups}}</label>
+		<div class="section-small">
+		<div class="row">
+			<label class="input-div-row col-md-2" ng-show="{{selkid.services.anticipo.enabled}}">Anticipo</label>
+			<label class="input-div-row col-md-2" ng-show="{{selkid.services.posticipo.enabled}}">Posticipo</label>
+			<label class="input-div-row col-md-2" ng-show="{{selkid.services.mensa.enabled}}">Mensa</label>
+			<label class="input-div-row col-md-2" ng-show="{{selkid.services.bus.enabled}}"> Autobus</label>
+		</div>
+	</div>
+							
+		</div>
+		<div class="title title-text">Servizi Attivi</div>
+		<div class="section-small">
+			<div data-ng-repeat="service in selkid.services"></div>
+			<div class="title title-text">Sezioni e Gruppi</div>
+			<div class="section-small"></div>
+			<div class="row">
+				<div class="col-md-6 col-sm-8 col-xs-12 pull-right">
+					<div class="row">
+						<div class="col-md-6 col-sm-6 col-xs-6">
+							<button type="button"
+								class="btn btn-default button-anulla menu-button-text"
+								ui-sref="child_list">Chiudi</button>
+						</div>
+						<div class="col-md-6 col-sm-6 col-xs-6">
+							<button type="button"
+								class="btn btn-default button-save menu-button-text"
+								ui-sref="child_menu.child_create_1"
+								ng-click="selectkid(kidlist.indexOf(kid))">Modifica</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>

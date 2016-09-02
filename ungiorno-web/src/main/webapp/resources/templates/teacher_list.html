@@ -1,0 +1,75 @@
+<div class="container" ng-controller="ctrl">
+	<div class="green-button-list">
+		<a ui-sref="teacher_create"><button
+				class="menu-button-text green-button pull-right">Aggiungi insegnante</button></a>
+	</div>
+	<div class="section">
+		<div class="row">
+			<div class="col-md-7">
+				<div class="row">
+					<div class="col-md-1">
+						<label class="header-text">Ordine:</label>
+					</div>
+					<div class="col-md-5">
+						<button class="btn drop-menu-button dropdown-toggle" type="button"
+							data-toggle="dropdown">
+							ordina per:<span class="glyphicon glyphicon-menu-down pull-right"></span>
+						</button>
+						<ul class="dropdown-menu">
+							<li><a ng-click="ordina('firstName')">Alfabetico per
+									nome</a></li>
+							<li><a ng-click="ordina('lastName')">Alfabetico per
+									cognome</a></li>
+						</ul>
+					</div>
+					<div class="col-md-1">
+						<label class="header-text">Filtro:</label>
+					</div>
+					<div class="col-md-5">
+						<button class="btn drop-menu-button dropdown-toggle" type="button"
+							data-toggle="dropdown">
+							mostra:<span class="glyphicon glyphicon-menu-down pull-right"></span>
+						</button>
+						<ul class="dropdown-menu">
+							<li><a ng-click="filtra()">Tutti</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4 pull-right">
+				<div class="input-group">
+					<input class="form-control ricerca-input" ng-model="search"
+						type="text" placeholder="Cerca per nome">
+					<div class="input-group-addon ricerca-icon-box">
+						<span class=" glyphicon glyphicon-search"></span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="section-small col-md-12">
+			<p class="pull-right header-text">Totale Insegnanti: {{teacherlist.length}}</p>
+		</div>
+	</div>
+	<div
+		data-ng-repeat="teacher in teacherlist | filter:filtro | orderBy:ordine">
+		<div class="section-small">
+			<div class="person-group-box section input-div">
+				<div class="input-div-row indent">
+					<div class="header-text">{{teacher.fullName}}</div>
+					<div class="group-link-box">
+						<span class=" glyphicon glyphicon-user"></span>
+					</div>
+				</div>
+				<div class="input-div-row pull-right">
+					<span onclick="window.location.reload()"
+						ng-click="deleteTeacher(teacher.teacherId)"
+						class=" glyphicon glyphicon-trash edit-delete-icon"></span> <span
+						class="glyphicon glyphicon-pencil edit-delete-icon"
+						ui-sref="teacher_create" ng-click="selectteacher(teacherlist.indexOf(teacher))"></span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,149 @@
+
+<div id="bambino-edit" ng-controller="ctrl">
+	<div class="section-small">
+		<p class="p-info indent">
+			<span class="glyphicon glyphicon-question-sign"></span>Tutti i campi
+			contrassegnati da simbolo * sono obbligatori. Compila tutti i campi
+			prima di salvare.
+		</p>
+	</div>
+	<div class="title title-text header-text">Informazioni di base</div>
+
+	<div class="section">
+		<form class="form-horizontal">
+			<div class="form-group">
+				<label class="col-md-2">Nome *:</label>
+				<div class="col-md-9">
+					<input type="text" class="form-control input-div" ng-model="selkid.firstName">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-md-2">Cognome *:</label>
+				<div class="col-md-9">
+					<input type="text" class="form-control input-div" ng-model="selkid.lastName">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2">Sesso *:</label>
+				<div class="col-sm-2">
+					<select class="form-control input-div" ng-model="selkid.gender">
+						<option>Maschio</option>
+						<option>Femmina</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2">Data di nascita*:</label>
+				<div class="col-sm-2">
+					<div class="input-group">
+						<input type="date" class="form-control input-group-left" ng-model="selkid.birthday" min="2009-01-01" max="2016-12-31">
+						<div class="input-group-addon input-group-right time-icon-box">
+							<span class="glyphicon glyphicon-calendar"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="title title-text  header-text">Foto del bambino</div>
+	<div class="section">
+		<img src="baby.jpg" class="img-circle" alt="baby" width="100"
+			height="100">
+		<button class="btn green-button menu-button-text">
+			<input type="file" id="upload">Inserisci Immagine
+		</button>
+	</div>
+	<div class="title title-text header-text">Allergie</div>
+	<div class="section-small">
+		<form class="form-inline">
+			<fieldset data-ng-repeat="allergy in selkid.allergies"
+				class="section-small input-div-row">
+				<input type="text" class="form-control input-div"
+					readonly="readonly" value={{allergy.type}}><span
+					class="glyphicon glyphicon-remove delete-x-icon"
+					ng-click="removeAllergy($index)"></span>
+			</fieldset>
+			<input type="text" class="form-control input-div input-div-row"
+				ng-model="allergyinput">
+			<button type="button" class="btn btn-xs button-add menu-button-text"
+				ng-click="addAllergy()">
+				<span class="glyphicon glyphicon-plus"></span>
+			</button>
+		</form>
+	</div>
+	<div class="title title-text header-text">Informazioni
+		Scolastiche</div>
+	<div class="section">
+		<div class="row">
+			<div class="form-group">
+				<label class="col-sm-2">fascia d'età *:</label>
+				<div class="col-sm-2">
+					<select class="form-control input-div" ng-model="selkid.ageGroups[0]">
+						<option>Piccola</option>
+						<option>Media</option>
+						<option>Grande</option>
+					</select>
+				</div>
+			</div>
+		</div>
+		<div class="section-small indent">
+			<input type="checkbox" ng-model="selkid.active">Partecipa
+			alla sperimentazione
+		</div>
+	</div>
+	<div class="title title-text  header-text">Servizi Attivi</div>
+	<div class="section-small options-box">
+		<div>
+			<label><input type="checkbox" ng-model="selkid.services.anticipo.enabled"> Anticipo</label>
+		</div>
+		<div>
+			<label><input type="checkbox" ng-model="selkid.services.posticipo.enabled"> Posticipo</label>
+		</div>
+		<div>
+			<label><input type="checkbox" ng-model="selkid.services.mensa.enabled"> Mensa</label>
+		</div>
+		<div>
+			<label><input type="checkbox" ng-model="selkid.services.bus.enabled"> Autobus</label>
+		</div>
+	</div>
+	<div class="title title-text header-text">Sezioni e Gruppi</div>
+	<div class="section-small">
+		<p class="p-info indent">
+			Nessuna associazione presente. <br>Creando una sezione o un
+			gruppo e associandolo a questa/o bambina/o lo vedrai apparire in
+			questa sezione
+		</p>
+	</div>
+	<div class="row">
+		<div class="col-md-6 col-sm-8 col-xs-12 pull-right">
+			<div class="row">
+				<div class="col-md-6 col-sm-6 col-xs-6">
+					<button type="button"
+						class="btn btn-default button-anulla menu-button-text"
+						data-toggle="modal" data-target="#modal">Annulla
+						Modifiche</button>
+				</div>
+				<div class="col-md-6 col-sm-6 col-xs-6">
+					<button type="button"
+						class="btn btn-default button-save menu-button-text"
+						ng-click="saveChild(1)" ui-sref="child_list">Salva</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-body">
+				<p>Sei sicuro di voler annulare le modifiche?</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn" ui-sref="child_list"
+					data-dismiss="modal">Si</button>
+				<button type="button" class="btn" data-dismiss="modal">no</button>
+			</div>
+		</div>
+	</div>
+</div>
+</div>

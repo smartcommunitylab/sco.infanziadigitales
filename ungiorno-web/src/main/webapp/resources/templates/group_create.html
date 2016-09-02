@@ -1,0 +1,146 @@
+
+<div id="bambino-edit" ng-controller="ctrl">
+	<div class="container">
+		<div class="section-small link-back">
+			<a ui-sref="group_list" ng-click="resetId()" class="header-text"><span
+				class="glyphicon glyphicon-arrow-left"></span>Crea/modifica un
+				gruppo</a>
+		</div>
+		<div class="section-small">
+			<p class="p-info indent">
+				<span class="glyphicon glyphicon-question-sign"></span>Tutti i campi
+				contrassegnati da simbolo * sono obbligatori. Compila tutti i campi
+				prima di salvare.
+			</p>
+		</div>
+		<div class="title title-text header-text">Informazioni di base</div>
+		<div class="section">
+			<form class="form-horizontal">
+				<div class="form-group">
+					<label class="col-md-2">Nome del gruppo:*</label>
+					<div class="col-md-9">
+						<input type="text" class="form-control input-div"
+							ng-model="selgroup.name" placeholder="Inserisci il nome">
+					</div>
+				</div>
+			</form>
+			<div class="section-small">
+				<input type="checkbox" ng-model="selgroup.section">Questo
+				gruppo è una sezione
+			</div>
+		</div>
+
+		<div class="title title-text header-text">Insegnanti</div>
+		<div class="section">
+			<div>
+				<button type="button" class="btn green-button menu-button-text"
+					data-toggle="modal" data-target="#modalteachers">Aggiungi
+					Insegnanti</button>
+			</div>
+		</div>
+		<div class="title title-text">Bambini</div>
+		<div class="section">
+			<div class="section">
+				<div class="row">
+					<div class="col-md-11">
+						<div class="row">
+							<div class="col-md-3">
+								<div class="person-group-box input-div">
+									<img src="baby.jpg" class="img-circle" alt="baby" width="75"
+										height="75"><span
+										class="glyphicon glyphicon-remove edit-delete-icon"></span> Nome
+									Cognome
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+				<button type="button" class="btn green-button menu-button-text"
+					data-toggle="modal" data-target="#modalkids">Aggiungi
+					Bambini</button>
+		</div>
+		<div class="row">
+			<div class="col-md-6 col-sm-8 col-xs-12 pull-right">
+				<div class="row">
+					<div class="col-md-6 col-sm-6 col-xs-6">
+						<button type="button"
+							class="btn btn-default button-anulla menu-button-text"
+							data-toggle="modal" data-target="#modal">Annulla
+							Modifiche</button>
+					</div>
+					<div class="col-md-6 col-sm-6 col-xs-6">
+						<button type="button"
+							class="btn btn-default button-save menu-button-text"
+							ng-click="saveGroup()" ui-sref="group_list">Salva</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="modal" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-body">
+					<p>Sei sicuro di voler annulare le modifiche?</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn" ui-sref="group_list"
+						data-dismiss="modal">Si</button>
+					<button type="button" class="btn" data-dismiss="modal">no</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="modalkids" tabindex="-1" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content" ng-controller="ctrl">
+			<div class="title title-text">Seleziona bambini che vuoi
+				aggiungere:</div>
+			<div class="section-small">
+				<div data-ng-repeat="kid in kidlist" class="section-small container">
+					<label><input type="checkbox" ng-model="">{{kid.fullName}}</label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6 col-sm-6 col-xs-6">
+					<button type="button"
+						class="btn btn-default button-anulla menu-button-text"
+						data-dismiss="modal">Chiudi</button>
+				</div>
+				<div class="col-md-6 col-sm-6 col-xs-6">
+					<button type="button"
+						class="btn btn-default button-save menu-button-text"
+						ng-click="addKidsToGroup()" data-dismiss="modal">Aggiungi</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="modalteachers" tabindex="-1" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content" ng-controller="ctrl">
+			<div class="title title-text">Seleziona insegnanti che vuoi
+				aggiungere:</div>
+			<div class="section-small">
+				<div data-ng-repeat="teacher in teacherlist"
+					class="section-small container">
+					<label><input type="checkbox">{{teacher.fullName}}</label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6 col-sm-6 col-xs-6">
+					<button type="button"
+						class="btn btn-default button-anulla menu-button-text"
+						data-dismiss="modal">Chiudi</button>
+				</div>
+				<div class="col-md-6 col-sm-6 col-xs-6">
+					<button type="button"
+						class="btn btn-default button-save menu-button-text"
+						ng-click="" data-dismiss="modal">Aggiungi</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

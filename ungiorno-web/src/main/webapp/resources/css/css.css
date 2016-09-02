@@ -1,0 +1,248 @@
+/*-----------------------------------------------------------------------------Generale-------------------------------------------------------------------------------*/
+/*il formato della la label*/
+label {
+	font-weight: normal !important;
+	vertical-align: sub;
+	margin: 0 !important;
+}
+/*tutte le row*/
+.row {
+	margin-left: 0 !important;
+	margin-right: 0 !important;
+}
+/*rientro*/
+.indent {
+	padding-left: 20px !important;
+}
+/*allineamento verticale testo*/
+.align-text {
+	vertical-align: sub;
+}
+/*testo dei menu, titoli e altro...*/
+.header-text {
+	font-weight: bold !important;
+}
+/*paragrafo informativo*/
+.p-info {
+	color: #666666;
+	font-size: small;
+}
+/*background del titolo*/
+.title {
+	background-color: rgba(152, 186, 60, 0.2);
+	padding: 5px;
+}
+/*testo del titolo*/
+.title-text {
+	color: #3e5421;
+	font-size: 1.1em;
+}
+/*sezione generale*/
+.section {
+	padding: 20px 0 20px 0px;
+}
+/*sottosezione*/
+.section-small {
+	padding: 10px 10px 10px 0px;
+}
+/*la parte sinistra di input group*/
+.input-group-left {
+	border-radius: 8px 0px 0px 8px !important;
+}
+/*la parte destra di input group*/
+.input-group-right {
+	border-radius: 0px 8px 8px 0px !important;
+}
+/*il border dell' input*/
+.input-div {
+	border-radius: 10px !important;
+}
+/*testo di un menu o di un bottone*/
+.menu-button-text {
+	color: #ffffff !important;
+}
+/*bottone salva*/
+.button-save {
+	background-color: #bd3e4d !important;
+	width: 100%;
+}
+/*bottone anulla*/
+.button-anulla {
+	background-color: #666666 !important;
+	width: 100%;
+}
+/*bottone aggiungi*/
+.button-add {
+	background-color: #98ba3c;
+	border-radius: 50% !important;
+	height: 25px;
+	width: 25px;
+}
+/*contenitore del gruppo di input time*/
+.time-box {
+	width: 150px;
+	left: 10px;
+}
+/*contenitore dell' icona dell' orologio o data*/
+.time-icon-box {
+	background-color: #cccccc !important;
+	top: 0 !important;
+}
+/*icone di view, edit, delete*/
+.edit-delete-icon {
+	float: right;
+	padding: 10px;
+	color: #bd3e4d;
+}
+/*x per eliminare i campi*/
+.delete-x-icon {
+	left: -20px;
+	top: 3px !important;
+	color: #bd3e4d;
+}
+/*la riga con i campi in linea*/
+.input-div-row {
+	display: inline-block;
+}
+/*contenitore bottone verde dalle pagine con liste*/
+.green-button-list {
+	padding: 30px 0px 60px 0px;
+	border-bottom: 2px solid #cccccc;
+	width: 100%;
+	display: block;
+}
+/*bottone verde*/
+.green-button {
+	background-color: #7b9e2a;
+	border: 0px;
+	border-radius: 5px;
+	border: 0px;
+	padding: 10px 15px;
+}
+/*menu dei filter buttons*/
+.drop-menu-button {
+	text-align: left !important;
+	height: 34px;
+	width: 100%;
+	background-color: #ffffff;
+	border: 1px solid #cccccc !important;
+}
+/*il menu dei filters*/
+.dropdown-menu {
+	width: 89.7%;
+	left: auto !important;
+}
+/*input ricerca border*/
+.ricerca-input {
+	border-right: 0 !important;
+}
+/*background icona ricerca*/
+.ricerca-icon-box {
+	background-color: #ffffff !important;
+}
+/*contenitore insegnante, bambino, gruppo*/
+.person-group-box {
+	display: block;
+	border: 2px solid #cccccc;
+	width: 100%;
+}
+/*link per tornare indietro da crea/modifica*/
+.link-back>a {
+	color: #7b9e2a;
+}
+/*link per tornare indietro da crea/modifica attivo*/
+.link-back>a:hover, a:active {
+	color: #5e7920;
+	text-decoration: none;
+}
+/*la parte predefinita di upload*/
+#upload {
+	opacity: 0;
+	position: absolute;
+	width: 117px;
+}
+/*-------------------------------------------------------------------------------MENU-------------------------------------------------------------------------------*/
+/*nome della scuola con cui fai log in*/
+#menu #school-name {
+	border-right: 2px solid #7b9e2a;
+	color: #7b9e2a;
+	text-align: right;
+}
+/*immagine del logo*/
+#menu #logo {
+	height: auto;
+	width: auto;
+}
+/*contenitore del menu*/
+#menu .container-fluid {
+	background-color: #cccccc;
+}
+/*contenitore del menu destro del index*/
+#menu #menu-right-box {
+	float: right;
+	padding-top: 20px;
+}
+/*menu destro del index*/
+#menu .menu-right {
+	display: inline;
+	padding: 5px 20px 5px 20px;
+}
+/*link per fare log out*/
+#menu a {
+	color: #ffffff !important;
+	text-decoration: none;
+	border-bottom: 0;
+	border-radius: 0;
+}
+/*contenitore del menu principale*/
+#menu  #menu-nav-box {
+	border-bottom: 5px solid #98ba3c;
+	position: relative;
+	height: auto;
+	padding: 0 0 15px 0 !important;
+}
+/*le tab del menu principale*/
+#menu .menu-nav.nav-tabs {
+	position: relative;
+	top: 15px;
+	border-bottom: 0;
+	background-color: #cccccc;
+}
+
+#menu .menu-nav.nav-tabs>li.active>a {
+	background-color: #98ba3c;
+	border-color: #98ba3c;
+}
+/*-----------------------------------------------------------------------------GroupList------------------------------------------------------------------------------*/
+/*parti che compongono la riga del gruppo*/
+#group-list .group-part {
+	padding: 25px 0px 25px 20px;
+	height: 75px;
+}
+/*la parte che definisce se un gruppo è una sezione*/
+#group-list .section-part {
+	background-color: #98ba3c;
+}
+/*contenitore con il numero dei insegnanti e bambini che fanno parte del gruppo*/
+#group-list .num-box {
+	background-color: #3e5421;
+	border-radius: 50%;
+	height: 25px;
+	width: 25px;
+	text-align: center;
+}
+
+#group-list .edit-delete-icon {
+	padding-top: 3px;
+}
+/*----------------------------------------------------------------------------BambinoEdit-----------------------------------------------------------------------------*/
+#bambino-edit .options-box div {
+	padding: 15px;
+	display: inline;
+}
+
+#bambino-edit .genitore-bambino-box {
+	border: 2px solid #cccccc;
+	border-radius: 15px;
+	padding: 10px;
+}

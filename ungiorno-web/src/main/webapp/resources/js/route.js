@@ -1,6 +1,6 @@
 var routerApp = angular.module('routerApp', [ 'ui.router' ]);
 
-function ctrl($scope, $http, $rootScope) {
+function ctrl($scope, $http, $rootScope, $q) {
 	$scope.times = [];
 	$scope.absences = [];
 	$scope.illnessess = [];
@@ -147,11 +147,8 @@ function ctrl($scope, $http, $rootScope) {
 		$scope.resetId();
 		$rootScope.selkidid = $scope.kidlist[i].kidId;
 		$rootScope.selkid = $scope.kidlist[i];
-        alert(JSON.stringify($scope.kidlist[i]));
 		if(index1!=null){
-	        alert(JSON.stringify($scope.kidlist[i].parents[0]));
 			var index1 = $scope.trovaIndice($scope.kidlist[i].parents[0]);
-	        alert(JSON.stringify(index1));
 			$rootScope.selkid_parent1 = $scope.personlist[$scope.personlist[index1]];
 		}
 		if(index2!=null){
@@ -163,7 +160,6 @@ function ctrl($scope, $http, $rootScope) {
 	{
 		for(i=0; i<$scope.kidlist.lenght; i++){
 			if(id==$scope.kidlist[i]){
-		        alert(JSON.stringify($scope.kidlist[i]));
 				return $scope.kidlist[i];
 			}
 		}
@@ -238,32 +234,24 @@ function ctrl($scope, $http, $rootScope) {
 				$rootScope.selkid_parent2.firstName!=null&&$rootScope.selkid_parent2.lastName!=null&&$rootScope.selkid_parent2.email!=null&&$rootScope.selkid_parent2.phone!=null
 				)
 			{
-				alert("caso 2 parte");
 				var idlist = [];
 		        if($rootScope.selkid.parents[0]==null){
-		        	$scope.savePerson($rootScope.selkid_parent1, null,2)
-		        	alert($scope.idforlist);
-					idlist.push($scope.idforlist);
+		        	var promise=$scope.savePerson($rootScope.selkid_parent1, null,2);
+		        	promise.then(function(greeting) {idlist.push($scope.idforlist)});
 		        }
 		        else{
-		        	$scope.savePerson($rootScope.selkid_parent1, $rootScope.selkid.parents[0],2);
-			        alert(JSON.stringify($rootScope.selkid_parent1));
-		        	alert($scope.idforlist);
-					idlist.push($scope.idforlist);
+		        	var promise=$scope.savePerson($rootScope.selkid_parent1, $rootScope.selkid.parents[0],2);
+		        	promise.then(idlist.push($scope.idforlist));
 		        }
 		        if($rootScope.selkid.parents[1]==null){
-					$scope.savePerson($rootScope.selkid_parent2,null,2);
-		        	alert($scope.idforlist);
-					idlist.push($scope.idforlist);
+		        	var promise=$scope.savePerson($rootScope.selkid_parent2,null,2);
+		        	promise.then(idlist.push($scope.idforlist));
 		        }
 		        else{
-		        	$scope.savePerson($rootScope.selkid_parent2,$rootScope.selkid.parents[0],2);
-		        	alert($scope.idforlist);
-					idlist.push($scope.idforlist);
+		        	var promise=$scope.savePerson($rootScope.selkid_parent2,$rootScope.selkid.parents[0],2);
+		        	promise.then(idlist.push($scope.idforlist));
 		        }
-				alert(JSON.stringify(idlist));
 				$rootScope.selkid.parents=idlist;
-				alert(JSON.stringify($rootScope.selkid.parents));
 				$http.post("http://localhost:8080/ungiorno2/api/test/test/kid", $rootScope.selkid)
 			}
 			else{
@@ -285,20 +273,17 @@ function ctrl($scope, $http, $rootScope) {
 		case 2:
 			person["adult"]=true;
 			person["parent"]=true;
-			alert("save person caso 2 finisce");
 		break;
 		case 3:
 			person["adult"]=selperson.adult;
 			person["relation"]=selperson.relation;
 			person["authorizationDeadline"]=+selperson.authorization;
-			alert("save person caso 3 finisce");
 			break;
 		}
 		if(selpersonid!=null)
 			person["personId"]=selpersonid;
-		alert("comincia post person:");
-		$http.post("http://localhost:8080/ungiorno2/api/test/test/person", person).then (function(response) {
-				$scope.idforlist=response.data.personId;
+		$http.post("http://localhost:8080/ungiorno2/api/test/test/person", person).then(function(response) {
+			return $q(function(resolve, reject) {assegna(function(){$scope.idforlist=response.data.personId})});
 		},
     			function(e) {
     				alert(e.data.errorType + " ---- " + e.data.errorMsg);

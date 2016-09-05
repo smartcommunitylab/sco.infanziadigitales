@@ -1,21 +1,21 @@
 {
-    "name": "it.smartcommunitylab.infanziadigitales.teachers",
-    "version": "1.0.0",
-    "description": "InfanziaDigitales Insegnanti",
-    "dependencies": {
-        "gulp": "^3.5.6",
-        "gulp-concat": "^2.2.0",
-        "gulp-minify-css": "^0.3.0",
-        "gulp-rename": "^1.2.0",
-        "gulp-sass": "^1.3.3",
-        "moment": "^2.10.3"
-    },
-    "devDependencies": {
-        "bower": "^1.3.3",
-        "gulp-util": "^2.2.14",
-        "shelljs": "^0.3.0"
-    },
-    "cordovaPlugins": [
+  "name": "it.smartcommunitylab.infanziadigitales.teachers",
+  "version": "1.0.0",
+  "description": "InfanziaDigitales Insegnanti",
+  "dependencies": {
+    "gulp": "^3.5.6",
+    "gulp-concat": "^2.2.0",
+    "gulp-minify-css": "^0.3.0",
+    "gulp-rename": "^1.2.0",
+    "gulp-sass": "^1.3.3",
+    "moment": "^2.10.3"
+  },
+  "devDependencies": {
+    "bower": "^1.3.3",
+    "gulp-util": "^2.2.14",
+    "shelljs": "^0.3.0"
+  },
+  "cordovaPlugins": [
     "org.apache.cordova.console",
     "org.apache.cordova.device",
     "org.apache.cordova.statusbar",
@@ -33,23 +33,23 @@
     "https://github.com/smartcommunitylab/cordova-plugin-googleplus",
     "net.yoik.cordova.plugins.screenorientation",
     "com.cordova.plugins.cookiemaster",
-  "https://github.com/katzer/cordova-plugin-local-notifications",
-        {
-            "variables": {
-                "REVERSED_CLIENT_ID": "myreversedclientid"
-            },
-            "locator": "cordova-plugin-googleplus",
-            "id": "cordova-plugin-googleplus"
+    "https://github.com/katzer/cordova-plugin-local-notifications",
+    {
+      "variables": {
+        "REVERSED_CLIENT_ID": "myreversedclientid"
+      },
+      "locator": "cordova-plugin-googleplus",
+      "id": "cordova-plugin-googleplus"
     },
-        {
-            "variables": {
-                "SENDER_ID": "453601816446"
-            },
-            "locator": "phonegap-plugin-push@~1.7.4",
-            "id": "phonegap-plugin-push"
+    {
+      "variables": {
+        "SENDER_ID": "453601816446"
+      },
+      "locator": "phonegap-plugin-push@~1.7.4",
+      "id": "phonegap-plugin-push"
     }
   ],
-    "cordovaPlatforms": [
+  "cordovaPlatforms": [
     "android"
   ]
 }

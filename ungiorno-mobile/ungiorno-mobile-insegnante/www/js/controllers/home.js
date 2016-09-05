@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home', [])
 
-.controller('HomeCtrl', function ($scope, $location, dataServerService, profileService, babyConfigurationService, $filter, $state, Toast, $ionicModal, $ionicLoading, moment, teachersService, sectionService, communicationService, Config, $ionicSideMenuDelegate, $ionicPopup, loginService, pushNotificationService) {
+.controller('HomeCtrl', function ($scope, $location, dataServerService, profileService, babyConfigurationService, $filter, $state, Toast, $ionicModal, $ionicLoading, moment, teachersService, sectionService, communicationService, Config, $ionicSideMenuDelegate, $ionicPopup, $rootScope, loginService, pushNotificationService) {
     $scope.sections = null;
     $scope.section = null;
     $scope.childrenConfigurations = [];
@@ -8,6 +8,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
     $scope.childrenNotes = [];
     $scope.availableChildren = [];
     $scope.totalChildrenNumber = [];
+    $rootScope.numberMessageUnread = {};
     $scope.colors = [];
     $scope.noteExpanded = false;
     $scope.teachersNote = true;
@@ -259,6 +260,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
                 dataServerService.getSections($scope.schoolProfile.schoolId).then(function (data) {
                     if (data != null) {
                         $scope.sections = data;
+                        $rootScope.sharedSections = data;
                         if (sectionService.getSection() == null) {
                             $scope.section = $scope.sections[0];
                             sectionService.setSection(0);
@@ -517,51 +519,26 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
             }
         }
     }
-
-    $scope.loadNotes = function () {
-        var sectionsIdsArray = [];
-        if ($scope.section.sectionId === "all") {
-            $scope.sections.forEach(function (section) {
-                sectionsIdsArray.push(section.sectionId);
-            });
-        } else {
-            sectionsIdsArray.push($scope.section.sectionId);
+    var updateMsg = function (unreadMsgs) {
+        if (!$rootScope.numberMessageUnread) {
+            $rootScope.numberMessageUnread = {};
         }
-        dataServerService.getInternalNotesBySections($scope.schoolProfile.schoolId, sectionsIdsArray).then(function (data) {
-            $scope.teacherNotes = data;
-
-            //insert babys photos and name into notes
-            //O(n^3)... for some images and names
-            $scope.teacherNotes.forEach(function (note) {
-                injectBabyInformationsInNote(note);
-            });
-
-
-
-        }, function (err) {
-            Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
-            $ionicLoading.hide();
-        });
-        dataServerService.getKidsNotesBySectionIds($scope.schoolProfile.schoolId, sectionsIdsArray).then(function (data) {
-            $scope.parentNotes = data;
-            $scope.parentNotes.forEach(function (note) {
-                var found = false;
-                var sectionChildrenIndex = 0;
-                while (!found && sectionChildrenIndex < $scope.section.children.length) {
-                    if ($scope.section.children[sectionChildrenIndex].kidId === note.kidId) {
-                        var baby = {
-                            image: $scope.section.children[sectionChildrenIndex].image,
-                            kidId: $scope.section.children[sectionChildrenIndex].kidId,
-                            name: $scope.section.children[sectionChildrenIndex].childrenName
-                        }
-                        note.kid = baby;
+        for (var schoolClass in unreadMsgs) {
+            if (unreadMsgs.hasOwnProperty(schoolClass)) {
+                for (var kid in unreadMsgs[schoolClass]) {
+                    if (unreadMsgs[schoolClass].hasOwnProperty(kid)) {
+                        // $scope.msg[kid] = unreadMsgs[schoolClass][kid];
+                        $rootScope.numberMessageUnread[kid] = unreadMsgs[schoolClass][kid];
                     }
-                    sectionChildrenIndex++;
                 }
-            });
-        }, function (err) {
-            Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
-            $ionicLoading.hide();
+            }
+        }
+    }
+    $scope.loadNotes = function () {
+        dataServerService.getUnreadMessages($scope.schoolProfile.schoolId).then(function (data) {
+            console.log(JSON.stringify(data));
+            //put the icon of new messages on the right children
+            updateMsg(data);
         });
     }
 
@@ -745,5 +722,5 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
         var image = Config.URL() + "/" + Config.app() + "/student/" + Config.appId() + "/" + $scope.schoolProfile.schoolId + "/" + child.kidId + "/true/images";
         return image;
     }
-
+    $scope.refreshHome();
 });

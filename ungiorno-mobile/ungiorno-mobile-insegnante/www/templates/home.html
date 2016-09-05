@@ -1,9 +1,8 @@
 <ion-view id="home" ng-init="initialize()" title="{{teacherName}} - {{title}}">
     <ion-nav-buttons side="right">
-        <button class="button" ng-if="!viewClose()" ng-click="refreshHome()">
-            <i class="icon ion-loop action-icon"></i>
-        </button>
-        <!--
+<button class="button" ng-if="!viewClose()" ng-click="refreshHome()">
+    <i class="icon ion-loop action-icon"></i>
+</button>        <!--
         <button class="button" ng-if="!viewClose()" ng-click="openNotes()">
             <i class="icon ion-document-text action-icon "></i>
         </button>
@@ -82,7 +81,11 @@
                     {{'home_scadenze' | translate}}
                 </div>
                 <div class=" children-home " ng-repeat="child in childrenProfiles[selectedPeriod] track by $index " ng-click="detailOrCommunication(child) ">
+                    <!--
                     <div class="badge-msg " ng-if="child.calNotes && !communicationExpanded "><i class="icon center icon-message ion-document-text "></i>
+                    </div>
+-->
+                    <div class="badge-msg" ng-if="numberMessageUnread[child.kidId]>0"><i class="icon center icon-message ion-document-text "></i>
                     </div>
                     <img ng-src="{{getChildImage(child)}} " ng-class="{ 'img-assente':child.exitTime==null || (child.exitTime < getTime(selectedPeriod)), 'img-presente':child.exitTime !=null, 'img-not-active':!child.active, 'img-communication':communicationExpanded, 'delivered':(!getChildrenDeliveryByID(child.kidId) && communicationExpanded) } ">
 

@@ -166,7 +166,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
 
 
     .state('app.home', {
-        cache: true,
+        cache: false,
         url: "/home",
         views: {
             'menuContent': {
@@ -461,7 +461,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
         lbl_yesterday: 'IERI',
         send_msg_placeholder: 'Scrivi messaggio',
         chat_teacher_label: 'Maestra ',
-        chat_write_label: ' scrive...'
+        chat_write_label: ' scrive...',
+        no_messages: 'Non sono presenti messaggi'
     });
 
     $translateProvider.preferredLanguage("it");

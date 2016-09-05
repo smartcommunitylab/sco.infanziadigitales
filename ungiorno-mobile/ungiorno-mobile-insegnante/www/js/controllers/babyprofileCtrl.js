@@ -1,12 +1,19 @@
 angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.babyprofile', [])
 
-.controller('babyprofileCtrl', function ($scope, dataServerService, profileService, babyConfigurationService, Config, $filter, Toast, $ionicLoading, $rootScope, $ionicPopup, $ionicScrollDelegate, teachersService, messagesService) {
+.controller('babyprofileCtrl', function ($scope, dataServerService, profileService, babyConfigurationService, Config, $filter, Toast, $ionicLoading, $rootScope, $ionicPopup, $interval, $ionicScrollDelegate, teachersService, messagesService) {
 
     var IS_PARENT = 'parent';
     var IS_TEACHER = 'teacher';
     $scope.all = 10;
     $scope.teacher = {};
-    $scope.newMessage = "";
+    $scope.newMessage = {
+        text: ""
+    };
+    $scope.userAction = false;
+    var isBackground = function () {
+        return $rootScope.background;
+    }
+    var typing = undefined;
     $scope.showLoader = function () {
         $ionicLoading.show({
             content: 'Loading',
@@ -40,7 +47,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
     }
 
     var checkAllDataLoaded = function () {
-        if ($scope.babyProfileLoaded && $scope.notesLoaded) {
+        if ($scope.babyProfileLoaded) {
+            //        if ($scope.babyProfileLoaded && $scope.notesLoaded) {
             $scope.calculateOtherData();
             $scope.dataLoaded = true;
             $ionicLoading.hide();
@@ -53,6 +61,33 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
         }
 
     }
+
+    $scope.startTyping = function () {
+        // Don't send notification if we are still typing or we are typing a private message
+        //if (angular.isDefined(typing) || $scope.sendTo != "everyone") return;
+        if (angular.isDefined(typing)) return;
+        typing = $interval(function () {
+            $scope.stopTyping();
+        }, 3000);
+
+        messagesService.send("/topic/toparent." + Config.appId() + "." + $scope.babyProfile.kidId + ".typing", {}, JSON.stringify({
+            //username: $scope.username,
+            typing: true
+        }));
+    };
+
+    $scope.stopTyping = function () {
+        if (angular.isDefined(typing)) {
+            $interval.cancel(typing);
+            typing = undefined;
+
+            messagesService.send("/topic/toparent." + Config.appId() + "." + $scope.babyProfile.kidId + ".typing", {}, JSON.stringify({
+                //username: $scope.username,
+                typing: false
+            }));
+        }
+    };
+
     $scope.messageInit = function () {
         if (!$rootScope.messages) {
             $rootScope.messages = {};
@@ -62,12 +97,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
             if (data) {
                 $rootScope.messages[$scope.babyProfile.kidId] = data.slice().reverse(); //turn the order from top to bottom
                 $ionicScrollDelegate.scrollBottom();
+                $ionicLoading.hide();
+
             } else {
                 $ionicLoading.hide();
+                console.log("no messages received");
                 Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
             }
         }, function (error) {
             $ionicLoading.hide();
+            console.log(error);
             Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
         });
         messagesService.init(Config.getServerURL() + '/chat');
@@ -93,16 +132,20 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
             });
             //            user is typing
             messagesService.subscribe("/topic/toteacher." + Config.appId() + "." + $scope.babyProfile.kidId + ".typing", function (message) {
-                var parsed = JSON.parse(message.body);
-                if (parsed.username == $scope.username) return;
-
-                for (var index in $scope.participants) {
-                    var participant = $scope.participants[index];
-
-                    if (participant.username == parsed.username) {
-                        $scope.participants[index].typing = parsed.typing;
-                    }
+                $scope.userAction = JSON.parse(message.body);
+                $ionicScrollDelegate.resize();
+                if ($scope.isBottom()) {
+                    $ionicScrollDelegate.scrollBottom();
                 }
+                //                if (parsed.username == $scope.username) return;
+                //
+                //                for (var index in $scope.participants) {
+                //                    var participant = $scope.participants[index];
+                //
+                //                    if (participant.username == parsed.username) {
+                //                        $scope.participants[index].typing = parsed.typing;
+                //                    }
+                //                }
             });
 
 
@@ -123,10 +166,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
                         "seen": true,
                         "text": chatMessage.description
                     }
-                    if ($rootScope.messages[chatMessage.content.kidId]) {
+                    if (chatMessage.content.schoolId && chatMessage.content.kidId && chatMessage.content.messageId && $rootScope.messages[chatMessage.content.kidId]) {
                         $rootScope.messages[chatMessage.content.kidId].push(newMessage);
                         messagesService.receivedMessage(chatMessage.content.schoolId, chatMessage.content.kidId, chatMessage.content.messageId);
-                        messagesService.seenMessage(chatMessage.content.schoolId, chatMessage.content.kidId, chatMessage.content.messageId);
+                        if (!isBackground()) {
+                            messagesService.seenMessage(chatMessage.content.schoolId, chatMessage.content.kidId, chatMessage.content.messageId);
+                        }
                     }
                     $ionicScrollDelegate.scrollBottom();
                 }
@@ -138,6 +183,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
 
         });
     }
+    $scope.isBottom = function () {
+
+        var currentTop = $ionicScrollDelegate.$getByHandle('handler').getScrollPosition().top;
+        var maxScrollableDistanceFromTop = $ionicScrollDelegate.$getByHandle('handler').getScrollView().__maxScrollTop;
+
+        if (currentTop >= maxScrollableDistanceFromTop) {
+            return true;
+        }
+        return false;
+    };
     $scope.init = function () {
         $scope.parents = [];
         $scope.newNote = {
@@ -163,31 +218,35 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
                 $scope.babyProfileLoaded = true;
                 checkAllDataLoaded();
                 $scope.messageInit();
+                $ionicLoading.hide();
+
             } else {
                 $ionicLoading.hide();
+                console.log("No profile received");
                 Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
             }
         }, function (err) {
+            console.log(err);
             Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
             $ionicLoading.hide();
         });
-        babyConfigurationService.getBabyNotesById($scope.schoolProfile.schoolId, babyProfileID).then(function (data) {
-            if (data) {
-                if (data[0]) {
-                    $scope.notes = data[0];
-                } else {
-                    $scope.notes = {};
-                }
-                $scope.notesLoaded = true;
-                checkAllDataLoaded();
-            } else {
-                $ionicLoading.hide();
-                Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
-            }
-        }, function (err) {
-            Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
-            $ionicLoading.hide();
-        });
+        //        babyConfigurationService.getBabyNotesById($scope.schoolProfile.schoolId, babyProfileID).then(function (data) {
+        //            if (data) {
+        //                if (data[0]) {
+        //                    $scope.notes = data[0];
+        //                } else {
+        //                    $scope.notes = {};
+        //                }
+        //                $scope.notesLoaded = true;
+        //                checkAllDataLoaded();
+        //            } else {
+        //                $ionicLoading.hide();
+        //                Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+        //            }
+        //        }, function (err) {
+        //            Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+        //            $ionicLoading.hide();
+        //        });
     }
     $scope.calculateOtherData = function () {
 
@@ -246,7 +305,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
             var note = {
                 "kidId": $scope.babyProfile.kidId,
                 "teacherId": $scope.teacher.teacherId,
-                "text": $scope.newMessage
+                "text": $scope.newMessage.text
             }
             var requestFail = function () {
                 var myPopup = $ionicPopup.show({
@@ -300,11 +359,60 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
     $scope.changeTeacher = function (teacher) {
         $scope.teacher = teacher;
     }
+
+    $scope.loadMore = function () {
+        if (!$scope.loading) {
+            $scope.loading = true;
+
+            messagesService.getMessages($rootScope.messages[$scope.babyProfile.kidId][0].creationDate - 1, $scope.all, $scope.babyProfile.schoolId, $scope.babyProfile.kidId).then(function (data) {
+                    if (data) {
+                        var newmessages = data.slice();
+                        //var newmessages = data;
+
+                        if (!!$rootScope.messages[$scope.babyProfile.kidId]) {
+                            for (var i = 0; i < newmessages.length; i++)
+                                $rootScope.messages[$scope.babyProfile.kidId].unshift(newmessages[i]);
+                        } else {
+                            $rootScope.messages[$scope.babyProfile.kidId] = newmessages;
+                        }
+                        // $rootScope.messages = !!$rootScope.messages ? $rootScope.messages.concat(newmessages) : newmessages;
+                        if ($rootScope.messages[$scope.babyProfile.kidId].length == 0) {
+                            $scope.emptylist = true;
+                        }
+                        if (data.length >= $scope.all) {
+                            $scope.end_reached = false;
+                        } else {
+                            $scope.end_reached = true;
+                        }
+                    } else {
+                        $scope.emptylist = true;
+                        $scope.end_reached = true;
+                        Toast.show($filter('translate')("pop_up_error_server_template"), "short", "bottom");
+
+                    }
+                    $scope.loading = false;
+
+                },
+                function (err) {
+
+                    $scope.end_reached = true;
+                    $scope.loading = false;
+
+                });
+        }
+    };
+    $scope.refresh = function () {
+        if ($ionicScrollDelegate.$getByHandle('handler').getScrollPosition().top == 0 && !$scope.end_reached) {
+            //refresh
+            $scope.loadMore();
+        }
+    }
+
+
     $scope.sendMessage = function (text) {
         if (text != null && text != '') {
             //create message
-
-
+            $scope.stopTyping();
             $ionicLoading.show();
             $scope.newMessage;
             messagesService.sendMessage($scope.babyProfile.schoolId, $scope.babyProfile.kidId, $scope.teacher.teacherId, text).then(
@@ -312,18 +420,18 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
                     // init(); temporary commented. why reinitialize the list?
                     $rootScope.messages[$scope.babyProfile.kidId] = $rootScope.messages[$scope.babyProfile.kidId].concat(msg);
                     $ionicLoading.hide();
-                    $scope.newMessage = '';
+                    $scope.newMessage.text = '';
                     $ionicScrollDelegate.scrollBottom();
                 },
                 function (err) {
                     $ionicLoading.hide();
+                    console.log(err);
                     Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
                 }
             );
         }
 
         $ionicScrollDelegate.scrollBottom();
-        $scope.newMessage = '';
     };
     $scope.isANewDate = function (indexOfMessage) {
         if (indexOfMessage == 0) {

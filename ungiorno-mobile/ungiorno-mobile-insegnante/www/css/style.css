@@ -550,11 +550,13 @@ p {
 #home .sectionBabyIndicator-notnow {
     max-height: 150px;
     max-width: 150px;
+    margin: auto;
 }
 
 #home .sectionBabyIndicator-now {
     max-height: 200px;
     max-width: 200px;
+    margin: auto;
 }
 
 .home-separator {
@@ -925,6 +927,7 @@ select {
 
 #babyprofile #chat-box {
     position: relative!important;
+    height: 75vh;
 }
 
 #babyprofile #kid-profile {
@@ -1032,6 +1035,7 @@ select {
     display: block;
     height: auto;
     bottom: 0px;
+    padding: 0px;
 }
 
 #babyprofile #chat-box label {
@@ -1043,6 +1047,29 @@ select {
 
 #babyprofile #chat-box .message-flag {
     color: #80D0E6;
+}
+
+#babyprofile .chat-chose {
+    background-color: #BD3E4D;
+    margin-bottom: 5px;
+}
+
+#babyprofile .chat-chose {
+    background-color: #BD3E4D;
+    margin-bottom: 5px;
+}
+
+#babyprofile .input-label {
+    color: white!important;
+}
+
+#babyprofile select {
+    color: white!important;
+}
+
+.teacher-option {
+    color: white!important;
+    background-color: #BD3E4D!important;
 }
 
 .section-text {
@@ -1492,6 +1519,14 @@ ion-content .scroll {
     /*    transform: translate(-50%, -50%)*/
 }
 
+.no-messages-placeholder {
+    position: absolute;
+    top: 50%;
+    width: 50%;
+    text-align: center;
+    margin-right: auto;
+}
+
 .nothing-to-show-placeholder {
     text-align: center;
     font-size: 1.4em;
@@ -1727,4 +1762,36 @@ ion-content .scroll {
 
 .radio-home .item-content {
     padding-bottom: 0px!important;
+}
+
+#babyprofile .loading {
+    font-size: 30px;
+}
+
+#babyprofile .loading:after {
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: bottom;
+    -webkit-animation: ellipsis steps(4, end) 900ms infinite;
+    animation: ellipsis steps(4, end) 900ms infinite;
+    content: "\2026";
+    /* ascii code for the ellipsis character */
+    width: 0px;
+}
+
+@keyframes ellipsis {
+    to {
+        width: 1.25em;
+    }
+}
+
+@-webkit-keyframes ellipsis {
+    to {
+        width: 1.25em;
+    }
+}
+
+.disabled {
+    visibility: hidden;
+    height: 10px;
 }

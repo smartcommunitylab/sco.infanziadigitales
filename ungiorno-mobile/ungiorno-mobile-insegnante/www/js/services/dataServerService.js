@@ -612,29 +612,33 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.dataSer
     };
 
     //    get unread messages for the classes or the school
-    //    dataServerService.getUnreadMessages = function (schoolId, kidId) {
-    //        var deferred = $q.defer();
-    //        $http({
-    //            method: 'GET',
-    //            url: Config.URL() + '/' + Config.app() + '/chat/' + Config.appId() + '/' + schoolId + '/message/' + kidId + '/unread/fromteacher',
-    //            headers: {
-    //                'Accept': 'application/json'
-    //            },
-    //            timeout: Config.httpTimout()
-    //
-    //        }).
-    //        success(function (data, status, headers, config) {
-    //            deferred.resolve(data);
-    //        }).
-    //        error(function (data, status, headers, config) {
-    //            console.log(data + status + headers + config);
-    //            deferred.reject(data);
-    //        });
-    //        return deferred.promise;
-    //    };
+    // /chat/{appId}/{schoolId}/message/unread/fromparent
+    dataServerService.getUnreadMessages = function (schoolId) {
+        var deferred = $q.defer();
+        $http({
+            method: 'GET',
+            url: Config.URL() + '/' + Config.app() + '/chat/' + Config.appId() + '/' + schoolId + '/message/unread/fromparent',
+            headers: {
+                'Accept': 'application/json'
+            },
+            timeout: Config.httpTimout()
+
+        }).
+        success(function (data, status, headers, config) {
+            deferred.resolve(data);
+        }).
+        error(function (data, status, headers, config) {
+            console.log(data + status + headers + config);
+            deferred.reject(data);
+        });
+        return deferred.promise;
+    };
 
     dataServerService.sendMessage = function (schoolId, msg) {
         var deferred = $q.defer();
+        if (!schoolId) {
+            deferred.reject();
+        }
         $http({
             method: 'POST',
             url: Config.URL() + '/' + Config.app() + '/chat/' + Config.appId() + '/' + schoolId + '/message/fromteacher',

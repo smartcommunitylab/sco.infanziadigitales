@@ -237,6 +237,26 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
         $scope.popover = popover;
     });
 
+    function onPause() {
+        // handle background
+        $rootScope.background = true;
+    }
+
+    function onResume() {
+        // handle background
+        $rootScope.background = false;
+        $state.reload(); //in case of chat this let to sign messages to seen
+
+    }
+    document.addEventListener("resume", function () {
+        onResume();
+    });
+    document.addEventListener("pause", function () {
+        onPause();
+    });
+    $scope.isBackGround = function () {
+        return $rootScope.background;
+    };
 
     $scope.openPopover = function ($event) {
         $scope.popover.show($event);

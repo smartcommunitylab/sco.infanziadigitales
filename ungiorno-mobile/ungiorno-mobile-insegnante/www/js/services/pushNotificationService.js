@@ -20,7 +20,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.pushNot
                     //manage kind of notification if message or communication
                     if (JSON.parse(notification.data)["content.type"] == "chat") {
                         switchProfileFromBackground(notification, true, true).then(function () {
-                            $state.go("app.messages");
+                            $state.go("app.babyprofile");
                             deleteMessageFromStorage(notification.id, JSON.parse(notification.data)["content.kidId"]);
                         });
 
@@ -99,47 +99,79 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.pushNot
     var isBackground = function () {
         return $rootScope.background;
     }
+    var getProfileFromsharedSection = function (kidId) {
+        for (var section in $rootScope.sharedSections) {
+            if ($rootScope.sharedSections.hasOwnProperty(section)) {
+                for (var profile in $rootScope.sharedSections[section].children) {
+                    if ($rootScope.sharedSections[section].children.hasOwnProperty(profile)) {
+                        if ($rootScope.sharedSections[section].children[profile].kidId = kidId)
+                            return $rootScope.sharedSections[section].children[profile]
+                    }
+                }
+            }
+        }
+        return null;
+    }
+    var searchProfile = function (kidId) {
+        var deferred = $q.defer();
+        if (!$rootScope.sharedSections) {
+            dataServerService.getSections(profileService.getSchoolProfile().schoolId).then(function (data) {
+                if (data != null) {
+                    $rootScope.sharedSections = data;
+                    deferred.resolve(getProfileFromsharedSection(kidId));
+                }
+            });
+        } else {
+            deferred.resolve(getProfileFromsharedSection(kidId));
+        }
+        return deferred.promise;
 
+    };
     var switchProfileFromBackground = function (notification, chat, local) {
         var deferred = $q.defer();
-        var profiles = profileService.getBabiesProfiles();
+        //var profiles = profileService.getBabiesProfiles();
         var item = null;
         var kidId = null;
         if (chat) {
             if (local) {
-                kidId = JSON.parse(notification.data)["content.kidId"]
+                kidId = JSON.parse(notification.data)["content.kidId"];
             } else {
-                kidId = notification.additionalData["content.kidId"]
+                kidId = notification.additionalData["content.kidId"];
             }
-            for (var k = 0; k < profiles.length; k++) {
-                //            if (profiles[k].kidId == notification.additionalData["content.kidId"]) {
-                if (profiles[k].kidId == kidId) {
-                    item = profiles[k];
-                    break;
-                }
-            }
+            searchProfile(kidId).then(function (item) {
+                profileService.setCurrentBaby(item);
+                deferred.resolve();
+
+            });
+            //            item = profileService.getBabyProfileById(profileService.getSchoolProfile().schoolId, kidId).then(function (item) {
+            //                if (item) {
+            //                    profileService.setCurrentBaby(item);
+            //                    deferred.resolve();
+            //                }
+            //            });
+
         } else {
             if (local) {
-                schoolId = JSON.parse(notification.data)["content.schoolId"]
+                schoolId = JSON.parse(notification.data)["content.schoolId"];
             } else {
-                schoolId = notification.additionalData["content.schoolId"]
+                schoolId = notification.additionalData["content.schoolId"];
             }
-            for (var k = 0; k < profiles.length; k++) {
-                //            if (profiles[k].kidId == notification.additionalData["content.kidId"]) {
-                if (profiles[k].schoolId == schoolId) {
-                    item = profiles[k];
-                    break;
-                }
-            }
-        }
-        if (item) {
-            profileService.setBabyProfile(item);
-            $rootScope.loadConfiguration(item.schoolId, item.kidId).then(function () {
+
+            kidId = notification.additionalData["content.kidId"];
+            searchProfile(kidId).then(function (item) {
+                profileService.setCurrentBaby(item);
                 deferred.resolve();
-            }, function (err) {
-                deferred.reject(err);
+
             });
+            //            item = profileService.getBabyProfileById(profileService.getSchoolProfile(), kidId).then(function (item) {
+            //                if (item) {
+            //                    profileService.setCurrentBaby(item);
+            //                    deferred.resolve();
+            //
+            //                }
+            //            });
         }
+
 
         return deferred.promise;
     }
@@ -158,8 +190,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.pushNot
         // Register to GCM
     pushNotificationService.register = function (schoolId) {
         console.log("registration");
-        var schoolId = [];
-        schoolId.push(Config.getMessagingAppId() + ".teacher." + schoolId);
+        var schoolIdArray = [];
+        schoolIdArray.push(Config.getMessagingAppId() + ".teacher." + schoolId);
 
         //        for (var i = 0; i < schooldIds.length; i++) {
         //            arrayOfSchools.push(Config.getMessagingAppId() + ".comms." + schooldIds[i]);
@@ -168,14 +200,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.pushNot
             android: {
                 senderID: Config.getSenderID(),
                 //                topics: arrayOfSchools
-                topics: schoolId
+                topics: schoolIdArray
             },
             ios: {
                 alert: "true",
                 badge: "true",
                 sound: "true",
                 senderID: Config.getSenderID(),
-                topics: schoolId
+                topics: schoolIdArray
             },
             windows: {}
         });
@@ -194,12 +226,19 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.pushNot
             //send received to server
             if (notification && notification.additionalData && notification.additionalData["content.type"] == "chat") {
                 //check if contained in localStorage
-                if (!isChatMessageReceived(notification.additionalData["content.messageId"], notification.additionalData["content.kidId"]) && !notification.additionalData["coldstart"] && (notification.additionalData["content.kidId"] != profileService.getBabyProfile().kidIs && !$state.is("app.messages"))) {
+                if (!isChatMessageReceived(notification.additionalData["content.messageId"], notification.additionalData["content.kidId"]) && !notification.additionalData["coldstart"] && (!profileService.getCurrentBaby() || !(notification.additionalData["content.kidId"] == profileService.getCurrentBaby().kidId && $state.is("app.babyprofile")))) {
                     messagesService.receivedMessage(notification.additionalData["content.schoolId"], notification.additionalData["content.kidId"], notification.additionalData["content.messageId"]);
                     chatMessageReceived(notification.additionalData["content.messageId"], notification.additionalData["content.kidId"]);
                     if (!isBackground()) {
                         //update button with message and style with warch
                         //create local notification that goes to app.messages
+                        $rootScope.$apply(function () {
+                            if (!$rootScope.numberMessageUnread[notification.additionalData["content.kidId"]]) {
+                                $rootScope.numberMessageUnread[notification.additionalData["content.kidId"]] = 1;
+                            } else {
+                                $rootScope.numberMessageUnread[notification.additionalData["content.kidId"]]++;
+                            }
+                        });
                         cordova.plugins.notification.local.schedule({
                             id: new Date().getTime(),
                             title: notification.title,
@@ -211,9 +250,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.pushNot
 
 
                         });
-                        $rootScope.$apply(function () {
-                            $rootScope.numberMessageUnread[notification.additionalData["content.kidId"]]++;
-                        });
+
                     };
 
                 } else {
@@ -224,20 +261,20 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.pushNot
                             dataServerService.receivedMessage(notification.additionalData["content.schoolId"], notification.additionalData["content.kidId"], notification.additionalData["content.messageId"])
                         }
                         //already received-> go, seen and delete from localstorage
-                        if (!$state.is("app.messages")) {
-                            $state.go("app.messages");
+                        if (!$state.is("app.babyprofile")) {
+                            $state.go("app.babyprofile");
                         } //manage different kids
-                        else {
-                            //updateChat
-                            $rootScope.$apply(function () {
-                                dataServerService.getMessages(null, null, notification.additionalData["content.schoolId"], notification.additionalData["content.kidId"]).then(function (notifications) {
-                                    $rootScope.messages[notification.additionalData["content.kidId"]].push(notifications[0]);
-                                    $ionicScrollDelegate.scrollBottom();
-
-                                });
-
-                            });
-                        }
+                        //                        else {
+                        //                            //updateChat
+                        //                            $rootScope.$apply(function () {
+                        //                                dataServerService.getMessages(null, null, notification.additionalData["content.schoolId"], notification.additionalData["content.kidId"]).then(function (notifications) {
+                        //                                    $rootScope.messages[notification.additionalData["content.kidId"]].push(notifications[0]);
+                        //                                    $ionicScrollDelegate.scrollBottom();
+                        //
+                        //                                });
+                        //
+                        //                            });
+                        //                        }
                     }, function (error) {
 
                     });

@@ -157,6 +157,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     function onResume() {
         // handle background
         $rootScope.background = false;
+        $state.reload(); //in case of chat this let to sign messages to seen
+
     }
     document.addEventListener("resume", function () {
         onResume();

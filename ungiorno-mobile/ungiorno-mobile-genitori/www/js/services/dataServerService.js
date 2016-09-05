@@ -409,6 +409,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
 
     dataServerService.sendMessage = function (schoolId, kidId, msg) {
         var deferred = $q.defer();
+        if (!kidId || !schoolId) {
+            deferred.reject(data);
+        }
         $http({
             method: 'POST',
             url: Config.URL() + '/' + Config.app() + '/chat/' + Config.appId() + '/' + schoolId + '/message/fromparent',

@@ -1625,6 +1625,9 @@ $dark: #444 !default;
     border-left: 3px;
     border-style: solid;
 }
+#chat .teacher-label {
+    color: #F8A913!important;
+}
 #chat .message-container-parent {
     color: #189BA9;
     border-right: 3px;
@@ -1683,4 +1686,32 @@ $dark: #444 !default;
 }
 #chat .message-flag {
     color: #80D0E6;
+}
+#chat .loading {
+    font-size: 30px;
+}
+#chat .loading:after {
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: bottom;
+    -webkit-animation: ellipsis steps(4, end) 900ms infinite;
+    animation: ellipsis steps(4, end) 900ms infinite;
+    content: "\2026";
+    /* ascii code for the ellipsis character */
+
+    width: 0px;
+}
+@keyframes ellipsis {
+    to {
+        width: 1.25em;
+    }
+}
+@-webkit-keyframes ellipsis {
+    to {
+        width: 1.25em;
+    }
+}
+.disabled {
+    visibility: hidden;
+    height: 10px;
 }

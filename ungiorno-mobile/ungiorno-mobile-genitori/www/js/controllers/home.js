@@ -90,7 +90,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         $scope.elements.push({
             click: "app.retire",
             string: $filter('translate')('home_retire') + $scope.kidProfile.firstName,
-            note: ($scope.dailyFermata ? $filter('translate')('home_entry_to') + $scope.fromTime + $filter('translate')('home_exit_to') + $scope.fromTime : $filter('translate')('home_entry_to') + $scope.fromTime + $filter('translate')('go_home_by_bus')),
+            note: ($scope.dailyFermata ? $filter('translate')('home_entry_to') + $scope.fromTime + $filter('translate')('go_home_by_bus') : $filter('translate')('home_entry_to') + $scope.fromTime + $filter('translate')('home_exit_to') + $scope.toTime),
             class: style,
             img: 'img/ritiro.png',
             disabled: false
@@ -157,6 +157,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 img: 'img/mensa.png'
             });
         }*/
+        $ionicLoading.hide();
 
     }
     var contact = function () {
@@ -203,6 +204,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
     $rootScope.loadConfiguration = function () {
         var deferred = $q.defer();
+        $ionicLoading.show();
         $scope.kidProfile = profileService.getBabyProfile();
         var schoolId = $scope.kidProfile.schoolId;
         var kidId = $scope.kidProfile.kidId;
@@ -287,7 +289,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
                             }
                             buildHome();
-                            $ionicLoading.hide();
+
                             //Toast.show($filter('translate')('data_updated'), 'short', 'bottom');
                             deferred.resolve();
 

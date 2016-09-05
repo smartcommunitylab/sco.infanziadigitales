@@ -6,10 +6,41 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     var IS_PARENT = 'parent';
     var IS_TEACHER = 'teacher';
     $scope.all = 10;
-
+    var typing = undefined;
     $scope.status = {
         loading: false,
         loaded: false
+    };
+    $scope.isTyping = false;
+    var isBackground = function () {
+        return $rootScope.background;
+    }
+
+
+    $scope.startTyping = function () {
+        // Don't send notification if we are still typing or we are typing a private message
+        // if (angular.isDefined(typing) || $scope.sendTo != "everyone") return;
+        if (angular.isDefined(typing)) return;
+        typing = $interval(function () {
+            $scope.stopTyping();
+        }, 3000);
+
+        messagesService.send("/topic/toteacher." + Config.appId() + "." + $scope.babyProfile.kidId + ".typing", {}, JSON.stringify({
+            //username: $scope.username,
+            typing: true
+        }));
+    };
+
+    $scope.stopTyping = function () {
+        if (angular.isDefined(typing)) {
+            $interval.cancel(typing);
+            typing = undefined;
+
+            messagesService.send("/topic/toteacher." + Config.appId() + "." + $scope.babyProfile.kidId + ".typing", {}, JSON.stringify({
+                //username: $scope.username,
+                typing: false
+            }));
+        }
     };
     $scope.init = function () {
         if (!$rootScope.messages) {
@@ -18,7 +49,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         $scope.end_reached = false;
         messagesService.getMessages(null, null, $scope.babyProfile.schoolId, $scope.babyProfile.kidId).then(function (data) {
             if (data) {
-                $rootScope.messages[$scope.babyProfile.kidId] = data.slice().reverse(); //turn the order from top to bottom
+                $rootScope.messages[$scope.babyProfile.kidId] = (data.slice() ? data.slice().reverse() : []); //turn the order from top to bottom
                 $ionicScrollDelegate.scrollBottom();
             } else {
                 $ionicLoading.hide();
@@ -43,7 +74,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             //message received
             messagesService.subscribe("/topic/toparent." + Config.appId() + "." + $scope.babyProfile.kidId + ".received", function (message) {
                 console.log(message);
-                console.log(message);
                 if (message.body && messagesService.getByValue($rootScope.messages[$scope.babyProfile.kidId], message.body)) {
                     messagesService.getByValue($rootScope.messages[$scope.babyProfile.kidId], message.body).received = true;
 
@@ -51,16 +81,20 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             });
             //            user is typing
             messagesService.subscribe("/topic/toparent." + Config.appId() + "." + $scope.babyProfile.kidId + ".typing", function (message) {
-                var parsed = JSON.parse(message.body);
-                if (parsed.username == $scope.username) return;
-
-                for (var index in $scope.participants) {
-                    var participant = $scope.participants[index];
-
-                    if (participant.username == parsed.username) {
-                        $scope.participants[index].typing = parsed.typing;
-                    }
+                $scope.userAction = JSON.parse(message.body);
+                $ionicScrollDelegate.resize();
+                if ($scope.isBottom()) {
+                    $ionicScrollDelegate.scrollBottom();
                 }
+                //                if (parsed.username == $scope.username) return;
+                //
+                //                for (var index in $scope.participants) {
+                //                    var participant = $scope.participants[index];
+                //
+                //                    if (participant.username == parsed.username) {
+                //                        $scope.participants[index].typing = parsed.typing;
+                //                    }
+                //                }
             });
 
 
@@ -85,7 +119,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                         $rootScope.messages[chatMessage.content.kidId].push(newMessage);
 
                         messagesService.receivedMessage(chatMessage.content.schoolId, chatMessage.content.kidId, chatMessage.content.messageId);
-                        messagesService.seenMessage(chatMessage.content.schoolId, chatMessage.content.kidId, chatMessage.content.messageId);
+                        if (!isBackground()) {
+                            messagesService.seenMessage(chatMessage.content.schoolId, chatMessage.content.kidId, chatMessage.content.messageId);
+                        }
 
                     }
 
@@ -99,6 +135,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
         });
     }
+    $scope.isBottom = function () {
+
+        var currentTop = $ionicScrollDelegate.$getByHandle('handler').getScrollPosition().top;
+        var maxScrollableDistanceFromTop = $ionicScrollDelegate.$getByHandle('handler').getScrollView().__maxScrollTop;
+
+        if (currentTop >= maxScrollableDistanceFromTop) {
+            return true;
+        }
+        return false;
+    };
     $scope.isMe = function (id) {
         if (id == IS_PARENT) {
             return true;
@@ -168,7 +214,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         if (text != null && text != '') {
             //create message
 
-
+            $scope.stopTyping();
             $ionicLoading.show();
             messagesService.sendMessage($scope.babyProfile.schoolId, $scope.babyProfile.kidId, text).then(
                 function (msg) {
@@ -187,6 +233,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         $ionicScrollDelegate.scrollBottom();
         $scope.new_message = '';
     };
+
+
     $scope.isANewDate = function (indexOfMessage) {
         if (indexOfMessage == 0) {
             return true;

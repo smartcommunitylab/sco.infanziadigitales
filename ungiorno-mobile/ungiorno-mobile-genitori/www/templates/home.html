@@ -4,11 +4,13 @@
         <!--        {{date | date:'EEEE, d MMMM yyyy'}}-->
         {{date | date:'EEEE, d MMMM yyyy'}}
     </ion-nav-title>
-    <ion-nav-buttons side="right">
-        <button class="button" ng-click="refresh()">
-            <i class="icon ion-loop"></i>
-        </button>
-    </ion-nav-buttons>
+<!--
+<ion-nav-buttons side="right">
+    <button class="button" ng-click="refresh()">
+        <i class="icon ion-loop"></i>
+    </button>
+</ion-nav-buttons>
+-->
     <ion-content has-header="true" scroll="false">
         <ion-scroll class="home-area">
             <div ng-repeat="element in elements track by $index" class="list">

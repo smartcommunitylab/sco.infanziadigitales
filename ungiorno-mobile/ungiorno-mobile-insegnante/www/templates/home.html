@@ -1,8 +1,9 @@
 <ion-view id="home" ng-init="initialize()" title="{{teacherName}} - {{title}}">
     <ion-nav-buttons side="right">
-<button class="button" ng-if="!viewClose()" ng-click="refreshHome()">
-    <i class="icon ion-loop action-icon"></i>
-</button>        <!--
+        <button class="button" ng-if="!viewClose()" ng-click="refreshHome()">
+            <i class="icon ion-loop action-icon"></i>
+        </button>
+        <!--
         <button class="button" ng-if="!viewClose()" ng-click="openNotes()">
             <i class="icon ion-document-text action-icon "></i>
         </button>
@@ -12,6 +13,7 @@
         <button class="button" ng-if="viewClose()" ng-click="closeNotesAndComm()">{{'close' | translate | uppercase}}</button>
         <button class="button" ng-if="viewClose() && communicationExpanded " ng-click="saveNotesAndComm()">{{'save' | translate | uppercase}}</button>
 -->
+        <button class="button" ng-if="viewClose() && communicationExpanded " ng-click="saveNotesAndComm()">{{'save' | translate | uppercase}}</button>
 
     </ion-nav-buttons>
     <!--
@@ -21,63 +23,76 @@
 -->
     <ion-content has-header="true">
         <div class="row section-row home-container">
-            <div class="col section-row" ng-class="{'sections-displayer-short': noteExpanded || communicationExpanded, 'sections-displayer-full': !(noteExpanded || communicationExpanded)}">
-                <div class="row section-row">
-                    <div class="tabs-striped tabs-top tabs-background-dark tabs-color-light">
-                        <div class="tabs section-tabs">
-                            <a class="tab-item section-tab" ng-repeat="section in sections track by $index" class="col" ng-click="changeSection($index)" ng-class="{'active' :  (isThisSection($index))}"> {{section.sectionName}} </a>
-                            <a class="tab-item section-tab" class="col" ng-click="changeSection('all')" ng-class="{'active' :  (isThisSection('all'))}">  {{'all_section' | translate}} </a>
+            <!--            <div class="col section-row" ng-class="{'sections-displayer-short': noteExpanded || communicationExpanded, 'sections-displayer-full': !(noteExpanded || communicationExpanded)}">-->
+            <div class="col section-row sections-displayer-full">
+                <div class=" row section-row ">
+                    <div class="tabs-striped tabs-top tabs-background-dark tabs-color-light ">
+                        <div class="tabs section-tabs ">
+                            <a class="tab-item section-tab " ng-repeat="section in sections track by $index " class="col " ng-click="changeSection($index) " ng-class="{ 'active' : (isThisSection($index))} "> {{section.sectionName}} </a>
+                            <a class="tab-item section-tab " class="col " ng-click="changeSection( 'all') " ng-class="{ 'active' : (isThisSection( 'all'))} ">  {{'all_section' | translate}} </a>
                         </div>
                     </div>
                 </div>
-                <div class="row home-section-space">
-                    <div class="col">
-                        <div class="sectionPeriod" ng-click="changeSectionPeriod('anticipo')">
-                            <svg ng-class="{'sectionBabyIndicator-now':isNow('anticipo'),'sectionBabyIndicator-notnow':!isNow('anticipo')}" id="svg" viewbox="0 0 100 100">
-                                <circle cx="50" cy="50" r="45" fill="{{colors['anticipo']}}" />
-                                <path fill="none" stroke-linecap="round" stroke-width="5" stroke="#bd3e4d" stroke-dasharray="{{getLineStroke(availableChildren['anticipo'],totalChildrenNumber['anticipo'])}}" d="M50 10
-           a 40 40 0 0 1 0 80
-           a 40 40 0 0 1 0 -80" />
-                                <text x="50" y="50" text-anchor="middle" dy="7" font-size="20">{{availableChildren['anticipo']}} su {{totalChildrenNumber['anticipo']}}</text>
+                <div class="row home-section-space " ng-if="!communicationExpanded ">
+                    <div class="col ">
+                        <div class="sectionPeriod " ng-click="changeSectionPeriod( 'anticipo') ">
+                            <svg ng-class="{ 'sectionBabyIndicator-now':isNow( 'anticipo'), 'sectionBabyIndicator-notnow':!isNow( 'anticipo')} " id="svg " viewbox="0 0 100 100 ">
+                                <circle cx="50 " cy="50 " r="45 " fill="{{colors[ 'anticipo']}} " />
+                                <path fill="none " stroke-linecap="round " stroke-width="5 " stroke="#bd3e4d " stroke-dasharray="{{getLineStroke(availableChildren[ 'anticipo'],totalChildrenNumber[ 'anticipo'])}} " d="M50 10 a 40 40 0 0 1 0 80 a 40 40 0 0 1 0 -80 " />
+                                <text x="50 " y="50 " text-anchor="middle " dy="7 " font-size="20 ">{{availableChildren['anticipo']}} su {{totalChildrenNumber['anticipo']}}</text>
                             </svg>
                         </div>
-                        <div class="section-text">
+                        <div class="section-text ">
                             {{'home_anticipo' | translate}}
                         </div>
                     </div>
-                    <div class="col">
-                        <div class="sectionPeriod" ng-click="changeSectionPeriod('mensa')">
+                    <div class="col ">
+                        <div class="sectionPeriod " ng-click="changeSectionPeriod( 'mensa') ">
 
-                            <svg ng-class="{'sectionBabyIndicator-now':isNow('mensa'),'sectionBabyIndicator-notnow':!isNow('mensa')}" id="svg" viewbox="0 0 100 100">
-                                <circle cx="50" cy="50" r="45" fill="{{colors['mensa']}}" />
-                                <path fill="none" stroke-linecap="round" stroke-width="5" stroke="#bd3e4d" stroke-dasharray="{{getLineStroke(availableChildren['mensa'],totalChildrenNumber['mensa'])}}" d="M50 10
-           a 40 40 0 0 1 0 80
-           a 40 40 0 0 1 0 -80" />
-                                <text x="50" y="50" text-anchor="middle" dy="7" font-size="20">{{availableChildren['mensa']}} su {{totalChildrenNumber['mensa']}}</text>
+                            <svg ng-class="{ 'sectionBabyIndicator-now':isNow( 'mensa'), 'sectionBabyIndicator-notnow':!isNow( 'mensa')} " id="svg " viewbox="0 0 100 100 ">
+                                <circle cx="50 " cy="50 " r="45 " fill="{{colors[ 'mensa']}} " />
+                                <path fill="none " stroke-linecap="round " stroke-width="5 " stroke="#bd3e4d " stroke-dasharray="{{getLineStroke(availableChildren[ 'mensa'],totalChildrenNumber[ 'mensa'])}} " d="M50 10 a 40 40 0 0 1 0 80 a 40 40 0 0 1 0 -80 " />
+                                <text x="50 " y="50 " text-anchor="middle " dy="7 " font-size="20 ">{{availableChildren['mensa']}} su {{totalChildrenNumber['mensa']}}</text>
                             </svg>
                         </div>
-                        <div class="section-text">
+                        <div class="section-text ">
                             {{'home_orario_normale' | translate}}
                         </div>
                     </div>
-                    <div class="col">
-                        <div ng-class="{'sectionBabyIndicator-now':isNow('posticipo'),'sectionBabyIndicator-notnow':!isNow('posticipo')}" ng-click="changeSectionPeriod('posticipo')">
-                            <svg class="sectionBabyIndicator" id="svg" viewbox="0 0 100 100">
-                                <circle cx="50" cy="50" r="45" fill="{{colors['posticipo']}}" />
-                                <path fill="none" stroke-linecap="round" stroke-width="5" stroke="#bd3e4d" stroke-dasharray="{{getLineStroke(availableChildren['posticipo'],totalChildrenNumber['posticipo'])}}" d="M50 10
-           a 40 40 0 0 1 0 80
-           a 40 40 0 0 1 0 -80" />
-                                <text x="50" y="50" text-anchor="middle" dy="7" font-size="20">{{availableChildren['posticipo']}} su {{totalChildrenNumber['posticipo']}}</text>
+                    <div class="col ">
+                        <div ng-class="{ 'sectionBabyIndicator-now':isNow( 'posticipo'), 'sectionBabyIndicator-notnow':!isNow( 'posticipo')} " ng-click="changeSectionPeriod( 'posticipo') ">
+                            <svg class="sectionBabyIndicator " id="svg " viewbox="0 0 100 100 ">
+                                <circle cx="50 " cy="50 " r="45 " fill="{{colors[ 'posticipo']}} " />
+                                <path fill="none " stroke-linecap="round " stroke-width="5 " stroke="#bd3e4d " stroke-dasharray="{{getLineStroke(availableChildren[ 'posticipo'],totalChildrenNumber[ 'posticipo'])}} " d="M50 10 a 40 40 0 0 1 0 80 a 40 40 0 0 1 0 -80 " />
+                                <text x="50 " y="50 " text-anchor="middle " dy="7 " font-size="20 ">{{availableChildren['posticipo']}} su {{totalChildrenNumber['posticipo']}}</text>
                             </svg>
                         </div>
-                        <div class="section-text">
+                        <div class="section-text ">
                             {{'home_posticipo' | translate}}
                         </div>
                         <!--                <div section></div>-->
                     </div>
                 </div>
-                <div class="home-separator"></div>
-                <div class="section-text" ng-if="communicationExpanded">
+
+                <div class="home-separator "></div>
+                <div class="home-communication-description " ng-if="communicationExpanded ">
+                    <div class="row">
+                        <div class="col">
+                            <div class="comm-creation-date">{{'communication_of' | translate}} {{data.creationDate | date}}</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <a class="communication-text">{{data.description}}</a>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            {{'deadline' | translate}}: {{data.dateToCheck | date}}</div>
+                    </div>
+                </div>
+                <div class="section-text " ng-if="communicationExpanded ">
                     {{'home_scadenze' | translate}}
                 </div>
                 <div class=" children-home " ng-repeat="child in childrenProfiles[selectedPeriod] track by $index " ng-click="detailOrCommunication(child) ">
@@ -85,7 +100,7 @@
                     <div class="badge-msg " ng-if="child.calNotes && !communicationExpanded "><i class="icon center icon-message ion-document-text "></i>
                     </div>
 -->
-                    <div class="badge-msg" ng-if="numberMessageUnread[child.kidId]>0"><i class="icon center icon-message ion-document-text "></i>
+                    <div class="badge-msg " ng-if="numberMessageUnread[child.kidId]>0"><i class="icon center icon-message ion-document-text "></i>
                     </div>
                     <img ng-src="{{getChildImage(child)}} " ng-class="{ 'img-assente':child.exitTime==null || (child.exitTime < getTime(selectedPeriod)), 'img-presente':child.exitTime !=null, 'img-not-active':!child.active, 'img-communication':communicationExpanded, 'delivered':(!getChildrenDeliveryByID(child.kidId) && communicationExpanded) } ">
 

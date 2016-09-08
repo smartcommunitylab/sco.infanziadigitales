@@ -559,6 +559,16 @@ p {
     margin: auto;
 }
 
+#home .home-communication-description {
+    margin: 10px;
+    /* border: 1px; */
+    border-style: solid;
+    border-width: 4px;
+    /* text-align: center; */
+    border-color: lightgray;
+    padding: 6px;
+}
+
 .home-separator {
     margin-left: 20px;
     margin-right: 20px;
@@ -1225,6 +1235,7 @@ select {
 
 .communication.card {
     padding: 18px;
+    position: relative;
 }
 
 .communication-selected {
@@ -1419,7 +1430,7 @@ ion-content .scroll {
 }
 
 .sections-displayer-short {
-    max-width: 75%;
+    /*    max-width: 75%;*/
     transition: max-width ease 200ms;
 }
 
@@ -1760,7 +1771,57 @@ ion-content .scroll {
     padding-bottom: 4px;
 }
 
-.radio-home .item-content {
+#communications .buttons-communications {
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    -moz-align-items: center;
+    align-items: center;
+    position: absolute;
+    top: 16px;
+    right: 15px;
+    min-width: 34px;
+    min-height: 34px;
+    font-size: 18px;
+    line-height: 32px;
+}
+
+#communications .comm-creation-date {
+    color: darkgrey;
+    padding-bottom: 10px;
+}
+
+#communications ion-list .item {
+    padding: 0 !important;
+    margin-bottom: 0 !important;
+    background-color: white;
+    color: black;
+}
+
+#communications ion-list .item-content {
+    background-color: white !important;
+    color: black;
+}
+
+
+/* override radio button display with custom icon for both states */
+
+#communications ion-list .item-radio input ~ .radio-icon {
+    visibility: visible !important;
+}
+
+#communications ion-list .item-radio > .radio-icon:before {
+    content: "\f3a6" !important;
+    /*deselected - Ionic class = ion-android-radio-button-off */
+}
+
+#communications ion-list .item-radio > input[type=radio]:checked ~ .radio-icon:before {
+    content: "\f3a7" !important;
+    /*selected Ionic class = ion-android-radio-button-on */
+}
+
+#communications ion-list .radio-home .item-content {
     padding-bottom: 0px!important;
 }
 

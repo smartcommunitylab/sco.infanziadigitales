@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home', [])
 
-.controller('HomeCtrl', function ($scope, $location, dataServerService, profileService, babyConfigurationService, $filter, $state, Toast, $ionicModal, $ionicLoading, moment, teachersService, sectionService, communicationService, Config, $ionicSideMenuDelegate, $ionicPopup, $rootScope, loginService, pushNotificationService) {
+.controller('HomeCtrl', function ($scope, $location, dataServerService, profileService, babyConfigurationService, $filter, $state, Toast, $ionicModal, $ionicLoading, moment, teachersService, sectionService, communicationService, Config, $ionicSideMenuDelegate, $ionicPopup, $rootScope, loginService, pushNotificationService, $ionicHistory) {
     $scope.sections = null;
     $scope.section = null;
     $scope.childrenConfigurations = [];
@@ -18,6 +18,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
     $scope.schoolProfile = null;
     $scope.numberOfChildren = 0;
     $scope.communications = [];
+    // $scope.communicationTocheck = {};
+
     $scope.childrenCommunicationDelivery = null;
     $scope.selectedNote = false;
     $scope.data = {
@@ -38,7 +40,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
             $scope.openCommunications();
             if (communicationService.getCommunication()) {
                 $scope.data = {
-                    communication: communicationService.getCommunication().communicationId
+                    communication: communicationService.getCommunication().communicationId,
+                    description: communicationService.getCommunication().description,
+                    dateToCheck: new Date(communicationService.getCommunication().dateToCheck),
+                    creationDate: new Date(communicationService.getCommunication().creationDate)
                 }
             };
             $scope.childrenCommunicationDelivery = communicationService.getCommunication().children;
@@ -101,7 +106,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
         communication.children = $scope.childrenCommunicationDelivery;
         dataServerService.modifyCommunication($scope.schoolProfile.schoolId, communicationService.getCommunication().coomunicationId, communication).then(function (data) {
             Toast.show($filter('translate')('communication_modified'), 'short', 'bottom');
-            communicationService.setToCheck(false);
+            communicationService.modifyCommunication(communication);
+            $state.go('app.communications').then(function () {
+                communicationService.setToCheck(false);
+            });
         }, function (data) {
             Toast.show($filter('translate')('communication_not_modified'), 'short', 'bottom');
             communicationService.setToCheck(false);

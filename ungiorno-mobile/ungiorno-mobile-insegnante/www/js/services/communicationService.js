@@ -45,6 +45,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.communi
         }
         //selectedCommunication = communication;
     }
+    communicationService.modifyCommunication = function (communication) {
+        //get the new communication by id
+        for (var i = 0; i < communications.length; i++) {
+            if (communications[i].communicationId == communication.communicationId) {
+                communications[i] = communication;
+            }
+        }
+        //selectedCommunication = communication;
+    }
     communicationService.getCommunication = function () {
         return selectedCommunication;
     }

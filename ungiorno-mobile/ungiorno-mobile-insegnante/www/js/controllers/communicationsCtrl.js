@@ -1,13 +1,13 @@
 angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.communications', [])
 
-.controller('communicationsCtrl', function ($scope, dataServerService, $ionicPopup, communicationService, profileService, Toast, $filter, $ionicLoading) {
+.controller('communicationsCtrl', function ($scope, dataServerService, $ionicPopup, communicationService, profileService, Toast, $filter, $ionicLoading, $compile) {
 
     var selectedCommunicationIndex = -1;
 
     var MODE_NORMAL_LIST = "normal";
     var MODE_EDIT = "edit";
     var MODE_NEW = "new";
-
+    // $scope.editedCommunication
     var currentMode = MODE_NORMAL_LIST;
     $scope.datepickerObject = {};
     $scope.datepickerObject.inputDate = new Date();
@@ -34,6 +34,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
         $filter('translate')('popup_datepicker_fri'),
         $filter('translate')('popup_datepicker_sat')
     ];
+
 
     function setDateWidget() {
 
@@ -76,20 +77,20 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
     };
     setDateWidget();
     $scope.communicationTypes = [
-//        {
-//            typeId: "0",
-//            name: "Generica",
-//            checked: true
-//        }, {
-//            typeId: "1",
-//            name: "Consegna Documenti",
-//            checked: false
-//        }
         {
             typeId: "0",
-            name: "Aggiungi scadenza",
+            name: "Senza richiesta dei genitori",
             checked: false
+        }, {
+            typeId: "1",
+            name: "Con richiesta dei genitori",
+            checked: true
         }
+//        {
+//            typeId: "0",
+//            name: "Aggiungi scadenza",
+//            checked: false
+//        }
     ];
     $scope.delivery = false;
     var sortCommunications = function () {
@@ -125,14 +126,55 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
         return currentMode === mode;
     }
 
-    $scope.editCommunicationMode = function () {
+    $scope.editCommunicationMode = function (index) {
+        var tmp = $scope.communications[index];
+        //"57b5b9d0e4b0cfd3937cd298"
+        //appId
+        //:
+        //"trento"
+        //children
+        //:
+        //Array[0]
+        //communicationId
+        //:
+        //"57b5b9d0e4b0cfd3937cd298"
+        //creationDate
+        //:
+        //1471527376410
+        //dateToCheck
+        //:
+        //1471527200292
+        //description
+        //:
+        //"Tr"
+        //doCheck
+        //:
+        //false
+        //schoolId
+        //:
+        //"scuola2"
+        $scope.editedCommunication = {
+            appId: tmp.appId,
+            children: tmp.children,
+            communicationId: tmp.communicationId,
+            schoolId: tmp.schoolId,
+            dateToCheck: new Date(tmp.dateToCheck),
+            creationDate: new Date(),
+            description: tmp.description,
+            doCheck: tmp.doCheck,
+            children: []
+        };
         currentMode = MODE_EDIT;
+        selectedCommunicationIndex = index;
 
-        var tmp = $scope.communications[selectedCommunicationIndex];
+        $scope.delivery = $scope.editedCommunication.doCheck;
 
-        $scope.editedCommunication = JSON.parse(JSON.stringify(tmp));
-        $scope.editedCommunication.dateToCheck = new Date(tmp.dateToCheck);
-        //$scope.editedCommunication.creationDate = new Date(tmp.creationDate);
+        if (document.getElementById("communication-datepicker-" + index)) {
+            //document.getElementById("communication-datepicker").innerHTML = "<div ng-include=\'communicationDatepicker.html\'></div>";
+            document.getElementById("communication-datepicker-" + index).innerHTML = " <ion-list class=\"padlist\">    <ion-radio type=\"radio\" ng-model=\"editedCommunication.doCheck\" ng-value=\"communicationTypes[0].checked\" on-tap=\"selectType(communicationTypes[0])\"> {{communicationTypes[0].name}}    </ion-radio>    <br/>    <ion-radio type=\"radio\" ng-model=\"editedCommunication.doCheck\" ng-value=\"communicationTypes[1].checked\" on-tap=\"selectType(communicationTypes[1])\"> {{communicationTypes[1].name}}    </ion-radio>    <br/></ion-list><div ng-show = \"delivery\">    <a class=\" input-label newComItems communication-text\">{{ 'deadline_time' | translate}} : </a>    <ionic-datepicker input-obj=\"datepickerObjectPopup\">        <span class=\"input-label date-label\">{{editedCommunication.dateToCheck | date:'dd/MM/yyyy'}}</span>        <button ng-hide=\"true\"></button>    </ionic-datepicker></div>             <div class=\"row\">                <div class=\"col\">                    <input  ng-model=\"editedCommunication.description\" type=\"text\" id=\"modifyDescription\" value=\"{{editedCommunication.description}}\"> </div>            </div>";
+            $compile(document.getElementById('communication-datepicker-' + index))($scope);
+        }
+
     }
 
     $scope.isCommunicationSelected = function (index) {
@@ -157,34 +199,49 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
         };
         currentMode = MODE_NEW;
     }
-    $scope.discardCommunication = function () {
+    var setNormalMode = function () {
         currentMode = MODE_NORMAL_LIST;
+        if (document.getElementById("communication-datepicker-" + selectedCommunicationIndex)) {
+            //document.getElementById("communication-datepicker").innerHTML = "<div ng-include=\'communicationDatepicker.html\'></div>";
+            document.getElementById("communication-datepicker-" + selectedCommunicationIndex).innerHTML = "";
+            $compile(document.getElementById('communication-datepicker-' + selectedCommunicationIndex))($scope);
+        }
     }
+    $scope.discardCommunication = function () {
+            setNormalMode();
+            //            currentMode = MODE_NORMAL_LIST;
+            //            if (document.getElementById("communication-datepicker-" + selectedCommunicationIndex)) {
+            //                //document.getElementById("communication-datepicker").innerHTML = "<div ng-include=\'communicationDatepicker.html\'></div>";
+            //                document.getElementById("communication-datepicker-" + selectedCommunicationIndex).innerHTML = "";
+            //                $compile(document.getElementById('communication-datepicker-' + selectedCommunicationIndex))($scope);
+            //            }
 
-    $scope.selectType = function (newType) {
-        //        for (var i = 0; i < $scope.communicationTypes.length; i++) {
-        //            $scope.communicationTypes[i].checked = ($scope.communicationTypes[i].typeId === newType.typeId);
-        //        }
-        //        if ($scope.communicationTypes[0].checked) {
-        //            $scope.delivery = true;
-        //            $scope.newCommunication.doCheck = true;
-        //        } else {
-        //            $scope.delivery = false;
-        //            $scope.newCommunication.doCheck = false;
-        //        }
-
-        if (newType.checked) {
-            $scope.delivery = true;
-            $scope.newCommunication.doCheck = true;
-        } else {
-            $scope.delivery = false;
-            $scope.newCommunication.doCheck = false;
 
         }
+        //    $scope.newCommunicationCheck = {
+        //        dochek: false;
+        //    }
+    $scope.selectType = function (newType) {
+
+
+        if (newType.typeId === "0") {
+            $scope.delivery = false;
+            // $scope.newCommunication.doCheck = true;
+        } else {
+            $scope.delivery = true;
+            //            document.getElementById("communication-datepicker-" + selectedCommunicationIndex).innerHTML = " <div ng-show = \"delivery\">    <a class=\" input-label newComItems communication-text\">{{ 'deadline_time' | translate}} : </a>    <ionic-datepicker input-obj=\"datepickerObjectPopup\">        <span class=\"input-label date-label\">{{editedCommunication.dateToCheck | date:'dd/MM/yyyy'}}</span>        <button ng-hide=\"true\"></button>    </ionic-datepicker></div> ";
+            //            $compile(document.getElementById('communication-datepicker-' + selectedCommunicationIndex))($scope);
+            if (document.getElementById("communication-datepicker-" + selectedCommunicationIndex)) {
+                //document.getElementById("communication-datepicker").innerHTML = "<div ng-include=\'communicationDatepicker.html\'></div>";
+                document.getElementById("communication-datepicker-" + selectedCommunicationIndex).innerHTML = " <ion-list class=\"padlist\">    <ion-radio type=\"radio\" ng-model=\"editedCommunication.doCheck\" ng-value=\"communicationTypes[0].checked\" on-tap=\"selectType(communicationTypes[0])\"> {{communicationTypes[0].name}}    </ion-radio>    <br/>    <ion-radio type=\"radio\" ng-model=\"editedCommunication.doCheck\" ng-value=\"communicationTypes[1].checked\" on-tap=\"selectType(communicationTypes[1])\"> {{communicationTypes[1].name}}    </ion-radio>    <br/></ion-list><div ng-show = \"delivery\">    <a class=\" input-label newComItems communication-text\">{{ 'deadline_time' | translate}} : </a>    <ionic-datepicker input-obj=\"datepickerObjectPopup\">        <span class=\"input-label date-label\">{{editedCommunication.dateToCheck | date:'dd/MM/yyyy'}}</span>        <button ng-hide=\"true\"></button>    </ionic-datepicker></div>             <div class=\"row\">                <div class=\"col\">                    <input  ng-model=\"editedCommunication.description\" type=\"text\" id=\"modifyDescription\" value=\"{{editedCommunication.description}}\"> </div>            </div>";
+                $compile(document.getElementById('communication-datepicker-' + selectedCommunicationIndex))($scope);
+            }
+        }
+
 
     }
 
-    $scope.deleteCommunication = function () {
+    $scope.deleteCommunication = function (index) {
 
         var communicationFail = function () {
             var communicationFailPopup = $ionicPopup.show({
@@ -208,8 +265,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
             });
         }
         var deleteFromServer = function () {
-            dataServerService.deleteCommunication(profileService.getSchoolProfile().schoolId, $scope.communications[selectedCommunicationIndex].communicationId).then(function (data) {
-                $scope.communications.splice(selectedCommunicationIndex, 1);
+            dataServerService.deleteCommunication(profileService.getSchoolProfile().schoolId, $scope.communications[index].communicationId).then(function (data) {
+                //            dataServerService.deleteCommunication(profileService.getSchoolProfile().schoolId, $scope.communications[selectedCommunicationIndex].communicationId).then(function (data) {
+                $scope.communications.splice(index, 1);
                 selectedCommunicationIndex = -1;
             }, function (data) {
                 communicationFail();
@@ -291,7 +349,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
             }
             updateCurrentCommunicationList(data);
 
-            currentMode = MODE_NORMAL_LIST;
+            //currentMode = MODE_NORMAL_LIST;
+            setNormalMode();
             if (selectedCommunicationIndex >= 0) {
                 selectedCommunicationIndex = -1;
             }
@@ -326,8 +385,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
 
     }
 
+    $scope.rende = function (index) {
 
-
+    }
+    $scope.$watch("editedCommunication.doCheck", function (newvalue, oldvalue) {
+        console.log(JSON.stringify(newvalue));
+        console.log(JSON.stringify(oldvalue));
+    });
     $scope.homeRedirect = function (index) {
         selectedCommunicationIndex = -1;
         communicationService.setCommunication($scope.communications[index].communicationId);

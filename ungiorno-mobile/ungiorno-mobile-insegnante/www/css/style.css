@@ -1729,8 +1729,27 @@ ion-content .scroll {
     color: gray;
 }
 
+
+/*
 .delivered {
     opacity: 0.2;
+}
+*/
+
+#home .children-home {
+    position: relative;
+}
+
+#home .ribbon {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    background-color: green;
+    z-index: 9;
 }
 
 .btn_disabled {
@@ -1785,6 +1804,11 @@ ion-content .scroll {
     min-height: 34px;
     font-size: 18px;
     line-height: 32px;
+}
+
+#communications .communication-radio {
+    border-bottom: 0px!important;
+    border-top: 0px!important;
 }
 
 #communications .comm-creation-date {

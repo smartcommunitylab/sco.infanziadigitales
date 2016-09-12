@@ -101,6 +101,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
         $scope.teachersNote = true;
         $scope.parentsNote = false;
         $scope.newNoteExpandend = false;
+        $ionicLoading.show();
         //save the new list
         var communication = communicationService.getCommunication();
         communication.children = $scope.childrenCommunicationDelivery;
@@ -108,6 +109,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
             Toast.show($filter('translate')('communication_modified'), 'short', 'bottom');
             communicationService.modifyCommunication(communication);
             $state.go('app.communications').then(function () {
+                $ionicLoading.hide();
                 communicationService.setToCheck(false);
             });
         }, function (data) {

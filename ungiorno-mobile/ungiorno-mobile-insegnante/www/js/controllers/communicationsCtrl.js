@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.communications', [])
 
-.controller('communicationsCtrl', function ($scope, dataServerService, $ionicPopup, communicationService, profileService, Toast, $filter, $ionicLoading, $compile) {
+.controller('communicationsCtrl', function ($scope, dataServerService, $ionicPopup, communicationService, profileService, Toast, $filter, $ionicLoading, $compile, $state) {
 
     var selectedCommunicationIndex = -1;
 
@@ -396,6 +396,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
         selectedCommunicationIndex = -1;
         communicationService.setCommunication($scope.communications[index].communicationId);
         communicationService.setToCheck(true);
-        window.location.assign('#/app/home');
+        $state.go('app.home');
+        // window.location.assign('#/app/home');
     }
 });

@@ -4,16 +4,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.getCommunications = function (schoolId, kidId) {
         $ionicLoading.show();
         communicationsService.getCommunications(schoolId, kidId).then(function (data) {
-                $scope.communications = data;
-                for (var i = 0; i < $scope.communications.length; i++) {
-                    if ($scope.communications[i].doCheck) {
+                $rootScope.communications = data;
+                for (var i = 0; i < $rootScope.communications.length; i++) {
+                    if ($rootScope.communications[i].doCheck) {
                         //check if present and set done and set action
-                        if (communicationsService.getCommunictionDone($scope.communications[i]._id)) {
-                            $scope.communications[i].done = true;
-                            $scope.communications[i].action = $filter('translate')('communication_done');
+                        if (communicationsService.getCommunictionDone($rootScope.communications[i]._id)) {
+                            $rootScope.communications[i].done = true;
+                            $rootScope.communications[i].action = $filter('translate')('communication_done');
                         } else {
-                            $scope.communications[i].done = false;
-                            $scope.communications[i].action = $filter('translate')('communication_undone');
+                            $rootScope.communications[i].done = false;
+                            $rootScope.communications[i].action = $filter('translate')('communication_undone');
                         }
                     }
                 }

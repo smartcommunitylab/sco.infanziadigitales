@@ -414,6 +414,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
             }
         }).state('app.communications', {
             url: '/communications',
+            cache: false,
             views: {
                 'menuContent': {
                     templateUrl: 'templates/communications.html',

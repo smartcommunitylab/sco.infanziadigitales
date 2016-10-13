@@ -603,7 +603,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         communication_undone: 'DA FARE',
         lbl_today: 'OGGI',
         lbl_yesterday: 'IERI',
-        retire_popup_absent_close: 'CHIUDI'
+        retire_popup_absent_close: 'CHIUDI',
+        input_chat_placeholder: 'Scrivi messaggio'
+
 
 
     });
@@ -764,7 +766,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         communication_undone: 'DA FARE',
         lbl_today: 'OGGI',
         lbl_yesterday: 'IERI',
-        send_msg_placeholder: 'Scrivi messaggio',
+        input_chat_placeholder: 'Scrivi messaggio',
         retire_popup_absent_close: 'CHIUDI'
 
     });
@@ -928,13 +930,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         data_updated: 'Dati aggiornati',
         communications_title: "Comunicazioni della scuola",
         messages_title: "Messaggi",
-
         communication_before: 'Da consegnare entro:',
         communication_done: 'FATTO',
         communication_undone: 'DA FARE',
         lbl_today: 'OGGI',
         lbl_yesterday: 'IERI',
-        send_msg_placeholder: 'Scrivi messaggio',
+        input_chat_placeholder: 'Scrivi messaggio',
         retire_popup_absent_close: 'CHIUDI'
 
     });

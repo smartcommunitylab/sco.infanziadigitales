@@ -1709,6 +1709,45 @@ $dark: #444 !default;
 
     width: 0px;
 }
+#chat .input-chat-footer {
+    background-color: #F6F6F6;
+}
+#chat .input-chat-footer::-webkit-input-placeholder {
+    color: gray!important;
+}
+#chat .input-chat-footer:-moz-placeholder {
+    color: gray!important;
+}
+#chat .input-chat-footer:-ms-input-placeholder {
+    /* IE10+ */
+
+    color: gray!important;
+}
+#chat .button-chat-send {
+    color: white;
+    background-color: #5FC3DF;
+}
+#chat input[type=text],
+textarea {
+    border-bottom: none;
+}
+
+/*
+#chat .input-chat-footer::-webkit-input-placeholder {
+    color: red;
+}
+#chat .input-chat-footer:-moz-placeholder {
+
+    color: red;
+}
+#chat .input-chat-footer::-moz-placeholder {
+
+    color: red;
+}
+#chat .input-chat-footer:-ms-input-placeholder {
+    color: red;
+}
+*/
 @keyframes ellipsis {
     to {
         width: 1.25em;

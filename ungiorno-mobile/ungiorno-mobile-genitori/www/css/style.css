@@ -70,6 +70,7 @@ a.item-content {
 .home-area {
     display: grid!important;
     height: 100%!important;
+    padding-top: 20px;
 }
 .home-info {
     background-color: #FFAD00;
@@ -1361,6 +1362,7 @@ select {
 }
 
 /* Login */
+
 /*
 .scroll {
     height: 100% !important

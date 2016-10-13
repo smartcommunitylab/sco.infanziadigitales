@@ -452,9 +452,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         home_entry_to: ' Entra alle ore ',
         home_exit_to: ' ed esce alle ore ',
         go_home_by_bus: ' e torna a casa con il bus.',
-        menu_exit: 'Esci',
+        menu_exit: 'Logout',
         menu_enter: 'Entra',
-        menu_impostazioni: 'Impostazioni',
+        menu_impostazioni: 'Informazioni',
         babysetting_intro: 'Informazioni relative al bambino.',
         babysetting_services: 'Servizi',
         babysetting_hours: 'Orario di uscita:',
@@ -601,7 +601,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         communication_done: 'FATTO',
         communication_undone: 'DA FARE',
         lbl_today: 'OGGI',
-        lbl_yesterday: 'IERI'
+        lbl_yesterday: 'IERI',
+        retire_popup_absent_close: 'CHIUDI'
 
 
     });
@@ -621,9 +622,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         home_entry_to: ' Entra alle ore ',
         home_exit_to: ' ed esce alle ore ',
         go_home_by_bus: ' e torna a casa con il bus.',
-        menu_exit: 'Esci',
+        menu_exit: 'Logout',
         menu_enter: 'Entra',
-        menu_impostazioni: 'Impostazioni',
+        menu_impostazioni: 'Informazioni',
         babysetting_intro: 'Definisci i seguenti dati relativi all\'orario scolastico del bambino.',
         babysetting_services: 'Servizi',
         babysetting_hours: 'Orario di uscita:',
@@ -762,7 +763,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         communication_undone: 'DA FARE',
         lbl_today: 'OGGI',
         lbl_yesterday: 'IERI',
-        send_msg_placeholder: 'Scrivi messaggio'
+        send_msg_placeholder: 'Scrivi messaggio',
+        retire_popup_absent_close: 'CHIUDI'
 
     });
 
@@ -781,9 +783,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         home_entry_to: ' Entra alle ore ',
         home_exit_to: ' ed esce alle ore ',
         go_home_by_bus: ' e torna a casa con il bus.',
-        menu_exit: 'Esci',
+        menu_exit: 'Logout',
         menu_enter: 'Entra',
-        menu_impostazioni: 'Impostazioni',
+        menu_impostazioni: 'Informazioni',
         babysetting_intro: 'Definisci i seguenti dati relativi all\'orario scolastico del bambino.',
         babysetting_services: 'Servizi',
         babysetting_hours: 'Orario di uscita:',
@@ -931,7 +933,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         communication_undone: 'DA FARE',
         lbl_today: 'OGGI',
         lbl_yesterday: 'IERI',
-        send_msg_placeholder: 'Scrivi messaggio'
+        send_msg_placeholder: 'Scrivi messaggio',
+        retire_popup_absent_close: 'CHIUDI'
 
     });
 

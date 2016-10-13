@@ -335,7 +335,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 template: $filter('translate')('retire_popup_toolate_text') + " " + $scope.modifyBefore,
                 buttons: [
                     {
-                        text: $filter('translate')('retire_popup_absent_cancel'),
+                        text: $filter('translate')('retire_popup_absent_close'),
                         type: 'button-positive'
 						}
 					]

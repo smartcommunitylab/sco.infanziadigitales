@@ -1239,8 +1239,7 @@ ul.rating {
     width: inherit;
     height: 50px;
 }
-.home_informations {
-    margin: 10px;
+.communications-main {
     padding-bottom: 10px;
 }
 .ion-input-select,
@@ -1339,15 +1338,19 @@ select {
 .ionic_datepicker_popup .popup-body .year_select:after {
     color: #5FC3DF;
 }
+#communications .communication-content {
+    margin-left: 0px;
+    margin-right: 0px;
+}
 #communications .note-date {
     color: gray!important;
     text-align: right;
 }
 #communications .note-text {
     font-size: 16px;
-    margin-left: 12px;
     padding-top: 10px;
     padding-bottom: 10px;
+    text-align: justify;
 }
 #communications .note-pointer {
     margin-right: 6px;
@@ -1359,6 +1362,11 @@ select {
 #communications .button-communication {
     float: right;
     margin-bottom: 10px;
+    box-shadow: 2px 2px 2px #888888;
+}
+#communication .communication-card {
+    margin-left: 1px;
+    margin-right: 1px;
 }
 
 /* Login */

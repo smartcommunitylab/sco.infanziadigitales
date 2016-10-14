@@ -74,7 +74,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             //message received
             messagesService.subscribe("/topic/toparent." + Config.appId() + "." + $scope.babyProfile.kidId + ".received", function (message) {
                 console.log(message);
-                if (message.body && messagesService.getByValue($rootScope.messages[$scope.babyProfile.kidId], message.body)) {
+                if (message.body && $rootScope.messages && messagesService.getByValue($rootScope.messages[$scope.babyProfile.kidId], message.body)) {
                     messagesService.getByValue($rootScope.messages[$scope.babyProfile.kidId], message.body).received = true;
 
                 }

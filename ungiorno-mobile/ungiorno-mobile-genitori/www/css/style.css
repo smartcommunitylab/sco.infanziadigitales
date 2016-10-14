@@ -1731,6 +1731,10 @@ $dark: #444 !default;
 textarea {
     border-bottom: none;
 }
+#chat .chat-time {
+    color: #A0A0A0;
+    margin-left: 8px;
+}
 
 /*
 #chat .input-chat-footer::-webkit-input-placeholder {

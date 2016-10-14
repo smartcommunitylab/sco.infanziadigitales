@@ -79,18 +79,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
     $scope.communicationTypes = [
         {
             typeId: "0",
-            name: "Senza richiesta dei genitori",
+            name: $filter('translate')('communication_type_without_parents'),
             checked: false
         }, {
             typeId: "1",
-            name: "Con richiesta dei genitori",
+            name: $filter('translate')('communication_type_parents'),
             checked: true
         }
-//        {
-//            typeId: "0",
-//            name: "Aggiungi scadenza",
-//            checked: false
-//        }
     ];
     $scope.delivery = false;
     var sortCommunications = function () {

@@ -3,12 +3,12 @@
         <ion-nav-back-button>
         </ion-nav-back-button>
     </ion-nav-bar>
-    <ion-content has-header="true" class="page-padding">
-        <div class="home_informations">
+    <ion-content has-header="true" class="page-padding communication-content">
+        <div class="communications-main">
 
             <div ng-if="!communications || communications.length == 0">{{'home_no_school_information' | translate}}</div>
             <ul class="list">
-                <li ng-repeat="communication in communications   | orderBy:'-creationDate'" class="card">
+                <li ng-repeat="communication in communications   | orderBy:'-creationDate'" class="card communication-card">
                     <div class="item item-text-wrap">
                         <p class="note-date">{{communication.creationDate | date:'EEEE, d MMMM yyyy'}}</p>
                         <p class="note-text">{{communication.description}}</p>

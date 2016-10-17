@@ -17,6 +17,7 @@ package it.smartcommunitylab.ungiorno.utils;
 
 import it.smartcommunitylab.ungiorno.model.AppInfo;
 import it.smartcommunitylab.ungiorno.model.AuthPerson;
+import it.smartcommunitylab.ungiorno.model.Author;
 import it.smartcommunitylab.ungiorno.model.Communication;
 import it.smartcommunitylab.ungiorno.model.KidProfile;
 import it.smartcommunitylab.ungiorno.model.LoginData;
@@ -99,7 +100,7 @@ public class NotificationManager {
 		communicator.registerUserToPush(signature, appName, permissions.getUserAccessToken());
 	}
 
-	public void sendCommunicationMessage(String appId, String schoolId, Communication message) throws CommunicatorConnectorException, AACException {
+	public void sendCommunicationMessage(String appId, String schoolId, Communication message, boolean isUpdate) throws CommunicatorConnectorException, AACException {
 		Map<String, Object> content = new TreeMap<String, Object>();
 		content.put("type", "communication");
 		content.put("schoolId", schoolId);
@@ -107,7 +108,11 @@ public class NotificationManager {
 		content.put("dateToCheck", message.getDateToCheck());
 		
 		Notification n = prepareMessage(message.getDescription(), content);
-		n.setTitle("Nuova communicazione");
+		if (isUpdate) {
+			n.setTitle("Communicazione modificata");
+		} else {
+			n.setTitle("Nuova comunicazione");
+		}
 
 		String appName = channelName(appSetup.getAppsMap().get(appId).getMessagingAppId(), schoolId, APP_UGAS_COMMS);
 		communicator.sendAppNotification(n, appName, Collections.<String>emptyList(), permissions.getAppToken());
@@ -120,7 +125,7 @@ public class NotificationManager {
 		simpMessagingTemplate.convertAndSend("/topic/toparent."+appId+"."+kidId+"."+status, messageId);
 	}
 	
-	public void sendDirectMessageToParents(String appId, String schoolId, String kidId, String teacherId, String message, String messageId) throws CommunicatorConnectorException, AACException {
+	public void sendDirectMessageToParents(String appId, String schoolId, String kidId, String teacherId, Author author, String message, String messageId) throws CommunicatorConnectorException, AACException {
 		KidProfile kid = storage.getKidProfile(appId, schoolId, kidId);
 		List<String> userIds = new ArrayList<String>();
 		for (AuthPerson p : kid.getPersons()) {
@@ -136,6 +141,9 @@ public class NotificationManager {
 		content.put("type", "chat");
 		content.put("kidId", kidId);
 		content.put("teacherId", teacherId);
+		if (author != null) {
+			content.put("author", author);
+		}
 		content.put("schoolId", schoolId);
 		content.put("messageId", messageId);
 
@@ -147,12 +155,15 @@ public class NotificationManager {
 		simpMessagingTemplate.convertAndSend("/topic/toparent."+appId+"."+kidId, n);
 	}
 	
-	public void sendDirectMessageToSchool(String appId, String schoolId, String kidId, String message, String messageId) throws CommunicatorConnectorException, AACException {
+	public void sendDirectMessageToSchool(String appId, String schoolId, String kidId, Author author, String message, String messageId) throws CommunicatorConnectorException, AACException {
 		Map<String, Object> content = new TreeMap<String, Object>();
 		content.put("type", "chat");
 		content.put("schoolId", schoolId);
 		content.put("kidId", kidId);
 		content.put("messageId", messageId);
+		if (author != null) {
+			content.put("author", author);
+		}
 			
 		Notification n = prepareMessage(message, content);
 		n.setTitle(storage.getKidProfile(appId, schoolId, kidId).getFullName() + ": nuovo messaggio");

@@ -13,6 +13,8 @@ public class ChatMessage extends SchoolObject {
 	private boolean seen;
 	private String text;
 	
+	private Author author;
+	
 	public String getMessageId() {
 		return messageId;
 	}
@@ -61,7 +63,10 @@ public class ChatMessage extends SchoolObject {
 	public void setText(String text) {
 		this.text = text;
 	}
-	
-	
-	
+	public Author getAuthor() {
+		return author;
+	}
+	public void setAuthor(Author author) {
+		this.author = author;
+	}
 }

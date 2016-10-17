@@ -25,6 +25,7 @@ import it.smartcommunitylab.ungiorno.diary.model.DiaryTeacher;
 import it.smartcommunitylab.ungiorno.diary.model.MultimediaEntry;
 import it.smartcommunitylab.ungiorno.model.AppInfo;
 import it.smartcommunitylab.ungiorno.model.AuthPerson;
+import it.smartcommunitylab.ungiorno.model.Author;
 import it.smartcommunitylab.ungiorno.model.BusData;
 import it.smartcommunitylab.ungiorno.model.CalendarItem;
 import it.smartcommunitylab.ungiorno.model.ChatMessage;
@@ -740,9 +741,27 @@ public class RepositoryManager {
 			comm.set_id(ObjectId.get().toString());
 			comm.setCommunicationId(comm.get_id());
 		}
+		if (comm.getAuthor() != null && comm.getAuthor().getId() != null) {
+			Teacher teacher = getTeacher(comm.getAuthor().getId(),comm.getAppId(), comm.getSchoolId());
+			if (teacher != null) {
+				comm.getAuthor().setName(teacher.getTeacherName());
+				comm.getAuthor().setSurname(teacher.getTeacherSurname());
+				comm.getAuthor().setFullname(teacher.getTeacherFullname());
+			}
+		} 
 		comm.setCreationDate(System.currentTimeMillis());
 		template.save(comm);
 		return comm;
+	}
+
+	/**
+	 * @param comm
+	 * @return
+	 */
+	public Communication getCommunicationById(String appId, String schoolId, String id) {
+		Query q = schoolQuery(appId, schoolId);
+		q.addCriteria(new Criteria("communicationId").is(id));
+		return template.findOne(q, Communication.class);
 	}
 
 	/**
@@ -1496,5 +1515,41 @@ public class RepositoryManager {
 		}
 		
 		return result;
+	}
+
+	/**
+	 * @param appId
+	 * @param schoolId
+	 * @param teacherId
+	 * @return
+	 */
+	public Author getTeacherAsAuthor(String appId, String schoolId, String teacherId) {
+		Teacher teacher = getTeacher(teacherId, appId, schoolId);
+		Author a = null;
+		if (teacher != null) {
+			a = new Author();
+			a.setName(teacher.getTeacherName());
+			a.setSurname(teacher.getTeacherSurname());
+			a.setFullname(teacher.getTeacherFullname());
+		}
+		return a;
+	}
+
+	/**
+	 * @param appId
+	 * @param schoolId
+	 * @param userId
+	 * @return
+	 */
+	public Author getTeacherAsParent(String appId, String schoolId, String userId) {
+		Parent p = getParent(userId, appId, schoolId);
+		Author a = null;
+		if (p != null) {
+			a = new Author();
+			a.setName(p.getFirstName());
+			a.setSurname(p.getLastName());
+			a.setFullname(p.getFullName());
+		}
+		return a;
 	}
 }

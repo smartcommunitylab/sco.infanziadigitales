@@ -442,7 +442,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         home_mensa: 'Mensa',
         home_calendario: 'Calendario',
         home_comunicazioni: 'Comunicazioni della scuola',
-        home_comunicazioni_unread: 'Comunicazioni non lette: ',
+        home_comunicazioni_unread: 'Nuovi messaggi: ',
         home_messaggi: 'Messaggi',
         home_messaggi_unread: 'Messaggi non letti: ',
         home_contatta: 'Chiama la scuola',

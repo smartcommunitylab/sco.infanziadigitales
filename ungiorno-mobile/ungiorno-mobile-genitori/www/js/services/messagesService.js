@@ -5,6 +5,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.m
     var cacheMessages = [];
     var stompClient;
     var subscriptions = [];
+    var topics = [];
 
     messagesService.getMessages = function (timestamp, numbers, schoolId, kidId) {
         var deferred = $q.defer();
@@ -84,6 +85,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.m
             sub.unsubscribe();
         });
         stompClient.disconnect();
+        topics = [];
+    }
+
+    messagesService.alreadySubscribed = function (topic) {
+        for (var i = 0; i < topics.length; i++) {
+            if (topics[i] === topic) {
+                return true;
+            }
+        }
+        return false;
     }
     messagesService.connect = function (successCallback, errorCallback) {
 
@@ -104,6 +115,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.m
                 callback(message);
             });
         }));
+        topics.push(destination);
     }
     messagesService.send = function (destination, headers, object) {
         stompClient.send(destination, headers, object);

@@ -1059,6 +1059,20 @@ select {
     color: #80D0E6;
 }
 
+#babyprofile .chat-time {
+    color: #A0A0A0;
+    margin-left: 8px;
+    margin-right: 8px;
+}
+
+#babyprofile .parent-label {
+    color: #F8A913!important;
+}
+
+#babyprofile .teacher-label {
+    color: #189BA9!important;
+}
+
 #babyprofile .chat-chose {
     background-color: #BD3E4D;
     margin-bottom: 5px;
@@ -1809,6 +1823,15 @@ ion-content .scroll {
 #communications .communication-radio {
     border-bottom: 0px!important;
     border-top: 0px!important;
+}
+
+#communications ion-list .item-content {
+    left: 50px;
+}
+
+#communications .item-radio .radio-icon {
+    right: auto;
+    left: 0px
 }
 
 #communications .comm-creation-date {

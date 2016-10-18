@@ -112,76 +112,84 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
         messagesService.init(Config.getServerURL() + '/chat');
         messagesService.connect(function (frame) {
 
-            //          messages seen
-            messagesService.subscribe("/topic/toteacher." + Config.appId() + "." + $scope.babyProfile.kidId + ".seen", function (message) {
-                console.log(message);
-                if (message.body && messagesService.getByValue($rootScope.messages[$scope.babyProfile.kidId], message.body)) {
-                    messagesService.getByValue($rootScope.messages[$scope.babyProfile.kidId], message.body).seen = true;
+                //          messages seen
+                if (!messagesService.alreadySubscribed("/topic/toteacher." + Config.appId() + "." + $scope.babyProfile.kidId + ".seen")) {
+                    messagesService.subscribe("/topic/toteacher." + Config.appId() + "." + $scope.babyProfile.kidId + ".seen", function (message) {
+                        console.log(message);
+                        if (message.body && messagesService.getByValue($rootScope.messages[$scope.babyProfile.kidId], message.body)) {
+                            messagesService.getByValue($rootScope.messages[$scope.babyProfile.kidId], message.body).seen = true;
 
-                }
-                //set message to seen
-            });
-            //message received
-            messagesService.subscribe("/topic/toteacher." + Config.appId() + "." + $scope.babyProfile.kidId + ".received", function (message) {
-                console.log(message);
-                console.log(message);
-                if (message.body && messagesService.getByValue($rootScope.messages[$scope.babyProfile.kidId], message.body)) {
-                    messagesService.getByValue($rootScope.messages[$scope.babyProfile.kidId], message.body).received = true;
-
-                }
-            });
-            //            user is typing
-            messagesService.subscribe("/topic/toteacher." + Config.appId() + "." + $scope.babyProfile.kidId + ".typing", function (message) {
-                $scope.userAction = JSON.parse(message.body);
-                $ionicScrollDelegate.resize();
-                if ($scope.isBottom()) {
-                    $ionicScrollDelegate.scrollBottom();
-                }
-                //                if (parsed.username == $scope.username) return;
-                //
-                //                for (var index in $scope.participants) {
-                //                    var participant = $scope.participants[index];
-                //
-                //                    if (participant.username == parsed.username) {
-                //                        $scope.participants[index].typing = parsed.typing;
-                //                    }
-                //                }
-            });
-
-
-            //get new message
-            messagesService.subscribe("/topic/toteacher." + Config.appId() + "." + $scope.babyProfile.kidId, function (message) {
-                console.log(message);
-                if (message.body) {
-                    var chatMessage = JSON.parse(message.body);
-                    var newMessage = {
-                        "appId": Config.appId(),
-                        "schoolId": chatMessage.content.schoolId,
-                        "messageId": chatMessage.content.messageId,
-                        "kidId": chatMessage.content.kidId,
-                        "teacherId": chatMessage.content.teacherId,
-                        "sender": "parent",
-                        "creationDate": chatMessage.timestamp,
-                        "received": true,
-                        "seen": true,
-                        "text": chatMessage.description
-                    }
-                    if (chatMessage.content.schoolId && chatMessage.content.kidId && chatMessage.content.messageId && $rootScope.messages[chatMessage.content.kidId]) {
-                        $rootScope.messages[chatMessage.content.kidId].push(newMessage);
-                        messagesService.receivedMessage(chatMessage.content.schoolId, chatMessage.content.kidId, chatMessage.content.messageId);
-                        if (!isBackground()) {
-                            messagesService.seenMessage(chatMessage.content.schoolId, chatMessage.content.kidId, chatMessage.content.messageId);
                         }
-                    }
-                    $ionicScrollDelegate.scrollBottom();
+                        //set message to seen
+                    });
                 }
+                //message received
+                if (!messagesService.alreadySubscribed("/topic/toteacher." + Config.appId() + "." + $scope.babyProfile.kidId + ".received")) {
+                    messagesService.subscribe("/topic/toteacher." + Config.appId() + "." + $scope.babyProfile.kidId + ".received", function (message) {
+                        console.log(message);
+                        console.log(message);
+                        if (message.body && messagesService.getByValue($rootScope.messages[$scope.babyProfile.kidId], message.body)) {
+                            messagesService.getByValue($rootScope.messages[$scope.babyProfile.kidId], message.body).received = true;
+
+                        }
+                    });
+                }
+                //            user is typing
+                if (!messagesService.alreadySubscribed("/topic/toteacher." + Config.appId() + "." + $scope.babyProfile.kidId + ".typing")) {
+                    messagesService.subscribe("/topic/toteacher." + Config.appId() + "." + $scope.babyProfile.kidId + ".typing", function (message) {
+                        $scope.userAction = JSON.parse(message.body);
+                        $ionicScrollDelegate.resize();
+                        if ($scope.isBottom()) {
+                            $ionicScrollDelegate.scrollBottom();
+                        }
+                        //                if (parsed.username == $scope.username) return;
+                        //
+                        //                for (var index in $scope.participants) {
+                        //                    var participant = $scope.participants[index];
+                        //
+                        //                    if (participant.username == parsed.username) {
+                        //                        $scope.participants[index].typing = parsed.typing;
+                        //                    }
+                        //                }
+                    });
+                }
+
+                //get new message
+                if (!messagesService.alreadySubscribed("/topic/toteacher." + Config.appId() + "." + $scope.babyProfile.kidId)) {
+                    messagesService.subscribe("/topic/toteacher." + Config.appId() + "." + $scope.babyProfile.kidId, function (message) {
+                        console.log(message);
+                        if (message.body) {
+                            var chatMessage = JSON.parse(message.body);
+                            var newMessage = {
+                                "appId": Config.appId(),
+                                "schoolId": chatMessage.content.schoolId,
+                                "author": chatMessage.content.author,
+                                "messageId": chatMessage.content.messageId,
+                                "kidId": chatMessage.content.kidId,
+                                "teacherId": chatMessage.content.teacherId,
+                                "sender": "parent",
+                                "creationDate": chatMessage.timestamp,
+                                "received": true,
+                                "seen": true,
+                                "text": chatMessage.description
+                            }
+                            if (chatMessage.content.schoolId && chatMessage.content.kidId && chatMessage.content.messageId && $rootScope.messages[chatMessage.content.kidId]) {
+                                $rootScope.messages[chatMessage.content.kidId].push(newMessage);
+                                messagesService.receivedMessage(chatMessage.content.schoolId, chatMessage.content.kidId, chatMessage.content.messageId);
+                                if (!isBackground()) {
+                                    messagesService.seenMessage(chatMessage.content.schoolId, chatMessage.content.kidId, chatMessage.content.messageId);
+                                }
+                            }
+                            $ionicScrollDelegate.scrollBottom();
+                        }
+                    });
+
+                }
+            },
+            function (error) {
+                console.log('Connection error ' + error);
+
             });
-
-
-        }, function (error) {
-            console.log('Connection error ' + error);
-
-        });
     }
     $scope.isBottom = function () {
 
@@ -469,8 +477,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
         }
     }
     $scope.getProfileImage = function () {
-        var image = Config.URL() + "/" + Config.app() + "/student/" + Config.appId() + "/" + $scope.schoolProfile.schoolId + "/" + $scope.babyProfile.kidId + "/true/images";
-        return image;
+        if ($scope.babyProfile) {
+            var image = Config.URL() + "/" + Config.app() + "/student/" + Config.appId() + "/" + $scope.schoolProfile.schoolId + "/" + $scope.babyProfile.kidId + "/true/images";
+            return image;
+        } else return "";
     }
 
     $scope.init();

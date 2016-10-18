@@ -346,6 +346,16 @@ input:checked+.checkbox-icon:before {
     float: left;
     width: 50px;
 }
+#retire .label-time-date {
+    border-bottom: 2px solid lightgray;
+    padding-bottom: 3px;
+}
+#retire .retire-list {
+    border: 1px solid lightgray;
+}
+#retire .retire-toggle {
+    border: 0px;
+}
 .delegate-input {
     text-align: center;
     margin-top: 6px;
@@ -1644,6 +1654,9 @@ $dark: #444 !default;
 #chat .teacher-label {
     color: #F8A913!important;
 }
+#chat .parent-label {
+    color: #189BA9;
+}
 #chat .message-container-parent {
     color: #189BA9;
     border-right: 3px;
@@ -1742,6 +1755,7 @@ textarea {
 #chat .chat-time {
     color: #A0A0A0;
     margin-left: 8px;
+    margin-right: 8px;
 }
 
 /*

@@ -15,31 +15,38 @@
                 <!-- Date -->
                 <div class="row ">
                     <h5 class="accent-color input-retire-description-padding " class="col "><b>{{'date' | translate}}:</b></h5>
-                    <button class="button button-clear button-dark " ng-click="openDatePicker() ">{{getDateLabel()}}</button>
+                    <button class="button button-clear button-dark " ng-click="openDatePicker() "><span class="label-time-date">{{getDateLabel()}}</span></button>
                 </div>
                 <div ng-if="babyProfile.services.bus.enabled ">
+                    <!--
                     <ion-checkbox ng-model="busChecked.value " ng-checked="busChecked.value " ng-change="checkBus(busChecked.value) " class="accent-color input-description-padding ">
                         <b> {{'retire_bus' | translate}}</b>
                     </ion-checkbox>
+-->
+                    <ion-toggle ng-model="busChecked.value" ng-checked="busChecked.value " ng-change="checkBus(busChecked.value) " toggle-class="toggle-calm" class="retire-toggle"><span class="input-retire-description-padding"><b> {{'retire_bus' | translate}}</b></span></ion-toggle>
                 </div>
 
                 <!-- Hour -->
                 <div ng-if="!isUsingBus() " class="row ">
                     <h5 class="accent-color input-retire-description-padding " class="col "><b>{{'hour' | translate}}:</b></h5>
-                    <button class="button button-clear button-dark " ng-click="openTimePicker() ">{{getTimeLabel()}}</button>
+                    <button class="button button-clear button-dark " ng-click="openTimePicker() "><span class="label-time-date">{{getTimeLabel()}}</span></button>
                 </div>
 
                 <!-- Who takes baby -->
                 <h5 class="accent-color input-description-padding "><b>{{'who_takes_baby' | translate}}</b></h5>
-                <p class="delegate-label description ">{{'delegate_status' | translate}}:</p>
+                <!--                <p class="delegate-label description ">{{'delegate_status' | translate}}:</p>-->
                 <ion-list>
                     <ion-list class="padlist ">
-                        <ion-checkbox ng-repeat="item in retirePersons " ng-model="item.checked " ng-checked="item.checked " ng-change="selectPerson(item) ">
-                            <div class="retire ">
-                                <div class="row retireFullName ">{{item.fullName}}</div>
-                                <div class="row delegate-field ">{{item.authorizationDeadline | date:'d MMMM yyyy'}}</div>
-                            </div>
-                        </ion-checkbox>
+                        <ion-radio class="retire-list" ng-repeat="item in retirePersons" ng-value="item.personId" ng-model="data.personId" ng-change="selectPerson(item) ">
+                            {{ item.fullName }}
+                        </ion-radio>
+                        <!--
+<ion-checkbox ng-repeat="item in retirePersons " ng-model="item.checked" ng-checked="item.checked " ng-change="selectPerson(item) ">
+    <div class="retire ">
+        <div class="row retireFullName ">{{item.fullName}}</div>
+<div class="row delegate-field ">{{item.authorizationDeadline | date:'d MMMM yyyy'}}</div>    </div>
+</ion-checkbox>
+-->
                     </ion-list>
 
                 </ion-list>

@@ -3,6 +3,7 @@ package it.smartcommunitylab.ungiorno.controller;
 
 import it.smartcommunitylab.ungiorno.config.exception.ProfileNotFoundException;
 import it.smartcommunitylab.ungiorno.model.ChatMessage;
+import it.smartcommunitylab.ungiorno.model.Parent;
 import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
 import it.smartcommunitylab.ungiorno.utils.NotificationManager;
 import it.smartcommunitylab.ungiorno.utils.PermissionsManager;
@@ -101,8 +102,10 @@ public class ChatController {
 		message.setKidId(kidId);
 		message.setText(text);
 		message.setSender(ChatMessage.SENT_BY_PARENT);
+		message.setAuthor(storage.getTeacherAsParent(appId,schoolId, permissions.getUserId()));
+		
 		result = storage.saveChatMessage(message);
-		notificationManager.sendDirectMessageToSchool(appId, schoolId, kidId, text, result.getMessageId());
+		notificationManager.sendDirectMessageToSchool(appId, schoolId, kidId, message.getAuthor(), text, result.getMessageId());
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("sendMessageToTeacher[%s]: %s - %s", appId, schoolId, kidId));
 		}
@@ -125,9 +128,10 @@ public class ChatController {
 		message.setTeacherId(teacherId);
 		message.setText(text);
 		message.setSender(ChatMessage.SENT_BY_TEACHER);
+		message.setAuthor(storage.getTeacherAsAuthor(appId,schoolId, teacherId));
 		result = storage.saveChatMessage(message);
 		
-		notificationManager.sendDirectMessageToParents(appId, schoolId, kidId, teacherId, text, result.getMessageId());
+		notificationManager.sendDirectMessageToParents(appId, schoolId, kidId, teacherId, message.getAuthor(), text, result.getMessageId());
 		
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("sendMessageToParent[%s]: %s - %s - %s", appId, schoolId, kidId, teacherId));
@@ -157,8 +161,9 @@ public class ChatController {
 			message.setTeacherId(teacherId);
 			message.setSender(ChatMessage.SENT_BY_TEACHER);
 			message.setText(text);
+			message.setAuthor(storage.getTeacherAsAuthor(appId,schoolId, teacherId));
 			ChatMessage dbMessage = storage.saveChatMessage(message);
-			notificationManager.sendDirectMessageToParents(appId, schoolId, kidId, teacherId, text, dbMessage.getMessageId());
+			notificationManager.sendDirectMessageToParents(appId, schoolId, kidId, teacherId, message.getAuthor(), text, dbMessage.getMessageId());
 			result.add(dbMessage);
 		}
 		if(logger.isInfoEnabled()) {

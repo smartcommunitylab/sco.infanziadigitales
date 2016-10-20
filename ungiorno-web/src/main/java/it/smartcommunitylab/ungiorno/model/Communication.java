@@ -27,6 +27,8 @@ public class Communication extends SchoolObject {
 	private long creationDate, dateToCheck;
 	private List<String> children;
 	private boolean doCheck;
+	
+	private Author author;
 
 	public String getCommunicationId() {
 		return communicationId;
@@ -73,4 +75,11 @@ public class Communication extends SchoolObject {
 	public void set_id(String _id) {
 		this._id = _id;
 	}
+	public Author getAuthor() {
+		return author;
+	}
+	public void setAuthor(Author author) {
+		this.author = author;
+	}
+	
 }

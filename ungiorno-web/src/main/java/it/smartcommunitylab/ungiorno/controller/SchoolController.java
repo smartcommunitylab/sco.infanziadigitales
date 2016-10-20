@@ -105,9 +105,10 @@ public class SchoolController {
 		try {
 			comm.setAppId(appId);
 			comm.setSchoolId(schoolId);
+			Communication old = storage.getCommunicationById(appId, schoolId, comm.getCommunicationId());
 			Communication result = storage.saveCommunication(comm);
 			
-			notificationManager.sendCommunicationMessage(appId, schoolId, comm);
+			notificationManager.sendCommunicationMessage(appId, schoolId, comm, old != null);
 			
 			return new Response<>(result);
 		} catch (Exception e) {

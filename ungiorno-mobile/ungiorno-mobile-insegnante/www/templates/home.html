@@ -13,7 +13,7 @@
         <button class="button" ng-if="viewClose()" ng-click="closeNotesAndComm()">{{'close' | translate | uppercase}}</button>
         <button class="button" ng-if="viewClose() && communicationExpanded " ng-click="saveNotesAndComm()">{{'save' | translate | uppercase}}</button>
 -->
-        <button class="button" ng-if="viewClose() && communicationExpanded " ng-click="saveNotesAndComm()">{{'save' | translate | uppercase}}</button>
+        <button class="button button-save" ng-if="viewClose() && communicationExpanded " ng-click="saveNotesAndComm()">{{'save' | translate | uppercase}}</button>
 
     </ion-nav-buttons>
     <!--

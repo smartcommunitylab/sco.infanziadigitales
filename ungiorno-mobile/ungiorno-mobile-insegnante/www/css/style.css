@@ -569,6 +569,11 @@ p {
     padding: 6px;
 }
 
+.button-save {
+    color: #bd3e4d!important;
+    font-weight: bold!important;
+}
+
 .home-separator {
     margin-left: 20px;
     margin-right: 20px;
@@ -976,13 +981,13 @@ select {
 }
 
 #babyprofile #chat-box .message-container-teacher {
-    color: #F8A913;
+    color: #3e5421;
     border-left: 3px;
     border-style: solid;
 }
 
 #babyprofile #chat-box .message-container-parent {
-    color: #189BA9;
+    color: #bd3e4d;
     border-right: 3px;
     border-style: solid;
 }
@@ -1066,11 +1071,11 @@ select {
 }
 
 #babyprofile .parent-label {
-    color: #F8A913!important;
+    color: #3e5421!important;
 }
 
 #babyprofile .teacher-label {
-    color: #189BA9!important;
+    color: #bd3e4d!important;
 }
 
 #babyprofile .chat-chose {
@@ -1271,10 +1276,6 @@ select {
     top: 0;
     right: 0;
     cursor: pointer;
-}
-
-.communication-text {
-    font-size: 22px;
 }
 
 .communication-date {
@@ -1804,6 +1805,13 @@ ion-content .scroll {
     padding-bottom: 4px;
 }
 
+#communications input[type=text] {
+    border-bottom: 1px solid #98ba3c;
+    width: 98%;
+    font-size: 20px;
+    margin-left: 24px;
+}
+
 #communications .buttons-communications {
     display: flex;
     -webkit-box-align: center;
@@ -1820,6 +1828,10 @@ ion-content .scroll {
     line-height: 32px;
 }
 
+#communications .button-disabled {
+    opacity: 0.7;
+}
+
 #communications .communication-radio {
     border-bottom: 0px!important;
     border-top: 0px!important;
@@ -1831,7 +1843,8 @@ ion-content .scroll {
 
 #communications .item-radio .radio-icon {
     right: auto;
-    left: 0px
+    left: 0px;
+    line-height: 10px;
 }
 
 #communications .comm-creation-date {
@@ -1849,6 +1862,49 @@ ion-content .scroll {
 #communications ion-list .item-content {
     background-color: white !important;
     color: black;
+}
+
+#communications .label-time-date {
+    border-bottom: 2px solid lightgray;
+    padding-bottom: 3px;
+}
+
+#communications .communication-radio {
+    position: relative;
+}
+
+#communications .communication-radio label {
+    display: inline-block;
+}
+
+#communications .button-communication-date {
+    /*
+    position: absolute;
+    right: 0px;
+    right: 0px;
+    bottom: 0px;
+    z-index: 9999;
+*/
+}
+
+#communications .communication-buttons {
+    float: right;
+    margin-top: 16px;
+}
+
+#communications .communication-button {
+    min-width: 100px;
+    margin-right: 8px;
+}
+
+#communications .communication-button.send {
+    background-color: #bd3e4d;
+    color: white;
+}
+
+#communications .communication-button.cancel {
+    background-color: gray;
+    color: white;
 }
 
 
@@ -1870,6 +1926,30 @@ ion-content .scroll {
 
 #communications ion-list .radio-home .item-content {
     padding-bottom: 0px!important;
+}
+
+#communications .button-communications {
+    color: #bd3e4d;
+}
+
+.communication-text {
+    font-size: 22px;
+    text-align: justify;
+    line-height: 26px;
+}
+
+#communications .communication-kind {
+    font-size: 16px;
+    text-align: justify;
+    line-height: 26px;
+    padding-left: 24px;
+}
+
+#communications .communication-title {
+    position: absolute;
+    right: 0px;
+    margin-right: 8px;
+    color: #98ba3c;
 }
 
 #babyprofile .loading {

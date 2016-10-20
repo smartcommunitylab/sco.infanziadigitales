@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.babyprofile', [])
 
-.controller('babyprofileCtrl', function ($scope, dataServerService, profileService, babyConfigurationService, Config, $filter, Toast, $ionicLoading, $rootScope, $ionicPopup, $interval, $ionicScrollDelegate, teachersService, messagesService) {
+.controller('babyprofileCtrl', function ($scope, dataServerService, profileService, babyConfigurationService, Config, $filter, Toast, $ionicLoading, $rootScope, $ionicPopup, $ionicPopover, $interval, $ionicScrollDelegate, teachersService, messagesService) {
 
     var IS_PARENT = 'parent';
     var IS_TEACHER = 'teacher';
@@ -238,23 +238,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
             Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
             $ionicLoading.hide();
         });
-        //        babyConfigurationService.getBabyNotesById($scope.schoolProfile.schoolId, babyProfileID).then(function (data) {
-        //            if (data) {
-        //                if (data[0]) {
-        //                    $scope.notes = data[0];
-        //                } else {
-        //                    $scope.notes = {};
-        //                }
-        //                $scope.notesLoaded = true;
-        //                checkAllDataLoaded();
-        //            } else {
-        //                $ionicLoading.hide();
-        //                Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
-        //            }
-        //        }, function (err) {
-        //            Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
-        //            $ionicLoading.hide();
-        //        });
+        $ionicPopover.fromTemplateUrl('templates/popover.html', {
+            scope: $scope,
+        }).then(function (popover) {
+            $scope.popover = popover;
+        });
     }
     $scope.calculateOtherData = function () {
 
@@ -365,6 +353,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
 
     }
     $scope.changeTeacher = function (teacher) {
+        $scope.popover.hide();
         $scope.teacher = teacher;
     }
 

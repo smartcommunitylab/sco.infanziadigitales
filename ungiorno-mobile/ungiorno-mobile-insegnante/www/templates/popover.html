@@ -1,0 +1,9 @@
+<ion-popover-view>
+    <ion-content class="content-teacher-list">
+        <div class="list">
+            <a class="item list-teacher" ng-repeat="teacher in teachers" ng-click="changeTeacher(teacher)">
+              {{teacher.teacherFullname}}
+            </a>
+        </div>
+    </ion-content>
+</ion-popover-view>

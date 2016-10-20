@@ -21,17 +21,18 @@
                     <button class="button button-clear button-dark button-communication-date" ng-class="{'button-disabled':!delivery }" ng-if="communicationType.typeId=='1'" ng-click="openDatePicker() "><span class="label-time-date">{{getDateLabel()}}</span></button>
                 </div>
             </ion-list>
-            <div class="item-input chat-teacher-input auto-height">
-                <div class="row chat-chose">
-                    <div class="input-label">
-                        {{'chat_teacher_label'|translate}}
-                    </div>
-                    <select ng-model="teacher" ng-init="teacher=teachers[0]" options-class="{'teacher-option':true}" ng-options="teacher.teacherFullname for teacher in teachers" ng-change="changeTeacher(teacher)"> </select>
-                    <div class="input-label">
-                        {{'chat_write_label'|translate}}
-                    </div>
-                </div>
-            </div>
+<div class="item-input chat-teacher-input auto-height">
+    <div class="row chat-chose">
+        <div class="input-label-teacher">
+            {{'note_teacher_label'|translate}}
+        </div>
+        <div class="note-teacher" ng-click="popover.show($event)">
+            <div class="input-label">
+                <span> {{teacher.teacherFullname}} </span></div>
+            <button class="button button-icon button-teacher-list ion-arrow-down-b"></button>
+        </div>
+    </div>
+</div>
             <label>
                 <input type="text" id="description" placeholder="{{'description' | translate}}" ng-model="newCommunication.description">
             </label>

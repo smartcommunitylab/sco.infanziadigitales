@@ -271,6 +271,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
         delegate_status: "Validità delega",
         note: "Note",
         note_description: "Inserisci una nota...",
+        note_teacher_label: "Messaggio da: ",
         delegate: "Delega straordinaria",
         delegate_description: "Dati del delegato",
         name: "Nome del delegato",
@@ -471,7 +472,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
         send_msg_placeholder: 'Scrivi messaggio',
         chat_teacher_label: 'Maestra ',
         chat_write_label: ' scrive...',
-        no_messages: 'Non sono presenti messaggi'
+        no_messages: 'Non sono presenti messaggi',
+        input_chat_placeholder: 'Scrivi messaggio'
     });
 
     $translateProvider.preferredLanguage("it");

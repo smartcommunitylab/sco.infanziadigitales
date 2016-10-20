@@ -166,181 +166,98 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
 
 
-//    $scope.getRetireByDate = function (date) {
-//        var retirePerson = null;
-//        $scope.retirePersons = [];
-//        //check bus stop
-//        dataServerService.getFermata($scope.babyProfile.schoolId, $scope.babyProfile.kidId, date.getTime()).then(function (data) {
-//            var fermata = data;
-//            if (fermata) {
-//                $scope.busChecked.value = true;
-//                $scope.useBus = true;
-//                retirePerson = fermata.personId;
-//                for (var k in $scope.babyProfile.persons) {
-//                    $scope.retirePersons.push({
-//                        personId: $scope.babyProfile.persons[k].personId,
-//                        fullName: $scope.babyProfile.persons[k].fullName,
-//                        authorizationDeadline: $scope.babyProfile.persons[k].authorizationDeadline,
-//                        checked: (retirePerson == $scope.babyProfile.persons[k].personId)
-//                    })
-//                }
-//                for (var k in $scope.babyConfiguration.extraPersons) {
-//                    $scope.retirePersons.push({
-//                        personId: $scope.babyConfiguration.extraPersons[k].personId,
-//                        fullName: $scope.babyConfiguration.extraPersons[k].fullName,
-//                        authorizationDeadline: $scope.babyConfiguration.extraPersons[k].authorizationDeadline,
-//                        checked: (retirePerson == $scope.babyConfiguration.extraPersons[k].personId)
-//
-//                    });
-//                }
-//            }
-//            //get retire conf
-//            dataServerService.getRitiro($scope.babyProfile.schoolId, $scope.babyProfile.kidId, date.getTime()).then(function (data) {
-//                retireConfiguration = data;
-//                if (retireConfiguration) {
-//                    setTime(retireConfiguration.date);
-//                    //set people to retire
-//                    $scope.temporary.note = retireConfiguration.note;
-//                } else {
-//                    //set default time
-//                    var tmpdate = new Date($scope.temporary.date);
-//                    if (!$scope.babyProfile.services.posticipo.enabled) {
-//                        //creo data nuova con ora configurata e setto il model della pagina
-//                        tmpdate.setHours(profileService.getSchoolProfile().regularTiming.toTime.substring(0, 2), profileService.getSchoolProfile().posticipoTiming.toTime.substring(3, 5), 0, 0);
-//                        $scope.temporary.time = Date.parse(profileService.getSchoolProfile().regularTiming.toTime);
-//                    } else {
-//                        $scope.temporary.time = Date.parse(profileService.getSchoolProfile().posticipoTiming.toTime);
-//                        tmpdate.setHours(profileService.getSchoolProfile().posticipoTiming.toTime.substring(0, 2), profileService.getSchoolProfile().posticipoTiming.toTime.substring(3, 5), 0, 0);
-//
-//                    }
-//                    $scope.temporary.time = tmpdate;
-//                }
-//                if (!fermata) {
-//                    $scope.busChecked.value = false;
-//                    $scope.useBus = false;
-//                    if (retireConfiguration) {
-//                        retirePerson = retireConfiguration.personId;
-//                    } else {
-//                        retirePerson = $scope.babyConfiguration.defaultPerson;
-//                    }
-//                    for (var k in $scope.babyProfile.persons) {
-//                        $scope.retirePersons.push({
-//                            personId: $scope.babyProfile.persons[k].personId,
-//                            fullName: $scope.babyProfile.persons[k].fullName,
-//                            authorizationDeadline: $scope.babyProfile.persons[k].authorizationDeadline,
-//                            checked: (retirePerson == $scope.babyProfile.persons[k].personId)
-//                        })
-//                    }
-//                    if ($scope.babyConfiguration.extraPersons != null) {
-//                        $scope.retirePersons.push({
-//                            personId: $scope.babyConfiguration.extraPersons.personId,
-//                            fullName: $scope.babyConfiguration.extraPersons.fullName,
-//                            authorizationDeadline: $scope.babyConfiguration.extraPersons.authorizationDeadline,
-//                            checked: (retirePerson == $scope.babyConfiguration.extraPersons.personId)
-//                        });
-//                    }
-//                }
-//            });
-//        });
-//        //check if child is absent
-//        dataServerService.getAbsence($scope.babyProfile.schoolId, $scope.babyProfile.kidId, date.getTime()).then(function (response) {
-//            var absence = response.data;
-//            if (absence) {
-//                $scope.isAbsent = true;
-//            }
-//        });
-//    };
- $scope.getRetireByDate = function (date) {
-     var retirePerson = null;
-     $scope.retirePersons = [];
-     $scope.data = {};
-     //check bus stop
-     dataServerService.getFermata($scope.babyProfile.schoolId, $scope.babyProfile.kidId, date.getTime()).then(function (data) {
-         var fermata = data;
-         if (fermata) {
-             $scope.busChecked.value = true;
-             $scope.useBus = true;
-             retirePerson = fermata.personId;
-             for (var k in $scope.babyProfile.persons) {
-                 $scope.retirePersons.push({
-                     personId: $scope.babyProfile.persons[k].personId,
-                     fullName: $scope.babyProfile.persons[k].fullName,
-                     authorizationDeadline: $scope.babyProfile.persons[k].authorizationDeadline,
-                     checked: (retirePerson == $scope.babyProfile.persons[k].personId)
-                 })
-             }
-             for (var k in $scope.babyConfiguration.extraPersons) {
-                 $scope.retirePersons.push({
-                     personId: $scope.babyConfiguration.extraPersons[k].personId,
-                     fullName: $scope.babyConfiguration.extraPersons[k].fullName,
-                     authorizationDeadline: $scope.babyConfiguration.extraPersons[k].authorizationDeadline,
-                     checked: (retirePerson == $scope.babyConfiguration.extraPersons[k].personId)
 
-                 });
-             }
-         }
-         //get retire conf
-         dataServerService.getRitiro($scope.babyProfile.schoolId, $scope.babyProfile.kidId, date.getTime()).then(function (data) {
-             retireConfiguration = data;
-             if (retireConfiguration) {
-                 setTime(retireConfiguration.date);
-                 //set people to retire
-                 $scope.temporary.note = retireConfiguration.note;
-             } else {
-                 //set default time
-                 var tmpdate = new Date($scope.temporary.date);
-                 if (!$scope.babyProfile.services.posticipo.enabled) {
-                     //creo data nuova con ora configurata e setto il model della pagina
-                     tmpdate.setHours(profileService.getSchoolProfile().regularTiming.toTime.substring(0, 2), profileService.getSchoolProfile().posticipoTiming.toTime.substring(3, 5), 0, 0);
-                     $scope.temporary.time = Date.parse(profileService.getSchoolProfile().regularTiming.toTime);
-                 } else {
-                     $scope.temporary.time = Date.parse(profileService.getSchoolProfile().posticipoTiming.toTime);
-                     tmpdate.setHours(profileService.getSchoolProfile().posticipoTiming.toTime.substring(0, 2), profileService.getSchoolProfile().posticipoTiming.toTime.substring(3, 5), 0, 0);
+    $scope.getRetireByDate = function (date) {
+        var retirePerson = null;
+        $scope.retirePersons = [];
+        $scope.data = {};
+        //check bus stop
+        dataServerService.getFermata($scope.babyProfile.schoolId, $scope.babyProfile.kidId, date.getTime()).then(function (data) {
+            var fermata = data;
+            if (fermata) {
+                $scope.busChecked.value = true;
+                $scope.useBus = true;
+                retirePerson = fermata.personId;
+                for (var k in $scope.babyProfile.persons) {
+                    $scope.retirePersons.push({
+                        personId: $scope.babyProfile.persons[k].personId,
+                        fullName: $scope.babyProfile.persons[k].fullName,
+                        authorizationDeadline: $scope.babyProfile.persons[k].authorizationDeadline,
+                        checked: (retirePerson == $scope.babyProfile.persons[k].personId)
+                    })
+                }
+                for (var k in $scope.babyConfiguration.extraPersons) {
+                    $scope.retirePersons.push({
+                        personId: $scope.babyConfiguration.extraPersons[k].personId,
+                        fullName: $scope.babyConfiguration.extraPersons[k].fullName,
+                        authorizationDeadline: $scope.babyConfiguration.extraPersons[k].authorizationDeadline,
+                        checked: (retirePerson == $scope.babyConfiguration.extraPersons[k].personId)
 
-                 }
-                 $scope.temporary.time = tmpdate;
-             }
-             if (!fermata) {
-                 $scope.busChecked.value = false;
-                 $scope.useBus = false;
-                 if (retireConfiguration) {
-                     retirePerson = retireConfiguration.personId;
-                 } else {
-                     retirePerson = $scope.babyConfiguration.defaultPerson;
-                 }
-                 for (var k in $scope.babyProfile.persons) {
-                     $scope.retirePersons.push({
-                         personId: $scope.babyProfile.persons[k].personId,
-                         fullName: $scope.babyProfile.persons[k].fullName,
-                         authorizationDeadline: $scope.babyProfile.persons[k].authorizationDeadline,
-                         checked: (retirePerson == $scope.babyProfile.persons[k].personId)
-                     })
-                     if (retirePerson == $scope.babyProfile.persons[k].personId) {
-                         $scope.data = $scope.babyProfile.persons[k];
-                     }
-                 }
-                 if ($scope.babyConfiguration.extraPersons != null) {
-                     $scope.retirePersons.push({
-                         personId: $scope.babyConfiguration.extraPersons.personId,
-                         fullName: $scope.babyConfiguration.extraPersons.fullName,
-                         authorizationDeadline: $scope.babyConfiguration.extraPersons.authorizationDeadline,
-                         checked: (retirePerson == $scope.babyConfiguration.extraPersons.personId)
-                     });
-                     if (retirePerson == $scope.babyProfile.persons[k].personId) {
-                         $scope.data = $scope.babyProfile.persons[k];
-                     }
-                 }
-             }
-         });
-     });
-     //check if child is absent
-     dataServerService.getAbsence($scope.babyProfile.schoolId, $scope.babyProfile.kidId, date.getTime()).then(function (response) {
-         var absence = response.data;
-         if (absence) {
-             $scope.isAbsent = true;
-         }
-     });
- };
+                    });
+                }
+            }
+            //get retire conf
+            dataServerService.getRitiro($scope.babyProfile.schoolId, $scope.babyProfile.kidId, date.getTime()).then(function (data) {
+                retireConfiguration = data;
+                if (retireConfiguration) {
+                    setTime(retireConfiguration.date);
+                    //set people to retire
+                    $scope.temporary.note = retireConfiguration.note;
+                } else {
+                    //set default time
+                    var tmpdate = new Date($scope.temporary.date);
+                    if (!$scope.babyProfile.services.posticipo.enabled) {
+                        //creo data nuova con ora configurata e setto il model della pagina
+                        tmpdate.setHours(profileService.getSchoolProfile().regularTiming.toTime.substring(0, 2), profileService.getSchoolProfile().posticipoTiming.toTime.substring(3, 5), 0, 0);
+                        $scope.temporary.time = Date.parse(profileService.getSchoolProfile().regularTiming.toTime);
+                    } else {
+                        $scope.temporary.time = Date.parse(profileService.getSchoolProfile().posticipoTiming.toTime);
+                        tmpdate.setHours(profileService.getSchoolProfile().posticipoTiming.toTime.substring(0, 2), profileService.getSchoolProfile().posticipoTiming.toTime.substring(3, 5), 0, 0);
+
+                    }
+                    $scope.temporary.time = tmpdate;
+                }
+                if (!fermata) {
+                    $scope.busChecked.value = false;
+                    $scope.useBus = false;
+                    if (retireConfiguration) {
+                        retirePerson = retireConfiguration.personId;
+                    } else {
+                        retirePerson = $scope.babyConfiguration.defaultPerson;
+                    }
+                    for (var k in $scope.babyProfile.persons) {
+                        $scope.retirePersons.push({
+                            personId: $scope.babyProfile.persons[k].personId,
+                            fullName: $scope.babyProfile.persons[k].fullName,
+                            authorizationDeadline: $scope.babyProfile.persons[k].authorizationDeadline,
+                            checked: (retirePerson == $scope.babyProfile.persons[k].personId)
+                        })
+                        if (retirePerson == $scope.babyProfile.persons[k].personId) {
+                            $scope.data = $scope.babyProfile.persons[k];
+                        }
+                    }
+                    if ($scope.babyConfiguration.extraPersons != null) {
+                        $scope.retirePersons.push({
+                            personId: $scope.babyConfiguration.extraPersons.personId,
+                            fullName: $scope.babyConfiguration.extraPersons.fullName,
+                            authorizationDeadline: $scope.babyConfiguration.extraPersons.authorizationDeadline,
+                            checked: (retirePerson == $scope.babyConfiguration.extraPersons.personId)
+                        });
+                        if (retirePerson == $scope.babyProfile.persons[k].personId) {
+                            $scope.data = $scope.babyProfile.persons[k];
+                        }
+                    }
+                }
+            });
+        });
+        //check if child is absent
+        dataServerService.getAbsence($scope.babyProfile.schoolId, $scope.babyProfile.kidId, date.getTime()).then(function (response) {
+            var absence = response.data;
+            if (absence) {
+                $scope.isAbsent = true;
+            }
+        });
+    };
     $scope.getRetire = function () {
         $scope.babyProfile = profileService.getBabyProfile();
         $scope.babyConfiguration = configurationService.getBabyConfiguration();

@@ -1952,6 +1952,24 @@ ion-content .scroll {
     color: #98ba3c;
 }
 
+#communications .chat-chose {
+    background-color: #BD3E4D;
+    margin-bottom: 5px;
+}
+
+#communications .input-label {
+    color: white!important;
+}
+
+#communications select {
+    color: white!important;
+}
+
+#communications .chat-chose {
+    background-color: #BD3E4D;
+    margin-bottom: 5px;
+}
+
 #babyprofile .loading {
     font-size: 30px;
 }

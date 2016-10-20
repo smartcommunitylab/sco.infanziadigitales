@@ -12,6 +12,7 @@
                     <div class="item item-text-wrap">
                         <p class="note-date">{{communication.creationDate | date:'EEEE, d MMMM yyyy'}}</p>
                         <p class="note-text">{{communication.description}}</p>
+                        <p class="note-author">{{communication.author.name}}{{communication.author.surname}}</p>
                         <div ng-show="communication.doCheck">
                             <p class="note-date-to-check">{{'communication_before'|translate}}{{communication.dateToCheck | date:'EEEE, d MMMM yyyy'}}</p>
                             <button class="button button-energized button-communication" ng-click="setCommunication(communication._id, communication)" ng-class="{'button-outline':communication.done}">

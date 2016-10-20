@@ -1362,6 +1362,9 @@ select {
     padding-bottom: 10px;
     text-align: justify;
 }
+#communications .note-author {
+    font-style: italic;
+}
 #communications .note-pointer {
     margin-right: 6px;
     float: left;

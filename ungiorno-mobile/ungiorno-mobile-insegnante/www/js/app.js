@@ -344,7 +344,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
         arguments: "Argomento",
         description: "Descrizione",
         send: "Invia",
-        baby_info: "Informazioni",
+        baby_info: "INFORMAZIONI UTILI",
         parent_one: "Genitore 1",
         parent_two: "Genitore 2",
         food_allergies: "Allergie alimentari: ",

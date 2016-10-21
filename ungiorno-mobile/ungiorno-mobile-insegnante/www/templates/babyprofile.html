@@ -9,41 +9,43 @@
                 <div class="col  card profile-column">
                     <div id="kid-profile">
                         <div style="display:inline-block; vertical-align:top;">
-                            <img ng-src="{{getProfileImage()}}" style="width: 200px; height: 200px;">
+                            <img ng-src="{{getProfileImage()}}" class="baby-profile-image">
                         </div>
                         <div>
-                            <div class=" detailItem" ng-if="babyInformations.active">{{babyProfile.firstName}} {{'is' | translate}} {{babyStatus | uppercase}}</div>
+                            <div class=" detailItem" ng-if="babyInformations.active">{{babyProfile.firstName}} {{'is' | translate}} <b>{{babyStatus | uppercase}}</b></div>
                             <div class=" detailItem" ng-if="!babyInformations.active">{{babyProfile.firstName}}{{'baby_not_monitored' | translate}}</div>
                             <div class=" detailItem" ng-if="babyInformations.exitTime == null && babyInformations.absenceType!=null">{{'absence_type' | translate}} {{babyInformations.absenceType}}</div>
-                            <div class=" detailItem" ng-if="babyInformations.exitTime !== null">{{'enter_at' | translate}} {{babyEnterHour}}</div>
-                            <div class=" detailItem" ng-if="checkBusServiceActive() && babyInformations.exitTime !== null">{{'bus_stop_back' | translate}} {{babyBusStopBackName}}</div>
-                            <div class=" detailItem" ng-if="babyInformations.exitTime !== null && !checkBusServiceActive()">{{'exit_at' | translate}}{{babyInformations.exitTime | date:'HH:mm'}}</div>
-                            <div class=" detailItem" ng-if="babyInformations.exitTime !== null && !checkBusServiceActive()">{{'person_who_retire' | translate}}{{babyInformations.personName}} ({{relation}})</div>
+                            <div class=" detailItem" ng-if="babyInformations.exitTime !== null">{{'enter_at' | translate}}<b> {{babyEnterHour}}</b></div>
+                            <div class=" detailItem" ng-if="checkBusServiceActive() && babyInformations.exitTime !== null">{{'bus_stop_back' | translate}} <b>{{babyBusStopBackName}}</b></div>
+                            <div class=" detailItem" ng-if="babyInformations.exitTime !== null && !checkBusServiceActive()">{{'exit_at' | translate}}<b>{{babyInformations.exitTime | date:'HH:mm'}}</b></div>
+                            <div class=" detailItem" ng-if="babyInformations.exitTime !== null && !checkBusServiceActive()">{{'person_who_retire' | translate}}<b>{{babyInformations.personName}} ({{relation}})</b></div>
                             <div class=" detailItem" style="color: #ff0000;" ng-if="babyInformations.personException && babyInformations.exitTime !== null">{{'extra_delegation' | translate}}</div>
                             <a href="http://www.google.it" class=" detailItem" ng-if="personWhoRetire.isDelegate && babyInformations.exitTime !== null">{{'view_delegation' | translate}}</a>
                         </div>
                     </div>
+                    <div class="babyprofile-separator"></div>
                     <div ng-if="babyInformations.active">
-                        <div>{{'baby_info' | translate}}</div>
-                        <br>
+                        <div class="baby-info-label">{{'baby_info' | translate}}</div>
                         <div ng-repeat="person in parents track by $index" ng-if="parents.length>0">
                             <div class="row" ng-if="$index%2==0">
                                 <div class="col">
-                                    <div class=" detailsTitle">{{'parent' | translate}}{{$index+1}}</div>
-                                    <div>{{parents[$index].fullName}}</div>
-                                    <ion-list>
-                                        <ion-item ng-repeat="num in parents[$index].phone" ng-click="callPhone('{{num}}');">
-                                            <i class="icon voice-menu ion-ios-telephone" style="margin-right: 20px;"></i>{{num}}
-                                        </ion-item>
-                                    </ion-list>
+                                    <div class="babyprofile-parent">
+                                        <div class=" detailsTitle">{{'parent' | translate}}{{$index+1}}</div>
+                                        <div class="babyprofile-parent-name">{{parents[$index].fullName}}</div>
+                                        <ion-list>
+                                            <div ng-repeat="num in parents[$index].phone" ng-click="callPhone('{{num}}');" class="babyprofile-phone">
+                                                <i class="icon voice-menu ion-ios-telephone babyprofile-phone"></i>{{num}}
+                                            </div>
+                                        </ion-list>
+                                    </div>
                                 </div>
                                 <div class="col" ng-if="parents.length> ($index + 2)">
                                     <div class=" detailsTitle">{{'parent' | translate}}{{$index+2}}</div>
-                                    <div>{{parents[$index+1].fullName}}</div>
+                                    <div class="babyprofile-parent-name">{{parents[$index+1].fullName}}</div>
                                     <ion-list>
-                                        <ion-item ng-repeat="num in parents[$index+1].phone" ng-click="callPhone('{{num}}');">
-                                            <i class="icon voice-menu ion-ios-telephone" style="margin-right: 20px;"></i>{{num}}
-                                        </ion-item>
+                                        <div ng-repeat="num in parents[$index+1].phone" ng-click="callPhone('{{num}}');" class="babyprofile-phone">
+                                            <i class="icon voice-menu ion-ios-telephone babyprofile-phone"></i>{{num}}
+                                        </div>
                                     </ion-list>
                                 </div>
                             </div>
@@ -55,12 +57,17 @@
 
                         <div class="row">
                             <div class="col">
-                                <div class=" detailsTitle" ng-hide="babyProfile.allergies.length==0">{{'food_allergies' | translate}}</div>
-                                <ion-list ng-hide="babyProfile.allergies.length==0">
-                                    <ion-item ng-repeat="allergia in babyProfile.allergies">
-                                        <i class="voice-menu" style="margin-right: 20px;"></i>{{allergia.name}}
-                                    </ion-item>
-                                </ion-list>
+                                <div class="babyprofile-allergies">
+                                    <div class=" detailsTitle">{{'food_allergies' | translate}}</div>
+                                    <ion-list ng-hide="babyProfile.allergies.length==0">
+                                        <div ng-repeat="allergia in babyProfile.allergies">
+                                            <i class="voice-menu babyprofile-allergy">{{allergia.name}}</i>
+                                        </div>
+                                    </ion-list>
+                                    <div ng-hide="babyProfile.allergies.length!=0" class="babyprofile-allergy">
+                                        No allergies
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -82,30 +89,6 @@
                             </div>
                             <div ng-class="{'message-container-parent': isMe(ms.sender), 'message-container-teacher': !isMe(ms.sender) }" class="message-container">
                                 <div id="{{ ms.creationDate }}" class="card-chat" ng-class="{'card-chat-my': (isMe(ms.sender) && !chatExtraLength(ms.text)), 'card-chat-my-extra': (isMe(ms.sender) && chatExtraLength(ms.text))}">
-                                    <!--
-new versione
-                                    <div class="item">
-                                        <span>{{ ms.text }}</span>
-                                    </div>
-                                    <div ng-if="!isMe(ms.sender)" class="item item-divider parent-label" ng-init="checkMessage(ms)">
-                                        <span>{{ ms.author.name }} {{ ms.author.surname }} </span><span class="chat-time">{{ ms.creationDate | date:'HH:mm' }}</span>
-                                    </div>
-                                    <div class="item item-divider" ng-if="isMe(ms.sender)">
-                                        <span><i class="icon ion-checkmark-round" ng-class="{'message-flag': ms.seen}"></i><i class="icon ion-checkmark-round" ng-class="{'message-flag':  ms.received}"></i></span><span class="chat-time">{{ ms.creationDate | date:'HH:mm' }}</span><span class="teacher-label" ng-if="isMe(ms.sender)">{{ ms.author.name }} {{ ms.author.surname }} </span>
-                                    </div>
--->
-                                    <!--
-old version
-                                    <div ng-if="!isMe(ms.sender)" class="item item-divider" ng-init="checkMessage(ms)">
-                                        <span>{{ ms.teacherId }} </span>
-                                    </div>
-                                    <div class="item">
-                                        <span>{{ ms.text }}</span>
-                                    </div>
-                                    <div class="item item-divider">
-                                        <span ng-if="isMe(ms.sender)"><i class="icon ion-checkmark-round" ng-class="{'message-flag': ms.seen}"></i><i class="icon ion-checkmark-round" ng-class="{'message-flag':  ms.received}"></i></span> {{ ms.creationDate | date:'HH:mm' }}
-                                    </div>
--->
                                     <div class="item">
                                         <span>{{ ms.text }}</span>
                                     </div>

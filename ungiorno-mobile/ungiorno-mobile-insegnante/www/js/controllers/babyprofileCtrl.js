@@ -429,6 +429,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
         }
 
         $ionicScrollDelegate.scrollBottom();
+        $scope.new_message = '';
     };
     $scope.isANewDate = function (indexOfMessage) {
         if (indexOfMessage == 0) {

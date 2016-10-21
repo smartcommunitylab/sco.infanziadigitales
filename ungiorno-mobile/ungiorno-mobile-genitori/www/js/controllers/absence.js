@@ -95,7 +95,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     var delay = 1000; //1 sec
     $scope.isOther = false;
 
-
+    $scope.data = {
+        typeId: $scope.schoolProfile.absenceTypes[0].typeId
+    };
     $scope.selectAbsence = function (newabsence) {
         for (var i = 0; i < $scope.absenceTypes.length; i++) {
             if ($scope.absenceTypes[i].typeId == newabsence.typeId) {

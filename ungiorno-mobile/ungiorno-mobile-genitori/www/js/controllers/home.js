@@ -87,10 +87,19 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         //build the array
         $scope.elements = [];
         style = getButtonStyle("retire");
+        var note = "";
+        if (!$scope.isPresent) {
+            note = $filter('translate')('home_absent')
+        }
+        if ($scope.dailyFermata) {
+            note = $filter('translate')('home_entry_to') + $scope.fromTime + $filter('translate')('go_home_by_bus');
+        } else if ($scope.dailyRitiro) {
+            note = $filter('translate')('home_entry_to') + $scope.fromTime + $filter('translate')('home_exit_to') + $scope.toTime;
+        }
         $scope.elements.push({
             click: "app.retire",
             string: $filter('translate')('home_retire') + $scope.kidProfile.firstName,
-            note: ($scope.dailyFermata ? $filter('translate')('home_entry_to') + $scope.fromTime + $filter('translate')('go_home_by_bus') : $filter('translate')('home_entry_to') + $scope.fromTime + $filter('translate')('home_exit_to') + $scope.toTime),
+            note: note,
             class: style,
             img: 'img/ritiro.png',
             disabled: false

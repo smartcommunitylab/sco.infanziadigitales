@@ -20,6 +20,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     //$rootScope.absenceLimitHours = 9;
     //$rootScope.absenceLimitMinutes = 15;
     $rootScope.retireLimit = 10;
+    $scope.noConnection = false;
     $scope.refresh = function () {
         //window.location.reload(true);
         $scope.getConfiguration();
@@ -195,7 +196,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
 
     $scope.execute = function (element) {
-        if (element.class != "button-stable") {
+        if (element.class != "button-stable" && !($scope.noConnection && !$scope.isContact(element))) {
             if (typeof element.click == "string") {
                 $state.go(element.click);
             } else {
@@ -210,7 +211,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         //return number of comunications from localstorage (all the new omunication not visualized get from push)
         return pushNotificationService.getNewComunications(schoolId);
     }
-
+    $scope.isContact = function (element) {
+        return (element.string == $filter('translate')('home_contatta'));
+    }
     $rootScope.loadConfiguration = function () {
         var deferred = $q.defer();
         $ionicLoading.show();
@@ -295,8 +298,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                             } else {
                                 //il ragazzo e' assente
                                 $scope.isPresent = false;
-
                             }
+                            $scope.noConnection = false;
                             buildHome();
 
                             //Toast.show($filter('translate')('data_updated'), 'short', 'bottom');
@@ -305,7 +308,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                         }, function (error) {
                             console.log("ERROR -> " + error);
                             Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
-
+                            $scope.noConnection = true;
+                            buildHome();
                             $ionicLoading.hide();
                             deferred.reject();
 
@@ -313,7 +317,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                     }, function (error) {
                         console.log("ERROR -> " + error);
                         Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
-
+                        $scope.noConnection = true;
+                        buildHome();
                         $ionicLoading.hide();
                         deferred.reject();
 
@@ -321,7 +326,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 }, function (error) {
                     console.log("ERROR -> " + error);
                     Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
-
+                    $scope.noConnection = true;
+                    buildHome();
                     $ionicLoading.hide();
                     deferred.reject();
                 });
@@ -332,7 +338,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         }, function (error) {
             console.log("ERROR -> " + error);
             Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+            $scope.noConnection = true;
+            buildHome();
             $ionicLoading.hide();
+            deferred.reject();
         });
         return deferred.promise;
     }

@@ -473,7 +473,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
         chat_teacher_label: 'Maestra ',
         chat_write_label: ' scrive...',
         no_messages: 'Non sono presenti messaggi',
-        input_chat_placeholder: 'Scrivi messaggio'
+        input_chat_placeholder: 'Scrivi messaggio',
+        no_parents: 'Nessun genitore',
+        no_allergies: 'Nessuna allergia'
     });
 
     $translateProvider.preferredLanguage("it");

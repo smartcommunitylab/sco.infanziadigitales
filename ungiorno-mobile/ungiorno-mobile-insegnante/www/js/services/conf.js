@@ -120,6 +120,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.conf', 
         },
         doProfiling: function () {
             return false;
+        },
+        getExpirationDate: function () {
+            return mapJsonConfig["expirationDate"];
+
         }
     }
 })

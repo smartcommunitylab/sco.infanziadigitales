@@ -606,7 +606,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         lbl_today: 'OGGI',
         lbl_yesterday: 'IERI',
         retire_popup_absent_close: 'CHIUDI',
-        input_chat_placeholder: 'Scrivi messaggio'
+        input_chat_placeholder: 'Scrivi messaggio',
+        pop_up_expired_title: 'Versione scaduta',
+        pop_up__expired_template: 'Ci scusiamo ma non è più possibile utilizzare questa versione dell\'applicazione in quanto il periodo di prova è terminata',
+        pop_up_not_expired_title: 'Versione di prova',
+        pop_up_not_expired_template: 'Questa  è una versione di prova e terminerà il '
+
 
 
 
@@ -771,7 +776,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         lbl_today: 'OGGI',
         lbl_yesterday: 'IERI',
         input_chat_placeholder: 'Scrivi messaggio',
-        retire_popup_absent_close: 'CHIUDI'
+        retire_popup_absent_close: 'CHIUDI',
+        pop_up_expired_title: 'Version expired',
+        pop_up__expired_template: 'The actual version of the app has expired',
+        pop_up_not_expired_title: 'Trial version',
+        pop_up_not_expired_template: 'The actual version of the app end on '
 
     });
 
@@ -942,7 +951,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         lbl_today: 'OGGI',
         lbl_yesterday: 'IERI',
         input_chat_placeholder: 'Scrivi messaggio',
-        retire_popup_absent_close: 'CHIUDI'
+        retire_popup_absent_close: 'CHIUDI',
+        pop_up_expired_title: 'Version expired',
+        pop_up__expired_template: 'The actual version of the app has expired',
+        pop_up_not_expired_title: 'Trial version',
+        pop_up_not_expired_template: 'The actual version of the app end on '
 
     });
 

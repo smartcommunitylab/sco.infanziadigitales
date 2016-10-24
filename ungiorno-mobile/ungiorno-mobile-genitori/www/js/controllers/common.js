@@ -52,7 +52,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
 })
 
-.controller('AppCtrl', function ($scope, $rootScope, $cordovaDevice, $ionicModal, $ionicHistory, $timeout, $filter, $ionicPopover, $state, $ionicSideMenuDelegate, Toast, Config, profileService) {
+.controller('AppCtrl', function ($scope, $rootScope, $cordovaDevice, $ionicModal, $ionicHistory, $timeout, $filter, $ionicPopover, $state, $ionicSideMenuDelegate, Toast, Config, profileService, $ionicPopup) {
     $scope.profilesOpen = false;
     $scope.expandProfiles = false;
 
@@ -78,12 +78,62 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.openCredits = function () {
         $scope.creditsModal.show();
     }
+    $scope.showExpiredPopup = function () {
+        var alertPopup = $ionicPopup.alert({
+            title: $filter('translate')("pop_up_expired_title"),
+            template: $filter('translate')("pop_up__expired_template"),
+            buttons: [
+                {
+                    text: $filter('translate')("ok"),
+                    type: 'button-norm',
+                    onTap: function (e) {
+                        ionic.Platform.exitApp();
+                    }
+                            }
+            ]
+        });
+    }
+    $scope.showNotExpiredPopup = function (date) {
+        var alertPopup = $ionicPopup.alert({
+            title: $filter('translate')("pop_up_not_expired_title"),
+            template: $filter('translate')("pop_up_not_expired_template") + date,
+            buttons: [
+                {
+                    text: $filter('translate')("ok"),
+                    type: 'button-norm'
+                            }
+            ]
+        });
+    }
+    $scope.isExpired = function () {
+        //check in config if expirationDate is > of today
+        //        var expirationDateString = Config.getExpirationDate();
+        //        var expirationDate
+        var expirationDateString = Config.getExpirationDate();
+        var pattern = /(\d{2})-(\d{2})-(\d{4})/;
+        var expirationDate = new Date(expirationDateString.replace(pattern, '$3-$2-$1'));
+        expirationDate = expirationDate.getTime();
+        var today = new Date().getTime();
+        if (expirationDate < today) {
+            return true;
+        } else if (expirationDate > today) {
+            return false;
+        }
 
-    $scope.babyselected = null;
-    $scope.babies = [];
-    // Categories submenu
-    $scope.categoriesSubmenu = false;
-    $scope.version = Config.getVersion();
+    }
+    Config.init().then(function () {
+        $scope.babyselected = null;
+        $scope.babies = [];
+        // Categories submenu
+        $scope.categoriesSubmenu = false;
+        $scope.version = Config.getVersion();
+        if (!$scope.isExpired()) {
+            $scope.showNotExpiredPopup(Config.getExpirationDate());
+        } else {
+            $scope.showExpiredPopup();
+        }
+    });
+
     $scope.toggleSubmenu = function () {
         $scope.categoriesSubmenu = !$scope.categoriesSubmenu;
     };

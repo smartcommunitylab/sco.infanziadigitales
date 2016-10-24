@@ -159,6 +159,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.c
         },
         doProfiling: function () {
             return false;
+        },
+        getExpirationDate: function () {
+            return mapJsonConfig["expirationDate"];
+
         }
     }
 })

@@ -2122,3 +2122,8 @@ ion-content .scroll {
     visibility: hidden;
     height: 10px;
 }
+
+.insegnanti-button {
+    background-color: #bd3e4d;
+    color: white;
+}

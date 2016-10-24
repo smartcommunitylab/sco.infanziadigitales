@@ -475,7 +475,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
         no_messages: 'Non sono presenti messaggi',
         input_chat_placeholder: 'Scrivi messaggio',
         no_parents: 'Nessun genitore',
-        no_allergies: 'Nessuna allergia'
+        no_allergies: 'Nessuna allergia',
+        pop_up_expired_title: 'Versione scaduta',
+        pop_up__expired_template: 'Ci scusiamo ma non è più possibile utilizzare questa versione dell\'applicazione in quanto il periodo di prova è terminata',
+        pop_up_not_expired_title: 'Versione di prova',
+        pop_up_not_expired_template: 'Questa  è una versione di prova e terminerà il '
     });
 
     $translateProvider.preferredLanguage("it");

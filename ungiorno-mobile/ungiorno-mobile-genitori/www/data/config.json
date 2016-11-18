@@ -1,7 +1,7 @@
 {
-    "senderID": "453601816446",
-    "messagingAppId": "ugas.trento",
-    "absenceLimitHours": 9,
-    "absenceLimitMinutes": 15,
-    "expirationDate": "15-11-2016"
+  "senderID": "453601816446",
+  "messagingAppId": "ugas.trento",
+  "absenceLimitHours": 9,
+  "absenceLimitMinutes": 15,
+  "expirationDate": "20-11-2016"
 }

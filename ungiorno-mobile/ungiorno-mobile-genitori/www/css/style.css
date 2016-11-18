@@ -71,11 +71,16 @@ a.item-content {
   opacity: 0.7;
 }
 #home .no-connection {
-  text-align: justify;
   padding: 8px;
 }
 #home .home-reload {
-  color: #5FC3DF;
+  color: #fff;
+  background: #FFAD00;
+  border: 0px;
+}
+#home .no-connection-block {
+  text-align: center;
+  margin: 8px;
 }
 .home-area {
   display: grid!important;

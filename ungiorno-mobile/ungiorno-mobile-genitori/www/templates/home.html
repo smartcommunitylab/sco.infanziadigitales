@@ -1,43 +1,36 @@
 <ion-view id="home">
 
-    <ion-nav-title ng-init="getDateString()">
-        <!--        {{date | date:'EEEE, d MMMM yyyy'}}-->
-        {{date | date:'EEEE, d MMMM yyyy'}}
-    </ion-nav-title>
-    <!--
+  <ion-nav-title ng-init="getDateString()">
+    <!--        {{date | date:'EEEE, d MMMM yyyy'}}-->
+    {{date | date:'EEEE, d MMMM yyyy'}}
+  </ion-nav-title>
+  <!--
 <ion-nav-buttons side="right">
     <button class="button" ng-click="refresh()">
         <i class="icon ion-loop"></i>
     </button>
 </ion-nav-buttons>
 -->
-    <ion-content has-header="true" scroll="false">
-        <ion-scroll class="home-area" scrollbar-y="true">
-            <div class="no-connection" ng-show="noConnection">{{'home_no_connection'|translate}}<a class="home-reload" ng-click="refresh()"> ricarica pagina</a></div>
-            <div ng-repeat="element in elements track by $index" class="list" ng-class="{'home-button-no-connection':(noConnection && !isContact(element))}">
-                <div class="card" ng-class="elements[$index].class">
-                    <a class=" button-block item-thumbnail-left" ng-click="execute(elements[$index])" ng-disabled="elements[$index].disabled">
-                        <!--
-                        <img src="{{elements[$index].img}}">
-                        <div class="row">
-                            <div class="col">
-                                <p class="title">{{elements[$index].string|uppercase}}</p>
-                                <p class="note">{{elements[$index].note}}</p>
+  <ion-content has-header="true" scroll="false">
+    <ion-scroll class="home-area" scrollbar-y="true">
+      <div class="no-connection-block">
+        <div class="no-connection" ng-show="noConnection" ng-bind-html="noConnectionMessage"></div>
+        <button ng-show="noConnection" class="button home-reload" ng-click="refresh()"> ricarica pagina</button>
+      </div>
+      <div ng-repeat="element in elements track by $index" class="list" ng-if="!noConnection || isContact(element)">
+        <div class="card" ng-class="elements[$index].class">
+          <a class=" button-block item-thumbnail-left" ng-click="execute(elements[$index])" ng-disabled="elements[$index].disabled">
+            <img ng-src="{{element.img}}">
+            <div class="row">
+              <div class="col">
+                <p class="title">{{element.string|uppercase}}</p>
+                <p class="note">{{element.note}}</p>
 
-                            </div>
-                        </div>
--->
-                        <img ng-src="{{element.img}}">
-                        <div class="row">
-                            <div class="col">
-                                <p class="title">{{element.string|uppercase}}</p>
-                                <p class="note">{{element.note}}</p>
-
-                            </div>
-                        </div>
-                    </a>
-                </div>
+              </div>
             </div>
-        </ion-scroll>
-    </ion-content>
+          </a>
+        </div>
+      </div>
+    </ion-scroll>
+  </ion-content>
 </ion-view>

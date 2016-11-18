@@ -453,7 +453,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     home_entry_to: ' Entra alle ore ',
     home_exit_to: ' ed esce alle ore ',
     home_absent: 'Assente',
-    home_no_connection: 'Connessione assente, alcune funzionalitá sono disabilitate. Controlla la connessione del dispositivo e ',
+    home_no_connection: 'Connessione assente! <br> Controlla la connessione del dispositivo',
     go_home_by_bus: ' e torna a casa con il bus.',
     menu_exit: 'Logout',
     menu_enter: 'Entra',

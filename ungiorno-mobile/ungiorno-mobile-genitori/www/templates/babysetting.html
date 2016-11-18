@@ -1,41 +1,54 @@
 <ion-view id="ritiro" hide-back-button="false">
-    <ion-nav-bar class="bar bar-ungiorno">
-        <ion-nav-back-button>
-        </ion-nav-back-button>
-        <ion-nav-title>
-            {{'settings' | translate}}
-        </ion-nav-title>
-    </ion-nav-bar>
+  <ion-nav-bar class="bar bar-ungiorno">
+    <ion-nav-back-button>
+    </ion-nav-back-button>
+    <ion-nav-title>
+      {{'settings' | translate}}
+    </ion-nav-title>
+  </ion-nav-bar>
 
-    <ion-content has-header="true" class="page-padding" scrollbar-y="true">
-        <div class="form-container">
-            <div>{{'babysetting_intro' | translate}}</div>
-
-            <div>
-                <div class="input-description-padding">{{'babysetting_services' | translate}}</div>
-                <ul class="home-info-content my-list home-comm">
-                    <!--                    <li class="home-comm row" ng-repeat="item in babyServices" ng-if="item.text!='mensa'" ng-model="item.checked" ng-checked="item.checked" ng-change="showOptions(item)">-->
-                    <!--                        <div class="setting-text" >{{ item.text }}</div>-->
-                    <!--                    </li>-->
-                    <li ng-repeat="item in babyServices" ng-if="item.text!='mensa'">{{ item.text }}</li>
-                </ul>
-
-                <div class="input-description-padding">{{'babysetting_hours' | translate}}</div>
-                <label class="item item-input setting">{{getTimeLabel()}}</label>
-
-
-                <div class="input-description-padding">{{'babysetting_who' | translate}}</div>
-                <ion-list class="padlist">
-                    <div class="item item-input setting" ng-repeat="person in babyProfile.persons">{{person.fullName}}</div>
-                </ion-list>
-            </div>
-
-            <div ng-show="busEnabled">
-                <div class="input-description-padding">{{'babysetting_bus' | translate}}</div>
-                <label class="item item-input setting">
-                    {{selectedBusBack.name}}
-                </label>
-            </div>
+  <ion-content has-header="true" class="page-padding" scrollbar-y="true">
+    <div class="form-container">
+      <!--<div>{{'babysetting_intro' | translate}}</div>-->
+      <div>
+        <div class="input-description-padding setting-services-list">{{'babysetting_services' | translate}}</div>
+        <div class="home-info-content my-list home-comm">
+          <!--                    <li class="home-comm row" ng-repeat="item in babyServices" ng-if="item.text!='mensa'" ng-model="item.checked" ng-checked="item.checked" ng-change="showOptions(item)">-->
+          <!--                        <div class="setting-text" >{{ item.text }}</div>-->
+          <!--                    </li>-->
+          <!--          <div ng-repeat="item in babyServices" ng-if="item.text!='mensa'">{{ item.text }}</div>-->
+          <!--          <ion-checkbox ng-model="filter.red">Red</ion-checkbox>-->
+          <ion-checkbox ng-repeat="(key, data) in babyConfiguration.services" ng-model="data.active" checked onclick="return false;" onkeydown="return false;" ng-if="key!='mensa'">{{ key }}</ion-checkbox>
         </div>
-    </ion-content>
+
+        <div class="input-description-padding row">{{'babysetting_hours' | translate}}
+          <label class="item item-input setting setting-line">{{getTimeLabel()}}</label>
+        </div>
+
+
+
+        <div class="input-description-padding">{{'babysetting_who' | translate}}</div>
+        <!--        <ion-list class="padlist">-->
+        <!--        <ul class="item item-input setting my-list" ng-repeat="person in babyProfile.persons">{{person.fullName}}</ul>-->
+        <!--        </ion-list>-->
+        <ul class="home-info-content my-list home-comm">
+          <li class="huge" ng-repeat="person in babyProfile.persons">{{person.fullName}}</li>
+
+        </ul>
+      </div>
+
+      <div ng-show="busEnabled">
+        <div class="input-description-padding">{{'babysetting_bus' | translate}}</div>
+        <!--
+        <label class="item item-input setting">
+          {{selectedBusBack.name}}
+        </label>
+-->
+        <ul class="home-info-content my-list home-comm">
+          <li class="huge">{{selectedBusBack.name}}</li>
+
+        </ul>
+      </div>
+    </div>
+  </ion-content>
 </ion-view>

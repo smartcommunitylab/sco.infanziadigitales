@@ -1,21 +1,21 @@
 <ion-side-menus enable-menu-with-back-views="false">
-    <ion-side-menu-content drag-content="false">
-        <ion-nav-bar class="bar bar-ungiorno">
-            <ion-nav-buttons side="left">
-                <!-- O: button-clear or button-icon -->
-                <button class="button button-percorsi button-clear" menu-toggle="left">
-                    <i class="icon ion-navicon"></i>
-                </button>
-            </ion-nav-buttons>
-        </ion-nav-bar>
-        <ion-nav-view name="menuContent"></ion-nav-view>
-    </ion-side-menu-content>
+  <ion-side-menu-content drag-content="false">
+    <ion-nav-bar class="bar bar-ungiorno">
+      <ion-nav-buttons side="left">
+        <!-- O: button-clear or button-icon -->
+        <button class="button button-percorsi button-clear" menu-toggle="left">
+          <i class="icon ion-navicon"></i>
+        </button>
+      </ion-nav-buttons>
+    </ion-nav-bar>
+    <ion-nav-view name="menuContent"></ion-nav-view>
+  </ion-side-menu-content>
 
-    <ion-side-menu side="left">
+  <ion-side-menu side="left">
 
-        <ion-content class="leftmenu">
-            <ion-list>
-                <!--
+    <ion-content class="leftmenu">
+      <ion-list>
+        <!--
 <p>
     <div class="row">
         <div class="col col-80">
@@ -31,42 +31,45 @@
 
 </p>
 -->
-                <!--                <ion-item class="item item-avatar item-button-right menu-profile" ng-if="babies && babies.length > 0">-->
-                <!--                    <img ng-src="http://static.guide.supereva.it/guide/portoghese/insegnante.jpg">-->
-                <!--                    <h2>{{teacherName}}</h2>-->
-                <!--                </ion-item>-->
-                <ion-item menu-close item-icon-left class="menu-item-insegnante menu-profile" ng-if="babies && babies.length > 0">
-                    <div>
-                        <h2>UGAS - Insegnanti</h2>
-                    </div>
-                    <div>
-                        <h2>{{teacherName}}</h2></div>
-                </ion-item>
-                <ion-item menu-close item-icon-left class="menu-item-insegnante" ng-click="goto('app.home')">
-                    <i class="icon voice-menu  icon-menu-insegnante inf_dighome"></i>Home
-                </ion-item>
+        <!--                <ion-item class="item item-avatar item-button-right menu-profile" ng-if="babies && babies.length > 0">-->
+        <!--                    <img ng-src="http://static.guide.supereva.it/guide/portoghese/insegnante.jpg">-->
+        <!--                    <h2>{{teacherName}}</h2>-->
+        <!--                </ion-item>-->
+        <ion-item menu-close item-icon-left class="menu-item-insegnante menu-profile" ng-if="babies && babies.length > 0">
+          <div>
+            <h2>UGAS - Insegnanti</h2>
+          </div>
+          <div>
+            <h2>{{teacherName}}</h2></div>
+        </ion-item>
+        <ion-item menu-close item-icon-left class="menu-item-insegnante" ng-click="goto('app.home')">
+          <i class="icon voice-menu  icon-menu-insegnante inf_dighome"></i>Home
+        </ion-item>
 
-                <ion-item menu-close item-icon-left class="menu-item-insegnante" ng-click="goto('app.communications')">
-                    <i class="icon voice-menu  icon-menu-insegnante inf_dignote"></i>{{'parent_communications'|translate}}
-                </ion-item>
-                <ion-item menu-close item-icon-left class="menu-item-insegnante" ng-click="goto('app.bus')">
-                    <i class="icon voice-menu icon-menu-insegnante  inf_digbus"></i>{{'menu_bus' | translate}}
-                </ion-item>
+        <ion-item menu-close item-icon-left class="menu-item-insegnante" ng-click="goto('app.communications')">
+          <i class="icon voice-menu  icon-menu-insegnante inf_dignote"></i>{{'parent_communications'|translate}}
+        </ion-item>
+        <ion-item menu-close item-icon-left class="menu-item-insegnante" ng-click="goto('app.bus')">
+          <i class="icon voice-menu icon-menu-insegnante  inf_digbus"></i>{{'menu_bus' | translate}}
+        </ion-item>
 
-                <!--
+        <!--
 <ion-item menu-close item-icon-left class="menu-item-insegnante" ng-click="goto('app.calendar')">
     <i class="icon voice-menu  icon-menu-insegnante inf_digcalendar"></i>Calendario
 </ion-item>
 -->
-                <ion-item menu-close item-icon-left class="menu-item-insegnante" ng-click="logout()">
-                    <i class="icon voice-menu  icon-menu-insegnante inf_diglog-out"></i>{{'menu_exit' | translate}}
-                </ion-item>
-                <ion-item menu-close item-icon-left class="menu-item-insegnante" ng-click="openCredits()">
-                    <i class="icon voice-menu icon-menu-insegnante   ion-information-circled"></i>{{'menu_credits' | translate}}
-                </ion-item>
-            </ion-list>
-        </ion-content>
-    </ion-side-menu>
+        <ion-item menu-close item-icon-left class="menu-item-insegnante" ng-click="logout()">
+          <i class="icon voice-menu  icon-menu-insegnante inf_diglog-out"></i>{{'menu_exit' | translate}}
+        </ion-item>
+        <ion-item menu-close item-icon-left class="menu-item-insegnante" onclick="window.open('mailto:infdig-help@smartcommunitylab.it','_system'); return false;">
+          <i class="icon voice-menu  icon-menu-insegnante ion-alert-circled"></i>{{'menu_issue' | translate}}
+        </ion-item>
+        <ion-item menu-close item-icon-left class="menu-item-insegnante" ng-click="openCredits()">
+          <i class="icon voice-menu icon-menu-insegnante   ion-information-circled"></i>{{'menu_credits' | translate}}
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ion-side-menu>
 </ion-side-menus>
 
 

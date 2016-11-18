@@ -257,6 +257,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
     menu_bus: 'Bus',
     menu_exit: 'Logout',
     menu_enter: 'Entra',
+    menu_issue: 'Segnala problema app',
     babysetting_intro: 'Definisci i seguenti dati relativi all\'orario scolastico del bambino.',
     babysetting_services: 'Servizi',
     babysetting_hours: 'Orario di uscita:',
@@ -490,6 +491,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
     pop_up_not_expired_template_4: ' giorni',
     pop_up_not_expired_template_5: ". Per ulteriori informazioni, scrivi a ",
     popup_app_name: 'Un Giorno A Scuola - Genitori',
+
   });
 
   $translateProvider.preferredLanguage("it");

@@ -1403,7 +1403,10 @@ select {
   margin-right: 6px;
   float: left;
 }
-#communications .note-date-to-check {
+#communications .note-date-to-check-label {
+  color: #ffc900!important;
+}
+#communications .note-date-to-check-value {
   color: gray!important;
 }
 #communications .button-communication {
@@ -1414,6 +1417,9 @@ select {
 #communication .communication-card {
   margin-left: 1px;
   margin-right: 1px;
+}
+#communications ul.list {
+  background-color: lightgray;
 }
 
 /* Login */

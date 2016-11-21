@@ -620,6 +620,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     pop_up_not_expired_template_4: ' giorni',
     pop_up_not_expired_template_5: ". Per ulteriori informazioni, scrivi a ",
     popup_app_name: 'Un Giorno A Scuola - Genitori',
+    retire_popup_person_cancel: 'Indica chi ritira il bambino'
 
 
 
@@ -798,6 +799,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     pop_up_not_expired_template_4: ' giorni',
     pop_up_not_expired_template_5: ". Per ulteriori informazioni, scrivi a ",
     popup_app_name: 'Un Giorno A Scuola - Genitori',
+    retire_popup_person_cancel: 'Indica chi ritira il bambino'
 
   });
 
@@ -982,6 +984,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     pop_up_not_expired_template_4: ' giorni',
     pop_up_not_expired_template_5: ". Per ulteriori informazioni, scrivi a ",
     popup_app_name: 'Un Giorno A Scuola - Genitori',
+    retire_popup_person_cancel: 'Indica chi ritira il bambino',
+    //    retire_popup_toolate_title: 'Attenzione',
+    //    retire_popup_toolate_template: '',
+    //    retire_popup_toolate_button: ''
 
   });
 

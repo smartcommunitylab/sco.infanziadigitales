@@ -193,6 +193,9 @@ input[type=time] {
   margin-top: 16px;
   color: #FFAD00;
   font-weight: bold;
+  display: inline;
+  line-height: 47px;
+  font-size: 16px;
 }
 .iinput-retire--description-padding i {
   color: #000000;
@@ -389,6 +392,9 @@ input:checked+.checkbox-icon:before {
 #retire .retire-toggle {
   border: 0px;
   padding-left: 5px;
+}
+#retire .toggle-small.item-toggle .toggle {
+  top: 30px;
 }
 .delegate-input {
   text-align: center;

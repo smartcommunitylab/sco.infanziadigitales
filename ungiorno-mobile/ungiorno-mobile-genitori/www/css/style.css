@@ -1867,6 +1867,20 @@ textarea {
   border-left: 1px solid lightgray;
   border-right: 1px solid lightgray;
 }
+#absence .add-motivation-button {
+  background-color: #FFAD00;
+  color: #fff;
+}
+#absence .delete-motivation-button {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  color: red;
+  font-weight: bold;
+  padding: 0px;
+  font-size: 18px;
+  width: 100%;
+  text-align: right;
+}
 .setting-line {
   height: 20px;
   line-height: 20px;

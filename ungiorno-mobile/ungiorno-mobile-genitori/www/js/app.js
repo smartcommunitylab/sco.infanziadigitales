@@ -547,14 +547,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     assenza_popup_retire_cancel: "Annulla",
     assenza_popup_retire_ok: "Conferma",
     assenza_popup_toolate_title: "Attenzione",
-    assenza_popup_toolate_text: "Non è più possibile inserire un'assenza per oggi. Modifica permessa entro le ore",
+    assenza_popup_toolate_text_1: "Non è più possibile inserire un'assenza per oggi. Modifica permessa entro le ore",
+    assenza_popup_toolate_text_2: ". Si prega di contattare la scuola telefonicamente.",
     noinfo: "Nessuna informazione",
     settings: "Impostazioni di base",
     cancel: "Annulla",
     absence: "Inserisci assenza",
     period: "Periodo",
-    period_from: "Da",
-    period_to: "A",
+    period_from: "Dal",
+    period_to: "Al",
     reason: "Motivazione",
     reason_other: "Altro...",
     absence_other: "Altro",
@@ -601,7 +602,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     credits_info: 'Per informazioni: ',
     credits_licenses_button: 'VEDI LICENZE',
     data_updated: 'Dati aggiornati',
-    communication_before: 'Da consegnare entro:',
+    communication_before: 'Da fare entro:',
     communication_done: 'FATTO',
     communication_undone: 'DA FARE',
     lbl_today: 'OGGI',
@@ -620,9 +621,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     pop_up_not_expired_template_4: ' giorni',
     pop_up_not_expired_template_5: ". Per ulteriori informazioni, scrivi a ",
     popup_app_name: 'Un Giorno A Scuola - Genitori',
-    retire_popup_person_cancel: 'Indica chi ritira il bambino'
-
-
+    retire_popup_person_cancel: 'Indica chi ritira il bambino',
+    add_motivation: 'Aggiungi la motivazione',
+    remove_motivation: 'Annulla',
+    type_illness: 'Tipo di mallatia:'
 
   });
 
@@ -710,6 +712,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     open: "Aperture",
     close: "Chiusure",
     timepicker_close: "Chiudi",
+    period: "Period",
+    period_from: "From",
     holiday: "Vacanza",
     meeting: "Riunione genitori",
     trip: "Gita",
@@ -734,7 +738,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     assenza_popup_retire_cancel: "Annulla",
     assenza_popup_retire_ok: "Conferma",
     assenza_popup_toolate_title: "Attenzione",
-    assenza_popup_toolate_text: "Non è più possibile inserire un'assenza per oggi. Modifica permessa entro le ore",
+    assenza_popup_toolate_text_1: "Non è più possibile inserire un'assenza per oggi. Modifica permessa entro le ore",
+    assenza_popup_toolate_text_2: ". Si prega di contattare la scuola telefonicamente.",
     ok: "OK",
     today: "Oggi",
     communication_error: "Errore di comunicazione con il server. Impossibile caricare i dati",
@@ -780,7 +785,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     communications_title: "Comunicazioni della scuola",
     messages_title: "Messaggi",
 
-    communication_before: 'Da consegnare entro:',
+    communication_before: 'Da fare entro:',
     communication_done: 'FATTO',
     communication_undone: 'DA FARE',
     lbl_today: 'OGGI',
@@ -799,7 +804,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     pop_up_not_expired_template_4: ' giorni',
     pop_up_not_expired_template_5: ". Per ulteriori informazioni, scrivi a ",
     popup_app_name: 'Un Giorno A Scuola - Genitori',
-    retire_popup_person_cancel: 'Indica chi ritira il bambino'
+    retire_popup_person_cancel: 'Indica chi ritira il bambino',
+    add_motivation: 'Aggiungi la motivazione',
+    remove_motivation: 'Annulla',
+    type_illness: 'Tipo di mallatia:'
 
   });
 
@@ -921,7 +929,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     assenza_popup_retire_cancel: "Annulla",
     assenza_popup_retire_ok: "Conferma",
     assenza_popup_toolate_title: "Attenzione",
-    assenza_popup_toolate_text: "Non è più possibile inserire un'assenza per oggi. Modifica permessa entro le ore",
+    assenza_popup_toolate_text_1: "Non è più possibile inserire un'assenza per oggi. Modifica permessa entro le ore",
+    assenza_popup_toolate_text_2: ". Si prega di contattare la scuola telefonicamente.",
     ok: "OK",
     today: "Oggi",
     communication_error: "Communication error",
@@ -965,7 +974,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     data_updated: 'Dati aggiornati',
     communications_title: "Comunicazioni della scuola",
     messages_title: "Messaggi",
-    communication_before: 'Da consegnare entro:',
+    communication_before: 'Da fare entro:',
     communication_done: 'FATTO',
     communication_undone: 'DA FARE',
     lbl_today: 'OGGI',
@@ -985,9 +994,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     pop_up_not_expired_template_5: ". Per ulteriori informazioni, scrivi a ",
     popup_app_name: 'Un Giorno A Scuola - Genitori',
     retire_popup_person_cancel: 'Indica chi ritira il bambino',
-    //    retire_popup_toolate_title: 'Attenzione',
-    //    retire_popup_toolate_template: '',
-    //    retire_popup_toolate_button: ''
+    add_motivation: 'Aggiungi la motivazione',
+    remove_motivation: 'Annulla',
+    type_illness: 'Tipo di mallatia:'
+      //    retire_popup_toolate_title: 'Attenzione',
+      //    retire_popup_toolate_template: '',
+      //    retire_popup_toolate_button: ''
 
   });
 

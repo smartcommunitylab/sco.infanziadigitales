@@ -1,49 +1,88 @@
 <ion-view id="absence" title="{{'absence' | translate}}">
-    <ion-nav-bar class="bar bar-ungiorno">
-        <ion-nav-back-button>
-        </ion-nav-back-button>
-        <ion-nav-buttons side="right">
+  <ion-nav-bar class="bar bar-ungiorno">
+    <ion-nav-back-button>
+    </ion-nav-back-button>
+    <ion-nav-buttons side="right">
 
-            <button class="button icon button-clear " ng-click="showConfirm()">{{'send'|translate}}</button>
-        </ion-nav-buttons>
-    </ion-nav-bar>
-    <ion-content has-header="true" class="page-padding" scrollbar-y="true">
-        <h5 class="accent-color input-description-padding">{{'period' | translate}}:</h5>
-        <div class="row">
-            <div class="col col-20">
-                <h5>{{'period_from' | translate}}:</h5>
-            </div>
-            <div class="col">
-                <button class="button button-clear button-dark " ng-click="openDatePickerFrom() "><span class="label-time-date">{{getDateLabel(illness.dateFrom)}}</span></button>
-            </div>
-        </div>
+      <button class="button icon button-clear " ng-click="showConfirm()">{{'send'|translate}}</button>
+    </ion-nav-buttons>
+  </ion-nav-bar>
+  <ion-content has-header="true" class="page-padding" scrollbar-y="true">
+    <!--        <h5 class="accent-color input-description-padding">{{'period' | translate}}:</h5>-->
+    <div class="row">
+      <div class="col col-20">
+        <div class="input-description-padding">{{'period_from' | translate}}:</div>
+      </div>
+      <div class="col">
+        <button class="button button-clear button-dark " ng-click="openDatePickerFrom() "><span class="label-time-date">{{getDateLabel(illness.dateFrom)}}</span></button>
+      </div>
+    </div>
 
-        <div class="row">
-            <div class="col col-20">
-                <h5>{{'period_to' | translate}}:</h5>
-            </div>
-            <div class="col">
-                <button class="button button-clear button-dark" ng-click="openDatePickerTo()"><span class="label-time-date">{{getDateLabel(illness.dateTo)}}</span></button>
-            </div>
-        </div>
+    <div class="row">
+      <div class="col col-20">
+        <div class="input-description-padding">{{'period_to' | translate}}:</div>
+      </div>
+      <div class="col">
+        <button class="button button-clear button-dark" ng-click="openDatePickerTo()"><span class="label-time-date">{{getDateLabel(illness.dateTo)}}</span></button>
+      </div>
+    </div>
 
+    <div class="row">
+      <div class="col col-10"></div>
+      <div class="col col-60">
+        <button class="button button-block add-motivation-button" ng-click="addMotivation()">
+          {{'add_motivation' | translate}}
+        </button>
+      </div>
+      <div class="col col-10"></div>
+    </div>
+    <div ng-if="motivationIsPresent">
+      <div class="row">
         <h5 class="accent-color input-description-padding"><b>{{'reason' | translate}}:</b></h5>
-        <ion-list>
-            <ion-list class="padlist ">
-                <ion-radio class="retire-list" ng-repeat="item in absenceTypes" ng-value="item.typeId" ng-model="data.typeId" ng-change="selectAbsence(item) ">
-                    {{item.name}}
-                </ion-radio>
-            </ion-list>
-        </ion-list>
-        <!--
-        <ion-list>
-            <ion-checkbox ng-repeat="item in absenceTypes" ng-model="item.checked" ng-checked="item.checked" ng-change="selectAbsence(item)">{{item.name}}</ion-checkbox>
-        </ion-list>
+        <label class="delete-motivation-button" ng-click="deleteMotivation()">
+          {{'remove_motivation' | translate |uppercase}}
+        </label>
+      </div>
+      <!--
+      <ion-list>
+  <ion-list class="padlist ">
+    <ion-radio class="retire-list" ng-repeat="item in absenceTypes" ng-value="item.typeId" ng-model="data.typeId" ng-change="selectAbsence(item) ">
+      {{item.name}}
+    </ion-radio>
+  </ion-list>
+</ion-list>
+<ion-list>
+  <ion-list class="padlist ">
+    <ion-radio class="retire-list" ng-repeat="illness in frequentIllnesses" ng-value="illness.typeId" ng-model="illnessModel.typeId" ng-change="selectIllness(illness) ">
+      {{illness.name}}
+    </ion-radio>
+  </ion-list>
+</ion-list>
 -->
-        <!--
-<label class="item item-input">
-    <input type="text" ng-model="note" placeholder="Inserire una motivazione" ng-hide="!isOther">
-</label>
+      <!--
+
+      <div class="item item-divider">
+        Clientside, Selected Value: {{ data.clientSide }}
+      </div>
 -->
-    </ion-content>
+      <div class="list card">
+        <ion-radio ng-repeat="item in absenceTypes" ng-value="item.typeId" ng-model="data.typeId" ng-change="selectAbsence(item)">
+          {{ item.name}}
+        </ion-radio>
+      </div>
+      <!--
+      <div class="item item-divider">
+        Serverside, Selected Value: {{ data.serverSide }}
+      </div>
+-->
+      <div ng-if="data.typeId=='malattia'">
+        <h5 class="accent-color input-description-padding"><b>{{'type_illness' | translate}}</b></h5>
+        <div class="list card">
+          <ion-radio ng-repeat=" item in frequentIllnesses " ng-value="item.typeId " ng-model="illnessModel.typeId " ng-change="selectIllness(illness) " name="server-side ">
+            {{ item.name }}
+          </ion-radio>
+        </div>
+      </div>
+    </div>
+  </ion-content>
 </ion-view>

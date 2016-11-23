@@ -159,6 +159,20 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     }
     return false;
   }
+  $scope.expandText = function () {
+    var element = document.getElementById("txtnotes");
+    element.style.height = element.scrollHeight + "px";
+    element = document.getElementById("txtfooter");
+    element.style.height = element.scrollHeight + "px";
+
+
+  }
+  $scope.resetText = function () {
+    var element = document.getElementById("txtnotes");
+    element.style.height = "44px";
+    element = document.getElementById("txtfooter");
+    element.style.height = "44px";
+  }
   var counter = 0;
   $scope.checkMessage = function (message) {
 
@@ -230,6 +244,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
           $rootScope.messages[$scope.babyProfile.kidId] = $rootScope.messages[$scope.babyProfile.kidId].concat(msg);
           $ionicLoading.hide();
           $ionicScrollDelegate.scrollBottom();
+          $scope.new_message = '';
+          $scope.resetText();
         },
         function (err) {
           $ionicLoading.hide();
@@ -239,7 +255,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     }
 
     $ionicScrollDelegate.scrollBottom();
-    $scope.new_message = '';
   };
 
 

@@ -1438,6 +1438,7 @@ select {
 .login {
   height: 100%;
   min-height: 100%;
+  background-color: #009aa8;
 }
 .login .login-title {
   position: relative;
@@ -1498,6 +1499,7 @@ select {
   border-color: #DB4437;
   background-color: #DB4437;
   color: #FFFFFF;
+  margin-bottom: 30px;
 }
 .login .login-button-facebook {
   text-transform: uppercase;
@@ -1507,8 +1509,8 @@ select {
 }
 .login .login-button-internal {
   text-transform: uppercase;
-  border-color: #f8ab15;
-  background-color: #f8ab15;
+  border-color: #80D0E6;
+  background-color: #80D0E6;
   color: #FFFFFF;
 }
 .delete-login {
@@ -1536,7 +1538,7 @@ select {
 }
 .login .login-link {
   display: block;
-  color: #fff;
+  color: #f8ab15;
   padding: 0 1em;
 }
 .login-input {
@@ -1800,6 +1802,8 @@ $dark: #444 !default;
 }
 #chat .input-chat-footer {
   background-color: #F6F6F6;
+  font-size: 20px;
+  line-height: 20px;
 }
 #chat .input-chat-footer::-webkit-input-placeholder {
   color: gray!important;

@@ -422,6 +422,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
           $ionicLoading.hide();
           $scope.newMessage.text = '';
           $ionicScrollDelegate.scrollBottom();
+          $scope.resetText();
         },
         function (err) {
           $ionicLoading.hide();
@@ -456,6 +457,21 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
       return true;
     }
     return false;
+  }
+
+  $scope.expandText = function () {
+    var element = document.getElementById("txtnotes");
+    element.style.height = element.scrollHeight + "px";
+    element = document.getElementById("txtfooter");
+    element.style.height = element.scrollHeight + "px";
+
+
+  }
+  $scope.resetText = function () {
+    var element = document.getElementById("txtnotes");
+    element.style.height = "40px";
+    element = document.getElementById("txtfooter");
+    element.style.height = "40px";
   }
   var counter = 0;
   $scope.checkMessage = function (message) {

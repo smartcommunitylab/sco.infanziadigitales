@@ -143,7 +143,10 @@ Right now they are not interested to put who retires the kid
 
                             </button>
 -->
-              <input type="text" class="input-chat-footer" placeholder="{{'input_chat_placeholder' | translate}}" ng-model="newMessage.text" ng-focus="inputUp()" ng-blur="inputDown()" ng-keyup="$event.keyCode == 13 ? sendMessage(newMessage.text) : startTyping()">
+              <!--              <input type="text" class="input-chat-footer" placeholder="{{'input_chat_placeholder' | translate}}" ng-model="newMessage.text" ng-focus="inputUp()" ng-blur="inputDown()" ng-keyup="$event.keyCode == 13 ? sendMessage(newMessage.text) : startTyping()">-->
+              <!--              <textarea class="input-chat-footer" placeholder="{{'input_chat_placeholder' | translate}}" ng-model="newMessage.text" id="txtnotes" ng-focus="inputUp()" ng-blur="inputDown()" ng-keyup="$event.keyCode == 13 ? sendMessage(newMessage.text) : startTyping()" ng-keydown="expandText()">-->
+              <textarea class="input-chat-footer" placeholder="{{'input_chat_placeholder' | translate}}" ng-model="newMessage.text" id="txtnotes" ng-focus="inputUp()" ng-blur="inputDown()" ng-keyup="startTyping()" ng-keydown="expandText()">
+              </textarea>
               <button class="button button-chat-send icon ion-android-send" ng-click="sendMessage(newMessage.text)">
 
               </button>

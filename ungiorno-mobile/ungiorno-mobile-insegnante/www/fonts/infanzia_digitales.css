@@ -1,141 +1,144 @@
 @font-face {
-    font-family: 'infanzia_digitales';
-    src:    url('infanzia_digitales.eot?z7dd0q');
-    src:    url('infanzia_digitales.eot?z7dd0q#iefix') format('embedded-opentype'),
-        url('infanzia_digitales.ttf?z7dd0q') format('truetype'),
-        url('infanzia_digitales.woff?z7dd0q') format('woff'),
-        url('infanzia_digitales.svg?z7dd0q#infanzia_digitales') format('svg');
-    font-weight: normal;
-    font-style: normal;
+  font-family: 'infanzia_digitales';
+  src:  url('infanzia_digitales.eot?7cwl9t');
+  src:  url('infanzia_digitales.eot?7cwl9t#iefix') format('embedded-opentype'),
+    url('infanzia_digitales.ttf?7cwl9t') format('truetype'),
+    url('infanzia_digitales.woff?7cwl9t') format('woff'),
+    url('infanzia_digitales.svg?7cwl9t#infanzia_digitales') format('svg');
+  font-weight: normal;
+  font-style: normal;
 }
 
 [class^="inf_dig"], [class*=" inf_dig"] {
-    /* use !important to prevent issues with browser extensions that change fonts */
-    font-family: 'infanzia_digitales' !important;
-    speak: none;
-    font-style: normal;
-    font-weight: normal;
-    font-variant: normal;
-    text-transform: none;
-    line-height: 1;
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'infanzia_digitales' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
 
-    /* Better Font Rendering =========== */
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
+.inf_dignotifica_messaggi:before {
+  content: "\e91c";
+}
 .inf_digaccount:before {
-    content: "\e900";
+  content: "\e900";
 }
 .inf_digalarm:before {
-    content: "\e901";
+  content: "\e901";
 }
 .inf_digalert:before {
-    content: "\e902";
+  content: "\e902";
 }
 .inf_digarrow_back:before {
-    content: "\e903";
+  content: "\e903";
 }
 .inf_digassignment:before {
-    content: "\e904";
+  content: "\e904";
 }
 .inf_digbus:before {
-    content: "\e905";
+  content: "\e905";
 }
 .inf_digcalendar:before {
-    content: "\e906";
+  content: "\e906";
 }
 .inf_digcall:before {
-    content: "\e907";
+  content: "\e907";
 }
 .inf_digcheck_circle:before {
-    content: "\e908";
+  content: "\e908";
 }
 .inf_digcheck:before {
-    content: "\e909";
+  content: "\e909";
 }
 .inf_digchildren_list:before {
-    content: "\e90a";
+  content: "\e90a";
 }
 .inf_digclock:before {
-    content: "\e90b";
+  content: "\e90b";
 }
 .inf_digclose:before {
-    content: "\e90c";
+  content: "\e90c";
 }
 .inf_digdelete:before {
-    content: "\e90d";
+  content: "\e90d";
 }
 .inf_digedit:before {
-    content: "\e90e";
+  content: "\e90e";
 }
 .inf_digfilter:before {
-    content: "\e90f";
+  content: "\e90f";
 }
 .inf_dighome:before {
-    content: "\e910";
+  content: "\e910";
 }
 .inf_digimage:before {
-    content: "\e911";
+  content: "\e911";
 }
 .inf_diginfo:before {
-    content: "\e912";
+  content: "\e912";
 }
 .inf_diglog-out:before {
-    content: "\e913";
+  content: "\e913";
 }
 .inf_digmail:before {
-    content: "\e914";
+  content: "\e914";
 }
 .inf_digmenu:before {
-    content: "\e915";
+  content: "\e915";
 }
 .inf_dignote:before {
-    content: "\e916";
+  content: "\e916";
 }
 .inf_digprint:before {
-    content: "\e917";
+  content: "\e917";
 }
 .inf_digsearch:before {
-    content: "\e918";
+  content: "\e918";
 }
 .inf_digsettings:before {
-    content: "\e919";
+  content: "\e919";
 }
 .inf_digshare:before {
-    content: "\e91a";
+  content: "\e91a";
 }
 .inf_digtags:before {
-    content: "\e91b";
+  content: "\e91b";
 }
 .inf_digverdura:before {
-    content: "\e600";
+  content: "\e600";
 }
 .inf_digfrutta:before {
-    content: "\e601";
+  content: "\e601";
 }
 .inf_digpesce:before {
-    content: "\e602";
+  content: "\e602";
 }
 .inf_digdolce:before {
-    content: "\e603";
+  content: "\e603";
 }
 .inf_digpizza:before {
-    content: "\e604";
+  content: "\e604";
 }
 .inf_digcarne-rossa:before {
-    content: "\e605";
+  content: "\e605";
 }
 .inf_diglatticini:before {
-    content: "\e606";
+  content: "\e606";
 }
 .inf_digriso:before {
-    content: "\e607";
+  content: "\e607";
 }
 .inf_digpasta:before {
-    content: "\e608";
+  content: "\e608";
 }
 .inf_digcarne-bianca:before {
-    content: "\e609";
+  content: "\e609";
 }
 

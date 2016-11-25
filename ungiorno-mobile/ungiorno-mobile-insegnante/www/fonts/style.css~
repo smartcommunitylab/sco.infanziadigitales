@@ -1,82 +1,144 @@
 @font-face {
-	font-family: 'infanzia_digitales';
-	src: url('fonts/infanzia_digitales.eot');
-}
-@font-face {
-	font-family: 'infanzia_digitales';
-	src: url(data:application/x-font-ttf;charset=utf-8;base64,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) format('truetype');
-	font-weight: normal;
-	font-style: normal;
+  font-family: 'infanzia_digitales';
+  src:  url('fonts/infanzia_digitales.eot?7cwl9t');
+  src:  url('fonts/infanzia_digitales.eot?7cwl9t#iefix') format('embedded-opentype'),
+    url('fonts/infanzia_digitales.ttf?7cwl9t') format('truetype'),
+    url('fonts/infanzia_digitales.woff?7cwl9t') format('woff'),
+    url('fonts/infanzia_digitales.svg?7cwl9t#infanzia_digitales') format('svg');
+  font-weight: normal;
+  font-style: normal;
 }
 
 [class^="inf_dig"], [class*=" inf_dig"] {
-	font-family: 'infanzia_digitales';
-	speak: none;
-	font-style: normal;
-	font-weight: normal;
-	font-variant: normal;
-	text-transform: none;
-	line-height: 1;
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'infanzia_digitales' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
 
-	/* Better Font Rendering =========== */
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.inf_digalert:before {
-	content: "\e000";
-}
-.inf_digcall:before {
-	content: "\e03f";
-}
-.inf_digedit:before {
-	content: "\e0ee";
-}
-.inf_digmenu:before {
-	content: "\e15c";
-}
-.inf_digbus:before {
-	content: "\e1ca";
-}
-.inf_digarrow_back:before {
-	content: "\e200";
-}
-.inf_digcheck:before {
-	content: "\e206";
-}
-.inf_digclose:before {
-	content: "\e209";
-}
-.inf_digcalendar:before {
-	content: "\e21c";
-}
-.inf_digphone:before {
-	content: "\e223";
-}
-.inf_digchildren_list:before {
-	content: "\e245";
+.inf_dignotifica_messaggi:before {
+  content: "\e91c";
 }
 .inf_digaccount:before {
-	content: "\e268";
+  content: "\e900";
+}
+.inf_digalarm:before {
+  content: "\e901";
+}
+.inf_digalert:before {
+  content: "\e902";
+}
+.inf_digarrow_back:before {
+  content: "\e903";
 }
 .inf_digassignment:before {
-	content: "\e272";
+  content: "\e904";
+}
+.inf_digbus:before {
+  content: "\e905";
+}
+.inf_digcalendar:before {
+  content: "\e906";
+}
+.inf_digcall:before {
+  content: "\e907";
 }
 .inf_digcheck_circle:before {
-	content: "\e281";
+  content: "\e908";
+}
+.inf_digcheck:before {
+  content: "\e909";
+}
+.inf_digchildren_list:before {
+  content: "\e90a";
+}
+.inf_digclock:before {
+  content: "\e90b";
+}
+.inf_digclose:before {
+  content: "\e90c";
 }
 .inf_digdelete:before {
-	content: "\e287";
+  content: "\e90d";
+}
+.inf_digedit:before {
+  content: "\e90e";
+}
+.inf_digfilter:before {
+  content: "\e90f";
 }
 .inf_dighome:before {
-	content: "\e29e";
+  content: "\e910";
+}
+.inf_digimage:before {
+  content: "\e911";
 }
 .inf_diginfo:before {
-	content: "\e2a2";
+  content: "\e912";
+}
+.inf_diglog-out:before {
+  content: "\e913";
+}
+.inf_digmail:before {
+  content: "\e914";
+}
+.inf_digmenu:before {
+  content: "\e915";
+}
+.inf_dignote:before {
+  content: "\e916";
 }
 .inf_digprint:before {
-	content: "\e2c1";
+  content: "\e917";
+}
+.inf_digsearch:before {
+  content: "\e918";
 }
 .inf_digsettings:before {
-	content: "\e2cb";
+  content: "\e919";
 }
+.inf_digshare:before {
+  content: "\e91a";
+}
+.inf_digtags:before {
+  content: "\e91b";
+}
+.inf_digverdura:before {
+  content: "\e600";
+}
+.inf_digfrutta:before {
+  content: "\e601";
+}
+.inf_digpesce:before {
+  content: "\e602";
+}
+.inf_digdolce:before {
+  content: "\e603";
+}
+.inf_digpizza:before {
+  content: "\e604";
+}
+.inf_digcarne-rossa:before {
+  content: "\e605";
+}
+.inf_diglatticini:before {
+  content: "\e606";
+}
+.inf_digriso:before {
+  content: "\e607";
+}
+.inf_digpasta:before {
+  content: "\e608";
+}
+.inf_digcarne-bianca:before {
+  content: "\e609";
+}
+

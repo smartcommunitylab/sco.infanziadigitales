@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.absence', ['ionic-datepicker'])
 
-.controller('AbsenceCtrl', function ($scope, $rootScope, profileService, $ionicModal, dataServerService, $filter, $ionicHistory, $ionicPopup, Toast, ionicDatePicker) {
+.controller('AbsenceCtrl', function ($scope, $rootScope, profileService, $ionicModal, dataServerService, $filter, $ionicHistory, $ionicScrollDelegate, $ionicPopup, Toast, ionicDatePicker) {
   $scope.schoolProfile = profileService.getSchoolProfile();
   $scope.babyProfile = profileService.getBabyProfile();
   $scope.selectedIllness = "Selezionare malattia frequente";
@@ -170,6 +170,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     } else {
       $scope.isOther = false;
     }
+    $ionicScrollDelegate.resize();
   }
   $scope.setIllness = function (boolInput, item) {
     $scope.illness.reason.type = item ? item.type : 'other';

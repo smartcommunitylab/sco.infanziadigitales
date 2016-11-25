@@ -54,7 +54,8 @@
   </ion-content>
   <ion-footer-bar id="txtfooter" class="input-chat-footer" keyboard-attach class="bar-stable item-input input-chat">
     <!--        <input type="text" class="input-chat-footer" placeholder="{{'input_chat_placeholder' | translate}}" ng-model="new_message" ng-focus="inputUp()" ng-blur="inputDown()" ng-keyup="$event.keyCode == 13 ? sendMessage(new_message) : startTyping()">-->
-    <textarea class="input-chat-footer" placeholder="{{'input_chat_placeholder' | translate}}" ng-model="new_message" id="txtnotes" ng-focus="inputUp()" ng-blur="inputDown()" ng-keyup="$event.keyCode == 13 ? sendMessage(new_message) : startTyping()" ng-keydown="expandText()">
+    <!--    <textarea class="input-chat-footer" placeholder="{{'input_chat_placeholder' | translate}}" ng-model="new_message" id="txtnotes" ng-focus="inputUp()" ng-blur="inputDown()" ng-keyup="$event.keyCode == 13 ? sendMessage(new_message) : startTyping()" ng-keydown="expandText()">-->
+    <textarea class="input-chat-footer" placeholder="{{'input_chat_placeholder' | translate}}" ng-model="new_message" id="txtnotes" ng-focus="inputUp()" ng-blur="inputDown()" ng-keyup="startTyping()" ng-keydown="expandText()">
     </textarea>
     <button class="button button-chat-send icon ion-android-send" ng-click="sendMessage(new_message)">
 

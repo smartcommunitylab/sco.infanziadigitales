@@ -43,39 +43,12 @@
           {{'remove_motivation' | translate |uppercase}}
         </label>
       </div>
-      <!--
-      <ion-list>
-  <ion-list class="padlist ">
-    <ion-radio class="retire-list" ng-repeat="item in absenceTypes" ng-value="item.typeId" ng-model="data.typeId" ng-change="selectAbsence(item) ">
-      {{item.name}}
-    </ion-radio>
-  </ion-list>
-</ion-list>
-<ion-list>
-  <ion-list class="padlist ">
-    <ion-radio class="retire-list" ng-repeat="illness in frequentIllnesses" ng-value="illness.typeId" ng-model="illnessModel.typeId" ng-change="selectIllness(illness) ">
-      {{illness.name}}
-    </ion-radio>
-  </ion-list>
-</ion-list>
--->
-      <!--
-
-      <div class="item item-divider">
-        Clientside, Selected Value: {{ data.clientSide }}
-      </div>
--->
       <div class="list card">
         <ion-radio ng-repeat="item in absenceTypes" ng-value="item.typeId" ng-model="data.typeId" ng-change="selectAbsence(item)">
           {{ item.name}}
         </ion-radio>
       </div>
-      <!--
-      <div class="item item-divider">
-        Serverside, Selected Value: {{ data.serverSide }}
-      </div>
--->
-      <div ng-if="data.typeId=='malattia'">
+      <div ng-show="data.typeId=='malattia' && frequentIllnesses.length>1">
         <h5 class="accent-color input-description-padding"><b>{{'type_illness' | translate}}</b></h5>
         <div class="list card">
           <ion-radio ng-repeat=" item in frequentIllnesses " ng-value="item.typeId " ng-model="illnessModel.typeId " ng-change="selectIllness(illness) " name="server-side ">

@@ -148,25 +148,25 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.diariocondiviso.se
 
             return deferred.promise;
         };
-        loginService.getTeacherName = function (schoolId) {
-            $http({
-                method: 'GET',
-                url: Config.URL() + '/' + Config.app() + '/school/' + Config.appId() + '/' + schoolId + '/teacher',
-
-                headers: {
-                    'Accept': 'application/json'
-                }
-            }).
-            success(function (data, status, headers, config) {
-                if (data && data.data) {
-                    $rootScope.teacherName = data.data.teacherFullname;
-                }
-
-            }).
-            error(function (data, status, headers, config) {
-                console.log(data + status + headers + config);
-            });
-        };
+//        loginService.getTeacherName = function (schoolId) {
+//            $http({
+//                method: 'GET',
+//                url: Config.URL() + '/' + Config.app() + '/school/' + Config.appId() + '/' + schoolId + '/teacher',
+//
+//                headers: {
+//                    'Accept': 'application/json'
+//                }
+//            }).
+//            success(function (data, status, headers, config) {
+//                if (data && data.data) {
+//                    $rootScope.teacherName = data.data.teacherFullname;
+//                }
+//
+//            }).
+//            error(function (data, status, headers, config) {
+//                console.log(data + status + headers + config);
+//            });
+//        };
 
         loginService.logout = function () {
             var deferred = $q.defer();

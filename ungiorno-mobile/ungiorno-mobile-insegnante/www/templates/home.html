@@ -1,4 +1,5 @@
-<ion-view id="home" ng-init="initialize()" title="{{teacherName}} - {{title}}">
+<!--<ion-view id="home" ng-init="initialize()" title="{{teacherName}} - {{title}}">-->
+<ion-view id="home" ng-init="initialize()" title="{{title}}">
   <ion-nav-buttons side="right">
     <button class="button" ng-if="!viewClose()" ng-click="refreshHome()">
       <i class="icon ion-loop action-icon"></i>
@@ -13,6 +14,8 @@
         <button class="button" ng-if="viewClose()" ng-click="closeNotesAndComm()">{{'close' | translate | uppercase}}</button>
         <button class="button" ng-if="viewClose() && communicationExpanded " ng-click="saveNotesAndComm()">{{'save' | translate | uppercase}}</button>
 -->
+    <button class="button button-save" ng-if="viewClose() && communicationExpanded " ng-click="cancelNotesAndComm()">{{'cancel' | translate | uppercase}}</button>
+
     <button class="button button-save" ng-if="viewClose() && communicationExpanded " ng-click="saveNotesAndComm()">{{'save' | translate | uppercase}}</button>
 
   </ion-nav-buttons>
@@ -75,7 +78,7 @@
         </div>
 
         <!--        <div class="home-separator "></div>-->
-        <div class="line-separator">
+        <div class="line-separator" ng-if="!communicationExpanded">
           <div class="side-line" id="leftLine"> </div>
           <div class="triangle"> </div>
           <div class="side-line" id="rightLine"> </div>
@@ -100,13 +103,19 @@
         <div class="section-text " ng-if="communicationExpanded ">
           {{'home_scadenze' | translate}}
         </div>
-        <div class=" children-home " ng-repeat="child in childrenProfiles[selectedPeriod] track by $index " ng-click="detailOrCommunication(child) ">
-          <div class="badge-msg " ng-if="numberMessageUnread[child.kidId]>0"><i class="icon center icon-message inf_dignotifica_messaggi"></i>
+        <div class=" children-home " ng-repeat="child in childrenProfiles[selectedPeriod] track by $index " ng-click="detailOrCommunication(child) " ng-if="!communicationExpanded">
+          <div class="badge-msg " ng-if="numberMessageUnread[child.kidId]>0 && !communicationExpanded"><i class="icon center icon-message inf_dignotifica_messaggi"></i>
           </div>
-          <i class="icon ion-checkmark-round ribbon" ng-if="(!getChildrenDeliveryByID(child.kidId) && communicationExpanded)"></i>
-          <img ng-src="{{getChildImage(child)}} " ng-class="{ 'img-assente':child.exitTime==null || (child.exitTime < getTime(selectedPeriod)), 'img-presente':child.exitTime !=null && (numberMessageUnread[child.kidId]==0 || numberMessageUnread[child.kidId]==null), 'img-not-active':!child.active, 'img-communication':communicationExpanded, 'img-messages':child.exitTime !=null && numberMessageUnread[child.kidId]>0} ">
+          <i class="icon ion-checkmark-round ribbon" ng-if="(getChildrenDeliveryByID(child.kidId) && communicationExpanded)"></i>
+          <img ng-src="{{getChildImage(child)}} " ng-class="{ 'img-assente':child.exitTime==null || (child.exitTime < getTime(selectedPeriod)), 'img-presente':(child.exitTime !=null && (numberMessageUnread[child.kidId]==0 || numberMessageUnread[child.kidId]==null)||communicationExpanded), 'img-not-active':!child.active, 'img-communication':communicationExpanded, 'img-messages':child.exitTime !=null && numberMessageUnread[child.kidId]>0 } ">
           <div class="name-of-child " ng-if="!child.image || child.image=='' ">{{child.childrenName}}</div>
           <div class="children-presenza " ng-if="child.active && !communicationExpanded " ng-class="{ 'child-assente':child.exitTime==null, 'child-presente':child.exitTime !=null} ">{{child.presenza}}</div>
+        </div>
+        <div class=" children-home " ng-repeat="child in childrenProfiles['allPeriod'] track by $index " ng-click="detailOrCommunication(child) " ng-if="communicationExpanded">
+          <i class="icon ion-checkmark-round ribbon" ng-if="(getChildrenDeliveryByID(child.kidId) && communicationExpanded)"></i>
+          <img ng-src="{{getChildImage(child)}} " ng-class="{ 'img-presente':(child.exitTime !=null && (numberMessageUnread[child.kidId]==0 || numberMessageUnread[child.kidId]==null)||communicationExpanded), 'img-not-active':!child.active, 'img-communication':communicationExpanded } ">
+          <div class="name-of-child " ng-if="!child.image || child.image=='' ">{{child.childrenName}}</div>
+
         </div>
       </div>
 

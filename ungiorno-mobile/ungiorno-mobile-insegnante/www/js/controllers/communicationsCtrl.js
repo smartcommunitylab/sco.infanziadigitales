@@ -301,14 +301,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
     var i = 0;
 
     while (i < $scope.communications.length && !found) {
-      if (response.data.communicationId === $scope.communications[i].communicationId) {
-        $scope.communications[i] = response.data;
+      if (response.communicationId === $scope.communications[i].communicationId) {
+        $scope.communications[i] = response;
         found = true;
       }
       i++;
     }
     if (!found) { //new communication
-      $scope.communications.push(response.data);
+      $scope.communications.push(response);
     }
     sortCommunications();
   }

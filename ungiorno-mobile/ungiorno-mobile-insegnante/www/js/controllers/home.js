@@ -48,7 +48,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
       };
       $scope.childrenCommunicationDelivery = communicationService.getCommunication().children;
     }
-
+    if ($scope.communicationExpanded) {
+      $ionicSideMenuDelegate.canDragContent(false);
+    }
   });
 
   $scope.getDateString = function () {
@@ -57,6 +59,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
   }
   $scope.viewClose = function () {
     return $scope.noteExpanded || $scope.communicationExpanded;
+  }
+
+  $scope.cancelNotesAndComm = function () {
+    $state.go('app.communications').then(function () {
+      $ionicLoading.hide();
+      communicationService.setToCheck(false);
+    });
   }
 
   $scope.closeNotesAndComm = function () {
@@ -75,14 +84,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
 
             }
                     }
-//                    ,
-//                    {
-//                        text: '<b>' + $filter('translate')('retry') + '</b>',
-//                        type: 'create-button',
-//                        onTap: function (e) {
-//                            $scope.sendNewNote();
-//                        }
-//                    }
                 ]
       });
 
@@ -262,10 +263,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
         profileService.setSchoolProfile($scope.schoolProfile);
         if ($scope.selectedPeriod == null) {
           $scope.selectedPeriod = getPeriodToNow();
+          $scope.changeHorizzontalLineStyle($scope.selectedPeriod);
         }
         pushNotificationService.register($scope.schoolProfile.schoolId);
 
-        loginService.getTeacherName($scope.schoolProfile.schoolId);
+        //loginService.getTeacherName($scope.schoolProfile.schoolId);
 
         dataServerService.getSections($scope.schoolProfile.schoolId).then(function (data) {
           if (data != null) {
@@ -280,7 +282,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
             $scope.getChildrenByCurrentSection();
             $scope.loadNotes();
             $ionicLoading.hide();
-            Toast.show($filter('translate')('data_updated'), 'short', 'bottom');
+            if (!$scope.communicationExpanded) {
+              Toast.show($filter('translate')('data_updated'), 'short', 'bottom');
+            }
           }
         }, function (err) {
           //manage error sections
@@ -597,27 +601,31 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
   }
 
   $scope.changeHorizzontalLineStyle = function (period) {
-    var leftLine = document.getElementById("leftLine");
-    var rightLine = document.getElementById("rightLine");
-    switch (period) {
-    case 'anticipo':
-      leftLine.style.width = "15%";
-      rightLine.style.width = "81%";
-      break;
-    case 'mensa':
-      leftLine.style.width = "48%";
-      rightLine.style.width = "48%";
-      break;
-    case 'posticipo':
-      leftLine.style.width = "82%";
-      rightLine.style.width = "14%";
-      break;
+    if (!$scope.communicationExpanded) {
+      var leftLine = document.getElementById("leftLine");
+      var rightLine = document.getElementById("rightLine");
+      switch (period) {
+      case 'anticipo':
+        leftLine.style.width = "15%";
+        rightLine.style.width = "81%";
+        break;
+      case 'mensa':
+        leftLine.style.width = "48%";
+        rightLine.style.width = "48%";
+        break;
+      case 'posticipo':
+        leftLine.style.width = "82%";
+        rightLine.style.width = "14%";
+        break;
+      }
     }
-
   };
 
   $scope.getChildrenProfilesByPeriod = function (periodOfTheDay) {
     $scope.childrenProfiles[periodOfTheDay] = [];
+    if (!$scope.childrenProfiles['allPeriod']) {
+      $scope.childrenProfiles['allPeriod'] = [];
+    }
     $scope.colors['anticipo'] = '#ddd';
     $scope.colors['posticipo'] = '#ddd';
     $scope.colors['mensa'] = '#ddd';
@@ -652,9 +660,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
           }
           break;
         }
-
-
-
+        $scope.childrenProfiles['allPeriod'].push($scope.section.children[i]);
       }
     }
   }

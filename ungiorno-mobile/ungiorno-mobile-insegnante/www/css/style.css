@@ -1558,6 +1558,7 @@ ion-content .scroll {
 
 .home-container {
   height: 100%;
+  padding-top: 50px;
 }
 
 .sections-displayer-full {

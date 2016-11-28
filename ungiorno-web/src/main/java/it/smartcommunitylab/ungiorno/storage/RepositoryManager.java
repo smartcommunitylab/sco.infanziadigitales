@@ -155,12 +155,13 @@ public class RepositoryManager {
 	 * @return
 	 */
 	public SchoolProfile getSchoolProfileForUser(String appId, String username) {
-		Query query = Query.query(new Criteria("appId").is(appId).and("username").is(username));
-		Teacher teacher = template.findOne(query, Teacher.class);
-		if (teacher != null) {
-			return getSchoolProfile(appId, teacher.getSchoolId());
-		}
-		return getSchoolProfile(appId, null);
+		Query query = Query.query(new Criteria("appId").is(appId).and("accessEmail").is(username));
+		return template.findOne(query, SchoolProfile.class);
+//		Teacher teacher = template.findOne(query, Teacher.class);
+//		if (teacher != null) {
+//			return getSchoolProfile(appId, teacher.getSchoolId());
+//		}
+//		return getSchoolProfile(appId, null);
 	}
 
 
@@ -742,7 +743,7 @@ public class RepositoryManager {
 			comm.setCommunicationId(comm.get_id());
 		}
 		if (comm.getAuthor() != null && comm.getAuthor().getId() != null) {
-			Teacher teacher = getTeacher(comm.getAuthor().getId(),comm.getAppId(), comm.getSchoolId());
+			Teacher teacher = getTeacher(comm.getAuthor().getId(), comm.getAppId(), comm.getSchoolId());
 			if (teacher != null) {
 				comm.getAuthor().setName(teacher.getTeacherName());
 				comm.getAuthor().setSurname(teacher.getTeacherSurname());
@@ -910,7 +911,7 @@ public class RepositoryManager {
 		SchoolProfile profile = getSchoolProfile(appId, schoolId);
 		Map<String, SectionData> map = new HashMap<String, SectionData>();
 		for (SectionProfile p : profile.getSections()) {
-			if (!sections.contains(p.getSectionId())) continue;
+			if (sections != null && !sections.isEmpty() && !sections.contains(p.getSectionId())) continue;
 			
 			SectionData sd = new SectionData();
 			sd.setSectionId(p.getSectionId());
@@ -1160,6 +1161,12 @@ public class RepositoryManager {
 	public Teacher getTeacher(String username, String appId, String schoolId) {
 		Query q = schoolQuery(appId, schoolId);
 		q.addCriteria(new Criteria("username").is(username));
+		return template.findOne(q, Teacher.class);
+	}
+
+	public Teacher getTeacherByPin(String pin, String appId, String schoolId) {
+		Query q = schoolQuery(appId, schoolId);
+		q.addCriteria(new Criteria("pin").is(pin));
 		return template.findOne(q, Teacher.class);
 	}
 

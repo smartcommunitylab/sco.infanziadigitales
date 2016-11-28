@@ -24,7 +24,7 @@ import java.util.List;
  *
  */
 public class Teacher extends SchoolObject {
-	private String teacherId, username, teacherFullname, teacherSurname, teacherName, colorToDisplay;
+	private String teacherId, username, teacherFullname, teacherSurname, teacherName, colorToDisplay, pin;
 	private List<String> sectionIds;
 
 	public String getTeacherId() {
@@ -81,6 +81,14 @@ public class Teacher extends SchoolObject {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public String getPin() {
+		return pin;
+	}
+
+	public void setPin(String pin) {
+		this.pin = pin;
 	}
 
 	/**

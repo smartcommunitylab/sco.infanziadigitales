@@ -87,8 +87,8 @@ public class NotificationManager {
 	
 	@PostConstruct
 	public void init() throws Exception {
-		communicator = new CommunicatorConnector(communicatorURL);
-		registerApps();
+//		communicator = new CommunicatorConnector(communicatorURL);
+//		registerApps();
 	}
 
 

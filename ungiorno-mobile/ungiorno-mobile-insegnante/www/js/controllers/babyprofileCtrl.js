@@ -46,7 +46,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
     }
     return parents;
   }
+  var getOtherPeople = function (babyProfile) {
+    otherPeople = [];
+    for (var i = 0; i < babyProfile.persons.length; i++) {
+      if (!babyProfile.persons[i].parent)
 
+        otherPeople.push(babyProfile.persons[i])
+    }
+    return otherPeople;
+  }
   var checkAllDataLoaded = function () {
     if ($scope.babyProfileLoaded) {
       //        if ($scope.babyProfileLoaded && $scope.notesLoaded) {
@@ -226,6 +234,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
       if (data) {
         $scope.babyProfile = data;
         $scope.parents = getParents(data);
+        $scope.otherPeople = getOtherPeople(data);
         $scope.babyProfileLoaded = true;
         checkAllDataLoaded();
         $scope.messageInit();

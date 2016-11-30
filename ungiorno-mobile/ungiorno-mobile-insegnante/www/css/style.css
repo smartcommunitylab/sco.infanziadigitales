@@ -950,6 +950,7 @@ select {
   width: 100px;
   height: 100px;
   margin: 16px;
+  border: 2px solid black;
 }
 
 #babyprofile .babyprofile-separator {
@@ -967,20 +968,31 @@ select {
 
 #babyprofile .baby-info-label {
   margin: 16px;
+  font-size: 18px;
 }
 
 #babyprofile .detailsTitle {
-  color: #000;
+  color: #7b9e2a;
   font-size: 18px;
-  margin-bottom: 4px;
+  margin: 8px 0px 8px 0px;
 }
 
 #babyprofile .babyprofile-parent-name {
+  /*
   margin-bottom: 4px;
-  font-weight: bold;
+  margin-bottom: 4px;
+*/
+  margin: 8px 0px 8px 0px;
+  font-size: 18px;
 }
 
 #babyprofile .babyprofile-phone {
+  font-size: 20px;
+  margin-right: 8px;
+  color: #bd3e4d;
+}
+
+#babyprofile .babyprofile-icon {
   font-size: 24px;
   margin-right: 8px;
   color: #bd3e4d;
@@ -992,6 +1004,11 @@ select {
 
 #babyprofile .babyprofile-allergy {
   font-weight: bold!important;
+  margin: 4px!important;
+}
+
+#babyprofile .babyprofile-others {
+  font-size: 18px;
   margin: 4px!important;
 }
 

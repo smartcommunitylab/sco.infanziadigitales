@@ -38,6 +38,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
     if (communicationService.getToCheck()) {
       //expand side menu on communication
       $scope.openCommunications();
+      //hide sidemenu
+      $rootScope.hideMenu = true;
       if (communicationService.getCommunication()) {
         $scope.data = {
           communication: communicationService.getCommunication().communicationId,

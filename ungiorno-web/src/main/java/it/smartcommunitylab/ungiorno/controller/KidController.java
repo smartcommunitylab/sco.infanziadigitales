@@ -16,23 +16,6 @@
 
 package it.smartcommunitylab.ungiorno.controller;
 
-import it.smartcommunitylab.ungiorno.config.exception.ProfileNotFoundException;
-import it.smartcommunitylab.ungiorno.model.CalendarItem;
-import it.smartcommunitylab.ungiorno.model.Communication;
-import it.smartcommunitylab.ungiorno.model.KidCalAssenza;
-import it.smartcommunitylab.ungiorno.model.KidCalFermata;
-import it.smartcommunitylab.ungiorno.model.KidCalNote;
-import it.smartcommunitylab.ungiorno.model.KidCalNote.Note;
-import it.smartcommunitylab.ungiorno.model.KidCalRitiro;
-import it.smartcommunitylab.ungiorno.model.KidConfig;
-import it.smartcommunitylab.ungiorno.model.KidProfile;
-import it.smartcommunitylab.ungiorno.model.Parent;
-import it.smartcommunitylab.ungiorno.model.Response;
-import it.smartcommunitylab.ungiorno.model.SchoolObject;
-import it.smartcommunitylab.ungiorno.model.Teacher;
-import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
-import it.smartcommunitylab.ungiorno.utils.PermissionsManager;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -60,9 +43,24 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.google.common.collect.Sets.SetView;
+
+import it.smartcommunitylab.ungiorno.config.exception.ProfileNotFoundException;
+import it.smartcommunitylab.ungiorno.model.CalendarItem;
+import it.smartcommunitylab.ungiorno.model.Communication;
+import it.smartcommunitylab.ungiorno.model.KidCalAssenza;
+import it.smartcommunitylab.ungiorno.model.KidCalFermata;
+import it.smartcommunitylab.ungiorno.model.KidCalNote;
+import it.smartcommunitylab.ungiorno.model.KidCalNote.Note;
+import it.smartcommunitylab.ungiorno.model.KidCalRitiro;
+import it.smartcommunitylab.ungiorno.model.KidConfig;
+import it.smartcommunitylab.ungiorno.model.KidProfile;
+import it.smartcommunitylab.ungiorno.model.Parent;
+import it.smartcommunitylab.ungiorno.model.Response;
+import it.smartcommunitylab.ungiorno.model.SchoolObject;
+import it.smartcommunitylab.ungiorno.model.Teacher;
+import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
+import it.smartcommunitylab.ungiorno.utils.PermissionsManager;
 
 @RestController
 public class KidController {
@@ -296,19 +294,25 @@ public class KidController {
 			sIds = Sets.newHashSet();
 		}
 
-		Teacher teacher = storage.getTeacher(permissions.getUserId(), appId, schoolId);
-
-		if (teacher == null) {
-			return new Response<>();
+		if (!permissions.isSchoolTeacher(appId, schoolId, permissions.getUserId())) {
+			throw new SecurityException("User is not associated to this school");
 		}
 
-		Set<String> tsIds = Sets.newHashSet(teacher.getSectionIds());
-
-		SetView sv = Sets.intersection(sIds, tsIds);
-		String[] sections = (String[]) Lists.newArrayList(sv).toArray(new String[] {});
+//		Teacher teacher = storage.getTeacher(permissions.getUserId(), appId, schoolId);
+//
+//		if (teacher == null) {
+//			return new Response<>();
+//		}
+//
+//		storage.getSchoolProfile(appId, schoolId).getSections();
+//		
+//		Set<String> tsIds = Sets.newHashSet(teacher.getSectionIds());
+//
+//		SetView sv = Sets.intersection(sIds, tsIds);
+//		String[] sections = (String[]) Lists.newArrayList(sv).toArray(new String[] {});
 
 		try {
-			List<KidCalNote> list = storage.getKidCalNotesForSection(appId, schoolId, sections, date);
+			List<KidCalNote> list = storage.getKidCalNotesForSection(appId, schoolId, sectionIds, date);
 			return new Response<>(list);
 		} catch (Exception e) {
 			return new Response<>(e.getMessage());
@@ -318,7 +322,8 @@ public class KidController {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/student/{appId}/{schoolId}/{kidId}/notes")
 	public @ResponseBody Response<KidCalNote> saveNote(@RequestBody KidCalNote note,
-			@PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId) {
+			@PathVariable String appId, @PathVariable String schoolId, @PathVariable String kidId, 
+			@RequestParam(required=false) String pin) {
 
 		try {
 			long now = System.currentTimeMillis();
@@ -342,7 +347,7 @@ public class KidController {
 					return new Response<>();
 				}
 
-				Teacher teacher = storage.getTeacher(permissions.getUserId(), appId, schoolId);
+				Teacher teacher = storage.getTeacherByPin(pin, appId, schoolId);
 				if (teacher == null)
 					throw new IllegalArgumentException("No teacher registered");
 				for (Note n : note.getSchoolNotes()) {

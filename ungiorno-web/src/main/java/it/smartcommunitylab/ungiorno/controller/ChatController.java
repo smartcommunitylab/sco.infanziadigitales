@@ -1,14 +1,6 @@
 package it.smartcommunitylab.ungiorno.controller;
 
 
-import it.smartcommunitylab.ungiorno.config.exception.ProfileNotFoundException;
-import it.smartcommunitylab.ungiorno.model.ChatMessage;
-import it.smartcommunitylab.ungiorno.model.Parent;
-import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
-import it.smartcommunitylab.ungiorno.utils.NotificationManager;
-import it.smartcommunitylab.ungiorno.utils.PermissionsManager;
-import it.smartcommunitylab.ungiorno.utils.Utils;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +23,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+
+import it.smartcommunitylab.ungiorno.config.exception.ProfileNotFoundException;
+import it.smartcommunitylab.ungiorno.model.Author;
+import it.smartcommunitylab.ungiorno.model.ChatMessage;
+import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
+import it.smartcommunitylab.ungiorno.utils.NotificationManager;
+import it.smartcommunitylab.ungiorno.utils.PermissionsManager;
+import it.smartcommunitylab.ungiorno.utils.Utils;
 
 @Controller
 public class ChatController {
@@ -152,6 +152,7 @@ public class ChatController {
 			recipients.add(node.asText());
 		}
 		long now = System.currentTimeMillis();
+		Author teacher = storage.getTeacherAsAuthor(appId,schoolId, teacherId);
 		for(String kidId : recipients) {
 			ChatMessage message = new ChatMessage();
 			message.setAppId(appId);
@@ -161,7 +162,7 @@ public class ChatController {
 			message.setTeacherId(teacherId);
 			message.setSender(ChatMessage.SENT_BY_TEACHER);
 			message.setText(text);
-			message.setAuthor(storage.getTeacherAsAuthor(appId,schoolId, teacherId));
+			message.setAuthor(teacher);
 			ChatMessage dbMessage = storage.saveChatMessage(message);
 			notificationManager.sendDirectMessageToParents(appId, schoolId, kidId, teacherId, message.getAuthor(), text, dbMessage.getMessageId());
 			result.add(dbMessage);

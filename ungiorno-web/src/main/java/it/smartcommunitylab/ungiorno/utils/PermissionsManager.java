@@ -65,12 +65,14 @@ public class PermissionsManager {
 
 		if (kid != null) {
 			if (isTeacher == null || isTeacher) {
-				Teacher teacher = storage.getTeacher(userId, appId, schoolId);
-				if (teacher != null) {
-					if (teacher.getSectionIds().contains(kid.getSection().getSectionId())) {
-						return true;
-					}
-				}
+				// all teachers of a school can operate all the kids of the school
+				return isSchoolTeacher(appId, schoolId, userId);
+//				Teacher teacher = storage.getTeacher(userId, appId, schoolId);
+//				if (teacher != null) {
+//					if (teacher.getSectionIds().contains(kid.getSection().getSectionId())) {
+//						return true;
+//					}
+//				}
 			}
 			if (isTeacher == null || !isTeacher) {
 				Parent parent = storage.getParent(userId, appId, schoolId);
@@ -136,6 +138,10 @@ public class PermissionsManager {
 		return principal.getUsername();
 	}
 
+	public boolean isSchoolTeacher(String appId, String schoolId, String username) {
+		return storage.getSchoolProfile(appId, schoolId).getAccessEmail().equalsIgnoreCase(username);
+	}
+	
 	/**
 	 * @param du
 	 * @param kidId

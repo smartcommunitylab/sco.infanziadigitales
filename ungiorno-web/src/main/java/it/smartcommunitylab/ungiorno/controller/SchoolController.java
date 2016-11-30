@@ -16,21 +16,7 @@
 
 package it.smartcommunitylab.ungiorno.controller;
 
-import it.smartcommunitylab.ungiorno.model.BusData;
-import it.smartcommunitylab.ungiorno.model.Communication;
-import it.smartcommunitylab.ungiorno.model.InternalNote;
-import it.smartcommunitylab.ungiorno.model.Menu;
-import it.smartcommunitylab.ungiorno.model.Response;
-import it.smartcommunitylab.ungiorno.model.SchoolProfile;
-import it.smartcommunitylab.ungiorno.model.SectionData;
-import it.smartcommunitylab.ungiorno.model.Teacher;
-import it.smartcommunitylab.ungiorno.model.TeacherCalendar;
-import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
-import it.smartcommunitylab.ungiorno.utils.JsonUtil;
-import it.smartcommunitylab.ungiorno.utils.NotificationManager;
-import it.smartcommunitylab.ungiorno.utils.PermissionsManager;
-
-import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,6 +33,21 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import it.smartcommunitylab.ungiorno.model.BusData;
+import it.smartcommunitylab.ungiorno.model.Communication;
+import it.smartcommunitylab.ungiorno.model.InternalNote;
+import it.smartcommunitylab.ungiorno.model.Menu;
+import it.smartcommunitylab.ungiorno.model.Response;
+import it.smartcommunitylab.ungiorno.model.SchoolProfile;
+import it.smartcommunitylab.ungiorno.model.SchoolProfile.SectionProfile;
+import it.smartcommunitylab.ungiorno.model.SectionData;
+import it.smartcommunitylab.ungiorno.model.Teacher;
+import it.smartcommunitylab.ungiorno.model.TeacherCalendar;
+import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
+import it.smartcommunitylab.ungiorno.utils.JsonUtil;
+import it.smartcommunitylab.ungiorno.utils.NotificationManager;
+import it.smartcommunitylab.ungiorno.utils.PermissionsManager;
 
 @RestController
 public class SchoolController {
@@ -79,7 +80,7 @@ public class SchoolController {
 		} catch (Exception e) {
 			if(logger.isWarnEnabled()) {
 				logger.warn("getSchoolProfile:" + appId + " - " + schoolId);
-				logger.warn("erro", e);
+				logger.warn("error", e);
 			}
 			return new Response<>(e.getMessage());
 		}
@@ -103,6 +104,9 @@ public class SchoolController {
 	public @ResponseBody Response<Communication> sendCommunication(@RequestBody Communication comm, @PathVariable String appId, @PathVariable String schoolId) {
 
 		try {
+			if (!permissions.isSchoolTeacher(appId, schoolId, permissions.getUserId())) {
+				throw new SecurityException("User is not associated to this school");
+			}
 			comm.setAppId(appId);
 			comm.setSchoolId(schoolId);
 			Communication old = storage.getCommunicationById(appId, schoolId, comm.getCommunicationId());
@@ -127,9 +131,18 @@ public class SchoolController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/school/{appId}/{schoolId}/notes")
-	public @ResponseBody Response<InternalNote> sendNote(@RequestBody InternalNote comm, @PathVariable String appId, @PathVariable String schoolId, @RequestParam(required=false) String[] kidIds, @RequestParam(required=false) String[] sectionIds) {
+	public @ResponseBody Response<InternalNote> sendNote(
+			@RequestBody InternalNote comm, 
+			@PathVariable String appId, 
+			@PathVariable String schoolId, 
+			@RequestParam(required=false) String[] kidIds, 
+			@RequestParam(required=false) String[] sectionIds,
+			@RequestParam(required=false) String pin) {
 
 		try {
+			if (!permissions.isSchoolTeacher(appId, schoolId, permissions.getUserId())) {
+				throw new SecurityException("User is not associated to this school");
+			}
 			comm.setAppId(appId);
 			comm.setSchoolId(schoolId);
 			if (kidIds != null && kidIds.length > 0) {
@@ -138,7 +151,14 @@ public class SchoolController {
 			else if (sectionIds != null && sectionIds.length > 0) {
 				comm.setSectionIds(sectionIds);
 			} else {
-				comm.setSectionIds(storage.getTeacher(permissions.getUserId(), appId, schoolId).getSectionIds().toArray(new String[0]));
+				List<SectionProfile> sections = storage.getSchoolProfile(appId, schoolId).getSections();
+				String[] allSections = new String[sections.size()];
+				int i = 0;
+				for (SectionProfile sp : sections) {
+					allSections[i++] = sp.getSectionId();
+				}
+				comm.setSectionIds(allSections);
+//				comm.setSectionIds(storage.getTeacher(permissions.getUserId(), appId, schoolId).getSectionIds().toArray(new String[0]));
 			}
 
 			return new Response<>(storage.saveInternalNote(comm));
@@ -151,9 +171,12 @@ public class SchoolController {
 	public @ResponseBody Response<List<InternalNote>> getNotes(@PathVariable String appId, @PathVariable String schoolId, @RequestParam(required=false) String[] sectionIds, @RequestParam long date) {
 
 		try {
-			if (sectionIds == null || sectionIds.length == 0) {
-				sectionIds = (String[])storage.getTeacher(permissions.getUserId(), appId, schoolId).getSectionIds().toArray(new String[0]);
+			if (!permissions.isSchoolTeacher(appId, schoolId, permissions.getUserId())) {
+				throw new SecurityException("User is not associated to this school");
 			}
+//			if (sectionIds == null || sectionIds.length == 0) {
+//				sectionIds = (String[])storage.getTeacher(permissions.getUserId(), appId, schoolId).getSectionIds().toArray(new String[0]);
+//			}
 			List<InternalNote> list = storage.getInternalNotes(appId, schoolId, sectionIds, date);
 			return new Response<>(list);
 		} catch (Exception e) {
@@ -165,6 +188,9 @@ public class SchoolController {
 	public @ResponseBody Response<Void> deleteCommunication(@PathVariable String appId, @PathVariable String schoolId, @PathVariable String commId) {
 
 		try {
+			if (!permissions.isSchoolTeacher(appId, schoolId, permissions.getUserId())) {
+				throw new SecurityException("User is not associated to this school");
+			}
 			storage.deleteCommunication(appId, schoolId, commId);
 			return new Response<>((Void)null);
 		} catch (Exception e) {
@@ -188,6 +214,9 @@ public class SchoolController {
 	public @ResponseBody Response<List<Teacher>> getTeachers(@PathVariable String appId, @PathVariable String schoolId) {
 
 		try {
+			if (!permissions.isSchoolTeacher(appId, schoolId, permissions.getUserId())) {
+				throw new SecurityException("User is not associated to this school");
+			}
 			List<Teacher> list = storage.getTeachers(appId, schoolId);
 			return new Response<>(list);
 		} catch (Exception e) {
@@ -195,17 +224,31 @@ public class SchoolController {
 		}
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/school/{appId}/{schoolId}/teacher")
-	public @ResponseBody Response<Teacher> getTeacher(@PathVariable String appId, @PathVariable String schoolId) {
+//	@RequestMapping(method = RequestMethod.GET, value = "/school/{appId}/{schoolId}/teacher")
+//	public @ResponseBody Response<Teacher> getTeacher(@PathVariable String appId, @PathVariable String schoolId) {
+//		String username = permissions.getUserId();
+//		try {
+//			Teacher result = storage.getTeacher(username, appId, schoolId);
+//			return new Response<>(result);
+//		} catch (Exception e) {
+//			return new Response<>(e.getMessage());
+//		}
+//	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/school/{appId}/{schoolId}/teacher/{pin}")
+	public @ResponseBody Response<Teacher> getTeacherByPin(@PathVariable String appId, @PathVariable String schoolId, @PathVariable String pin) {
 		String username = permissions.getUserId();
 		try {
-			Teacher result = storage.getTeacher(username, appId, schoolId);
+			if (!permissions.isSchoolTeacher(appId, schoolId, permissions.getUserId())) {
+				throw new SecurityException("User is not associated to this school");
+			}
+			Teacher result = storage.getTeacherByPin(username, appId, schoolId);
 			return new Response<>(result);
 		} catch (Exception e) {
 			return new Response<>(e.getMessage());
 		}
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "/school/{appId}/{schoolId}/teachercalendar")
 	public @ResponseBody Response<List<TeacherCalendar>> getTeacherCalendar(@PathVariable String appId, @PathVariable String schoolId, @RequestParam long from, @RequestParam long to) {
 
@@ -231,11 +274,15 @@ public class SchoolController {
 	@RequestMapping(method = RequestMethod.GET, value = "/school/{appId}/{schoolId}/sections")
 	public @ResponseBody Response<List<SectionData>> getSections(@PathVariable String appId, @PathVariable String schoolId, @RequestParam long date) {
 		try {
-			Collection<String> sections = storage.getTeacher(permissions.getUserId(), appId, schoolId).getSectionIds();
-			if(logger.isInfoEnabled()) {
-				logger.info("getSections(sections):" + JsonUtil.convertObject(sections));
+			if (!permissions.isSchoolTeacher(appId, schoolId, permissions.getUserId())) {
+				throw new SecurityException("User is not associated to this school");
 			}
-			List<SectionData> list = storage.getSections(appId, schoolId, sections , date);
+			
+//			Collection<String> sections = storage.getTeacher(permissions.getUserId(), appId, schoolId).getSectionIds();
+//			if(logger.isInfoEnabled()) {
+//				logger.info("getSections(sections):" + JsonUtil.convertObject(sections));
+//			}
+			List<SectionData> list = storage.getSections(appId, schoolId, null , date);
 			if(logger.isInfoEnabled()) {
 				logger.info("getSections(list):" + JsonUtil.convertObject(list));
 			}

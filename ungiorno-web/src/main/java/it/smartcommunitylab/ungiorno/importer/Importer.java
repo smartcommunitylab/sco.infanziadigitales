@@ -15,23 +15,6 @@
  ******************************************************************************/
 package it.smartcommunitylab.ungiorno.importer;
 
-import it.smartcommunitylab.ungiorno.diary.model.DiaryTeacher;
-import it.smartcommunitylab.ungiorno.model.AuthPerson;
-import it.smartcommunitylab.ungiorno.model.BusService;
-import it.smartcommunitylab.ungiorno.model.Contact;
-import it.smartcommunitylab.ungiorno.model.KidBusData;
-import it.smartcommunitylab.ungiorno.model.KidProfile;
-import it.smartcommunitylab.ungiorno.model.KidProfile.Allergy;
-import it.smartcommunitylab.ungiorno.model.KidServices;
-import it.smartcommunitylab.ungiorno.model.Parent;
-import it.smartcommunitylab.ungiorno.model.SchoolProfile;
-import it.smartcommunitylab.ungiorno.model.SchoolProfile.BusProfile;
-import it.smartcommunitylab.ungiorno.model.SchoolProfile.SectionProfile;
-import it.smartcommunitylab.ungiorno.model.SchoolService;
-import it.smartcommunitylab.ungiorno.model.SectionDef;
-import it.smartcommunitylab.ungiorno.model.Teacher;
-import it.smartcommunitylab.ungiorno.model.TypeDef;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
@@ -40,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -58,8 +42,26 @@ import org.springframework.util.StringUtils;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
+
+import it.smartcommunitylab.ungiorno.diary.model.DiaryTeacher;
+import it.smartcommunitylab.ungiorno.model.AuthPerson;
+import it.smartcommunitylab.ungiorno.model.BusService;
+import it.smartcommunitylab.ungiorno.model.Contact;
+import it.smartcommunitylab.ungiorno.model.KidBusData;
+import it.smartcommunitylab.ungiorno.model.KidProfile;
+import it.smartcommunitylab.ungiorno.model.KidProfile.Allergy;
+import it.smartcommunitylab.ungiorno.model.KidServices;
+import it.smartcommunitylab.ungiorno.model.Parent;
+import it.smartcommunitylab.ungiorno.model.SchoolProfile;
+import it.smartcommunitylab.ungiorno.model.SchoolProfile.BusProfile;
+import it.smartcommunitylab.ungiorno.model.SchoolProfile.SectionProfile;
+import it.smartcommunitylab.ungiorno.model.SchoolService;
+import it.smartcommunitylab.ungiorno.model.SectionDef;
+import it.smartcommunitylab.ungiorno.model.Teacher;
+import it.smartcommunitylab.ungiorno.model.TypeDef;
 
 /**
  * @author raman
@@ -80,6 +82,11 @@ public class Importer {
 
 	private static final Set<String> expectedSchoolSheets = Sets.newHashSet(SHEET_PROFILO,SHEET_ASSENZE,SHEET_MALATTIE,SHEET_TIPOLOGIE_NOTE,SHEET_SEZIONI, SHEET_CIBI,SHEET_BUS,SHEET_INSEGNANTI);
 	private static final Set<String> expectedKidSheets = Sets.newHashSet(SHEET_PROFILO,SHEET_UTENTI,SHEET_DELEGHE,SHEET_ALLERGIE,SHEET_BUS,SHEET_INSEGNANTI);
+//	private static final Set<String> expectedSchoolSheets = Sets.newHashSet(SHEET_PROFILO,SHEET_ASSENZE,SHEET_MALATTIE,SHEET_SEZIONI,SHEET_BUS,SHEET_INSEGNANTI);
+//	private static final Set<String> expectedKidSheets = Sets.newHashSet(SHEET_PROFILO,SHEET_UTENTI,SHEET_DELEGHE,SHEET_ALLERGIE,SHEET_BUS);
+	
+	private static final Set<String> numFields = Sets.newHashSet("PIN","CAPACITA");
+	static
 	
 	private SchoolProfile schoolProfile = null;
 	private List<Teacher> teachers = new ArrayList<Teacher>();
@@ -90,6 +97,7 @@ public class Importer {
 	
 	//private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
 	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+	private static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("HH:mm");
 	
 	public void importChildrenData(String appId, String schoolId, InputStream is) throws ImportError {
 		try {
@@ -414,6 +422,7 @@ public class Importer {
 			t.setTeacherFullname(t.getTeacherName() +" "+t.getTeacherSurname());
 			t.setTeacherId(map.get("ID"));
 			t.setUsername(map.get("USERNAME"));
+			t.setPin(map.get("PIN"));
 			teachers.add(t);
 		}
 	}
@@ -488,6 +497,11 @@ public class Importer {
 				Arrays.asList(StringUtils.commaDelimitedListToStringArray(line.get("PHONE"))));
 		schoolProfile.getContacts().setEmail(
 				Arrays.asList(StringUtils.commaDelimitedListToStringArray(line.get("EMAIL"))));
+		
+		schoolProfile.setAbsenceTiminig(line.get("ORARIO_ASSENZA"));
+		schoolProfile.setRetireTiming(line.get("ORARIO_RITIRO"));
+		schoolProfile.setAccessEmail(line.get("ACCESS_EMAIL"));
+
 	}
 
 	private List<Map<String, String>> getSheetMap(Sheet sheet) {
@@ -497,7 +511,7 @@ public class Importer {
 		int firstRow = 1;
 		if (row.getLastCellNum() != 1) {
 			for (int j = 0; j < row.getLastCellNum(); j++) {
-				String key = getCellValue(row.getCell(j)).toUpperCase().replace(' ', '_').trim();
+				String key = getCellValue(row.getCell(j), null).toUpperCase().replace(' ', '_').trim();
 				keys.add(key);
 			}
 		} else {
@@ -518,7 +532,7 @@ public class Importer {
 					continue;
 				}
 				if (row.getCell(j) != null) {
-					String value = getCellValue(row.getCell(j)).replace("_", " ").trim();
+					String value = getCellValue(row.getCell(j), keys.get(j)).replace("_", " ").trim();
 					if (!value.isEmpty()) {
 						add = true;
 					}
@@ -539,22 +553,35 @@ public class Importer {
 		return result;
 	}
 
-	private String getCellValue(Cell cell) {
+	private String getCellValue(Cell cell, String key) {
 		switch (cell.getCellType()) {
 		case Cell.CELL_TYPE_STRING:
 			return cell.getStringCellValue();
 		case Cell.CELL_TYPE_NUMERIC:
-			String value;
-			Calendar cal = new GregorianCalendar();
-			cal.setTime(cell.getDateCellValue());
-			if (cal.get(Calendar.YEAR) < 2014) {
-				value = cal.get(Calendar.HOUR_OF_DAY) + ":" + (cal.get(Calendar.MINUTE) + "0").substring(0, 2);
-			} else {
-				String month = "0" + (1 + cal.get(Calendar.MONTH));
-				String day = "0" + cal.get(Calendar.DAY_OF_MONTH);
-				value = cal.get(Calendar.YEAR) + "-" + month.substring(month.length() - 2, month.length()) + "-" + day.substring(day.length() - 2, day.length());
+			if (key != null && numFields.contains(key.toUpperCase())) {
+				double v = cell.getNumericCellValue();
+				if (v - Math.floor(v) > 0) return ""+v;
+				return ""+Math.round(v);
 			}
-			return value;
+			
+			Date date = cell.getDateCellValue();
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(date);
+			if (cal.get(Calendar.YEAR) <= 1970) return TIME_FORMAT.format(date);
+			return DATE_FORMAT.format(date);
+						
+			// TODO revise date management
+//			String value = null;
+//			Calendar cal = new GregorianCalendar();
+//			cal.setTime(cell.getDateCellValue());
+//			if (cal.get(Calendar.YEAR) < 2014) {
+//				value = cal.get(Calendar.HOUR_OF_DAY) + ":" + (cal.get(Calendar.MINUTE) + "0").substring(0, 2);
+//			} else {
+//				String month = "0" + (1 + cal.get(Calendar.MONTH));
+//				String day = "0" + cal.get(Calendar.DAY_OF_MONTH);
+//				value = cal.get(Calendar.YEAR) + "-" + month.substring(month.length() - 2, month.length()) + "-" + day.substring(day.length() - 2, day.length());
+//			}
+//			return value;
 		}
 		return "";
 	}

@@ -1,9 +1,9 @@
 angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.communications', [])
 
-.controller('communicationsCtrl', function ($scope, dataServerService, $ionicPopup, communicationService, profileService, teachersService, Toast, $filter, $ionicLoading, $compile, $ionicPopover, $state, ionicDatePicker) {
+.controller('communicationsCtrl', function ($scope, dataServerService, $ionicPopup, $rootScope, communicationService, profileService, teachersService, Toast, $filter, $ionicLoading, $compile, $ionicPopover, $state, ionicDatePicker) {
 
   var selectedCommunicationIndex = -1;
-
+  $rootScope.hideMenu = false;
   var MODE_NORMAL_LIST = "normal";
   var MODE_EDIT = "edit";
   var MODE_NEW = "new";

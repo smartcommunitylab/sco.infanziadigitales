@@ -6,15 +6,15 @@
   <ion-content has-header="true" scroll="false">
     <div>
       <div class="row">
-        <div class="col  card profile-column">
+        <div class="col   profile-column">
           <div id="kid-profile">
             <div style="display:inline-block; vertical-align:top;">
               <img ng-src="{{getProfileImage()}}" class="baby-profile-image">
             </div>
             <div>
-              <div class=" detailItem" ng-if="babyInformations.active">{{babyProfile.firstName}} {{'is' | translate}} <b>{{babyStatus | uppercase}}</b></div>
+              <div class=" detailItem" ng-if="babyInformations.active">{{babyProfile.firstName}} {{'is' | translate}} <b>{{babyStatus | uppercase}}</b> <span ng-if="babyInformations.exitTime == null && babyInformations.absenceType!=null">{{'because' | translate}}{{babyInformations.absenceType}} ({{babyInformations.absenceType}})</span></div>
               <div class=" detailItem" ng-if="!babyInformations.active">{{babyProfile.firstName}}{{'baby_not_monitored' | translate}}</div>
-              <div class=" detailItem" ng-if="babyInformations.exitTime == null && babyInformations.absenceType!=null">{{'absence_type' | translate}} {{babyInformations.absenceType}}</div>
+              <!--              <div class=" detailItem" ng-if="babyInformations.exitTime == null && babyInformations.absenceType!=null">{{'absence_type' | translate}} {{babyInformations.absenceType}}</div>-->
               <div class=" detailItem" ng-if="babyInformations.exitTime !== null">{{'enter_at' | translate}}<b> {{babyEnterHour}}</b></div>
               <div class=" detailItem" ng-if="checkBusServiceActive() && babyInformations.exitTime !== null">{{'bus_stop_back' | translate}} <b>{{babyBusStopBackName}}</b></div>
               <div class=" detailItem" ng-if="babyInformations.exitTime !== null && !checkBusServiceActive()">{{'exit_at' | translate}}<b>{{babyInformations.exitTime | date:'HH:mm'}}</b></div>
@@ -47,7 +47,7 @@ Right now they are not interested to put who retires the kid
                   <div class="babyprofile-parent-name">{{parents[$index+1].fullName}}</div>
                   <ion-list>
                     <div ng-repeat="num in parents[$index+1].phone" ng-click="callPhone('{{num}}');" class="babyprofile-phone">
-                      <i class="icon voice-menu ion-ios-telephone babyprofile-phone"></i>{{num}}
+                      <i class="icon voice-menu ion-ios-telephone babyprofile-phone-icon"></i>{{num}}
                     </div>
                   </ion-list>
                 </div>
@@ -57,7 +57,22 @@ Right now they are not interested to put who retires the kid
               {{'no_parents' | translate}}
             </div>
 
-
+            <div class="row">
+              <div class="col">
+                <div class="babyprofile-allergies">
+                  <div class=" detailsTitle">{{'people_retire' | translate}}</div>
+                  <ion-list ng-hide="otherPeople.length==0">
+                    <div ng-repeat="person in otherPeople track by $index">
+                      <i ng-if class="voice-menu babyprofile-others">{{person.fullName}}</i>
+                    </div>
+                  </ion-list>
+                  <div ng-hide="otherPeople.length!=0" class="babyprofile-others">
+                    {{'no_other_people' | translate}}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--
             <div class="row">
               <div class="col">
                 <div class="babyprofile-allergies">
@@ -73,6 +88,7 @@ Right now they are not interested to put who retires the kid
                 </div>
               </div>
             </div>
+-->
           </div>
 
         </div>

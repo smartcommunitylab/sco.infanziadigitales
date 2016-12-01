@@ -237,12 +237,11 @@ public class SchoolController {
 
 	@RequestMapping(method = RequestMethod.GET, value = "/school/{appId}/{schoolId}/teacher/{pin}")
 	public @ResponseBody Response<Teacher> getTeacherByPin(@PathVariable String appId, @PathVariable String schoolId, @PathVariable String pin) {
-		String username = permissions.getUserId();
 		try {
 			if (!permissions.isSchoolTeacher(appId, schoolId, permissions.getUserId())) {
 				throw new SecurityException("User is not associated to this school");
 			}
-			Teacher result = storage.getTeacherByPin(username, appId, schoolId);
+			Teacher result = storage.getTeacherByPin(pin, appId, schoolId);
 			return new Response<>(result);
 		} catch (Exception e) {
 			return new Response<>(e.getMessage());

@@ -498,7 +498,7 @@ public class Importer {
 		schoolProfile.getContacts().setEmail(
 				Arrays.asList(StringUtils.commaDelimitedListToStringArray(line.get("EMAIL"))));
 		
-		schoolProfile.setAbsenceTiminig(line.get("ORARIO_ASSENZA"));
+		schoolProfile.setAbsenceTiming(line.get("ORARIO_ASSENZA"));
 		schoolProfile.setRetireTiming(line.get("ORARIO_RITIRO"));
 		schoolProfile.setAccessEmail(line.get("ACCESS_EMAIL"));
 

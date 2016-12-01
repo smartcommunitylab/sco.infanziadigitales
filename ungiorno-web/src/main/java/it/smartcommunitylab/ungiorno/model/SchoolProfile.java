@@ -90,7 +90,7 @@ public class SchoolProfile extends SchoolObject {
 	private List<TypeDef> foodTypes;
 	private List<SectionProfile> sections;
 	private List<BusProfile> buses;
-	private String absenceTiminig, retireTiming;
+	private String absenceTiming, retireTiming;
 	private String accessEmail;
 	
 	public String getAccessEmail() {
@@ -99,11 +99,11 @@ public class SchoolProfile extends SchoolObject {
 	public void setAccessEmail(String accessEmail) {
 		this.accessEmail = accessEmail;
 	}
-	public String getAbsenceTiminig() {
-		return absenceTiminig;
+	public String getAbsenceTiming() {
+		return absenceTiming;
 	}
-	public void setAbsenceTiminig(String absenceTiminig) {
-		this.absenceTiminig = absenceTiminig;
+	public void setAbsenceTiming(String absenceTiming) {
+		this.absenceTiming = absenceTiming;
 	}
 	public String getRetireTiming() {
 		return retireTiming;

@@ -223,9 +223,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
     $scope.notesLoaded = false;
     $scope.dataLoaded = false;
     $scope.showLoader();
+    $scope.data = {
+      userPIN: ""
+    }
     $scope.schoolProfile = profileService.getSchoolProfile();
     $scope.babyInformations = profileService.getCurrentBaby();
-    setTeachers();
+    //setTeachers();
+    $scope.teacher = profileService.getTeacher();
     $scope.relation = "";
     var babyProfileID = $scope.babyInformations.kidId;
 
@@ -424,7 +428,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
       $scope.stopTyping();
       $ionicLoading.show();
       //$scope.newMessage;
-      messagesService.sendMessage($scope.babyProfile.schoolId, $scope.babyProfile.kidId, $scope.teacher.teacherId, text).then(
+      //      messagesService.sendMessage($scope.babyProfile.schoolId, $scope.babyProfile.kidId, $scope.teacher.teacherId, text).then(
+      messagesService.sendMessage($scope.babyProfile.schoolId, $scope.babyProfile.kidId, profileService.getTeacher().teacherId, text).then(
         function (msg) {
           // init(); temporary commented. why reinitialize the list?
           $rootScope.messages[$scope.babyProfile.kidId] = $rootScope.messages[$scope.babyProfile.kidId].concat(msg);
@@ -478,9 +483,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
   }
   $scope.resetText = function () {
     var element = document.getElementById("txtnotes");
-    element.style.height = "40px";
+    if (element) {
+      element.style.height = "40px";
+    }
     element = document.getElementById("txtfooter");
-    element.style.height = "40px";
+    if (element) {
+      element.style.height = "40px";
+    }
   }
   var counter = 0;
   $scope.checkMessage = function (message) {
@@ -500,6 +509,38 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
       return image;
     } else return "";
   }
+  var userAutent = function (PIN) {
+    profileService.authenticatheWithPIN($scope.schoolProfile.schoolId, PIN).then(function (user) {
+      $scope.teacher = user;
+    }, function (error) {
 
+    });
+  };
+  $scope.exit = function () {
+    profileService.lock();
+  }
+  $scope.unlock = function () {
+    //open the ionic popup for authentication
+    var unlockPopup = $ionicPopup.alert({
+      title: $filter('translate')("insert_pin_title"),
+      //      template: $filter('translate')("pop_up__expired_template"),
+      templateUrl: 'templates/insertPINPopup.html',
+      scope: $scope,
+      buttons: [
+        {
+          text: $filter('translate')("insert_pin_confim_button"),
+          type: 'button-popup',
+          onTap: function (e) {
+            userAutent($scope.data.userPIN);
+            $scope.data.userPIN = "";
+          }
+        }
+            ]
+    });
+
+  }
+  $scope.openPINKeyboard = function () {
+    document.getElementById('inputPIN').focus();
+  }
   $scope.init();
 });

@@ -978,10 +978,6 @@ select {
 }
 
 #babyprofile .babyprofile-parent-name {
-  /*
-  margin-bottom: 4px;
-  margin-bottom: 4px;
-*/
   margin: 8px 0px 8px 0px;
   font-size: 18px;
 }
@@ -992,10 +988,26 @@ select {
   color: #bd3e4d;
 }
 
+#babyprofile .ion-ios-telephone:before {
+  font-size: 28px;
+}
+
+#babyprofile .bullet-other-people {
+  font-size: 10px;
+  margin: 4px;
+  vertical-align: middle;
+}
+
 #babyprofile .babyprofile-icon {
   font-size: 24px;
   margin-right: 8px;
   color: #bd3e4d;
+}
+
+#babyprofile .chat-lock>label {
+  width: 100%;
+  color: white;
+  background-color: #98ba3c;
 }
 
 #babyprofile .babyprofile-allergies {
@@ -1007,9 +1019,26 @@ select {
   margin: 4px!important;
 }
 
+#babyprofile .babyprofile-other-name {
+  margin: 0px 0px 0px 0px;
+  font-size: 18px;
+}
+
 #babyprofile .babyprofile-others {
   font-size: 18px;
   margin: 4px!important;
+}
+
+#babyprofile .babyprofile-other {
+  margin: 6px;
+}
+
+#babyprofile .babyprofile-other .row {
+  padding-left: 0px;
+}
+
+#babyprofile .babyprofile-other .col {
+  padding-left: 0px;
 }
 
 #babyprofile .card {
@@ -1074,6 +1103,29 @@ select {
   min-height: 50px;
   min-width: 65px;
   margin-left: 5px;
+}
+
+#babyprofile .chat-lock {
+  background-color: #98ba3c;
+}
+
+#babyprofile .chat-lock-label {
+  font-size: 18px;
+}
+
+#babyprofile .chat-lock>span {
+  width: 100%;
+  color: white;
+}
+
+#babyprofile .chat-user {
+  color: white;
+  display: flex;
+  background-color: #bd3e4d;
+}
+
+#babyprofile .chat-user>span {
+  width: 100%;
 }
 
 #babyprofile input[type=text],
@@ -1163,7 +1215,7 @@ textarea {
 #babyprofile .chat-teacher-input {
   display: block;
   height: auto;
-  bottom: 0px;
+  bottom: 10px;
   padding: 0px;
 }
 

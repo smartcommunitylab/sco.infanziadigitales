@@ -389,7 +389,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
     deadline_time: 'Data di scadenza',
     cancel: 'Annulla',
     ok: 'OK',
-    because: 'per',
+    because: 'per ',
     absent: 'Assente',
     new_note: 'Nuova voce',
     create_new_note: 'Crea una nuova voce',
@@ -494,7 +494,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
     pop_up_not_expired_template_5: ". Per ulteriori informazioni, scrivi a ",
     popup_app_name: 'Un Giorno A Scuola - Genitori',
     people_retire: 'Autorizzati al ritiro del bambino:',
-    no_other_people: 'Nessuna altra persona'
+    no_other_people: 'Nessuna altra persona',
+    chat_lock_label: 'Digita qui il tuo PIN numerico',
+    chat_lock_button: 'Entra',
+    insert_pin_template: 'Digita il tuo PIN per scrivere un nuovo messaggio',
+    insert_pin_title: 'PIN',
+    insert_pin_placeholder: 'Digita qui il tuo PIN numerico',
+    insert_pin_confim_button: 'Conferma PIN',
+    chat_exit_button: 'Esci'
 
   });
 

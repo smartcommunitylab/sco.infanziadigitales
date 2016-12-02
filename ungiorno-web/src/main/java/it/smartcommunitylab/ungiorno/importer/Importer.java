@@ -498,7 +498,7 @@ public class Importer {
 		schoolProfile.getContacts().setEmail(
 				Arrays.asList(StringUtils.commaDelimitedListToStringArray(line.get("EMAIL"))));
 		
-		schoolProfile.setAbsenceTiminig(line.get("ORARIO_ASSENZA"));
+		schoolProfile.setAbsenceTiming(line.get("ORARIO_ASSENZA"));
 		schoolProfile.setRetireTiming(line.get("ORARIO_RITIRO"));
 		schoolProfile.setAccessEmail(line.get("ACCESS_EMAIL"));
 
@@ -508,14 +508,13 @@ public class Importer {
 		System.err.println(sheet.getSheetName());
 		Row row = sheet.getRow(0);
 		List<String> keys = new ArrayList<String>();
-		int firstRow = 1;
+		int firstRow = 2;
 		if (row.getLastCellNum() != 1) {
 			for (int j = 0; j < row.getLastCellNum(); j++) {
 				String key = getCellValue(row.getCell(j), null).toUpperCase().replace(' ', '_').trim();
 				keys.add(key);
 			}
 		} else {
-			firstRow = 1;
 			keys.add("valore");
 		}
 

@@ -950,6 +950,7 @@ public class RepositoryManager {
 				skp.setNote(a.getNote());
 				if(a.getReason() != null) {
 					skp.setAbsenceType(a.getReason().getType());
+					skp.setAbsenceSubtype(a.getReason().getSubtype());
 				}
 			} else if (ritiriMap.containsKey(kp.getKidId())){
 				KidCalRitiro r = ritiriMap.get(kp.getKidId());

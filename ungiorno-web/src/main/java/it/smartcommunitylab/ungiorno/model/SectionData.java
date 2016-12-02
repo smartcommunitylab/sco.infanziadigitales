@@ -64,6 +64,7 @@ public class SectionData extends SchoolObject{
 		private String note;
 		private String stopId;
 		private String absenceType;
+		private String absenceSubtype;
 		
 		private boolean calNotes;
 		
@@ -171,6 +172,13 @@ public class SectionData extends SchoolObject{
 		public void setAbsenceType(String absenceType) {
 			this.absenceType = absenceType;
 		}
+		public String getAbsenceSubtype() {
+			return absenceSubtype;
+		}
+		public void setAbsenceSubtype(String absenceSubtype) {
+			this.absenceSubtype = absenceSubtype;
+		}
+		
 	}
 
 	private String sectionId, sectionName;

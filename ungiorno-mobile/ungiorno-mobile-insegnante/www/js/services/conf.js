@@ -124,6 +124,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.conf', 
     getExpirationDate: function () {
       return mapJsonConfig["expirationDate"];
 
+    },
+    getAuthenticationTimer: function () {
+      return mapJsonConfig['authenticationTimer'];
     }
   }
 })

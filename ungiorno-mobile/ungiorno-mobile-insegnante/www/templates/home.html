@@ -24,7 +24,7 @@
         <div>{{date | date:'EEEE, d MMMM yyyy'}} - Maestra Chiara</div>
     </ion-nav-title>
 -->
-  <ion-content has-header="true">
+  <ion-content has-header="true" scroll="false">
     <div class="row section-row home-container">
       <!--            <div class="col section-row" ng-class="{'sections-displayer-short': noteExpanded || communicationExpanded, 'sections-displayer-full': !(noteExpanded || communicationExpanded)}">-->
       <div class="col section-row sections-displayer-full">
@@ -103,6 +103,7 @@
         <div class="section-text " ng-if="communicationExpanded ">
           {{'home_scadenze' | translate}}
         </div>
+        <!--<ion-scroll>-->
         <div class=" children-home " ng-repeat="child in childrenProfiles[selectedPeriod] track by $index " ng-click="detailOrCommunication(child) " ng-if="!communicationExpanded">
           <div class="badge-msg " ng-if="numberMessageUnread[child.kidId]>0 && !communicationExpanded"><i class="icon center icon-message inf_dignotifica_messaggi"></i>
           </div>
@@ -117,6 +118,7 @@
           <div class="name-of-child " ng-if="!child.image || child.image=='' ">{{child.childrenName}}</div>
 
         </div>
+        <!--        </ion-scroll>-->
       </div>
 
     </div>

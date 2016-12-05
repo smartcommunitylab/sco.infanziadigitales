@@ -2124,6 +2124,7 @@ ion-content .scroll {
   text-align: justify;
   line-height: 26px;
   padding-left: 24px;
+  padding-top: 40px;
 }
 
 #communications .communication-title {
@@ -2131,6 +2132,17 @@ ion-content .scroll {
   right: 0px;
   margin-right: 8px;
   color: #98ba3c;
+}
+
+#communications .communication-name {
+  position: absolute;
+  left: 0px;
+  top: 0;
+  margin-right: 8px;
+  color: #fff;
+  background-color: #bd3e4d;
+  font-size: 20px;
+  padding: 4px 8px 4px 8px;
 }
 
 #communications .chat-chose {
@@ -2184,6 +2196,67 @@ ion-content .scroll {
   line-height: 20px;
   width: 100%;
 }
+
+#communications .chat-lock {
+  background-color: #98ba3c;
+}
+
+#communications .chat-lock-label {
+  font-size: 18px;
+}
+
+#communications .chat-lock>span {
+  width: 100%;
+  color: white;
+}
+
+#communications .chat-user {
+  position: fixed;
+  bottom: 0px;
+  color: white;
+  display: flex;
+  background-color: #bd3e4d;
+}
+
+#communications .chat-user>span {
+  width: 100%;
+}
+
+#communications .communication-footer {
+  background-color: rgba(0, 0, 0, 0);
+}
+
+#communications .button-chat-send {
+  color: white;
+  background-color: #bd3e4d;
+}
+
+#communications .chat-user {
+  width: 100%;
+  color: white;
+  display: flex;
+  background-color: #bd3e4d;
+}
+
+#communications .chat-user span {
+  height: 30px;
+  line-height: 30px;
+  font-size: 24px;
+  margin-right: 20px;
+}
+
+#communications .communication-spacer {
+  height: 40px;
+}
+
+
+/*
+#communications .chat-user>div {
+  width: 100%;
+  line-height: 20px;
+  height: 20px;
+}
+*/
 
 .list-teacher {
   background-color: #fff!important;

@@ -512,12 +512,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
   var userAutent = function (PIN) {
     profileService.authenticatheWithPIN($scope.schoolProfile.schoolId, PIN).then(function (user) {
       $scope.teacher = user;
+      Toast.show($filter('translate')('user_auth'), 'short', 'bottom');
+
     }, function (error) {
+      Toast.show($filter('translate')('user_not_auth'), 'short', 'bottom');
 
     });
   };
   $scope.exit = function () {
     profileService.lock();
+    Toast.show($filter('translate')('user_exit_auth'), 'short', 'bottom');
   }
   $scope.unlock = function () {
     //open the ionic popup for authentication

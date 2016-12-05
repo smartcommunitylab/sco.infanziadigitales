@@ -501,7 +501,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
     insert_pin_title: 'PIN',
     insert_pin_placeholder: 'Digita qui il tuo PIN numerico',
     insert_pin_confim_button: 'Conferma PIN',
-    chat_exit_button: 'Esci'
+    chat_exit_button: 'Esci',
+    user_auth: 'Utente autenticato',
+    user_not_auth: 'Utente non autenticato',
+    user_exit_auth: 'Utente uscito correttamente'
+
 
   });
 

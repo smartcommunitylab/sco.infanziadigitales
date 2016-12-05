@@ -108,6 +108,7 @@ public class Importer {
 			mapChildrenData(appId, schoolId, wb);
 			
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new ImportError(e.getMessage());
 		}
 	}
@@ -227,11 +228,13 @@ public class Importer {
 			p.setEmail(Arrays.asList(StringUtils.commaDelimitedListToStringArray(m.get("EMAIL"))));
 			p.setPhone(Arrays.asList(StringUtils.commaDelimitedListToStringArray(m.get("TELEFONO"))));
 			p.setRelation(m.get("LEGAME"));
-			p.setAdult(m.get("ADULTO").equals("1"));
-			try {
-				p.setAuthorizationDeadline(DATE_FORMAT.parse(m.get("SCADENZA_DELEGA")).getTime());
-			} catch (ParseException e) {
-				throw new ImportError("Delega date format error: "+ e.getMessage());
+			p.setAdult(m.get("ADULTO") == null ? true : m.get("ADULTO").equals("1"));
+			if (m.get("SCADENZA_DELEGA") != null) {
+				try {
+					p.setAuthorizationDeadline(DATE_FORMAT.parse(m.get("SCADENZA_DELEGA")).getTime());
+				} catch (ParseException e) {
+					throw new ImportError("Delega date format error: "+ e.getMessage());
+				}
 			}
 			String kidId = m.get("IDBAMBINO");
 			if (kidMap.containsKey(kidId)) {

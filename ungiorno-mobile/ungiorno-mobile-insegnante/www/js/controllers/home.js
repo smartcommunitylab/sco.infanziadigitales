@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home', [])
 
-.controller('HomeCtrl', function ($scope, $location, dataServerService, profileService, babyConfigurationService, $filter, $state, Toast, $ionicModal, $ionicLoading, moment, teachersService, sectionService, communicationService, Config, $ionicSideMenuDelegate, $ionicPopup, $rootScope, loginService, pushNotificationService, $ionicHistory) {
+.controller('HomeCtrl', function ($scope, $location, dataServerService, profileService, babyConfigurationService, $filter, $q, $state, Toast, $ionicModal, $ionicLoading, moment, teachersService, sectionService, communicationService, Config, $ionicSideMenuDelegate, $ionicPopup, $rootScope, loginService, pushNotificationService, $ionicHistory) {
   $scope.sections = null;
   $scope.section = null;
   $scope.childrenConfigurations = [];
@@ -245,15 +245,30 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
   }
 
   $scope.title = moment().locale('it').format("dddd, D MMMM gggg");
+  $scope.checkConnection = function () {
+    var deferred = $q.defer();
+    if (window.Connection) {
+      if (navigator.connection.type == Connection.NONE) {
+        deferred.reject();
+      } else {
+        deferred.resolve();
+
+      }
+    };
+    return deferred.promise;
+  }
   $scope.refreshHome = function () {
-    $scope.initialize();
+    $scope.checkConnection().then(function () {
+      $scope.initialize();
+    }, function (err) {
+      Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+    });
   }
   $scope.initialize = function () {
     $ionicLoading.show({
       template: $filter('translate')('loading_data')
     });
     $scope.title = $filter('date')(new Date(), 'EEEE, dd MMMM yyyy'); // cat - profile teacher
-
 
     dataServerService.getSchoolProfileForTeacher().then(function (schoolProfile) {
       if (schoolProfile) {
@@ -429,20 +444,41 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
     //}
 
   }
+  $scope.showNoConnection = function () {
+    var alertPopup = $ionicPopup.alert({
+      title: $filter('translate')("signal_send_no_connection_title"),
+      template: $filter('translate')("signal_send_no_connection_template"),
+      cssClass: 'no-connection-popup',
+      buttons: [
+        {
+          text: $filter('translate')("signal_send_toast_alarm"),
+          type: 'button-custom'
+            }
+        ]
+    });
 
+    alertPopup.then(function (res) {
+      console.log('no place');
+    });
+  };
   $scope.detailOrCommunication = function (child) {
-    //se modalita' communication, modifico lista consegne e poi confermo
-    //altrimenti openDetail(index)
-    if (child.active) {
-      if ($scope.communicationExpanded) {
-        $scope.switchChildrenDeliveryByID(child.kidId)
-      } else {
-        $scope.openDetail(child);
-      }
-    } else {
-      Toast.show($filter('translate')('child_not_partecipate'), 'short', 'bottom');
+    $scope.checkConnection().then(function () {
 
-    }
+      //se modalita' communication, modifico lista consegne e poi confermo
+      //altrimenti openDetail(index)
+      if (child.active) {
+        if ($scope.communicationExpanded) {
+          $scope.switchChildrenDeliveryByID(child.kidId)
+        } else {
+          $scope.openDetail(child);
+        }
+      } else {
+        Toast.show($filter('translate')('child_not_partecipate'), 'short', 'bottom');
+      }
+    }, function (err) {
+      $scope.showNoConnection();
+
+    })
   }
   $scope.communicationDone = function (childId) {
     //se sono in modalita' communication e id contenuto nella lista attuale return true
@@ -761,5 +797,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
     var image = Config.URL() + "/" + Config.app() + "/student/" + Config.appId() + "/" + $scope.schoolProfile.schoolId + "/" + child.kidId + "/true/images";
     return image;
   }
+
+
   $scope.refreshHome();
 });

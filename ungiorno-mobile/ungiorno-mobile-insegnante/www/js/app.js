@@ -496,15 +496,18 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
     people_retire: 'Autorizzati al ritiro del bambino:',
     no_other_people: 'Nessuna altra persona',
     chat_lock_label: 'Digita qui il tuo PIN numerico',
-    chat_lock_button: 'Entra',
-    insert_pin_template: 'Digita il tuo PIN per scrivere un nuovo messaggio',
-    insert_pin_title: 'PIN',
-    insert_pin_placeholder: 'Digita qui il tuo PIN numerico',
-    insert_pin_confim_button: 'Conferma PIN',
+    chat_lock_button: 'ENTRA NELLA CHAT',
+    insert_pin_template: 'Per scrivere nella chat devi digitare il tuo PIN numerico.',
+    insert_pin_title: 'Richiesta PIN',
+    insert_pin_placeholder: 'Digita qui il tuo PIN',
+    insert_pin_confim_button: 'Conferma',
     chat_exit_button: 'Esci',
     user_auth: 'Utente autenticato',
     user_not_auth: 'Utente non autenticato',
-    user_exit_auth: 'Utente uscito correttamente'
+    user_exit_auth: 'Utente uscito correttamente',
+    signal_send_no_connection_title: 'Attenzione!',
+    signal_send_no_connection_template: 'Connessione assente! Controlla la connessione del dispositivo e ricarica la pagina',
+    signal_send_toast_alarm: 'Errore di connessione'
 
 
   });

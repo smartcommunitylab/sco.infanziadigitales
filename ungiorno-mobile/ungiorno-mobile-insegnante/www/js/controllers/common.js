@@ -63,6 +63,22 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
     $scope.teacherName = teachersService.getSelectedTeacher().teacherName;
     $ionicSideMenuDelegate.toggleLeft();
   };
+  $scope.showNoConnection = function () {
+    var alertPopup = $ionicPopup.alert({
+      title: $filter('translate')("signal_send_no_connection_title"),
+      template: $filter('translate')("signal_send_no_connection_template"),
+      buttons: [
+        {
+          text: $filter('translate')("signal_send_toast_alarm"),
+          type: 'button-custom'
+            }
+        ]
+    });
+
+    alertPopup.then(function (res) {
+      console.log('no place');
+    });
+  };
   $ionicModal.fromTemplateUrl('templates/credits.html', {
     id: '3',
     scope: $scope,
@@ -370,22 +386,7 @@ function showNoPlace() {
   });
 };
 
-function showNoConnection() {
-  var alertPopup = $ionicPopup.alert({
-    title: $filter('translate')("signal_send_no_connection_title"),
-    template: $filter('translate')("signal_send_no_connection_template"),
-    buttons: [
-      {
-        text: $filter('translate')("signal_send_toast_alarm"),
-        type: 'button-custom'
-            }
-        ]
-  });
 
-  alertPopup.then(function (res) {
-    console.log('no place');
-  });
-};
 
 function handleNoGeolocation(errorFlag) {
   if (errorFlag) {

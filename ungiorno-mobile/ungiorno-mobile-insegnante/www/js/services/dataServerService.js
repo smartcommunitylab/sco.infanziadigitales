@@ -286,7 +286,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.dataSer
       timeout: Config.httpTimout()
     }).
     success(function (data, status, headers, config) {
-      deferred.resolve(data.data);
+      if (data.data) {
+        deferred.resolve(data.data);
+      } else {
+        deferred.reject();
+      }
     }).
     error(function (data, status, headers, config) {
       console.log(data + status + headers + config);

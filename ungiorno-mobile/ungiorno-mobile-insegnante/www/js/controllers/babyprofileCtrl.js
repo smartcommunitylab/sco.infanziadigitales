@@ -525,12 +525,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
   }
   $scope.unlock = function () {
     //open the ionic popup for authentication
-    var unlockPopup = $ionicPopup.alert({
+    var unlockPopup = $ionicPopup.show({
       title: $filter('translate')("insert_pin_title"),
       //      template: $filter('translate')("pop_up__expired_template"),
       templateUrl: 'templates/insertPINPopup.html',
+      cssClass: 'pin-popup',
       scope: $scope,
       buttons: [
+        {
+          text: $filter('translate')("cancel"),
+
+        },
         {
           text: $filter('translate')("insert_pin_confim_button"),
           type: 'button-popup',

@@ -126,7 +126,7 @@
             </div>
 -->
             <div ng-if="userAuth" class="chat-user"><span>{{teacher.teacherFullname}}</span>
-              <button class="button button-chat-send" ng-click="exit()">{{'chat_exit_button'|translate|uppercase}}
+              <button class="button button-chat-exit" ng-click="exit()">{{'chat_exit_button'|translate|uppercase}}
               </button>
             </div>
             <div class="row chat-write" ng-if="userAuth">
@@ -135,10 +135,16 @@
               <button class="button button-chat-send icon ion-android-send" ng-click="sendMessage(newMessage.text)">
               </button>
             </div>
+            <!--
             <div class="row chat-lock" ng-if="!userAuth">
               <span class="chat-lock-label">{{'chat_lock_label'|translate}}
               </span>
               <button class="button button-chat-send" ng-click="unlock()">{{'chat_lock_button'|translate|uppercase}}
+              </button>
+            </div>
+-->
+            <div class="row" ng-if="!userAuth">
+              <button class="button button-chat-unlock" ng-click="unlock()">{{'chat_lock_button'|translate|uppercase}}
               </button>
             </div>
           </div>

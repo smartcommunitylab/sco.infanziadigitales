@@ -1122,6 +1122,8 @@ select {
   color: white;
   display: flex;
   background-color: #bd3e4d;
+  line-height: 34px;
+  padding-left: 8px;
 }
 
 #babyprofile .chat-user>span {
@@ -1131,15 +1133,38 @@ select {
 #babyprofile input[type=text],
 textarea {
   border-bottom: none;
+  background-color: #eeeeee;
+}
+
+#babyprofile .chat-write {
+  background-color: #eeeeee;
 }
 
 #babyprofile .input-chat-footer {
-  background-color: #F6F6F6;
+  background-color: #eeeeee;
+  height: 60px;
+  padding: 20px 6px;
+}
+
+#babyprofile .button-chat-exit {
+  min-width: 100px;
+  color: white;
+  background-color: #bd3e4d;
 }
 
 #babyprofile .button-chat-send {
   color: white;
   background-color: #bd3e4d;
+}
+
+#babyprofile .button-chat-unlock {
+  width: 100%;
+  color: white;
+  background-color: #bd3e4d;
+  height: 57px;
+  margin-left: 5px;
+  margin-right: 5px;
+  font-size: 18px;
 }
 
 #babyprofile #chat-box ion-item {
@@ -1215,8 +1240,9 @@ textarea {
 #babyprofile .chat-teacher-input {
   display: block;
   height: auto;
-  bottom: 10px;
+  bottom: 0px;
   padding: 0px;
+  border: 0px;
 }
 
 #babyprofile #chat-box label {
@@ -1280,6 +1306,22 @@ textarea {
 
 #babyprofile select {
   color: white!important;
+}
+
+#bus .bus-resume {
+  font-size: 20px;
+  text-align: center;
+  margin-top: 10px;
+  padding: 10px;
+  margin-bottom: 0px;
+}
+
+.pin-popup .popup {
+  width: 350px;
+}
+
+.input-pin {
+  margin-top: 16px;
 }
 
 .teacher-option {
@@ -2247,6 +2289,18 @@ ion-content .scroll {
 
 #communications .communication-spacer {
   height: 40px;
+}
+
+.no-connection-popup .popup {
+  color: green;
+}
+
+.no-connection-popup .popup-title {
+  color: black;
+}
+
+.no-connection-popup .popup-buttons .button {
+  color: orange;
 }
 
 

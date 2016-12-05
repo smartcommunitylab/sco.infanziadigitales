@@ -33,6 +33,7 @@
     "https://github.com/smartcommunitylab/cordova-plugin-googleplus",
     "net.yoik.cordova.plugins.screenorientation",
     "com.cordova.plugins.cookiemaster",
+    "org.apache.cordova.network-information"
     "https://github.com/katzer/cordova-plugin-local-notifications",
     {
       "variables": {

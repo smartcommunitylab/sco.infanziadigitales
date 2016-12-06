@@ -16,7 +16,6 @@
 
 package it.smartcommunitylab.ungiorno.controller;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -112,7 +111,13 @@ public class SchoolController {
 			Communication old = storage.getCommunicationById(appId, schoolId, comm.getCommunicationId());
 			Communication result = storage.saveCommunication(comm);
 			
-			notificationManager.sendCommunicationMessage(appId, schoolId, comm, old != null);
+			if (old != null && (
+					!old.getDescription().equals(comm.getDescription()) ||
+					old.getDateToCheck() != comm.getDateToCheck() ||
+					old.isDoCheck() != comm.isDoCheck())) 
+			{
+				notificationManager.sendCommunicationMessage(appId, schoolId, comm, old != null);
+			}
 			
 			return new Response<>(result);
 		} catch (Exception e) {

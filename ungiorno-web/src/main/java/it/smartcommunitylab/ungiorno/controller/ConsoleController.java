@@ -92,7 +92,7 @@ public class ConsoleController {
 			if (multiFileMap.containsKey("childrenData")) {
 				importer.importChildrenData(appId, schoolId, multiFileMap.getFirst("childrenData").getInputStream());
 				storage.updateChildren(appId, schoolId, importer.getChildren());
-				storage.updateParents(appId, importer.getParents());
+				storage.updateParents(appId, schoolId, importer.getParents());
 				storage.updateKidBusData(appId, schoolId, importer.getBusData());
 			}
 			res = new ObjectMapper().writeValueAsString(storage.getApp(appId));

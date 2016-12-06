@@ -52,7 +52,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
   };
 })
 
-.controller('AppCtrl', function ($scope, $rootScope, $cordovaDevice, $ionicModal, $ionicHistory, $timeout, $filter, $ionicPopover, $state, Toast, Config, $ionicSideMenuDelegate, loginService, teachersService, $ionicPopup) {
+.controller('AppCtrl', function ($scope, $rootScope, $cordovaDevice, $ionicModal, $ionicHistory, $q, $timeout, $filter, $ionicPopover, $state, Toast, Config, $ionicSideMenuDelegate, loginService, teachersService, $ionicPopup) {
   $scope.rightView = null;
   $scope.openRightMenu = function (item) {
     $scope.rightView = item;
@@ -63,22 +63,22 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
     $scope.teacherName = teachersService.getSelectedTeacher().teacherName;
     $ionicSideMenuDelegate.toggleLeft();
   };
-  $scope.showNoConnection = function () {
-    var alertPopup = $ionicPopup.alert({
-      title: $filter('translate')("signal_send_no_connection_title"),
-      template: $filter('translate')("signal_send_no_connection_template"),
-      buttons: [
-        {
-          text: $filter('translate')("signal_send_toast_alarm"),
-          type: 'button-custom'
-            }
-        ]
-    });
-
-    alertPopup.then(function (res) {
-      console.log('no place');
-    });
-  };
+  //  $scope.showNoConnection = function () {
+  //    var alertPopup = $ionicPopup.alert({
+  //      title: $filter('translate')("signal_send_no_connection_title"),
+  //      template: $filter('translate')("signal_send_no_connection_template"),
+  //      buttons: [
+  //        {
+  //          text: $filter('translate')("signal_send_toast_alarm"),
+  //          type: 'button-custom'
+  //            }
+  //        ]
+  //    });
+  //
+  //    alertPopup.then(function (res) {
+  //      console.log('no place');
+  //    });
+  //  };
   $ionicModal.fromTemplateUrl('templates/credits.html', {
     id: '3',
     scope: $scope,
@@ -195,21 +195,33 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
       $scope.showExpiredPopup(Config.getExpirationDate());
     }
   });
-
+  $scope.sendMail = function () {
+    $scope.checkConnection().then(function () {
+        window.open('mailto:infdig-help@smartcommunitylab.it', '_system');
+        return false;
+      },
+      function (err) {
+        $scope.showNoConnection();
+      });
+  }
   $scope.logout = function () {
-
-    //first logout the exit from auth
-    loginService.logout().then(function (done) {
-      window.plugins.googleplus.logout(
-        function (msg) {
-          $state.go('app.login');
-          $ionicHistory.nextViewOptions({
-            disableBack: true,
-            historyRoot: true
-          });
-        }
-      );
+    $scope.checkConnection().then(function () {
+      //first logout the exit from auth
+      loginService.logout().then(function (done) {
+        window.plugins.googleplus.logout(
+          function (msg) {
+            $state.go('app.login');
+            $ionicHistory.nextViewOptions({
+              disableBack: true,
+              historyRoot: true
+            });
+          }
+        );
+      });
+    }, function (err) {
+      $scope.showNoConnection();
     });
+
 
   };
   $scope.toggleSubmenu = function () {
@@ -253,15 +265,51 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
       }
     }
   }
+  $scope.showNoConnection = function () {
+    var alertPopup = $ionicPopup.alert({
+      title: $filter('translate')("signal_send_no_connection_title"),
+      template: $filter('translate')("signal_send_no_connection_template"),
+      cssClass: 'no-connection-popup',
+      buttons: [
+        {
+          text: $filter('translate')("signal_send_toast_alarm"),
+          type: 'button-custom'
+            }
+        ]
+    });
 
-  $scope.window = {
-    open: function (url, target) {
-      window.open(url, target);
-    }
+    alertPopup.then(function (res) {
+      console.log('no place');
+    });
   };
+  $scope.window = {
+      open: function (url, target) {
+        window.open(url, target);
+      }
+    },
+    function (err) {
+      $scope.showNoConnection();
 
+    }
+  $scope.checkConnection = function () {
+    var deferred = $q.defer();
+    if (window.Connection) {
+      if (navigator.connection.type == Connection.NONE) {
+        deferred.reject();
+      } else {
+        deferred.resolve();
+
+      }
+    };
+    return deferred.promise;
+  }
   $scope.goto = function (state) {
-    $state.go(state);
+    $scope.checkConnection().then(function () {
+      $state.go(state);
+    }, function (err) {
+      $scope.showNoConnection();
+
+    });
   }
   $scope.bringmethere = function (loc) {
     if (device != undefined && device.platform == "Android") {

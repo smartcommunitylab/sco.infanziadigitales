@@ -24,8 +24,8 @@
         <div>{{date | date:'EEEE, d MMMM yyyy'}} - Maestra Chiara</div>
     </ion-nav-title>
 -->
-  <ion-content has-header="true" scroll="false">
-    <div class="row section-row home-container">
+  <ion-content has-header="true">
+    <div class="row section-row home-container" ng-if="!noConnection">
       <!--            <div class="col section-row" ng-class="{'sections-displayer-short': noteExpanded || communicationExpanded, 'sections-displayer-full': !(noteExpanded || communicationExpanded)}">-->
       <div class="col section-row sections-displayer-full">
         <div class=" row section-row ">
@@ -121,6 +121,9 @@
         <!--        </ion-scroll>-->
       </div>
 
+    </div>
+    <div class="row section-row home-container" ng-if="noConnection">
+      <div class="no-connection-message">{{'no_connection_message'|translate}}</div>
     </div>
   </ion-content>
 </ion-view>

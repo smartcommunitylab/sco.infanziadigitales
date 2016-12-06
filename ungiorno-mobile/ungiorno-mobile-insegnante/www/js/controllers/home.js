@@ -18,6 +18,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
   $scope.schoolProfile = null;
   $scope.numberOfChildren = 0;
   $scope.communications = [];
+  $scope.noConnection = false;
   // $scope.communicationTocheck = {};
 
   $scope.childrenCommunicationDelivery = null;
@@ -245,29 +246,33 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
   }
 
   $scope.title = moment().locale('it').format("dddd, D MMMM gggg");
-  $scope.checkConnection = function () {
-    var deferred = $q.defer();
-    if (window.Connection) {
-      if (navigator.connection.type == Connection.NONE) {
-        deferred.reject();
-      } else {
-        deferred.resolve();
-
-      }
-    };
-    return deferred.promise;
-  }
+  //  $scope.checkConnection = function () {
+  //    var deferred = $q.defer();
+  //    if (window.Connection) {
+  //      if (navigator.connection.type == Connection.NONE) {
+  //        deferred.reject();
+  //      } else {
+  //        deferred.resolve();
+  //
+  //      }
+  //    };
+  //return deferred.promise;
+  // }
   $scope.refreshHome = function () {
     $scope.checkConnection().then(function () {
       $scope.initialize();
+      $scope.noConnection = false;
     }, function (err) {
-      Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+      //Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+      $scope.showNoConnection();
+      $scope.noConnection = true;
     });
   }
   $scope.initialize = function () {
-    $ionicLoading.show({
-      template: $filter('translate')('loading_data')
-    });
+    //    $ionicLoading.show({
+    //      template: $filter('translate')('loading_data')
+    //    });
+    $ionicLoading.show();
     $scope.title = $filter('date')(new Date(), 'EEEE, dd MMMM yyyy'); // cat - profile teacher
 
     dataServerService.getSchoolProfileForTeacher().then(function (schoolProfile) {
@@ -428,39 +433,39 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
     return false
   }
   $scope.switchChildrenDeliveryByID = function (childId) {
-    // if ($scope.childrenCommunicationDelivery.indexOf(id) >= 0) {
-    //se presente rimuovi, se assente aggiungi
-    //var childrenID = $scope.childrenProfiles[id].kidId
-    var index = -1;
-    if ($scope.childrenCommunicationDelivery) {
-      index = $scope.childrenCommunicationDelivery.indexOf(childId);
-      if (index > -1) {
-        $scope.childrenCommunicationDelivery.splice(index, 1);
-      } else {
-        $scope.childrenCommunicationDelivery.push(childId);
+      // if ($scope.childrenCommunicationDelivery.indexOf(id) >= 0) {
+      //se presente rimuovi, se assente aggiungi
+      //var childrenID = $scope.childrenProfiles[id].kidId
+      var index = -1;
+      if ($scope.childrenCommunicationDelivery) {
+        index = $scope.childrenCommunicationDelivery.indexOf(childId);
+        if (index > -1) {
+          $scope.childrenCommunicationDelivery.splice(index, 1);
+        } else {
+          $scope.childrenCommunicationDelivery.push(childId);
+        }
       }
+      //$scope.childrenCommunicationDelivery[id] = !$scope.childrenCommunicationDelivery[id]
+      //}
+
     }
-    //$scope.childrenCommunicationDelivery[id] = !$scope.childrenCommunicationDelivery[id]
-    //}
-
-  }
-  $scope.showNoConnection = function () {
-    var alertPopup = $ionicPopup.alert({
-      title: $filter('translate')("signal_send_no_connection_title"),
-      template: $filter('translate')("signal_send_no_connection_template"),
-      cssClass: 'no-connection-popup',
-      buttons: [
-        {
-          text: $filter('translate')("signal_send_toast_alarm"),
-          type: 'button-custom'
-            }
-        ]
-    });
-
-    alertPopup.then(function (res) {
-      console.log('no place');
-    });
-  };
+    //  $scope.showNoConnection = function () {
+    //    var alertPopup = $ionicPopup.alert({
+    //      title: $filter('translate')("signal_send_no_connection_title"),
+    //      template: $filter('translate')("signal_send_no_connection_template"),
+    //      cssClass: 'no-connection-popup',
+    //      buttons: [
+    //        {
+    //          text: $filter('translate')("signal_send_toast_alarm"),
+    //          type: 'button-custom'
+    //            }
+    //        ]
+    //    });
+    //
+    //    alertPopup.then(function (res) {
+    //      console.log('no place');
+    //    });
+    //  };
   $scope.detailOrCommunication = function (child) {
     $scope.checkConnection().then(function () {
 

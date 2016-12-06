@@ -61,7 +61,7 @@
         <ion-item menu-close item-icon-left class="menu-item-insegnante" ng-click="logout()">
           <i class="icon voice-menu  icon-menu-insegnante inf_diglog-out"></i>{{'menu_exit' | translate}}
         </ion-item>
-        <ion-item menu-close item-icon-left class="menu-item-insegnante" onclick="window.open('mailto:infdig-help@smartcommunitylab.it','_system'); return false;">
+        <ion-item menu-close item-icon-left class="menu-item-insegnante" ng-click="sendMail()">
           <i class="icon voice-menu  icon-menu-insegnante ion-alert-circled"></i>{{'menu_issue' | translate}}
         </ion-item>
         <ion-item menu-close item-icon-left class="menu-item-insegnante" ng-click="openCredits()">

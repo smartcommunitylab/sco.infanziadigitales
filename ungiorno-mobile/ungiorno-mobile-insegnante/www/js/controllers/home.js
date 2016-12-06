@@ -293,7 +293,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
 
         dataServerService.getSections($scope.schoolProfile.schoolId).then(function (data) {
           if (data != null) {
-            $scope.sections = data;
+            //order by sectionName
+            $scope.sections = $filter('orderBy')(data, 'sectionName');
             $rootScope.sharedSections = data;
             if (sectionService.getSection() == null) {
               $scope.section = $scope.sections[0];

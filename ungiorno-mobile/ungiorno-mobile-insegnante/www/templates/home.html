@@ -31,7 +31,7 @@
         <div class=" row section-row ">
           <div class="tabs-striped tabs-top tabs-background-dark tabs-color-light ">
             <div class="tabs section-tabs ">
-              <a class="tab-item section-tab " ng-repeat="section in sections track by $index " class="col " ng-click="changeSection($index) " ng-class="{ 'active' : (isThisSection($index))} "> {{section.sectionName}} </a>
+              <a class="tab-item section-tab " ng-repeat="section in sections | orderBy: 'sectionName' track by $index  " class="col " ng-click="changeSection($index) " ng-class="{ 'active' : (isThisSection($index))} "> {{section.sectionName}} </a>
               <a class="tab-item section-tab " class="col " ng-click="changeSection( 'all') " ng-class="{ 'active' : (isThisSection( 'all'))} ">  {{'all_section' | translate}} </a>
             </div>
           </div>

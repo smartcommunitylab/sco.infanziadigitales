@@ -201,7 +201,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
       $scope.delivery = $scope.editedCommunication.doCheck;
 
       if (document.getElementById("communication-datepicker-" + index)) {
-        document.getElementById("communication-datepicker-" + index).innerHTML = " <span class=\"communication-title\"> {{ 'communication_edit' | translate}} </span>            <a class=\"communication-kind\"> {{ 'communication_kind' | translate}} </a><ion-list class=\"padlist\"><div ng-repeat=\"communicationType in communicationTypes\" class=\"communication-radio\">                    <ion-radio class=\"communication-radio\" ng-class=\"communication-radio\" ng-value=\"communicationType.checked\" ng-change=\"selectType(communicationType)\" ng-checked=\"communicationType.checked\" ng-model=\"editedCommunication.doCheck\">                        {{communicationType.name}}                    </ion-radio>                    <button class=\"button button-clear button-dark button-communication-date\" ng-class=\"{'button-disabled':!delivery }\" ng-if=\"communicationType.typeId=='1'\" ng-click=\"openDatePicker() \"><span class=\"label-time-date\">{{getDateLabel()}}</span></button>                </div></ion-list>                                 <div class=\"row\">                <div class=\"col\">               <textarea ng-init=\"expandText('editdescription')\" class = \"input-communication\" placeholder=\"{{'communication_description' | translate}}\" ng-model=\"editedCommunication.description\" id=\"editdescription\" ng-keydown=\"expandText('editdescription')\">      </textarea>           </div>    </div>        <div class=\"communication-buttons\">                <button class=\"button communication-button cancel\" ng-click=\"discardCommunication()\" ng-show=\"isMode('edit') || isMode('new')\">                    {{'communication_annulla' | translate}}                </button>                <button class=\"button communication-button send\" ng-click=\"submitCommunication()\" ng-show=\"isMode('edit') || isMode('new')\">                    {{'communication_modifica' | translate}}                </button>            </div>         </div>";
+        document.getElementById("communication-datepicker-" + index).innerHTML = "      <span class=\" communication-name\"> {{teacher.teacherFullname}} </span> <span class=\"communication-title\"> {{ 'communication_edit' | translate}} </span>            <div class=\"communication-kind\"> {{ 'communication_kind' | translate}} </div><ion-list class=\"padlist\"><div ng-repeat=\"communicationType in communicationTypes\" class=\"communication-radio\">                    <ion-radio class=\"communication-radio\" ng-class=\"communication-radio\" ng-value=\"communicationType.checked\" ng-change=\"selectType(communicationType)\" ng-checked=\"communicationType.checked\" ng-model=\"editedCommunication.doCheck\">                        {{communicationType.name}}                    </ion-radio>                    <button class=\"button button-clear button-dark button-communication-date\" ng-class=\"{'button-disabled':!delivery }\" ng-if=\"communicationType.typeId=='1'\" ng-click=\"openDatePicker() \"><span class=\"label-time-date\">{{getDateLabel()}}</span></button>                </div></ion-list>                                 <div class=\"row\">                <div class=\"col\">               <textarea ng-init=\"expandText('editdescription')\" class = \"input-communication\" placeholder=\"{{'communication_description' | translate}}\" ng-model=\"editedCommunication.description\" id=\"editdescription\" ng-keydown=\"expandText('editdescription')\">      </textarea>           </div>    </div>        <div class=\"communication-buttons\">                <button class=\"button communication-button cancel\" ng-click=\"discardCommunication()\" ng-show=\"isMode('edit') || isMode('new')\">                    {{'communication_annulla' | translate}}                </button>                <button class=\"button communication-button send\" ng-click=\"submitCommunication()\" ng-show=\"isMode('edit') || isMode('new')\">                    {{'communication_modifica' | translate}}                </button>            </div>         </div>";
         $compile(document.getElementById('communication-datepicker-' + index))($scope);
       }
     } else {
@@ -254,32 +254,65 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
     return deferred.promise;
   };
   $scope.exit = function () {
+    //exit  from profile and from mode
+    $scope.discardCommunication();
     profileService.lock();
+
     Toast.show($filter('translate')('user_exit_auth'), 'short', 'bottom');
 
   }
   $scope.unlock = function () {
     var deferred = $q.defer();
     //open the ionic popup for authentication
-    var unlockPopup = $ionicPopup.alert({
+    //    var unlockPopup = $ionicPopup.alert({
+    //      title: $filter('translate')("insert_pin_title"),
+    //      //      template: $filter('translate')("pop_up__expired_template"),
+    //      templateUrl: 'templates/insertPINPopup.html',
+    //      scope: $scope,
+    //      buttons: [
+    //        {
+    //          text: $filter('translate')("insert_pin_confim_button"),
+    //          type: 'button-popup',
+    //          onTap: function (e) {
+    //            userAutent($scope.data.userPIN).then(function () {
+    //              deferred.resolve();
+    //              Toast.show($filter('translate')('user_auth'), 'short', 'bottom');
+    //
+    //            }, function (error) {
+    //              deferred.reject();
+    //              Toast.show($filter('translate')('user_not_auth'), 'short', 'bottom');
+    //
+    //            });
+    //            $scope.data.userPIN = "";
+    //          }
+    //        }
+    //            ]
+    //    });
+    var unlockPopup = $ionicPopup.show({
       title: $filter('translate')("insert_pin_title"),
       //      template: $filter('translate')("pop_up__expired_template"),
       templateUrl: 'templates/insertPINPopup.html',
+      cssClass: 'pin-popup',
       scope: $scope,
       buttons: [
+        {
+          text: $filter('translate')("cancel"),
+
+        },
         {
           text: $filter('translate')("insert_pin_confim_button"),
           type: 'button-popup',
           onTap: function (e) {
             userAutent($scope.data.userPIN).then(function () {
-              deferred.resolve();
-              Toast.show($filter('translate')('user_auth'), 'short', 'bottom');
+                deferred.resolve();
+                Toast.show($filter('translate')('user_auth'), 'short', 'bottom');
 
-            }, function (error) {
-              deferred.reject();
-              Toast.show($filter('translate')('user_not_auth'), 'short', 'bottom');
+              },
+              function (error) {
+                deferred.reject();
+                Toast.show($filter('translate')('user_not_auth'), 'short', 'bottom');
 
-            });
+              });
             $scope.data.userPIN = "";
           }
         }
@@ -342,7 +375,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
       $scope.delivery = true;
 
       if (document.getElementById("communication-datepicker-" + selectedCommunicationIndex)) {
-        document.getElementById("communication-datepicker-" + selectedCommunicationIndex).innerHTML = "      <span class=\" communication-name\"> {{teacher.teacherFullname}} </span> <span class=\"communication-title\"> {{ 'communication_edit' | translate}} </span>            <div class=\"communication-kind\"> {{ 'communication_kind' | translate}} </div> <ion-list class=\"padlist\"><div ng-repeat=\"communicationType in communicationTypes\" class=\"communication-radio\">                    <ion-radio class=\"communication-radio\" ng-class=\"communication-radio\" ng-value=\"communicationType.checked\" ng-change=\"selectType(communicationType)\" ng-checked=\"communicationType.checked\" ng-model=\"editedCommunication.doCheck\">                        {{communicationType.name}}                    </ion-radio>                    <button class=\"button button-clear button-dark button-communication-date\" ng-class=\"{'button-disabled':!delivery }\" ng-if=\"communicationType.typeId=='1'\" ng-click=\"openDatePicker() \"><span class=\"label-time-date\">{{getDateLabel()}}</span></button>                </div></ion-list>  <div class=\"item-input chat-teacher-input auto-height\">             <div class=\"row chat-chose\">                    <div class=\"input-label-teacher\">                        {{'note_teacher_label'|translate}}                    </div>                    <div class=\"note-teacher\" ng-click=\"popover.show($event)\"  ng-init=\"initMod(editedCommunication)\">                        <div class=\"input-label\">                            <span> {{teacher.teacherFullname}} </span></div>                        <button class=\"button button-icon button-teacher-list ion-arrow-down-b\"></button>                    </div>                </div>            </div>           <div class=\"row\">                <div class=\"col\">                    <textarea ng-init=\"expandText('editdescription');\" class=\"input-communication\" placeholder=\"{{'communication_description' | translate}}\" ng-model=\"editedCommunication.description\" id=\"editdescription\" ng-keydown=\"expandText('editdescription')\"  data-resizable=\"true \">      </textarea>  </div>    </div>        <div class=\"communication-buttons\">                <button class=\"button communication-button cancel\" ng-click=\"discardCommunication()\" ng-show=\"isMode('edit') || isMode('new')\">                    {{'communication_annulla' | translate}}                </button>                <button class=\"button communication-button send\" ng-click=\"submitCommunication()\" ng-show=\"isMode('edit') || isMode('new')\">                    {{'communication_modifica' | translate}}                </button>            </div>         </div>";
+        document.getElementById("communication-datepicker-" + selectedCommunicationIndex).innerHTML = "      <span class=\" communication-name\"> {{teacher.teacherFullname}} </span> <span class=\"communication-title\"> {{ 'communication_edit' | translate}} </span>            <div class=\"communication-kind\"> {{ 'communication_kind' | translate}} </div><ion-list class=\"padlist\"><div ng-repeat=\"communicationType in communicationTypes\" class=\"communication-radio\">                    <ion-radio class=\"communication-radio\" ng-class=\"communication-radio\" ng-value=\"communicationType.checked\" ng-change=\"selectType(communicationType)\" ng-checked=\"communicationType.checked\" ng-model=\"editedCommunication.doCheck\">                        {{communicationType.name}}                    </ion-radio>                    <button class=\"button button-clear button-dark button-communication-date\" ng-class=\"{'button-disabled':!delivery }\" ng-if=\"communicationType.typeId=='1'\" ng-click=\"openDatePicker() \"><span class=\"label-time-date\">{{getDateLabel()}}</span></button>                </div></ion-list>  <div class=\"item-input chat-teacher-input auto-height\">             <div class=\"row chat-chose\">                    <div class=\"input-label-teacher\">                        {{'note_teacher_label'|translate}}                    </div>                    <div class=\"note-teacher\" ng-click=\"popover.show($event)\"  ng-init=\"initMod(editedCommunication)\">                        <div class=\"input-label\">                            <span> {{teacher.teacherFullname}} </span></div>                        <button class=\"button button-icon button-teacher-list ion-arrow-down-b\"></button>                    </div>                </div>            </div>           <div class=\"row\">                <div class=\"col\">                    <textarea ng-init=\"expandText('editdescription');\" class=\"input-communication\" placeholder=\"{{'communication_description' | translate}}\" ng-model=\"editedCommunication.description\" id=\"editdescription\" ng-keydown=\"expandText('editdescription')\"  data-resizable=\"true \">      </textarea>  </div>    </div>        <div class=\"communication-buttons\">                <button class=\"button communication-button cancel\" ng-click=\"discardCommunication()\" ng-show=\"isMode('edit') || isMode('new')\">                    {{'communication_annulla' | translate}}                </button>                <button class=\"button communication-button send\" ng-click=\"submitCommunication()\" ng-show=\"isMode('edit') || isMode('new')\">                    {{'communication_modifica' | translate}}                </button>            </div>         </div>";
         $compile(document.getElementById('communication-datepicker-' + selectedCommunicationIndex))($scope);
       }
     }

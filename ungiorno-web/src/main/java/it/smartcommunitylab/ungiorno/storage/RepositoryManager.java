@@ -261,11 +261,16 @@ public class RepositoryManager {
 	}
 	/**
 	 * @param appId
+	 * @param schoolId 
 	 * @param schoolId
 	 * @param parents
 	 */
-	public void updateParents(String appId, List<Parent> parents) {
-		template.remove(appQuery(appId), Parent.class);
+	public void updateParents(String appId, String schoolId, List<Parent> parents) {
+		for (Parent parent : parents) {
+			Query q = appQuery(appId);
+			q.addCriteria(new Criteria("username").is(parent.getUsername()));
+			template.remove(q);
+		}
 		template.insertAll(parents);
 	}
 

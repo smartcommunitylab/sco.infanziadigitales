@@ -104,20 +104,20 @@
           {{'home_scadenze' | translate}}
         </div>
         <!--<ion-scroll>-->
-        <div class=" children-home " ng-repeat="child in childrenProfiles[selectedPeriod] track by $index " ng-click="detailOrCommunication(child) " ng-if="!communicationExpanded">
-          <div class="badge-msg " ng-if="numberMessageUnread[child.kidId]>0 && !communicationExpanded"><i class="icon center icon-message inf_dignotifica_messaggi"></i>
-          </div>
-          <i class="icon ion-checkmark-round ribbon" ng-if="(getChildrenDeliveryByID(child.kidId) && communicationExpanded)"></i>
-          <img ng-src="{{getChildImage(child)}} " ng-class="{ 'img-assente':child.exitTime==null || (child.exitTime < getTime(selectedPeriod)), 'img-presente':(child.exitTime !=null && (numberMessageUnread[child.kidId]==0 || numberMessageUnread[child.kidId]==null)||communicationExpanded), 'img-not-active':!child.active, 'img-communication':communicationExpanded, 'img-messages':child.exitTime !=null && numberMessageUnread[child.kidId]>0 } ">
-          <div class="name-of-child " ng-if="!child.image || child.image=='' ">{{child.childrenName}}</div>
-          <div class="children-presenza " ng-if="child.active && !communicationExpanded " ng-class="{ 'child-assente':child.exitTime==null, 'child-presente':child.exitTime !=null} ">{{child.presenza}}</div>
-        </div>
-        <div class=" children-home " ng-repeat="child in childrenProfiles['allPeriod'] track by $index " ng-click="detailOrCommunication(child) " ng-if="communicationExpanded">
-          <i class="icon ion-checkmark-round ribbon" ng-if="(getChildrenDeliveryByID(child.kidId) && communicationExpanded)"></i>
-          <img ng-src="{{getChildImage(child)}} " ng-class="{ 'img-presente':(child.exitTime !=null && (numberMessageUnread[child.kidId]==0 || numberMessageUnread[child.kidId]==null)||communicationExpanded), 'img-not-active':!child.active, 'img-communication':communicationExpanded } ">
-          <div class="name-of-child " ng-if="!child.image || child.image=='' ">{{child.childrenName}}</div>
+<div class=" children-home " ng-repeat="child in childrenProfiles[selectedPeriod] track by $index " ng-click="detailOrCommunication(child) " ng-if="!communicationExpanded">
+  <div class="badge-msg " ng-if="numberMessageUnread[child.kidId]>0 && !communicationExpanded"><i class="icon center icon-message inf_dignotifica_messaggi"></i>
+  </div>
+  <i class="icon ion-checkmark-round ribbon" ng-if="(getChildrenDeliveryByID(child.kidId) && communicationExpanded)"></i>
+  <img ng-src="{{getChildImage(child)}} " ng-class="{ 'img-assente':child.exitTime==null || (child.exitTime < getTime(selectedPeriod)), 'img-presente':(child.exitTime !=null && (numberMessageUnread[child.kidId]==0 || numberMessageUnread[child.kidId]==null)||communicationExpanded), 'img-not-active':!child.active, 'img-communication':communicationExpanded, 'img-messages':child.exitTime !=null && numberMessageUnread[child.kidId]>0 } ">
+  <div class="name-of-child " ng-if="!child.image || child.image=='' ">{{child.childrenName}}</div>
+  <div class="children-presenza " ng-if="child.active && !communicationExpanded " ng-class="{ 'child-assente':child.exitTime==null, 'child-presente':child.exitTime !=null} ">{{child.presenza}}</div>
+</div>
+<div class=" children-home " ng-repeat="child in childrenProfiles['allPeriod'] track by $index " ng-click="detailOrCommunication(child) " ng-if="communicationExpanded">
+  <i class="icon ion-checkmark-round ribbon" ng-if="(getChildrenDeliveryByID(child.kidId) && communicationExpanded)"></i>
+  <img ng-src="{{getChildImage(child)}} " ng-class="{ 'img-presente':(child.exitTime !=null && (numberMessageUnread[child.kidId]==0 || numberMessageUnread[child.kidId]==null)||communicationExpanded), 'img-not-active':!child.active, 'img-communication':communicationExpanded } ">
+  <div class="name-of-child " ng-if="!child.image || child.image=='' ">{{child.childrenName}}</div>
 
-        </div>
+</div>
         <!--        </ion-scroll>-->
       </div>
 

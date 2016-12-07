@@ -46,40 +46,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
   $rootScope.loginStarted = false;
   $rootScope.authWindow = null;
 
-  //    $rootScope.login = function () {
-  //        if ($rootScope.loginStarted) return;
-  //
-  //        $rootScope.loginStarted = true;
-  //        loginService.login("googlelocal").then(
-  //            function (data) {
-  //                loginStarted = false;
-  //            },
-  //            function (error) {
-  //                loginStarted = false;
-  //                ionic.Platform.exitApp();
-  //            }
-  //        );
-  //        loginService.login().then(
-  //            function (data) {
-  //                $rootScope.loginStarted = false;
-  //                localStorage.userId = data.userId; //store user data
-  //                localStorage.username = data.username;
-  //                //                localStorage.name = data.name;
-  //                //                localStorage.surname = data.surname;
-  //                $state.go('app.home', {}, {
-  //                    reload: true
-  //                });
-  //            },
-  //            function (error) {
-  //                //The user denied access to the app
-  //                $rootScope.loginStarted = false;
-  //                localStorage.userId = null;
-  //                alert('autenticazione non riuscita');
-  //                ionic.Platform.exitApp();
-  //            }
-  //        );
-  // };
-
   $ionicPlatform.ready(function () {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -257,7 +223,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
     menu_bus: 'Bus',
     menu_exit: 'Logout',
     menu_enter: 'Entra',
-    menu_issue: 'Segnala problema app',
+    menu_issue: 'Segnala problema ',
     babysetting_intro: 'Definisci i seguenti dati relativi all\'orario scolastico del bambino.',
     babysetting_services: 'Servizi',
     babysetting_hours: 'Orario di uscita:',
@@ -332,12 +298,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
     all_section: "Tutte",
     logout: "Esci",
     parents_alerts: "Comunicazioni",
-    enter_at: "Entra ad ore: ",
-    exit_at: "Esce ad ore: ",
+    enter_at: "Entra alle: ",
+    exit_at: "Esce alle: ",
     is: "è",
     bus_stop_go: "Fermata bus andata: ",
     bus_stop_back: "Fermata bus ritorno: ",
-    bus_stop_drops_off: "Scende in:",
+    bus_stop_drops_off: "Scende a ",
     bus_stop_person_wait: "Ad aspettare c'è:",
     person_who_retire: "Persona incaricata del ritiro: ",
     parents_notes: "Messaggi ricevuti",
@@ -377,8 +343,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
     communication_updated: 'Comunicazione aggiornata correttamente',
     communication_fail: 'Comunicazione non inviata',
     communication_check: 'Controlla consegne',
-    communication_delete_confirm: 'Sei sicuro di voler eliminare questa comunicazione?',
+    communication_delete_title: 'Elimina comunicazione',
+    communication_delete_confirm: 'Sei sicuro di voler eliminare la comunicazione?',
     communication_delete_fail: 'Comunicazione non eliminata',
+    communication_deleted: 'Comunicazione eliminata',
     communication_function_not_possible: 'Impossibile modificare questo elemento',
     communication_annulla: 'ANNULLA',
     communication_invia: 'INVIA',
@@ -502,7 +470,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
     insert_pin_placeholder: 'Digita qui il tuo PIN',
     insert_pin_confim_button: 'Conferma',
     chat_exit_button: 'Esci',
-    user_auth: 'Utente autenticato',
+    user_auth: 'Hai eseguito l\'accesso come ',
     user_not_auth: 'Utente non autenticato',
     user_exit_auth: 'Utente uscito correttamente',
     signal_send_no_connection_title: 'Attenzione!',

@@ -1078,6 +1078,10 @@ select {
   height: 75vh;
 }
 
+#babyprofile .box-ion-spinner {
+  text-align: center;
+}
+
 #babyprofile #kid-profile {
   /*    height: 100%;*/
 }

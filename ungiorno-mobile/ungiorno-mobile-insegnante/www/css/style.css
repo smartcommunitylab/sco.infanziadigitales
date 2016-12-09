@@ -993,9 +993,9 @@ select {
 }
 
 #babyprofile .babyprofile-phone {
-  font-size: 20px;
+  font-size: 28px;
   margin-right: 8px;
-  color: #bd3e4d;
+  margin-bottom: 4px;
 }
 
 #babyprofile .ion-ios-telephone:before {

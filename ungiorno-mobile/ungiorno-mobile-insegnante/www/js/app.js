@@ -29,7 +29,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
 		'it.smartcommunitylab.infanziadigitales.teachers.services.storageService',
 		'it.smartcommunitylab.infanziadigitales.teachers.services.pushNotificationService',
 		'it.smartcommunitylab.infanziadigitales.teachers.services.messagesService',
-    'angularMoment'
+    'angularMoment',
+  'monospaced.elastic'
 ])
 
 .run(function ($ionicPlatform, $rootScope, $cordovaSplashscreen, $state, $translate, $q, $ionicHistory, $ionicConfig, $ionicLoading, Config,

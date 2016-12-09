@@ -66,7 +66,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
 
   $scope.cancelNotesAndComm = function () {
     $state.go('app.communications').then(function () {
-      $ionicLoading.hide();
+      //$ionicLoading.hide();
       communicationService.setToCheck(false);
     });
   }
@@ -100,25 +100,46 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
   }
 
   $scope.saveNotesAndComm = function () {
-    $scope.noteExpanded = false;
-    $scope.communicationExpanded = false;
-    $scope.teachersNote = true;
-    $scope.parentsNote = false;
-    $scope.newNoteExpandend = false;
+    //    $scope.noteExpanded = false;
+    //    $scope.communicationExpanded = false;
+    //    $scope.teachersNote = true;
+    //    $scope.parentsNote = false;
+    //    $scope.newNoteExpandend = false;
     $ionicLoading.show();
     //save the new list
     var communication = communicationService.getCommunication();
+    if (communication.creationDate instanceof Date) {
+      communication.creationDate = new Date(communication.creationDate).getTime();
+    }
+    if (communication.dateToCheck instanceof Date) {
+      communication.dateToCheck = new Date(communication.dateToCheck).getTime();
+    }
+    //          tmp.creationDate = new Date(tmp.creationDate).getTime();
+    //      if (tmp.creation) {
+    //        delete tmp['creation'];
+    //      }
+    //      tmp.dateToCheck = new Date(tmp.dateToCheck).getTime();
     communication.children = $scope.childrenCommunicationDelivery;
     dataServerService.modifyCommunication($scope.schoolProfile.schoolId, communicationService.getCommunication().coomunicationId, communication).then(function (data) {
       Toast.show($filter('translate')('communication_modified'), 'short', 'bottom');
       communicationService.modifyCommunication(communication);
       $state.go('app.communications').then(function () {
-        $ionicLoading.hide();
+        //$ionicLoading.hide();
         communicationService.setToCheck(false);
+        $scope.noteExpanded = false;
+        $scope.communicationExpanded = false;
+        $scope.teachersNote = true;
+        $scope.parentsNote = false;
+        $scope.newNoteExpandend = false;
       });
     }, function (data) {
       Toast.show($filter('translate')('communication_not_modified'), 'short', 'bottom');
       communicationService.setToCheck(false);
+      $scope.noteExpanded = false;
+      $scope.communicationExpanded = false;
+      $scope.teachersNote = true;
+      $scope.parentsNote = false;
+      $scope.newNoteExpandend = false;
 
     });
   }
@@ -422,7 +443,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
 
   //when select is clicked
   $scope.changeCommunication = function (communicationId) {
-    communicationService.setCommunication(communicationId);
+    communicationService.setCommunicationById(communicationId);
     $scope.childrenCommunicationDelivery = communicationService.getCommunication().children;
   }
   $scope.getChildrenDeliveryByID = function (id) {

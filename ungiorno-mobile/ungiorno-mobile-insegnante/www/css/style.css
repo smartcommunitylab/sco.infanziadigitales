@@ -1379,10 +1379,16 @@ textarea {
 }
 
 .busBabyDetail {
-  font-size: 1em;
+  font-size: 14px;
   width: 10px;
   white-space: nowrap;
 }
+
+.busBabyDetail.firstrow {
+  margin-top: 16px
+}
+
+.busBabyDetail .secondrow {}
 
 .child-img {
   width: 100%;

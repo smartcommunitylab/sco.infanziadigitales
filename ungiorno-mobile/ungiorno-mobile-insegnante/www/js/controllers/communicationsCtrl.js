@@ -11,7 +11,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
   var currentMode = MODE_NORMAL_LIST;
   $scope.datepickerObject = {};
   $scope.datepickerObject.inputDate = new Date();
-  $ionicLoading.show();
+//  $scope.$on('$ionicView.beforeEnter', function () {
+       //    $ionicLoading.show();
+       //  });
   $scope.data = {
     userPIN: ""
   }
@@ -117,7 +119,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
       }
     }
     //setTeachers();
-
+  $ionicLoading.show();
   dataServerService.getCommunications(profileService.getSchoolProfile().schoolId).then(function (data) {
     $scope.communications = data;
     for (var i = 0; i < $scope.communications.length; i++) {
@@ -194,8 +196,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
         dateToCheck: new Date(tmp.dateToCheck),
         creationDate: new Date(),
         description: tmp.description,
-        doCheck: tmp.doCheck,
-        children: []
+        doCheck: tmp.doCheck
+          //children: []
       };
       currentMode = MODE_EDIT;
       selectedCommunicationIndex = index;
@@ -569,7 +571,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
       return;
     }
     selectedCommunicationIndex = -1;
-    communicationService.setCommunication($scope.communications[index].communicationId);
+    //    communicationService.setCommunication($scope.communications[index].communicationId);
+    communicationService.setCommunication($scope.communications[index]);
     communicationService.setToCheck(true);
     $state.go('app.home');
     // window.location.assign('#/app/home');

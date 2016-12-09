@@ -25,9 +25,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
     });
     $scope.dataLoaded = false;
   };
-//  $scope.inputUp = function () {
-//    $scope.newMessage.text = ' ';
-//  }
+  //  $scope.inputUp = function () {
+  //    $scope.newMessage.text = ' ';
+  //  }
   $scope.checkBusServiceActive = function () {
     return $scope.babyInformations.bus.active && $scope.babyInformations.bus.enabled && $scope.babyInformations.stopId != null;
   }
@@ -589,5 +589,18 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
   $scope.openPINKeyboard = function () {
     document.getElementById('inputPIN').focus();
   }
+  window.addEventListener('native.keyboardshow', function () {
+    var element = document.getElementById("chat-footer");
+    if (element) {
+      element.style.bottom = "60px";
+    }
+
+  });
+  window.addEventListener('native.keyboardhide', function () {
+    var element = document.getElementById("chat-footer");
+    if (element) {
+      element.style.bottom = "0px";
+    }
+  });
   $scope.init();
 });

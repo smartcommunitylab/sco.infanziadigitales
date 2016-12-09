@@ -2254,10 +2254,24 @@ ion-content .scroll {
 }
 
 #communications .input-communication {
+  background-color: #F6F6F6;
   font-size: 20px;
   line-height: 20px;
+  background-color: #eeeeee;
+  height: 60px;
+  padding: 20px 6px;
   width: 100%;
 }
+
+
+/*
+#communications .input-communication {
+  font-size: 20px;
+  line-height: 30px;
+  padding-left: 6px;
+  width: 100%;
+}
+*/
 
 #communications .chat-lock {
   background-color: #98ba3c;

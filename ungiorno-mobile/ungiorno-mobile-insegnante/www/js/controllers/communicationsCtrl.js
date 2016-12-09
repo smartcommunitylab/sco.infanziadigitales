@@ -11,9 +11,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
   var currentMode = MODE_NORMAL_LIST;
   $scope.datepickerObject = {};
   $scope.datepickerObject.inputDate = new Date();
-//  $scope.$on('$ionicView.beforeEnter', function () {
-       //    $ionicLoading.show();
-       //  });
+  //  $scope.$on('$ionicView.beforeEnter', function () {
+  //    $ionicLoading.show();
+  //  });
   $scope.data = {
     userPIN: ""
   }
@@ -552,15 +552,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
   }
 
   $scope.expandText = function (id) {
-    var element = document.getElementById(id);
+    //var element = document.getElementById(id);
 
     setTimeout(function () {
-      element.style.cssText = 'height:auto; padding:0';
-      // for box-sizing other than "content-box" use:
-      // el.style.cssText = '-moz-box-sizing:content-box';
-      element.style.cssText = 'height:' + element.scrollHeight + 'px';
-    }, 0);
-    //element.style.height = element.scrollHeight + "px";
+      var element = document.getElementById(id);
+      if (element) {
+        element.style.height = element.scrollHeight + "px";
+      }
+
+    })
   }
   $scope.$watch("editedCommunication.doCheck", function (newvalue, oldvalue) {
     console.log(JSON.stringify(newvalue));

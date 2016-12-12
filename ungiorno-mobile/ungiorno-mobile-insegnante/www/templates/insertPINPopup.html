@@ -1,4 +1,5 @@
 <div>
   {{'insert_pin_template'|translate}}
   <input class="input-pin" type="number" id="inputPIN" placeholder="{{'insert_pin_placeholder'|translate}}" ng-model="data.userPIN" autofocus>
+  <div class="error-pin" ng-if="noAuthenicate">{{'error_pin'|translate}}</div>
 </div>

@@ -578,8 +578,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
             e.preventDefault();
             userAutent($scope.data.userPIN).then(function () {
               $scope.data.userPIN = "";
+              $scope.noAuthenicate = false;
               unlockPopup.close();
-            }, function (error) {});
+            }, function (error) {
+              $scope.data.userPIN = "";
+              $scope.noAuthenicate = true;
+            });
           }
           }
           ]

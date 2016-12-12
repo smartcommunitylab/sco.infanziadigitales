@@ -477,7 +477,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
     signal_send_no_connection_title: 'Attenzione!',
     signal_send_no_connection_template: 'Connessione assente! Controlla la connessione del dispositivo e ricarica la pagina',
     signal_send_toast_alarm: 'Errore di connessione',
-    no_connection_message: 'Nessuna connessione'
+    no_connection_message: 'Nessuna connessione',
+    error_pin: 'PIN errato'
 
 
   });

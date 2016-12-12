@@ -963,6 +963,10 @@ select {
   border: 2px solid black;
 }
 
+#babyprofile .second-parent {
+  margin-left: 20px;
+}
+
 #babyprofile .babyprofile-separator {
   margin-left: 16px;
   margin-right: 16px;
@@ -996,6 +1000,7 @@ select {
   font-size: 28px;
   margin-right: 8px;
   margin-bottom: 4px;
+  color: #bd3e4d;
 }
 
 #babyprofile .ion-ios-telephone:before {
@@ -1336,6 +1341,13 @@ textarea {
 
 .input-pin {
   margin-top: 16px;
+}
+
+.error-pin {
+  text-align: center;
+  color: red;
+  margin-top: 6px;
+  font-weight: bold;
 }
 
 .teacher-option {
@@ -2324,6 +2336,17 @@ ion-content .scroll {
 
 #communications .communication-spacer {
   height: 40px;
+}
+
+@media (min-width: 680px) {
+  .credits {
+    width: 90%;
+    height: 90%;
+    top: 5%;
+    left: 5%;
+    right: 5%;
+    bottom: 5%;
+  }
 }
 
 

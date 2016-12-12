@@ -748,7 +748,7 @@ public class RepositoryManager {
 			comm.setCommunicationId(comm.get_id());
 		}
 		if (comm.getAuthor() != null && comm.getAuthor().getId() != null) {
-			Teacher teacher = getTeacher(comm.getAuthor().getId(), comm.getAppId(), comm.getSchoolId());
+			Teacher teacher = getTeacherByTeacherId(comm.getAuthor().getId(), comm.getAppId(), comm.getSchoolId());
 			if (teacher != null) {
 				comm.getAuthor().setName(teacher.getTeacherName());
 				comm.getAuthor().setSurname(teacher.getTeacherSurname());
@@ -1169,6 +1169,11 @@ public class RepositoryManager {
 		q.addCriteria(new Criteria("username").is(username));
 		return template.findOne(q, Teacher.class);
 	}
+	public Teacher getTeacherByTeacherId(String teacherId, String appId, String schoolId) {
+		Query q = schoolQuery(appId, schoolId);
+		q.addCriteria(new Criteria("teacherId").is(teacherId));
+		return template.findOne(q, Teacher.class);
+	}
 
 	public Teacher getTeacherByPin(String pin, String appId, String schoolId) {
 		Query q = schoolQuery(appId, schoolId);
@@ -1537,7 +1542,7 @@ public class RepositoryManager {
 	 * @return
 	 */
 	public Author getTeacherAsAuthor(String appId, String schoolId, String teacherId) {
-		Teacher teacher = getTeacher(teacherId, appId, schoolId);
+		Teacher teacher = getTeacherByTeacherId(teacherId, appId, schoolId);
 		Author a = null;
 		if (teacher != null) {
 			a = new Author();

@@ -209,29 +209,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
         $compile(document.getElementById('communication-datepicker-' + index))($scope);
       }
     } else {
-      $scope.unlock().then(function () {
-        var tmp = $scope.communications[index];
-        $scope.editedCommunication = {
-          appId: tmp.appId,
-          children: tmp.children,
-          communicationId: tmp.communicationId,
-          author: tmp.author,
-          schoolId: tmp.schoolId,
-          dateToCheck: new Date(tmp.dateToCheck),
-          creationDate: new Date(),
-          description: tmp.description,
-          doCheck: tmp.doCheck,
-          children: []
-        };
-        currentMode = MODE_EDIT;
-        selectedCommunicationIndex = index;
+      $scope.unlock('edit', $scope.communications[index], index).then(function () {
 
-        $scope.delivery = $scope.editedCommunication.doCheck;
-
-        if (document.getElementById("communication-datepicker-" + index)) {
-          document.getElementById("communication-datepicker-" + index).innerHTML = "      <span class=\" communication-name\"> {{teacher.teacherFullname}} </span> <span class=\"communication-title\"> {{ 'communication_edit' | translate}} </span>            <div class=\"communication-kind\"> {{ 'communication_kind' | translate}} </div><ion-list class=\"padlist\"><div ng-repeat=\"communicationType in communicationTypes\" class=\"communication-radio\">                    <ion-radio class=\"communication-radio\" ng-class=\"communication-radio\" ng-value=\"communicationType.checked\" ng-change=\"selectType(communicationType)\" ng-checked=\"communicationType.checked\" ng-model=\"editedCommunication.doCheck\">                        {{communicationType.name}}                    </ion-radio>                    <button class=\"button button-clear button-dark button-communication-date\" ng-class=\"{'button-disabled':!delivery }\" ng-if=\"communicationType.typeId=='1'\" ng-click=\"openDatePicker() \"><span class=\"label-time-date\">{{getDateLabel()}}</span></button>                </div></ion-list>                                <div class=\"row\">                <div class=\"col\">               <textarea ng-init=\"expandText('editdescription')\" class = \"input-communication\" placeholder=\"{{'communication_description' | translate}}\" ng-model=\"editedCommunication.description\" id=\"editdescription\" ng-keydown=\"expandText('editdescription')\">      </textarea>           </div>    </div>        <div class=\"communication-buttons\">                <button class=\"button communication-button cancel\" ng-click=\"discardCommunication()\" ng-show=\"isMode('edit') || isMode('new')\">                    {{'communication_annulla' | translate}}                </button>                <button class=\"button communication-button send\" ng-click=\"submitCommunication()\" ng-show=\"isMode('edit') || isMode('new')\">                    {{'communication_modifica' | translate}}                </button>            </div>         </div>";
-          $compile(document.getElementById('communication-datepicker-' + index))($scope);
-        }
       })
     }
   }
@@ -265,33 +244,45 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
     Toast.show($filter('translate')('user_exit_auth'), 'short', 'bottom');
 
   }
-  $scope.unlock = function () {
+  var modifyComm = function (communication, index) {
+    'edit' //var tmp = $scope.communications[index];
+    $scope.editedCommunication = {
+      appId: communication.appId,
+      children: communication.children,
+      communicationId: communication.communicationId,
+      author: communication.author,
+      schoolId: communication.schoolId,
+      dateToCheck: new Date(communication.dateToCheck),
+      creationDate: new Date(),
+      description: communication.description,
+      doCheck: communication.doCheck,
+      children: []
+    };
+    currentMode = MODE_EDIT;
+    selectedCommunicationIndex = index;
+
+    $scope.delivery = $scope.editedCommunication.doCheck;
+
+    if (document.getElementById("communication-datepicker-" + index)) {
+      document.getElementById("communication-datepicker-" + index).innerHTML = "      <span class=\" communication-name\"> {{teacher.teacherFullname}} </span> <span class=\"communication-title\"> {{ 'communication_edit' | translate}} </span>            <div class=\"communication-kind\"> {{ 'communication_kind' | translate}} </div><ion-list class=\"padlist\"><div ng-repeat=\"communicationType in communicationTypes\" class=\"communication-radio\">                    <ion-radio class=\"communication-radio\" ng-class=\"communication-radio\" ng-value=\"communicationType.checked\" ng-change=\"selectType(communicationType)\" ng-checked=\"communicationType.checked\" ng-model=\"editedCommunication.doCheck\">                        {{communicationType.name}}                    </ion-radio>                    <button class=\"button button-clear button-dark button-communication-date\" ng-class=\"{'button-disabled':!delivery }\" ng-if=\"communicationType.typeId=='1'\" ng-click=\"openDatePicker() \"><span class=\"label-time-date\">{{getDateLabel()}}</span></button>                </div></ion-list>                                <div class=\"row\">                <div class=\"col\">               <textarea ng-init=\"expandText('editdescription')\" class = \"input-communication\" placeholder=\"{{'communication_description' | translate}}\" ng-model=\"editedCommunication.description\" id=\"editdescription\" ng-keydown=\"expandText('editdescription')\">      </textarea>           </div>    </div>        <div class=\"communication-buttons\">                <button class=\"button communication-button cancel\" ng-click=\"discardCommunication()\" ng-show=\"isMode('edit') || isMode('new')\">                    {{'communication_annulla' | translate}}                </button>                <button class=\"button communication-button send\" ng-click=\"submitCommunication()\" ng-show=\"isMode('edit') || isMode('new')\">                    {{'communication_modifica' | translate}}                </button>            </div>         </div>";
+      $compile(document.getElementById('communication-datepicker-' + index))($scope);
+    }
+  }
+
+
+  var createNewComm = function () {
+    $scope.newCommunication = {
+      dateToCheck: new Date(),
+      creationDate: new Date(),
+      description: "",
+      doCheck: false,
+      author: {},
+      children: []
+    };
+    currentMode = MODE_NEW;
+  }
+  $scope.unlock = function (action, communication, index) {
     var deferred = $q.defer();
-    //open the ionic popup for authentication
-    //    var unlockPopup = $ionicPopup.alert({
-    //      title: $filter('translate')("insert_pin_title"),
-    //      //      template: $filter('translate')("pop_up__expired_template"),
-    //      templateUrl: 'templates/insertPINPopup.html',
-    //      scope: $scope,
-    //      buttons: [
-    //        {
-    //          text: $filter('translate')("insert_pin_confim_button"),
-    //          type: 'button-popup',
-    //          onTap: function (e) {
-    //            userAutent($scope.data.userPIN).then(function () {
-    //              deferred.resolve();
-    //              Toast.show($filter('translate')('user_auth'), 'short', 'bottom');
-    //
-    //            }, function (error) {
-    //              deferred.reject();
-    //              Toast.show($filter('translate')('user_not_auth'), 'short', 'bottom');
-    //
-    //            });
-    //            $scope.data.userPIN = "";
-    //          }
-    //        }
-    //            ]
-    //    });
     var unlockPopup = $ionicPopup.show({
       title: $filter('translate')("insert_pin_title"),
       //      template: $filter('translate')("pop_up__expired_template"),
@@ -310,11 +301,18 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
             e.preventDefault();
             userAutent($scope.data.userPIN).then(function (user) {
                 deferred.resolve();
+                $scope.noAuthenicate = false;
                 Toast.show($filter('translate')('user_auth') + user.teacherFullname, 'short', 'bottom');
+                if (action == 'new') {
+                  createNewComm();
+                } else {
+                  modifyComm(communication, index);
+                }
                 unlockPopup.close();
               },
               function (error) {
                 deferred.reject();
+                $scope.noAuthenicate = true;
                 Toast.show($filter('translate')('user_not_auth'), 'short', 'bottom');
 
               });
@@ -341,16 +339,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
       };
       currentMode = MODE_NEW;
     } else {
-      $scope.unlock().then(function () {
-        $scope.newCommunication = {
-          dateToCheck: new Date(),
-          creationDate: new Date(),
-          description: "",
-          doCheck: false,
-          author: {},
-          children: []
-        };
-        currentMode = MODE_NEW;
+      $scope.unlock('new').then(function () {
+
       });
     }
   }

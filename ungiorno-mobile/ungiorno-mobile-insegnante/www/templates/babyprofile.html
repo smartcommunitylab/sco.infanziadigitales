@@ -12,7 +12,9 @@
               <img ng-src="{{getProfileImage()}}" class="baby-profile-image">
             </div>
             <div>
-              <div class=" detailItem" ng-if="babyInformations.active">{{babyProfile.firstName}} {{'is' | translate}} <b>{{babyStatus | uppercase}}</b> <span ng-if="babyInformations.exitTime == null && babyInformations.absenceType!=null">{{'because' | translate}} <b>{{babyInformations.absenceType}} ({{babyInformations.absenceSubtype}})</b></span></div>
+              <div class=" detailItem" ng-if="babyInformations.active">{{babyProfile.firstName}} {{'is' | translate}} <b>{{babyStatus | uppercase}}</b> <span ng-if="babyInformations.exitTime == null && babyInformations.absenceType!=null && babyInformations.absenceType!=''">{{'because' | translate}} <b>{{babyInformations.absenceType}} <span ng-if="absenceSubtype!=''">({{absenceSubtype}})</span></b>
+                </span>
+              </div>
               <div class=" detailItem" ng-if="!babyInformations.active">{{babyProfile.firstName}}{{'baby_not_monitored' | translate}}</div>
               <div class=" detailItem" ng-if="babyInformations.exitTime !== null">{{'enter_at' | translate}}<b> {{babyEnterHour}}</b></div>
               <div class=" detailItem" ng-if="checkBusServiceActive() && babyInformations.exitTime !== null">{{'bus_stop_back' | translate}} <b>{{babyBusStopBackName}}</b></div>
@@ -83,7 +85,9 @@
             {{'no_messages' | translate}}
           </div>
           <ion-scroll direction="y" id="chat-box" delegate-handle="handler" on-scroll="refresh()">
-            <ion-spinner ng-if="loading" icon="spiral"></ion-spinner>
+            <div class="box-ion-spinner">
+              <ion-spinner ng-if="loading" icon="spiral"></ion-spinner>
+            </div>
             <ion-item ng-repeat="ms in messages[babyProfile.kidId]">
               <div class="dateOfChatMessage">
                 <label ng-if="isToday(ms.creationDate) && isANewDate($index)">{{'lbl_today' | translate}} </label>
@@ -117,37 +121,27 @@
               </div>
             </ion-item>
           </ion-scroll>
-          <div class="bar bar-subfooter item-input chat-teacher-input auto-height">
-            <!--
-            <div class="item-input chat-teacher-input auto-height" ng-if="userAuth">
-              <div class="row chat-chose">
-                {{user.fullName}}
-              </div>
-            </div>
--->
+          <ion-footer-bar class="bar  item-input chat-teacher-input auto-height" id="chat-footer">
             <div ng-if="userAuth" class="chat-user"><span>{{teacher.teacherFullname}}</span>
               <button class="button button-chat-exit" ng-click="exit()">{{'chat_exit_button'|translate|uppercase}}
               </button>
             </div>
             <div class="row chat-write" ng-if="userAuth">
+              <!--
               <textarea class="input-chat-footer" placeholder="{{'input_chat_placeholder' | translate}}" ng-model="newMessage.text" id="txtnotes" ng-focus="inputUp()" ng-blur="inputDown()" ng-keyup="startTyping()" ng-keydown="expandText()">
+              </textarea>
+-->
+              <textarea class="input-chat-footer" placeholder="{{'input_chat_placeholder' | translate}}" ng-model="newMessage.text" msd-elastic>
+
               </textarea>
               <button class="button button-chat-send icon ion-android-send" ng-click="sendMessage(newMessage.text)">
               </button>
             </div>
-            <!--
-            <div class="row chat-lock" ng-if="!userAuth">
-              <span class="chat-lock-label">{{'chat_lock_label'|translate}}
-              </span>
-              <button class="button button-chat-send" ng-click="unlock()">{{'chat_lock_button'|translate|uppercase}}
-              </button>
-            </div>
--->
             <div class="row" ng-if="!userAuth">
               <button class="button button-chat-unlock" ng-click="unlock()">{{'chat_lock_button'|translate|uppercase}}
               </button>
             </div>
-          </div>
+          </ion-footer-bar>
         </div>
       </div>
       <!--

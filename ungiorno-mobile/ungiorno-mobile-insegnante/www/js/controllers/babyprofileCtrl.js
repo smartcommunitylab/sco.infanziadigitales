@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.babyprofile', [])
 
-.controller('babyprofileCtrl', function ($scope, dataServerService, profileService, babyConfigurationService, Config, $filter, Toast, $ionicLoading, $rootScope, $ionicPopup, $ionicPopover, $interval, $ionicScrollDelegate, teachersService, messagesService) {
+.controller('babyprofileCtrl', function ($scope, dataServerService, profileService, babyConfigurationService, Config, $q, $filter, Toast, $location, $ionicLoading, $rootScope, $ionicPopup, $ionicPopover, $interval, $ionicScrollDelegate, teachersService, messagesService) {
 
   var IS_PARENT = 'parent';
   var IS_TEACHER = 'teacher';
@@ -25,7 +25,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
     });
     $scope.dataLoaded = false;
   };
-
+  //  $scope.inputUp = function () {
+  //    $scope.newMessage.text = ' ';
+  //  }
   $scope.checkBusServiceActive = function () {
     return $scope.babyInformations.bus.active && $scope.babyInformations.bus.enabled && $scope.babyInformations.stopId != null;
   }
@@ -70,7 +72,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
     }
 
   }
-
+  var getSubType = function (typeID) {
+    for (var i = 0; i < $scope.schoolProfile.frequentIllnesses.length; i++) {
+      if ($scope.schoolProfile.frequentIllnesses.typeId == typeID) {
+        return $scope.schoolProfile.frequentIllnesses.type;
+      }
+    }
+    return '';
+  }
   $scope.startTyping = function () {
     // Don't send notification if we are still typing or we are typing a private message
     //if (angular.isDefined(typing) || $scope.sendTo != "everyone") return;
@@ -212,6 +221,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
     }
     return false;
   };
+
+
   $scope.init = function () {
     $scope.parents = [];
     $scope.newNote = {
@@ -240,6 +251,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
         $scope.parents = getParents(data);
         $scope.otherPeople = getOtherPeople(data);
         $scope.babyProfileLoaded = true;
+        if ($scope.babyInformations.absenceSubtype != '') {
+          for (var i = 0; i < $scope.schoolProfile.frequentIllnesses.length; i++) {
+            if ($scope.schoolProfile.frequentIllnesses[i].typeId == $scope.babyInformations.absenceSubtype) {
+              $scope.absenceSubtype = $scope.schoolProfile.frequentIllnesses[i].type;
+            }
+          }
+          if (!$scope.absenceSubtype) {
+            $scope.absenceSubtype = '';
+          }
+          //$scope.absenceSubtype = getSubtype($scope.babyInformations.absenceSubtype);
+        }
         checkAllDataLoaded();
         $scope.messageInit();
         $ionicLoading.hide();
@@ -376,43 +398,50 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
   $scope.loadMore = function () {
     if (!$scope.loading) {
       $scope.loading = true;
+      //      if ($rootScope.messages[$scope.babyProfile.kidId][0]) {
+      try {
+        messagesService.getMessages($rootScope.messages[$scope.babyProfile.kidId][0].creationDate - 1, $scope.all, $scope.babyProfile.schoolId, $scope.babyProfile.kidId).then(function (data) {
+            if (data) {
+              var newmessages = data.slice();
+              //var newmessages = data;
 
-      messagesService.getMessages($rootScope.messages[$scope.babyProfile.kidId][0].creationDate - 1, $scope.all, $scope.babyProfile.schoolId, $scope.babyProfile.kidId).then(function (data) {
-          if (data) {
-            var newmessages = data.slice();
-            //var newmessages = data;
-
-            if (!!$rootScope.messages[$scope.babyProfile.kidId]) {
-              for (var i = 0; i < newmessages.length; i++)
-                $rootScope.messages[$scope.babyProfile.kidId].unshift(newmessages[i]);
+              if (!!$rootScope.messages[$scope.babyProfile.kidId]) {
+                for (var i = 0; i < newmessages.length; i++)
+                  $rootScope.messages[$scope.babyProfile.kidId].unshift(newmessages[i]);
+              } else {
+                $rootScope.messages[$scope.babyProfile.kidId] = newmessages;
+              }
+              // $rootScope.messages = !!$rootScope.messages ? $rootScope.messages.concat(newmessages) : newmessages;
+              if ($rootScope.messages[$scope.babyProfile.kidId].length == 0) {
+                $scope.emptylist = true;
+              }
+              if (data.length >= $scope.all) {
+                $scope.end_reached = false;
+              } else {
+                $scope.end_reached = true;
+              }
             } else {
-              $rootScope.messages[$scope.babyProfile.kidId] = newmessages;
-            }
-            // $rootScope.messages = !!$rootScope.messages ? $rootScope.messages.concat(newmessages) : newmessages;
-            if ($rootScope.messages[$scope.babyProfile.kidId].length == 0) {
               $scope.emptylist = true;
-            }
-            if (data.length >= $scope.all) {
-              $scope.end_reached = false;
-            } else {
               $scope.end_reached = true;
+              Toast.show($filter('translate')("pop_up_error_server_template"), "short", "bottom");
+
             }
-          } else {
-            $scope.emptylist = true;
+            $scope.loading = false;
+
+          },
+          function (err) {
+
             $scope.end_reached = true;
-            Toast.show($filter('translate')("pop_up_error_server_template"), "short", "bottom");
+            $scope.loading = false;
 
-          }
-          $scope.loading = false;
-
-        },
-        function (err) {
-
-          $scope.end_reached = true;
-          $scope.loading = false;
-
-        });
+          });
+      } catch (err) {
+        $scope.emptylist = true;
+        $scope.end_reached = true;
+        $scope.loading = false;
+      }
     }
+    //    $scope.loading = false;
   };
   $scope.refresh = function () {
     if ($ionicScrollDelegate.$getByHandle('handler').getScrollPosition().top == 0 && !$scope.end_reached) {
@@ -475,20 +504,24 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
 
   $scope.expandText = function () {
     var element = document.getElementById("txtnotes");
-    element.style.height = element.scrollHeight + "px";
+    if (element) {
+      element.style.height = element.scrollHeight + "px";
+    }
     element = document.getElementById("txtfooter");
-    element.style.height = element.scrollHeight + "px";
+    if (element) {
+      element.style.height = element.scrollHeight + "px";
+    }
 
 
   }
   $scope.resetText = function () {
     var element = document.getElementById("txtnotes");
     if (element) {
-      element.style.height = "40px";
+      element.style.height = "60px";
     }
     element = document.getElementById("txtfooter");
     if (element) {
-      element.style.height = "40px";
+      element.style.height = "60px";
     }
   }
   var counter = 0;
@@ -510,14 +543,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
     } else return "";
   }
   var userAutent = function (PIN) {
+    var deferred = $q.defer();
     profileService.authenticatheWithPIN($scope.schoolProfile.schoolId, PIN).then(function (user) {
       $scope.teacher = user;
-      Toast.show($filter('translate')('user_auth'), 'short', 'bottom');
-
+      Toast.show($filter('translate')('user_auth') + user.teacherFullname, 'short', 'bottom');
+      deferred.resolve();
     }, function (error) {
       Toast.show($filter('translate')('user_not_auth'), 'short', 'bottom');
-
+      deferred.reject();
     });
+    return deferred.promise;
   };
   $scope.exit = function () {
     profileService.lock();
@@ -540,16 +575,32 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
           text: $filter('translate')("insert_pin_confim_button"),
           type: 'button-popup',
           onTap: function (e) {
-            userAutent($scope.data.userPIN);
-            $scope.data.userPIN = "";
+            e.preventDefault();
+            userAutent($scope.data.userPIN).then(function () {
+              $scope.data.userPIN = "";
+              unlockPopup.close();
+            }, function (error) {});
           }
-        }
-            ]
+          }
+          ]
     });
 
   }
   $scope.openPINKeyboard = function () {
     document.getElementById('inputPIN').focus();
   }
+  window.addEventListener('native.keyboardshow', function () {
+    var element = document.getElementById("chat-footer");
+    if (element) {
+      element.style.bottom = "60px";
+    }
+
+  });
+  window.addEventListener('native.keyboardhide', function () {
+    var element = document.getElementById("chat-footer");
+    if (element) {
+      element.style.bottom = "0px";
+    }
+  });
   $scope.init();
 });

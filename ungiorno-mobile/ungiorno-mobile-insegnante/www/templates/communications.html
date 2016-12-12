@@ -67,7 +67,7 @@ Old version
       <div ng-hide="(isCommunicationSelected($index) && isMode('edit'))">
         <div class="row">
           <div class="col">
-            <div class="comm-creation-date">{{'communication_of' | translate}} {{communication.creationDate | date}}<span ng-if="communication.author"> -  {{communication.author.name}}{{communication.author.surname}}</span> </div>
+            <div class="comm-creation-date">{{'communication_of' | translate}} {{communication.creationDate | date}}<span ng-if="communication.author"> -  {{communication.author.fullname}}</span> </div>
           </div>
         </div>
         <div class="row">

@@ -993,9 +993,9 @@ select {
 }
 
 #babyprofile .babyprofile-phone {
-  font-size: 20px;
+  font-size: 28px;
   margin-right: 8px;
-  color: #bd3e4d;
+  margin-bottom: 4px;
 }
 
 #babyprofile .ion-ios-telephone:before {
@@ -1078,6 +1078,10 @@ select {
   height: 75vh;
 }
 
+#babyprofile .box-ion-spinner {
+  text-align: center;
+}
+
 #babyprofile #kid-profile {
   /*    height: 100%;*/
 }
@@ -1153,7 +1157,7 @@ textarea {
 #babyprofile .input-chat-footer {
   background-color: #eeeeee;
   height: 60px;
-  padding: 20px 6px;
+  padding: 6px 6px;
 }
 
 #babyprofile .button-chat-exit {
@@ -1375,10 +1379,16 @@ textarea {
 }
 
 .busBabyDetail {
-  font-size: 1em;
+  font-size: 14px;
   width: 10px;
   white-space: nowrap;
 }
+
+.busBabyDetail.firstrow {
+  margin-top: 16px
+}
+
+.busBabyDetail .secondrow {}
 
 .child-img {
   width: 100%;
@@ -1558,7 +1568,7 @@ textarea {
 }
 
 .home-section-space {
-  padding-top: 70px !important;
+  padding-top: 10px !important;
 }
 
 .create-note {
@@ -1994,10 +2004,11 @@ ion-content .scroll {
   right: 0px;
   color: white;
   border-radius: 50%;
-  width: 20px;
-  height: 20px;
+  width: 30px;
+  height: 30px;
   background-color: green;
   z-index: 9;
+  line-height: 30px;
 }
 
 .btn_disabled {
@@ -2244,10 +2255,24 @@ ion-content .scroll {
 }
 
 #communications .input-communication {
+  background-color: #F6F6F6;
   font-size: 20px;
   line-height: 20px;
+  background-color: #eeeeee;
+  height: 60px;
+  padding: 20px 6px;
   width: 100%;
 }
+
+
+/*
+#communications .input-communication {
+  font-size: 20px;
+  line-height: 30px;
+  padding-left: 6px;
+  width: 100%;
+}
+*/
 
 #communications .chat-lock {
   background-color: #98ba3c;

@@ -27,8 +27,36 @@
           <div ng-if="babyInformations.active">
             <div class="baby-info-label">{{'baby_info' | translate}}</div>
             <div>
-              <div ng-repeat="person in parents track by $index" ng-if="parents.length>0">
-                <div class="row" ng-if="$index%2==0">
+              <div class="row">
+                <!--                <div ng-repeat="person in parents track by $index" ng-class="{'second-parent':($index %2 == 1);}" ng-if="parents.length>0">-->
+                <!--                <div class="row">-->
+                <div ng-if="parents[0]">
+                  <div class="col col-30" ng-if="parents[0].parent">
+                    <div class="babyprofile-parent">
+                      <div class=" detailsTitle">{{'parent' | translate}}1</div>
+                      <div class="babyprofile-parent-name">{{parents[0].fullName}}</div>
+                      <ion-list>
+                        <div ng-repeat="num in parents[0].phone" ng-click="callPhone('{{num}}');" class="babyprofile-phone">
+                          <i class="icon voice-menu ion-ios-telephone babyprofile-phone"></i>{{num}}
+                        </div>
+                      </ion-list>
+                    </div>
+                  </div>
+                </div>
+                <div ng-if="parents[1]">
+                  <div class="col col-30 second-parent" ng-if="parents[1].parent">
+                    <div class="babyprofile-parent">
+                      <div class=" detailsTitle">{{'parent' | translate}}2</div>
+                      <div class="babyprofile-parent-name">{{parents[1].fullName}}</div>
+                      <ion-list>
+                        <div ng-repeat="num in parents[1].phone" ng-click="callPhone('{{num}}');" class="babyprofile-phone">
+                          <i class="icon voice-menu ion-ios-telephone babyprofile-phone"></i>{{num}}
+                        </div>
+                      </ion-list>
+                    </div>
+                  </div>
+                </div>
+                <!--
                   <div class="col">
                     <div class="babyprofile-parent">
                       <div class=" detailsTitle">{{'parent' | translate}}{{$index+1}}</div>
@@ -49,7 +77,9 @@
                       </div>
                     </ion-list>
                   </div>
-                </div>
+-->
+                <!--                </div>-->
+                <!--                </div>-->
               </div>
               <div ng-if="parents.length==0">
                 {{'no_parents' | translate}}

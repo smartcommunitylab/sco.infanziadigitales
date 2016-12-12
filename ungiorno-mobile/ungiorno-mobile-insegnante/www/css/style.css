@@ -963,6 +963,10 @@ select {
   border: 2px solid black;
 }
 
+#babyprofile .second-parent {
+  margin-left: 20px;
+}
+
 #babyprofile .babyprofile-separator {
   margin-left: 16px;
   margin-right: 16px;

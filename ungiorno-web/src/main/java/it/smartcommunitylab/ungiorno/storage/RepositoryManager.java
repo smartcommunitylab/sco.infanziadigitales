@@ -269,7 +269,7 @@ public class RepositoryManager {
 		for (Parent parent : parents) {
 			Query q = appQuery(appId);
 			q.addCriteria(new Criteria("username").is(parent.getUsername()));
-			template.remove(q);
+			template.remove(q, Parent.class);
 		}
 		template.insertAll(parents);
 	}

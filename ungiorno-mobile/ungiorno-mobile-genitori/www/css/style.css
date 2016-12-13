@@ -1427,6 +1427,15 @@ select {
 #communications ul.list {
   background-color: lightgray;
 }
+#communications .no-messages-placeholder {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  text-align: center;
+  margin-right: auto;
+  margin-top: 30px;
+  font-size: 20px;
+}
 
 /* Login */
 

@@ -76,7 +76,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.communicationsService',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.messagesService',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.notification',
-    'angularMoment'
+    'angularMoment',
+  'monospaced.elastic'
 ])
 
 .run(function ($ionicPlatform, $rootScope, $ionicLoading, $ionicPopup, $filter, $cordovaSplashscreen, $state, $translate, $q, $window, $ionicHistory, $ionicConfig, Config,

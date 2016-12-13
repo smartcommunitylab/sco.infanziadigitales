@@ -1810,9 +1810,10 @@ $dark: #444 !default;
   width: 0px;
 }
 #chat .input-chat-footer {
-  background-color: #F6F6F6;
-  font-size: 20px;
-  line-height: 20px;
+  /*  background-color: #F6F6F6;*/
+
+  line-height: 45px;
+  padding-left: 4px;
 }
 #chat .input-chat-footer::-webkit-input-placeholder {
   color: gray!important;
@@ -1828,10 +1829,12 @@ $dark: #444 !default;
 #chat .button-chat-send {
   color: white;
   background-color: #5FC3DF;
+  height: 100%;
 }
 #chat input[type=text],
 textarea {
   border-bottom: none;
+  background-color: #f6f6f6;
 }
 #chat .chat-time {
   color: #A0A0A0;
@@ -1848,6 +1851,14 @@ textarea {
   text-align: center;
   margin-right: auto;
   margin-top: 30px;
+}
+#chat .send-button-container {
+  padding: 4px;
+  background-color: #f6f6f6;
+}
+#chat .bar-footer {
+  height: 60px;
+  background-image: none;
 }
 
 /*

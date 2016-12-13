@@ -583,6 +583,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
             }, function (error) {
               $scope.data.userPIN = "";
               $scope.noAuthenicate = true;
+              $scope.openPINKeyboard();
             });
           }
           }
@@ -598,7 +599,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
     if (element) {
       element.style.bottom = "60px";
     }
-
+    $ionicScrollDelegate.resize();
   });
   window.addEventListener('native.keyboardhide', function () {
     var element = document.getElementById("chat-footer");
@@ -607,4 +608,5 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
     }
   });
   $scope.init();
+  $ionicScrollDelegate.resize();
 });

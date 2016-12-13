@@ -99,12 +99,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     });
   }
   //add extra absence
-  $scope.absenceTypes.push({
-    typeId: "Altro",
-    name: $filter('translate')('absence_other'),
-    checked: false
-
-  });
+//  $scope.absenceTypes.push({
+//    typeId: "Altro",
+//    name: $filter('translate')('absence_other'),
+//    checked: false
+//
+//  });
   for (var i = 0; i < $scope.schoolProfile.frequentIllnesses.length; i++) {
     $scope.frequentIllnesses.push({
       typeId: $scope.schoolProfile.frequentIllnesses[i].typeId,

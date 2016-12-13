@@ -44,14 +44,14 @@
         </label>
       </div>
       <div class="list card">
-        <ion-radio ng-repeat="item in absenceTypes" ng-value="item.typeId" ng-model="data.typeId" ng-change="selectAbsence(item)">
+        <ion-radio ng-repeat="item in absenceTypes | orderBy: 'name'" ng-value="item.typeId" ng-model="data.typeId" ng-change="selectAbsence(item)">
           {{ item.name}}
         </ion-radio>
       </div>
       <div ng-show="data.typeId=='malattia' && frequentIllnesses.length>1">
         <h5 class="accent-color input-description-padding"><b>{{'type_illness' | translate}}</b></h5>
         <div class="list card">
-          <ion-radio ng-repeat=" item in frequentIllnesses " ng-value="item.typeId " ng-model="illnessModel.typeId " ng-change="selectIllness(illness) " name="server-side ">
+          <ion-radio ng-repeat=" item in frequentIllnesses | orderBy: 'name'" ng-value="item.typeId " ng-model="illnessModel.typeId " ng-change="selectIllness(illness) " name="server-side ">
             {{ item.name }}
           </ion-radio>
         </div>

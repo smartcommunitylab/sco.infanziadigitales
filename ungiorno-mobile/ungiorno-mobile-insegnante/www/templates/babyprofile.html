@@ -161,7 +161,7 @@
               <textarea class="input-chat-footer" placeholder="{{'input_chat_placeholder' | translate}}" ng-model="newMessage.text" id="txtnotes" ng-focus="inputUp()" ng-blur="inputDown()" ng-keyup="startTyping()" ng-keydown="expandText()">
               </textarea>
 -->
-              <textarea class="input-chat-footer" placeholder="{{'input_chat_placeholder' | translate}}" ng-model="newMessage.text" msd-elastic>
+              <textarea class="input-chat-footer" placeholder="{{'input_chat_placeholder' | translate}}" ng-keyup="startTyping()" ng-model="newMessage.text" msd-elastic>
 
               </textarea>
               <button class="button button-chat-send icon ion-android-send" ng-click="sendMessage(newMessage.text)">

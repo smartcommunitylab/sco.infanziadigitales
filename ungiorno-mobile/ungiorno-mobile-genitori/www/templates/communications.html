@@ -12,7 +12,7 @@
           <div class="item item-text-wrap">
             <p class="note-date">{{communication.creationDate | date:'EEEE, d MMMM yyyy'}}</p>
             <p class="note-text">{{communication.description}}</p>
-            <p class="note-author">{{communication.author.name}}{{communication.author.surname}}</p>
+            <p class="note-author">{{communication.author.teacherFullname}}</p>
             <div ng-show="communication.doCheck">
               <div class="note-date-to-check-label">{{'communication_before'|translate}}</div>
               <div class="note-date-to-check-value">{{communication.dateToCheck | date:'EEEE, d MMMM yyyy'}}</div>

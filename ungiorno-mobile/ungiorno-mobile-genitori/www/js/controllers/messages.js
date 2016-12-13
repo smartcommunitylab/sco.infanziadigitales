@@ -188,42 +188,47 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
   $scope.loadMore = function () {
     if (!$scope.loading) {
       $scope.loading = true;
+      try {
+        messagesService.getMessages($rootScope.messages[$scope.babyProfile.kidId][0].creationDate - 1, $scope.all, $scope.babyProfile.schoolId, $scope.babyProfile.kidId).then(function (data) {
+            if (data) {
+              var newmessages = data.slice();
+              //var newmessages = data;
 
-      messagesService.getMessages($rootScope.messages[$scope.babyProfile.kidId][0].creationDate - 1, $scope.all, $scope.babyProfile.schoolId, $scope.babyProfile.kidId).then(function (data) {
-          if (data) {
-            var newmessages = data.slice();
-            //var newmessages = data;
-
-            if (!!$rootScope.messages[$scope.babyProfile.kidId]) {
-              for (var i = 0; i < newmessages.length; i++)
-                $rootScope.messages[$scope.babyProfile.kidId].unshift(newmessages[i]);
+              if (!!$rootScope.messages[$scope.babyProfile.kidId]) {
+                for (var i = 0; i < newmessages.length; i++)
+                  $rootScope.messages[$scope.babyProfile.kidId].unshift(newmessages[i]);
+              } else {
+                $rootScope.messages[$scope.babyProfile.kidId] = newmessages;
+              }
+              // $rootScope.messages = !!$rootScope.messages ? $rootScope.messages.concat(newmessages) : newmessages;
+              if ($rootScope.messages[$scope.babyProfile.kidId].length == 0) {
+                $scope.emptylist = true;
+              }
+              if (data.length >= $scope.all) {
+                $scope.end_reached = false;
+              } else {
+                $scope.end_reached = true;
+              }
             } else {
-              $rootScope.messages[$scope.babyProfile.kidId] = newmessages;
-            }
-            // $rootScope.messages = !!$rootScope.messages ? $rootScope.messages.concat(newmessages) : newmessages;
-            if ($rootScope.messages[$scope.babyProfile.kidId].length == 0) {
               $scope.emptylist = true;
-            }
-            if (data.length >= $scope.all) {
-              $scope.end_reached = false;
-            } else {
               $scope.end_reached = true;
+              Toast.show($filter('translate')("pop_up_error_server_template"), "short", "bottom");
+
             }
-          } else {
-            $scope.emptylist = true;
+            $scope.loading = false;
+
+          },
+          function (err) {
+
             $scope.end_reached = true;
-            Toast.show($filter('translate')("pop_up_error_server_template"), "short", "bottom");
+            $scope.loading = false;
 
-          }
-          $scope.loading = false;
-
-        },
-        function (err) {
-
-          $scope.end_reached = true;
-          $scope.loading = false;
-
-        });
+          });
+      } catch (err) {
+        $scope.emptylist = true;
+        $scope.end_reached = true;
+        $scope.loading = false;
+      }
     }
   };
   $scope.refresh = function () {

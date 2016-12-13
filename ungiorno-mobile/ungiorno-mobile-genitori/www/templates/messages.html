@@ -3,12 +3,20 @@
     <ion-nav-back-button>
     </ion-nav-back-button>
   </ion-nav-bar>
+  <ion-content has-header="true" class="page-padding" style="{bottom:70px}">
+    <div class="no-messages-placeholder" ng-if="messages[babyProfile.kidId].length === 0 ">
+      {{'no_messages' | translate}}
+    </div>
+  </ion-content>
   <ion-content has-header="true" class="page-padding" style="{bottom:70px}" delegate-handle="handler" on-scroll="refresh()">
     <!--
         <ion-infinite-scroll ng-if="!end_reached" on-infinite="loadMore()" distance="1%">
         </ion-infinite-scroll>
 -->
-    <ion-spinner ng-if="loading" icon="spiral"></ion-spinner>
+    <div class="box-ion-spinner">
+      <ion-spinner ng-if="loading" icon="spiral"></ion-spinner>
+    </div>
+    <!--    <ion-spinner ng-if="loading" icon="spiral"></ion-spinner>-->
     <ion-list>
       <!--            <ion-item ng-repeat="ms in messages | orderBy: 'creationDate' track by $index">-->
       <!--            <ion-item ng-repeat="ms in messages | reverse">-->

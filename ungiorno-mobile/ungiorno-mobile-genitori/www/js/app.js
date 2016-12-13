@@ -458,7 +458,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     menu_exit: 'Logout',
     menu_enter: 'Entra',
     menu_impostazioni: 'Informazioni',
-    menu_issue: 'Segnala problema app',
+    menu_issue: 'Segnala un problema',
     babysetting_intro: 'Informazioni relative al bambino.',
     babysetting_services: 'Servizi:',
     babysetting_hours: 'Orario di uscita:',
@@ -631,7 +631,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
 
   $translateProvider.translations('en', {
     menu_home: 'Home',
-    menu_issue: 'Segnala problema app',
+    menu_issue: 'Segnala un problema',
     home_assenza: 'Assenza',
     home_retire: 'La giornata di ',
     home_bus: 'Bus',
@@ -816,7 +816,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
 
   $translateProvider.translations('de', {
     menu_home: 'Home',
-    menu_issue: 'Segnala problema app',
+    menu_issue: 'Segnala un problema',
     home_assenza: 'Assenza',
     home_retire: 'La giornata di ',
     home_bus: 'Bus',

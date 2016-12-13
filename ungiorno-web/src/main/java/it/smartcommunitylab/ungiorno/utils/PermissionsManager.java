@@ -66,7 +66,7 @@ public class PermissionsManager {
 		if (kid != null) {
 			if (isTeacher == null || isTeacher) {
 				// all teachers of a school can operate all the kids of the school
-				return isSchoolTeacher(appId, schoolId, userId);
+				if (isSchoolTeacher(appId, schoolId, userId)) return true;
 //				Teacher teacher = storage.getTeacher(userId, appId, schoolId);
 //				if (teacher != null) {
 //					if (teacher.getSectionIds().contains(kid.getSection().getSectionId())) {

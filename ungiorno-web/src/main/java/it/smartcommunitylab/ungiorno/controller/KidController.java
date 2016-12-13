@@ -27,6 +27,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -60,10 +62,13 @@ import it.smartcommunitylab.ungiorno.model.Response;
 import it.smartcommunitylab.ungiorno.model.SchoolObject;
 import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
+import it.smartcommunitylab.ungiorno.utils.JsonUtil;
 import it.smartcommunitylab.ungiorno.utils.PermissionsManager;
 
 @RestController
 public class KidController {
+
+	private static final transient Logger logger = LoggerFactory.getLogger(KidController.class);
 
 	@Autowired
 	@Value("${image.download.dir}")
@@ -258,7 +263,13 @@ public class KidController {
 				return new Response<>();
 			}
 
+			if(logger.isDebugEnabled()) {
+				logger.debug("reading ritiro:" + appId + " - " + schoolId + " - "+ kidId +" - " + date);
+			}
 			KidCalRitiro obj = storage.getReturn(appId, schoolId, kidId, date);
+			if(logger.isDebugEnabled()) {
+				logger.debug("reading ritiro: result "+ JsonUtil.convertObject(obj));
+			}
 			return new Response<>(obj);
 		} catch (Exception e) {
 			return new Response<>(e.getMessage());

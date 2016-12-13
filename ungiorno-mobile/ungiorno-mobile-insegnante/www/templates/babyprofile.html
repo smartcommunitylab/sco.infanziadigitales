@@ -30,7 +30,7 @@
               <div class="row">
                 <!--                <div ng-repeat="person in parents track by $index" ng-class="{'second-parent':($index %2 == 1);}" ng-if="parents.length>0">-->
                 <!--                <div class="row">-->
-                <div ng-if="parents[0]">
+                <div ng-if="parents[0]" class="col col-50">
                   <div class="col col-30" ng-if="parents[0].parent">
                     <div class="babyprofile-parent">
                       <div class=" detailsTitle">{{'parent' | translate}}1</div>
@@ -43,7 +43,7 @@
                     </div>
                   </div>
                 </div>
-                <div ng-if="parents[1]">
+                <div ng-if="parents[1]" class="col col-50">
                   <div class="col col-30 second-parent" ng-if="parents[1].parent">
                     <div class="babyprofile-parent">
                       <div class=" detailsTitle">{{'parent' | translate}}2</div>

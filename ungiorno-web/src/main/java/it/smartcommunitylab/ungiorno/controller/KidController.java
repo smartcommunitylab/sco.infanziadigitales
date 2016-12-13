@@ -263,12 +263,13 @@ public class KidController {
 				return new Response<>();
 			}
 
-			logger.info("reading ritiro:" + appId + " - " + schoolId + " - "+ kidId +" - " + date);
-			System.err.println("-reading ritiro:" + appId + " - " + schoolId + " - "+ kidId +" - " + date);
-			
+			if(logger.isDebugEnabled()) {
+				logger.debug("reading ritiro:" + appId + " - " + schoolId + " - "+ kidId +" - " + date);
+			}
 			KidCalRitiro obj = storage.getReturn(appId, schoolId, kidId, date);
-			logger.info("reading ritiro: result "+ JsonUtil.convertObject(obj));
-			System.err.println("-reading ritiro: result "+ JsonUtil.convertObject(obj));
+			if(logger.isDebugEnabled()) {
+				logger.debug("reading ritiro: result "+ JsonUtil.convertObject(obj));
+			}
 			return new Response<>(obj);
 		} catch (Exception e) {
 			return new Response<>(e.getMessage());

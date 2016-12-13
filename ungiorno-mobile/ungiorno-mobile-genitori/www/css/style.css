@@ -1829,6 +1829,17 @@ textarea {
   margin-left: 8px;
   margin-right: 8px;
 }
+#chat .box-ion-spinner {
+  text-align: center;
+}
+#chat .no-messages-placeholder {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  text-align: center;
+  margin-right: auto;
+  margin-top: 30px;
+}
 
 /*
 #chat .input-chat-footer::-webkit-input-placeholder {

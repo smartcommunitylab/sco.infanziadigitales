@@ -625,8 +625,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     retire_popup_person_cancel: 'Indica chi ritira il bambino',
     add_motivation: 'Aggiungi la motivazione',
     remove_motivation: 'Annulla',
-    type_illness: 'Tipo di mallatia:'
-
+    type_illness: 'Tipo di mallatia:',
+    no_messages: 'Non sono presenti messaggi'
   });
 
   $translateProvider.translations('en', {
@@ -809,7 +809,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     retire_popup_person_cancel: 'Indica chi ritira il bambino',
     add_motivation: 'Aggiungi la motivazione',
     remove_motivation: 'Annulla',
-    type_illness: 'Tipo di mallatia:'
+    type_illness: 'Tipo di mallatia:',
+    no_messages: 'Non sono presenti messaggi'
 
   });
 
@@ -999,10 +1000,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     retire_popup_person_cancel: 'Indica chi ritira il bambino',
     add_motivation: 'Aggiungi la motivazione',
     remove_motivation: 'Annulla',
-    type_illness: 'Tipo di mallatia:'
-      //    retire_popup_toolate_title: 'Attenzione',
-      //    retire_popup_toolate_template: '',
-      //    retire_popup_toolate_button: ''
+    type_illness: 'Tipo di mallatia:',
+    no_messages: 'Non sono presenti messaggi'
 
   });
 

@@ -529,9 +529,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
       profileService.getBabyProfileById($scope.schoolProfile.schoolId, $scope.section.children[i].kidId).then(function (profile) {
         $scope.childrenProfiles.push(profile);
       });
-      babyConfigurationService.getBabyConfigurationById($scope.schoolProfile.schoolId, $scope.section.children[i].kidId).then(function (configuration) {
-        $scope.childrenConfigurations.push(configuration);
-      });
+      //    useless because u can't change configuration
+      //    babyConfigurationService.getBabyConfigurationById($scope.schoolProfile.schoolId, $scope.section.children[i].kidId).then(function (configuration) {
+      //        $scope.childrenConfigurations.push(configuration);
+      //      });
       /*
                   babyConfigurationService.getBabyNotesById($scope.schoolProfile.schoolId, $scope.section.children[i].childrenId).then(function (notes) {
                       $scope.childrenNotes.push(notes);

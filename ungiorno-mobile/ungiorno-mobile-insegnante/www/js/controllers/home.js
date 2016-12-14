@@ -134,13 +134,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
       });
     }, function (data) {
       Toast.show($filter('translate')('communication_not_modified'), 'short', 'bottom');
-      communicationService.setToCheck(false);
-      $scope.noteExpanded = false;
-      $scope.communicationExpanded = false;
-      $scope.teachersNote = true;
-      $scope.parentsNote = false;
-      $scope.newNoteExpandend = false;
-
+//      communicationService.setToCheck(false);
+//      $scope.noteExpanded = false;
+//      $scope.communicationExpanded = false;
+//      $scope.teachersNote = true;
+//      $scope.parentsNote = false;
+//      $scope.newNoteExpandend = false;
+      $ionicLoading.hide();
     });
   }
   $scope.data = {
@@ -526,9 +526,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
 
     $scope.numberOfChildren = $scope.section.children.length;
     for (var i = 0; i < $scope.numberOfChildren; i++) {
-//      profileService.getBabyProfileById($scope.schoolProfile.schoolId, $scope.section.children[i].kidId).then(function (profile) {
-//        $scope.childrenProfiles.push(profile);
-//      });
+      //      profileService.getBabyProfileById($scope.schoolProfile.schoolId, $scope.section.children[i].kidId).then(function (profile) {
+      //        $scope.childrenProfiles.push(profile);
+      //      });
       //    useless because u can't change configuration
       //    babyConfigurationService.getBabyConfigurationById($scope.schoolProfile.schoolId, $scope.section.children[i].kidId).then(function (configuration) {
       //        $scope.childrenConfigurations.push(configuration);

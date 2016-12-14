@@ -122,15 +122,18 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
   $ionicLoading.show();
   dataServerService.getCommunications(profileService.getSchoolProfile().schoolId).then(function (data) {
     $scope.communications = data;
-    for (var i = 0; i < $scope.communications.length; i++) {
-      $scope.communications[i].dateToCheck = new Date($scope.communications[i].dateToCheck);
-      $scope.communications[i].creation = $scope.communications[i].creationDate;
-      $scope.communications[i].creationDate = $scope.communications[i].creationDate;
+    if ($scope.communications) {
+      for (var i = 0; i < $scope.communications.length; i++) {
+        $scope.communications[i].dateToCheck = new Date($scope.communications[i].dateToCheck);
+        $scope.communications[i].creation = $scope.communications[i].creationDate;
+        $scope.communications[i].creationDate = $scope.communications[i].creationDate;
+      }
+      sortCommunications();
     }
-    sortCommunications();
     $ionicLoading.hide();
   }, function (err) {
     Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+    $scope.communications = [];
     $ionicLoading.hide();
   });
   $scope.initMod = function (communication) {

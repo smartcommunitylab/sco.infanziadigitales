@@ -189,10 +189,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
   Config.init().then(function () {
     $scope.categoriesSubmenu = false;
     $scope.version = Config.getVersion();
-    if (!$scope.isExpired()) {
-      $scope.showNotExpiredPopup(Config.getExpirationDate());
-    } else {
-      $scope.showExpiredPopup(Config.getExpirationDate());
+    try {
+      if (!$scope.isExpired()) {
+        $scope.showNotExpiredPopup(Config.getExpirationDate());
+      } else {
+        $scope.showExpiredPopup(Config.getExpirationDate());
+      }
+    } catch (err) {
+      //no expired time set, go on
     }
   });
   $scope.sendMail = function () {

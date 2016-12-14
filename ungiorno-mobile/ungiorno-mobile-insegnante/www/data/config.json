@@ -1,5 +1,6 @@
 {
   "senderID": "453601816446",
   "messagingAppId": "ugas.trento",
-  "authenticationTimer": 180000
+  "authenticationTimer": 180000,
+  "expirationDate": "20-12-2016"
 }

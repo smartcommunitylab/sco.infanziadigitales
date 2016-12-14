@@ -77,6 +77,7 @@ a.item-content {
   color: #fff;
   background: #FFAD00;
   border: 0px;
+  margin-bottom: 20px;
 }
 #home .no-connection-block {
   text-align: center;
@@ -163,6 +164,13 @@ a.item-content {
   font-size: large;
 }
 .popup-buttons .button.button-positive {
+  background-color: #5FC3DF;
+  border-color: #5FC3DF;
+}
+.button-expired-call {
+  width: 100%;
+  color: white;
+  margin-top: 8px;
   background-color: #5FC3DF;
   border-color: #5FC3DF;
 }
@@ -1439,6 +1447,16 @@ select {
 
 /* Login */
 
+/* Settings */
+#babysettings .input-description-padding {
+  margin-top: 16px;
+  margin-bottom: 8px;
+  color: #FFAD00;
+  font-weight: bold;
+  padding: 0px;
+  font-size: 18px;
+}
+
 /*
 .scroll {
     height: 100% !important
@@ -1675,7 +1693,7 @@ $dark: #444 !default;
 }
 .my-list li:before {
   content: '\2022';
-  line-height: 16px;
+  line-height: 30px;
   /*match the li line-height for vertical centered bullets*/
 
   position: absolute;
@@ -1710,7 +1728,7 @@ $dark: #444 !default;
   width: 100%;
   bottom: 0px;
   min-height: 60px;
-  background-color: #fff;
+  background-color: #f6f6f6;
 }
 #chat .input-chat input[type='text'] {
   border-bottom: 1px solid #ddd;
@@ -1812,7 +1830,8 @@ $dark: #444 !default;
 #chat .input-chat-footer {
   /*  background-color: #F6F6F6;*/
 
-  line-height: 45px;
+  line-height: 30px;
+  font-size: 18px;
   padding-left: 4px;
 }
 #chat .input-chat-footer::-webkit-input-placeholder {
@@ -1903,8 +1922,14 @@ textarea {
   border-right: 1px solid lightgray;
 }
 #absence .add-motivation-button {
+  border-color: #FFAD00;
   background-color: #FFAD00;
   color: #fff;
+}
+#absence .remove-motivation-button {
+  border-color: #FFAD00;
+  background-color: #fff;
+  color: #FFAD00;
 }
 #absence .delete-motivation-button {
   margin-top: 20px;
@@ -1919,4 +1944,7 @@ textarea {
 .setting-line {
   height: 20px;
   line-height: 20px;
+}
+.expired-popup .popup-body {
+  text-align: justify;
 }

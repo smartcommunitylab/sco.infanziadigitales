@@ -164,7 +164,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     element.style.height = element.scrollHeight + "px";
     element = document.getElementById("txtfooter");
     element.style.height = element.scrollHeight + "px";
-
+        element = document.getElementById("buttonsend");
+        element.style.height = element.scrollHeight + "px";
 
   }
   $scope.resetText = function () {

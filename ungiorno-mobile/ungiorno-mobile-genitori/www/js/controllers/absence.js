@@ -99,12 +99,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     });
   }
   //add extra absence
-//  $scope.absenceTypes.push({
-//    typeId: "Altro",
-//    name: $filter('translate')('absence_other'),
-//    checked: false
-//
-//  });
+  //  $scope.absenceTypes.push({
+  //    typeId: "Altro",
+  //    name: $filter('translate')('absence_other'),
+  //    checked: false
+  //
+  //  });
   for (var i = 0; i < $scope.schoolProfile.frequentIllnesses.length; i++) {
     $scope.frequentIllnesses.push({
       typeId: $scope.schoolProfile.frequentIllnesses[i].typeId,
@@ -141,7 +141,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
   if ($scope.isAbsenceTimeLimitExpired($scope.getAbsenceTimeLimit($scope.schoolProfile))) {
     var myPopup = $ionicPopup.show({
       title: $filter('translate')('assenza_popup_toolate_title'),
-      template: $filter('translate')('assenza_popup_toolate_text_1') + " " + $filter('date')($scope.modifyBefore, 'HH:mm') + $filter('translate')('assenza_popup_toolate_text_2'),
+      cssClass: 'expired-popup',
+      template: $filter('translate')('assenza_popup_toolate_text_1') + " " + $filter('date')($scope.modifyBefore, 'HH:mm') + $filter('translate')('assenza_popup_toolate_text_2') + "<div class\"row\"><a href=\"tel:" + profileService.getSchoolProfile().contacts.telephone[0] + "\" class=\"button button-expired-call\">" + $filter('translate')('home_contatta') + "</a></div>",
       buttons: [
         {
           text: $filter('translate')('retire_popup_absent_close'),

@@ -149,10 +149,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     // Categories submenu
     $scope.categoriesSubmenu = false;
     $scope.version = Config.getVersion();
-    if (!$scope.isExpired()) {
-      $scope.showNotExpiredPopup(Config.getExpirationDate());
-    } else {
-      $scope.showExpiredPopup(Config.getExpirationDate());
+    try {
+      if (!$scope.isExpired()) {
+        $scope.showNotExpiredPopup(Config.getExpirationDate());
+      } else {
+        $scope.showExpiredPopup(Config.getExpirationDate());
+      }
+    } catch (err) {
+      //no date definied, go on
     }
   });
 

@@ -625,9 +625,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     popup_app_name: 'Un Giorno A Scuola - Genitori',
     retire_popup_person_cancel: 'Indica chi ritira il bambino',
     add_motivation: 'Aggiungi la motivazione',
-    remove_motivation: 'Annulla',
+    remove_motivation: 'Rimuovi la motivazione',
     type_illness: 'Tipo di mallatia:',
-    no_messages: 'Non sono presenti messaggi'
+    no_messages: 'Non sono presenti messaggi',
+    babysetting_active: 'Attivo',
+    babysetting_not_active: 'Non attivo'
   });
 
   $translateProvider.translations('en', {
@@ -809,9 +811,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     popup_app_name: 'Un Giorno A Scuola - Genitori',
     retire_popup_person_cancel: 'Indica chi ritira il bambino',
     add_motivation: 'Aggiungi la motivazione',
-    remove_motivation: 'Annulla',
+    remove_motivation: 'Rimuovi la motivazione',
     type_illness: 'Tipo di mallatia:',
-    no_messages: 'Non sono presenti messaggi'
+    no_messages: 'Non sono presenti messaggi',
+    babysetting_active: 'Attivo',
+    babysetting_not_active: 'Non attivo'
 
   });
 
@@ -1000,9 +1004,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     popup_app_name: 'Un Giorno A Scuola - Genitori',
     retire_popup_person_cancel: 'Indica chi ritira il bambino',
     add_motivation: 'Aggiungi la motivazione',
-    remove_motivation: 'Annulla',
+    remove_motivation: 'Rimuovi la motivazione',
     type_illness: 'Tipo di mallatia:',
-    no_messages: 'Non sono presenti messaggi'
+    no_messages: 'Non sono presenti messaggi',
+    babysetting_active: 'Attivo',
+    babysetting_not_active: 'Non attivo'
 
   });
 

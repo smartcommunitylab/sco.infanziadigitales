@@ -6,12 +6,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
   $scope.babyConfiguration = configurationService.getBabyConfiguration();
   $scope.babyProfile = profileService.getBabyProfile();
   $scope.babyServices = [];
-  $scope.busEnabled = true;
+  $scope.busEnabled = false;
   $scope.busStops = [];
   $scope.time = {
     value: new Date()
   }
 
+  if ($scope.babyConfiguration.services && $scope.babyConfiguration.services.bus) {
+    $scope.busEnabled = $scope.babyConfiguration.services.bus.active;
+  }
   for (var k in $scope.babyProfile.services) {
     if ($scope.babyProfile.services.hasOwnProperty(k)) {
       if ($scope.babyProfile.services[k].enabled)

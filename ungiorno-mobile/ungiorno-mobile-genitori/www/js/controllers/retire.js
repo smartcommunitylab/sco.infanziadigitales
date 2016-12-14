@@ -302,7 +302,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     if ($scope.isRetireTimeLimitExpired($scope.getRetireTimeLimit($scope.schoolProfile))) {
       var myPopup = $ionicPopup.show({
         title: $filter('translate')('retire_popup_toolate_title'),
-        template: $filter('translate')('retire_popup_toolate_text') + " " + $filter('date')($scope.modifyBefore, 'HH:mm'),
+        cssClass: 'expired-popup',
+        template: $filter('translate')('retire_popup_toolate_text') + " " + $filter('date')($scope.modifyBefore, 'HH:mm') + "<div class\"row\"><a href=\"tel:" + profileService.getSchoolProfile().contacts.telephone[0] + "\" class=\"button button-expired-call\">" + $filter('translate')('home_contatta') + "</a></div>",
         buttons: [
           {
             text: $filter('translate')('retire_popup_absent_close'),

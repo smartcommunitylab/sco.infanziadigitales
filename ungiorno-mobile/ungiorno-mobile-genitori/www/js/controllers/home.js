@@ -193,7 +193,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
   }
   $scope.createNote = function () {
     $state.go('app.addnote');
-    $scope.contactPopup.close();
+    if ($scope.contactPopup) {
+      $scope.contactPopup.close();
+    }
   };
 
   $scope.checkConnection = function () {

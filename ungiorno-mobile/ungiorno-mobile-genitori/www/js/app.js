@@ -462,7 +462,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     menu_issue: 'Segnala un problema',
     babysetting_intro: 'Informazioni relative al bambino.',
     babysetting_services: 'Servizi:',
-    babysetting_hours: 'Orario di uscita:',
+    babysetting_hours: 'Orario di uscita predefinito:',
     babysetting_who: 'Autorizzati al ritiro del bambino:',
     babysetting_bus: 'Fermate bus:',
     babysetting_busGo: 'Fermata bus andata:',

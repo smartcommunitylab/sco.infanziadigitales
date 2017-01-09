@@ -549,8 +549,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
       Toast.show($filter('translate')('user_auth') + user.teacherFullname, 'short', 'bottom');
       deferred.resolve();
     }, function (error) {
-      Toast.show($filter('translate')('user_not_auth'), 'short', 'bottom');
-      deferred.reject();
+      if (error) {
+        Toast.show($filter('translate')('user_not_auth'), 'short', 'bottom');
+      } else {
+        Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+      }
+      deferred.reject(error);
     });
     return deferred.promise;
   };
@@ -559,6 +563,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
     Toast.show($filter('translate')('user_exit_auth'), 'short', 'bottom');
   }
   $scope.unlock = function () {
+    $scope.noAuthenicate = false;
     //open the ionic popup for authentication
     var unlockPopup = $ionicPopup.show({
       title: $filter('translate')("insert_pin_title"),
@@ -582,7 +587,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
               unlockPopup.close();
             }, function (error) {
               $scope.data.userPIN = "";
-              $scope.noAuthenicate = true;
+              if (error) {
+                $scope.noAuthenicate = true;
+              } else {
+                $scope.noAuthenicate = false;
+              }
               $scope.openPINKeyboard();
             });
           }

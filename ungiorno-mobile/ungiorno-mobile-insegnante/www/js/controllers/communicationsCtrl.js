@@ -235,7 +235,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
       $scope.teacher = user;
       deferred.resolve(user);
     }, function (error) {
-      deferred.reject();
+      if (error) {
+        Toast.show($filter('translate')('user_not_auth'), 'short', 'bottom');
+      } else {
+        Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+      }
+      deferred.reject(error);
     });
     return deferred.promise;
   };
@@ -286,6 +291,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
   }
   $scope.unlock = function (action, communication, index) {
     var deferred = $q.defer();
+    $scope.noAuthenicate = false;
     var unlockPopup = $ionicPopup.show({
       title: $filter('translate')("insert_pin_title"),
       //      template: $filter('translate')("pop_up__expired_template"),
@@ -315,8 +321,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
               },
               function (error) {
                 deferred.reject();
-                $scope.noAuthenicate = true;
-                Toast.show($filter('translate')('user_not_auth'), 'short', 'bottom');
+                if (error) {
+                  $scope.noAuthenicate = true;
+                } else {
+                  $scope.noAuthenicate = false;
+                }
+                //Toast.show($filter('translate')('user_not_auth'), 'short', 'bottom');
 
               });
             $scope.data.userPIN = "";
@@ -416,7 +426,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
 
         $scope.communications.splice(index, 1);
         selectedCommunicationIndex = -1;
-      }, function (data) {
+      }, function (error) {
+        if (!error) {
+          Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+        }
         communicationFail();
       });
     }

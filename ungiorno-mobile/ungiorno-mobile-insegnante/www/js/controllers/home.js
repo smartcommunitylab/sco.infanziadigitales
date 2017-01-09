@@ -304,9 +304,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
         $scope.datePosticipo.setHours(timeArr[0]);
         $scope.datePosticipo.setMinutes(timeArr[1]);
         profileService.setSchoolProfile($scope.schoolProfile);
-        if ($scope.selectedPeriod == null) {
-          $scope.selectedPeriod = getPeriodToNow();
-          $scope.changeHorizzontalLineStyle($scope.selectedPeriod);
+        if ($rootScope.selectedPeriod == null) {
+          $rootScope.selectedPeriod = getPeriodToNow();
+          $scope.changeHorizzontalLineStyle($rootScope.selectedPeriod);
         }
         pushNotificationService.register($scope.schoolProfile.schoolId);
 
@@ -522,7 +522,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
     $scope.getChildrenNumber('posticipo');
     $scope.getChildrenNumber('mensa');
 
-    $scope.getChildrenProfilesByPeriod($scope.selectedPeriod);
+    $scope.getChildrenProfilesByPeriod($rootScope.selectedPeriod);
 
     $scope.numberOfChildren = $scope.section.children.length;
     for (var i = 0; i < $scope.numberOfChildren; i++) {
@@ -810,13 +810,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
   }
 
   $scope.sectionColor = function (period) {
-    if (period == $scope.selectedPeriod)
+    if (period == $rootScope.selectedPeriod)
       return '#abc';
     return '#ddd';
   }
 
   $scope.changeSectionPeriod = function (period) {
-    $scope.selectedPeriod = period;
+    $rootScope.selectedPeriod = period;
     $scope.getChildrenProfilesByPeriod(period);
     $scope.changeHorizzontalLineStyle(period);
   }

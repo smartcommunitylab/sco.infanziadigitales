@@ -268,7 +268,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         go = false;
         var myPopup = $ionicPopup.show({
           title: $filter('translate')('assenza_popup_toolate_title'),
-          template: $filter('translate')('assenza_popup_toolate_text_1') + " " + $filter('date')($scope.modifyBefore, 'HH:mm') + $filter('translate')('assenza_popup_toolate_text_2'),
+          cssClass: 'expired-popup',
+          template: $filter('translate')('assenza_popup_toolate_text_1') + " " + $filter('date')($scope.modifyBefore, 'HH:mm') + $filter('translate')('assenza_popup_toolate_text_2') + "<div class\"row\"><a href=\"tel:" + profileService.getSchoolProfile().contacts.telephone[0] + "\" class=\"button button-expired-call\">" + $filter('translate')('home_contatta') + "</a></div>",
           buttons: [
             {
               text: $filter('translate')('retire_popup_absent_close'),
@@ -389,7 +390,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         go = false;
         var myPopup = $ionicPopup.show({
           title: $filter('translate')('assenza_popup_toolate_title'),
-          template: $filter('translate')('assenza_popup_toolate_text_1') + " " + $filter('date')($scope.modifyBefore, 'HH:mm') + $filter('translate')('assenza_popup_toolate_text_2'),
+          cssClass: 'expired-popup',
+          template: $filter('translate')('assenza_popup_toolate_text_1') + " " + $filter('date')($scope.modifyBefore, 'HH:mm') + $filter('translate')('assenza_popup_toolate_text_2') + "<div class\"row\"><a href=\"tel:" + profileService.getSchoolProfile().contacts.telephone[0] + "\" class=\"button button-expired-call\">" + $filter('translate')('home_contatta') + "</a></div>",
           buttons: [
             {
               text: $filter('translate')('retire_popup_absent_close'),

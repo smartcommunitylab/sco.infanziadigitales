@@ -380,7 +380,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     if (($scope.temporary.date < today) && (dateToModify > todayMax)) {
       var myPopup = $ionicPopup.show({
         title: $filter('translate')('retire_popup_toolate_title'),
-        template: $filter('translate')('retire_popup_toolate_text') + " " + $filter('date')($scope.modifyBefore, 'HH:mm'),
+        cssClass: 'expired-popup',
+        template: $filter('translate')('retire_popup_toolate_text') + " " + $filter('date')($scope.modifyBefore, 'HH:mm') + "<div class\"row\"><a href=\"tel:" + profileService.getSchoolProfile().contacts.telephone[0] + "\" class=\"button button-expired-call\">" + $filter('translate')('home_contatta') + "</a></div>",
 
         buttons: [
           {

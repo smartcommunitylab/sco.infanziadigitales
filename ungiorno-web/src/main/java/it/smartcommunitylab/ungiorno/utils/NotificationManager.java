@@ -15,16 +15,6 @@
  ******************************************************************************/
 package it.smartcommunitylab.ungiorno.utils;
 
-import it.smartcommunitylab.ungiorno.model.AppInfo;
-import it.smartcommunitylab.ungiorno.model.AuthPerson;
-import it.smartcommunitylab.ungiorno.model.Author;
-import it.smartcommunitylab.ungiorno.model.Communication;
-import it.smartcommunitylab.ungiorno.model.KidProfile;
-import it.smartcommunitylab.ungiorno.model.LoginData;
-import it.smartcommunitylab.ungiorno.model.School;
-import it.smartcommunitylab.ungiorno.storage.AppSetup;
-import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -50,6 +40,15 @@ import eu.trentorise.smartcampus.communicator.CommunicatorConnectorException;
 import eu.trentorise.smartcampus.communicator.model.AppSignature;
 import eu.trentorise.smartcampus.communicator.model.Notification;
 import eu.trentorise.smartcampus.communicator.model.UserSignature;
+import it.smartcommunitylab.ungiorno.model.AppInfo;
+import it.smartcommunitylab.ungiorno.model.AuthPerson;
+import it.smartcommunitylab.ungiorno.model.Author;
+import it.smartcommunitylab.ungiorno.model.Communication;
+import it.smartcommunitylab.ungiorno.model.KidProfile;
+import it.smartcommunitylab.ungiorno.model.LoginData;
+import it.smartcommunitylab.ungiorno.model.School;
+import it.smartcommunitylab.ungiorno.storage.AppSetup;
+import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
 
 /**
  * @author raman
@@ -130,7 +129,7 @@ public class NotificationManager {
 		List<String> userIds = new ArrayList<String>();
 		for (AuthPerson p : kid.getPersons()) {
 			if (p.isParent()) {
-				LoginData loginData = storage.getTokenData(p.getPersonId());
+				LoginData loginData = storage.getTokenDataByPersonId(p.getPersonId(), appId);
 				if (loginData != null) {
 					userIds.add(loginData.getUserAACId());
 				}

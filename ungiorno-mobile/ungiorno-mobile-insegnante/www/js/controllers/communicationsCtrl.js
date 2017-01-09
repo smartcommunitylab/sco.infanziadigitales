@@ -547,6 +547,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
       communicationService.addCommunication(profileService.getSchoolProfile().schoolId, tmp).then(function (data) {
         requestSuccess(data);
       }, function (data) {
+        if (!data) {
+          Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+        }
         requestFail();
       });
     }

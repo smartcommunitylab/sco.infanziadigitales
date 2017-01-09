@@ -30,9 +30,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.communi
       communications.unshift(data);
       deferred.resolve(data);
     }, function (data) {
-      if (data) {
-        deferred.reject(data.errorCode + ' ' + data.errorMessage);
-      }
+      //      if (data) {
+      deferred.reject(data);
+      //      }
     });
     return deferred.promise;
 

@@ -25,9 +25,9 @@
     "ionic-plugin-keyboard@2.0.1",
     "cordova-plugin-x-toast@2.5.0",
     "cordova-plugin-whitelist",
-    "com.cordova.plugins.cookiemaster", ,
-      "org.apache.cordova.network-information"
-        "https://github.com/katzer/cordova-plugin-local-notifications",
+    "com.cordova.plugins.cookiemaster",
+    "org.apache.cordova.network-information",
+    "https://github.com/katzer/cordova-plugin-local-notifications",
     {
       "variables": {
         "SENDER_ID": "453601816446"
@@ -37,7 +37,11 @@
     }
   ],
   "cordovaPlatforms": [
-    "ios",
-    "android"
+    "android",
+    {
+      "platform": "ios",
+      "version": "4.1.1",
+      "locator": "ios@4.1.1"
+    }
   ]
 }

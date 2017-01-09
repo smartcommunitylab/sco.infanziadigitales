@@ -1472,6 +1472,13 @@ public class RepositoryManager {
 	public LoginData getTokenData(String username) {
 		return template.findOne(new Query(new Criteria("username").is(username)), LoginData.class);
 	}
+	public LoginData getTokenDataByPersonId(String personId, String appId) {
+		Query q = appQuery(appId);
+		q.addCriteria(new Criteria("personId").is(personId));
+		Parent p = template.findOne(q, Parent.class);
+		if (p == null) return null;
+		return template.findOne(new Query(new Criteria("username").is(p.getUsername())), LoginData.class);
+	}
 	public void saveTokenData(LoginData loginData) {
 		template.save(loginData);
 	}

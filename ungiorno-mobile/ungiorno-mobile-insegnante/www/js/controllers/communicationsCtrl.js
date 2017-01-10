@@ -579,12 +579,18 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
     if ($scope.isMode('edit') || $scope.isMode('new')) {
       return;
     }
-    selectedCommunicationIndex = -1;
-    //    communicationService.setCommunication($scope.communications[index].communicationId);
-    communicationService.setCommunication($scope.communications[index]);
-    communicationService.setToCheck(true);
-    $state.go('app.home');
-    // window.location.assign('#/app/home');
+    //check connection
+    $scope.checkConnection().then(function () {
+      selectedCommunicationIndex = -1;
+      //    communicationService.setCommunication($scope.communications[index].communicationId);
+      communicationService.setCommunication($scope.communications[index]);
+      communicationService.setToCheck(true);
+      $state.go('app.home');
+      // window.location.assign('#/app/home');
+    }, function (err) {
+      Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+    })
+
   }
 
 

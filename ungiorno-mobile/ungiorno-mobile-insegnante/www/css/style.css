@@ -1521,6 +1521,10 @@ textarea {
   position: relative;
 }
 
+.card-bord {
+  border: 4px #7b9e2a solid;
+}
+
 .communication-selected {
   background-color: #7b9e2a;
   color: #fff;

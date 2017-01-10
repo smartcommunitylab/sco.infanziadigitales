@@ -10,7 +10,7 @@
   </ion-nav-bar>
 
   <ion-content has-header="true">
-    <div class="communication card" ng-if="isMode('new')">
+    <div class="communication card card-bord" ng-if="isMode('new')">
       <!--      <div class="row">-->
       <span class=" communication-name"> {{teacher.teacherFullname}} </span>
       <span class=" communication-title"> {{ 'communication_new' | translate}} </span>
@@ -60,7 +60,7 @@ Old version
       </div>
     </div>
 
-    <div class="communication card " ng-repeat="communication in communications | orderBy: '-creation' track by $index ">
+    <div class="communication card " ng-class="{'card-bord':(isCommunicationSelected($index) && isMode('edit'))}" ng-repeat="communication in communications | orderBy: '-creation' track by $index ">
 
       <div id="communication-datepicker-{{$index}}"></div>
 

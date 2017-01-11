@@ -1433,7 +1433,7 @@ textarea {
 }
 
 .img-assente {
-  border: 2px solid #ff0000;
+  border: 2px solid #bd3e4d;
 }
 
 .img-messages {
@@ -1595,11 +1595,11 @@ textarea {
 }
 
 .name-of-child {
-  position: absolute;
-  bottom: 20px;
   text-overflow: ellipsis;
+  /*  white-space: nowrap;*/
   text-align: center;
   width: 100%;
+  height: 20px;
 }
 
 .communication-disabled {
@@ -2009,6 +2009,10 @@ ion-content .scroll {
     opacity: 0.2;
 }
 */
+
+#home .children-container {
+  /*  border: solid 2px black;*/
+}
 
 #home .children-home {
   position: relative;

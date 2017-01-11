@@ -38,6 +38,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.filters', [])
       }
     }
   })
+  .filter('homeName', function ($filter) {
+    return function (input) {
+      return input.substr(0, input.indexOf(' '));
+    }
+  })
   .filter('translate_remote', function ($rootScope, Config) {
     return function (input, debug) {
       lang = $rootScope.lang;

@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.communications', [])
 
-.controller('communicationsCtrl', function ($scope, dataServerService, $ionicPopup, $q, $rootScope, communicationService, profileService, teachersService, Toast, $filter, $ionicLoading, $compile, $ionicPopover, $state, ionicDatePicker) {
+.controller('communicationsCtrl', function ($scope, dataServerService, $ionicPopup, $ionicScrollDelegate, $ionicPosition, $q, $rootScope, communicationService, profileService, teachersService, Toast, $filter, $ionicLoading, $compile, $ionicPopover, $state, ionicDatePicker) {
 
   var selectedCommunicationIndex = -1;
   $rootScope.hideMenu = false;
@@ -210,6 +210,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
       if (document.getElementById("communication-datepicker-" + index)) {
         document.getElementById("communication-datepicker-" + index).innerHTML = "      <span class=\" communication-name\"> {{teacher.teacherFullname}} </span> <span class=\"communication-title\"> {{ 'communication_edit' | translate}} </span>            <div class=\"communication-kind\"> {{ 'communication_kind' | translate}} </div><ion-list class=\"padlist\"><div ng-repeat=\"communicationType in communicationTypes\" class=\"communication-radio\">                    <ion-radio class=\"communication-radio\" ng-class=\"communication-radio\" ng-value=\"communicationType.checked\" ng-change=\"selectType(communicationType)\" ng-checked=\"communicationType.checked\" ng-model=\"editedCommunication.doCheck\">                        {{communicationType.name}}                    </ion-radio>                    <button class=\"button button-clear button-dark button-communication-date\" ng-class=\"{'button-disabled':!delivery }\" ng-if=\"communicationType.typeId=='1'\" ng-click=\"openDatePicker() \"><span class=\"label-time-date\">{{getDateLabel()}}</span></button>                </div></ion-list>                                 <div class=\"row\">                <div class=\"col\">               <textarea ng-init=\"expandText('editdescription')\" class = \"input-communication\" placeholder=\"{{'communication_description' | translate}}\" ng-model=\"editedCommunication.description\" id=\"editdescription\" ng-keydown=\"expandText('editdescription')\">      </textarea>           </div>    </div>        <div class=\"communication-buttons\">                <button class=\"button communication-button cancel\" ng-click=\"discardCommunication()\" ng-show=\"isMode('edit') || isMode('new')\">                    {{'communication_annulla' | translate}}                </button>                <button class=\"button communication-button send\" ng-click=\"submitCommunication()\" ng-show=\"isMode('edit') || isMode('new')\">                    {{'communication_modifica' | translate}}                </button>            </div>         </div>";
         $compile(document.getElementById('communication-datepicker-' + index))($scope);
+        var communication = document.getElementById("communication-datepicker-" + index);
+        $scope.communicationPosition = communication.getBoundingClientRect();
       }
     } else {
       $scope.unlock('edit', $scope.communications[index], index).then(function () {
@@ -371,7 +373,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
   $scope.discardCommunication = function () {
     setNormalMode();
     selectedCommunicationIndex = -1;
-
+    $ionicScrollDelegate.scrollTo(0, $scope.communicationPosition.top, true);
   }
 
   $scope.selectType = function (newType) {
@@ -513,6 +515,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
 
       //currentMode = MODE_NORMAL_LIST;
       setNormalMode();
+      //scroll to the top where is the updated element
+      $ionicScrollDelegate.scrollTop(true);
       if (selectedCommunicationIndex >= 0) {
         selectedCommunicationIndex = -1;
       }

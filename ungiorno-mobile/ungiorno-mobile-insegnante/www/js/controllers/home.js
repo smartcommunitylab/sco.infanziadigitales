@@ -19,6 +19,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
   $scope.numberOfChildren = 0;
   $scope.communications = [];
   $scope.noConnection = false;
+  $scope.numberOfDeliveries = 0;
   // $scope.communicationTocheck = {};
 
   $scope.childrenCommunicationDelivery = null;
@@ -35,6 +36,29 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
 
     }
   });
+
+  function contains(a, obj) {
+    var i = a.length;
+    while (i--) {
+      if (a[i] === obj) {
+        return true;
+      }
+    }
+    return false;
+  }
+  $scope.calculateNumberDeliveriesByClass = function (classID) {
+    $scope.numberOfDeliveries = 0;
+    if ('all' === classID) {
+      $scope.numberOfDeliveries = $scope.childrenCommunicationDelivery.length;
+    } else {
+      //check deliveries id with current babies id
+      for (var i = 0; i < $scope.childrenProfiles['allPeriod'].length; i++) {
+        if (contains($scope.childrenCommunicationDelivery, $scope.childrenProfiles['allPeriod'][i].kidId)) {
+          $scope.numberOfDeliveries++;
+        }
+      }
+    }
+  }
   $scope.$on('$ionicView.beforeEnter', function () {
     if (communicationService.getToCheck()) {
       //expand side menu on communication
@@ -50,6 +74,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
         }
       };
       $scope.childrenCommunicationDelivery = communicationService.getCommunication().children;
+      //$scope.numberOfDeliveries = $scope.childrenCommunicationDelivery.length;
     }
     if ($scope.communicationExpanded) {
       $ionicSideMenuDelegate.canDragContent(false);
@@ -134,12 +159,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
       });
     }, function (data) {
       Toast.show($filter('translate')('communication_not_modified'), 'short', 'bottom');
-//      communicationService.setToCheck(false);
-//      $scope.noteExpanded = false;
-//      $scope.communicationExpanded = false;
-//      $scope.teachersNote = true;
-//      $scope.parentsNote = false;
-//      $scope.newNoteExpandend = false;
+      //      communicationService.setToCheck(false);
+      //      $scope.noteExpanded = false;
+      //      $scope.communicationExpanded = false;
+      //      $scope.teachersNote = true;
+      //      $scope.parentsNote = false;
+      //      $scope.newNoteExpandend = false;
       $ionicLoading.hide();
     });
   }
@@ -445,6 +470,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
   $scope.changeCommunication = function (communicationId) {
     communicationService.setCommunicationById(communicationId);
     $scope.childrenCommunicationDelivery = communicationService.getCommunication().children;
+    $scope.numberOfDeliveries = $scope.childrenCommunicationDelivery.length;
   }
   $scope.getChildrenDeliveryByID = function (id) {
     if ($scope.communicationExpanded && $scope.childrenCommunicationDelivery != null) {
@@ -463,12 +489,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
         index = $scope.childrenCommunicationDelivery.indexOf(childId);
         if (index > -1) {
           $scope.childrenCommunicationDelivery.splice(index, 1);
+          //remove delivery
+          $scope.numberOfDeliveries--;
         } else {
           $scope.childrenCommunicationDelivery.push(childId);
+          //add delivery
+          $scope.numberOfDeliveries++;
         }
       }
-      //$scope.childrenCommunicationDelivery[id] = !$scope.childrenCommunicationDelivery[id]
-      //}
+
 
     }
     //  $scope.showNoConnection = function () {
@@ -574,6 +603,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
       $scope.getChildrenByCurrentSection();
     }
     $scope.loadNotes();
+    //id I'm in delivery mode
+    if ($scope.childrenCommunicationDelivery != null) {
+      $scope.calculateNumberDeliveriesByClass(sectionId);
+    }
   }
 
   var injectBabyInformationsInNote = function (note) {

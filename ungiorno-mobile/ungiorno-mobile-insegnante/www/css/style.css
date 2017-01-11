@@ -557,6 +557,18 @@ p {
   transform: translate(-50%, -50%);
 }
 
+#home .number-devilevered {
+  color: white;
+  position: absolute;
+  background-color: green;
+  bottom: 0px;
+  right: 0px;
+  width: 40%;
+  font-size: 20px;
+  padding: 4px;
+  text-align: center;
+}
+
 #home .sectionBabyIndicator-notnow {
   max-height: 150px;
   max-width: 150px;
@@ -600,6 +612,7 @@ p {
   /* text-align: center; */
   border-color: lightgray;
   padding: 6px;
+  position: relative;
 }
 
 .button-save {

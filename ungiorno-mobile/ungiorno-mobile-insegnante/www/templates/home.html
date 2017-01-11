@@ -96,8 +96,12 @@
 
           </div>
           <div class="row">
-            <div class="col">
+            <div class="col col-50">
               {{'deadline' | translate}}: {{data.dateToCheck | date}}</div>
+            <div class="col col-50">
+              <div class="number-devilevered">
+                {{'home_number_deliveries' | translate}}{{numberOfDeliveries}}{{'home_out_of_deliveries' | translate}}{{numberOfChildren}}</div>
+            </div>
           </div>
         </div>
         <div class="section-text " ng-if="communicationExpanded ">
@@ -121,7 +125,7 @@
           <i class="icon ion-checkmark-round ribbon" ng-if="(getChildrenDeliveryByID(child.kidId) && communicationExpanded)"></i>
           <img ng-src="{{getChildImage(child)}} " ng-class="{ 'img-presente':(child.exitTime !=null && (numberMessageUnread[child.kidId]==0 || numberMessageUnread[child.kidId]==null)||communicationExpanded), 'img-not-active':!child.active, 'img-communication':communicationExpanded } ">
           <!--          <div class="name-of-child " ng-if="!child.image || child.image=='' ">{{child.childrenName}}</div>-->
-
+          <div class="name-of-child ">{{child.childrenName | homeName}}</div>
         </div>
         <!--        </ion-scroll>-->
       </div>

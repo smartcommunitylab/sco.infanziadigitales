@@ -478,7 +478,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
     signal_send_no_connection_template: 'Connessione assente! Controlla la connessione del dispositivo e ricarica la pagina',
     signal_send_toast_alarm: 'Errore di connessione',
     no_connection_message: 'Nessuna connessione',
-    error_pin: 'PIN errato'
+    error_pin: 'PIN errato',
+    home_number_deliveries: 'Consegne completate: ',
+    home_out_of_deliveries: ' su '
 
 
   });

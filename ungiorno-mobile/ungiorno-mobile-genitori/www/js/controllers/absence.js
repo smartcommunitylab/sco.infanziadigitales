@@ -17,8 +17,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     //return the timestamp of timelimit
     var tmpdate = new Date();
     //creo data nuova con ora configurata e setto il model della pagina
-    if (schoolProfile.absenceTiminig) {
-      tmpdate.setHours(schoolProfile.absenceTiminig.substring(0, 2), schoolProfile.absenceTiminig.substring(3, 5), 0, 0);
+    if (schoolProfile.absenceTiming) {
+      tmpdate.setHours(schoolProfile.absenceTiming.substring(0, 2), schoolProfile.absenceTiming.substring(3, 5), 0, 0);
     } else {
       //default value is 10 am
       tmpdate.setHours(10, 0, 0, 0);

@@ -402,7 +402,7 @@ input:checked+.checkbox-icon:before {
   padding-left: 5px;
 }
 #retire .toggle-small.item-toggle .toggle {
-  top: 30px;
+  top: 33px;
 }
 .delegate-input {
   text-align: center;
@@ -1725,10 +1725,14 @@ $dark: #444 !default;
   padding-right: 10px;
   border: 0;
   position: absolute;
-  width: 100%;
+  width: 98%;
   bottom: 0px;
   min-height: 60px;
   background-color: #f6f6f6;
+  /*
+  padding: 6px 10px 6px 10px;
+ margin-bottom: 10px;
+*/
 }
 #chat .input-chat input[type='text'] {
   border-bottom: 1px solid #ddd;
@@ -1759,9 +1763,9 @@ $dark: #444 !default;
   border-right: 3px;
   border-style: solid;
 }
-
 #chat ion-footer-bar#txtfooter.input-chat-footer.bar.bar-footer {
-    bottom: 0;
+  bottom: 0;
+  padding: 0px;
 }
 #chat .card-chat {
   box-shadow: none;
@@ -1836,7 +1840,11 @@ $dark: #444 !default;
 
   line-height: 30px;
   font-size: 18px;
-  padding-left: 4px;
+  width: 100%;
+  /*  padding-left: 4px;*/
+}
+#chat .input-chat-footer.bar-stable.item-input.input-chat {
+  border-top: 1px solid #878787
 }
 #chat .input-chat-footer::-webkit-input-placeholder {
   color: gray!important;
@@ -1950,6 +1958,9 @@ textarea {
 }
 #absence .card-without-space {
   margin: 0px 10px 20px 10px;
+}
+#absence .absence-from-to {
+  width: 35px;
 }
 .setting-line {
   height: 20px;

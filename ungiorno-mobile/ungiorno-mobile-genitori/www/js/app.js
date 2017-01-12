@@ -166,7 +166,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     Config.init().then(function () {
       if (window.cordova && window.cordova.plugins.Keyboard) {
         cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-          cordova.plugins.Keyboard.disableScroll(true);
+        cordova.plugins.Keyboard.disableScroll(true);
       }
 
       if (window.StatusBar) {
@@ -628,7 +628,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     retire_popup_person_cancel: 'Indica chi ritira il bambino',
     add_motivation: 'Aggiungi la motivazione',
     remove_motivation: 'Rimuovi la motivazione',
-    type_illness: 'Tipo di mallatia:',
+    type_illness: 'Tipo di malattia:',
     no_messages: 'Non sono presenti messaggi',
     babysetting_active: 'Attivo',
     babysetting_not_active: 'Non attivo'
@@ -815,7 +815,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     retire_popup_person_cancel: 'Indica chi ritira il bambino',
     add_motivation: 'Aggiungi la motivazione',
     remove_motivation: 'Rimuovi la motivazione',
-    type_illness: 'Tipo di mallatia:',
+    type_illness: 'Tipo di malattia:',
     no_messages: 'Non sono presenti messaggi',
     babysetting_active: 'Attivo',
     babysetting_not_active: 'Non attivo'
@@ -1009,7 +1009,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     retire_popup_person_cancel: 'Indica chi ritira il bambino',
     add_motivation: 'Aggiungi la motivazione',
     remove_motivation: 'Rimuovi la motivazione',
-    type_illness: 'Tipo di mallatia:',
+    type_illness: 'Tipo di malattia:',
     no_messages: 'Non sono presenti messaggi',
     babysetting_active: 'Attivo',
     babysetting_not_active: 'Non attivo'

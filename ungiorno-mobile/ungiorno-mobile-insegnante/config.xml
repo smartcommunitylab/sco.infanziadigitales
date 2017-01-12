@@ -1,11 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
-  <widget android-versionCode="3" id="it.smartcommunitylab.infanziadigitales.teachers" version="2.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>UGAS per Insegnanti</name>
-    <description>
-      An Ionic Framework and Cordova project.
+  <widget android-versionCode="4" id="it.smartcommunitylab.infanziadigitales.teachers" version="2.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>UGAS Insegnanti</name>
+    <description>&#xD; Un Giorno a Scuola - teachers.&#xD;
     </description>
-    <author email="hi@ionicframework" href="http://ionicframework.com/">
-      Ionic Framework Team
+    <author email="info@smartcommunitylab.it" href="http://www.smartcommunitylab.it">&#xD; Smart Community Lab&#xD;
     </author>
     <content src="index.html" />
     <access origin="*" />

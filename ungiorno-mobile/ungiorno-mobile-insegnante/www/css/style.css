@@ -560,7 +560,7 @@ p {
 #home .number-devilevered {
   color: white;
   position: absolute;
-  background-color: green;
+  background-color: #39b54a;
   bottom: 0px;
   right: 0px;
   width: 40%;
@@ -2024,11 +2024,12 @@ ion-content .scroll {
 */
 
 #home .children-container {
-  /*  border: solid 2px black;*/
+  border: solid 2px darkgray;
 }
 
 #home .children-home {
   position: relative;
+  margin-top: 20px;
 }
 
 #home .ribbon {
@@ -2039,7 +2040,7 @@ ion-content .scroll {
   border-radius: 50%;
   width: 30px;
   height: 30px;
-  background-color: green;
+  background-color: #39b54a;
   z-index: 9;
   line-height: 30px;
 }

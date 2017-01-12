@@ -1759,6 +1759,10 @@ $dark: #444 !default;
   border-right: 3px;
   border-style: solid;
 }
+
+#chat ion-footer-bar#txtfooter.input-chat-footer.bar.bar-footer {
+    bottom: 0;
+}
 #chat .card-chat {
   box-shadow: none;
 }

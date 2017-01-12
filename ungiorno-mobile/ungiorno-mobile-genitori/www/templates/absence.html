@@ -48,7 +48,7 @@
         </label>
 -->
       </div>
-      <div class="list card">
+      <div class="list card card-without-space">
         <ion-radio ng-repeat="item in absenceTypes | orderBy: 'name'" ng-value="item.typeId" ng-model="data.typeId" ng-change="selectAbsence(item)">
           {{ item.name}}
         </ion-radio>

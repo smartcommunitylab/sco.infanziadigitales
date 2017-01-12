@@ -6,24 +6,28 @@
   <ion-content has-header="true" class="page-padding communication-content">
     <div class="communications-main">
 
-<div ng-if="!communications || communications.length == 0" class="no-messages-placeholder">
-  {{'home_no_school_information' | translate}}</div>
-<ul class="list">
-  <li ng-repeat="communication in communications   | orderBy:'-creationDate'" class="card communication-card">
-    <div class="item item-text-wrap">
-      <p class="note-date">{{communication.creationDate | date:'EEEE, d MMMM yyyy'}}</p>
-      <p class="note-text">{{communication.description}}</p>
-      <p class="note-author">{{communication.author.teacherFullname}}</p>
-      <div ng-show="communication.doCheck">
-        <div class="note-date-to-check-label">{{'communication_before'|translate}}</div>
-        <div class="note-date-to-check-value">{{communication.dateToCheck | date:'EEEE, d MMMM yyyy'}}</div>
-        <button class="button button-energized button-communication" ng-click="setCommunication(communication._id, communication)" ng-class="{'button-outline':communication.done}">
-          {{communication.action}}
-        </button>
-      </div>
-    </div>
-  </li>
-</ul>
+      <div ng-if="!communications || communications.length == 0" class="no-messages-placeholder">
+        {{'home_no_school_information' | translate}}</div>
+      <ul class="list">
+        <li ng-repeat="communication in communications   | orderBy:'-creationDate'" class="card communication-card">
+          <div class="item item-text-wrap">
+            <p class="note-date">{{communication.creationDate | date:'EEEE, d MMMM yyyy'}}</p>
+            <p class="note-text">{{communication.description}}</p>
+            <p class="note-author">{{communication.author.teacherFullname}}</p>
+            <div ng-show="communication.doCheck">
+              <div class="note-date-to-check-label">{{'communication_before'|translate}}
+                <button class="button button-energized button-communication" ng-click="setCommunication(communication._id, communication)" ng-class="{'button-outline':communication.done}">
+                  {{communication.action}}
+                </button>
+              </div>
+              <div class="note-date-to-check-value">{{communication.dateToCheck | date:'EEEE, d MMMM yyyy'}}
+
+              </div>
+
+            </div>
+          </div>
+        </li>
+      </ul>
     </div>
   </ion-content>
 </ion-view>

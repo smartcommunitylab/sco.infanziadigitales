@@ -1879,6 +1879,9 @@ textarea {
   height: 60px;
   background-image: none;
 }
+#chat ion-footer-bar#txtfooter.input-chat-footer.bar.bar-footer {
+  bottom: 0;
+}
 
 /*
 #chat .input-chat-footer::-webkit-input-placeholder {
@@ -1940,6 +1943,9 @@ textarea {
   font-size: 18px;
   width: 100%;
   text-align: right;
+}
+#absence .card-without-space {
+  margin: 0px 10px 20px 10px;
 }
 .setting-line {
   height: 20px;

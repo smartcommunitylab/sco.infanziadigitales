@@ -15,7 +15,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.communi
       communications = data;
       deferred.resolve(data);
     }, function (data) {
-      deferred.reject(data.errorCode + ' ' + data.errorMessage);
+      deferred.reject(data);
     });
     return deferred.promise;
 

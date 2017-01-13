@@ -111,10 +111,10 @@ public class SchoolController {
 			Communication old = storage.getCommunicationById(appId, schoolId, comm.getCommunicationId());
 			Communication result = storage.saveCommunication(comm);
 			
-			if (old != null && (
-					!old.getDescription().equals(comm.getDescription()) ||
-					old.getDateToCheck() != comm.getDateToCheck() ||
-					old.isDoCheck() != comm.isDoCheck())) 
+			if (   old == null 
+				|| !old.getDescription().equals(comm.getDescription()) 
+				|| old.getDateToCheck() != comm.getDateToCheck() 
+				|| old.isDoCheck() != comm.isDoCheck()) 
 			{
 				notificationManager.sendCommunicationMessage(appId, schoolId, comm, old != null);
 			}

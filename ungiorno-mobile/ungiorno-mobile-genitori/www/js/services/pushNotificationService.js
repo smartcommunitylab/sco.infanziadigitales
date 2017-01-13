@@ -186,7 +186,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.n
                 badge: "true",
                 sound: "true",
                 senderID: Config.getSenderID(),
-                topics: arrayOfSchools
+                topics: arrayOfSchools,
+                gcmSandbox: "true"
             },
             windows: {}
         });
@@ -195,7 +196,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.n
             //alert('registration' + JSON.stringify(data));
             console.log('registration' + JSON.stringify(data));
             //register to the server
-            dataServerService.pushNotificationRegister(data.registrationId);
+            dataServerService.pushNotificationRegister(data.registrationId,ionic.Platform.platform());
         });
 
         //the main method triggers when a new notification arrives and in case of background when the application restore

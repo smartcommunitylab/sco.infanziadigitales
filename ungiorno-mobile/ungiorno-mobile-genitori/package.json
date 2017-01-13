@@ -16,17 +16,17 @@
     "shelljs": "^0.3.0"
   },
   "cordovaPlugins": [
-    "org.apache.cordova.console",
-    "org.apache.cordova.device",
-    "org.apache.cordova.statusbar",
-    "org.apache.cordova.splashscreen",
-    "org.apache.cordova.inappbrowser",
-    "org.apache.cordova.globalization",
+    "cordova-plugin-console",
+    "cordova-plugin-device",
+    "cordova-plugin-statusbar",
+    "cordova-plugin-splashscreen",
+    "cordova-plugin-inappbrowser",
+    "cordova-plugin-globalization",
     "ionic-plugin-keyboard@2.0.1",
     "cordova-plugin-x-toast@2.5.0",
     "cordova-plugin-whitelist",
     "com.cordova.plugins.cookiemaster",
-    "org.apache.cordova.network-information",
+    "cordova-plugin-network-information",
     "https://github.com/katzer/cordova-plugin-local-notifications",
     {
       "variables": {

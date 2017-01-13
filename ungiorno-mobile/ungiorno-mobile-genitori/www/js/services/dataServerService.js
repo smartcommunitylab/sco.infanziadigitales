@@ -472,11 +472,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
         return deferred.promise;
     }
 
-    dataServerService.pushNotificationRegister = function (registrationId) {
+    dataServerService.pushNotificationRegister = function (registrationId,platform) {
         var deferred = $q.defer();
         $http({
             method: 'PUT',
-            url: Config.URL() + '/' + Config.app() + '/parent/' + Config.appId() + '/register?registrationId=' + registrationId,
+            url: Config.URL() + '/' + Config.app() + '/parent/' + Config.appId() + '/register?registrationId=' + registrationId+'&platform='+platform,
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'

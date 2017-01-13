@@ -31,7 +31,7 @@
       <div class="babiesDisplay">
         <div class="row">
           <div class="col">
-            <div class="card bus-resume">{{'today' | translate}}, {{nowDate | date:'EEEE dd MMMM y'}}{{'baby_bus_1' | translate}} {{selectedBus.busName}} {{'baby_bus_2' | translate}} <b>{{realBabyNumer}} {{'baby_bus_3'|translate}}</b> </div>
+            <div class="card bus-resume">{{'today' | translate}}, {{nowDate | date:'EEEE dd MMMM y'}}{{'baby_bus_1' | translate}} {{selectedBus.busName}} <span ng-if="realBabyNumer>1">{{'baby_bus_2a' | translate}}</span><span ng-if="realBabyNumer==1">{{'baby_bus_2b' | translate}}</span> <b>{{realBabyNumer}} <span ng-if="realBabyNumer>1">{{'baby_bus_3a'|translate}}</span><span ng-if="realBabyNumer==1">{{'baby_bus_3b'|translate}}</span></b> </div>
           </div>
         </div>
         <div class="row" ng-repeat="nRow in totalNumRow()">

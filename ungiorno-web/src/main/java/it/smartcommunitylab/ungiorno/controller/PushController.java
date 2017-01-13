@@ -41,17 +41,17 @@ public class PushController {
 	private NotificationManager notificationManager;
 	
 	@RequestMapping(method = RequestMethod.PUT, value = "/parent/{appId}/register")
-	public @ResponseBody Response<Void> registerUgasParent(@PathVariable String appId, @RequestParam String registrationId) {
-		return registerUser(appId, registrationId, NotificationManager.APP_UGAS_PARENT);
+	public @ResponseBody Response<Void> registerUgasParent(@PathVariable String appId, @RequestParam(required=false) String platform, @RequestParam String registrationId) {
+		return registerUser(appId, registrationId, platform, NotificationManager.APP_UGAS_PARENT);
 	}
 	@RequestMapping(method = RequestMethod.PUT, value = "/diary/{appId}/register")
-	public @ResponseBody Response<Void> registerDiaryUser(@PathVariable String appId, @RequestParam String registrationId) {
-		return registerUser(appId, registrationId, NotificationManager.APP_UGAS_DIARY);
+	public @ResponseBody Response<Void> registerDiaryUser(@PathVariable String appId, @RequestParam(required=false) String platform, @RequestParam String registrationId) {
+		return registerUser(appId, registrationId, platform, NotificationManager.APP_UGAS_DIARY);
 	}
 
-	private Response<Void> registerUser(String appId, String registrationId, String appNameSuffix) {
+	private Response<Void> registerUser(String appId, String registrationId, String platform, String appNameSuffix) {
 		try {
-			notificationManager.registerUser(appId, registrationId, appNameSuffix);
+			notificationManager.registerUser(appId, registrationId, platform, appNameSuffix);
 			return new Response<>((Void)null);
 		} catch (Exception e) {
 			return new Response<>(e.getMessage());

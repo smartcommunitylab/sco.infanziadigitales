@@ -79,7 +79,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.n
     localStorage.setItem(RECEIVED_MESSAGE, JSON.stringify(received_messages));
   }
   var isCommunicationReceived = function (idCommunication, schoolId) {
-    var received_communications = JSON.parse(localStorage.getItem(RECEIVED_COMMUNICATIONS)).received_communications;
+    var received_communications = (localStorage.getItem(RECEIVED_COMMUNICATIONS) ? JSON.parse(localStorage.getItem(RECEIVED_COMMUNICATIONS)).received_communications : []);
     if (received_communications && received_communications[schoolId] && received_communications[schoolId].indexOf(idCommunication) > 0) {
       return true;
     }
@@ -90,7 +90,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.n
 
   //
   var communicationReceived = function (idCommunication, schoolId) {
-    var received_communications = JSON.parse(localStorage.getItem(RECEIVED_COMMUNICATIONS)).received_communications;
+    var received_communications = (localStorage.getItem(RECEIVED_COMMUNICATIONS) ? JSON.parse(localStorage.getItem(RECEIVED_COMMUNICATIONS)).received_communications : []);
     if (!received_communications[schoolId]) {
       received_communications = {};
       received_communications[schoolId] = [];
@@ -105,7 +105,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.n
     }));
   };
   var deleteCommunicationFromStorage = function (idCommunication, schoolId) {
-    var received_communications = (JSON.parse(localStorage.getItem(RECEIVED_COMMUNICATIONS))).received_communications;
+    var received_communications = (localStorage.getItem(RECEIVED_COMMUNICATIONS) ? (JSON.parse(localStorage.getItem(RECEIVED_COMMUNICATIONS))).received_communications : []);
     var index = received_communications.indexOf(idCommunication);
     var index = received_communications.indexOf(idCommunication);
     received_communications.splice(index, 1);
@@ -162,15 +162,20 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.n
   }
 
   pushNotificationService.getNewComunications = function (schoolId) {
+    if (!localStorage.getItem(RECEIVED_COMMUNICATIONS)) {
+      return 0;
+    }
     var received_communications = JSON.parse(localStorage.getItem(RECEIVED_COMMUNICATIONS)).received_communications;
-    if (!received_communications || received_communications[schoolId].length == 0) {
+    if (!received_communications || !received_communications[schoolId] || received_communications[schoolId].length == 0) {
       return 0
 
     }
     return received_communications[schoolId].length;
   }
   pushNotificationService.resetNewComunications = function () {
-      localStorage.setItem(RECEIVED_COMMUNICATIONS, JSON.stringify([]));
+      localStorage.setItem(RECEIVED_COMMUNICATIONS, JSON.stringify({
+        received_communications: []
+      }));
     }
     // Register to GCM
   pushNotificationService.register = function (schooldIds) {

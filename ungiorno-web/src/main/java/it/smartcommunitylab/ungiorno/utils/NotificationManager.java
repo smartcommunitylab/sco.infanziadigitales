@@ -91,11 +91,14 @@ public class NotificationManager {
 	}
 
 
-	public void registerUser(String appId, String registrationId, String appNameSuffix) throws SecurityException, CommunicatorConnectorException, AACException {
+	public void registerUser(String appId, String registrationId, String platform, String appNameSuffix) throws SecurityException, CommunicatorConnectorException, AACException {
 		UserSignature signature = new UserSignature();
 		String appName = appSetup.getAppsMap().get(appId).getMessagingAppId() + appNameSuffix;
 		signature.setAppName(appName);
 		signature.setRegistrationId(registrationId);
+		if (platform != null) {
+			signature.setPlatform(platform);
+		}
 		communicator.registerUserToPush(signature, appName, permissions.getUserAccessToken());
 	}
 

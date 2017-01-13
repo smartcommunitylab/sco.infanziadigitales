@@ -2,7 +2,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.conf', 
 
 .factory('Config', function ($q, $http, $window, $filter, $rootScope) {
 
-  var DEVELOPMENT = true;
+  var DEVELOPMENT = false;
   var URL = 'https://' + (DEVELOPMENT ? 'dev' : 'tn') + '.smartcommunitylab.it';
   //var URL = 'http://192.168.42.60:8080';
   var timeout = 100000;

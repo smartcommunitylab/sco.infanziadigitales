@@ -1494,6 +1494,13 @@ select {
 .stuffcontainer {
   font-size: 16px;
 }
+.login .signup-success {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.login .login-button-signup.signup-success {
+  color: #f8ab15;
+}
 .login-margin {
   margin-top: 24px !important;
 }
@@ -1548,7 +1555,8 @@ select {
 }
 .login .login-button-signup {
   border-color: #fff;
-  background-color: #A5A5A5;
+  /*  background-color: #A5A5A5;*/
+
   color: #fff;
 }
 ::-webkit-input-placeholder {

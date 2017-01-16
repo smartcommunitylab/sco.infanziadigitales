@@ -14,18 +14,19 @@
       <div class=" form-container ">
         <!-- Date -->
         <div class="row ">
-          <div class="col">
             <span class="accent-color input-retire-description-padding"><b>{{'date' | translate}}:</b></span>
             <button class="button button-clear button-dark " ng-click="openDatePicker() "><span class="label-time-date">{{getDateLabel()}}</span></button>
-          </div>
           <!-- Hour -->
           <!--        <div ng-if="!isUsingBus() ">-->
-          <div ng-if="!isUsingBus()" class="col">
+
+          <!--        </div>-->
+        </div>
+          <div class="row">
+                    <div ng-if="!isUsingBus()" >
             <span class="accent-color input-retire-description-padding inline"><b>{{'hour' | translate}}:</b></span>
             <button class="button button-clear button-dark " ng-click="openTimePicker() "><span class="label-time-date">{{getTimeLabel()}}</span></button>
           </div>
-          <!--        </div>-->
-        </div>
+              </div>
         <div class="row" ng-if="babyProfile.services.bus.enabled ">
           <!--
                     <ion-checkbox ng-model="busChecked.value " ng-checked="busChecked.value " ng-change="checkBus(busChecked.value) " class="accent-color input-description-padding ">

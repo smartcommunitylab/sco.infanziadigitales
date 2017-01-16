@@ -5,7 +5,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.c
   var DEVELOPMENT = false;
   var URL = 'https://' + (DEVELOPMENT ? 'dev' : 'tn') + '.smartcommunitylab.it';
   //var URL = 'http://192.168.42.60:8080';
-  var AAC_URL = 'https://' + (DEVELOPMENT ? 'dev' : 'it') + '.smartcommunitylab.it/aac';
+  var AAC_URL = 'https://' + (DEVELOPMENT ? 'dev' : 'tn') + '.smartcommunitylab.it/aac';
   var fakeId = '23655';
   var app = 'ungiorno2';
   //var senderId = 453601816446;
@@ -16,7 +16,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.c
 
   var APP_BUILD = '';
 
-  var APP_VERSION = '2.0.1';
+  var APP_VERSION = '2.0.2';
   var mapJsonConfig = null;
 
 

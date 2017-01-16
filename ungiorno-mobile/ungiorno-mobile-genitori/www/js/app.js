@@ -719,7 +719,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     close: "Chiusure",
     timepicker_close: "Chiudi",
     period: "Period",
-    period_from: "From",
+    period_from: "Da",
     holiday: "Vacanza",
     meeting: "Riunione genitori",
     trip: "Gita",

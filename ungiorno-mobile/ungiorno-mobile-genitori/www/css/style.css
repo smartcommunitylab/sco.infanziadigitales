@@ -1299,6 +1299,7 @@ ul.rating {
 }
 .communications-main {
   padding-bottom: 10px;
+  background-color: lightgray;
 }
 .ion-input-select,
 select {

@@ -225,6 +225,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
     menu_exit: 'Logout',
     menu_enter: 'Entra',
     menu_issue: 'Segnala problema ',
+    menu_privacy: 'Privacy',
     babysetting_intro: 'Definisci i seguenti dati relativi all\'orario scolastico del bambino.',
     babysetting_services: 'Servizi',
     babysetting_hours: 'Orario di uscita:',

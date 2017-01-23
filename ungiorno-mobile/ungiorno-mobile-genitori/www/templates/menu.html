@@ -46,6 +46,9 @@
         <ion-item nav-clear menu-close class="item item-icon-left" ng-click="logout()" ng-if="userIsLogged">
           <i class="icon voice-menu  inf_digaccount"></i>{{'menu_exit' | translate}}
         </ion-item>
+        <ion-item nav-clear menu-close onclick="window.open('http://www.smartcommunitylab.it/ugas-privacy/', '_system', 'location=yes'); return false;" class="menu-last item-icon-left">
+          <i class="icon ion-android-list"></i>{{'menu_privacy' | translate}}
+        </ion-item>
         <ion-item nav-clear menu-close ng-click="openCredits()" class="menu-last item-icon-left">
           <i class="icon ion-information-circled"></i>{{'menu_credits' | translate}}
         </ion-item>

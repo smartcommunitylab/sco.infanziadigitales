@@ -299,7 +299,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.temporary.time.setHours($scope.temporary.time.getHours(), $scope.temporary.time.getMinutes(), 0, 0);
     //$scope.getRetireByDate($scope.temporary.date);
     //check if time has expired, then popup
-    if ($scope.isRetireTimeLimitExpired($scope.getRetireTimeLimit($scope.schoolProfile))) {
+    if ($scope.isRetireTimeLimitExpired($scope.getRetireTimeLimit($scope.schoolProfile).getTime())) {
       var myPopup = $ionicPopup.show({
         title: $filter('translate')('retire_popup_toolate_title'),
         cssClass: 'expired-popup',

@@ -138,7 +138,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     typeId: $scope.schoolProfile.frequentIllnesses[0].typeId
   };
 
-  if ($scope.isAbsenceTimeLimitExpired($scope.getAbsenceTimeLimit($scope.schoolProfile))) {
+  if ($scope.isAbsenceTimeLimitExpired($scope.getAbsenceTimeLimit($scope.schoolProfile).getTime())) {
     var myPopup = $ionicPopup.show({
       title: $filter('translate')('assenza_popup_toolate_title'),
       cssClass: 'expired-popup',

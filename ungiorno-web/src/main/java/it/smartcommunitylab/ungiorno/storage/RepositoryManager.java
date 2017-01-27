@@ -49,6 +49,9 @@ import it.smartcommunitylab.ungiorno.model.SectionData;
 import it.smartcommunitylab.ungiorno.model.SectionData.ServiceProfile;
 import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.model.TeacherCalendar;
+import it.smartcommunitylab.ungiorno.usage.UsageEntity;
+import it.smartcommunitylab.ungiorno.usage.UsageEntity.UsageAction;
+import it.smartcommunitylab.ungiorno.usage.UsageEntity.UsageActor;
 import it.smartcommunitylab.ungiorno.utils.Utils;
 
 import java.io.File;
@@ -1577,4 +1580,83 @@ public class RepositoryManager {
 		}
 		return a;
 	}
+	
+	
+	public void saveUsageEntity(UsageEntity entity) {
+		template.save(entity);
+	}
+	
+	public List<UsageEntity> findUsageEntities(String appId, String schoolId, UsageAction action, UsageActor from, UsageActor to, Object extra, Long fromTime, Long toTime) {
+		Criteria criteria = new Criteria("appId").is(appId).and("schoolId").is(schoolId);
+		if (action != null) {
+			criteria = criteria.and("action").is(action);
+		}			
+		if (from != null) {
+			criteria = criteria.and("from").is(from);
+		}
+		if (to != null) {
+			criteria = criteria.and("to").is(from);
+		}
+		if (extra != null) {
+			criteria = criteria.and("extra").is(extra);
+		}		
+
+		Criteria range = null;
+		if (fromTime != null) {
+			range = new Criteria("timestamp").gte(fromTime);
+		}		
+		if (toTime != null) {
+			if (range == null) {
+				range = new Criteria("timestamp");
+			}
+			range = range.lte(toTime);
+		}			
+		if (range != null) {
+			criteria = criteria.andOperator(range);
+		}		
+		
+		Query query = new Query(criteria).with(new Sort(Sort.Direction.ASC, "timestamp"));
+		
+		List<UsageEntity> results = template.find(query, UsageEntity.class);
+		
+		return results;
+	}
+	
+	public long countUsageEntities(String appId, String schoolId, UsageAction action, UsageActor from, UsageActor to, Object extra, Long fromTime, Long toTime) {
+		Criteria criteria = new Criteria("appId").is(appId).and("schoolId").is(schoolId);
+		if (action != null) {
+			criteria = criteria.and("action").is(action);
+		}		
+		if (from != null) {
+			criteria = criteria.and("from").is(from);
+		}
+		if (to != null) {
+			criteria = criteria.and("to").is(from);
+		}
+		if (extra != null) {
+			criteria = criteria.and("extra").is(extra);
+		}
+		
+		Criteria range = null;
+		if (fromTime != null) {
+			range = new Criteria("timestamp").gte(fromTime);
+		}		
+		if (toTime != null) {
+			if (range == null) {
+				range = new Criteria("timestamp");
+			}
+			range = range.lte(toTime);
+		}			
+		if (range != null) {
+			criteria = criteria.andOperator(range);
+		}
+		
+		Query query = new Query(criteria);
+		
+		long resultN = template.count(query, UsageEntity.class);
+		
+		return resultN;
+	}	
+	
+	
 }

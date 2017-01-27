@@ -98,7 +98,30 @@
                     </div>
                   </div>
                 </div>
-              </div>                             
+              </div>     
+              
+              <div class="row">
+                <div class="col-md-8">
+                  <div class="panel panel-default">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <form name="csvForm" class="col-md-12" action="downloadcsv" method="post">
+                          <h4>Download Usage data</h4>
+                          <div class="form-group">
+                            <label for="schoolId">School</label>
+                            <select id="schoolId" name="schoolId" ng-required="true" ng-model="schoolId">
+                                <option ng-repeat="option in profile.schools" value="{{option.schoolId}}">{{option.schoolId}}</option>
+                            </select>
+                          </div>
+                          <button type="submit" class="form-group btn btn-default">Submit</button>
+                          <br/>
+                          <br/>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>                                        
 			</div>
 		</div>
 	</div>

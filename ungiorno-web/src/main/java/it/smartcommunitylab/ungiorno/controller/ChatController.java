@@ -1,6 +1,16 @@
 package it.smartcommunitylab.ungiorno.controller;
 
 
+import it.smartcommunitylab.ungiorno.config.exception.ProfileNotFoundException;
+import it.smartcommunitylab.ungiorno.model.Author;
+import it.smartcommunitylab.ungiorno.model.ChatMessage;
+import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
+import it.smartcommunitylab.ungiorno.usage.UsageEntity.UsageActor;
+import it.smartcommunitylab.ungiorno.usage.UsageManager;
+import it.smartcommunitylab.ungiorno.utils.NotificationManager;
+import it.smartcommunitylab.ungiorno.utils.PermissionsManager;
+import it.smartcommunitylab.ungiorno.utils.Utils;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -24,14 +34,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
-import it.smartcommunitylab.ungiorno.config.exception.ProfileNotFoundException;
-import it.smartcommunitylab.ungiorno.model.Author;
-import it.smartcommunitylab.ungiorno.model.ChatMessage;
-import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
-import it.smartcommunitylab.ungiorno.utils.NotificationManager;
-import it.smartcommunitylab.ungiorno.utils.PermissionsManager;
-import it.smartcommunitylab.ungiorno.utils.Utils;
-
 @Controller
 public class ChatController {
 	private static final transient Logger logger = LoggerFactory.getLogger(ChatController.class);
@@ -43,6 +45,8 @@ public class ChatController {
 	private PermissionsManager permissions;
 	@Autowired
 	private NotificationManager notificationManager;
+	@Autowired
+	private UsageManager usageManager;	
 	
 	@RequestMapping(method=RequestMethod.GET, value="/chat/{appId}/{schoolId}/message/{kidId}")
 	public @ResponseBody List<ChatMessage> getMessages(@PathVariable String appId, @PathVariable String schoolId,
@@ -109,6 +113,9 @@ public class ChatController {
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("sendMessageToTeacher[%s]: %s - %s", appId, schoolId, kidId));
 		}
+		
+		usageManager.messageSent(appId, schoolId, kidId, null, UsageActor.PARENT, UsageActor.TEACHER, false);
+		
 		return result;
 	}
 	
@@ -136,6 +143,9 @@ public class ChatController {
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("sendMessageToParent[%s]: %s - %s - %s", appId, schoolId, kidId, teacherId));
 		}
+		
+		usageManager.messageSent(appId, schoolId, teacherId, kidId, UsageActor.TEACHER, UsageActor.PARENT, false);
+		
 		return result;
 	}
 	
@@ -170,6 +180,9 @@ public class ChatController {
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("sendMessage[%s]: %s - %s - %s", appId, schoolId, teacherId, recipients.toString()));
 		}
+		
+		usageManager.messageSent(appId, schoolId, teacherId, null, UsageActor.TEACHER, UsageActor.PARENT, true);
+		
 		return result;
 	}
 	

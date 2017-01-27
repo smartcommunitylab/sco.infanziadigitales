@@ -34,7 +34,7 @@ import com.mongodb.MongoException;
  *
  */
 @Configuration
-@ComponentScan("it.smartcommunitylab.ungiorno.storage")
+@ComponentScan({"it.smartcommunitylab.ungiorno.storage", "it.smartcommunitylab.ungiorno.usage"})
 @PropertySource("classpath:app.properties")
 public class TestConfig {
 
@@ -47,9 +47,14 @@ public class TestConfig {
 		return new PropertySourcesPlaceholderConfigurer();
 	}
 
+//	@Bean
+//	public MongoTemplate getMongo() throws UnknownHostException, MongoException {
+//		return new MongoTemplate(new MongoClient("localhost",37017), dbName);
+//	}
+	
 	@Bean
 	public MongoTemplate getMongo() throws UnknownHostException, MongoException {
-		return new MongoTemplate(new MongoClient("localhost",37017), dbName);
-	}
+		return new MongoTemplate(new MongoClient(), dbName);
+	}	
 
 }

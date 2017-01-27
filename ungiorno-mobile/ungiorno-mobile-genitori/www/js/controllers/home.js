@@ -188,8 +188,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
   }
   $scope.call = function () {
     var num = profileService.getSchoolProfile().contacts.telephone[0];
-    window.open('tel:' + num);
-    $scope.contactPopup.close();
+    num = num.replace(/\D/g, '');
+    window.open('tel:' + num, '_system');
+    if ($scope.contactPopup) {
+      $scope.contactPopup.close();
+    }
   }
   $scope.createNote = function () {
     $state.go('app.addnote');

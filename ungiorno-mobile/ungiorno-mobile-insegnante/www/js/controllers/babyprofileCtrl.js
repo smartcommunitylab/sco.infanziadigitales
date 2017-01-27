@@ -562,6 +562,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
     profileService.lock();
     Toast.show($filter('translate')('user_exit_auth'), 'short', 'bottom');
   }
+
+  function addZerotoPin() {
+    $scope.data.userPIN = $scope.data.userPIN.toString();
+    while ($scope.data.userPIN.length != 4)
+      $scope.data.userPIN = "0" + $scope.data.userPIN;
+  }
   $scope.unlock = function () {
     $scope.noAuthenicate = false;
     //open the ionic popup for authentication
@@ -581,6 +587,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
           type: 'button-popup',
           onTap: function (e) {
             e.preventDefault();
+            addZerotoPin();
             userAutent($scope.data.userPIN).then(function () {
               $scope.data.userPIN = "";
               $scope.noAuthenicate = false;

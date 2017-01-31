@@ -9,13 +9,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 
 @Component
@@ -54,36 +55,81 @@ public class UsageManager {
 		}
 		
 		countByQuery(repository.findUsageEntities(appId, schoolId, UsageAction.MESSAGE, UsageActor.TEACHER, null, "multi", null, null), schoolId, typeCount.get(0));
-		countByQuery(repository.findUsageEntities(appId, schoolId, UsageAction.MESSAGE, UsageActor.PARENT, null, "", null, null), schoolId, typeCount.get(1));
-		countByQuery(repository.findUsageEntities(appId, schoolId, UsageAction.MESSAGE, UsageActor.TEACHER, null, "", null, null), schoolId, typeCount.get(2));		
+		countByQuery(repository.findUsageEntities(appId, schoolId, UsageAction.MESSAGE, UsageActor.TEACHER, null, "", null, null), schoolId, typeCount.get(1));
+		countByQuery(repository.findUsageEntities(appId, schoolId, UsageAction.MESSAGE, UsageActor.PARENT, null, "", null, null), schoolId, typeCount.get(2));
 		countByQuery(repository.findUsageEntities(appId, schoolId, UsageAction.ABSENCE, null, null, null, null, null), schoolId, typeCount.get(3));
 		countByQuery(repository.findUsageEntities(appId, schoolId, UsageAction.RETURN, null, null, null, null, null), schoolId, typeCount.get(4));		
 		
-		getDates(typeCount).stream().forEach(x -> sb.append(csvLine(x, typeCount)));
+		for (String d: getDates(typeCount)) {
+			sb.append(csvLine(d, typeCount));
+		}
+		
+//		getDates(typeCount).stream().forEach(x -> sb.append(csvLine(x, typeCount)));
 		
 		return sb.toString();
 	}	
-	
+
 	private void countByQuery(List<UsageEntity> result, String schoolId, Map<String, Integer> countByTimestamp) {
-		result.stream().collect(Collectors.groupingBy(x -> sdf.format(new Date(x.getTimestamp())))).
-		forEach((k,v) ->
-		countByTimestamp.put(k, v.size()));
-	}	
+		Multimap<String, UsageEntity> map = ArrayListMultimap.create();
+		for (UsageEntity ue: result) {
+			map.put(sdf.format(new Date(ue.getTimestamp())), ue);
+		}
+		for (String day: map.keySet()) {
+			countByTimestamp.put(day, map.get(day).size());
+		}
+	}		
+	
+	
+//	private void countByQuery(List<UsageEntity> result, String schoolId, Map<String, Integer> countByTimestamp) {
+//		result.stream().collect(Collectors.groupingBy(x -> sdf.format(new Date(x.getTimestamp())))).
+//		forEach((k,v) ->
+//		countByTimestamp.put(k, v.size()));
+//	}	
 	
 	private Set<String> getDates(List<Map<String, Integer>> typeCount) {
 		Set<String> dates = Sets.newTreeSet();
-		typeCount.stream().forEach(x -> dates.addAll(x.keySet()));
+		for (Map<String, Integer> map: typeCount) {
+			dates.addAll(map.keySet());
+		}
 		return dates;
-	}
+	}	
+	
+//	private Set<String> getDates(List<Map<String, Integer>> typeCount) {
+//		Set<String> dates = Sets.newTreeSet();
+//		typeCount.stream().forEach(x -> dates.addAll(x.keySet()));
+//		return dates;
+//	}
 	
 	
 	private String csvLine(String date, List<Map<String, Integer>> typeCount) {
 		StringBuffer sb = new StringBuffer();
 		sb.append(date + ",");
-		typeCount.stream().forEach(x -> sb.append(x.getOrDefault(date, 0) + ","));
+		for (Map<String, Integer> map: typeCount) {
+			if (map.containsKey(date)) {
+				sb.append(map.get(date) + ",");
+			} else {
+				sb.append("0,");
+			}
+		}
 		sb.deleteCharAt(sb.length() - 1);
 		sb.append("\r\n");
 		return sb.toString();
-	}
+	}	
+	
+	
+//	private String csvLine(String date, List<Map<String, Integer>> typeCount) {
+//		StringBuffer sb = new StringBuffer();
+//		sb.append(date + ",");
+//		typeCount.stream().forEach(x -> sb.append(x.getOrDefault(date, 0) + ","));
+//		sb.deleteCharAt(sb.length() - 1);
+//		sb.append("\r\n");
+//		return sb.toString();
+//	}
+	
+	
+	
+	
+	
+	
 	
 }

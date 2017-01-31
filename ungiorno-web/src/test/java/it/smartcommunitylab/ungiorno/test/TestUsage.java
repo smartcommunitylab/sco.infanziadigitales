@@ -62,6 +62,9 @@ public class TestUsage {
 		usageManager.kidReturn(APP_ID, SCHOOL_ID, "2", false);
 		usageManager.kidReturn(APP_ID, SCHOOL_ID, "4", true);
 		
+		// Comunicazioni,Messaggi da insegnanti,Messaggi da genitori,Assenze,Ritiri
+		// 1, 1, 3, 2, 2
+		
 		System.err.println(usageManager.generateCSV(APP_ID, SCHOOL_ID));
 		
 	}

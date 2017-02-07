@@ -4,8 +4,11 @@ import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
 import it.smartcommunitylab.ungiorno.usage.UsageEntity.UsageAction;
 import it.smartcommunitylab.ungiorno.usage.UsageEntity.UsageActor;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -25,6 +28,7 @@ public class UsageManager {
 	@Autowired
 	private RepositoryManager repository;
 	
+	private SimpleDateFormat osdf = new SimpleDateFormat("yy/MM/dd");
 	private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
 	
 	public void messageSent(String appId, String schoolId, String fromId, String toId, UsageActor from, UsageActor to, boolean multi) {
@@ -72,7 +76,7 @@ public class UsageManager {
 	private void countByQuery(List<UsageEntity> result, String schoolId, Map<String, Integer> countByTimestamp) {
 		Multimap<String, UsageEntity> map = ArrayListMultimap.create();
 		for (UsageEntity ue: result) {
-			map.put(sdf.format(new Date(ue.getTimestamp())), ue);
+			map.put(osdf.format(new Date(ue.getTimestamp())), ue);
 		}
 		for (String day: map.keySet()) {
 			countByTimestamp.put(day, map.get(day).size());
@@ -91,6 +95,30 @@ public class UsageManager {
 		for (Map<String, Integer> map: typeCount) {
 			dates.addAll(map.keySet());
 		}
+		
+		List<String> dl = Lists.newArrayList(dates);
+		Date start;
+//		Date end = osdf.parse(dl.get(dl.size() - 1));
+		Date end = new Date();
+		try {
+			start = osdf.parse(dl.get(0));
+
+			Calendar cal = new GregorianCalendar();
+			while (start.before(end)) {
+				cal.setTime(start);
+				cal.add(Calendar.DAY_OF_YEAR, 1);
+				start = cal.getTime();
+				String day = osdf.format(start);
+				if (!dates.contains(day)) {
+					dates.add(day);
+				}
+			}
+
+		} catch (ParseException e) {
+		}
+		
+		System.out.println(dates);
+		
 		return dates;
 	}	
 	
@@ -103,7 +131,10 @@ public class UsageManager {
 	
 	private String csvLine(String date, List<Map<String, Integer>> typeCount) {
 		StringBuffer sb = new StringBuffer();
-		sb.append(date + ",");
+		try {
+			sb.append(sdf.format(osdf.parse(date)) + ",");
+		} catch (ParseException e) {
+		}
 		for (Map<String, Integer> map: typeCount) {
 			if (map.containsKey(date)) {
 				sb.append(map.get(date) + ",");

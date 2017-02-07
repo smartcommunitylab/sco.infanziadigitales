@@ -25,11 +25,13 @@ import it.smartcommunitylab.ungiorno.security.AppDetails;
 import it.smartcommunitylab.ungiorno.storage.App;
 import it.smartcommunitylab.ungiorno.storage.AppSetup;
 import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
+import it.smartcommunitylab.ungiorno.usage.UsageManager;
 
 import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -53,6 +55,9 @@ public class ConsoleController {
 	@Autowired
 	private RepositoryManager storage;
 
+	@Autowired
+	private UsageManager usageManager;
+	
 	@Autowired
 	private AppSetup appSetup;
 
@@ -134,6 +139,19 @@ public class ConsoleController {
 		res = new ObjectMapper().writeValueAsString(response);
 		return res;
 	}
+	
+	@RequestMapping(value = "/downloadcsv", method = RequestMethod.POST)
+	public void downloadCSV(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+		String res = "";
+		String schoolId = req.getParameter("schoolId");
+		String appId = getAppId();
+		
+		String result = usageManager.generateCSV(appId, schoolId);
+		
+		resp.setContentType("application/csv; charset=utf-8");
+		resp.setHeader("Content-Disposition", "attachment; filename=\"usage_" + schoolId + ".csv\"");
+		resp.getWriter().write(result);
+	}	
 	
 	private String getAppId() {
 		AppDetails details = (AppDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

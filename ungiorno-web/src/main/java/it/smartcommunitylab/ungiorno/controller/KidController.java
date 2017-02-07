@@ -16,6 +16,25 @@
 
 package it.smartcommunitylab.ungiorno.controller;
 
+import it.smartcommunitylab.ungiorno.config.exception.ProfileNotFoundException;
+import it.smartcommunitylab.ungiorno.model.CalendarItem;
+import it.smartcommunitylab.ungiorno.model.Communication;
+import it.smartcommunitylab.ungiorno.model.KidCalAssenza;
+import it.smartcommunitylab.ungiorno.model.KidCalFermata;
+import it.smartcommunitylab.ungiorno.model.KidCalNote;
+import it.smartcommunitylab.ungiorno.model.KidCalNote.Note;
+import it.smartcommunitylab.ungiorno.model.KidCalRitiro;
+import it.smartcommunitylab.ungiorno.model.KidConfig;
+import it.smartcommunitylab.ungiorno.model.KidProfile;
+import it.smartcommunitylab.ungiorno.model.Parent;
+import it.smartcommunitylab.ungiorno.model.Response;
+import it.smartcommunitylab.ungiorno.model.SchoolObject;
+import it.smartcommunitylab.ungiorno.model.Teacher;
+import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
+import it.smartcommunitylab.ungiorno.usage.UsageManager;
+import it.smartcommunitylab.ungiorno.utils.JsonUtil;
+import it.smartcommunitylab.ungiorno.utils.PermissionsManager;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -47,24 +66,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.collect.Sets;
 
-import it.smartcommunitylab.ungiorno.config.exception.ProfileNotFoundException;
-import it.smartcommunitylab.ungiorno.model.CalendarItem;
-import it.smartcommunitylab.ungiorno.model.Communication;
-import it.smartcommunitylab.ungiorno.model.KidCalAssenza;
-import it.smartcommunitylab.ungiorno.model.KidCalFermata;
-import it.smartcommunitylab.ungiorno.model.KidCalNote;
-import it.smartcommunitylab.ungiorno.model.KidCalNote.Note;
-import it.smartcommunitylab.ungiorno.model.KidCalRitiro;
-import it.smartcommunitylab.ungiorno.model.KidConfig;
-import it.smartcommunitylab.ungiorno.model.KidProfile;
-import it.smartcommunitylab.ungiorno.model.Parent;
-import it.smartcommunitylab.ungiorno.model.Response;
-import it.smartcommunitylab.ungiorno.model.SchoolObject;
-import it.smartcommunitylab.ungiorno.model.Teacher;
-import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
-import it.smartcommunitylab.ungiorno.utils.JsonUtil;
-import it.smartcommunitylab.ungiorno.utils.PermissionsManager;
-
 @RestController
 public class KidController {
 
@@ -79,6 +80,9 @@ public class KidController {
 
 	@Autowired
 	private PermissionsManager permissions;
+	
+	@Autowired
+	private UsageManager usageManager;		
 
 	@RequestMapping(method = RequestMethod.GET,
 			value = "/student/{appId}/{schoolId}/{kidId}/calendar")
@@ -175,6 +179,9 @@ public class KidController {
 			stop.setSchoolId(schoolId);
 
 			KidConfig config = storage.saveStop(stop);
+			
+			usageManager.kidReturn(appId, schoolId, kidId, true);
+			
 			return new Response<>(config);
 		} catch (Exception e) {
 			return new Response<>(e.getMessage());
@@ -212,6 +219,9 @@ public class KidController {
 			absence.setSchoolId(schoolId);
 
 			KidConfig config = storage.saveAbsence(absence);
+			
+			usageManager.kidAbsence(appId, schoolId, kidId);
+			
 			return new Response<>(config);
 		} catch (Exception e) {
 			return new Response<>(e.getMessage());
@@ -248,6 +258,9 @@ public class KidController {
 			ritiro.setSchoolId(schoolId);
 
 			KidConfig config = storage.saveReturn(ritiro);
+			
+			usageManager.kidReturn(appId, schoolId, kidId, false);
+			
 			return new Response<>(config);
 		} catch (Exception e) {
 			return new Response<>(e.getMessage());

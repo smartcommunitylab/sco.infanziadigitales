@@ -17,26 +17,29 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
   $scope.getRetireTimeLimit = function (schoolProfile) {
     //return the timestamp of timelimit
-    var tmpdate = new Date();
+    //////var tmpdate = new Date();
     //creo data nuova con ora configurata e setto il model della pagina
     if (schoolProfile.retireTiming) {
-      tmpdate.setHours(schoolProfile.retireTiming.substring(0, 2), schoolProfile.retireTiming.substring(3, 5), 0, 0);
+      return moment(schoolProfile.retireTiming,'HH:mm');
+      //////tmpdate.setHours(schoolProfile.retireTiming.substring(0, 2), schoolProfile.retireTiming.substring(3, 5), 0, 0);
     } else {
       //default value is 10 am
-      tmpdate.setHours(10, 0, 0, 0);
+      //////tmpdate.setHours(10, 0, 0, 0);
+      return moment().startOf('day').add(10,'hours');
     }
-    return tmpdate;
+    //////return tmpdate;
   }
 
-  $scope.isRetireTimeLimitExpired = function (time) {
+  $scope.isRetireTimeLimitExpired = function () {
+    return moment($scope.modifyBefore).isBefore(moment());
     //return true if it is expired
-    var now = new Date().getTime();
-    if (time < now) {
-      return true;
-    }
-    return false;
+//////    var now = new Date().getTime();
+//////    if (time < now) {
+//////      return true;
+//////    }
+//////    return false;
   }
-  $scope.modifyBefore = $scope.getRetireTimeLimit($scope.schoolProfile);
+  $scope.modifyBefore = $scope.getRetireTimeLimit($scope.schoolProfile).toDate();
 
   function setDateWidget() {
     $scope.datePickerObject = {
@@ -114,9 +117,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     }
   }
 
-  function setDefaultPErsonId() {
-    radio[1].checked = true;
-  }
+//////  function setDefaultPErsonId() {
+//////    radio[1].checked = true;
+//////  }
 
   function getSelectedPersonId() {
     for (var i = 0; i < $scope.retirePersons.length; i++) {
@@ -135,18 +138,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
   $scope.openDatePicker = function () {
     setDateWidget();
     ionicDatePicker.openDatePicker($scope.datePickerObject);
-  }
-
-  $scope.getTimeLabel = function () {
-    var day = moment($scope.temporary.time);
-    var result = day.format('HH:mm');
-    return result;
-  }
-
-  $scope.getDateLabel = function () {
-    var day = moment($scope.temporary.date);
-    var result = day.format('DD/MM/YYYY');
-    return result;
   }
 
   $scope.checkBus = function (value) {
@@ -230,17 +221,22 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
           $scope.temporary.note = retireConfiguration.note;
         } else {
           //set default time
-          var tmpdate = new Date($scope.temporary.date);
+          var tmpdate = moment($scope.temporary.date).startOf('day');
+          var tmptime = null;
           if (!$scope.babyProfile.services.posticipo.enabled) {
             //creo data nuova con ora configurata e setto il model della pagina
-            tmpdate.setHours(profileService.getSchoolProfile().regularTiming.toTime.substring(0, 2), profileService.getSchoolProfile().posticipoTiming.toTime.substring(3, 5), 0, 0);
-            $scope.temporary.time = Date.parse(profileService.getSchoolProfile().regularTiming.toTime);
+            tmptime = moment(profileService.getSchoolProfile().regularTiming.toTime, 'HH:mm');
+//////            tmpdate.setHours(profileService.getSchoolProfile().regularTiming.toTime.substring(0, 2), profileService.getSchoolProfile().posticipoTiming.toTime.substring(3, 5), 0, 0);
+//////            $scope.temporary.time = Date.parse(profileService.getSchoolProfile().regularTiming.toTime);
           } else {
-            $scope.temporary.time = Date.parse(profileService.getSchoolProfile().posticipoTiming.toTime);
-            tmpdate.setHours(profileService.getSchoolProfile().posticipoTiming.toTime.substring(0, 2), profileService.getSchoolProfile().posticipoTiming.toTime.substring(3, 5), 0, 0);
+            tmptime = moment(profileService.getSchoolProfile().posticipoTiming.toTime, 'HH:mm');
+//////            $scope.temporary.time = Date.parse(profileService.getSchoolProfile().posticipoTiming.toTime);
+//////            tmpdate.setHours(profileService.getSchoolProfile().posticipoTiming.toTime.substring(0, 2), profileService.getSchoolProfile().posticipoTiming.toTime.substring(3, 5), 0, 0);
 
           }
-          $scope.temporary.time = tmpdate;
+          tmpdate.hours(tmptime.hours());
+          tmpdate.minutes(tmptime.minutes());
+          $scope.temporary.time = tmpdate.toDate();
         }
         if (!fermata) {
           $scope.busChecked.value = false;
@@ -291,15 +287,21 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
     //set default time (forget the days, because it is overwritten by new date
     $scope.temporary = {
-      date: new Date(),
-      time: new Date(),
+//////      date: new Date(),
+//////      time: new Date(),
+      date: moment().startOf('day').toDate(),
+      time: moment().startOf('day').add(10,'hours').toDate(),
       note: null
     };
-    $scope.temporary.date.setHours(0, 0, 0, 0);
-    $scope.temporary.time.setHours($scope.temporary.time.getHours(), $scope.temporary.time.getMinutes(), 0, 0);
+    $scope.$watch('temporary.date', function () {
+      $scope.getRetireByDate($scope.temporary.date);
+    });
+
+    ////// $scope.temporary.date.setHours(0, 0, 0, 0);
+    ////// $scope.temporary.time.setHours($scope.temporary.time.getHours(), $scope.temporary.time.getMinutes(), 0, 0);
     //$scope.getRetireByDate($scope.temporary.date);
     //check if time has expired, then popup
-    if ($scope.isRetireTimeLimitExpired($scope.getRetireTimeLimit($scope.schoolProfile).getTime())) {
+    if ($scope.isRetireTimeLimitExpired()) {
       var myPopup = $ionicPopup.show({
         title: $filter('translate')('retire_popup_toolate_title'),
         cssClass: 'expired-popup',
@@ -315,9 +317,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
   };
 
-  $scope.$watch('temporary.date', function () {
-    $scope.getRetireByDate($scope.temporary.date);
-  });
+//////  $scope.$watch('temporary.date', function () {
+//////    $scope.getRetireByDate($scope.temporary.date);
+//////  });
 
   $scope.send = function () {
     $scope.setRetire();
@@ -370,14 +372,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
   }
 
   $scope.showConfirm = function () {
-    var now = new Date();
-    var dateToModify = $scope.temporary.date;
-    dateToModify.setHours(now.getHours(), now.getMinutes(), 0, 0);
-    var today = new Date();
-    today.setHours(23, 59, 59, 0);
-    var todayMax = new Date();
-    todayMax.setHours($scope.modifyBefore.getHours(), 0, 0, 0);
-    if (($scope.temporary.date < today) && (dateToModify > todayMax)) {
+//////    var now = new Date();
+//////    var dateToModify = $scope.temporary.date;
+//////    dateToModify.setHours(now.getHours(), now.getMinutes(), 0, 0);
+//////    var today = new Date();
+//////    today.setHours(23, 59, 59, 0);
+//////    var todayMax = new Date();
+//////    todayMax.setHours($scope.modifyBefore.getHours(), 0, 0, 0);
+//////    if (($scope.temporary.date < today) && (dateToModify > todayMax)) {
+    if (moment($scope.temporary.date).isBefore(moment().endOf('day')) && $scope.isRetireTimeLimitExpired()) {
       var myPopup = $ionicPopup.show({
         title: $filter('translate')('retire_popup_toolate_title'),
         cssClass: 'expired-popup',

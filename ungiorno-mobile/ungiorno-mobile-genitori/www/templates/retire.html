@@ -15,7 +15,7 @@
         <!-- Date -->
         <div class="row ">
             <span class="accent-color input-retire-description-padding inline"><b>{{'date' | translate}}:</b></span>
-            <button class="button button-clear button-dark " ng-click="openDatePicker() "><span class="label-time-date">{{getDateLabel()}}</span></button>
+            <button class="button button-clear button-dark " ng-click="openDatePicker() "><span class="label-time-date">{{temporary.date|date: 'dd/MM/yyyy'}}</span></button>
           <!-- Hour -->
           <!--        <div ng-if="!isUsingBus() ">-->
 
@@ -24,7 +24,7 @@
           <div class="row">
                     <div ng-if="!isUsingBus()" >
             <span class="accent-color input-retire-description-padding inline"><b>{{'hour' | translate}}:</b></span>
-            <button class="button button-clear button-dark " ng-click="openTimePicker() "><span class="label-time-date">{{getTimeLabel()}}</span></button>
+            <button class="button button-clear button-dark " ng-click="openTimePicker() "><span class="label-time-date">{{temporary.time|date: 'HH:mm'}}</span></button>
           </div>
               </div>
         <div class="row" ng-if="babyProfile.services.bus.enabled ">

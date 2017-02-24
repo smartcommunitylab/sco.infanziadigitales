@@ -210,7 +210,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         deferred.resolve();
 
       }
-    };
+    } else {
+      deferred.resolve();
+    }
     return deferred.promise;
   }
   $scope.execute = function (element) {

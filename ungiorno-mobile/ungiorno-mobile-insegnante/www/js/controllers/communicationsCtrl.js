@@ -310,6 +310,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
           type: 'button-popup',
           onTap: function (e) {
             e.preventDefault();
+            addZerotoPin();
             userAutent($scope.data.userPIN).then(function (user) {
                 deferred.resolve();
                 $scope.noAuthenicate = false;
@@ -360,7 +361,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
     }
   }
 
-
+  function addZerotoPin() {
+    $scope.data.userPIN = $scope.data.userPIN.toString();
+    while ($scope.data.userPIN.length != 4)
+      $scope.data.userPIN = "0" + $scope.data.userPIN;
+  }
 
   var setNormalMode = function () {
     currentMode = MODE_NORMAL_LIST;
@@ -373,7 +378,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
   $scope.discardCommunication = function () {
     setNormalMode();
     selectedCommunicationIndex = -1;
-    $ionicScrollDelegate.scrollTo(0, $scope.communicationPosition.top, true);
+    if ($scope.communicationPosition) {
+      $ionicScrollDelegate.scrollTo(0, $scope.communicationPosition.top, true);
+    }
   }
 
   $scope.selectType = function (newType) {

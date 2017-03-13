@@ -181,7 +181,7 @@ public class ChatController {
 			logger.info(String.format("sendMessage[%s]: %s - %s - %s", appId, schoolId, teacherId, recipients.toString()));
 		}
 		
-		usageManager.messageSent(appId, schoolId, teacherId, null, UsageActor.TEACHER, UsageActor.PARENT, true);
+//		usageManager.messageSent(appId, schoolId, teacherId, null, UsageActor.TEACHER, UsageActor.PARENT, true);
 		
 		return result;
 	}

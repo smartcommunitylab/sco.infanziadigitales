@@ -16,6 +16,23 @@
 
 package it.smartcommunitylab.ungiorno.controller;
 
+import it.smartcommunitylab.ungiorno.model.BusData;
+import it.smartcommunitylab.ungiorno.model.Communication;
+import it.smartcommunitylab.ungiorno.model.InternalNote;
+import it.smartcommunitylab.ungiorno.model.Menu;
+import it.smartcommunitylab.ungiorno.model.Response;
+import it.smartcommunitylab.ungiorno.model.SchoolProfile;
+import it.smartcommunitylab.ungiorno.model.SchoolProfile.SectionProfile;
+import it.smartcommunitylab.ungiorno.model.SectionData;
+import it.smartcommunitylab.ungiorno.model.Teacher;
+import it.smartcommunitylab.ungiorno.model.TeacherCalendar;
+import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
+import it.smartcommunitylab.ungiorno.usage.UsageEntity.UsageActor;
+import it.smartcommunitylab.ungiorno.usage.UsageManager;
+import it.smartcommunitylab.ungiorno.utils.JsonUtil;
+import it.smartcommunitylab.ungiorno.utils.NotificationManager;
+import it.smartcommunitylab.ungiorno.utils.PermissionsManager;
+
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,21 +50,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import it.smartcommunitylab.ungiorno.model.BusData;
-import it.smartcommunitylab.ungiorno.model.Communication;
-import it.smartcommunitylab.ungiorno.model.InternalNote;
-import it.smartcommunitylab.ungiorno.model.Menu;
-import it.smartcommunitylab.ungiorno.model.Response;
-import it.smartcommunitylab.ungiorno.model.SchoolProfile;
-import it.smartcommunitylab.ungiorno.model.SchoolProfile.SectionProfile;
-import it.smartcommunitylab.ungiorno.model.SectionData;
-import it.smartcommunitylab.ungiorno.model.Teacher;
-import it.smartcommunitylab.ungiorno.model.TeacherCalendar;
-import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
-import it.smartcommunitylab.ungiorno.utils.JsonUtil;
-import it.smartcommunitylab.ungiorno.utils.NotificationManager;
-import it.smartcommunitylab.ungiorno.utils.PermissionsManager;
-
 @RestController
 public class SchoolController {
 	private static final transient Logger logger = LoggerFactory.getLogger(SchoolController.class);
@@ -60,6 +62,9 @@ public class SchoolController {
 
 	@Autowired
 	private NotificationManager notificationManager;
+	
+	@Autowired
+	private UsageManager usageManager;		
 
 	@RequestMapping(method = RequestMethod.GET, value = "/ping")
 	public @ResponseBody
@@ -102,8 +107,10 @@ public class SchoolController {
 	@RequestMapping(method = RequestMethod.POST, value = "/school/{appId}/{schoolId}/communications")
 	public @ResponseBody Response<Communication> sendCommunication(@RequestBody Communication comm, @PathVariable String appId, @PathVariable String schoolId) {
 
+		String teacherId = permissions.getUserId();
+		
 		try {
-			if (!permissions.isSchoolTeacher(appId, schoolId, permissions.getUserId())) {
+			if (!permissions.isSchoolTeacher(appId, schoolId, teacherId)) {
 				throw new SecurityException("User is not associated to this school");
 			}
 			comm.setAppId(appId);
@@ -117,6 +124,8 @@ public class SchoolController {
 				|| old.isDoCheck() != comm.isDoCheck()) 
 			{
 				notificationManager.sendCommunicationMessage(appId, schoolId, comm, old != null);
+				
+				usageManager.messageSent(appId, schoolId, teacherId, null, UsageActor.TEACHER, UsageActor.PARENT, true);
 			}
 			
 			return new Response<>(result);

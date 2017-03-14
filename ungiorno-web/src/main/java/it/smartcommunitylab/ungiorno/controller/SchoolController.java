@@ -125,7 +125,9 @@ public class SchoolController {
 			{
 				notificationManager.sendCommunicationMessage(appId, schoolId, comm, old != null);
 				
-				usageManager.messageSent(appId, schoolId, teacherId, null, UsageActor.TEACHER, UsageActor.PARENT, true);
+				if (old == null) {
+					usageManager.messageSent(appId, schoolId, teacherId, null, UsageActor.TEACHER, UsageActor.PARENT, true);
+				}
 			}
 			
 			return new Response<>(result);

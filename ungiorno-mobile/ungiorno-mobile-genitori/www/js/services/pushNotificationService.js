@@ -161,7 +161,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.n
     return deferred.promise;
   }
 
-  pushNotificationService.getNewComunications = function (schoolId) {
+  pushNotificationService.getNewComunications = function (communications, schoolId) {
+    //check time since last update and number of those elements I didnt' updated
+
     if (!localStorage.getItem(RECEIVED_COMMUNICATIONS)) {
       return 0;
     }

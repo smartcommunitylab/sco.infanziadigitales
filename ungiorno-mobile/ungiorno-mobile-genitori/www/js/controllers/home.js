@@ -235,7 +235,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
   var checkNewCommunication = function (Allcommunications, schoolId) {
     //return number of comunications from localstorage (all the new omunication not visualized get from push)
-    return pushNotificationService.getNewComunications(schoolId);
+    // return pushNotificationService.getNewComunications(schoolId);
+    return communicationsService.getNewComunications($filter('orderBy')(Allcommunications, '-creationDate'), schoolId);
   }
   $scope.isContact = function (element) {
     return (element.string == $filter('translate')('home_contatta'));
@@ -396,19 +397,25 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     });
   }
   var getCommunications = function () {
-      var communicationPromises = [];
+    var communicationPromises = [];
 
-      for (var i = 0; i < profileService.getBabiesProfiles().length; i++) {
-        var kidProfile = profileService.getBabiesProfiles()[i];
-        communicationPromises.push(communicationsService.getCommunications($scope.kidProfile.schoolId, $scope.kidProfile.kidId));
-      }
-      $q.all(communicationPromises).then(function (values) {
-        for (var i = 0; i < values.length; i++) {
-          $rootScope.numberCommunicationsUnread[profileService.getBabiesProfiles()[i].schoolId] = checkNewCommunication(values[i], profileService.getBabiesProfiles()[i].schoolId);
-        }
-      });
+    for (var i = 0; i < profileService.getBabiesProfiles().length; i++) {
+      var kidProfile = profileService.getBabiesProfiles()[i];
+      communicationPromises.push(communicationsService.getCommunications($scope.kidProfile.schoolId, $scope.kidProfile.kidId));
     }
-    //corretto tutte e tre annidate? cosa succede se una salta? ma come faccio a settare il profilo temporaneo senza avere conf, prof????
+    $q.all(communicationPromises).then(function (values) {
+      for (var i = 0; i < values.length; i++) {
+        $rootScope.numberCommunicationsUnread[profileService.getBabiesProfiles()[i].schoolId] = checkNewCommunication(values[i], profileService.getBabiesProfiles()[i].schoolId);
+      }
+    });
+  }
+  document.addEventListener("resume", onResume, false);
+
+  function onResume() {
+    // Handle the resume event
+    getCommunications();
+  }
+  //corretto tutte e tre annidate? cosa succede se una salta? ma come faccio a settare il profilo temporaneo senza avere conf, prof????
   $scope.getConfiguration = function () {
     if (profileService.getBabiesProfiles().length == 0) {
       //parto da getBabyProfiles()(appid incluso nel server e qui ottengo schoolId e kidId

@@ -104,10 +104,15 @@ public class UsageManager {
 			start = osdf.parse(dl.get(0));
 
 			Calendar cal = new GregorianCalendar();
-			while (start.before(end)) {
+			while (true) {
 				cal.setTime(start);
 				cal.add(Calendar.DAY_OF_YEAR, 1);
 				start = cal.getTime();
+				
+				if (!start.before(end)) {
+					break;
+				}
+				
 				String day = osdf.format(start);
 				if (!dates.contains(day)) {
 					dates.add(day);

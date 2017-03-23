@@ -272,13 +272,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.n
               data: notification.additionalData
 
             });
-            if (!$state.is("app.communications")) {
-
-
+            if (!$state.is("app.communications") && !notification.additionalData["coldstart"]) {
               $rootScope.$apply(function () {
-                if (ionic.Platform.isAndroid()) {
-                  $rootScope.numberCommunicationsUnread[notification.additionalData["content.schoolId"]]++;
-                }
+                $rootScope.numberCommunicationsUnread[notification.additionalData["content.schoolId"]]++;
               });
             } else {
               $state.reload();

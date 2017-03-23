@@ -42,6 +42,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.c
         return_var++;
       }
     }
+    console.log("SCHOOLID"+schoolId+"return var"+return_var);
     return return_var;
   }
   communicationsService.setComunicationsUpdated = function (communications) {

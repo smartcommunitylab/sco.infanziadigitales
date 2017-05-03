@@ -16,6 +16,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
         //loginService.login(provider).then(
             function (data) {
+                  Config.setAppId(data.userId);
+                 localStorage.userId = data.userId;
+                 localStorage.provider = provider;
                 dataServerService.getBabyProfiles().then(function (data) {
                     $state.go('app.home');
                     $ionicHistory.nextViewOptions({

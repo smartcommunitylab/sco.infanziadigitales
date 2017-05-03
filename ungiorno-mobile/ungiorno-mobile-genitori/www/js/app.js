@@ -112,7 +112,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     //                console.log("Success in channel " + 'CarPooling_' + StorageSrv.getUserId() + " unsubscribe");
     //            });
     //        }
-    loginService.logout().then(
+    LoginService.logout().then(
       function (data) {
         //ionic.Platform.exitApp();
         window.location.reload(true);
@@ -148,7 +148,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
 
 
   $rootScope.logout = function () {
-    loginService.logout().then(
+    LoginService.logout().then(
       function (data) {
         localStorage.userId = null;
         window.location.hash = '/login';
@@ -228,13 +228,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
       //            //facebookConnectPlugin.browserInit(appId, version);
       //            // version is optional. It refers to the version of API you may want to use.
       //        }
-      if (loginService.userIsLogged()) {
+      if (LoginService.userIsLogged()) {
         console.log("user is logged");
         //
         if (localStorage.provider == 'internal') {
           $rootScope.login();
         } else {
-          loginService.login(localStorage.provider).then(
+          LoginService.login(localStorage.provider).then(
             function (data) {
               dataServerService.getBabyProfiles().then(function (data) {
                 //pushNotificationService.register();
@@ -249,7 +249,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
                 // Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
                 $ionicLoading.hide();
                 if (error == 406) {
-                  loginService.logout();
+                  LoginService.logout();
                   $ionicPopup.alert({
                     title: $filter('translate')('not_allowed_popup_title'),
                     template: $filter('translate')('not_allowed_signin')

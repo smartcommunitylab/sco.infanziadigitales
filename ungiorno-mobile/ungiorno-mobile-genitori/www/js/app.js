@@ -48,6 +48,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     'ngCordova',
     'ngIOS9UIWebViewPatch',
     'pascalprecht.translate',
+    'smartcommunitylab.services.login',
     'it.smartcommunitylab.infanziadigitales.diario.parents.filters',
     'it.smartcommunitylab.infanziadigitales.diario.parents.directives',
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.common',
@@ -81,7 +82,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
 ])
 
 .run(function ($ionicPlatform, $rootScope, $ionicLoading, $ionicPopup, $filter, $cordovaSplashscreen, $state, $translate, $q, $window, $ionicHistory, $ionicConfig, Config,
-  configurationService, profileService, dataServerService, loginService, pushNotificationService, Toast) {
+  configurationService, profileService, dataServerService, loginService, pushNotificationService, Toast,LoginService) {
 
   $rootScope.getUserId = function () {
     return localStorage.userId;
@@ -145,6 +146,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
   //        );
   //    };
 
+
   $rootScope.logout = function () {
     loginService.logout().then(
       function (data) {
@@ -164,6 +166,27 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     Config.init().then(function () {
+      var baseUrl = Config.URL()+'/' + Config.app();
+      	var cookieInitOptions = {
+		loginType: LoginService.LOGIN_TYPE.COOKIE,
+          googleWebClientId: CONF.googleWebClientId,
+		customConfig: {
+			BASE_URL:baseUrl ,
+			AUTHORIZE_URL:baseUrl+ '/userlogin',
+			SUCCESS_REGEX: /userloginsuccess\?profile=(.+)$/,
+			ERROR_REGEX: /userloginerror\?error=(.+)$/,
+			LOGIN_URL: baseUrl + '/userlogininternal',
+			REGISTER_URL: baseUrl + '/register',
+			REVOKE_URL: baseUrl + '/logout',
+			RESET_URL: Config.getAACURL()+'/internal/reset',
+			REDIRECT_URL: 'http://localhost',
+
+
+		}
+	};
+
+	LoginService.init(cookieInitOptions);
+
       if (window.cordova && window.cordova.plugins.Keyboard) {
         cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
         cordova.plugins.Keyboard.disableScroll(true);

@@ -48,7 +48,7 @@
         <h4>{{'signin_google_title' | translate}}</h4>
         <div class="row">
           <div class="col ">
-            <button class="button button-block login-button-google" ng-click="login(login_googlelocal)">
+            <button class="button button-block login-button-google" ng-click="login('google')">
               Google
             </button>
           </div>
@@ -89,7 +89,8 @@
         <a class="text-left login-link" ng-click="passwordRecover()">
                   {{'signin_pwd_reset' | translate}}
               </a>
-        <button class="button button-block login-button-internal login-margin" ng-click="signin()">
+<!--        <button class="button button-block login-button-internal login-margin" ng-click="signin()">-->
+          <button class="button button-block login-button-internal login-margin" ng-click="login('internal')">
           {{'login_signin' | translate}}
         </button>
         <a class=" login-link login-margin" ng-click="goRegister()">

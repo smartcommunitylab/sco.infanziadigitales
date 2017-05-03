@@ -2,7 +2,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.c
 
 .factory('Config', function ($q, $http, $window, $filter, $rootScope) {
 
-  var DEVELOPMENT = true;
+  var DEVELOPMENT = false;
   var URL = 'https://' + (DEVELOPMENT ? 'dev' : 'tn') + '.smartcommunitylab.it';
   //var URL = 'http://192.168.42.60:8080';
   var AAC_URL = 'https://' + (DEVELOPMENT ? 'dev' : 'tn') + '.smartcommunitylab.it/aac';
@@ -16,7 +16,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.c
 
   var APP_BUILD = '';
 
-  var APP_VERSION = '2.0.6';
+  var APP_VERSION = '2.0.7';
   var mapJsonConfig = null;
 
 

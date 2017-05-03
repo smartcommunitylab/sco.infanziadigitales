@@ -197,8 +197,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.n
         badge: "true",
         sound: "true",
         senderID: Config.getSenderID(),
-        topics: arrayOfSchools,
-        gcmSandbox: "true"
+        topics: arrayOfSchools
       },
       windows: {}
     });
@@ -291,7 +290,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.n
             }
             //already received-> go, seen and delete from localstorage
             if (!$state.is("app.communications")) {
-              $state.go("app.communications");
+              //$state.go("app.communications");
             } else {
               //updateCommunications
               $rootScope.$apply(function () {

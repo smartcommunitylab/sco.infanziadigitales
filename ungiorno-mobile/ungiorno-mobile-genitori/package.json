@@ -28,6 +28,8 @@
     "com.cordova.plugins.cookiemaster",
     "cordova-plugin-network-information",
     "https://github.com/katzer/cordova-plugin-local-notifications",
+    "https://github.com/bez4pieci/Phonegap-Cookies-Plugin.git",
+
     {
       "variables": {
         "SENDER_ID": "453601816446"
@@ -37,7 +39,7 @@
     },
      {
 	"variables": {
-				"REVERSED_CLIENT_ID": "453601816446-7u56mviff2alr9g7hil2v26thq894t5t.apps.googleusercontent.com"
+				"REVERSED_CLIENT_ID": "com.googleusercontent.apps.453601816446-7u56mviff2alr9g7hil2v26thq894t5t"
 			},
 			"locator": "https://github.com/EddyVerbruggen/cordova-plugin-googleplus",
 			"id": "cordova-plugin-googleplus"

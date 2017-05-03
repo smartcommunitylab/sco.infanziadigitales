@@ -107,11 +107,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
   };
 
   $rootScope.logout = function () {
-    //        if (window.ParsePushPlugin) {
-    //            window.ParsePushPlugin.unsubscribe('CarPooling_' + StorageSrv.getUserId(), function () {
-    //                console.log("Success in channel " + 'CarPooling_' + StorageSrv.getUserId() + " unsubscribe");
-    //            });
-    //        }
     LoginService.logout().then(
       function (data) {
         //ionic.Platform.exitApp();
@@ -230,13 +225,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
       //        }
       if (LoginService.userIsLogged()) {
         console.log("user is logged");
-        //
-        if (localStorage.provider == 'internal') {
-          $rootScope.login();
-        } else {
-          LoginService.login(localStorage.provider).then(
-            function (data) {
-              dataServerService.getBabyProfiles().then(function (data) {
+        Config.setAppId(localStorage.userId);
+                      dataServerService.getBabyProfiles().then(function (data) {
                 //pushNotificationService.register();
                 $state.go('app.home');
                 $ionicHistory.nextViewOptions({
@@ -244,25 +234,40 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
                   historyRoot: true
                 });
 
-              }, function (error) {
-                console.log("ERROR -> " + error);
-                // Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
-                $ionicLoading.hide();
-                if (error == 406) {
-                  LoginService.logout();
-                  $ionicPopup.alert({
-                    title: $filter('translate')('not_allowed_popup_title'),
-                    template: $filter('translate')('not_allowed_signin')
-                  });
-                  $state.go('app.login');
-                  $ionicHistory.nextViewOptions({
-                    disableBack: true,
-                    historyRoot: true
-                  });
-                }
-              });
-            })
-        };
+              })
+//        //
+//        if (localStorage.provider == 'internal') {
+//          $rootScope.login();
+//        } else {
+//          LoginService.login(localStorage.provider).then(
+//            function (data) {
+//              dataServerService.getBabyProfiles().then(function (data) {
+//                //pushNotificationService.register();
+//                $state.go('app.home');
+//                $ionicHistory.nextViewOptions({
+//                  disableBack: true,
+//                  historyRoot: true
+//                });
+//
+//              }, function (error) {
+//                console.log("ERROR -> " + error);
+//                // Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+//                $ionicLoading.hide();
+//                if (error == 406) {
+//                  LoginService.logout();
+//                  $ionicPopup.alert({
+//                    title: $filter('translate')('not_allowed_popup_title'),
+//                    template: $filter('translate')('not_allowed_signin')
+//                  });
+//                  $state.go('app.login');
+//                  $ionicHistory.nextViewOptions({
+//                    disableBack: true,
+//                    historyRoot: true
+//                  });
+//                }
+//              });
+//            })
+//        };
       } else {
         $rootScope.login();
       }

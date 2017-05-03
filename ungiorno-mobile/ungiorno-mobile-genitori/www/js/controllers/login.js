@@ -33,7 +33,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                     // Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
                     $ionicLoading.hide();
                     if (error == 406) {
-                        loginService.logout();
+                        LoginService.logout();
                         $ionicPopup.alert({
                             title: $filter('translate')('not_allowed_popup_title'),
                             template: $filter('translate')('not_allowed_signin')
@@ -66,7 +66,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         //Utils.loading();
         $ionicLoading.show();
 
-        loginService.signin($scope.user).then(
+        LoginService.signin($scope.user).then(
             function (data) {
                 dataServerService.getBabyProfiles().then(function (data) {
                     $state.go('app.home');
@@ -80,7 +80,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                     // Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
                     $ionicLoading.hide();
                     if (error == 406) {
-                        loginService.logout();
+                        LoginService.logout();
                         $ionicPopup.alert({
                             title: $filter('translate')('not_allowed_popup_title'),
                             template: $filter('translate')('not_allowed_signin')
@@ -145,7 +145,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         }
 
         $ionicLoading.show();
-        loginService.register($scope.user).then(
+        LoginService.register($scope.user).then(
             function (data) {
                 $state.go('app.signupsuccess');
             },

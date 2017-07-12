@@ -38,7 +38,14 @@ $colors: (
   secondary:  #32db64,
   danger:     #f53d3d,
   light:      #f4f4f4,
-  dark:       #222
+  dark:       #222,
+  green1: #3e5421,
+  green2: #7b9e2a,
+  green3: (base: #98ba3c, contrast: white),
+  green4: rgba(152,186,60, .8),
+  magenta1: #bd3e4d,
+  grey1: #666,
+  grey2: #ccc
 );
 
 

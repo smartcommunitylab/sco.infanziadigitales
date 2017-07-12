@@ -1,14 +1,132 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>
-      Ionic Blank
+  <ion-navbar color="grey2">
+    <ion-title float-start>
+       <img src="assets/images/icona_navbar.png" height="40px" />
     </ion-title>
+    <button ion-button icon-only float-end color="green2" margin-right> <ion-icon name="exit"></ion-icon></button>
+     <button ion-button float-end color="green2" margin-right> 
+      <ion-label>Scuola</ion-label>
+      <ion-select [(ngModel)]='selectedId' (ngModelChange)="onSchoolChange(selectedId)">
+        <ion-option *ngFor="let item of schools" value="{{item.id}}" >{{item.id}} - {{item.name}}</ion-option>
+      </ion-select>
+     </button> 
   </ion-navbar>
+  <ion-segment [(ngModel)]="settings" color="light" style="background-color: #98ba3c;" *ngIf="selectedSchool">
+    <ion-segment-button value="profilo">
+      Home
+    </ion-segment-button>
+    <ion-segment-button value="orari">
+      Orari
+    </ion-segment-button>
+    <ion-segment-button value="gruppi_sezioni">
+      Gruppi e sezioni
+    </ion-segment-button>
+    <ion-segment-button value="bus">
+      Bus
+    </ion-segment-button>
+    <ion-segment-button value="insegnanti">
+      Insegnanti
+    </ion-segment-button>
+    <ion-segment-button value="assenze">
+      Assenze
+    </ion-segment-button>
+  </ion-segment>
 </ion-header>
 
-<ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+<ion-content padding margin>
+  <ion-grid *ngIf="selectedSchool">
+    <ion-col col-12>
+      <div [ngSwitch]="settings">
+        <div *ngSwitchCase="'profilo'">
+          <ion-grid inset>
+            <ion-row>
+              <ion-col col-1><p></p></ion-col>
+              <ion-col col-10>
+                <ion-card>
+                  <ion-card-header>
+                    Nome Scuola
+                  </ion-card-header>
+                  <ion-card-content margin-top>
+                    Nome
+                  </ion-card-content>
+                </ion-card>
+              </ion-col>
+              <ion-col col-1><p></p></ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col col-1><p></p></ion-col>
+              <ion-col col-sm-10>
+                <ion-card>
+                  <ion-card-header>
+                    Indirizzo
+                  </ion-card-header>
+                  <ion-card-content margin-top>
+                    <p>{{selectedSchool.address}}</p>
+                  </ion-card-content>
+                </ion-card>
+              </ion-col>
+              <ion-col col-1><p></p></ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col col-1><p></p></ion-col>
+              <ion-col col-sm-10>
+                <ion-card>
+                  <ion-card-header>
+                    Contatti
+                  </ion-card-header>
+                  <ion-card-content margin-top>
+                    <p>Telefono: <a href="tel: {{selectedSchool.telephone}}">{{selectedSchool.telephone}}</a></p>
+                    <p>Email: <a href="{{selectedSchool.email}}">{{selectedSchool.email}}</a></p>
+                    <ion-fab style="bottom: -5px; right: -5px">
+                      <button ion-fab mini (click)="showPromptOnContattiEdit()"><ion-icon name="md-create"></ion-icon></button>
+                    </ion-fab>
+                  </ion-card-content>
+                </ion-card>
+              </ion-col>
+              <ion-col col-1><p></p></ion-col>
+            </ion-row>      
+          </ion-grid>
+        </div>
+        <div *ngSwitchCase="'gruppi_sezioni'">
+          <ion-grid inset>
+            <ion-row>
+              <ion-col col-12>
+                <button ion-button color="green1" float-end margin-top>Crea nuovo gruppo</button>
+              </ion-col>
+              <ion-col col-12>
+                <hr />
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col col-4>
+                <ion-item>
+                  <ion-label floating>Ordine</ion-label>
+                  <ion-select>
+                    <ion-option>alfabetico A-Z</ion-option>
+                    <ion-option>alfabetico Z-A</ion-option>
+                    <ion-option>n. Bambini (dal piu grande)</ion-option>
+                    <ion-option>n. Bambini (dal piu piccolo)</ion-option>
+                  </ion-select>
+                </ion-item>
+              </ion-col>
+              <ion-col col-4>
+                <ion-item>
+                  <ion-label floating>Filtro</ion-label>
+                  <ion-select>
+                    
+                  </ion-select>
+                </ion-item>
+              </ion-col>
+              <ion-col col-4>
+                <ion-item>
+                  <ion-label floating>Cerca</ion-label>
+                  <ion-input type="text"></ion-input>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </div>
+    </ion-col> 
+  </ion-grid>
 </ion-content>

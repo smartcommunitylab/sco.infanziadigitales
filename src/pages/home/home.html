@@ -91,7 +91,7 @@
           <ion-grid inset>
             <ion-row>
               <ion-col col-12>
-                <button ion-button color="green1" float-end margin-top>Crea nuovo gruppo</button>
+                <button ion-button color="green1" float-end margin-top (click)="newGroupModal()">Crea nuovo gruppo</button>
               </ion-col>
               <ion-col col-12>
                 <hr />
@@ -113,7 +113,9 @@
                 <ion-item>
                   <ion-label floating>Filtro</ion-label>
                   <ion-select>
-                    
+                    <ion-option>Tutti</ion-option>
+                    <ion-option>Solo gruppi</ion-option>
+                    <ion-option>Solo sezioni</ion-option>
                   </ion-select>
                 </ion-item>
               </ion-col>
@@ -122,6 +124,24 @@
                   <ion-label floating>Cerca</ion-label>
                   <ion-input type="text"></ion-input>
                 </ion-item>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col col-12>
+                <p float-end>Totale gruppi: {{selectedSchool.groups.length}}</p>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col col-12>
+                <ion-list>
+                  <ion-item *ngFor="let item of selectedSchool.groups">
+                    <ion-icon name="contacts" item-start color="green3" *ngIf="item.section" ></ion-icon>
+                    <ion-icon *ngIf="!item.section" item-start></ion-icon>
+                    {{item.name}}
+                    <ion-icon name="md-create" item-end color="magenta1" style="margin-right: 30px" (click)="showGroupModal(item)"></ion-icon>
+                    <ion-icon name="trash" item-end color="magenta1" style="margin-right: 10px" (click)="deleteGroup(item)"></ion-icon>
+                  </ion-item>
+                </ion-list>
               </ion-col>
             </ion-row>
           </ion-grid>

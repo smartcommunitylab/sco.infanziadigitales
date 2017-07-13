@@ -1,7 +1,9 @@
+import { Group } from './../../app/Classes/group';
+import { GroupModal } from './../Components/Modals/groupModal/groupModal';
 import { WebService } from './../../app/WebService';
 import { School } from './../../app/Classes/school';
 import { Component, OnInit } from '@angular/core';
-import { NavController, AlertController } from 'ionic-angular';
+import { NavController, AlertController, ModalController } from 'ionic-angular';
 
 @Component({
   selector: 'page-home',
@@ -20,7 +22,9 @@ export class HomePage implements OnInit {
   selectedSchool : School;
   selectedId : string;
 
-  constructor(public navCtrl: NavController, private webService : WebService, public alertCtrl: AlertController) {}
+  toDeleteGroup : Group;
+
+  constructor(public navCtrl: NavController, private webService : WebService, public alertCtrl: AlertController, public modalCtrl: ModalController) {}
 
   ngOnInit(): void {
     this.webService.getData().then(item => { this.schools = item });
@@ -65,5 +69,20 @@ export class HomePage implements OnInit {
       ]
     });
     prompt.present();
+  }
+
+  showGroupModal(item: Group) {
+    let modal = this.modalCtrl.create(GroupModal, {'group' : item, 'school' : this.selectedSchool}, {enableBackdropDismiss: false, showBackdrop: false});
+    modal.present();
+  }
+
+  newGroupModal() {
+    var newGroup =  new Group('', [], false, []);
+    this.showGroupModal(newGroup);
+  }
+
+  deleteGroup(item : Group) {
+    this.toDeleteGroup = new Group(item.name, item.kids, item.section, item.teachers)
+    this.webService.remove(this.selectedId, this.toDeleteGroup).then(tmp=> {this.selectedSchool.groups = []; tmp.groups.forEach(x=>this.selectedSchool.groups.push(x))});
   }
 }

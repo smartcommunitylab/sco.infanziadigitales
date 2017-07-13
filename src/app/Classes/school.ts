@@ -2,6 +2,7 @@ import { Kid } from "./kid";
 import { Teacher } from "./teacher";
 import { Bus } from "./bus";
 import { Service } from "./service";
+import { Group } from "./group";
 
 export class School {
     id: string;
@@ -15,6 +16,7 @@ export class School {
     buses: Bus[];
     sections: string[];
     assenze:string[];
+    groups: Group[];
 
     constructor() {}
 

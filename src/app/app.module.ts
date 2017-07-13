@@ -10,11 +10,13 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { InMemoryWebApiModule } from "angular-in-memory-web-api";
 import { HttpModule } from "@angular/http";
+import { GroupModal } from "../pages/Components/Modals/groupModal/groupModal";
 
 @NgModule({
   declarations: [
     MyApp,
-    HomePage
+    HomePage,
+    GroupModal
   ],
   imports: [
     BrowserModule,
@@ -26,6 +28,7 @@ import { HttpModule } from "@angular/http";
   entryComponents: [
     MyApp,
     HomePage,
+    GroupModal
   ],
   providers: [
     StatusBar,

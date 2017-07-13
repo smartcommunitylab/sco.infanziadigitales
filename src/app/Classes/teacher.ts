@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
 import { Person } from "./person";
+import { Group } from "./group";
 
 export class Teacher extends Person {
-    section: string[];
+    groups_sections : Group[];
     pin: string;
 
-    constructor(id:string, name:string, surname:string, cellphone?:string, telephone?:string, email?:string, section?:string[], pin?:string) {
+    constructor(id:string, name:string, surname:string, cellphone?:string, telephone?:string, email?:string, section?:Group[], pin?:string) {
         super(id, name, surname, cellphone, telephone, email);
-        this.section = section;
+        this.groups_sections = section;
         this.pin = pin;
     }
 }

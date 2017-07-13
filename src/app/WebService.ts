@@ -1,3 +1,6 @@
+import { Group } from './Classes/group';
+import { Bus } from './Classes/bus';
+import { Parent } from './Classes/parent';
 import { Teacher } from './Classes/teacher';
 import { Kid } from "./Classes/kid";
 
@@ -41,12 +44,37 @@ export class WebService {
     return Promise.reject(error.message || error);
   }
 
-  addTeacher(schoolId: string, item : Teacher) : Promise<School> {
+  add(schoolId: string, item : any) : Promise<School> {
     var sch;
     const url = `${this.schoolUrl}/${schoolId}`
-    return this.getSchool(schoolId).then(tmp => {
-      tmp.teachers.push(item); 
-      return this.http.put(url, JSON.stringify(tmp), {headers: this.headers}).toPromise().then(() => tmp).catch(this.handleError);
-    });
+    if (item instanceof Teacher) {
+      return this.getSchool(schoolId).then(tmp => {
+        tmp.teachers.push(item); 
+        return this.http.put(url, JSON.stringify(tmp), {headers: this.headers}).toPromise().then(() => tmp).catch(this.handleError);
+      });
+    }
+    else if (item instanceof Bus) {
+      return this.getSchool(schoolId).then(tmp => {
+        tmp.buses.push(item); 
+        return this.http.put(url, JSON.stringify(tmp), {headers: this.headers}).toPromise().then(() => tmp).catch(this.handleError);
+      });
+    }
+    else if (item instanceof Group) {
+      return this.getSchool(schoolId).then(tmp => {
+        tmp.groups.push(item); 
+        return this.http.put(url, JSON.stringify(tmp), {headers: this.headers}).toPromise().then(() => tmp).catch(this.handleError);
+      });
+    }
+  }
+
+  remove(schoolId: string, item: any) : Promise<School> {
+    const url = `${this.schoolUrl}/${schoolId}`;
+    if (item instanceof Group) {
+      return this.getSchool(schoolId).then(tmp => {
+        var pos = tmp.groups.findIndex(x => x.name === item.name)
+        tmp.groups.splice(pos, 1); 
+        return this.http.put(url, JSON.stringify(tmp), {headers: this.headers}).toPromise().then(() => tmp).catch(this.handleError);
+      });
+    }
   }
 }

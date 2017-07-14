@@ -1,13 +1,13 @@
 <ion-header>
     <ion-navbar>
         <ion-title text-center>
-             {{selectedGroup.name}} 
+             {{selectedBus.name}} 
         </ion-title>
         <ion-buttons start>
             <button ion-button (click)="close()">Annulla</button>
         </ion-buttons>
         <ion-buttons end>
-            <button ion-button (click)="save()" [disabled]='!(newGroup.name)'>Salva</button>
+            <button ion-button (click)="save()" [disabled]='!(newBus.name) || !(newBus.capolinea)'>Salva</button>
         </ion-buttons>
             
     </ion-navbar>
@@ -18,26 +18,19 @@
     <ion-list inset>
         <ion-item>
             <ion-label floating>Nome*</ion-label>
-            <ion-input name="name" type="text" [(ngModel)]="newGroup.name"></ion-input>
+            <ion-input name="name" type="text" [(ngModel)]="newBus.name"></ion-input>
         </ion-item>
-        <ion-item margin-top>
-            <ion-label inline>Questo gruppo è una sezione</ion-label>
-            <ion-checkbox [(ngModel)]="newGroup.section"></ion-checkbox>
+    </ion-list>
+    <ion-list inset>
+        <ion-item>
+            <ion-label floating>Capolinea*</ion-label>
+            <ion-input name="name" type="text" [(ngModel)]="newBus.capolinea"></ion-input>
         </ion-item>
     </ion-list>
     <hr/>
     <ion-list inset>
-        <ion-list-header>Insegnanti</ion-list-header>
-        <ion-item *ngFor="let tea of newGroup.teachers">
-            {{tea.name}} {{tea.surname}}
-            <ion-icon name="close" float-end (click)="removeTeacher(tea)"></ion-icon>
-        </ion-item>
-        <button ion-item color="green3" (click)='addTeacher()'><ion-icon name="add"></ion-icon> Aggiungi insegnanti</button>
-    </ion-list>
-    <br /> 
-    <ion-list inset>
         <ion-list-header>Bambini</ion-list-header>
-        <ion-item *ngFor="let kid of newGroup.kids">
+        <ion-item *ngFor="let kid of newBus.kids">
             <ion-thumbnail item-start>
                 <img src={{kid.image}}>
             </ion-thumbnail>

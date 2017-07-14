@@ -63,14 +63,17 @@ export class InMemoryDataService implements InMemoryDbService {
             new Kid("BNCLGI","Luigi", "Bianchi"),
           ],
           teachers : [
-            new Teacher("FSTANT", "Antonello", "Fausti", "", "", "", [], ""),
-            new Teacher("FSTLGI","Luigi", "Festi", "", "", "", [], ""),
-            new Teacher("FRRMNL","Emanuela", "Ferri", "", "", "", [], ""),
+            new Teacher("FSTANT", "Antonello", "Fausti", "", "", "", ""),
+            new Teacher("FSTLGI","Luigi", "Festi", "", "", "", ""),
+            new Teacher("FRRMNL","Emanuela", "Ferri", "", "", "", ""),
           ],
           buses : [
-            new Bus("bus1", "Povo"),
-            new Bus("bus2", "Gardolo"),
-            new Bus("bus3", "Rovereto")
+            new Bus("bus1", "Povo" , [
+              new Kid("RSSMRO", "Mario", "Rossi"),
+              new Kid("VRDGVN","Giovanni", "Verdi")
+            ]),
+            new Bus("bus2", "Gardolo", []),
+            new Bus("bus3", "Rovereto", [])
           ],
           servizi : [
             new Service("default", [new Time("mattutina", new Date(0, 0, 0, 9), new Date(0, 0, 0, 13)), new Time("pomeridiana", new Date(0, 0, 0, 13), new Date(0, 0, 0, 16))]), //9.00 to 13.00
@@ -89,12 +92,7 @@ export class InMemoryDataService implements InMemoryDbService {
             "Vacanza"
           ],
           groups : [
-            new Group("Gruppo1", [
-              new Kid("RSSMRO", "Mario", "Rossi"),
-              new Kid("VRDGVN","Giovanni", "Verdi")
-            ], false, [
-              new Teacher("FSTANT", "Antonello", "Fausti", "", "", "", [], "")
-            ]),
+            new Group("Gruppo1", [], false, []),
             new Group("Sezione1", [], true, []),
             new Group("Gruppo2", [], false, []),
             new Group("Sezione2", [], true, []),

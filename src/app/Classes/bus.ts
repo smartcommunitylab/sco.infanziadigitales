@@ -1,15 +1,12 @@
-import { Component } from '@angular/core';
-
-@Component({
-  
-})
-
+import { Kid } from './kid';
 export class Bus {
-    id: string;
+    name: string;
     capolinea: string;
+    kids : Kid[];
 
-    constructor(id:string, capolinea:string) {
-        this.id = id;
+    constructor(id:string, capolinea:string, kids : Kid[]) {
+        this.name = id;
         this.capolinea = capolinea;
+        this.kids = kids;
     }
 }

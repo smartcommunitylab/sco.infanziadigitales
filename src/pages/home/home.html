@@ -6,12 +6,12 @@
     <button ion-button icon-only float-end color="green2" margin-right> <ion-icon name="exit"></ion-icon></button>
      <button ion-button float-end color="green2" margin-right> 
       <ion-label>Scuola</ion-label>
-      <ion-select [(ngModel)]='selectedId' (ngModelChange)="onSchoolChange(selectedId)">
+      <ion-select [(ngModel)]='selectedId' (ngModelChange)="onSchoolChange(selectedId)" interface='popover'>
         <ion-option *ngFor="let item of schools" value="{{item.id}}" >{{item.id}} - {{item.name}}</ion-option>
       </ion-select>
      </button> 
   </ion-navbar>
-  <ion-segment [(ngModel)]="settings" color="light" style="background-color: #98ba3c;" *ngIf="selectedSchool">
+  <ion-segment [(ngModel)]="settings" (ngModelChange)="onSegmentChange()" color="light" style="background-color: #98ba3c;" *ngIf="selectedSchool">
     <ion-segment-button value="profilo">
       Home
     </ion-segment-button>
@@ -27,8 +27,8 @@
     <ion-segment-button value="insegnanti">
       Insegnanti
     </ion-segment-button>
-    <ion-segment-button value="assenze">
-      Assenze
+    <ion-segment-button value="bambini">
+      Bambini
     </ion-segment-button>
   </ion-segment>
 </ion-header>
@@ -88,7 +88,7 @@
           </ion-grid>
         </div>
         <div *ngSwitchCase="'gruppi_sezioni'">
-          <ion-grid inset>
+          <!-- <ion-grid inset>
             <ion-row>
               <ion-col col-12>
                 <button ion-button color="green1" float-end margin-top (click)="newGroupModal()">Crea nuovo gruppo</button>
@@ -101,50 +101,111 @@
               <ion-col col-4>
                 <ion-item>
                   <ion-label floating>Ordine</ion-label>
-                  <ion-select>
-                    <ion-option>alfabetico A-Z</ion-option>
-                    <ion-option>alfabetico Z-A</ion-option>
-                    <ion-option>n. Bambini (dal piu grande)</ion-option>
-                    <ion-option>n. Bambini (dal piu piccolo)</ion-option>
+                  <ion-select [(ngModel)]='ordine' (ngModelChange)="onOrdineChange(ordine, selectedSchool.groups)" interface='popover'>
+                    <ion-option value='0'>Alfabetico A-Z</ion-option>
+                    <ion-option value='1'>Alfabetico Z-A</ion-option>
+                    <ion-option value='2'>N. Bambini (dal piu grande)</ion-option>
+                    <ion-option value='3'>N. Bambini (dal piu piccolo)</ion-option>
                   </ion-select>
                 </ion-item>
               </ion-col>
               <ion-col col-4>
                 <ion-item>
                   <ion-label floating>Filtro</ion-label>
-                  <ion-select>
-                    <ion-option>Tutti</ion-option>
-                    <ion-option>Solo gruppi</ion-option>
-                    <ion-option>Solo sezioni</ion-option>
+                  <ion-select interface='popover' [(ngModel)]='filtro' (ngModelChange)="onFiltroGroupChange(filtro)">
+                    <ion-option value='0'>Tutti</ion-option>
+                    <ion-option value='1'>Solo gruppi</ion-option>
+                    <ion-option value='2'>Solo sezioni</ion-option>
                   </ion-select>
                 </ion-item>
               </ion-col>
               <ion-col col-4>
                 <ion-item>
-                  <ion-label floating>Cerca</ion-label>
-                  <ion-input type="text"></ion-input>
+                   <ion-label floating>Cerca</ion-label> 
+                  <ion-input (input)="searchGroups($event)"></ion-input>
                 </ion-item>
               </ion-col>
             </ion-row>
             <ion-row>
               <ion-col col-12>
-                <p float-end>Totale gruppi: {{selectedSchool.groups.length}}</p>
+                <p float-end>Totale gruppi trovati: {{filteredGroups.length}}</p>
               </ion-col>
             </ion-row>
             <ion-row>
               <ion-col col-12>
                 <ion-list>
-                  <ion-item *ngFor="let item of selectedSchool.groups">
+                  <ion-item *ngFor="let item of filteredGroups">
                     <ion-icon name="contacts" item-start color="green3" *ngIf="item.section" ></ion-icon>
                     <ion-icon *ngIf="!item.section" item-start></ion-icon>
                     {{item.name}}
-                    <ion-icon name="md-create" item-end color="magenta1" style="margin-right: 30px" (click)="showGroupModal(item)"></ion-icon>
+                    <ion-icon name="md-create" item-end color="magenta1" style="margin-right: 30px" (click)="showGroupModal(item, false)"></ion-icon>
                     <ion-icon name="trash" item-end color="magenta1" style="margin-right: 10px" (click)="deleteGroup(item)"></ion-icon>
                   </ion-item>
                 </ion-list>
               </ion-col>
             </ion-row>
-          </ion-grid>
+          </ion-grid> -->
+          <gruppi [selectedSchool]="selectedSchool"></gruppi>
+        </div>
+        <div *ngSwitchCase="'bus'">
+          <!-- <ion-grid inset>
+            <ion-row>
+              <ion-col col-12>
+                <button ion-button color="green1" float-end margin-top (click)="newBusModal()">Aggiungi autobus</button>
+              </ion-col>
+              <ion-col col-12>
+                <hr />
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col col-4>
+                <ion-item>
+                  <ion-label floating>Ordine</ion-label>
+                  <ion-select [(ngModel)]='ordine' (ngModelChange)="onOrdineChange(ordine, selectedSchool.buses)" interface='popover'>
+                    <ion-option value='0'>Alfabetico (nome) A-Z</ion-option>
+                    <ion-option value='1'>Alfabetico (nome) Z-A</ion-option>
+                    <ion-option value='4'>Alfabetico (capolinea) A-Z</ion-option>
+                    <ion-option value='5'>Alfabetico (capolinea) Z-A</ion-option>
+                    <ion-option value='2'>N. Bambini (dal piu grande)</ion-option>
+                    <ion-option value='3'>N. Bambini (dal piu piccolo)</ion-option>
+                  </ion-select>
+                </ion-item>
+              </ion-col>
+              <ion-col col-4>
+                <p></p>
+              </ion-col>
+              <ion-col col-4>
+                <ion-item>
+                   <ion-label floating>Cerca (nome)</ion-label> 
+                  <ion-input (input)="searchBus($event)"></ion-input>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col col-12>
+                <p float-end>Totale autobus trovati: {{filteredBus.length}}</p>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col col-12>
+                <ion-list>
+                  <ion-item *ngFor="let item of filteredBus">
+                    <ion-icon name="bus" item-start color="green3" ></ion-icon>
+                    {{item.name}} ({{item.capolinea}})
+                    <ion-icon name="md-create" item-end color="magenta1" style="margin-right: 30px" (click)="showBusModal(item, false)"></ion-icon>
+                    <ion-icon name="trash" item-end color="magenta1" style="margin-right: 10px" (click)="deleteBus(item)"></ion-icon>
+                  </ion-item>
+                </ion-list>
+              </ion-col>
+            </ion-row>
+          </ion-grid> -->
+          <buses [selectedSchool]="selectedSchool"></buses>
+        </div>
+        <div *ngSwitchCase="'insegnanti'">
+          <insegnanti [selectedSchool]="selectedSchool"></insegnanti>
+        </div>
+        <div *ngSwitchCase="'bambini'">
+          <bambini [selectedSchool]="selectedSchool"></bambini>
         </div>
       </div>
     </ion-col> 

@@ -65,6 +65,12 @@ export class WebService {
         return this.http.put(url, JSON.stringify(tmp), {headers: this.headers}).toPromise().then(() => tmp).catch(this.handleError);
       });
     }
+    else if(item instanceof Kid) {
+      return this.getSchool(schoolId).then(tmp => {
+        tmp.kids.push(item); 
+        return this.http.put(url, JSON.stringify(tmp), {headers: this.headers}).toPromise().then(() => tmp).catch(this.handleError);
+      });
+    }
   }
 
   remove(schoolId: string, item: any) : Promise<School> {
@@ -73,6 +79,27 @@ export class WebService {
       return this.getSchool(schoolId).then(tmp => {
         var pos = tmp.groups.findIndex(x => x.name === item.name)
         tmp.groups.splice(pos, 1); 
+        return this.http.put(url, JSON.stringify(tmp), {headers: this.headers}).toPromise().then(() => tmp).catch(this.handleError);
+      });
+    }
+    else if(item instanceof Bus) {
+      return this.getSchool(schoolId).then(tmp => {
+        var pos = tmp.buses.findIndex(x => x.name === item.name)
+        tmp.buses.splice(pos, 1); 
+        return this.http.put(url, JSON.stringify(tmp), {headers: this.headers}).toPromise().then(() => tmp).catch(this.handleError);
+      });
+    }
+    else if(item instanceof Teacher) {
+      return this.getSchool(schoolId).then(tmp => {
+        var pos = tmp.teachers.findIndex(x => x.id === item.id)
+        tmp.teachers.splice(pos, 1); 
+        return this.http.put(url, JSON.stringify(tmp), {headers: this.headers}).toPromise().then(() => tmp).catch(this.handleError);
+      });
+    }
+    else if(item instanceof Kid) {
+      return this.getSchool(schoolId).then(tmp => {
+        var pos = tmp.kids.findIndex(x => x.id === item.id)
+        tmp.kids.splice(pos, 1); 
         return this.http.put(url, JSON.stringify(tmp), {headers: this.headers}).toPromise().then(() => tmp).catch(this.handleError);
       });
     }

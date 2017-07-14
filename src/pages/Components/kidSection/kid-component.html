@@ -1,0 +1,56 @@
+<ion-grid inset>
+  <ion-row>
+    <ion-col col-12>
+      <!-- <button ion-button color="green1" float-end margin-top (click)="newKidModal()">Aggiungi bambino</button> -->
+      <a routerLink="/kid" routerLinkActive="active">Aggiungi bambino</a>
+    </ion-col>
+    <ion-col col-12>
+      <hr />
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col col-4>
+      <ion-item>
+        <ion-label floating>Ordine</ion-label>
+        <ion-select [(ngModel)]='ordine' (ngModelChange)="onOrdineChange(ordine)" interface='popover'>
+          <ion-option value='0'>Alfabetico (nome) A-Z</ion-option>
+          <ion-option value='1'>Alfabetico (nome) Z-A</ion-option>
+          <ion-option value='2'>Alfabetico (cognome) A-Z</ion-option>
+          <ion-option value='3'>Alfabetico (cognome) Z-A</ion-option>
+        </ion-select>
+      </ion-item>
+    </ion-col>
+    <ion-col col-4>
+      <ion-item>
+        <ion-label floating>Filtro</ion-label>
+        <ion-select interface='popover' [(ngModel)]='filtro' (ngModelChange)="onFiltroKidChange(filtro)">
+          <ion-option value='0'>Tutti</ion-option>
+        </ion-select>
+      </ion-item>
+    </ion-col>
+    <ion-col col-4>
+      <ion-item>
+        <ion-label floating>Cerca</ion-label> 
+        <ion-input (input)="searchKids($event)"></ion-input>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col col-12>
+      <p float-end>Totale bambini trovati: {{filteredKid.length}}</p>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col col-12>
+      <ion-list>
+        <ion-item *ngFor="let item of filteredKid">
+          <ion-icon name="book" item-start color="green3" ></ion-icon>
+          <h2>{{item.name}} {{item.surname}}</h2>
+          <ion-icon name="eye" item-end color="magenta1" style="margin-right: 30px"></ion-icon>
+          <ion-icon name="md-create" item-end color="magenta1" style="margin-right: 30px"></ion-icon>
+          <ion-icon name="trash" item-end color="magenta1" style="margin-right: 10px" (click)="deleteKid(item)"></ion-icon>
+        </ion-item>
+      </ion-list>
+    </ion-col>
+  </ion-row>
+</ion-grid>

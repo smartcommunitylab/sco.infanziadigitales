@@ -6,6 +6,7 @@ import { Bus } from "./Classes/bus";
 import { Time } from "./Classes/time";
 import { Service } from "./Classes/service";
 import { Group } from "./Classes/group";
+import { Parent } from "./Classes/parent";
 
 export class InMemoryDataService implements InMemoryDbService {
   // createDb() {
@@ -58,7 +59,7 @@ export class InMemoryDataService implements InMemoryDbService {
           telephone : "0461256985",
           email : "scuolauno@mail.com",
           kids : [
-            new Kid("RSSMRO", "Mario", "Rossi"),
+            new Kid("RSSMRO", "Mario", "Rossi", "Maschio", new Date(2013, 11, 23), 'https://s-media-cache-ak0.pinimg.com/originals/ed/cb/7f/edcb7f2fc6cf61ef85713420ceb91565.jpg' , false, new Parent('GSTLRN', 'Lorenzo', 'Giusti'), new Parent('RSSFBO', 'Fabio', 'Rossi'), null, [], [], true, []),
             new Kid("VRDGVN","Giovanni", "Verdi"),
             new Kid("BNCLGI","Luigi", "Bianchi"),
           ],
@@ -68,10 +69,7 @@ export class InMemoryDataService implements InMemoryDbService {
             new Teacher("FRRMNL","Emanuela", "Ferri", "", "", "", ""),
           ],
           buses : [
-            new Bus("bus1", "Povo" , [
-              new Kid("RSSMRO", "Mario", "Rossi"),
-              new Kid("VRDGVN","Giovanni", "Verdi")
-            ]),
+            new Bus("bus1", "Povo", []),
             new Bus("bus2", "Gardolo", []),
             new Bus("bus3", "Rovereto", [])
           ],
@@ -80,12 +78,6 @@ export class InMemoryDataService implements InMemoryDbService {
             new Service("anticipo", [new Time("Fascia unica", new Date(0, 0, 0, 8, 30), new Date(0, 0, 0, 9, 30))]), //9.00 to 13.00
             new Service("posticipo", [new Time("Fascia unica", new Date(0, 0, 0, 15, 30), new Date(0, 0, 0, 17, 30))]), //9.00 to 13.00
           ],
-          // sections : [
-          //   "Sezione1",
-          //   "Sezione2",
-          //   "Sezione3",
-          //   "Sezione4",
-          // ],
           assenze : [
             "Malattia",
             "Vaccinazione",

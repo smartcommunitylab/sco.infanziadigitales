@@ -42,13 +42,14 @@ export class GroupModal {
     this.selectedGroup.teachers = new Array();
     this.newGroup.teachers.forEach(x=> {this.selectedGroup.teachers.push(x)});
 
-    console.log(this.school);
+    //console.log(this.school);
 
     if(this.isNew) {
-      console.log(this.selectedGroup);
+      //console.log(this.selectedGroup);
       if(this.school.groups.findIndex(x => x.name.toLowerCase() == this.selectedGroup.name.toLowerCase()) < 0)
         this.webService.add(this.school.id, this.newGroup).then(tmp => this.school.groups.push(tmp.groups[tmp.groups.length - 1]));
     }
+    this.webService.update(this.school);
     this.navCtrl.pop();
   }
   

@@ -31,13 +31,12 @@ export class WebService {
     .catch(this.handleError);
   }
 
-  getKid(id: string): Promise<Kid> {
-    const url = `${this.schoolUrl}/${id}`;
-    return this.http.get(url)
-        .toPromise()
-        .then(response => response.json().data as Kid)
-        .catch(this.handleError);
-    }
+  getKid(schoolId: string, kidId : string): Promise<Kid> {
+    const url = `${this.schoolUrl}/${schoolId}`;
+    return this.getSchool(schoolId).then(tmp => {
+      return tmp.kids.find(x=>x.id.toLowerCase() == kidId.toLowerCase());
+    });
+  }
     
   private handleError(error: any): Promise<any> {
     console.error('An error occurred', error);
@@ -103,5 +102,14 @@ export class WebService {
         return this.http.put(url, JSON.stringify(tmp), {headers: this.headers}).toPromise().then(() => tmp).catch(this.handleError);
       });
     }
+  }
+
+  update(school : School) {
+    const url = `${this.schoolUrl}/${school.id}`;
+    return this.http
+    .put(url, JSON.stringify(school), {headers: this.headers})
+    .toPromise()
+    .then(()=>school)
+    .catch(this.handleError);
   }
 }

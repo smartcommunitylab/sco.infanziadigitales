@@ -18,16 +18,16 @@
     <ion-segment-button value="orari">
       Orari
     </ion-segment-button>
-    <ion-segment-button value="gruppi_sezioni">
+    <ion-segment-button value="gruppi_sezioni" [routerLink]="['/']"> 
       Gruppi e sezioni
     </ion-segment-button>
-    <ion-segment-button value="bus">
+    <ion-segment-button value="bus" [routerLink]="['/']">
       Bus
     </ion-segment-button>
-    <ion-segment-button value="insegnanti">
+    <ion-segment-button value="insegnanti" [routerLink]="['/']">
       Insegnanti
     </ion-segment-button>
-    <ion-segment-button value="bambini">
+    <ion-segment-button value="bambini" [routerLink]="['/kid', selectedSchool.id]">
       Bambini
     </ion-segment-button>
   </ion-segment>
@@ -47,7 +47,7 @@
                     Nome Scuola
                   </ion-card-header>
                   <ion-card-content margin-top>
-                    Nome
+                    {{selectedSchool.name}}
                   </ion-card-content>
                 </ion-card>
               </ion-col>
@@ -205,7 +205,8 @@
           <insegnanti [selectedSchool]="selectedSchool"></insegnanti>
         </div>
         <div *ngSwitchCase="'bambini'">
-          <bambini [selectedSchool]="selectedSchool"></bambini>
+          <!-- <bambini [selectedSchool]="selectedSchool"></bambini> -->
+          <router-outlet></router-outlet>
         </div>
       </div>
     </ion-col> 

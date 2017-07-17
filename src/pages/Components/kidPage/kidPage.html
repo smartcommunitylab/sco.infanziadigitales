@@ -1,1 +1,160 @@
-<p>as</p>
+<ion-grid inset *ngIf="selectedKid" >
+    <ion-row>
+        <ion-col col-1><p></p></ion-col>
+        <ion-col col-10>
+            <button ion-button color='green1' float-start margin-top (click)='goBack()'><ion-icon name='arrow-round-back' margin-right></ion-icon> Dettagli di {{selectedKid.name}} {{selectedKid.surname}}</button>
+        </ion-col>
+        <ion-col col-1><p></p></ion-col>
+    </ion-row>
+    <ion-row>
+        <ion-col col-1><p></p></ion-col>
+        <ion-col col-10>
+            <ion-segment [(ngModel)]="kidSettings" color="light" style="background-color: #98ba3c;">
+                <ion-segment-button value="info">
+                Informazioni
+                </ion-segment-button>
+                <ion-segment-button value="genitori">
+                Genitori
+                </ion-segment-button>
+                <ion-segment-button value="autorizza"> 
+                Persone autorizzate
+                </ion-segment-button>
+            </ion-segment>
+        </ion-col>
+        <ion-col col-1><p></p></ion-col>
+    </ion-row>
+    <ion-row>
+        <ion-col col-1><p></p></ion-col>
+        <ion-col col-10>
+            <div [ngSwitch]="kidSettings">
+                <div *ngSwitchCase="'info'">
+                    <ion-grid inset>
+                        <ion-row>
+                            <ion-col col-12>
+                                <ion-card>
+                                    <ion-card-header>
+                                        Informazioni di base
+                                    </ion-card-header>
+                                    <ion-card-content margin-top>
+                                        <ion-grid inset>
+                                            <ion-row>
+                                                <ion-col col-1>
+                                                    Nome:
+                                                </ion-col>
+                                                <ion-col col-11>
+                                                    <ion-input [(ngModel)]="selectedKid.name" [disabled]='!edit' no-margin></ion-input>
+                                                </ion-col>
+                                            </ion-row>
+                                            <ion-row>
+                                                <ion-col col-1>
+                                                    Cognome:
+                                                </ion-col>
+                                                <ion-col col-11>
+                                                    <ion-input [(ngModel)]="selectedKid.surname" [disabled]='!edit' no-margin></ion-input>
+                                                </ion-col>
+                                            </ion-row>
+                                            <ion-row>
+                                                <ion-col col-1>
+                                                    Genere:
+                                                </ion-col>
+                                                <ion-col col-11>
+                                                    <ion-select interface='popover' [(ngModel)]="selectedKid.gender" *ngIf="edit" >
+                                                        <ion-option value='Maschio'>Maschio</ion-option>
+                                                        <ion-option value='Femmina'>Femmina</ion-option>
+                                                        <ion-option value='Altro'>Altro</ion-option>
+                                                    </ion-select>
+                                                    <span *ngIf="!edit" style="padding-left: 8px;">{{selectedKid.gender}}</span>
+                                                </ion-col>
+                                            </ion-row>
+                                            <ion-row>
+                                                <ion-col col-1>
+                                                    Data di nascita:
+                                                </ion-col>
+                                                <ion-col col-11>
+                                                    <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="selectedKid.nascita" *ngIf='edit' no-margin></ion-datetime >
+                                                    <span *ngIf="!edit" style="padding-left: 8px;">{{selectedKid.nascita}}</span>
+                                                </ion-col>
+                                            </ion-row>
+                                            <ion-row *ngIf='selectedKid.sperimentazione'>
+                                                <ion-col col-12>
+                                                    Partecipa alla sperimentazione
+                                                </ion-col>
+                                            </ion-row>
+                                        </ion-grid>
+                                    </ion-card-content>
+                                </ion-card>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row>
+                            <ion-col col-sm-12>
+                                <ion-card>
+                                    <ion-card-header>
+                                        Foto del bambino
+                                    </ion-card-header>
+                                    <ion-card-content margin-top>
+                                        <img src="{{selectedKid.image}}">
+                                    </ion-card-content>
+                                </ion-card>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row>
+                            <ion-col col-sm-12>
+                                <ion-card>
+                                    <ion-card-header>
+                                        Allergie
+                                    </ion-card-header>
+                                    <ion-card-content margin-top>
+                                        <ion-list>
+                                            <ion-item *ngFor="let item of selectedKid.allergie">
+                                                {{item}}
+                                                <span *ngIf="selectedKid.allergie.length === 0">Nessuna allergia</span> 
+                                            </ion-item>
+                                        </ion-list>
+                                    </ion-card-content>
+                                </ion-card>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row>
+                            <ion-col col-sm-12>
+                                <ion-card>
+                                    <ion-card-header>
+                                        Servizi attivi
+                                    </ion-card-header>
+                                    <ion-card-content margin-top>
+                                        <ion-list>
+                                            <ion-item *ngFor="let item of selectedKid.services">{{item}}</ion-item>
+                                            <span *ngIf="selectedKid.services.length === 0">Nessun servizio</span> 
+                                        </ion-list>
+                                    </ion-card-content>
+                                </ion-card>
+                            </ion-col>
+                        </ion-row> 
+                        <ion-row>
+                            <ion-col col-sm-12>
+                                <ion-card>
+                                    <ion-card-header>
+                                        Sezione e gruppi
+                                    </ion-card-header>
+                                    <ion-card-content margin-top>
+                                        <ion-list>
+                                            <ion-item *ngFor="let item of selectedKidGroups">
+                                                {{item.name}}
+                                                <span *ngIf="selectedKidGroups.length === 0">Nessun gruppo o sezione</span> 
+                                            </ion-item>
+                                        </ion-list>
+                                    </ion-card-content>
+                                </ion-card>
+                            </ion-col>
+                        </ion-row> 
+                        <ion-row>
+                            <ion-col col-sm-12>
+                                <button ion-button color='magenta1' float-end margin-top (click)='editClick()'>Modifica</button>
+                            </ion-col>
+                        </ion-row> 
+                    </ion-grid>
+                </div>
+            </div>
+        </ion-col>
+        <ion-col col-1><p></p></ion-col>
+    </ion-row>
+</ion-grid>

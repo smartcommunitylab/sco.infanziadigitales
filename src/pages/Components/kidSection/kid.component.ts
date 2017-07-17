@@ -1,3 +1,5 @@
+import { ActivatedRoute } from '@angular/router';
+import { ParamMap } from '@angular/router';
 import { Kid } from './../../../app/Classes/kid';
 import { Group } from './../../../app/Classes/group';
 import { WebService } from './../../../app/WebService';
@@ -11,17 +13,22 @@ import { NavController, AlertController, ModalController } from 'ionic-angular';
 })
 
 export class Bambini implements OnInit {
-  @Input() selectedSchool: School; 
+  selectedSchool: School; 
   toDeleteKid : Kid;
   ordine: string = '0';
   filtro : string = '0';
   filteredKid : Kid[];
   teacherGroups : Group[];
 
-  constructor(private webService : WebService, public alertCtrl: AlertController, public modalCtrl: ModalController) {}
+  constructor(private webService : WebService, public alertCtrl: AlertController, public modalCtrl: ModalController, private route : ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.filteredKid = this.selectedSchool.kids;
+     this.route.paramMap.switchMap((params: ParamMap) => this.webService.getSchool(params.get('schoolId'))).subscribe(tmp => 
+      {
+        //this.selectedSchool = new School(tmp.id, tmp.name, tmp.telephone, tmp.email, tmp.address, tmp.servizi, tmp.kids, tmp.teachers, tmp.buses, tmp.assenze, tmp.groups);
+        this.selectedSchool = tmp;
+        this.filteredKid = this.selectedSchool.kids;
+      });
   }
 
   deleteKid(item : Kid) {
@@ -60,8 +67,9 @@ export class Bambini implements OnInit {
     let val = item.target.value;
     if(val && val.trim() !== '') {
       this.filteredKid = this.filteredKid.filter(x => {
-        var tmp = x.name;
-        return (tmp.toLowerCase().indexOf(val.toLowerCase()) >= 0);
+        var tmpN = x.name;
+        var tmpS = x.surname;
+        return (tmpN.toLowerCase().indexOf(val.toLowerCase()) >= 0 || tmpS.toLowerCase().indexOf(val.toLowerCase()) >= 0);
       })
     }
   }

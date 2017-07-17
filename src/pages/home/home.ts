@@ -87,6 +87,7 @@ export class HomePage implements OnInit {
           handler: data => {
             this.selectedSchool.telephone = data.tel;
             this.selectedSchool.email = data.email;
+            this.webService.update(this.selectedSchool);
           }
         }
       ]

@@ -14,19 +14,23 @@ export class School {
     kids: Kid[];
     teachers: Teacher[];
     buses: Bus[];
-    sections: string[];
+    // sections: string[];
     assenze:string[];
     groups: Group[];
 
     constructor() {}
 
-    // constructor(name?:string, telephone?:string, email?:string, address?:string, kids?:Kid[], teachers?:Teacher[], buses?:Bus[]) {
+    // constructor(id:string, name?:string, telephone?:string, email?:string, address?:string, servizi?:Service[], kids?:Kid[], teachers?:Teacher[], buses?:Bus[], assenze?:string[], groups?:Group[]) {
+    //     this.id = id;
     //     this.name = name;
     //     this.telephone = telephone;
     //     this.email = email;
     //     this.address = address;
     //     this.kids = kids;
+    //     this.servizi = servizi;
     //     this.teachers = teachers;
     //     this.buses = buses;
+    //     this.assenze = assenze;
+    //     this.groups = groups;
     // }
 }

@@ -31,7 +31,7 @@ import { KidPage } from "../pages/Components/kidPage/kidPage";
     Buses,
     Insegnanti,
     Bambini,
-    KidPage
+    KidPage,
   ],
   imports: [
     BrowserModule,
@@ -40,8 +40,22 @@ import { KidPage } from "../pages/Components/kidPage/kidPage";
     InMemoryWebApiModule.forRoot(InMemoryDataService),
     RouterModule.forRoot([
       {
-        path: 'kid',
+        path: 'kid/:schoolId/:kidId',
         component: KidPage
+      },
+      {
+        path: 'kid/:schoolId',
+        component: Bambini
+      },
+      {
+        path: '', 
+        redirectTo: '/', 
+        pathMatch: 'full'
+      },
+      {
+        path: '**', 
+        redirectTo: '/', 
+        pathMatch: 'full'
       }
     ])
   ],
@@ -56,7 +70,7 @@ import { KidPage } from "../pages/Components/kidPage/kidPage";
     Buses,
     Insegnanti,
     Bambini,
-    KidPage
+    KidPage,
   ],
   providers: [
     StatusBar,

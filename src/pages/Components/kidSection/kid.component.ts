@@ -25,9 +25,10 @@ export class Bambini implements OnInit {
   ngOnInit(): void {
      this.route.paramMap.switchMap((params: ParamMap) => this.webService.getSchool(params.get('schoolId'))).subscribe(tmp => 
       {
-        //this.selectedSchool = new School(tmp.id, tmp.name, tmp.telephone, tmp.email, tmp.address, tmp.servizi, tmp.kids, tmp.teachers, tmp.buses, tmp.assenze, tmp.groups);
         this.selectedSchool = tmp;
         this.filteredKid = this.selectedSchool.kids;
+        this.webService.update(this.selectedSchool);
+        // console.log(this.selectedSchool);
       });
   }
 

@@ -20,6 +20,7 @@ export class GroupModal {
 
   constructor(public params: NavParams, public navCtrl:NavController, private webService : WebService, public alertCtrl : AlertController) {
     this.school = this.params.get('school') as School;
+    console.log(this.school)
     this.selectedGroup = this.params.get('group') as Group;
     this.isNew = this.params.get('isNew') as boolean;
 

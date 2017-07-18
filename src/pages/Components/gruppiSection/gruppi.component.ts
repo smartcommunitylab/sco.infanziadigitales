@@ -7,7 +7,15 @@ import { NavController, AlertController, ModalController } from 'ionic-angular';
 
 @Component({
   selector: 'gruppi',
-  templateUrl: 'gruppi-component.html'
+  templateUrl: 'gruppi-component.html',
+  styles: [`
+      .modal-wrapper {
+        top: 10px; 
+        left: 10px;
+        width: 90% ;
+        height: 90%
+      }
+  `]
 })
 
 export class Gruppi implements OnInit {
@@ -21,9 +29,13 @@ export class Gruppi implements OnInit {
 
   ngOnInit(): void {
     this.filteredGroups = this.selectedSchool.groups;
+    this.webService.getData().then(x => console.log(x));
+    this.onOrdineChange(this.ordine);
+    this.onFiltroGroupChange(this.filtro);
   }
 
   showGroupModal(item: Group, isNew : boolean) {
+    console.log(this.selectedSchool);
     let modal = this.modalCtrl.create(GroupModal, {'group' : item, 'school' : this.selectedSchool, 'isNew' : isNew}, {enableBackdropDismiss: false, showBackdrop: false});
     modal.present();
   }
@@ -39,7 +51,6 @@ export class Gruppi implements OnInit {
   }
 
   onOrdineChange(ordine : string) {
-    console.log(ordine);
     switch(ordine) {
       case '0':
         this.filteredGroups.sort((item1, item2) => item1.name.localeCompare(item2.name));
@@ -76,6 +87,7 @@ export class Gruppi implements OnInit {
         this.filteredGroups = this.selectedSchool.groups.filter(x => x.section === true)
       break;
     }
+    this.onOrdineChange(this.ordine);
   }
 
   searchGroups(item : any) {

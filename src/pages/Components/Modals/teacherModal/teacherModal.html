@@ -16,41 +16,92 @@
 <ion-content>
     <p style="color: #ccc" text-center><ion-icon name="help-circle"></ion-icon> Tutti i campi contrassegnati dal simbolo * sono obbligatori</p>
     <ion-list inset>
-        <ion-item>
-            <ion-label floating>ID (C.F.)*</ion-label>
-            <ion-input name="name" type="text" [(ngModel)]="newTeacher.id"></ion-input>
-        </ion-item>
-        <ion-item>
-            <ion-label floating>Nome*</ion-label>
-            <ion-input name="name" type="text" [(ngModel)]="newTeacher.name"></ion-input>
-        </ion-item>
-        <ion-item>
-            <ion-label floating>Cognome*</ion-label>
-            <ion-input name="name" type="text" [(ngModel)]="newTeacher.surname"></ion-input>
-        </ion-item>
-        <ion-item>
-            <ion-label floating>Telefono</ion-label>
-            <ion-input name="tel" type="text" [(ngModel)]="newTeacher.telephone"></ion-input>
-        </ion-item>
-        <ion-item>
-            <ion-label floating>Cellulare</ion-label>
-            <ion-input name="tel" type="text" [(ngModel)]="newTeacher.cellphone"></ion-input>
-        </ion-item>
-        <ion-item>
-            <ion-label floating>E-Mail</ion-label>
-            <ion-input name="email" type="text" [(ngModel)]="newTeacher.email"></ion-input>
-        </ion-item>
-        <ion-item>
-            <ion-label floating>PIN*</ion-label>
-            <ion-input name="text" type="text" [(ngModel)]="newTeacher.pin"></ion-input>
-        </ion-item>
+        <ion-grid inset>
+            <ion-row>
+                <ion-col col-2><p></p></ion-col>
+                <ion-col col-8>
+                    <ion-item>
+                        <ion-label floating>ID (C.F.)*</ion-label>
+                        <ion-input name="name" type="text" [(ngModel)]="newTeacher.id"></ion-input>
+                    </ion-item>
+                </ion-col>
+                <ion-col col-2><p></p></ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col col-2><p></p></ion-col>
+                <ion-col col-8>
+                    <ion-item>
+                        <ion-label floating>Nome*</ion-label>
+                        <ion-input name="name" type="text" [(ngModel)]="newTeacher.name"></ion-input>
+                    </ion-item>
+                </ion-col>
+                <ion-col col-2><p></p></ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col col-2><p></p></ion-col>
+                <ion-col col-8>
+                    <ion-item>
+                        <ion-label floating>Cognome*</ion-label>
+                        <ion-input name="name" type="text" [(ngModel)]="newTeacher.surname"></ion-input>
+                    </ion-item>
+                </ion-col>
+                <ion-col col-2><p></p></ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col col-2><p></p></ion-col>
+                <ion-col col-8>
+                    <ion-item>
+                        <ion-label floating>Telefono</ion-label>
+                        <ion-input name="tel" type="text" [(ngModel)]="newTeacher.telephone"></ion-input>
+                    </ion-item>
+                </ion-col>
+                <ion-col col-2><p></p></ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col col-2><p></p></ion-col>
+                <ion-col col-8>
+                    <ion-item>
+                        <ion-label floating>Cellulare</ion-label>
+                        <ion-input name="tel" type="text" [(ngModel)]="newTeacher.cellphone"></ion-input>
+                    </ion-item>
+                </ion-col>
+                <ion-col col-2><p></p></ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col col-2><p></p></ion-col>
+                <ion-col col-8>
+                    <ion-item>
+                        <ion-label floating>E-Mail</ion-label>
+                        <ion-input name="email" type="text" [(ngModel)]="newTeacher.email"></ion-input>
+                    </ion-item>
+                </ion-col>
+                <ion-col col-2><p></p></ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col col-2><p></p></ion-col>
+                <ion-col col-8>
+                    <ion-item>
+                        <ion-label floating>PIN*</ion-label>
+                        <ion-input name="text" type="text" [(ngModel)]="newTeacher.pin"></ion-input>
+                    </ion-item>
+                </ion-col>
+                <ion-col col-2><p></p></ion-col>
+            </ion-row>
+        </ion-grid>
     </ion-list>
-    <hr/>
-    <ion-list inset>
-        <ion-list-header>Sezioni e gruppi</ion-list-header>
-        <ion-item *ngFor="let gr of newTeacherGroups">
-            {{gr.name}}
-            <ion-icon name="close" float-end (click)="removeGroup(gr)"></ion-icon>
-        </ion-item>
-    </ion-list>
+    <ion-grid inset>
+        <ion-row>
+            <ion-col col-2><p></p></ion-col>
+            <ion-col col-8>
+                <ion-list inset>
+                    <ion-list-header>Sezioni e gruppi</ion-list-header>
+                    <ion-item *ngFor="let gr of newTeacherGroups">
+                        {{gr.name}}
+                        <ion-icon name="close" float-end (click)="removeGroup(gr)"></ion-icon>
+                    </ion-item>
+                </ion-list>
+            </ion-col>
+            <ion-col col-2><p></p></ion-col>
+        </ion-row>
+    </ion-grid>    
 </ion-content>

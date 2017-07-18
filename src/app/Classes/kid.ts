@@ -20,7 +20,7 @@ export class Kid extends Person {
     services : Service[];
 
     constructor(id:string, name:string, surname:string, gender?:string, nascita?:Date, image?:string, 
-                section?: boolean, parent1?:Parent, parent2?:Parent, bus?:Bus, ritiro?:Delega[], allergie?:string[], sperimentazione? : boolean, services?:Service[]) {
+                section?: boolean, parent1?:Parent, parent2?:Parent, bus?:Bus, ritiro?:Person[], deleghe?: Delega[], allergie?:string[], sperimentazione? : boolean, services?:Service[]) {
                     super(id, name, surname);
                     this.gender = gender;
                     this.nascita = nascita;
@@ -30,6 +30,7 @@ export class Kid extends Person {
                     this.parent2 = parent2;
                     this.bus = bus;
                     this.ritiro = ritiro;
+                    this.deleghe = deleghe;
                     this.allergie = allergie;
                     this.sperimentazione = sperimentazione;
                     this.services = services;

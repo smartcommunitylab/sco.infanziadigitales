@@ -1,3 +1,6 @@
+import { Delega } from './../../../app/Classes/delega';
+import { AlertController } from 'ionic-angular';
+import { Service } from './../../../app/Classes/service';
 import { Group } from './../../../app/Classes/group';
 import { School } from './../../../app/Classes/school';
 import { Kid } from './../../../app/Classes/kid';
@@ -26,6 +29,7 @@ import 'rxjs/add/operator/switchMap';
             border: solid 1px black;
             border-radius: 7px 7px 7px 7px;
             padding-left: 8px;
+            margin-left: 0;
         }
         .text-input[disabled] {
             opacity:  1;
@@ -44,7 +48,17 @@ import 'rxjs/add/operator/switchMap';
             border: none;
         }
         .datetime {
-            padding-left: 8px;
+            padding: 0 0 0 8px;
+            border: solid 1px black;
+            border-radius: 7px;
+            margin-right: 18px;
+        }
+        #giord {
+            border: solid 1px black;
+            border-radius: 7px 7px 7px 7px;
+            padding: 4px 0 4px 8px;
+            margin: 0;
+            width: 95%;
         }
     `]
 })
@@ -54,31 +68,88 @@ export class KidPage implements OnInit{
     selectedSchool : School
     selectedKidGroups : Group[];
     kidSettings:string = 'info';
-    nascita : string;
     edit:boolean = false;
+
+    newAllergia : string;
+    selectedDelega :Delega;
+
+    thisKid : Kid = new Kid('', '', '');
     
     constructor(
         private webService : WebService,
         private route : ActivatedRoute,
-        private location : Location
+        private location : Location,
+        private alertCtrl : AlertController
     ) { }
 
     ngOnInit(): void {    
-        this.route.paramMap.switchMap((params: ParamMap) => this.webService.getKid(params.get('schoolId'), params.get('kidId'))).subscribe(kid => this.selectedKid = kid);
+        this.route.paramMap.switchMap((params: ParamMap) => this.webService.getKid(params.get('schoolId'), params.get('kidId'))).subscribe(kid => {this.selectedKid = kid; Object.assign(this.thisKid, kid)});
         this.route.paramMap.switchMap((params: ParamMap) => this.webService.getSchool(params.get('schoolId'))).subscribe(school => {
             this.selectedSchool = school; 
-            this.selectedKidGroups = this.selectedSchool.groups.filter(x => 
-                x.kids.findIndex(d=>d.id === this.selectedKid.id) >= 0);
-                this.nascita = new Date(this.selectedKid.nascita).toLocaleString();
-                });   
+            this.selectedKidGroups = this.selectedSchool.groups.filter(x => x.kids.findIndex(d=>d.id === this.selectedKid.id) >= 0);
+        });
     }
 
     goBack() {
         this.location.back();
     }
 
+    addAllergia(all : string) {
+        if(this.thisKid.allergie.findIndex(x=>x.toLowerCase() === all.toLowerCase()) < 0)
+            this.thisKid.allergie.push(all);
+        this.newAllergia = '';
+    }
+    removeAllergia(all: string) {
+        this.thisKid.allergie.splice(this.thisKid.allergie.findIndex(x=>x.toLowerCase() === all.toLowerCase()), 1);
+    }
+
+    changeServices() {
+        let alert = this.alertCtrl.create();
+        alert.setTitle('Aggiungi servizi');
+        
+        this.selectedSchool.servizi.forEach(element => {
+            alert.addInput({
+                type: 'checkbox',
+                label: element.servizio,
+                value: JSON.stringify(element),
+                checked: this.thisKid.services.findIndex(x => x.servizio === element.servizio) >= 0
+            })
+        });
+
+        alert.addButton('Annulla');
+        alert.addButton({
+        text: 'OK',
+        handler: data => {
+            var x = new Array();
+            data.forEach(element => {
+            x.push(JSON.parse(element) as Kid)
+            });
+            this.thisKid.services = x
+        }
+        })
+        alert.present();
+    }
+
+    onSelectDelega(delega: Delega) {
+        this.selectedDelega = delega;
+    }
+
     editClick() {
         this.edit = !this.edit;
-        this.nascita = new Date(this.selectedKid.nascita).toLocaleString();
+    }
+
+    saveClick() {
+        Object.assign(this.selectedKid, this.thisKid);
+        Object.assign(this.selectedSchool.kids.find(x => x.id === this.selectedKid.id), this.selectedKid);
+        this.webService.update(this.selectedSchool);
+        this.webService.getSchool(this.selectedSchool.id).then(x => console.log(x));
+        this.webService.getData().then(x => console.log(x))
+        this.edit = !this.edit;
+        this.goBack();
+    }
+
+    cancelClick() {
+        Object.assign(this.thisKid, this.selectedKid);
+        this.edit = !this.edit;
     }
 }

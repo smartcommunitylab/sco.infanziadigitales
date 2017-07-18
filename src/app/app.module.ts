@@ -19,6 +19,7 @@ import { Gruppi } from "../pages/Components/gruppiSection/gruppi.component";
 import { Buses } from "../pages/Components/busSection/bus.component";
 import { Bambini } from "../pages/Components/kidSection/kid.component";
 import { KidPage } from "../pages/Components/kidPage/kidPage";
+import { DelegaPage } from "../pages/Components/kidPage/delega.component";
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { KidPage } from "../pages/Components/kidPage/kidPage";
     Insegnanti,
     Bambini,
     KidPage,
+    DelegaPage
   ],
   imports: [
     BrowserModule,
@@ -71,6 +73,7 @@ import { KidPage } from "../pages/Components/kidPage/kidPage";
     Insegnanti,
     Bambini,
     KidPage,
+    DelegaPage
   ],
   providers: [
     StatusBar,

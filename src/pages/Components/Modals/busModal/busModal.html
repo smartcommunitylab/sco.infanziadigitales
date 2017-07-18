@@ -15,28 +15,47 @@
 
 <ion-content>
     <p style="color: #ccc" text-center><ion-icon name="help-circle"></ion-icon> Tutti i campi contrassegnati dal simbolo * sono obbligatori</p>
-    <ion-list inset>
-        <ion-item>
-            <ion-label floating>Nome*</ion-label>
-            <ion-input name="name" type="text" [(ngModel)]="newBus.name"></ion-input>
-        </ion-item>
-    </ion-list>
-    <ion-list inset>
-        <ion-item>
-            <ion-label floating>Capolinea*</ion-label>
-            <ion-input name="name" type="text" [(ngModel)]="newBus.capolinea"></ion-input>
-        </ion-item>
-    </ion-list>
-    <hr/>
-    <ion-list inset>
-        <ion-list-header>Bambini</ion-list-header>
-        <ion-item *ngFor="let kid of newBus.kids">
-            <ion-thumbnail item-start>
-                <img src={{kid.image}}>
-            </ion-thumbnail>
-            {{kid.name}} {{kid.surname}}
-            <ion-icon name="close" float-end (click)="removeKid(kid)"></ion-icon>
-        </ion-item>
-        <button ion-item color="green3" (click)='addKid()'><ion-icon name="add"></ion-icon> Aggiungi bambini</button>
-    </ion-list>  
+    <ion-grid inset>
+        <ion-row>
+            <ion-col col-1><p></p></ion-col>
+            <ion-col col-10>
+                <ion-list inset>
+                    <ion-item>
+                        <ion-label floating>Nome*</ion-label>
+                        <ion-input name="name" type="text" [(ngModel)]="newBus.name"></ion-input>
+                    </ion-item>
+                </ion-list>
+            </ion-col>
+            <ion-col col-1><p></p></ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col col-1><p></p></ion-col>
+            <ion-col col-10>
+                <ion-list inset>
+                    <ion-item>
+                        <ion-label floating>Capolinea*</ion-label>
+                        <ion-input name="name" type="text" [(ngModel)]="newBus.capolinea"></ion-input>
+                    </ion-item>
+                </ion-list>
+            </ion-col>
+            <ion-col col-1><p></p></ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col col-1><p></p></ion-col>
+            <ion-col col-10>
+                <ion-list inset>
+                    <ion-list-header>Bambini</ion-list-header>
+                    <ion-item *ngFor="let kid of newBus.kids">
+                        <ion-thumbnail item-start>
+                            <img src={{kid.image}}>
+                        </ion-thumbnail>
+                        {{kid.name}} {{kid.surname}}
+                        <ion-icon name="close" float-end (click)="removeKid(kid)"></ion-icon>
+                    </ion-item>
+                    <button ion-item color="green3" (click)='addKid()'><ion-icon name="add"></ion-icon> Aggiungi bambini</button>
+                </ion-list>  
+            </ion-col>
+            <ion-col col-1><p></p></ion-col>
+        </ion-row>
+    </ion-grid>
 </ion-content>

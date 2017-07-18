@@ -12,10 +12,10 @@
      </button> 
   </ion-navbar>
   <ion-segment [(ngModel)]="settings" (ngModelChange)="onSegmentChange()" color="light" style="background-color: #98ba3c;" *ngIf="selectedSchool">
-    <ion-segment-button value="profilo">
+    <ion-segment-button value="profilo" [routerLink]="['/']">
       Home
     </ion-segment-button>
-    <ion-segment-button value="orari">
+    <ion-segment-button value="orari" [routerLink]="['/']">
       Orari
     </ion-segment-button>
     <ion-segment-button value="gruppi_sezioni" [routerLink]="['/']"> 

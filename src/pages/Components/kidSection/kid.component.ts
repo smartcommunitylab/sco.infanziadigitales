@@ -13,38 +13,58 @@ import { NavController, AlertController, ModalController } from 'ionic-angular';
 })
 
 export class Bambini implements OnInit {
-  selectedSchool: School; 
+  @Input() selectedSchool: School; 
   toDeleteKid : Kid;
   ordine: string = '0';
   filtro : string = '0';
   filteredKid : Kid[];
   teacherGroups : Group[];
 
-  constructor(private webService : WebService, public alertCtrl: AlertController, public modalCtrl: ModalController, private route : ActivatedRoute) {}
+  thisSchool:School = new School();
+
+  kidClick : boolean[] = [false];
+
+  selectedKid : Kid;
+
+  edit : boolean;
+
+  constructor(private webService : WebService) {}
 
   ngOnInit(): void {
-     this.route.paramMap.switchMap((params: ParamMap) => this.webService.getSchool(params.get('schoolId'))).subscribe(tmp => 
-      {
-        this.selectedSchool = tmp;
-        this.filteredKid = this.selectedSchool.kids;
-        this.webService.update(this.selectedSchool);
-        // console.log(this.selectedSchool);
-      });
+      Object.assign(this.thisSchool, this.selectedSchool)
+      this.filteredKid = this.selectedSchool.kids;
+      this.onFiltroKidChange(this.filtro);
   }
 
-  deleteKid(item : Kid) {
+  onAddKid() {
+    var k = new Kid('', '', '');
+    this.onEditKid(k);
+  }
+
+  onViewKid(kid : Kid) {
+    this.selectedKid = kid;
+    this.edit = false;
+    this.kidClick[0] = true;
+  }
+
+  onEditKid(kid : Kid) {
+    this.selectedKid = kid;
+    this.edit = true;
+    this.kidClick[0]= true;
+  }
+
+  onDeleteKid(item : Kid) {
     this.toDeleteKid = new Kid(item.id, item.name, item.surname);
     this.webService.remove(this.selectedSchool.id, this.toDeleteKid).then(tmp=> {this.selectedSchool.kids = []; tmp.kids.forEach(x=>this.selectedSchool.kids.push(x)); this.filteredKid = this.selectedSchool.kids});
   }
 
   onOrdineChange(ordine : string) {
-    console.log(ordine);
     switch(ordine) {
       case '0':
-        this.filteredKid.sort((item1, item2) => item1.name.localeCompare(item2.name));
+        this.filteredKid.sort((item1, item2) => item2.name.localeCompare(item1.name));
       break;
       case '1':
-        this.filteredKid.sort((item1, item2) => item2.name.localeCompare(item1.name));
+        this.filteredKid.sort((item1, item2) => item1.name.localeCompare(item2.name));
       break;
       case '2':
         this.filteredKid.sort((item1, item2) => item1.surname.localeCompare(item2.surname));
@@ -60,7 +80,23 @@ export class Bambini implements OnInit {
       case '0':
         this.filteredKid = this.selectedSchool.kids;
       break;
+      case '1':
+        this.filteredKid = this.selectedSchool.kids.filter(x=> x.gender === "Maschio");
+      break;
+      case '2':
+        this.filteredKid = this.selectedSchool.kids.filter(x=> x.gender === "Femmina");;
+      break;
+      case '3':
+        this.filteredKid = this.selectedSchool.kids.filter(x=> x.gender === "Altro");;
+      break;
+      case '4':
+        this.filteredKid = this.selectedSchool.kids.filter(x=> x.section);
+      break;
+      case '5':
+        this.filteredKid = this.selectedSchool.kids.filter(x=> !x.section);
+      break;
     }
+    this.onOrdineChange(this.ordine);
   }
 
   searchKids(item : any) {

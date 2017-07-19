@@ -1,0 +1,117 @@
+<ion-grid inset>
+    <ion-row>
+        <ion-col col-10 offset-1>
+            <ion-card>
+                <ion-card-header>
+                Informazioni di base
+                </ion-card-header>
+                <ion-card-content margin-top>
+                    <ion-grid inset>
+                        <ion-row margin-bottom>
+                            <ion-col col-1>
+                                Nome:
+                            </ion-col>
+                            <ion-col col-11>
+                                {{selectedSchool.name}}
+                            </ion-col>
+                        </ion-row>
+                        <ion-row margin-bottom>
+                            <ion-col col-1>
+                                Indirizzo:
+                            </ion-col>
+                            <ion-col col-11s>
+                                {{selectedSchool.address}}
+                            </ion-col>
+                        </ion-row>
+                    </ion-grid>
+                </ion-card-content>
+            </ion-card>
+        </ion-col>
+    </ion-row>
+    <ion-row>
+        <ion-col col-10 offset-1>
+            <ion-card>
+                <ion-card-header>
+                Contatti
+                </ion-card-header>
+                <ion-card-content margin-top>
+                    <ion-grid inset>
+                        <ion-row margin-bottom>
+                            <ion-col col-1>
+                                Telefono:
+                            </ion-col>
+                            <ion-col col-11>
+                                <ion-input type="tel" [(ngModel)]="selectedSchool.telephone" [disabled]='!editContatti' no-margin></ion-input>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row margin-bottom>
+                            <ion-col col-1>
+                                Indirizzo email:
+                            </ion-col>
+                            <ion-col col-11>
+                                <ion-input type="tel" [(ngModel)]="selectedSchool.email" [disabled]='!editContatti' no-margin></ion-input>
+                            </ion-col>
+                        </ion-row>
+                    </ion-grid>
+                    <ion-fab style="bottom: -5px; right: -5px">
+                        <button ion-fab mini (click)="onContattiEdit()" color='magenta1'><ion-icon name="md-create"></ion-icon></button>
+                    </ion-fab>
+                </ion-card-content>
+            </ion-card>
+        </ion-col>
+    </ion-row>
+    <ion-row>
+        <ion-col col-10 offset-1>
+            <ion-card>
+                <ion-card-header>
+                Tipologia di assenze
+                </ion-card-header>
+                <ion-card-content margin-top>
+                    <ion-grid *ngIf="editAssenze" no-padding no-margin><ion-row><ion-col col-4>
+                        <ion-item class="ome" no-padding no-margin>
+                            <input type='text' id='giord' [(ngModel)]="newAssenza" placeholder="Inserisci tipologia di assenza" no-padding no-margin>
+                            <ion-icon name="add-circle" color="green3" (click)="addAssenza(newAssenza)" item-end></ion-icon>    
+                        </ion-item> 
+                    </ion-col></ion-row></ion-grid>
+                    <ion-list>
+                        <ion-item *ngFor="let item of selectedSchool.assenze">
+                            {{item}}
+                            <ion-icon *ngIf="selectedSchool.assenze.length > 0 && editAssenze" name="close" float-end (click)="removeAssenza(item)"></ion-icon>
+                        </ion-item>
+                        <ion-item *ngIf="selectedSchool.assenze.length === 0">Nessuna tipologia di assenza</ion-item> 
+                    </ion-list>
+                    <ion-fab style="bottom: -5px; right: -5px">
+                        <button ion-fab mini (click)="onAssenzeEdit()" color='magenta1'><ion-icon name="md-create"></ion-icon></button>
+                    </ion-fab>
+                </ion-card-content>
+            </ion-card>
+        </ion-col>
+    </ion-row>       
+    <ion-row>
+        <ion-col col-10 offset-1>
+            <ion-card>
+                <ion-card-header>
+                Tipologia di malattie
+                </ion-card-header>
+                <ion-card-content margin-top>
+                    <ion-grid *ngIf="editMalattie" no-padding no-margin><ion-row><ion-col col-4>
+                        <ion-item class="ome" no-padding no-margin>
+                            <input type='text' id='giord' [(ngModel)]="newMalattia" placeholder="Inserisci tipologia di malattia" no-padding no-margin>
+                            <ion-icon name="add-circle" color="green3" (click)="addMalattia(newMalattia)" item-end></ion-icon>    
+                        </ion-item> 
+                    </ion-col></ion-row></ion-grid>
+                    <ion-list>
+                        <ion-item *ngFor="let item of selectedSchool.malattie">
+                            {{item}}
+                            <ion-icon *ngIf="selectedSchool.malattie.length > 0 && editMalattie" name="close" float-end (click)="removeMalattia(item)"></ion-icon>
+                        </ion-item>
+                        <ion-item *ngIf="selectedSchool.malattie.length === 0">Nessuna tipologia di malattia</ion-item> 
+                    </ion-list>
+                    <ion-fab style="bottom: -5px; right: -5px">
+                        <button ion-fab mini (click)="onMalattieEdit()" color='magenta1'><ion-icon name="md-create"></ion-icon></button>
+                    </ion-fab>
+                </ion-card-content>
+            </ion-card>
+        </ion-col>
+    </ion-row>    
+</ion-grid>

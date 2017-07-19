@@ -42,7 +42,7 @@
                                                     C.F. (ID):
                                                 </ion-col>
                                                 <ion-col col-10>
-                                                    <ion-input [(ngModel)]="thisKid.id" [disabled]='!edit' no-margin></ion-input>
+                                                    <ion-input [(ngModel)]="thisKid.id" [disabled]='true' no-margin></ion-input>
                                                 </ion-col>
                                             </ion-row>
                                             <ion-row margin-bottom>
@@ -350,7 +350,7 @@
                         </ion-row>
                         <ion-row>
                             <ion-col col-12>
-                                <delega [selectedDelega]='selectedDelega'></delega>
+                                <delega *ngIf="selectedDelega"  [delega]='selectedDelega' [edit]='edit'></delega>
                             </ion-col>
                         </ion-row>
                     </ion-grid>

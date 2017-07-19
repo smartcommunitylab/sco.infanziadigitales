@@ -1,4 +1,4 @@
-<ion-grid inset>
+<ion-grid inset *ngIf="selectedSchool" >
   <ion-row>
     <ion-col col-12>
       <button ion-button color="green1" float-end margin-top (click)="newGroupModal()">Crea nuovo gruppo</button>
@@ -38,7 +38,7 @@
   </ion-row>
   <ion-row>
     <ion-col col-12>
-      <!-- <p float-end>Totale gruppi trovati: {{filteredGroups.length}}</p> -->
+       <p float-end>Totale gruppi trovati: {{filteredGroups.length}}</p> 
     </ion-col>
   </ion-row>
   <ion-row>

@@ -20,6 +20,7 @@ import { Buses } from "../pages/Components/busSection/bus.component";
 import { Bambini } from "../pages/Components/kidSection/kid.component";
 import { KidPage } from "../pages/Components/kidPage/kidPage";
 import { DelegaPage } from "../pages/Components/kidPage/delega.component";
+import { Info } from "../pages/Components/homeSection/info.component";
 
 @NgModule({
   declarations: [
@@ -33,33 +34,14 @@ import { DelegaPage } from "../pages/Components/kidPage/delega.component";
     Insegnanti,
     Bambini,
     KidPage,
-    DelegaPage
+    DelegaPage,
+    Info
   ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
     HttpModule,
-    InMemoryWebApiModule.forRoot(InMemoryDataService),
-    RouterModule.forRoot([
-      {
-        path: 'kid/:schoolId/:kidId',
-        component: KidPage
-      },
-      {
-        path: 'kid/:schoolId',
-        component: Bambini
-      },
-      {
-        path: '', 
-        redirectTo: '/', 
-        pathMatch: 'full'
-      },
-      {
-        path: '**', 
-        redirectTo: '/', 
-        pathMatch: 'full'
-      }
-    ])
+    InMemoryWebApiModule.forRoot(InMemoryDataService)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -73,7 +55,8 @@ import { DelegaPage } from "../pages/Components/kidPage/delega.component";
     Insegnanti,
     Bambini,
     KidPage,
-    DelegaPage
+    DelegaPage,
+    Info
   ],
   providers: [
     StatusBar,

@@ -64,39 +64,73 @@ import 'rxjs/add/operator/switchMap';
 })
 
 export class KidPage implements OnInit{ 
-    selectedKid : Kid;
-    selectedSchool : School
+    @Input() selectedKid : Kid;
+    @Input() selectedSchool : School
+    @Input() kidClick : boolean[];
+    @Input() edit:boolean = false;
+
     selectedKidGroups : Group[];
+
     kidSettings:string = 'info';
-    edit:boolean = false;
 
     newAllergia : string;
-    selectedDelega :Delega;
+    selectedDelega : Delega;
+    thisDelega:Delega = new Delega('', '', '');
 
     thisKid : Kid = new Kid('', '', '');
-    
+
     constructor(
         private webService : WebService,
-        private route : ActivatedRoute,
-        private location : Location,
         private alertCtrl : AlertController
     ) { }
 
     ngOnInit(): void {    
-        this.route.paramMap.switchMap((params: ParamMap) => this.webService.getKid(params.get('schoolId'), params.get('kidId'))).subscribe(kid => {this.selectedKid = kid; Object.assign(this.thisKid, kid)});
-        this.route.paramMap.switchMap((params: ParamMap) => this.webService.getSchool(params.get('schoolId'))).subscribe(school => {
-            this.selectedSchool = school; 
-            this.selectedKidGroups = this.selectedSchool.groups.filter(x => x.kids.findIndex(d=>d.id === this.selectedKid.id) >= 0);
-        });
+        Object.assign(this.thisKid, this.selectedKid)
+        this.thisKid.allergie = new Array();
+        this.selectedKid.allergie.forEach(x => this.thisKid.allergie.push(x));
+        this.thisKid.deleghe = new Array();
+        this.selectedKid.deleghe.forEach(x => this.thisKid.deleghe.push(x));
+        this.thisKid.ritiro = new Array();
+        this.selectedKid.ritiro.forEach(x => this.thisKid.ritiro.push(x));
+        this.thisKid.services = new Array();
+        
+        this.selectedKidGroups = this.selectedSchool.groups.filter(x => x.kids.findIndex(d => d === this.selectedKid.id) >= 0);
     }
 
     goBack() {
-        this.location.back();
+        if(this.edit) {
+            let alert = this.alertCtrl.create({
+                subTitle: 'Salvare prima di uscire?',            
+            });
+            
+            alert.addButton({
+                text: 'No',
+                handler: () => {
+                    this.kidClick[0] = false;
+                }
+            });
+            alert.addButton({
+                text: 'Sì',
+                handler: () => {
+                    this.saveClick();
+                    this.kidClick[0] = false;
+                }
+            })
+            alert.present();
+        }
+        else this.kidClick[0] = false;
     }
 
     addAllergia(all : string) {
-        if(this.thisKid.allergie.findIndex(x=>x.toLowerCase() === all.toLowerCase()) < 0)
-            this.thisKid.allergie.push(all);
+        if(all !== undefined && all !== '') 
+            if(this.thisKid.allergie.findIndex(x=>x.toLowerCase() === all.toLowerCase()) < 0 && all !== '')
+                this.thisKid.allergie.push(all);
+            else {
+                let alert = this.alertCtrl.create();
+                alert.setSubTitle('Voce già presente');
+                alert.addButton('OK');
+                alert.present();
+            }
         this.newAllergia = '';
     }
     removeAllergia(all: string) {
@@ -132,6 +166,7 @@ export class KidPage implements OnInit{
 
     onSelectDelega(delega: Delega) {
         this.selectedDelega = delega;
+        Object.assign(this.thisDelega, delega);
     }
 
     editClick() {
@@ -142,14 +177,12 @@ export class KidPage implements OnInit{
         Object.assign(this.selectedKid, this.thisKid);
         Object.assign(this.selectedSchool.kids.find(x => x.id === this.selectedKid.id), this.selectedKid);
         this.webService.update(this.selectedSchool);
-        this.webService.getSchool(this.selectedSchool.id).then(x => console.log(x));
-        this.webService.getData().then(x => console.log(x))
         this.edit = !this.edit;
-        this.goBack();
     }
 
     cancelClick() {
         Object.assign(this.thisKid, this.selectedKid);
+        this.selectedDelega = this.thisDelega;
         this.edit = !this.edit;
     }
 }

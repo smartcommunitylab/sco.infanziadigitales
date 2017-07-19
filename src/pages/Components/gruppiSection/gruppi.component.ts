@@ -19,8 +19,9 @@ import { NavController, AlertController, ModalController } from 'ionic-angular';
 })
 
 export class Gruppi implements OnInit {
-  @Input() selectedSchool: School; 
-  toDeleteGroup : Group;
+  @Input() selectedSchool : School;
+  thisSchool : School = new School();
+  toDeleteGroup : Group = new Group('', [], false, []);
   ordine: string = '0';
   filtro : string = '0';
   filteredGroups : Group[];
@@ -28,16 +29,16 @@ export class Gruppi implements OnInit {
   constructor(private webService : WebService, public alertCtrl: AlertController, public modalCtrl: ModalController) {}
 
   ngOnInit(): void {
+    Object.assign(this.thisSchool, this.selectedSchool);
     this.filteredGroups = this.selectedSchool.groups;
-    this.webService.getData().then(x => console.log(x));
-    this.onOrdineChange(this.ordine);
     this.onFiltroGroupChange(this.filtro);
   }
 
   showGroupModal(item: Group, isNew : boolean) {
-    console.log(this.selectedSchool);
-    let modal = this.modalCtrl.create(GroupModal, {'group' : item, 'school' : this.selectedSchool, 'isNew' : isNew}, {enableBackdropDismiss: false, showBackdrop: false});
-    modal.present();
+    let modal = this.modalCtrl.create(GroupModal, {'group' : item, 'school' : this.thisSchool, 'isNew' : isNew}, {enableBackdropDismiss: false, showBackdrop: false});
+    modal.present().then(x=>{
+      Object.assign(this.selectedSchool, this.thisSchool);
+    });
   }
 
   newGroupModal() {
@@ -46,8 +47,13 @@ export class Gruppi implements OnInit {
   }
 
   deleteGroup(item : Group) {
-    this.toDeleteGroup = new Group(item.name, item.kids, item.section, item.teachers)
-    this.webService.remove(this.selectedSchool.id, this.toDeleteGroup).then(tmp=> {this.selectedSchool.groups = []; tmp.groups.forEach(x=>this.selectedSchool.groups.push(x)); this.filteredGroups = this.selectedSchool.groups});
+    Object.assign(this.toDeleteGroup, item)
+    this.webService.remove(this.selectedSchool.id, this.toDeleteGroup).then(tmp=> {
+      this.selectedSchool.groups = []; 
+      tmp.groups.forEach(x=>this.selectedSchool.groups.push(x)); 
+      this.filteredGroups = this.selectedSchool.groups;
+      this.onFiltroGroupChange(this.filtro);
+    });
   }
 
   onOrdineChange(ordine : string) {

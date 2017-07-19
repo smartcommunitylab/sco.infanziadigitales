@@ -3,11 +3,11 @@ import { Teacher } from "./teacher";
 
 export class Group {
     name: string;
-    kids: Kid[];
+    kids: string[];
     section: boolean;
-    teachers: Teacher[];
+    teachers: string[];
 
-    constructor(name:string, kids: Kid[], section: boolean, teachers: Teacher[]) {
+    constructor(name:string, kids: string[], section: boolean, teachers: string[]) {
         this.name = name;
         this.kids = kids;
         this.section = section;

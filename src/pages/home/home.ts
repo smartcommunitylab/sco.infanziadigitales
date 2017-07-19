@@ -11,8 +11,22 @@ import { NavController, AlertController, ModalController } from 'ionic-angular';
   selector: 'page-home',
   templateUrl: 'home.html',
   styles: [`
-    ion-card-header {
-      background-color: rgba(152,186,60, .8);
+    ion-navbar{
+      padding-bottom:0
+    }
+    ion-header::after {
+      background-image: none;
+    }
+    .segment-button {
+      border-bottom: 4px solid #98ba3c;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    .segment-button.segment-activated {
+      border-bottom: 4px solid #98ba3c
+    }
+    ion-segment-button.segment-activated {
+      background-color : #98ba3c;
     }
   `]
 })
@@ -37,43 +51,4 @@ export class HomePage implements OnInit {
   onSegmentChange() {
     this.webService.getSchool(this.selectedId).then(x => this.selectedSchool = x)
   }
-
-  showPromptOnContattiEdit() {
-    let prompt = this.alertCtrl.create({
-      title: 'Contatti',
-      message: "Modifica contatti",
-      inputs: [
-        {
-          type: 'tel',
-          name: 'tel',
-          placeholder: 'Telefono',
-          value: this.selectedSchool.telephone
-        },
-        {
-          type: 'email',
-          name: 'email',
-          placeholder: 'Email',
-          value: this.selectedSchool.email
-        },
-      ],
-      buttons: [
-        {
-          text: 'Cancel',
-          handler: data => {
-            console.log('Cancel clicked');
-          }
-        },
-        {
-          text: 'Save',
-          handler: data => {
-            this.selectedSchool.telephone = data.tel;
-            this.selectedSchool.email = data.email;
-            this.webService.update(this.selectedSchool);
-          }
-        }
-      ]
-    });
-    prompt.present();
-  }
-
 }

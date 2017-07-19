@@ -1,8 +1,7 @@
-<ion-grid inset *ngIf='selectedSchool'>
+<ion-grid inset *ngIf='selectedSchool && !kidClick[0]'>
   <ion-row>
     <ion-col col-12>
-        <button ion-button color="green1" float-end margin-top>Aggiungi bambino</button>  
-       <!-- <a [routerLink]="['/newKid', selectedSchool.id]" routerLinkActive="active">Aggiungi bambino</a>  -->
+        <button ion-button color="green1" float-end margin-top (click)='onAddKid()'>Aggiungi bambino</button>  
     </ion-col>
     <ion-col col-12>
       <hr />
@@ -25,6 +24,11 @@
         <ion-label floating>Filtro</ion-label>
         <ion-select interface='popover' [(ngModel)]='filtro' (ngModelChange)="onFiltroKidChange(filtro)">
           <ion-option value='0'>Tutti</ion-option>
+          <ion-option value='1'>Genere (Maschi)</ion-option>
+          <ion-option value='2'>Genere (Femmine)</ion-option>
+          <ion-option value='3'>Genere (Altro)</ion-option>
+          <ion-option value='4'>Assegnati ad una sezione</ion-option>
+          <ion-option value='5'>Non assegnati ad alcuna sezione</ion-option>
         </ion-select>
       </ion-item>
     </ion-col>
@@ -48,11 +52,13 @@
             <img src="{{item.image}}">
           </ion-thumbnail>
           <h2>{{item.name}} {{item.surname}}</h2>
-          <ion-icon name="eye" item-end color="magenta1" style="margin-right: 30px" [routerLink]="['/kid', selectedSchool.id, item.id]" routerLinkActive="active"></ion-icon> 
-          <ion-icon name="md-create" item-end color="magenta1" style="margin-right: 30px"></ion-icon>
-          <ion-icon name="trash" item-end color="magenta1" style="margin-right: 10px" (click)="deleteKid(item)"></ion-icon>
+          <ion-icon name="eye" item-end color="magenta1" style="margin-right: 30px" (click)='onViewKid(item)'></ion-icon> 
+          <ion-icon name="md-create" item-end color="magenta1" style="margin-right: 30px" (click)='onEditKid(item)'></ion-icon>
+          <ion-icon name="trash" item-end color="magenta1" style="margin-right: 10px" (click)="onDeleteKid(item)"></ion-icon>
         </ion-item>
       </ion-list>
     </ion-col>
   </ion-row>
 </ion-grid>
+
+<kidPage [selectedKid]='selectedKid' [selectedSchool]='selectedSchool' [kidClick]='kidClick' [edit]='edit' *ngIf="kidClick[0]"></kidPage>

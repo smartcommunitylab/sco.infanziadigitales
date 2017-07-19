@@ -14,8 +14,8 @@ export class School {
     kids: Kid[];
     teachers: Teacher[];
     buses: Bus[];
-    // sections: string[];
     assenze:string[];
+    malattie: string[];
     groups: Group[];
 
     constructor() {}

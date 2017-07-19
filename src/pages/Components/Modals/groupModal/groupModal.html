@@ -7,7 +7,7 @@
             <button ion-button (click)="close()">Annulla</button>
         </ion-buttons>
         <ion-buttons end>
-            <button ion-button (click)="save()" [disabled]='!(newGroup.name)'>Salva</button>
+            <button ion-button (click)="save()" [disabled]='!(copiedGroup.name)'>Salva</button>
         </ion-buttons>
             
     </ion-navbar>
@@ -22,11 +22,11 @@
                 <ion-list inset>
                     <ion-item>
                         <ion-label floating>Nome*</ion-label>
-                        <ion-input name="name" type="text" [(ngModel)]="newGroup.name"></ion-input>
+                        <ion-input name="name" type="text" [(ngModel)]="copiedGroup.name"></ion-input>
                     </ion-item>
                     <ion-item margin-top>
                         <ion-label inline>Questo gruppo è una sezione</ion-label>
-                        <ion-checkbox [(ngModel)]="newGroup.section"></ion-checkbox>
+                        <ion-checkbox [(ngModel)]="copiedGroup.section"></ion-checkbox>
                     </ion-item>
                 </ion-list>
             </ion-col>
@@ -37,7 +37,7 @@
             <ion-col col-10>
                 <ion-list inset>
                     <ion-list-header>Insegnanti</ion-list-header>
-                    <ion-item *ngFor="let tea of newGroup.teachers">
+                    <ion-item *ngFor="let tea of selectedGroupTeachers">
                         {{tea.name}} {{tea.surname}}
                         <ion-icon name="close" float-end (click)="removeTeacher(tea)"></ion-icon>
                     </ion-item>
@@ -48,15 +48,15 @@
         </ion-row>
         <ion-row>
             <ion-col col-1><p></p></ion-col>
-            <ion-col col-10>
+            <ion-col col-10 >
                  <ion-list inset>
                     <ion-list-header>Bambini</ion-list-header>
-                    <ion-item *ngFor="let kid of newGroup.kids">
+                    <ion-item *ngFor="let kid of selectedGroupKids">
                         <ion-thumbnail item-start>
                             <img src={{kid.image}}>
                         </ion-thumbnail>
                         {{kid.name}} {{kid.surname}}
-                        <ion-icon name="close" float-end (click)="removeKid(kid)"></ion-icon>
+                        <ion-icon name="close" float-end (click)="removeKid(kid.id)"></ion-icon>
                     </ion-item>
                     <button ion-item color="green3" (click)='addKid()'><ion-icon name="add"></ion-icon> Aggiungi bambini</button>
                 </ion-list>  

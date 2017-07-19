@@ -35,7 +35,7 @@ export class TeacherModal implements OnInit{
   }
 
     ngOnInit(): void {
-        this.newTeacherGroups = this.school.groups.filter(x=>x.teachers.findIndex(c=>c.id === this.newTeacher.id) >= 0)
+        this.newTeacherGroups = this.school.groups.filter(x=>x.teachers.findIndex(c=>c === this.newTeacher.id) >= 0)
     }
 
   close() {
@@ -60,6 +60,6 @@ export class TeacherModal implements OnInit{
   }
 
   removeGroup(group : Group) {
-    group.teachers.splice(group.teachers.findIndex(x=>x.id == this.newTeacher.id), 1);
+    group.teachers.splice(group.teachers.findIndex(x=>x == this.newTeacher.id), 1);
   }
 }

@@ -41,7 +41,11 @@ export class HomePage implements OnInit {
   constructor(public navCtrl: NavController, private webService : WebService, public alertCtrl: AlertController, public modalCtrl: ModalController) {}
 
   ngOnInit(): void {
-    this.webService.getData().then(item => { this.schools = item });
+    this.webService.getData().then(item => { 
+      this.schools = item;
+      this.selectedId = this.schools[0].id;
+      this.onSchoolChange(this.selectedId)
+    });
   }
 
   onSchoolChange(selectedId : string) {

@@ -11,8 +11,8 @@ export class Person {
         this.id = id;
         this.name = name;
         this.surname = surname;
-        this.cellphone = cellphone;
-        this.telephone = telephone;
-        this.email = email;
+        this.cellphone = cellphone || "";
+        this.telephone = telephone || "";
+        this.email = email || "";
     }
 }

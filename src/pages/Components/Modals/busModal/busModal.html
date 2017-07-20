@@ -7,7 +7,7 @@
             <button ion-button (click)="close()">Annulla</button>
         </ion-buttons>
         <ion-buttons end>
-            <button ion-button (click)="save()" [disabled]='!(newBus.name) || !(newBus.capolinea)'>Salva</button>
+            <button ion-button (click)="save()" [disabled]='!(copiedBus.name) || !(copiedBus.capolinea)'>Salva</button>
         </ion-buttons>
             
     </ion-navbar>
@@ -22,7 +22,7 @@
                 <ion-list inset>
                     <ion-item>
                         <ion-label floating>Nome*</ion-label>
-                        <ion-input name="name" type="text" [(ngModel)]="newBus.name"></ion-input>
+                        <ion-input name="name" type="text" [(ngModel)]="copiedBus.name"></ion-input>
                     </ion-item>
                 </ion-list>
             </ion-col>
@@ -34,7 +34,7 @@
                 <ion-list inset>
                     <ion-item>
                         <ion-label floating>Capolinea*</ion-label>
-                        <ion-input name="name" type="text" [(ngModel)]="newBus.capolinea"></ion-input>
+                        <ion-input name="name" type="text" [(ngModel)]="copiedBus.capolinea"></ion-input>
                     </ion-item>
                 </ion-list>
             </ion-col>
@@ -45,7 +45,7 @@
             <ion-col col-10>
                 <ion-list inset>
                     <ion-list-header>Bambini</ion-list-header>
-                    <ion-item *ngFor="let kid of newBus.kids">
+                    <ion-item *ngFor="let kid of selectedBusKids">
                         <ion-thumbnail item-start>
                             <img src={{kid.image}}>
                         </ion-thumbnail>

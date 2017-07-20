@@ -44,7 +44,7 @@
           <ion-icon name="book" item-start color="green3" ></ion-icon>
           <h2>{{item.name}} {{item.surname}}</h2>
           <ion-icon name="md-create" item-end color="magenta1" style="margin-right: 30px" (click)="showTeacherModal(item, false)"></ion-icon>
-          <ion-icon name="trash" item-end color="magenta1" style="margin-right: 10px" (click)="deleteTeacher(item)"></ion-icon>
+          <ion-icon name="trash" item-end color="magenta1" style="margin-right: 10px" (click)="onDeleteTeacher(item)"></ion-icon>
         </ion-item>
       </ion-list>
     </ion-col>

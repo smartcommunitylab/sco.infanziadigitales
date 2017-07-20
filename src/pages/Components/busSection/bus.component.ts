@@ -13,14 +13,17 @@ import { NavController, AlertController, ModalController } from 'ionic-angular';
 
 export class Buses implements OnInit {
     @Input() selectedSchool: School;
-    toDeleteBus : Bus;
+    thisSchool : School = new School();
+
     ordine: string = '0';
     filteredBus : Bus[];
 
     constructor(public navCtrl: NavController, private webService : WebService, public alertCtrl: AlertController, public modalCtrl: ModalController) {}
 
     ngOnInit(): void {
-        this.filteredBus = this.selectedSchool.buses;
+      Object.assign(this.thisSchool, this.selectedSchool);
+      this.filteredBus = this.thisSchool.buses;
+      this.onOrdineChange(this.ordine);
     }
 
     onOrdineChange(ordine : string) {
@@ -56,8 +59,10 @@ export class Buses implements OnInit {
   }
 
   showBusModal(item: Bus, isNew : boolean) {
-    let modal = this.modalCtrl.create(BusModal, {'bus' : item, 'school' : this.selectedSchool, 'isNew' : isNew}, {enableBackdropDismiss: false, showBackdrop: false});
-      modal.present();
+    let modal = this.modalCtrl.create(BusModal, {'bus' : item, 'school' : this.thisSchool, 'isNew' : isNew}, {enableBackdropDismiss: false, showBackdrop: false});
+    modal.present().then(x=>{
+      Object.assign(this.selectedSchool, this.thisSchool);
+    });
   }
 
   newBusModal() {
@@ -65,9 +70,10 @@ export class Buses implements OnInit {
     this.showBusModal(newBus, true);
   }
 
-  deleteBus(item : Bus) {
-    this.toDeleteBus = new Bus(item.name, item.capolinea, item.kids);
-    this.webService.remove(this.selectedSchool.id, this.toDeleteBus).then(tmp => {this.selectedSchool.buses = []; tmp.buses.forEach(x => this.selectedSchool.buses.push(x)); this.filteredBus = this.selectedSchool.buses});
+  onDeleteBus(item : Bus) {
+    this.thisSchool.buses.splice(this.thisSchool.buses.findIndex(tmp => tmp.name.toLowerCase() === item.name.toLowerCase()), 1);
+    Object.assign(this.selectedSchool, this.thisSchool);
+    this.webService.update(this.selectedSchool);
   }
 
   searchBus(item : any) {

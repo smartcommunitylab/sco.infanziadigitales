@@ -1,3 +1,4 @@
+import { Bus } from './../../../app/Classes/bus';
 import { ActivatedRoute } from '@angular/router';
 import { ParamMap } from '@angular/router';
 import { Kid } from './../../../app/Classes/kid';
@@ -6,6 +7,7 @@ import { WebService } from './../../../app/WebService';
 import { School } from './../../../app/Classes/school';
 import { Component, Input, OnInit } from '@angular/core';
 import { NavController, AlertController, ModalController } from 'ionic-angular';
+import { Parent } from "../../../app/Classes/parent";
 
 @Component({
   selector: 'bambini',
@@ -14,30 +16,29 @@ import { NavController, AlertController, ModalController } from 'ionic-angular';
 
 export class Bambini implements OnInit {
   @Input() selectedSchool: School; 
-  toDeleteKid : Kid;
-  ordine: string = '0';
-  filtro : string = '0';
-  filteredKid : Kid[];
-  teacherGroups : Group[];
-
   thisSchool:School = new School();
 
-  kidClick : boolean[] = [false];
-
   selectedKid : Kid;
+
+  ordine: string = '0';
+  filtro : string = '0';
+
+  filteredKid : Kid[];
+
+  kidClick : boolean[] = [false];
 
   edit : boolean;
 
   constructor(private webService : WebService) {}
 
   ngOnInit(): void {
-      Object.assign(this.thisSchool, this.selectedSchool)
-      this.filteredKid = this.selectedSchool.kids;
-      this.onFiltroKidChange(this.filtro);
+    Object.assign(this.thisSchool, this.selectedSchool)
+    this.filteredKid = this.selectedSchool.kids;
+    this.onFiltroKidChange(this.filtro);
   }
 
   onAddKid() {
-    var k = new Kid('', '', '');
+    var k = new Kid('', '', '', '', new Date(''), '', false, new Parent('', '', '', '', '', ''), new Parent('', '', '', '', '', ''), new Bus('', '', []), [], [], [], false, []);
     this.onEditKid(k);
   }
 
@@ -45,26 +46,31 @@ export class Bambini implements OnInit {
     this.selectedKid = kid;
     this.edit = false;
     this.kidClick[0] = true;
+    Object.assign(this.selectedSchool, this.thisSchool);
+    this.webService.update(this.selectedSchool);
   }
 
   onEditKid(kid : Kid) {
     this.selectedKid = kid;
     this.edit = true;
     this.kidClick[0]= true;
+    Object.assign(this.selectedSchool, this.thisSchool);
+    this.webService.update(this.selectedSchool);
   }
 
   onDeleteKid(item : Kid) {
-    this.toDeleteKid = new Kid(item.id, item.name, item.surname);
-    this.webService.remove(this.selectedSchool.id, this.toDeleteKid).then(tmp=> {this.selectedSchool.kids = []; tmp.kids.forEach(x=>this.selectedSchool.kids.push(x)); this.filteredKid = this.selectedSchool.kids});
+    this.thisSchool.kids.splice(this.thisSchool.kids.findIndex(tmp => tmp.id === item.id), 1);
+    Object.assign(this.selectedSchool, this.thisSchool);
+    this.webService.update(this.selectedSchool);
   }
 
   onOrdineChange(ordine : string) {
     switch(ordine) {
       case '0':
-        this.filteredKid.sort((item1, item2) => item2.name.localeCompare(item1.name));
+        this.filteredKid.sort((item1, item2) => item1.name.localeCompare(item2.name));
       break;
       case '1':
-        this.filteredKid.sort((item1, item2) => item1.name.localeCompare(item2.name));
+        this.filteredKid.sort((item1, item2) => item2.name.localeCompare(item1.name));
       break;
       case '2':
         this.filteredKid.sort((item1, item2) => item1.surname.localeCompare(item2.surname));

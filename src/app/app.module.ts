@@ -1,3 +1,4 @@
+import { DelegaPage } from './../pages/Components/kidSection/kidPage/delegaSection/delega.component';
 import { Insegnanti } from './../pages/Components/teacherSection/teacher.component';
 import { TeacherModal } from './../pages/Components/Modals/teacherModal/teacherModal';
 import { BusModal } from './../pages/Components/Modals/busModal/busModal';
@@ -18,9 +19,8 @@ import { GroupModal } from "../pages/Components/Modals/groupModal/groupModal";
 import { Gruppi } from "../pages/Components/gruppiSection/gruppi.component";
 import { Buses } from "../pages/Components/busSection/bus.component";
 import { Bambini } from "../pages/Components/kidSection/kid.component";
-import { KidPage } from "../pages/Components/kidPage/kidPage";
-import { DelegaPage } from "../pages/Components/kidPage/delega.component";
 import { Info } from "../pages/Components/homeSection/info.component";
+import { KidPage } from "../pages/Components/kidSection/kidPage/kidPage";
 
 @NgModule({
   declarations: [
@@ -35,7 +35,7 @@ import { Info } from "../pages/Components/homeSection/info.component";
     Bambini,
     KidPage,
     DelegaPage,
-    Info
+    Info,
   ],
   imports: [
     BrowserModule,
@@ -56,7 +56,7 @@ import { Info } from "../pages/Components/homeSection/info.component";
     Bambini,
     KidPage,
     DelegaPage,
-    Info
+    Info,    
   ],
   providers: [
     StatusBar,

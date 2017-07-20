@@ -13,21 +13,27 @@ import { NavController, AlertController, ModalController } from 'ionic-angular';
 
 export class Insegnanti implements OnInit {
   @Input() selectedSchool: School; 
+  thisSchool : School = new School();
+
   toDeleteTeacher : Teacher;
+
   ordine: string = '0';
   filtro : string = '0';
   filteredTeacher : Teacher[];
-  teacherGroups : Group[];
 
   constructor(private webService : WebService, public alertCtrl: AlertController, public modalCtrl: ModalController) {}
 
   ngOnInit(): void {
+    Object.assign(this.thisSchool, this.selectedSchool);
     this.filteredTeacher = this.selectedSchool.teachers;
+    this.onFiltroTeacherChange(this.filtro);
   }
 
   showTeacherModal(item: Teacher, isNew : boolean) {
-    let modal = this.modalCtrl.create(TeacherModal, {'teacher' : item, 'school' : this.selectedSchool, 'isNew' : isNew}, {enableBackdropDismiss: false, showBackdrop: false});
-    modal.present();
+    let modal = this.modalCtrl.create(TeacherModal, {'teacher' : item, 'school' : this.thisSchool, 'isNew' : isNew}, {enableBackdropDismiss: false, showBackdrop: false});
+    modal.present().then(x=>{
+      Object.assign(this.selectedSchool, this.thisSchool);
+    });
   }
 
   newTeacherModal() {
@@ -35,9 +41,10 @@ export class Insegnanti implements OnInit {
     this.showTeacherModal(newTeacher, true);
   }
 
-  deleteTeacher(item : Teacher) {
-    this.toDeleteTeacher = new Teacher(item.id, item.name, item.surname);
-    this.webService.remove(this.selectedSchool.id, this.toDeleteTeacher).then(tmp=> {this.selectedSchool.teachers = []; tmp.teachers.forEach(x=>this.selectedSchool.teachers.push(x)); this.filteredTeacher = this.selectedSchool.teachers});
+  onDeleteTeacher(item : Teacher) {
+    this.thisSchool.teachers.splice(this.thisSchool.teachers.findIndex(tmp => tmp.id.toLowerCase() === item.id.toLowerCase()), 1);
+    Object.assign(this.selectedSchool, this.thisSchool);
+    this.webService.update(this.selectedSchool);
   }
 
   onOrdineChange(ordine : string) {
@@ -58,6 +65,7 @@ export class Insegnanti implements OnInit {
         this.filteredTeacher = this.selectedSchool.teachers;
       break;
     }
+    this.onOrdineChange(this.ordine);
   }
 
   searchTeachers(item : any) {

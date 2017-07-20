@@ -13,53 +13,62 @@ import { NavParams, NavController, AlertController } from "ionic-angular";
 })
 
 export class TeacherModal implements OnInit{ 
-    selectedTeacher: Teacher;
-  newTeacher : Teacher;
-  newTeacherGroups : Group[];
-  school : School;
-  isNew : boolean = false;
+  selectedSchool : School;
 
-  constructor(public params: NavParams, public navCtrl:NavController, private webService : WebService) {
-    this.school = this.params.get('school') as School;
+  selectedTeacher: Teacher;
+  copiedTeacher : Teacher = new Teacher('', '' ,'');
+  
+  selectedTeacherGroups : Group[];
+
+  isNew : boolean;
+
+  constructor(public params: NavParams, public navCtrl:NavController, private webService : WebService, private alertCtrl : AlertController) {
+    this.selectedSchool = this.params.get('school') as School;
     this.selectedTeacher = this.params.get('teacher') as Teacher;
     this.isNew = this.params.get('isNew') as boolean;
 
-    this.newTeacher = new Teacher('', '', '');
-    this.newTeacher.id = this.selectedTeacher.id;
-    this.newTeacher.name = this.selectedTeacher.name;
-    this.newTeacher.surname = this.selectedTeacher.surname;
-    this.newTeacher.cellphone = this.selectedTeacher.cellphone;
-    this.newTeacher.telephone = this.selectedTeacher.telephone;
-    this.newTeacher.email = this.selectedTeacher.email;
-    this.newTeacher.pin = this.selectedTeacher.pin;
+    Object.assign(this.copiedTeacher, this.selectedTeacher);
   }
 
-    ngOnInit(): void {
-        this.newTeacherGroups = this.school.groups.filter(x=>x.teachers.findIndex(c=>c === this.newTeacher.id) >= 0)
-    }
+  ngOnInit(): void {
+    this.updateArray();   
+  }
+
+  updateArray() {
+    this.selectedTeacherGroups = [];
+
+    this.selectedSchool.groups.forEach(group => {
+      group.teachers.forEach(teacherId => {
+        if(teacherId.toLowerCase() === this.copiedTeacher.id.toLowerCase()) this.selectedTeacherGroups.push(group);
+      })
+    })
+  }
 
   close() {
     this.navCtrl.pop();
   }
 
   save() {
-    this.selectedTeacher.id = this.newTeacher.id;
-    this.selectedTeacher.name = this.newTeacher.name;
-    this.selectedTeacher.surname = this.newTeacher.surname;
-    this.selectedTeacher.cellphone = this.newTeacher.cellphone;
-    this.selectedTeacher.telephone = this.newTeacher.telephone;
-    this.selectedTeacher.email = this.newTeacher.email;
-    this.selectedTeacher.pin = this.newTeacher.pin;
+    Object.assign(this.selectedTeacher, this.copiedTeacher);
 
     if(this.isNew) {
-      console.log(this.selectedTeacher);
-      if(this.school.teachers.findIndex(x => x.id.toLowerCase() === this.selectedTeacher.id.toLowerCase()) < 0)
-        this.webService.add(this.school.id, this.newTeacher).then(tmp => this.school.teachers.push(tmp.teachers[tmp.teachers.length - 1]));
+      if(this.selectedSchool.teachers.findIndex(x => x.id.toLowerCase() === this.selectedTeacher.id.toLowerCase()) < 0) {
+        this.webService.add(this.selectedSchool.id, this.copiedTeacher).then(tmp => this.selectedSchool.teachers.push(tmp.teachers[tmp.teachers.length - 1]));
+        this.webService.update(this.selectedSchool);
+        this.navCtrl.pop();
+      }
+      else {
+        let alert = this.alertCtrl.create({
+          subTitle: 'Elemento già presente (conflitto di C.F)',
+          buttons: ['OK']
+        });
+        alert.present();
+      }
     }
-    this.navCtrl.pop();
   }
 
-  removeGroup(group : Group) {
-    group.teachers.splice(group.teachers.findIndex(x=>x == this.newTeacher.id), 1);
+  onRemoveGroup(group : Group) {
+    group.teachers.splice(group.teachers.findIndex(x=>x.toLowerCase() == this.copiedTeacher.id.toLowerCase()), 1);
+    this.updateArray();
   }
 }

@@ -1,10 +1,10 @@
-import { Delega } from './../../../app/Classes/delega';
+import { Delega } from './../../../../app/Classes/delega';
 import { AlertController } from 'ionic-angular';
-import { Service } from './../../../app/Classes/service';
-import { Group } from './../../../app/Classes/group';
-import { School } from './../../../app/Classes/school';
-import { Kid } from './../../../app/Classes/kid';
-import { WebService } from './../../../app/WebService';
+import { Service } from './../../../../app/Classes/service';
+import { Group } from './../../../../app/Classes/group';
+import { School } from './../../../../app/Classes/school';
+import { Kid } from './../../../../app/Classes/kid';
+import { WebService } from './../../../../app/WebService';
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, ParamMap } from "@angular/router";
 import { Location }                 from '@angular/common';
@@ -69,15 +69,19 @@ export class KidPage implements OnInit{
     @Input() kidClick : boolean[];
     @Input() edit:boolean = false;
 
+    thisKid : Kid = new Kid('', '', '');
+
     selectedKidGroups : Group[];
 
     kidSettings:string = 'info';
 
     newAllergia : string;
-    selectedDelega : Delega;
-    thisDelega:Delega = new Delega('', '', '');
 
-    thisKid : Kid = new Kid('', '', '');
+    selectedDelega : Delega;
+    isNewD : boolean = false;
+    editD : boolean = false;
+
+    isNew : boolean = false;
 
     constructor(
         private webService : WebService,
@@ -93,16 +97,18 @@ export class KidPage implements OnInit{
         this.thisKid.ritiro = new Array();
         this.selectedKid.ritiro.forEach(x => this.thisKid.ritiro.push(x));
         this.thisKid.services = new Array();
-        
-        this.selectedKidGroups = this.selectedSchool.groups.filter(x => x.kids.findIndex(d => d === this.selectedKid.id) >= 0);
+        this.selectedKid.services.forEach(x => this.thisKid.services.push(x));
+
+        this.selectedKidGroups = this.selectedSchool.groups.filter(x => x.kids.findIndex(d => d.toLowerCase() === this.selectedKid.id.toLowerCase()) >= 0);
+
+        this.isNew = this.thisKid.id == ''; 
     }
 
     goBack() {
-        if(this.edit) {
+        if(this.edit && this.thisKid.name !== '' && this.thisKid.id !== '' && this.thisKid.surname !== '') {
             let alert = this.alertCtrl.create({
                 subTitle: 'Salvare prima di uscire?',            
             });
-            
             alert.addButton({
                 text: 'No',
                 handler: () => {
@@ -146,7 +152,7 @@ export class KidPage implements OnInit{
                 type: 'checkbox',
                 label: element.servizio,
                 value: JSON.stringify(element),
-                checked: this.thisKid.services.findIndex(x => x.servizio === element.servizio) >= 0
+                checked: this.thisKid.services.findIndex(x => x.servizio.toLowerCase() === element.servizio.toLowerCase()) >= 0
             })
         });
 
@@ -164,25 +170,93 @@ export class KidPage implements OnInit{
         alert.present();
     }
 
-    onSelectDelega(delega: Delega) {
-        this.selectedDelega = delega;
-        Object.assign(this.thisDelega, delega);
-    }
-
     editClick() {
         this.edit = !this.edit;
     }
 
     saveClick() {
-        Object.assign(this.selectedKid, this.thisKid);
-        Object.assign(this.selectedSchool.kids.find(x => x.id === this.selectedKid.id), this.selectedKid);
+        Object.assign(this.selectedKid, this.thisKid)
+        this.selectedKid.allergie = new Array();
+        this.thisKid.allergie.forEach(x => this.selectedKid.allergie.push(x));
+        this.selectedKid.deleghe = new Array();
+        this.thisKid.deleghe.forEach(x => this.selectedKid.deleghe.push(x));
+        this.selectedKid.ritiro = new Array();
+        this.thisKid.ritiro.forEach(x => this.selectedKid.ritiro.push(x));
+        this.selectedKid.services = new Array();
+        this.thisKid.services.forEach(x => this.selectedKid.services.push(x));
+
+        if(this.isNew) {
+            if(this.selectedSchool.kids.findIndex(x => x.id.toLowerCase() === this.thisKid.id.toLowerCase()) >= 0) {
+                let alert = this.alertCtrl.create({
+                    subTitle: 'Elemento già presente',
+                    buttons: [
+                        {
+                            text: 'OK'
+                        }
+                    ]
+                });
+                alert.present();
+            }
+            else {
+                this.selectedSchool.kids.push(this.selectedKid);              
+            }
+        }
         this.webService.update(this.selectedSchool);
         this.edit = !this.edit;
     }
 
     cancelClick() {
-        Object.assign(this.thisKid, this.selectedKid);
-        this.selectedDelega = this.thisDelega;
-        this.edit = !this.edit;
+        if(this.isNew) {
+            this.edit = false;
+            this.goBack();
+        }
+        else {
+            Object.assign(this.thisKid, this.selectedKid);
+            this.edit = !this.edit;
+        }
+    }
+
+    addDelega() {
+        if(!this.isNewD) {
+            this.isNewD = true;
+            this.selectedDelega = new Delega('', '' ,'');
+            this.editD = true;
+        }
+    }
+
+    onSelectDelega(delega: Delega) {
+        this.selectedDelega = delega;
+    }
+
+    saveDClick() {
+        if(this.isNewD)
+            if(this.selectedDelega !== undefined && this.selectedDelega.id !== '')
+                if(this.selectedKid.deleghe.findIndex(x => this.selectedDelega.id.toLowerCase() === x.id.toLowerCase()) < 0)
+                    this.thisKid.deleghe.push(this.selectedDelega)
+                else {
+                    let alert = this.alertCtrl.create({
+                        subTitle: 'Elemento già presente',
+                        buttons: [
+                            {
+                                text: 'OK'
+                            }
+                        ]
+                    });
+                    alert.present();
+                }
+        this.selectedDelega = undefined;
+        this.isNewD = false;
+        this.editD = false;
+        this.saveClick();
+    }
+
+    editDClick() {
+        this.editD = !this.editD;
+    }
+
+    cancelDClick() {
+        this.selectedDelega = undefined;
+        this.isNewD = false;
+        this.editD = false;
     }
 }

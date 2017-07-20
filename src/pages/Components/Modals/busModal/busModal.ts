@@ -4,7 +4,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { School } from './../../../../app/Classes/school';
 import { WebService } from './../../../../app/WebService';
 import { Bus } from './../../../../app/Classes/bus';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NavParams, NavController, AlertController } from "ionic-angular";
 
 @Component({
@@ -12,21 +12,36 @@ import { NavParams, NavController, AlertController } from "ionic-angular";
   templateUrl: 'busModal.html',
 })
 
-export class BusModal {
+export class BusModal implements OnInit {
+  selectedSchool : School;
+
   selectedBus: Bus;
-  newBus : Bus;
-  school : School;
-  isNew : boolean = false;
+  copiedBus : Bus = new Bus('', '');
+
+  selectedBusKids : Kid[] = [];
+
+  isNew : boolean;
 
   constructor(public params: NavParams, public navCtrl:NavController, private webService : WebService, public alertCtrl : AlertController) {
-    this.school = this.params.get('school') as School;
+    this.selectedSchool = this.params.get('school') as School;
     this.selectedBus = this.params.get('bus') as Bus;
     this.isNew = this.params.get('isNew') as boolean;
 
-    this.newBus = new Bus('', '', []);
-    this.newBus.name = this.selectedBus.name;
-    this.selectedBus.kids.forEach(x => this.newBus.kids.push(x) )
-    this.newBus.capolinea = this.selectedBus.capolinea;
+    Object.assign(this.copiedBus, this.selectedBus);
+    this.copiedBus.kids = new Array();
+    this.selectedBus.kids.forEach(x => this.copiedBus.kids.push(x));
+  }
+
+  ngOnInit() {
+    this.updateArray();
+  }
+
+  updateArray() {
+    this.selectedBusKids = [];
+
+    this.copiedBus.kids.forEach(item => {
+      this.selectedBusKids.push(this.selectedSchool.kids.find(x => x.id.toLowerCase() === item.toLowerCase()))
+    })
   }
 
   close() {
@@ -34,17 +49,24 @@ export class BusModal {
   }
 
   save() {
-    this.selectedBus.name = this.newBus.name;
+    Object.assign(this.selectedBus, this.copiedBus);
     this.selectedBus.kids = new Array();
-    this.newBus.kids.forEach(x => this.selectedBus.kids.push(x) )
-    this.selectedBus.capolinea = this.newBus.capolinea;
+    this.copiedBus.kids.forEach(x => this.selectedBus.kids.push(x) )
 
     if(this.isNew) {
-      console.log(this.selectedBus);
-      if(this.school.buses.findIndex(x => x.name.toLowerCase() == this.selectedBus.name.toLowerCase()) < 0)
-        this.webService.add(this.school.id, this.newBus).then(tmp => this.school.buses.push(tmp.buses[tmp.buses.length - 1]));
+      if(this.selectedSchool.buses.findIndex(x => x.name.toLowerCase() == this.selectedBus.name.toLowerCase()) < 0) {
+        this.webService.add(this.selectedSchool.id, this.copiedBus).then(tmp => this.selectedSchool.buses.push(tmp.buses[tmp.buses.length - 1]));
+        this.webService.update(this.selectedSchool);
+        this.close();
+      }
+      else {
+        let alert = this.alertCtrl.create({
+          subTitle: 'Elemento già presente (conflitto di nomi)',
+          buttons: ['OK']
+        });
+        alert.present();
+      }
     }
-    this.navCtrl.pop();
   }
 
 
@@ -52,30 +74,30 @@ export class BusModal {
     let alert = this.alertCtrl.create();
     alert.setTitle('Aggiungi bambini');
     
-    this.school.kids.forEach(element => {
+    this.selectedSchool.kids.forEach(element => {
       alert.addInput({
         type: 'checkbox',
         label: element.name + ' ' + element.surname,
-        value: JSON.stringify(element),
-        checked: this.newBus.kids.findIndex(x => x.id === element.id) >= 0
+        value: element.id,
+        checked: this.copiedBus.kids.findIndex(x => x.toLowerCase() === element.id.toLowerCase()) >= 0
       })
     });
-
+    this.copiedBus.kids = [];
     alert.addButton('Annulla');
     alert.addButton({
       text: 'OK',
       handler: data => {
-        var x = new Array();
         data.forEach(element => {
-          x.push(JSON.parse(element) as Kid)
+          this.copiedBus.kids.push(element);
+          this.updateArray();
         });
-        this.newBus.kids = x
       }
     })
     alert.present();
   }
 
   removeKid(kid : Kid) {
-    this.newBus.kids.splice(this.newBus.kids.findIndex(x => kid.id == x.id), 1);
+    this.copiedBus.kids.splice(this.copiedBus.kids.findIndex(x => kid.id.toLowerCase() == x.toLowerCase()), 1);
+    this.updateArray();
   }
 }

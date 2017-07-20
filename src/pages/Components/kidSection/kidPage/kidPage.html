@@ -42,7 +42,7 @@
                                                     C.F. (ID):
                                                 </ion-col>
                                                 <ion-col col-10>
-                                                    <ion-input [(ngModel)]="thisKid.id" [disabled]='true' no-margin></ion-input>
+                                                    <ion-input [(ngModel)]="thisKid.id" [disabled]='!isNew' no-margin></ion-input>
                                                 </ion-col>
                                             </ion-row>
                                             <ion-row margin-bottom>
@@ -333,6 +333,11 @@
                     <ion-grid inset>
                         <ion-row>
                             <ion-col col-12>
+                                <button ion-button color='green1' float-end margin-top (click)='addDelega()'>Aggiungi delega</button>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row>
+                            <ion-col col-12>
                                 <ion-card>
                                     <ion-card-header>
                                         Persone autorizzate
@@ -350,7 +355,142 @@
                         </ion-row>
                         <ion-row>
                             <ion-col col-12>
-                                <delega *ngIf="selectedDelega"  [delega]='selectedDelega' [edit]='edit'></delega>
+                                <!-- <delega *ngIf="thisDelega" [selectedSchool]='selectedSchool' [delega]='thisDelega' [edit]='edit'></delega> -->
+                                <div *ngIf="selectedDelega">
+                                    <ion-card>
+                                        <ion-card-header>
+                                            {{selectedDelega.name}} {{selectedDelega.surname}}
+                                        </ion-card-header>
+                                        <ion-card-content>
+                                        <ion-grid>
+                                            <ion-row>
+                                                <ion-col col-4>
+                                                    <ion-grid inset>
+                                                        <ion-row margin-bottom>
+                                                            <ion-col col-2>
+                                                                Ruolo
+                                                            </ion-col>
+                                                            <ion-col col-10>
+                                                                <ion-select [(ngModel)]="selectedDelega.legame" interface='popover' *ngIf="editD">
+                                                                    <ion-option value="Nonno/a">Nonno/a</ion-option>
+                                                                    <ion-option value="Zio/a">Zio/a</ion-option>
+                                                                    <ion-option value="Fratello/Sorella">Fratello/Sorella (maggiorenne)</ion-option>
+                                                                    <ion-option value="Altro">Altro</ion-option>
+                                                                </ion-select>
+                                                                <span *ngIf="!edit" style="padding-left: 8px;">{{selectedDelega.legame}}</span>
+                                                            </ion-col>
+                                                        </ion-row>
+                                                    </ion-grid>
+                                                </ion-col>
+                                            </ion-row>
+                                            <ion-row>
+                                                <ion-col col-12>
+                                                    <ion-card>
+                                                        <ion-card-header>
+                                                            Informazioni di base
+                                                        </ion-card-header>
+                                                        <ion-card-content margin-top>
+                                                            <ion-grid inset>
+                                                                <ion-row margin-bottom>
+                                                                    <ion-col col-2>
+                                                                        C.F. (ID):
+                                                                    </ion-col>
+                                                                    <ion-col col-10>
+                                                                        <ion-input [(ngModel)]="selectedDelega.id" [disabled]='!isNewD' no-margin></ion-input>
+                                                                    </ion-col>
+                                                                </ion-row>
+                                                                <ion-row margin-bottom>
+                                                                    <ion-col col-2>
+                                                                        Nome:
+                                                                    </ion-col>
+                                                                    <ion-col col-10>
+                                                                        <ion-input [(ngModel)]="selectedDelega.name" [disabled]='!editD' no-margin></ion-input>
+                                                                    </ion-col>
+                                                                </ion-row>
+                                                                <ion-row margin-bottom>
+                                                                    <ion-col col-2>
+                                                                        Cognome:
+                                                                    </ion-col>
+                                                                    <ion-col col-10>
+                                                                        <ion-input [(ngModel)]="selectedDelega.surname" [disabled]='!editD' no-margin></ion-input>
+                                                                    </ion-col>
+                                                                </ion-row>
+                                                            </ion-grid>
+                                                        </ion-card-content>
+                                                    </ion-card>
+                                                    <ion-card>
+                                                        <ion-card-header>
+                                                            Contatti
+                                                        </ion-card-header>
+                                                        <ion-card-content margin-top>
+                                                            <ion-grid inset>
+                                                                <ion-row margin-bottom>
+                                                                    <ion-col col-2>
+                                                                        Telefono:
+                                                                    </ion-col>
+                                                                    <ion-col col-10>
+                                                                        <ion-input [(ngModel)]="selectedDelega.telephone" [disabled]='!editD' no-margin></ion-input>
+                                                                    </ion-col>
+                                                                </ion-row>
+                                                                <ion-row margin-bottom>
+                                                                    <ion-col col-2>
+                                                                        Cellulare:
+                                                                    </ion-col>
+                                                                    <ion-col col-10>
+                                                                        <ion-input [(ngModel)]="selectedDelega.cellphone" [disabled]='!editD' no-margin></ion-input>
+                                                                    </ion-col>
+                                                                </ion-row>
+                                                                <ion-row margin-bottom>
+                                                                    <ion-col col-2>
+                                                                        Indirizzo email:
+                                                                    </ion-col>
+                                                                    <ion-col col-10>
+                                                                        <ion-input [(ngModel)]="selectedDelega.email" [disabled]='!editD' no-margin></ion-input>
+                                                                    </ion-col>
+                                                                </ion-row>
+                                                            </ion-grid>
+                                                        </ion-card-content>
+                                                    </ion-card>
+                                                    <ion-card>
+                                                        <ion-card-header>
+                                                            Autorizzazione
+                                                        </ion-card-header>
+                                                        <ion-card-content margin-top>
+                                                            <ion-grid inset>
+                                                                <ion-row margin-bottom>
+                                                                    <ion-col col-2>
+                                                                        Scadenza autorizzazione:
+                                                                    </ion-col>
+                                                                    <ion-col col-10>
+                                                                        <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="selectedDelega.scadenza" *ngIf='editD' no-margin></ion-datetime >
+                                                                        <span *ngIf="!editD" style="padding-left: 8px;">{{selectedDelega.scadenza}}</span>
+                                                                    </ion-col>
+                                                                </ion-row>
+                                                                <ion-row margin-bottom>
+                                                                    <ion-col col-12>
+                                                                        <span *ngIf='selectedDelega.maggiorenne && !editD'>La persona dichiara di essere maggiorenne</span>
+                                                                        <ion-item *ngIf='editD'>
+                                                                            <ion-label>Dichiara di essere maggiorenne</ion-label>
+                                                                            <ion-checkbox [(ngModel)]="selectedDelega.maggiorenne"></ion-checkbox>
+                                                                        </ion-item>
+                                                                    </ion-col>
+                                                                </ion-row>
+                                                            </ion-grid>
+                                                        </ion-card-content>
+                                                    </ion-card>
+                                                </ion-col>
+                                            </ion-row>
+                                            <ion-row>
+                                                <ion-col col-sm-12>
+                                                    <button ion-button color='magenta1' float-end margin-top (click)='editDClick()' *ngIf="!editD">Modifica</button>
+                                                    <button ion-button color='magenta1' float-end margin-top (click)='saveDClick()' *ngIf="editD" [disabled]='(selectedDelega.id == "" || selectedDelega.name == "" || selectedDelega.surname == "")'>Salva</button>
+                                                    <button ion-button color='grey2' float-end margin-top (click)='cancelDClick()' *ngIf="editD">Annulla modifiche</button>
+                                                </ion-col>
+                                            </ion-row>
+                                        </ion-grid>
+                                        </ion-card-content>
+                                    </ion-card>
+                                </div> 
                             </ion-col>
                         </ion-row>
                     </ion-grid>
@@ -362,9 +502,9 @@
     <ion-row>
         <ion-col col-1><p></p></ion-col>
         <ion-col col-sm-10>
-            <button ion-button color='magenta1' float-end margin-top (click)='editClick()' *ngIf="!edit">Modifica</button>
-            <button ion-button color='magenta1' float-end margin-top (click)='saveClick()' *ngIf="edit">Salva</button>
-            <button ion-button color='grey2' float-end margin-top (click)='cancelClick()' *ngIf="edit">Annulla modifiche</button>
+            <button ion-button color='magenta1' float-end margin-top (click)='editClick()' *ngIf="!edit && kidSettings!=='autorizza'">Modifica</button>
+            <button ion-button color='magenta1' float-end margin-top (click)='saveClick()' *ngIf="edit && kidSettings!=='autorizza'" [disabled]='(thisKid.id == "" || thisKid.name == "" || thisKid.surname == "")'>Salva</button>
+            <button ion-button color='grey2' float-end margin-top (click)='cancelClick()' *ngIf="edit && kidSettings!=='autorizza'">Annulla modifiche</button>
         </ion-col>
         <ion-col col-1><p></p></ion-col>
     </ion-row>

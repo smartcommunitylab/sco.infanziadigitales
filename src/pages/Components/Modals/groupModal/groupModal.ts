@@ -1,4 +1,3 @@
-import { ActivatedRoute } from '@angular/router';
 import { Kid } from './../../../../app/Classes/kid';
 import { Teacher } from './../../../../app/Classes/teacher';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
@@ -52,11 +51,19 @@ export class GroupModal implements OnInit{
     this.copiedGroup.teachers.forEach(x => this.selectedGroup.teachers.push(x))
 
     if(this.isNew) {
-      if(this.selectedSchool.groups.findIndex(x => x.name.toLowerCase() == this.selectedGroup.name.toLowerCase()) < 0)
+      if(this.selectedSchool.groups.findIndex(x => x.name.toLowerCase() == this.selectedGroup.name.toLowerCase()) < 0) {
         this.webService.add(this.selectedSchool.id, this.copiedGroup).then(tmp => this.selectedSchool.groups.push(tmp.groups[tmp.groups.length - 1]));
+        this.webService.update(this.selectedSchool);
+        this.close();
+      }
+      else {
+        let alert = this.alertCtrl.create({
+          subTitle: 'Elemento già presente (conflitto di nomi)',
+          buttons: ['OK']
+        });
+        alert.present();
+      }
     }
-    this.webService.update(this.selectedSchool); //aggiorna scuola sul webService
-    this.close();
   }
 
   updateArrays() {
@@ -64,10 +71,10 @@ export class GroupModal implements OnInit{
     this.selectedGroupTeachers = [];
 
     this.copiedGroup.teachers.forEach(x=>{
-      this.selectedGroupTeachers.push(this.selectedSchool.teachers.find(f=>f.id === x));
+      this.selectedGroupTeachers.push(this.selectedSchool.teachers.find(f=>f.id.toLowerCase() === x.toLowerCase()));
     });
     this.copiedGroup.kids.forEach(x=>{
-      this.selectedGroupKids.push(this.selectedSchool.kids.find(f=>f.id === x));
+      this.selectedGroupKids.push(this.selectedSchool.kids.find(f=>f.id.toLowerCase() === x.toLowerCase()));
     });
   }
   
@@ -80,7 +87,7 @@ export class GroupModal implements OnInit{
         type: 'checkbox',
         label: element.name + ' ' + element.surname,
         value: element.id,
-        checked: this.copiedGroup.teachers.findIndex(x => x === element.id) >= 0
+        checked: this.copiedGroup.teachers.findIndex(x => x.toLowerCase() === element.id.toLowerCase()) >= 0
       })
     });
     alert.addButton('Annulla'); //tasto annulla
@@ -106,7 +113,7 @@ export class GroupModal implements OnInit{
         type: 'checkbox',
         label: element.name + ' ' + element.surname,
         value: element.id,
-        checked: this.copiedGroup.kids.findIndex(x => x === element.id) >= 0
+        checked: this.copiedGroup.kids.findIndex(x => x.toLowerCase() === element.id.toLowerCase()) >= 0
       })
     });
 

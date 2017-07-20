@@ -60,7 +60,7 @@ export class InMemoryDataService implements InMemoryDbService {
           telephone : "0461256985",
           email : "scuolauno@mail.com",
           kids : [
-            new Kid("RSSMRO", "Mario", "Rossi", "Maschio", new Date(2013, 11, 23), 'https://s-media-cache-ak0.pinimg.com/originals/ed/cb/7f/edcb7f2fc6cf61ef85713420ceb91565.jpg' , false, new Parent('GSTLRN', 'Lorenzo', 'Giusti', '', '', ''), new Parent('RSSFBO', 'Fabio', 'Rossi', '', '', ''), null, [], [new Delega('GSTMRC', 'Marco', 'Giusti', '', '', '', 'Nonno/a', new Date())], [], true, []),
+            new Kid("RSSMRO", "Mario", "Rossi", "Maschio", new Date(2013, 11, 23), 'https://s-media-cache-ak0.pinimg.com/originals/ed/cb/7f/edcb7f2fc6cf61ef85713420ceb91565.jpg' , false, new Parent('GSTLRN', 'Lorenzo', 'Giusti', '', '', ''), new Parent('RSSFBO', 'Fabiola', 'Rossi', '', '', ''), null, [], [new Delega('GSTMRC', 'Marco', 'Giusti', '', '', '', 'Nonno/a', new Date())], [], true, []),
             new Kid("VRDGVN","Giovanni", "Verdi"),
             new Kid("BNCLGI","Luigi", "Bianchi"),
           ],

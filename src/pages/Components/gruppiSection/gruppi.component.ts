@@ -21,7 +21,9 @@ import { NavController, AlertController, ModalController } from 'ionic-angular';
 export class Gruppi implements OnInit {
   @Input() selectedSchool : School;
   thisSchool : School = new School();
+
   toDeleteGroup : Group = new Group('', [], false, []);
+
   ordine: string = '0';
   filtro : string = '0';
   filteredGroups : Group[];
@@ -46,14 +48,10 @@ export class Gruppi implements OnInit {
     this.showGroupModal(newGroup, true);
   }
 
-  deleteGroup(item : Group) {
-    Object.assign(this.toDeleteGroup, item)
-    this.webService.remove(this.selectedSchool.id, this.toDeleteGroup).then(tmp=> {
-      this.selectedSchool.groups = []; 
-      tmp.groups.forEach(x=>this.selectedSchool.groups.push(x)); 
-      this.filteredGroups = this.selectedSchool.groups;
-      this.onFiltroGroupChange(this.filtro);
-    });
+  onDeleteGroup(item : Group) {
+    this.thisSchool.groups.splice(this.thisSchool.groups.findIndex(tmp => tmp.name.toLowerCase() === item.name.toLowerCase()), 1);
+    Object.assign(this.selectedSchool, this.thisSchool);
+    this.webService.update(this.selectedSchool);
   }
 
   onOrdineChange(ordine : string) {

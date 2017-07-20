@@ -1,4 +1,4 @@
-<ion-grid inset *ngIf='selectedSchool && !kidClick[0]'>
+<ion-grid inset *ngIf='selectedSchool && !kidClick[0]' >
   <ion-row>
     <ion-col col-12>
         <button ion-button color="green1" float-end margin-top (click)='onAddKid()'>Aggiungi bambino</button>  
@@ -61,4 +61,4 @@
   </ion-row>
 </ion-grid>
 
-<kidPage [selectedKid]='selectedKid' [selectedSchool]='selectedSchool' [kidClick]='kidClick' [edit]='edit' *ngIf="kidClick[0]"></kidPage>
+<kidPage [selectedKid]='selectedKid' [selectedSchool]='thisSchool' [kidClick]='kidClick' [edit]='edit' *ngIf="kidClick[0]"></kidPage>

@@ -6,7 +6,7 @@ export class Teacher extends Person {
     // groups_sections : Group[];
     pin: string;
 
-    constructor(id:string, name:string, surname:string, cellphone?:string, telephone?:string, email?:string, pin?:string) {
+    constructor(id:string, name:string, surname:string, pin:string, cellphone?:string, telephone?:string, email?:string) {
         super(id, name, surname, cellphone, telephone, email);
         // this.groups_sections = section;
         this.pin = pin || "";

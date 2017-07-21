@@ -37,7 +37,7 @@ export class Insegnanti implements OnInit {
   }
 
   newTeacherModal() {
-    var newTeacher =  new Teacher('', '', '');
+    var newTeacher =  new Teacher('', '', '', '');
     this.showTeacherModal(newTeacher, true);
   }
 

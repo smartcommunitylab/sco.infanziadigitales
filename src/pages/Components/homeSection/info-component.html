@@ -54,7 +54,8 @@
                         </ion-row>
                     </ion-grid>
                     <ion-fab style="bottom: -5px; right: -5px">
-                        <button ion-fab mini (click)="onContattiEdit()" color='magenta1'><ion-icon name="md-create"></ion-icon></button>
+                        <button ion-fab mini *ngIf="!editContatti"  (click)="onContattiEdit()" color='magenta1'><ion-icon name="md-create"></ion-icon></button>
+                        <button ion-fab mini *ngIf="editContatti" (click)="onContattiEdit()" color='magenta1'><ion-icon name="checkmark-circle"></ion-icon></button>
                     </ion-fab>
                 </ion-card-content>
             </ion-card>
@@ -74,6 +75,20 @@
                         </ion-item> 
                     </ion-col></ion-row></ion-grid>
                     <ion-list>
+                        <ion-item *ngIf="editAssenze">
+                            <ion-label>Malattia</ion-label>
+                            <ion-checkbox [(ngModel)]="isMalattiaEnabled"></ion-checkbox>
+                        </ion-item>
+                        <ion-item *ngIf="editAssenze">
+                            <ion-label>Motivi familiari</ion-label>
+                            <ion-checkbox [(ngModel)]="selectedSchool.familiari"></ion-checkbox>
+                        </ion-item>
+                        <ion-item *ngIf="!editAssenze && selectedSchool.malattia">
+                            Malattia
+                        </ion-item>
+                        <ion-item *ngIf="!editAssenze && selectedSchool.familiari">
+                            Motivi familiari
+                        </ion-item>
                         <ion-item *ngFor="let item of selectedSchool.assenze">
                             {{item}}
                             <ion-icon *ngIf="selectedSchool.assenze.length > 0 && editAssenze" name="close" float-end (click)="removeAssenza(item)"></ion-icon>
@@ -81,13 +96,14 @@
                         <ion-item *ngIf="selectedSchool.assenze.length === 0">Nessuna tipologia di assenza</ion-item> 
                     </ion-list>
                     <ion-fab style="bottom: -5px; right: -5px">
-                        <button ion-fab mini (click)="onAssenzeEdit()" color='magenta1'><ion-icon name="md-create"></ion-icon></button>
+                        <button ion-fab mini *ngIf="!editAssenze" (click)="onAssenzeEdit()" color='magenta1'><ion-icon name="md-create"></ion-icon></button>
+                        <button ion-fab mini *ngIf="editAssenze" (click)="onAssenzeEdit()" color='magenta1'><ion-icon name="checkmark-circle"></ion-icon></button>
                     </ion-fab>
                 </ion-card-content>
             </ion-card>
         </ion-col>
     </ion-row>       
-    <ion-row>
+    <ion-row *ngIf="selectedSchool.malattia" >
         <ion-col col-10 offset-1>
             <ion-card>
                 <ion-card-header>
@@ -108,7 +124,8 @@
                         <ion-item *ngIf="selectedSchool.malattie.length === 0">Nessuna tipologia di malattia</ion-item> 
                     </ion-list>
                     <ion-fab style="bottom: -5px; right: -5px">
-                        <button ion-fab mini (click)="onMalattieEdit()" color='magenta1'><ion-icon name="md-create"></ion-icon></button>
+                        <button ion-fab mini *ngIf="!editMalattie"  (click)="onMalattieEdit()" color='magenta1'><ion-icon name="md-create"></ion-icon></button>
+                        <button ion-fab mini *ngIf="editMalattie" (click)="onMalattieEdit()" color='magenta1'><ion-icon name="checkmark-circle"></ion-icon></button>
                     </ion-fab>
                 </ion-card-content>
             </ion-card>

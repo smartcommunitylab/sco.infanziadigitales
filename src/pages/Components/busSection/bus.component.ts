@@ -8,6 +8,15 @@ import { NavController, AlertController, ModalController } from 'ionic-angular';
 @Component({
   selector: 'buses',
   templateUrl: 'bus-component.html',
+  styles: [`
+      button[disabled] {
+        opacity : 1
+      }
+      .item-md .item-button {
+        height: 40px;
+        font-size: 14px;
+      }
+    `]
 })
 
 

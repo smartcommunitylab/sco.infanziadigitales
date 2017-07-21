@@ -68,6 +68,8 @@ export class Info {
 
     editContatti : boolean = false;
 
+    isMalattiaEnabled : boolean;
+
     constructor(private alertCtrl:AlertController, private webService : WebService) {}
 
     showPromptOnContattiEdit() {
@@ -109,10 +111,14 @@ export class Info {
 
     onContattiEdit() {
         this.editContatti = !this.editContatti;
+        this.webService.update(this.selectedSchool);
     }
 
     onAssenzeEdit() {
+        if(!this.editAssenze) this.isMalattiaEnabled = this.selectedSchool.malattia;
+        else this.selectedSchool.malattia = this.isMalattiaEnabled;
         this.editAssenze = !this.editAssenze;
+        this.webService.update(this.selectedSchool);
     }
 
     addAssenza(assenza:string) {
@@ -134,6 +140,7 @@ export class Info {
 
     onMalattieEdit() {
         this.editMalattie = !this.editMalattie;
+        this.webService.update(this.selectedSchool);
     }
 
     addMalattia(malattia:string) {

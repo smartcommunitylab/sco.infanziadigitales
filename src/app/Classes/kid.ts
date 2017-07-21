@@ -19,6 +19,10 @@ export class Kid extends Person {
     sperimentazione : boolean;
     services : Service[];
 
+    get Nascita():string {
+        return new Date(this.nascita).toLocaleDateString();
+    }
+
     constructor(id:string, name:string, surname:string, gender?:string, nascita?:Date, image?:string, 
                 section?: boolean, parent1?:Parent, parent2?:Parent, bus?:Bus, ritiro?:Person[], deleghe?: Delega[], allergie?:string[], sperimentazione? : boolean, services?:Service[]) {
                     super(id, name, surname);

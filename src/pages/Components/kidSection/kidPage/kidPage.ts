@@ -53,6 +53,12 @@ import 'rxjs/add/operator/switchMap';
             border-radius: 7px;
             margin-right: 18px;
         }
+        .datetime-disabled {
+            padding: 0 0 0 8px;
+            border: 0;
+            margin-right: 18px;
+            opacity: 1;
+        }
         #giord {
             border: solid 1px black;
             border-radius: 7px 7px 7px 7px;
@@ -148,12 +154,13 @@ export class KidPage implements OnInit{
         alert.setTitle('Aggiungi servizi');
         
         this.selectedSchool.servizi.forEach(element => {
-            alert.addInput({
-                type: 'checkbox',
-                label: element.servizio,
-                value: JSON.stringify(element),
-                checked: this.thisKid.services.findIndex(x => x.servizio.toLowerCase() === element.servizio.toLowerCase()) >= 0
-            })
+            if(!element.normale)
+                alert.addInput({
+                    type: 'checkbox',
+                    label: element.servizio,
+                    value: JSON.stringify(element),
+                    checked: this.thisKid.services.findIndex(x => x.servizio.toLowerCase() === element.servizio.toLowerCase()) >= 0
+                })
         });
 
         alert.addButton('Annulla');
@@ -226,6 +233,7 @@ export class KidPage implements OnInit{
 
     onSelectDelega(delega: Delega) {
         this.selectedDelega = delega;
+        // Object.assign(this.selectedDelega, delega);
     }
 
     saveDClick() {
@@ -255,8 +263,8 @@ export class KidPage implements OnInit{
     }
 
     cancelDClick() {
-        this.selectedDelega = undefined;
-        this.isNewD = false;
+        // this.selectedDelega = undefined;
+        if(this.isNewD) {this.isNewD = false;  this.selectedDelega = undefined}
         this.editD = false;
     }
 }

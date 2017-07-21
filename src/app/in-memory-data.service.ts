@@ -60,14 +60,14 @@ export class InMemoryDataService implements InMemoryDbService {
           telephone : "0461256985",
           email : "scuolauno@mail.com",
           kids : [
-            new Kid("RSSMRO", "Mario", "Rossi", "Maschio", new Date(2013, 11, 23), 'https://s-media-cache-ak0.pinimg.com/originals/ed/cb/7f/edcb7f2fc6cf61ef85713420ceb91565.jpg' , false, new Parent('GSTLRN', 'Lorenzo', 'Giusti', '', '', ''), new Parent('RSSFBO', 'Fabiola', 'Rossi', '', '', ''), null, [], [new Delega('GSTMRC', 'Marco', 'Giusti', '', '', '', 'Nonno/a', new Date())], [], true, []),
+            new Kid("RSSMRO", "Mario", "Rossi", "Maschio", new Date('2013-07-23'), 'https://s-media-cache-ak0.pinimg.com/originals/ed/cb/7f/edcb7f2fc6cf61ef85713420ceb91565.jpg' , false, new Parent('GSTLRN', 'Lorenzo', 'Giusti', '', '', ''), new Parent('RSSFBO', 'Fabiola', 'Rossi', '', '', ''), null, [], [new Delega('GSTMRC', 'Marco', 'Giusti', '', '', '', 'Nonno/a', new Date('2017-08-01'), true)], [], true, []),
             new Kid("VRDGVN","Giovanni", "Verdi"),
             new Kid("BNCLGI","Luigi", "Bianchi"),
           ],
           teachers : [
-            new Teacher("FSTANT", "Antonello", "Fausti", "", "", "", ""),
-            new Teacher("FSTLGI","Luigi", "Festi", "", "", "", ""),
-            new Teacher("FRRMNL","Emanuela", "Ferri", "", "", "", ""),
+            new Teacher("FSTANT", "Antonello", "Fausti", "1234", "", "", ""),
+            new Teacher("FSTLGI","Luigi", "Festi", "5678", "", "", ""),
+            new Teacher("FRRMNL","Emanuela", "Ferri", "0000", "", "", ""),
           ],
           buses : [
             new Bus("bus1", "Povo", []),
@@ -75,13 +75,12 @@ export class InMemoryDataService implements InMemoryDbService {
             new Bus("bus3", "Rovereto", [])
           ],
           servizi : [
-            new Service("default", [new Time("mattutina", new Date(0, 0, 0, 9), new Date(0, 0, 0, 13)), new Time("pomeridiana", new Date(0, 0, 0, 13), new Date(0, 0, 0, 16))]), //9.00 to 13.00
+            new Service("normale", [new Time("mattutina", new Date(0, 0, 0, 9), new Date(0, 0, 0, 13)), new Time("pomeridiana", new Date(0, 0, 0, 13), new Date(0, 0, 0, 16))], true), //9.00 to 13.00
             new Service("anticipo", [new Time("Fascia unica", new Date(0, 0, 0, 8, 30), new Date(0, 0, 0, 9, 30))]), 
             new Service("posticipo", [new Time("Fascia unica", new Date(0, 0, 0, 15, 30), new Date(0, 0, 0, 17, 30))]), 
             new Service("mensa", [new Time("Turno unico", new Date(0, 0, 0, 12, 30), new Date(0, 0, 0, 13, 30))])
           ],
           assenze : [
-            "Malattia",
             "Vaccinazione",
             "Vacanza"
           ],
@@ -97,7 +96,10 @@ export class InMemoryDataService implements InMemoryDbService {
             new Group("Sezione2", [], true, []),
             new Group("Sezione3", [], true, []),
             new Group("Sezione4", [], true, []),
-          ]
+          ],
+          fermate:['Povo - polo scientifico', 'Piazza Dante - stazione fs', 'Piazza venezia', 'Via Travai'],
+          malattia:true,
+          familiari : true
         }
       ]
       return {school};

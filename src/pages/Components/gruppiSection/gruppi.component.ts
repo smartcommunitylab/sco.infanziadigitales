@@ -9,11 +9,16 @@ import { NavController, AlertController, ModalController } from 'ionic-angular';
   selector: 'gruppi',
   templateUrl: 'gruppi-component.html',
   styles: [`
-      .modal-wrapper {
-        top: 10px; 
-        left: 10px;
-        width: 90% ;
-        height: 90%
+      button[disabled] {
+        opacity : 1
+      }
+      .list-md[no-lines] .item-block, .list-md[no-lines] ion-item-options, .list-md[no-lines] .item .item-inner {
+        border-bottom: 1px solid #dedede !important;
+        border-width: initial
+      }
+      .item-md .item-button {
+        height: 40px;
+        font-size: 14px;
       }
   `]
 })

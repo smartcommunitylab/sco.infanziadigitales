@@ -80,7 +80,7 @@
                                                 </ion-col>
                                                 <ion-col col-10>
                                                     <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="thisKid.nascita" *ngIf='edit' no-margin></ion-datetime >
-                                                    <span *ngIf="!edit" style="padding-left: 8px;">{{thisKid.nascita}}</span>
+                                                    <span *ngIf="!edit" style="padding-left: 8px;">{{thisKid.Nascita}}</span>
                                                 </ion-col>
                                             </ion-row>
                                             <ion-row margin-bottom>
@@ -141,8 +141,9 @@
                                     </ion-card-header>
                                     <ion-card-content margin-top>
                                         <ion-list>
+                                            <ion-item>Normale</ion-item>
                                             <ion-item *ngFor="let item of thisKid.services" >{{item.servizio}}</ion-item>
-                                            <ion-item *ngIf="thisKid.services.length === 0">Nessun servizio</ion-item> 
+                                            <ion-item *ngIf="thisKid.services.length === 1">Nessun servizio extra</ion-item> 
                                             <ion-grid *ngIf="edit" no-padding no-margin><ion-row><ion-col col-3>
                                                 <button *ngIf="edit" ion-item color="green3" (click)='changeServices()'><ion-icon name="add"></ion-icon>  Aggiungi servizi</button>
                                             </ion-col></ion-row></ion-grid>
@@ -355,10 +356,12 @@
                         </ion-row>
                         <ion-row>
                             <ion-col col-12>
-                                <!-- <delega *ngIf="thisDelega" [selectedSchool]='selectedSchool' [delega]='thisDelega' [edit]='edit'></delega> -->
                                 <div *ngIf="selectedDelega">
                                     <ion-card>
                                         <ion-card-header>
+                                            <ion-fab style="top: -5px; right: -5px">
+                                                <button ion-fab mini *ngIf="!editD" (click)="this.selectedDelega = undefined" color='magenta1'><ion-icon name="close"></ion-icon></button>
+                                            </ion-fab>
                                             {{selectedDelega.name}} {{selectedDelega.surname}}
                                         </ion-card-header>
                                         <ion-card-content>
@@ -377,7 +380,7 @@
                                                                     <ion-option value="Fratello/Sorella">Fratello/Sorella (maggiorenne)</ion-option>
                                                                     <ion-option value="Altro">Altro</ion-option>
                                                                 </ion-select>
-                                                                <span *ngIf="!edit" style="padding-left: 8px;">{{selectedDelega.legame}}</span>
+                                                                <span *ngIf="!editD" style="padding-left: 8px;">{{selectedDelega.legame}}</span>
                                                             </ion-col>
                                                         </ion-row>
                                                     </ion-grid>
@@ -462,8 +465,8 @@
                                                                         Scadenza autorizzazione:
                                                                     </ion-col>
                                                                     <ion-col col-10>
-                                                                        <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="selectedDelega.scadenza" *ngIf='editD' no-margin></ion-datetime >
-                                                                        <span *ngIf="!editD" style="padding-left: 8px;">{{selectedDelega.scadenza}}</span>
+                                                                        <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="selectedDelega.scadenza" [disabled]='!editD' no-margin></ion-datetime >
+                                                                        <!-- <span *ngIf="!editD" style="padding-left: 8px;">{{selectedDelega.Scadenza}}</span> -->
                                                                     </ion-col>
                                                                 </ion-row>
                                                                 <ion-row margin-bottom>

@@ -17,17 +17,17 @@
         <ion-segment-button value="servizi">
           Orari e servizi
         </ion-segment-button>
-        <ion-segment-button value="gruppi_sezioni"> 
-          Gruppi e sezioni
-        </ion-segment-button>
-        <ion-segment-button value="bus">
-          Bus
-        </ion-segment-button>
         <ion-segment-button value="insegnanti">
           Insegnanti
         </ion-segment-button>
         <ion-segment-button value="bambini">
           Bambini
+        </ion-segment-button>
+        <ion-segment-button value="gruppi_sezioni"> 
+          Gruppi e sezioni
+        </ion-segment-button>
+        <ion-segment-button value="bus">
+          Bus
         </ion-segment-button>
       </ion-segment>
   </ion-navbar>
@@ -40,6 +40,9 @@
         <div *ngSwitchCase="'profilo'">
           <info [selectedSchool]='selectedSchool'></info>
         </div>
+        <div *ngSwitchCase="'servizi'">
+          <orari [selectedSchool]='selectedSchool'></orari>
+        </div> 
         <div *ngSwitchCase="'gruppi_sezioni'">
           <gruppi [selectedSchool]="selectedSchool"></gruppi>
         </div>
@@ -50,7 +53,6 @@
           <insegnanti [selectedSchool]="selectedSchool"></insegnanti>
         </div>
         <div *ngSwitchCase="'bambini'">
-          <!-- <router-outlet></router-outlet> -->
           <bambini [selectedSchool]="selectedSchool"></bambini>
         </div>
       </div>

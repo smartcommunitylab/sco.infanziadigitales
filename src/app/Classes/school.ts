@@ -10,13 +10,16 @@ export class School {
     telephone: string;
     email: string;
     address: string;
-    servizi: Service[];
+    servizi: Service[];s
     kids: Kid[];
     teachers: Teacher[];
     buses: Bus[];
     assenze:string[];
     malattie: string[];
     groups: Group[];
+    fermate : string[];
+    malattia : boolean;
+    familiari : boolean;
 
     constructor() {}
 

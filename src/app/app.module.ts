@@ -1,4 +1,3 @@
-import { DelegaPage } from './../pages/Components/kidSection/kidPage/delegaSection/delega.component';
 import { Insegnanti } from './../pages/Components/teacherSection/teacher.component';
 import { TeacherModal } from './../pages/Components/Modals/teacherModal/teacherModal';
 import { BusModal } from './../pages/Components/Modals/busModal/busModal';
@@ -21,6 +20,8 @@ import { Buses } from "../pages/Components/busSection/bus.component";
 import { Bambini } from "../pages/Components/kidSection/kid.component";
 import { Info } from "../pages/Components/homeSection/info.component";
 import { KidPage } from "../pages/Components/kidSection/kidPage/kidPage";
+import { Orari } from "../pages/Components/orariSection/orari.component";
+import { OrariModal } from "../pages/Components/Modals/orariModal/orariModal";
 
 @NgModule({
   declarations: [
@@ -29,13 +30,14 @@ import { KidPage } from "../pages/Components/kidSection/kidPage/kidPage";
     GroupModal,
     BusModal,
     TeacherModal,
+    OrariModal,
     Gruppi,
     Buses,
     Insegnanti,
     Bambini,
     KidPage,
-    DelegaPage,
     Info,
+    Orari,
   ],
   imports: [
     BrowserModule,
@@ -50,13 +52,14 @@ import { KidPage } from "../pages/Components/kidSection/kidPage/kidPage";
     GroupModal,
     BusModal,
     TeacherModal,
+    OrariModal,
     Gruppi,
     Buses,
     Insegnanti,
     Bambini,
     KidPage,
-    DelegaPage,
-    Info,    
+    Info,   
+    Orari 
   ],
   providers: [
     StatusBar,

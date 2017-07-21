@@ -26,7 +26,7 @@
                     </ion-item>
                     <ion-item margin-top>
                         <ion-label inline>Questo gruppo è una sezione</ion-label>
-                        <ion-checkbox [(ngModel)]="copiedGroup.section"></ion-checkbox>
+                        <ion-checkbox [(ngModel)]="copiedGroup.section" [disabled]='disabledSection'></ion-checkbox>
                     </ion-item>
                 </ion-list>
             </ion-col>

@@ -23,6 +23,8 @@ export class GroupModal implements OnInit{
 
   isNew : boolean; //true if the group is new
 
+  disabledSection : boolean;
+
   constructor(public params: NavParams, public navCtrl:NavController, private webService : WebService, public alertCtrl : AlertController) {
     this.selectedSchool = this.params.get('school') as School;
     this.selectedGroup = this.params.get('group') as Group;
@@ -40,6 +42,7 @@ export class GroupModal implements OnInit{
   }
 
   close() {
+    this.webService.update(this.selectedSchool);
     this.navCtrl.pop();
   }
 
@@ -64,6 +67,7 @@ export class GroupModal implements OnInit{
         alert.present();
       }
     }
+    this.close();
   }
 
   updateArrays() {
@@ -73,9 +77,12 @@ export class GroupModal implements OnInit{
     this.copiedGroup.teachers.forEach(x=>{
       this.selectedGroupTeachers.push(this.selectedSchool.teachers.find(f=>f.id.toLowerCase() === x.toLowerCase()));
     });
+
     this.copiedGroup.kids.forEach(x=>{
       this.selectedGroupKids.push(this.selectedSchool.kids.find(f=>f.id.toLowerCase() === x.toLowerCase()));
     });
+    
+    this.webService.update(this.selectedSchool);
   }
   
   addTeacher() {
@@ -91,7 +98,7 @@ export class GroupModal implements OnInit{
       })
     });
     alert.addButton('Annulla'); //tasto annulla
-
+    this.copiedGroup.teachers = [];
     alert.addButton({
       text: 'OK',
       handler: data => {
@@ -103,12 +110,13 @@ export class GroupModal implements OnInit{
     })
     alert.present();
   }
-
+  
   addKid() {
     let alert = this.alertCtrl.create();
     alert.setTitle('Aggiungi bambini');
     
     this.selectedSchool.kids.forEach(element => {
+      if(this.copiedGroup.section && element.section) return
       alert.addInput({
         type: 'checkbox',
         label: element.name + ' ' + element.surname,
@@ -117,12 +125,14 @@ export class GroupModal implements OnInit{
       })
     });
 
+    this.copiedGroup.kids = [];
     alert.addButton('Annulla');
     alert.addButton({
       text: 'OK',
       handler: data => {
         data.forEach(element => {
           this.copiedGroup.kids.push(element);
+          if(this.copiedGroup.section) this.selectedSchool.kids.find(c=> c.id.toLowerCase() === element.toLowerCase()).section = true;
           this.updateArrays();
         });
       }
@@ -132,6 +142,7 @@ export class GroupModal implements OnInit{
 
   removeKid(id : string) {
     this.copiedGroup.kids.splice(this.copiedGroup.kids.findIndex(x => id === x), 1);
+    this.selectedSchool.kids.find(c=> c.id.toLowerCase() === id.toLowerCase()).section = false;
     this.updateArrays();
   }
 

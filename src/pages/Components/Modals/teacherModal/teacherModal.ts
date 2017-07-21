@@ -16,7 +16,7 @@ export class TeacherModal implements OnInit{
   selectedSchool : School;
 
   selectedTeacher: Teacher;
-  copiedTeacher : Teacher = new Teacher('', '' ,'');
+  copiedTeacher : Teacher = new Teacher('', '' ,'', '');
   
   selectedTeacherGroups : Group[];
 
@@ -42,9 +42,12 @@ export class TeacherModal implements OnInit{
         if(teacherId.toLowerCase() === this.copiedTeacher.id.toLowerCase()) this.selectedTeacherGroups.push(group);
       })
     })
+
+    this.webService.update(this.selectedSchool);
   }
 
   close() {
+    this.webService.update(this.selectedSchool);
     this.navCtrl.pop();
   }
 
@@ -65,6 +68,8 @@ export class TeacherModal implements OnInit{
         alert.present();
       }
     }
+
+    this.close();
   }
 
   onRemoveGroup(group : Group) {

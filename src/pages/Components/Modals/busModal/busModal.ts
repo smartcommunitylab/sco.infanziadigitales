@@ -42,9 +42,12 @@ export class BusModal implements OnInit {
     this.copiedBus.kids.forEach(item => {
       this.selectedBusKids.push(this.selectedSchool.kids.find(x => x.id.toLowerCase() === item.toLowerCase()))
     })
+
+    this.webService.update(this.selectedSchool);
   }
 
   close() {
+    this.webService.update(this.selectedSchool);
     this.navCtrl.pop();
   }
 
@@ -67,6 +70,7 @@ export class BusModal implements OnInit {
         alert.present();
       }
     }
+    this.close();
   }
 
 

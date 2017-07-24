@@ -1,3 +1,4 @@
+import { Service } from './Classes/service';
 import { Group } from './Classes/group';
 import { Bus } from './Classes/bus';
 import { Parent } from './Classes/parent';
@@ -67,6 +68,12 @@ export class WebService {
     else if(item instanceof Kid) {
       return this.getSchool(schoolId).then(tmp => {
         tmp.kids.push(item); 
+        return this.http.put(url, JSON.stringify(tmp), {headers: this.headers}).toPromise().then(() => tmp).catch(this.handleError);
+      });
+    }
+    else if(item instanceof Service) {
+      return this.getSchool(schoolId).then(tmp => {
+        tmp.servizi.push(item); 
         return this.http.put(url, JSON.stringify(tmp), {headers: this.headers}).toPromise().then(() => tmp).catch(this.handleError);
       });
     }

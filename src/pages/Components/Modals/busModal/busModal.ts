@@ -59,8 +59,6 @@ export class BusModal implements OnInit {
     if(this.isNew) {
       if(this.selectedSchool.buses.findIndex(x => x.name.toLowerCase() == this.selectedBus.name.toLowerCase()) < 0) {
         this.webService.add(this.selectedSchool.id, this.copiedBus).then(tmp => this.selectedSchool.buses.push(tmp.buses[tmp.buses.length - 1]));
-        this.webService.update(this.selectedSchool);
-        this.close();
       }
       else {
         let alert = this.alertCtrl.create({

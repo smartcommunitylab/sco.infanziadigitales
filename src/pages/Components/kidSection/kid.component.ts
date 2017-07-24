@@ -37,6 +37,10 @@ export class Bambini implements OnInit {
     this.onFiltroKidChange(this.filtro);
   }
 
+  handlerInputChange(e) {
+    console.log(e.target.value)
+  }
+
   onAddKid() {
     var k = new Kid('', '', '', '', new Date(''), '', false, new Parent('', '', '', '', '', ''), new Parent('', '', '', '', '', ''), new Bus('', '', []), [], [], [], false, []);
     this.onEditKid(k);

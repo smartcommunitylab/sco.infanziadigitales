@@ -57,7 +57,6 @@ export class GroupModal implements OnInit{
       if(this.selectedSchool.groups.findIndex(x => x.name.toLowerCase() == this.selectedGroup.name.toLowerCase()) < 0) {
         this.webService.add(this.selectedSchool.id, this.copiedGroup).then(tmp => this.selectedSchool.groups.push(tmp.groups[tmp.groups.length - 1]));
         this.webService.update(this.selectedSchool);
-        this.close();
       }
       else {
         let alert = this.alertCtrl.create({

@@ -21,10 +21,6 @@ import 'rxjs/add/operator/switchMap';
             font-size: 20px !important;
             background-color: rgba(152,186,60, .4);
         }
-        img {
-            height: 100px;
-            width: auto;
-        }
         .text-input {
             border: solid 1px black;
             border-radius: 7px 7px 7px 7px;
@@ -89,10 +85,12 @@ export class KidPage implements OnInit{
 
     isNew : boolean = false;
 
+    servicesChecked = {};
+
     constructor(
         private webService : WebService,
         private alertCtrl : AlertController
-    ) { }
+        ) { }
 
     ngOnInit(): void {    
         Object.assign(this.thisKid, this.selectedKid)
@@ -108,6 +106,8 @@ export class KidPage implements OnInit{
         this.selectedKidGroups = this.selectedSchool.groups.filter(x => x.kids.findIndex(d => d.toLowerCase() === this.selectedKid.id.toLowerCase()) >= 0);
 
         this.isNew = this.thisKid.id == ''; 
+
+        this.thisKid.services.forEach(x=> this.servicesChecked[x.servizio] = true);
     }
 
     goBack() {
@@ -133,6 +133,14 @@ export class KidPage implements OnInit{
         else this.kidClick[0] = false;
     }
 
+    addImage(e) {
+        
+    }
+
+    handleChange(e) {
+        console.log(e.target.value);
+    }
+
     addAllergia(all : string) {
         if(all !== undefined && all !== '') 
             if(this.thisKid.allergie.findIndex(x=>x.toLowerCase() === all.toLowerCase()) < 0 && all !== '')
@@ -145,36 +153,47 @@ export class KidPage implements OnInit{
             }
         this.newAllergia = '';
     }
+
     removeAllergia(all: string) {
         this.thisKid.allergie.splice(this.thisKid.allergie.findIndex(x=>x.toLowerCase() === all.toLowerCase()), 1);
     }
 
-    changeServices() {
-        let alert = this.alertCtrl.create();
-        alert.setTitle('Aggiungi servizi');
+    // changeServices() {
+    //     let alert = this.alertCtrl.create();
+    //     alert.setTitle('Aggiungi servizi');
         
-        this.selectedSchool.servizi.forEach(element => {
-            if(!element.normale)
-                alert.addInput({
-                    type: 'checkbox',
-                    label: element.servizio,
-                    value: JSON.stringify(element),
-                    checked: this.thisKid.services.findIndex(x => x.servizio.toLowerCase() === element.servizio.toLowerCase()) >= 0
-                })
-        });
+    //     this.selectedSchool.servizi.forEach(element => {
+    //         if(!element.normale)
+    //             alert.addInput({
+    //                 type: 'checkbox',
+    //                 label: element.servizio,
+    //                 value: JSON.stringify(element),
+    //                 checked: this.thisKid.services.findIndex(x => x.servizio.toLowerCase() === element.servizio.toLowerCase()) >= 0
+    //             })
+    //     });
 
-        alert.addButton('Annulla');
-        alert.addButton({
-        text: 'OK',
-        handler: data => {
-            var x = new Array();
-            data.forEach(element => {
-            x.push(JSON.parse(element) as Kid)
-            });
-            this.thisKid.services = x
+    //     alert.addButton('Annulla');
+    //     alert.addButton({
+    //     text: 'OK',
+    //     handler: data => {
+    //         var x = new Array();
+    //         data.forEach(element => {
+    //         x.push(JSON.parse(element) as Service)
+    //         });
+    //         this.thisKid.services = x
+    //     }
+    //     })
+    //     alert.present();
+    // }
+
+    changeServices() {
+        var x = new Array();
+        for(var i in this.servicesChecked) {
+            if(this.servicesChecked[i]) {
+               x.push(this.selectedSchool.servizi.find(c => c.servizio.toLowerCase() === i.toLowerCase()));
+            }
         }
-        })
-        alert.present();
+        this.thisKid.services = x
     }
 
     editClick() {
@@ -205,6 +224,7 @@ export class KidPage implements OnInit{
                 alert.present();
             }
             else {
+                this.selectedKid.services.push(this.selectedSchool.servizi.find(x => x.normale));
                 this.selectedSchool.kids.push(this.selectedKid);              
             }
         }

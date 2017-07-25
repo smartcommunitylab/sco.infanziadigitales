@@ -7,7 +7,7 @@
             <button ion-button (click)="close()">Annulla</button>
         </ion-buttons>
         <ion-buttons end>
-            <button ion-button (click)="save()" [disabled]='!(copiedOrario.servizio) || disable'>Salva</button>
+            <button ion-button (click)="save()" [disabled]='!(copiedOrario.servizio) || disable || sovrapp'>Salva</button>
         </ion-buttons>
             
     </ion-navbar>
@@ -37,7 +37,7 @@
             <ion-col col-10>
                 <ion-list inset no-lines>
                     <ion-list-header>Fasce</ion-list-header>
-                    <ion-grid *ngFor="let fascia of copiedOrario.fasce">
+                    <ion-grid *ngFor="let fascia of copiedOrario.fasce; let i = index">
                         <ion-row>
                             <ion-col col-5>
                                 <ion-item>
@@ -48,17 +48,17 @@
                             <ion-col col-3 style="bottom: 5px">
                                 <ion-item>
                                     <ion-label floating>Da</ion-label>
-                                     <ion-input type="time" displayFormat='HH:mm' [(ngModel)]='fascia.start'></ion-input> 
+                                    <ion-datetime displayFormat='HH:mm' class='start' [(ngModel)]='fascia.start' [max]='fascia.end' (ngModelChange)='changeFascia(fascia)'></ion-datetime> 
                                 </ion-item>
                             </ion-col>
                             <ion-col col-3 style="bottom: 5px">
                                 <ion-item>
                                     <ion-label floating>A</ion-label>
-                                     <ion-input type="time" displayFormat='HH:mm' [(ngModel)]='fascia.end'></ion-input> 
+                                     <ion-datetime displayFormat='HH:mm' class='end' [(ngModel)]='fascia.end' [min]='fascia.start' (ngModelChange)='changeFascia(fascia)'></ion-datetime> 
                                 </ion-item>
                             </ion-col>
                             <ion-col col-1 style="top: 18px">
-                                    <button ion-item icon-only (click)='removeFascia(fascia)'><ion-icon name="trash" item-end color="magenta1"></ion-icon></button>
+                                <button ion-item icon-only (click)='removeFascia(fascia)'><ion-icon name="trash" item-end color="magenta1"></ion-icon></button>
                             </ion-col>
                         </ion-row>
                     </ion-grid>

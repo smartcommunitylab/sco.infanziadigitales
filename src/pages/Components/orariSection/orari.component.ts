@@ -35,6 +35,7 @@ export class Orari implements OnInit {
         Object.assign(this.thisSchool, this.selectedSchool);
         this.filteredOrari = this.thisSchool.servizi;
         this.onOrdineChange(this.ordine);
+        this.selectedSchool.servizi.sort((item1, item2) => item1.fasce[0].start.localeCompare(item2.fasce[0].start));
     }
 
     onOrdineChange(ordine : string) {
@@ -60,6 +61,7 @@ export class Orari implements OnInit {
         modal.present().then(x=>{
             Object.assign(this.selectedSchool, this.thisSchool);
             this.onOrdineChange(this.ordine);
+            this.selectedSchool.servizi.sort((item1, item2) => item1.fasce[0].start.localeCompare(item2.fasce[0].start));
         });
     }
 
@@ -67,6 +69,7 @@ export class Orari implements OnInit {
         this.showOrariModal(new Service('', [], [], false), true);
         this.webService.update(this.selectedSchool);
         this.onOrdineChange(this.ordine);
+        this.selectedSchool.servizi.sort((item1, item2) => item1.fasce[0].start.localeCompare(item2.fasce[0].start));
     }
 
     onDeleteOrario(item : Service) {
@@ -74,6 +77,7 @@ export class Orari implements OnInit {
         Object.assign(this.selectedSchool, this.thisSchool);
         this.webService.update(this.selectedSchool);
         this.onOrdineChange(this.ordine);
+        this.selectedSchool.servizi.sort((item1, item2) => item1.fasce[0].start.localeCompare(item2.fasce[0].start));
     }
 
     searchOrario(item : any) {

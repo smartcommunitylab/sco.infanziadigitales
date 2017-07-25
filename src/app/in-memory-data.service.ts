@@ -76,8 +76,8 @@ export class InMemoryDataService implements InMemoryDbService {
           ],
           servizi : [
             new Service("normale", [new Time("mattutina", new Date(0, 0, 0, 9), new Date(0, 0, 0, 13)), new Time("pomeridiana", new Date(0, 0, 0, 13), new Date(0, 0, 0, 16))], [], true), //9.00 to 13.00
-            new Service("anticipo", [new Time("Fascia unica", new Date(0, 0, 0, 8, 30), new Date(0, 0, 0, 9, 30))]), 
-            new Service("posticipo", [new Time("Fascia unica", new Date(0, 0, 0, 15, 30), new Date(0, 0, 0, 17, 30))]), 
+            new Service("anticipo", [new Time("Fascia unica", new Date(0, 0, 0, 8), new Date(0, 0, 0, 9))]), 
+            new Service("posticipo", [new Time("Fascia unica", new Date(0, 0, 0, 16), new Date(0, 0, 0, 18, 30))]), 
           ],
           assenze : [
             "Vaccinazione",

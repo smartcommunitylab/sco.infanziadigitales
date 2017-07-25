@@ -3,10 +3,11 @@ import { Service } from './../../../../app/Classes/service';
 import { Kid } from './../../../../app/Classes/kid';
 import { Teacher } from './../../../../app/Classes/teacher';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { School } from './../../../../app/Classes/school';
-import { WebService } from './../../../../app/WebService';
+import { School } from '../../../../app/Classes/school';
+import { WebService } from '../../../../app/WebService';
 import { Component, OnInit } from '@angular/core';
 import { NavParams, NavController, AlertController } from "ionic-angular";
+
 
 @Component({
   selector: 'orari-modal',
@@ -22,7 +23,10 @@ export class OrariModal implements OnInit{
     isNew : boolean;
     giaNorm : boolean[]; //segna se c'è già un servizio normale (ce ne può essere solo uno)
 
+    late: string;
+    early: string;
 
+    sovrapp:boolean;
 
     constructor(public params: NavParams, public navCtrl:NavController, private webService : WebService, public alertCtrl : AlertController) {
         this.selectedSchool = this.params.get('school') as School;
@@ -36,7 +40,17 @@ export class OrariModal implements OnInit{
     }
 
     ngOnInit() {
-        
+        this.late = this.copiedOrario.fasce[0].end;
+        for(var i = 0; i<this.copiedOrario.fasce.length-1; i++) {
+            if(this.late.localeCompare(this.copiedOrario.fasce[i].end) < 0)
+                this.late = this.copiedOrario.fasce[i].end;
+        }
+
+        this.early = this.copiedOrario.fasce[0].start;
+        for(var i = 0; i < this.copiedOrario.fasce.length-1; i++) {
+            if(this.early.localeCompare(this.copiedOrario.fasce[i].start) < 0)
+                this.early = this.copiedOrario.fasce[i].start;
+        }
     }
 
     close() {
@@ -64,32 +78,13 @@ export class OrariModal implements OnInit{
     }
 
     addFascia() {
-        var newFascia = new Time('', new Date(0), new Date(0));
+        var newFascia = new Time('', new Date(0, 0, 0, 0, 1), new Date(0, 0, 0, 23, 59));
         this.copiedOrario.fasce.push(newFascia);
         this.changeName(this.copiedOrario.fasce[this.copiedOrario.fasce.length - 1].name);
     }
 
     removeFascia(fascia : Time) {
         this.copiedOrario.fasce.splice(this.copiedOrario.fasce.findIndex(t=>t.name.toLowerCase() === fascia.name.toLowerCase()), 1);
-    }
-
-    editFascia(item : Time) {
-        let alert = this.alertCtrl.create({
-          title: item.name,
-          inputs: [
-            {
-                name: 'da',
-                placeholder: 'da',
-                type: 'time'
-            },
-            {
-                name: 'a',
-                placeholder: 'a',
-                type: 'time'
-            }
-          ]
-        });
-        alert.present();
     }
 
     disable : boolean;
@@ -103,5 +98,28 @@ export class OrariModal implements OnInit{
             this.copiedOrario.fasce.splice(this.copiedOrario.fasce.findIndex(t=>t.name.toLowerCase() === fascia.name.toLowerCase()), 1);
             this.disable = false
         }
+        this.copiedOrario.fasce.sort((item1, item2) => item1.start.localeCompare(item2.start));
+    }
+
+    changeFascia(fascia : Time) {
+        this.copiedOrario.fasce.sort((item1, item2) => item1.start.localeCompare(item2.start));
+        for(var i = 1; i < this.copiedOrario.fasce.length; i++) {
+            if(this.isBetween(this.copiedOrario.fasce[i].start, this.copiedOrario.fasce[i-1].start, this.copiedOrario.fasce[i-1].end) || this.isBetweenSchool(this.copiedOrario.fasce[i].start)) {
+                this.sovrapp = true; return;
+            }
+            else this.sovrapp = false;
+        }
+    }
+
+    isBetween (date:string, start:string, end: string) {
+        return date.localeCompare(start) >= 0 && date.localeCompare(end) < 0
+    }
+
+    isBetweenSchool (date:string) {
+        var ret;
+        this.selectedSchool.servizi.forEach(element => {
+            for(var i = 1; i < element.fasce.length; i++)
+                return this.isBetween(element.fasce[i].start, element.fasce[i-1].start, element.fasce[i-1].end)
+        })
     }
 }

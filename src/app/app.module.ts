@@ -23,7 +23,7 @@ import { Info } from "../pages/Components/homeSection/info.component";
 import { KidPage } from "../pages/Components/kidSection/kidPage/kidPage";
 import { Orari } from "../pages/Components/orariSection/orari.component";
 import { OrariModal } from "../pages/Components/Modals/orariModal/orariModal";
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {MomentModule} from 'angular2-moment/moment.module';
 
 
 @NgModule({
@@ -47,7 +47,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
     IonicModule.forRoot(MyApp),
     HttpModule,
     InMemoryWebApiModule.forRoot(InMemoryDataService),
-    NgbModule.forRoot(),
+    MomentModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

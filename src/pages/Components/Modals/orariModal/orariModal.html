@@ -45,16 +45,16 @@
                                     <ion-input type="text" [(ngModel)]='fascia.name' ng-focus="fascia.name === ''" (ngModelChange)='changeName(fascia.name)' (ionBlur)="blurFascia(fascia)"></ion-input>
                                 </ion-item>
                             </ion-col>
-                            <ion-col col-3 style="bottom: 10px">
+                            <ion-col col-3 style="bottom: 5px">
                                 <ion-item>
                                     <ion-label floating>Da</ion-label>
-                                    <ion-datetime type="time" displayFormat='HH:mm' [(ngModel)]='fascia.start'></ion-datetime>
+                                     <ion-input type="time" displayFormat='HH:mm' [(ngModel)]='fascia.start'></ion-input> 
                                 </ion-item>
                             </ion-col>
-                            <ion-col col-3 style="bottom: 10px">
+                            <ion-col col-3 style="bottom: 5px">
                                 <ion-item>
                                     <ion-label floating>A</ion-label>
-                                    <ion-datetime displayFormat='HH:mm' [(ngModel)]='fascia.end'></ion-datetime>
+                                     <ion-input type="time" displayFormat='HH:mm' [(ngModel)]='fascia.end'></ion-input> 
                                 </ion-item>
                             </ion-col>
                             <ion-col col-1 style="top: 18px">

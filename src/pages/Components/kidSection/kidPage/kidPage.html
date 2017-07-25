@@ -104,20 +104,12 @@
                                         Foto del bambino
                                     </ion-card-header>
                                     <ion-card-content margin-top>
-                                        <!-- <img src="{{thisKid.image}}">
-                                        <ion-grid inset>
-                                            <ion-row item-height="130px">
-                                                <ion-col col-2 style='margin-left: 10%'>
-                                                    <button id="addIm" ion-button color='green1'>Aggiungi immagine</button>
-                                                </ion-col>
-                                            </ion-row>
-                                        </ion-grid> -->
                                         <ion-item style="height:120px">
                                             <ion-thumbnail item-start style="height: 100%; width: auto">
                                                 <img src="{{thisKid.image}}" style="height: 100%; width: auto" />
                                             </ion-thumbnail>
                                             <input #inputFile type='file' style='display: none' (change)='handleChange($event)' accept="image/gif, image/png, image/jpeg, image/bmp, image/webp" />
-                                            <button ion-button color='green1' (click)='inputFile.click()'>Aggiungi immagine</button>
+                                            <button ion-button color='green1' (click)='inputFile.click()' *ngIf='edit'>Aggiungi immagine</button>
                                         </ion-item>
                                     </ion-card-content>
                                 </ion-card>
@@ -155,15 +147,16 @@
                                     </ion-card-header>
                                     <ion-card-content margin-top>
                                         <ion-list *ngIf="!edit" >
-                                            <ion-item>Normale</ion-item>
                                             <ion-item *ngFor="let item of thisKid.services" >{{item.servizio}}</ion-item>
                                             <ion-item *ngIf="thisKid.services.length === 0">Nessun servizio extra</ion-item> 
                                         </ion-list>
                                         <ion-list *ngIf="edit">
-                                            <ion-item *ngFor="let item of selectedSchool.servizi" >
-                                                <ion-label>{{item.servizio}}</ion-label>
-                                                <ion-checkbox *ngIf="!item.normale"  [(ngModel)]="servicesChecked[item.servizio]" (ionChange)="changeServices()"></ion-checkbox>
-                                            </ion-item>
+                                            <div *ngFor="let item of selectedSchool.servizi">
+                                                <ion-item *ngIf="!item.normale">
+                                                    <ion-label>{{item.servizio}}</ion-label>
+                                                    <ion-checkbox [(ngModel)]="servicesChecked[item.servizio]" (ionChange)="changeServices()"></ion-checkbox>
+                                                </ion-item>
+                                            </div>
                                         </ion-list>
                                     </ion-card-content>
                                 </ion-card>
@@ -365,6 +358,7 @@
                                             <button ion-item *ngFor="let item of thisKid.deleghe" (click)="onSelectDelega(item)">
                                                 <h2>{{item.name}} {{item.surname}}</h2>
                                                 <h3>{{item.legame}}</h3>
+                                                <ion-icon name="trash" item-end color="magenta1" style="margin-right: 10px" (click)="onDeleteDelega(item)"></ion-icon>
                                             </button>
                                         </ion-list>
                                     </ion-card-content>

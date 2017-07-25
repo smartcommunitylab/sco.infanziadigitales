@@ -158,34 +158,6 @@ export class KidPage implements OnInit{
         this.thisKid.allergie.splice(this.thisKid.allergie.findIndex(x=>x.toLowerCase() === all.toLowerCase()), 1);
     }
 
-    // changeServices() {
-    //     let alert = this.alertCtrl.create();
-    //     alert.setTitle('Aggiungi servizi');
-        
-    //     this.selectedSchool.servizi.forEach(element => {
-    //         if(!element.normale)
-    //             alert.addInput({
-    //                 type: 'checkbox',
-    //                 label: element.servizio,
-    //                 value: JSON.stringify(element),
-    //                 checked: this.thisKid.services.findIndex(x => x.servizio.toLowerCase() === element.servizio.toLowerCase()) >= 0
-    //             })
-    //     });
-
-    //     alert.addButton('Annulla');
-    //     alert.addButton({
-    //     text: 'OK',
-    //     handler: data => {
-    //         var x = new Array();
-    //         data.forEach(element => {
-    //         x.push(JSON.parse(element) as Service)
-    //         });
-    //         this.thisKid.services = x
-    //     }
-    //     })
-    //     alert.present();
-    // }
-
     changeServices() {
         var x = new Array();
         for(var i in this.servicesChecked) {
@@ -256,6 +228,11 @@ export class KidPage implements OnInit{
         // Object.assign(this.selectedDelega, delega);
     }
 
+    onDeleteDelega(delega : Delega) {
+        this.thisKid.deleghe.splice(this.thisKid.deleghe.findIndex(tmp => tmp.id === delega.id), 1);
+        this.saveClick();
+    }
+
     saveDClick() {
         if(this.isNewD)
             if(this.selectedDelega !== undefined && this.selectedDelega.id !== '')
@@ -275,6 +252,7 @@ export class KidPage implements OnInit{
         this.selectedDelega = undefined;
         this.isNewD = false;
         this.editD = false;
+        this.edit = false;
         this.saveClick();
     }
 

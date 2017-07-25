@@ -23,6 +23,8 @@ import { Info } from "../pages/Components/homeSection/info.component";
 import { KidPage } from "../pages/Components/kidSection/kidPage/kidPage";
 import { Orari } from "../pages/Components/orariSection/orari.component";
 import { OrariModal } from "../pages/Components/Modals/orariModal/orariModal";
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+
 
 @NgModule({
   declarations: [
@@ -38,13 +40,14 @@ import { OrariModal } from "../pages/Components/Modals/orariModal/orariModal";
     Bambini,
     KidPage,
     Info,
-    Orari,
+    Orari
   ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
     HttpModule,
-    InMemoryWebApiModule.forRoot(InMemoryDataService)
+    InMemoryWebApiModule.forRoot(InMemoryDataService),
+    NgbModule.forRoot(),
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -60,7 +63,7 @@ import { OrariModal } from "../pages/Components/Modals/orariModal/orariModal";
     Bambini,
     KidPage,
     Info,   
-    Orari 
+    Orari
   ],
   providers: [
     StatusBar,

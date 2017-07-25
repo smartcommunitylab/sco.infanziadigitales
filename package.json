@@ -25,9 +25,11 @@
     "@ionic-native/splash-screen": "3.12.1",
     "@ionic-native/status-bar": "3.12.1",
     "@ionic/storage": "2.0.1",
+    "@ng-bootstrap/ng-bootstrap": "^1.0.0-alpha.28",
     "cordova-plugin-filechooser": "^1.0.1",
     "ionic-angular": "3.5.0",
     "ionicons": "3.0.0",
+    "ngx-bootstrap": "^1.8.0",
     "rxjs": "5.4.0",
     "sw-toolbox": "3.6.0",
     "zone.js": "0.8.12"

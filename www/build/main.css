@@ -46810,9 +46810,10 @@ ion-navbar.toolbar {
 }
 
 .popover-content {
-  width: auto !important;
-  left: 78% !important;
+  width: 366px !important;
+  left: auto !important;
   margin-top: 2.5% !important;
+  right: 60px !important;
 }
 
 .popover-content .item {

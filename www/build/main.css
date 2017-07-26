@@ -46808,3 +46808,18 @@ ion-navbar.toolbar {
   width: calc(100% - 70px);
   height: calc(100% - 70px);
 }
+
+.popover-content {
+  width: auto !important;
+  left: 78% !important;
+  margin-top: 2.5% !important;
+}
+
+.popover-content .item {
+  background-color: #7b9e2a !important;
+  color: white;
+}
+
+.popover-content .list-md {
+  margin: 0;
+}

@@ -1,3 +1,4 @@
+import { PopoverPage } from './../pages/Components/Modals/orariModal/popoverOrari';
 import { Insegnanti } from './../pages/Components/teacherSection/teacher.component';
 import { TeacherModal } from './../pages/Components/Modals/teacherModal/teacherModal';
 import { BusModal } from './../pages/Components/Modals/busModal/busModal';
@@ -23,7 +24,7 @@ import { Info } from "../pages/Components/homeSection/info.component";
 import { KidPage } from "../pages/Components/kidSection/kidPage/kidPage";
 import { Orari } from "../pages/Components/orariSection/orari.component";
 import { OrariModal } from "../pages/Components/Modals/orariModal/orariModal";
-import {MomentModule} from 'angular2-moment/moment.module';
+import { MomentModule } from 'angular2-moment/moment.module';
 
 
 @NgModule({
@@ -40,7 +41,8 @@ import {MomentModule} from 'angular2-moment/moment.module';
     Bambini,
     KidPage,
     Info,
-    Orari
+    Orari,
+    PopoverPage
   ],
   imports: [
     BrowserModule,
@@ -63,7 +65,8 @@ import {MomentModule} from 'angular2-moment/moment.module';
     Bambini,
     KidPage,
     Info,   
-    Orari
+    Orari,
+    PopoverPage
   ],
   providers: [
     StatusBar,

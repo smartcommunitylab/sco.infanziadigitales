@@ -7,7 +7,11 @@
             <button ion-button (click)="close()">Annulla</button>
         </ion-buttons>
         <ion-buttons end>
-            <button ion-button (click)="save()" [disabled]='!(copiedOrario.servizio) || disable || sovrapp'>Salva</button>
+            <div (mouseover)="sovraPopover($event)">
+                <button  ion-button (click)="save()" [disabled]='!(copiedOrario.servizio) || disable || sovrapp'>
+                    Salva
+                </button>
+            </div>
         </ion-buttons>
             
     </ion-navbar>

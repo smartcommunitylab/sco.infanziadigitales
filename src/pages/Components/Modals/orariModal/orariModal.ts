@@ -1,3 +1,4 @@
+import { PopoverPage } from './popoverOrari';
 import { Time } from './../../../../app/Classes/time';
 import { Service } from './../../../../app/Classes/service';
 import { Kid } from './../../../../app/Classes/kid';
@@ -6,7 +7,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { School } from '../../../../app/Classes/school';
 import { WebService } from '../../../../app/WebService';
 import { Component, OnInit } from '@angular/core';
-import { NavParams, NavController, AlertController } from "ionic-angular";
+import { NavParams, NavController, AlertController, PopoverController, ViewController } from "ionic-angular";
 
 
 @Component({
@@ -28,7 +29,7 @@ export class OrariModal implements OnInit{
 
     sovrapp:boolean;
 
-    constructor(public params: NavParams, public navCtrl:NavController, private webService : WebService, public alertCtrl : AlertController) {
+    constructor(public params: NavParams, public navCtrl:NavController, private webService : WebService, public alertCtrl : AlertController, public popoverCtrl:PopoverController) {
         this.selectedSchool = this.params.get('school') as School;
         this.selectedOrario = this.params.get('orario') as Service;
         this.isNew = this.params.get('isNew') as boolean;
@@ -103,12 +104,15 @@ export class OrariModal implements OnInit{
 
     changeFascia(fascia : Time) {
         this.copiedOrario.fasce.sort((item1, item2) => item1.start.localeCompare(item2.start));
-        for(var i = 1; i < this.copiedOrario.fasce.length; i++) {
-            if(this.isBetween(this.copiedOrario.fasce[i].start, this.copiedOrario.fasce[i-1].start, this.copiedOrario.fasce[i-1].end) || this.isBetweenSchool(this.copiedOrario.fasce[i].start)) {
-                this.sovrapp = true; return;
+        if(this.copiedOrario.fasce.length > 1)
+            for(var i = 1; i < this.copiedOrario.fasce.length; i++) {
+                if(this.isBetween(this.copiedOrario.fasce[i].start, this.copiedOrario.fasce[i-1].start, this.copiedOrario.fasce[i-1].end) || this.isBetweenSchool(fascia.start) || this.isBetweenSchool(fascia.end) )  {
+                    this.sovrapp = true; return;
+                }
+                else this.sovrapp = false;
             }
-            else this.sovrapp = false;
-        }
+        else
+            this.sovrapp = this.isBetweenSchool(fascia.start);
     }
 
     isBetween (date:string, start:string, end: string) {
@@ -117,9 +121,22 @@ export class OrariModal implements OnInit{
 
     isBetweenSchool (date:string) {
         var ret;
-        this.selectedSchool.servizi.forEach(element => {
-            for(var i = 1; i < element.fasce.length; i++)
-                return this.isBetween(element.fasce[i].start, element.fasce[i-1].start, element.fasce[i-1].end)
-        })
+        for(var element of this.selectedSchool.servizi) {
+            for(var i = 0; i < element.fasce.length; i++) {
+                ret = this.isBetween(date, element.fasce[i].start, element.fasce[i].end);
+                if (ret) break;
+            }
+            if (ret) break;
+        }
+        return ret
+    }
+
+    sovraPopover(ev) {
+        if(this.sovrapp) {
+            let popover = this.popoverCtrl.create(PopoverPage);
+            popover.present({
+                ev : ev
+            });
+        }
     }
 }

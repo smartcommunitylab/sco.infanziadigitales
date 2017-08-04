@@ -42,9 +42,23 @@ export class Insegnanti implements OnInit {
   }
 
   onDeleteTeacher(item : Teacher) {
-    this.thisSchool.teachers.splice(this.thisSchool.teachers.findIndex(tmp => tmp.id.toLowerCase() === item.id.toLowerCase()), 1);
-    Object.assign(this.selectedSchool, this.thisSchool);
-    this.webService.update(this.selectedSchool);
+    let alert = this.alertCtrl.create({
+      subTitle: 'Conferma eliminazione',
+      buttons: [
+        {
+          text: "Annulla"
+        },
+        {
+          text: 'OK',
+          handler: () => {
+            this.thisSchool.teachers.splice(this.thisSchool.teachers.findIndex(tmp => tmp.id.toLowerCase() === item.id.toLowerCase()), 1);
+            Object.assign(this.selectedSchool, this.thisSchool);
+            this.webService.update(this.selectedSchool);
+          }
+        }
+      ]
+    })
+    alert.present();
   }
 
   onOrdineChange(ordine : string) {

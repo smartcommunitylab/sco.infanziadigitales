@@ -55,4 +55,8 @@ export class HomePage implements OnInit {
   onSegmentChange() {
     this.webService.getSchool(this.selectedId).then(x => this.selectedSchool = x)
   }
+
+  goBack() {
+    console.log()
+  }
 }

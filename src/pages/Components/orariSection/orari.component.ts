@@ -1,3 +1,4 @@
+import { Time } from './../../../app/Classes/time';
 import { StatusBar } from '@ionic-native/status-bar';
 import { OrariModal } from './../Modals/orariModal/orariModal';
 import { Service } from './../../../app/Classes/service';
@@ -10,13 +11,20 @@ import { NavController, AlertController, ModalController } from 'ionic-angular';
   selector: 'orari',
   templateUrl: 'orari-component.html',
     styles: [`
-      button[disabled] {
-        opacity : 1
-      }
-      .item-md .item-button {
-        height: 40px;
-        font-size: 14px;
-      }
+        .item-md .item-button {
+            height: 40px;
+            font-size: 14px;
+        }
+        .btnFasce {
+            color: black;
+            background-color: white;
+            border: 1px black solid;
+            border-radius: 0;
+            -webkit-box-shadow: 0 0 0 0;
+            box-shadow: 0 0 0 0;
+            opacity : 1;
+            text-transform: none;
+        }
     `]
 })
 
@@ -73,21 +81,24 @@ export class Orari implements OnInit {
     }
 
     onDeleteOrario(item : Service) {
-        this.thisSchool.servizi.splice(this.thisSchool.servizi.findIndex(tmp => tmp.servizio.toLowerCase() === item.servizio.toLowerCase()), 1);
-        Object.assign(this.selectedSchool, this.thisSchool);
-        this.webService.update(this.selectedSchool);
-        this.onOrdineChange(this.ordine);
-        this.selectedSchool.servizi.sort((item1, item2) => item1.fasce[0].start.localeCompare(item2.fasce[0].start));
-    }
-
-    searchOrario(item : any) {
-        this.filteredOrari = this.selectedSchool.servizi;
-        let val = item.target.value;
-        if(val && val.trim() !== '') {
-            this.filteredOrari = this.filteredOrari.filter(x => {
-                var tmp = x.servizio;
-                return (tmp.toLowerCase().indexOf(val.toLowerCase()) >= 0);
-            })
-        }
+        let alert = this.alertCtrl.create({
+            subTitle: 'Conferma eliminazione',
+            buttons: [
+                {
+                    text: "Annulla"
+                },
+                {
+                text: 'OK',
+                handler: () => {
+                    this.thisSchool.servizi.splice(this.thisSchool.servizi.findIndex(tmp => tmp.servizio.toLowerCase() === item.servizio.toLowerCase()), 1);
+                    Object.assign(this.selectedSchool, this.thisSchool);
+                    this.webService.update(this.selectedSchool);
+                    this.onOrdineChange(this.ordine);
+                    this.selectedSchool.servizi.sort((item1, item2) => item1.fasce[0].start.localeCompare(item2.fasce[0].start));
+                },
+                }
+            ]
+        })
+        alert.present();
     }
 }

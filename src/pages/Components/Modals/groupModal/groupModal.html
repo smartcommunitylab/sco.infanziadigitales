@@ -1,7 +1,8 @@
 <ion-header>
     <ion-navbar>
-        <ion-title text-center>
+        <ion-title>
              {{selectedGroup.name}} 
+             <span *ngIf="selectedGroup.name===''">Nuovo gruppo</span> 
         </ion-title>
         <ion-buttons start>
             <button ion-button (click)="close()">Annulla</button>
@@ -14,54 +15,67 @@
 </ion-header>
 
 <ion-content>       
-    <p style="color: #ccc" text-center><ion-icon name="help-circle"></ion-icon> Tutti i campi contrassegnati dal simbolo * sono obbligatori</p>   
+    <p style="color: #ccc; margin-left: 25px"><ion-icon name="help-circle"></ion-icon> Tutti i campi contrassegnati dal simbolo * sono obbligatori</p>   
     <ion-grid inset>
         <ion-row>
-            <ion-col col-1><p></p></ion-col>
-            <ion-col col-10>
-                <ion-list inset>
-                    <ion-item>
-                        <ion-label floating>Nome*</ion-label>
-                        <ion-input name="name" type="text" [(ngModel)]="copiedGroup.name"></ion-input>
-                    </ion-item>
-                    <ion-item margin-top>
-                        <ion-label inline>Questo gruppo è una sezione</ion-label>
-                        <ion-checkbox [(ngModel)]="copiedGroup.section" [disabled]='disabledSection'></ion-checkbox>
-                    </ion-item>
-                </ion-list>
+            <ion-col col-10 offset-1>
+                <ion-card>
+                    <ion-card-header>
+                        Informazioni di base
+                    </ion-card-header>
+                    <ion-card-content>
+                        <ion-list inset>
+                            <ion-item class="input-calza">
+                                <ion-label>Nome*</ion-label>
+                                <ion-input name="name" type="text" [(ngModel)]="copiedGroup.name"></ion-input>
+                            </ion-item>
+                            <ion-item margin-top>
+                                <ion-label inline>Questo gruppo è una sezione</ion-label>
+                                <ion-checkbox [(ngModel)]="copiedGroup.section" [disabled]='disabledSection'></ion-checkbox>
+                            </ion-item>
+                        </ion-list>
+                    </ion-card-content>
+                </ion-card>
             </ion-col>
-            <ion-col col-1><p></p></ion-col>
         </ion-row>
         <ion-row>
-            <ion-col col-1><p></p></ion-col>
-            <ion-col col-10>
-                <ion-list inset>
-                    <ion-list-header>Insegnanti</ion-list-header>
-                    <ion-item *ngFor="let tea of selectedGroupTeachers">
-                        {{tea.name}} {{tea.surname}}
-                        <ion-icon name="close" float-end (click)="removeTeacher(tea)"></ion-icon>
-                    </ion-item>
-                    <button ion-item color="green3" (click)='addTeacher()'><ion-icon name="add"></ion-icon> Aggiungi insegnanti</button>
-                </ion-list>
+            <ion-col col-10 offset-1>
+                 <ion-card>
+                    <ion-card-header>
+                        Insegnanti
+                    </ion-card-header>
+                    <ion-card-content>
+                        <ion-list inset>
+                            <ion-item *ngFor="let tea of selectedGroupTeachers">
+                                {{tea.name}} {{tea.surname}}
+                                <ion-icon name="close" float-end (click)="removeTeacher(tea)"></ion-icon>
+                            </ion-item>
+                            <button ion-button color="green1" (click)='addTeacher()' margin-top>Aggiungi insegnanti</button>
+                        </ion-list>
+                    </ion-card-content>
+                </ion-card>
             </ion-col>
-            <ion-col col-1><p></p></ion-col>
         </ion-row>
         <ion-row>
-            <ion-col col-1><p></p></ion-col>
-            <ion-col col-10 >
-                 <ion-list inset>
-                    <ion-list-header>Bambini</ion-list-header>
-                    <ion-item *ngFor="let kid of selectedGroupKids">
-                        <ion-thumbnail item-start>
-                            <img src={{kid.image}}>
-                        </ion-thumbnail>
-                        {{kid.name}} {{kid.surname}}
-                        <ion-icon name="close" float-end (click)="removeKid(kid.id)"></ion-icon>
-                    </ion-item>
-                    <button ion-item color="green3" (click)='addKid()'><ion-icon name="add"></ion-icon> Aggiungi bambini</button>
-                </ion-list>  
+            <ion-col col-10 offset-1>
+                <ion-card>
+                    <ion-card-header>
+                        Alunni
+                    </ion-card-header>
+                    <ion-card-content>
+                        <ion-list inset>
+                            <ion-item *ngFor="let kid of selectedGroupKids">
+                                <ion-thumbnail item-start>
+                                    <img src={{kid.image}}>
+                                </ion-thumbnail>
+                                {{kid.name}} {{kid.surname}}
+                                <ion-icon name="close" float-end (click)="removeKid(kid.id)"></ion-icon>
+                            </ion-item>
+                            <button ion-button color="green1" (click)='addKid()' margin-top>Aggiungi bambini</button>
+                        </ion-list>  
+                    </ion-card-content>
+                </ion-card>
             </ion-col>
-            <ion-col col-1><p></p></ion-col>
         </ion-row>
     </ion-grid>
 </ion-content>

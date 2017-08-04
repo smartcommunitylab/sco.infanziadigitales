@@ -61,8 +61,8 @@ export class InMemoryDataService implements InMemoryDbService {
           email : "scuolauno@mail.com",
           kids : [
             new Kid("RSSMRO", "Mario", "Rossi", "Maschio", new Date('2013-07-23'), 'https://s-media-cache-ak0.pinimg.com/originals/ed/cb/7f/edcb7f2fc6cf61ef85713420ceb91565.jpg' , false, new Parent('GSTLRN', 'Lorenzo', 'Giusti', '', '', ''), new Parent('RSSFBO', 'Fabiola', 'Rossi', '', '', ''), null, [], [new Delega('GSTMRC', 'Marco', 'Giusti', '', '', '', 'Nonno/a', new Date('2017-08-01'), true)], [], true, []),
-            new Kid("VRDGVN","Giovanni", "Verdi"),
-            new Kid("BNCLGI","Luigi", "Bianchi"),
+            new Kid("VRDGVN","Giovanni", "Verdi", "Maschio", new Date(), "https://s-media-cache-ak0.pinimg.com/originals/ed/cb/7f/edcb7f2fc6cf61ef85713420ceb91565.jpg"),
+            new Kid("BNCLGI","Luigi", "Bianchi", "Maschio", new Date(), "https://s-media-cache-ak0.pinimg.com/originals/ed/cb/7f/edcb7f2fc6cf61ef85713420ceb91565.jpg"),
           ],
           teachers : [
             new Teacher("FSTANT", "Antonello", "Fausti", "1234", "", "", ""),

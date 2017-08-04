@@ -10,6 +10,14 @@ import { NavParams, NavController, AlertController } from "ionic-angular";
 @Component({
   selector: 'bus-modal',
   templateUrl: 'busModal.html',
+  styles: [
+    `
+      ion-card-header {
+            font-size: 20px !important;
+            background-color: rgba(152,186,60, .4);
+        }
+    `
+  ]
 })
 
 export class BusModal implements OnInit {

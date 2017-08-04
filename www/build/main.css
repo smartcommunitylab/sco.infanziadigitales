@@ -46801,26 +46801,73 @@ ion-navbar.toolbar {
   }
 }
 
-.modal-wrapper {
-  left: 35px;
-  top: 35px;
-  position: absolute;
-  width: calc(100% - 70px);
-  height: calc(100% - 70px);
+.radio-md .radio-checked {
+  border-color: #7b9e2a;
 }
 
-.popover-content {
+.radio-md .radio-checked .radio-inner {
+  background-color: #7b9e2a;
+}
+
+.item-radio-checked.item-md ion-label {
+  color: #7b9e2a;
+}
+
+.item-input-has-focus .label-md[stacked], .input-has-focus .label-md[stacked], .item-input-has-focus .label-md[floating], .input-has-focus .label-md[floating] {
+  color: #7b9e2a;
+}
+
+.input-calza {
+  border-bottom-color: #ccc;
+  -webkit-box-shadow: inset 0 -1px 0 0 #ccc;
+  box-shadow: inset 0 -1px 0 0 #ccc;
+}
+
+.modal-wrapper {
+  left: 360px;
+  top: 80px;
+  position: absolute;
+  width: calc(100% - 720px);
+  height: calc(100% - 160px);
+}
+
+.alert-popover .popover-content {
   width: 366px !important;
   left: auto !important;
   margin-top: 2.5% !important;
   right: 60px !important;
 }
 
-.popover-content .item {
+.alert-popover .popover-content .item {
   background-color: #7b9e2a !important;
   color: white;
 }
 
-.popover-content .list-md {
+.alert-popover .popover-content .list-md {
   margin: 0;
+}
+
+.timepicker-popover .popover-content {
+  width: 150px !important;
+  margin-top: 4% !important;
+  text-align: center;
+}
+
+.timepicker-popover .popover-content .item {
+  background-color: #bd3e4d !important;
+  color: white;
+  border-radius: 20px;
+}
+
+.timepicker-popover .popover-content .list-md {
+  margin: 0 !important;
+}
+
+button#undefined.item-cover.item-cover-md.item-cover-default.item-cover-default-md {
+  display: none;
+}
+
+.edit {
+  height: 30px;
+  margin: -3px auto;
 }

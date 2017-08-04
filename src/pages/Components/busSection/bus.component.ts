@@ -9,12 +9,19 @@ import { NavController, AlertController, ModalController } from 'ionic-angular';
   selector: 'buses',
   templateUrl: 'bus-component.html',
   styles: [`
-      button[disabled] {
-        opacity : 1
-      }
       .item-md .item-button {
         height: 40px;
         font-size: 14px;
+      }
+      .btnBus {
+        color: black;
+        background-color: white;
+        border: 1px black solid;
+        border-radius: 0;
+        -webkit-box-shadow: 0 0 0 0;
+        box-shadow: 0 0 0 0;
+        opacity : 1;
+        text-transform: none;
       }
     `]
 })
@@ -80,9 +87,23 @@ export class Buses implements OnInit {
   }
 
   onDeleteBus(item : Bus) {
-    this.thisSchool.buses.splice(this.thisSchool.buses.findIndex(tmp => tmp.name.toLowerCase() === item.name.toLowerCase()), 1);
-    Object.assign(this.selectedSchool, this.thisSchool);
-    this.webService.update(this.selectedSchool);
+    let alert = this.alertCtrl.create({
+      subTitle: 'Conferma eliminazione',
+      buttons: [
+        {
+          text: "Annulla"
+        },
+        {
+          text: 'OK',
+          handler: () => {
+            this.thisSchool.buses.splice(this.thisSchool.buses.findIndex(tmp => tmp.name.toLowerCase() === item.name.toLowerCase()), 1);
+            Object.assign(this.selectedSchool, this.thisSchool);
+            this.webService.update(this.selectedSchool);
+          }
+        }
+      ]
+    })
+    alert.present();
   }
 
   searchBus(item : any) {

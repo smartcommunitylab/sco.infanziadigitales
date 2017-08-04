@@ -49,8 +49,8 @@
           <ion-icon *ngIf="!item.section" item-start></ion-icon> -->
           <button ion-button item-start *ngIf="item.section" color="green3" [disabled]='true'>Sezione</button>
           {{item.name}}
-          <button ion-button color="green2" item-end [disabled]='true'>{{item.teachers.length}} Insegnanti</button>
-          <button ion-button color="green2" item-end [disabled]='true' style='margin-right: 200px'>{{item.kids.length}} Bambini</button>
+          <button ion-button color="green2" class='btnGroup' item-end [disabled]='true'>{{item.teachers.length}} Insegnanti</button>
+          <button ion-button color="green2" class='btnGroup' item-end [disabled]='true' style='margin-right: 200px'>{{item.kids.length}} Bambini</button>
           <ion-icon name="md-create" item-end color="magenta1" style="margin-right: 30px" (click)="showGroupModal(item, false)"></ion-icon>
           <ion-icon name="trash" item-end color="magenta1" style="margin-right: 10px" (click)="onDeleteGroup(item)"></ion-icon>
         </ion-item>

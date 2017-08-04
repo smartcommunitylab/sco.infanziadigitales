@@ -9,9 +9,6 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
-import { RouterModule }   from '@angular/router';
-import {FileChooser} from '@ionic-native/file-chooser';
-
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { InMemoryWebApiModule } from "angular-in-memory-web-api";
@@ -24,8 +21,7 @@ import { Info } from "../pages/Components/homeSection/info.component";
 import { KidPage } from "../pages/Components/kidSection/kidPage/kidPage";
 import { Orari } from "../pages/Components/orariSection/orari.component";
 import { OrariModal } from "../pages/Components/Modals/orariModal/orariModal";
-import { MomentModule } from 'angular2-moment/moment.module';
-
+import { PopoverTimepicker } from "../pages/Components/Modals/orariModal/popoverTimepicker";
 
 @NgModule({
   declarations: [
@@ -42,14 +38,14 @@ import { MomentModule } from 'angular2-moment/moment.module';
     KidPage,
     Info,
     Orari,
-    PopoverPage
+    PopoverPage,
+    PopoverTimepicker
   ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
     HttpModule,
-    InMemoryWebApiModule.forRoot(InMemoryDataService),
-    MomentModule
+    InMemoryWebApiModule.forRoot(InMemoryDataService)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -66,7 +62,8 @@ import { MomentModule } from 'angular2-moment/moment.module';
     KidPage,
     Info,   
     Orari,
-    PopoverPage
+    PopoverPage,
+    PopoverTimepicker
   ],
   providers: [
     StatusBar,

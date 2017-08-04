@@ -14,10 +14,6 @@ import { Component, OnInit, Input } from '@angular/core';
         font-size: 20px !important;
         background-color: rgba(152,186,60, .4);
     }
-    img {
-        height: 100px;
-        width: auto;
-    }
     .text-input {
         border: solid 1px black;
         border-radius: 7px 7px 7px 7px;
@@ -109,16 +105,56 @@ export class Info {
         prompt.present();
     }
 
+    oldTel:string; oldMail:string;
     onContattiEdit() {
-        this.editContatti = !this.editContatti;
-        this.webService.update(this.selectedSchool);
+        this.editContatti = true;
+        if(this.editContatti) {
+            this.oldTel = this.selectedSchool.telephone;
+            this.oldMail = this.selectedSchool.email;
+        }
     }
 
-    onAssenzeEdit() {
-        if(!this.editAssenze) this.isMalattiaEnabled = this.selectedSchool.malattia;
-        else this.selectedSchool.malattia = this.isMalattiaEnabled;
-        this.editAssenze = !this.editAssenze;
+    onContattiSave() {
         this.webService.update(this.selectedSchool);
+        this.editContatti = false;
+    }
+
+    onContattiCancel() {
+        this.selectedSchool.email = this.oldMail;
+        this.selectedSchool.telephone = this.oldTel;
+        this.editContatti = false;
+    }
+
+    oldMal : boolean;
+    oldMf : boolean;
+    oldAsse : string[] = [];
+    onAssenzeEdit() {
+        this.oldAsse = [];
+        this.selectedSchool.assenze.forEach(x=>this.oldAsse.push(x));
+
+        this.oldMf = this.selectedSchool.familiari;
+        this.oldMal = this.selectedSchool.malattia;
+
+        this.isMalattiaEnabled = this.selectedSchool.malattia;
+        this.editAssenze = true;
+    }
+
+    onAssenzeSave() {
+        this.selectedSchool.malattia = this.isMalattiaEnabled;
+        this.webService.update(this.selectedSchool);
+        this.editAssenze = false;
+        this.newAssenza = '';
+    }
+
+    onAssenzeCancel() {
+        this.selectedSchool.assenze = [];
+        this.oldAsse.forEach(x=>this.selectedSchool.assenze.push(x));
+
+        this.selectedSchool.malattia = this.oldMal;
+        this.selectedSchool.familiari = this.oldMf;
+
+        this.editAssenze = false;
+        this.newAssenza = '';
     }
 
     addAssenza(assenza:string) {
@@ -135,12 +171,39 @@ export class Info {
     }
 
     removeAssenza(assenza:string) {
-        this.selectedSchool.assenze.splice(this.selectedSchool.assenze.findIndex(x=>x.toLowerCase() === assenza.toLowerCase()), 1);
+        let alert = this.alertCtrl.create({
+        subTitle: 'Conferma eliminazione',
+        buttons: [
+            {
+            text: "Annulla"
+            },
+            {
+            text: 'OK',
+            handler: () => {
+                this.selectedSchool.assenze.splice(this.selectedSchool.assenze.findIndex(x=>x.toLowerCase() === assenza.toLowerCase()), 1);
+            }
+            }
+        ]
+        })
+        alert.present();
     }
 
+    oldMals : string[];
     onMalattieEdit() {
-        this.editMalattie = !this.editMalattie;
+        this.oldMals = [];
+        this.selectedSchool.malattie.forEach(x=>this.oldMals.push(x));
+        this.editMalattie = true;
+    }
+
+    onMalattieSave() {
         this.webService.update(this.selectedSchool);
+        this.editMalattie = false;
+    }
+    
+    onMalattieCancel() {
+        this.selectedSchool.malattie = [];
+        this.oldMals.forEach(x=>this.selectedSchool.malattie.push(x));
+        this.editMalattie = false;
     }
 
     addMalattia(malattia:string) {
@@ -157,6 +220,20 @@ export class Info {
     }
 
     removeMalattia(malattia:string) {
-        this.selectedSchool.malattie.splice(this.selectedSchool.malattie.findIndex(x=>x.toLowerCase() === malattia.toLowerCase()), 1);
+        let alert = this.alertCtrl.create({
+        subTitle: 'Conferma eliminazione',
+        buttons: [
+            {
+                text: "Annulla"
+            },
+            {
+                text: 'OK',
+                handler: () => {
+                    this.selectedSchool.malattie.splice(this.selectedSchool.malattie.findIndex(x=>x.toLowerCase() === malattia.toLowerCase()), 1);
+                }
+            }
+        ]
+        })
+        alert.present();
     }
 }

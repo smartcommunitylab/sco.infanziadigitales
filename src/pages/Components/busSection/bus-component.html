@@ -42,7 +42,7 @@
         <ion-item *ngFor="let item of filteredBus">
           <ion-icon name="bus" item-start color="green3" ></ion-icon>
           {{item.name}} ({{item.capolinea}})
-          <button ion-button color="green2" item-end [disabled]='true' style='margin-right: 300px'>{{item.kids.length}} Bambini</button>
+          <button ion-button color="green2" class='btnBus' item-end [disabled]='true' style='margin-right: 300px'>{{item.kids.length}} Bambini</button>
           <ion-icon name="md-create" item-end color="magenta1" style="margin-right: 30px" (click)="showBusModal(item, false)"></ion-icon>
           <ion-icon name="trash" item-end color="magenta1" style="margin-right: 10px" (click)="onDeleteBus(item)"></ion-icon>
         </ion-item>

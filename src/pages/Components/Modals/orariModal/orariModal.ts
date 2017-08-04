@@ -1,3 +1,4 @@
+import { PopoverTimepicker } from './popoverTimepicker';
 import { PopoverPage } from './popoverOrari';
 import { Time } from './../../../../app/Classes/time';
 import { Service } from './../../../../app/Classes/service';
@@ -13,6 +14,18 @@ import { NavParams, NavController, AlertController, PopoverController, ViewContr
 @Component({
   selector: 'orari-modal',
   templateUrl: 'orariModal.html',
+  styles: [
+      `
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        ion-card-header {
+            font-size: 20px !important;
+            background-color: rgba(152,186,60, .4);
+        }
+      `
+  ]
 })
 
 export class OrariModal implements OnInit{
@@ -41,17 +54,7 @@ export class OrariModal implements OnInit{
     }
 
     ngOnInit() {
-        this.late = this.copiedOrario.fasce[0].end;
-        for(var i = 0; i<this.copiedOrario.fasce.length-1; i++) {
-            if(this.late.localeCompare(this.copiedOrario.fasce[i].end) < 0)
-                this.late = this.copiedOrario.fasce[i].end;
-        }
-
-        this.early = this.copiedOrario.fasce[0].start;
-        for(var i = 0; i < this.copiedOrario.fasce.length-1; i++) {
-            if(this.early.localeCompare(this.copiedOrario.fasce[i].start) < 0)
-                this.early = this.copiedOrario.fasce[i].start;
-        }
+        
     }
 
     close() {
@@ -86,6 +89,7 @@ export class OrariModal implements OnInit{
 
     removeFascia(fascia : Time) {
         this.copiedOrario.fasce.splice(this.copiedOrario.fasce.findIndex(t=>t.name.toLowerCase() === fascia.name.toLowerCase()), 1);
+        this.disable = this.copiedOrario.fasce.findIndex(t=>t.name.toLowerCase() === '') >= 0;
     }
 
     disable : boolean;
@@ -106,24 +110,33 @@ export class OrariModal implements OnInit{
         this.copiedOrario.fasce.sort((item1, item2) => item1.start.localeCompare(item2.start));
         if(this.copiedOrario.fasce.length > 1)
             for(var i = 1; i < this.copiedOrario.fasce.length; i++) {
-                if(this.isBetween(this.copiedOrario.fasce[i].start, this.copiedOrario.fasce[i-1].start, this.copiedOrario.fasce[i-1].end) || this.isBetweenSchool(fascia.start) || this.isBetweenSchool(fascia.end) )  {
+                if(this.isBetween(this.copiedOrario.fasce[i].name, this.copiedOrario.fasce[i].start, this.copiedOrario.fasce[i-1].start, this.copiedOrario.fasce[i-1].end, this.copiedOrario.fasce[i-1].name, null) || this.isBetweenSchool(fascia))  {
                     this.sovrapp = true; return;
                 }
                 else this.sovrapp = false;
             }
         else
-            this.sovrapp = this.isBetweenSchool(fascia.start);
+            this.sovrapp = this.isBetweenSchool(fascia);
     }
 
-    isBetween (date:string, start:string, end: string) {
-        return date.localeCompare(start) >= 0 && date.localeCompare(end) < 0
+    isBetween (dateName:string, date:string, start:string, end: string, name:string, dateF:string) {
+        if(dateF === null) {
+            return dateName !== name && (date.localeCompare(start) > 0 && date.localeCompare(end) < 0)
+        }
+        else {
+            return dateName !== name && 
+            ((date.localeCompare(start) > 0 && date.localeCompare(end) < 0) || //inizio interno ad una fascia
+            (dateF.localeCompare(start) > 0 && dateF.localeCompare(end) < 0) ||  //fine interna a una fascia
+            (date.localeCompare(start) <= 0 && dateF.localeCompare(end) >= 0) ||  //inizia prima di o assieme a una fascia e finisce dopo o assieme
+            (date.localeCompare(dateF) >= 0))
+        } 
     }
 
-    isBetweenSchool (date:string) {
+    isBetweenSchool (fascia : Time) {
         var ret;
         for(var element of this.selectedSchool.servizi) {
             for(var i = 0; i < element.fasce.length; i++) {
-                ret = this.isBetween(date, element.fasce[i].start, element.fasce[i].end);
+                ret = this.isBetween(fascia.name, fascia.start, element.fasce[i].start, element.fasce[i].end, element.fasce[i].name, fascia.end);
                 if (ret) break;
             }
             if (ret) break;
@@ -133,10 +146,21 @@ export class OrariModal implements OnInit{
 
     sovraPopover(ev) {
         if(this.sovrapp) {
-            let popover = this.popoverCtrl.create(PopoverPage);
+            let popover = this.popoverCtrl.create(PopoverPage, {}, {cssClass: 'alert-popover'});
             popover.present({
                 ev : ev
             });
         }
+    }
+
+    timepickerPresent(ev, item, ctrl) {
+        let popover = this.popoverCtrl.create(PopoverTimepicker, {'oggetto' : item, 'ctrl': ctrl}, {cssClass: 'timepicker-popover'});
+        popover.present({
+            ev : ev
+        });
+
+        popover.onWillDismiss(() => {
+            this.changeFascia(item);
+        })
     }
 }

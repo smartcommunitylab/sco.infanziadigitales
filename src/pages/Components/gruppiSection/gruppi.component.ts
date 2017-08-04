@@ -20,6 +20,16 @@ import { NavController, AlertController, ModalController } from 'ionic-angular';
         height: 40px;
         font-size: 14px;
       }
+      .btnGroup {
+        color: black;
+        background-color: white;
+        border: 1px black solid;
+        border-radius: 0;
+        -webkit-box-shadow: 0 0 0 0;
+        box-shadow: 0 0 0 0;
+        opacity : 1;
+        text-transform: none;
+      }
   `]
 })
 
@@ -54,9 +64,23 @@ export class Gruppi implements OnInit {
   }
 
   onDeleteGroup(item : Group) {
-    this.thisSchool.groups.splice(this.thisSchool.groups.findIndex(tmp => tmp.name.toLowerCase() === item.name.toLowerCase()), 1);
-    Object.assign(this.selectedSchool, this.thisSchool);
-    this.webService.update(this.selectedSchool);
+    let alert = this.alertCtrl.create({
+      subTitle: 'Conferma eliminazione',
+      buttons: [
+        {
+          text: "Annulla"
+        },
+        {
+          text: 'OK',
+          handler: () => {
+            this.thisSchool.groups.splice(this.thisSchool.groups.findIndex(tmp => tmp.name.toLowerCase() === item.name.toLowerCase()), 1);
+            Object.assign(this.selectedSchool, this.thisSchool);
+            this.webService.update(this.selectedSchool);
+          }
+        }
+      ]
+    })
+    alert.present();
   }
 
   onOrdineChange(ordine : string) {

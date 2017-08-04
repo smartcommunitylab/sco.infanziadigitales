@@ -1,7 +1,8 @@
 <ion-header>
     <ion-navbar>
-        <ion-title text-center>
+        <ion-title>
              {{selectedOrario.servizio}} 
+             <span *ngIf="selectedOrario.servizio === ''">Nuovo servizio</span> 
         </ion-title>
         <ion-buttons start>
             <button ion-button (click)="close()">Annulla</button>
@@ -18,56 +19,66 @@
 </ion-header>
 
 <ion-content>
-    <p style="color: #ccc" text-center><ion-icon name="help-circle"></ion-icon> Tutti i campi contrassegnati dal simbolo * sono obbligatori</p>
+    <p style="color: #ccc; margin-left: 25px"><ion-icon name="help-circle"></ion-icon> Tutti i campi contrassegnati dal simbolo * sono obbligatori</p>
     <ion-grid inset>
         <ion-row>
-            <ion-col col-1><p></p></ion-col>
-            <ion-col col-10>
-                <ion-list inset>
-                    <ion-item>
-                        <ion-label floating>Nome*</ion-label>
-                        <ion-input name="name" type="text" [(ngModel)]="copiedOrario.servizio"></ion-input>
-                    </ion-item>
-                    <ion-item>
-                        <ion-label>Questo è il servizio normale</ion-label>
-                        <ion-checkbox [(ngModel)]="copiedOrario.normale" (ngModelChange)='giaNorm[0] = copiedOrario.normale' [disabled]='giaNorm[0] && !copiedOrario.normale'></ion-checkbox>
-                    </ion-item>
-                </ion-list>
+            <ion-col col-10 offset-1>
+                <ion-card>
+                    <ion-card-header>
+                        Informazioni di base
+                    </ion-card-header>
+                    <ion-card-content>
+                        <ion-list inset>
+                            <ion-item class='input-calza'>
+                                <ion-label>Nome*</ion-label>
+                                <ion-input name="name" type="text" [(ngModel)]="copiedOrario.servizio"></ion-input>
+                            </ion-item>
+                            <ion-item>
+                                <ion-label>Questo è il servizio normale</ion-label>
+                                <ion-checkbox [(ngModel)]="copiedOrario.normale" (ngModelChange)='giaNorm[0] = copiedOrario.normale' [disabled]='giaNorm[0] && !copiedOrario.normale'></ion-checkbox>
+                            </ion-item>
+                        </ion-list>
+                    </ion-card-content>
+                </ion-card>
             </ion-col>
-            <ion-col col-1><p></p></ion-col>
         </ion-row>
         <ion-row>
-            <ion-col col-1><p></p></ion-col>
-            <ion-col col-10>
-                <ion-list inset no-lines>
-                    <ion-list-header>Fasce</ion-list-header>
-                    <ion-grid *ngFor="let fascia of copiedOrario.fasce; let i = index">
-                        <ion-row>
-                            <ion-col col-5>
-                                <ion-item>
-                                    <ion-label floating>Nome</ion-label>
-                                    <ion-input type="text" [(ngModel)]='fascia.name' ng-focus="fascia.name === ''" (ngModelChange)='changeName(fascia.name)' (ionBlur)="blurFascia(fascia)"></ion-input>
-                                </ion-item>
-                            </ion-col>
-                            <ion-col col-3 style="bottom: 5px">
-                                <ion-item>
-                                    <ion-label floating>Da</ion-label>
-                                    <ion-datetime displayFormat='HH:mm' class='start' [(ngModel)]='fascia.start' [max]='fascia.end' (ngModelChange)='changeFascia(fascia)'></ion-datetime> 
-                                </ion-item>
-                            </ion-col>
-                            <ion-col col-3 style="bottom: 5px">
-                                <ion-item>
-                                    <ion-label floating>A</ion-label>
-                                     <ion-datetime displayFormat='HH:mm' class='end' [(ngModel)]='fascia.end' [min]='fascia.start' (ngModelChange)='changeFascia(fascia)'></ion-datetime> 
-                                </ion-item>
-                            </ion-col>
-                            <ion-col col-1 style="top: 18px">
-                                <button ion-item icon-only (click)='removeFascia(fascia)'><ion-icon name="trash" item-end color="magenta1"></ion-icon></button>
-                            </ion-col>
-                        </ion-row>
-                    </ion-grid>
-                    <button ion-item color="green3" (click)='addFascia()' [disabled]='disable'><ion-icon name="add"></ion-icon> Aggiungi Fascia</button>
-                </ion-list>  
+            <ion-col col-10 offset-1>
+                <ion-card>
+                    <ion-card-header>
+                        Fasce
+                    </ion-card-header>
+                    <ion-card-content>
+                        <ion-list inset no-lines>
+                            <ion-grid *ngFor="let fascia of copiedOrario.fasce; let i = index">
+                                <ion-row>
+                                    <ion-col col-5>
+                                        <ion-item class='input-calza'>
+                                            <ion-label>Nome</ion-label>
+                                            <ion-input type="text" [(ngModel)]='fascia.name' ng-focus="fascia.name === ''" (ngModelChange)='changeName(fascia.name)' (ionBlur)="blurFascia(fascia)"></ion-input>
+                                        </ion-item>
+                                    </ion-col>
+                                    <ion-col col-3 style="bottom: 0px">
+                                        <ion-item>
+                                            <ion-label>Da</ion-label>
+                                            <ion-input readonly class='start' [(ngModel)]='fascia.start' [max]='fascia.end' (ngModelChange)='changeFascia(fascia)' (click)='timepickerPresent($event, copiedOrario.fasce[i], "s")'></ion-input> 
+                                        </ion-item>
+                                    </ion-col>
+                                    <ion-col col-3 style="bottom: 0px">
+                                        <ion-item class='input-calza'>
+                                            <ion-label>A</ion-label>
+                                            <ion-input readonly class='end' [(ngModel)]='fascia.end' [min]='fascia.start' (ngModelChange)='changeFascia(fascia)' (click)='timepickerPresent($event, copiedOrario.fasce[i], "e")'></ion-input> 
+                                        </ion-item>
+                                    </ion-col>
+                                    <ion-col col-1>
+                                        <button style="padding-left: 3px" ion-item icon-only (click)='removeFascia(fascia)'><ion-icon style="padding-left: 0" name="trash" item-end color="magenta1"></ion-icon></button>
+                                    </ion-col>
+                                </ion-row>
+                            </ion-grid>
+                            <button ion-button color="green1" (click)='addFascia()' [disabled]='disable' margin-top>Aggiungi Fascia</button>
+                        </ion-list>  
+                    </ion-card-content>
+                </ion-card>
             </ion-col>
             <ion-col col-1><p></p></ion-col>
         </ion-row>

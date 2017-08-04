@@ -1,7 +1,8 @@
 <ion-header>
     <ion-navbar>
-        <ion-title text-center>
+        <ion-title>
              {{selectedTeacher.name}} {{selectedTeacher.surname}}
+             <span *ngIf="selectedTeacher.name===''">Nuovo insegnante</span> 
         </ion-title>
         <ion-buttons start>
             <button ion-button (click)="close()">Annulla</button>
@@ -14,94 +15,90 @@
 </ion-header>
 
 <ion-content>
-    <p style="color: #ccc" text-center><ion-icon name="help-circle"></ion-icon> Tutti i campi contrassegnati dal simbolo * sono obbligatori</p>
+    <p style="color: #ccc; margin-left: 25px;" ><ion-icon name="help-circle"></ion-icon> Tutti i campi contrassegnati dal simbolo * sono obbligatori</p>
     <ion-list inset>
         <ion-grid inset>
             <ion-row>
-                <ion-col col-2><p></p></ion-col>
-                <ion-col col-8>
-                    <ion-item>
-                        <ion-label floating>ID (C.F.)*</ion-label>
-                        <ion-input name="name" type="text" [(ngModel)]="copiedTeacher.id" [disabled]='!isNew'></ion-input>
-                    </ion-item>
+                <ion-col col-10 offset-1>
+                    <ion-card>
+                        <ion-card-header>
+                            Informazioni di base
+                        </ion-card-header>
+                        <ion-card-content>
+                            <ion-item class='input-calza'>
+                                <ion-label>ID (C.F.)*</ion-label>
+                                <ion-input name="name" type="text" [(ngModel)]="copiedTeacher.id" [disabled]='!isNew'></ion-input>
+                            </ion-item>
+                            <ion-item class='input-calza'>
+                                <ion-label>Nome*</ion-label>
+                                <ion-input name="name" type="text" [(ngModel)]="copiedTeacher.name"></ion-input>
+                            </ion-item>
+                            <ion-item class='input-calza'>
+                                <ion-label>Cognome*</ion-label>
+                                <ion-input name="name" type="text" [(ngModel)]="copiedTeacher.surname"></ion-input>
+                            </ion-item>
+                        </ion-card-content>
+                    </ion-card>
                 </ion-col>
-                <ion-col col-2><p></p></ion-col>
             </ion-row>
             <ion-row>
-                <ion-col col-2><p></p></ion-col>
-                <ion-col col-8>
-                    <ion-item>
-                        <ion-label floating>Nome*</ion-label>
-                        <ion-input name="name" type="text" [(ngModel)]="copiedTeacher.name"></ion-input>
-                    </ion-item>
+                <ion-col col-10 offset-1>
+                    <ion-card>
+                        <ion-card-header>
+                            Contatti
+                        </ion-card-header>
+                        <ion-card-content>
+                            <ion-item class='input-calza'>
+                                <ion-label>Telefono</ion-label>
+                                <ion-input name="tel" type="text" [(ngModel)]="copiedTeacher.telephone"></ion-input>
+                            </ion-item>
+                            <ion-item class='input-calza'>
+                                <ion-label>Cellulare</ion-label>
+                                <ion-input name="tel" type="text" [(ngModel)]="copiedTeacher.cellphone"></ion-input>
+                            </ion-item>
+                        </ion-card-content>
+                    </ion-card>
                 </ion-col>
-                <ion-col col-2><p></p></ion-col>
             </ion-row>
             <ion-row>
-                <ion-col col-2><p></p></ion-col>
-                <ion-col col-8>
-                    <ion-item>
-                        <ion-label floating>Cognome*</ion-label>
-                        <ion-input name="name" type="text" [(ngModel)]="copiedTeacher.surname"></ion-input>
-                    </ion-item>
+                <ion-col col-10 offset-1>
+                    <ion-card>
+                        <ion-card-header>
+                            Accesso
+                        </ion-card-header>
+                        <ion-card-content>
+                            <ion-item class='input-calza'>
+                                <ion-label>E-Mail</ion-label>
+                                <ion-input name="email" type="text" [(ngModel)]="copiedTeacher.email"></ion-input>
+                            </ion-item>
+                            <ion-item>
+                                <ion-label>PIN*</ion-label>
+                                <ion-input name="text" type="text" [(ngModel)]="copiedTeacher.pin"></ion-input>
+                            </ion-item>
+                        </ion-card-content>
+                    </ion-card>
                 </ion-col>
-                <ion-col col-2><p></p></ion-col>
             </ion-row>
             <ion-row>
-                <ion-col col-2><p></p></ion-col>
-                <ion-col col-8>
-                    <ion-item>
-                        <ion-label floating>Telefono</ion-label>
-                        <ion-input name="tel" type="text" [(ngModel)]="copiedTeacher.telephone"></ion-input>
-                    </ion-item>
+                <ion-col col-10 offset-1>
+                    <ion-card> 
+                        <ion-card-header>
+                            Gruppi e sezioni
+                        </ion-card-header>
+                        <ion-card-content>
+                            <ion-item *ngFor="let gr of selectedTeacherGroups">
+                                {{gr.name}}
+                                <ion-icon name="close" float-end (click)="onRemoveGroup(gr)"></ion-icon>
+                            </ion-item>
+                            <ion-item *ngIf="selectedTeacherGroups.length === 0" style='color: grey'>
+                                Nessun gruppo o sezione <br />
+                                Creando una sezione o un gruppo e associandolo a <br />
+                                questa/o insegnante lo vedrai apparire in questa sezione
+                            </ion-item> 
+                        </ion-card-content>
+                    </ion-card>
                 </ion-col>
-                <ion-col col-2><p></p></ion-col>
-            </ion-row>
-            <ion-row>
-                <ion-col col-2><p></p></ion-col>
-                <ion-col col-8>
-                    <ion-item>
-                        <ion-label floating>Cellulare</ion-label>
-                        <ion-input name="tel" type="text" [(ngModel)]="copiedTeacher.cellphone"></ion-input>
-                    </ion-item>
-                </ion-col>
-                <ion-col col-2><p></p></ion-col>
-            </ion-row>
-            <ion-row>
-                <ion-col col-2><p></p></ion-col>
-                <ion-col col-8>
-                    <ion-item>
-                        <ion-label floating>E-Mail</ion-label>
-                        <ion-input name="email" type="text" [(ngModel)]="copiedTeacher.email"></ion-input>
-                    </ion-item>
-                </ion-col>
-                <ion-col col-2><p></p></ion-col>
-            </ion-row>
-            <ion-row>
-                <ion-col col-2><p></p></ion-col>
-                <ion-col col-8>
-                    <ion-item>
-                        <ion-label floating>PIN*</ion-label>
-                        <ion-input name="text" type="text" [(ngModel)]="copiedTeacher.pin"></ion-input>
-                    </ion-item>
-                </ion-col>
-                <ion-col col-2><p></p></ion-col>
-            </ion-row>
-        </ion-grid>
-    </ion-list>
-    <ion-grid inset>
-        <ion-row>
-            <ion-col col-2><p></p></ion-col>
-            <ion-col col-8>
-                <ion-list inset>
-                    <ion-list-header>Sezioni e gruppi</ion-list-header>
-                    <ion-item *ngFor="let gr of selectedTeacherGroups">
-                        {{gr.name}}
-                        <ion-icon name="close" float-end (click)="onRemoveGroup(gr)"></ion-icon>
-                    </ion-item>
-                </ion-list>
-            </ion-col>
-            <ion-col col-2><p></p></ion-col>
         </ion-row>
-    </ion-grid>    
+        </ion-grid>
+    </ion-list> 
 </ion-content>

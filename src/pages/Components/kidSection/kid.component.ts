@@ -29,7 +29,7 @@ export class Bambini implements OnInit {
 
   edit : boolean;
 
-  constructor(private webService : WebService) {}
+  constructor(private webService : WebService, public alertCtrl: AlertController) {}
 
   ngOnInit(): void {
     Object.assign(this.thisSchool, this.selectedSchool)
@@ -63,9 +63,23 @@ export class Bambini implements OnInit {
   }
 
   onDeleteKid(item : Kid) {
-    this.thisSchool.kids.splice(this.thisSchool.kids.findIndex(tmp => tmp.id === item.id), 1);
-    Object.assign(this.selectedSchool, this.thisSchool);
-    this.webService.update(this.selectedSchool);
+    let alert = this.alertCtrl.create({
+      subTitle: 'Conferma eliminazione',
+      buttons: [
+        {
+          text: "Annulla"
+        },
+        {
+          text: 'OK',
+          handler: () => {
+            this.thisSchool.kids.splice(this.thisSchool.kids.findIndex(tmp => tmp.id === item.id), 1);
+            Object.assign(this.selectedSchool, this.thisSchool);
+            this.webService.update(this.selectedSchool);
+          }
+        }
+      ]
+    })
+    alert.present();
   }
 
   onOrdineChange(ordine : string) {

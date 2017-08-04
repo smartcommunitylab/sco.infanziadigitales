@@ -1,3 +1,4 @@
+import { Parent } from './../../../../app/Classes/parent';
 import { Delega } from './../../../../app/Classes/delega';
 import { AlertController } from 'ionic-angular';
 import { Service } from './../../../../app/Classes/service';
@@ -62,6 +63,17 @@ import 'rxjs/add/operator/switchMap';
             margin: 0;
             width: 95%;
         }
+        .segment-button {
+            border-bottom: 4px solid #98ba3c;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .segment-button.segment-activated {
+            border-bottom: 4px solid #98ba3c
+        }
+        ion-segment-button.segment-activated {
+            background-color : #98ba3c;
+        }
     `]
 })
 
@@ -93,19 +105,21 @@ export class KidPage implements OnInit{
         ) { }
 
     ngOnInit(): void {    
-        Object.assign(this.thisKid, this.selectedKid)
-        this.thisKid.allergie = new Array();
-        this.selectedKid.allergie.forEach(x => this.thisKid.allergie.push(x));
-        this.thisKid.deleghe = new Array();
-        this.selectedKid.deleghe.forEach(x => this.thisKid.deleghe.push(x));
-        this.thisKid.ritiro = new Array();
-        this.selectedKid.ritiro.forEach(x => this.thisKid.ritiro.push(x));
-        this.thisKid.services = new Array();
-        this.selectedKid.services.forEach(x => this.thisKid.services.push(x));
+        this.thisKid = JSON.parse(JSON.stringify(this.selectedKid)) as Kid;
+        // Object.assign(this.thisKid, this.selectedKid)
+        // this.thisKid.allergie = new Array();
+        // this.selectedKid.allergie.forEach(x => this.thisKid.allergie.push(x));
+        // this.thisKid.deleghe = new Array();
+        // this.selectedKid.deleghe.forEach(x => this.thisKid.deleghe.push(x));
+        // this.thisKid.ritiro = new Array();
+        // this.selectedKid.ritiro.forEach(x => this.thisKid.ritiro.push(x));
+        // this.thisKid.services = new Array();
+        // this.selectedKid.services.forEach(x => this.thisKid.services.push(x));
 
         this.selectedKidGroups = this.selectedSchool.groups.filter(x => x.kids.findIndex(d => d.toLowerCase() === this.selectedKid.id.toLowerCase()) >= 0);
 
         this.isNew = this.thisKid.id == ''; 
+        this.editInfo = this.isNew;
 
         this.thisKid.services.forEach(x=> this.servicesChecked[x.servizio] = true);
     }
@@ -133,12 +147,96 @@ export class KidPage implements OnInit{
         else this.kidClick[0] = false;
     }
 
+    editInfo:boolean;
+    oldInfo:Kid = new Kid('', '', '');
+    onInfoEdit() {
+        this.editInfo = true;
+        this.oldInfo.id = this.thisKid.id;
+        this.oldInfo.name = this.thisKid.name;
+        this.oldInfo.surname = this.thisKid.surname;
+        this.oldInfo.nascita = this.thisKid.nascita;
+        this.oldInfo.sperimentazione = this.thisKid.sperimentazione;
+    }
+
+    onInfoSave() {
+        this.webService.update(this.selectedSchool);
+        this.editInfo = false;
+        if(this.isNew) {
+            if(this.selectedSchool.kids.findIndex(x => x.id.toLowerCase() === this.thisKid.id.toLowerCase()) >= 0) {
+                let alert = this.alertCtrl.create({
+                    subTitle: 'Elemento già presente',
+                    buttons: [
+                        {
+                            text: 'OK'
+                        }
+                    ]
+                });
+                alert.present();
+            }
+            else {
+                this.selectedKid.services.push(this.selectedSchool.servizi.find(x => x.normale));
+                this.selectedSchool.kids.push(this.selectedKid);              
+            }
+        }
+        this.webService.update(this.selectedSchool);
+        this.saveClick();
+    }
+
+    onInfoCancel() {
+        this.thisKid.id = this.oldInfo.id;
+        this.thisKid.name = this.oldInfo.name;
+        this.thisKid.surname = this.oldInfo.surname;
+        this.thisKid.nascita = this.oldInfo.nascita;
+        this.thisKid.sperimentazione = this.oldInfo.sperimentazione;
+        this.editInfo = false;
+    }
+
+    editFoto: boolean;
+    oldFoto : string;
+
+    onFotoEdit() {
+        this.editFoto = true;
+        this.oldFoto = this.thisKid.image;
+    }
+
+    onFotoSave() {
+        this.webService.update(this.selectedSchool);
+        this.editFoto = false;
+        this.saveClick();
+    }
+
+    onFotoCancel() {
+        this.thisKid.image = this.oldFoto;
+        this.editFoto = false;
+    }
+
     addImage(e) {
         
     }
 
     handleChange(e) {
         console.log(e.target.value);
+    }
+
+    editAllergia : boolean;
+    oldAll:string[];
+
+    onAllergiaEdit() {
+        this.oldAll = [];
+        this.editAllergia = true;
+        this.thisKid.allergie.forEach(x=>this.oldAll.push(x));
+    }
+
+    onAllergiaSave() {
+        this.webService.update(this.selectedSchool);
+        this.editAllergia = false;
+        this.saveClick();
+    }
+
+    onAllergiaCancel() {
+        this.thisKid.allergie = [];
+        this.oldAll.forEach(x=>this.thisKid.allergie.push(x));
+        this.editAllergia = false;
     }
 
     addAllergia(all : string) {
@@ -156,6 +254,30 @@ export class KidPage implements OnInit{
 
     removeAllergia(all: string) {
         this.thisKid.allergie.splice(this.thisKid.allergie.findIndex(x=>x.toLowerCase() === all.toLowerCase()), 1);
+    }
+
+    editService : boolean;
+    oldService : Service[];
+    oldChecked = {};
+
+    onServiceEdit() {
+        this.oldService = [];
+        this.thisKid.services.forEach(x => this.oldService.push(x));
+        this.oldChecked = JSON.parse(JSON.stringify(this.servicesChecked));
+        this.editService = true;
+    }
+
+    onServiceSave() {
+        this.webService.update(this.selectedSchool);
+        this.editService = false;
+        this.saveClick();
+    }
+
+    onServiceCancel() {
+        this.thisKid.services = [];
+        this.oldService.forEach(x=>this.thisKid.services.push(x));
+        this.servicesChecked = JSON.parse(JSON.stringify(this.oldChecked));
+        this.editService = false;
     }
 
     changeServices() {
@@ -183,25 +305,8 @@ export class KidPage implements OnInit{
         this.selectedKid.services = new Array();
         this.thisKid.services.forEach(x => this.selectedKid.services.push(x));
 
-        if(this.isNew) {
-            if(this.selectedSchool.kids.findIndex(x => x.id.toLowerCase() === this.thisKid.id.toLowerCase()) >= 0) {
-                let alert = this.alertCtrl.create({
-                    subTitle: 'Elemento già presente',
-                    buttons: [
-                        {
-                            text: 'OK'
-                        }
-                    ]
-                });
-                alert.present();
-            }
-            else {
-                this.selectedKid.services.push(this.selectedSchool.servizi.find(x => x.normale));
-                this.selectedSchool.kids.push(this.selectedKid);              
-            }
-        }
         this.webService.update(this.selectedSchool);
-        this.edit = !this.edit;
+        this.edit = false;
     }
 
     cancelClick() {
@@ -213,6 +318,96 @@ export class KidPage implements OnInit{
             Object.assign(this.thisKid, this.selectedKid);
             this.edit = !this.edit;
         }
+    }
+
+    editP1Info : boolean;
+    oldParent1: Parent = new Parent('', '', '');
+
+    onP1InfoEdit() {
+        this.oldParent1.id = this.thisKid.parent1.id;
+        this.oldParent1.name = this.thisKid.parent1.name;
+        this.oldParent1.surname = this.thisKid.parent1.surname;
+        this.editP1Info = true;
+    }
+
+    onP1InfoSave() {
+        this.webService.update(this.selectedSchool);
+        this.editP1Info = false;
+        this.saveClick();
+    }
+
+    onP1InfoCancel() {
+        this.thisKid.parent1.id = this.oldParent1.id;
+        this.thisKid.parent1.name = this.oldParent1.name;
+        this.thisKid.parent1.surname = this.oldParent1.surname;
+        this.editP1Info = false;
+    }
+
+    editP1Contatti : boolean;
+
+    onP1ContattiEdit() {
+        this.oldParent1.telephone = this.thisKid.parent1.telephone;
+        this.oldParent1.cellphone = this.thisKid.parent1.cellphone;
+        this.oldParent1.email = this.thisKid.parent1.email;
+        this.editP1Contatti = true;
+    }
+
+    onP1ContattiSave() {
+        this.webService.update(this.selectedSchool);
+        this.editP1Contatti = false;
+        this.saveClick();
+    }
+
+    onP1ContattiCancel() {
+        this.thisKid.parent1.telephone = this.oldParent1.telephone;
+        this.thisKid.parent1.cellphone = this.oldParent1.cellphone;
+        this.thisKid.parent1.email = this.oldParent1.email;
+        this.editP1Contatti = false;
+    }
+
+    editP2Info : boolean;
+    oldParent2: Parent = new Parent('', '', '');
+
+    onP2InfoEdit() {
+        this.oldParent2.id = this.thisKid.parent2.id;
+        this.oldParent2.name = this.thisKid.parent2.name;
+        this.oldParent2.surname = this.thisKid.parent2.surname;
+        this.editP2Info = true;
+    }
+
+    onP2InfoSave() {
+        this.webService.update(this.selectedSchool);
+        this.editP2Info = false;
+        this.saveClick();
+    }
+
+    onP2InfoCancel() {
+        this.thisKid.parent2.id = this.oldParent2.id;
+        this.thisKid.parent2.name = this.oldParent2.name;
+        this.thisKid.parent2.surname = this.oldParent2.surname;
+        this.editP2Info = false;
+    }
+
+    editP2Contatti : boolean;
+
+    onP2ContattiEdit() {
+        this.oldParent2.telephone = this.thisKid.parent2.telephone;
+        this.oldParent2.cellphone = this.thisKid.parent2.cellphone;
+        this.oldParent2.email = this.thisKid.parent2.email;
+        this.editP2Contatti = true;
+    }
+
+    onP2ContattiSave() {
+        this.webService.update(this.selectedSchool);
+        this.editP2Contatti = false;
+        this.saveClick();
+    }
+
+    onP2ContattiCancel() {
+        this.thisKid.parent2.telephone = this.oldParent2.telephone;
+        this.thisKid.parent2.cellphone = this.oldParent2.cellphone;
+        this.thisKid.parent2.email = this.oldParent2.email;
+        this.editP2Contatti = false;
     }
 
     addDelega() {
@@ -229,11 +424,38 @@ export class KidPage implements OnInit{
     }
 
     onDeleteDelega(delega : Delega) {
-        this.thisKid.deleghe.splice(this.thisKid.deleghe.findIndex(tmp => tmp.id === delega.id), 1);
-        this.saveClick();
+        let alert = this.alertCtrl.create({
+        subTitle: 'Conferma eliminazione',
+        buttons: [
+            {
+            text: "Annulla"
+            },
+            {
+            text: 'OK',
+            handler: () => {
+                this.thisKid.deleghe.splice(this.thisKid.deleghe.findIndex(tmp => tmp.id === delega.id), 1);
+                this.saveClick();
+            }
+            }
+        ]
+        })
+        alert.present();
     }
 
-    saveDClick() {
+    editDelegaInfo : boolean;
+    oldDelega : Delega = new Delega('', '', '');
+
+    onDelegaInfoEdit() {
+        this.oldDelega.id = this.selectedDelega.id;
+        this.oldDelega.name = this.selectedDelega.name;
+        this.oldDelega.surname = this.selectedDelega.surname;
+        this.oldDelega.legame = this.selectedDelega.legame;
+        this.editDelegaInfo = true;
+    }
+
+    onDelegaInfoSave() {
+        this.webService.update(this.selectedSchool);
+        this.editDelegaInfo = false;
         if(this.isNewD)
             if(this.selectedDelega !== undefined && this.selectedDelega.id !== '')
                 if(this.selectedKid.deleghe.findIndex(x => this.selectedDelega.id.toLowerCase() === x.id.toLowerCase()) < 0)
@@ -249,7 +471,61 @@ export class KidPage implements OnInit{
                     });
                     alert.present();
                 }
-        this.selectedDelega = undefined;
+        this.saveDClick();
+    }
+
+    onDelegaInfoCancel() {
+        this.selectedDelega.id = this.oldDelega.id;
+        this.selectedDelega.name = this.oldDelega.name;
+        this.selectedDelega.surname = this.oldDelega.surname;
+        this.selectedDelega.legame = this.oldDelega.legame;
+        this.editDelegaInfo = false;
+    }
+
+    editDelegaContatti:boolean;
+
+    onDelegaContattiEdit() {
+        this.oldDelega.telephone = this.selectedDelega.telephone;
+        this.oldDelega.cellphone = this.selectedDelega.cellphone;
+        this.oldDelega.email = this.selectedDelega.email;
+        this.editDelegaContatti = true;
+    }
+
+    onDelegaContattiSave() {
+        this.webService.update(this.selectedSchool);
+        this.editDelegaContatti = false;
+        this.saveDClick();
+    }
+
+    onDelegaContattiCancel() {
+        this.selectedDelega.telephone = this.oldDelega.telephone;
+        this.selectedDelega.cellphone = this.oldDelega.cellphone;
+        this.selectedDelega.email = this.oldDelega.email;
+        this.editDelegaContatti = false;
+    }
+
+    editDelegaAutor : boolean;
+
+    onDelegaAutorEdit() {
+        this.oldDelega.scadenza = JSON.parse(JSON.stringify(this.selectedDelega.scadenza));
+        this.oldDelega.maggiorenne = this.selectedDelega.maggiorenne;
+        this.editDelegaAutor = true;
+    }
+
+    onDelegaAutorSave() {
+        this.webService.update(this.selectedSchool);
+        this.editDelegaAutor = false;
+        this.saveDClick();
+    }
+
+    onDelegaAutorCancel() {
+        this.selectedDelega.scadenza = JSON.parse(JSON.stringify(this.oldDelega.scadenza));
+        this.selectedDelega.maggiorenne = this.oldDelega.maggiorenne;
+        this.editDelegaAutor = false;
+    }
+
+
+    saveDClick() {
         this.isNewD = false;
         this.editD = false;
         this.edit = false;
@@ -261,7 +537,6 @@ export class KidPage implements OnInit{
     }
 
     cancelDClick() {
-        // this.selectedDelega = undefined;
         if(this.isNewD) {this.isNewD = false;  this.selectedDelega = undefined}
         this.editD = false;
     }

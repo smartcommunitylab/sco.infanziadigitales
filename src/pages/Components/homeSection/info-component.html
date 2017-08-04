@@ -33,6 +33,9 @@
             <ion-card>
                 <ion-card-header>
                 Contatti
+                <button class='edit' ion-button color='magenta1' float-end *ngIf='!editContatti' (click)="onContattiEdit()">Modifica</button>
+                <button class='edit' ion-button color='magenta1' float-end *ngIf='editContatti' (click)="onContattiSave()">Salva</button>
+                <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='editContatti' (click)="onContattiCancel()">Annulla</button>
                 </ion-card-header>
                 <ion-card-content margin-top>
                     <ion-grid inset>
@@ -53,10 +56,6 @@
                             </ion-col>
                         </ion-row>
                     </ion-grid>
-                    <ion-fab style="bottom: -5px; right: -5px">
-                        <button ion-fab mini *ngIf="!editContatti"  (click)="onContattiEdit()" color='magenta1'><ion-icon name="md-create"></ion-icon></button>
-                        <button ion-fab mini *ngIf="editContatti" (click)="onContattiEdit()" color='magenta1'><ion-icon name="checkmark-circle"></ion-icon></button>
-                    </ion-fab>
                 </ion-card-content>
             </ion-card>
         </ion-col>
@@ -65,7 +64,10 @@
         <ion-col col-10 offset-1>
             <ion-card>
                 <ion-card-header>
-                Tipologia di assenze
+                    Tipologia di assenze
+                    <button class='edit' ion-button color='magenta1' float-end *ngIf='!editAssenze' (click)="onAssenzeEdit()">Modifica</button>
+                    <button class='edit' ion-button color='magenta1' float-end *ngIf='editAssenze' (click)="onAssenzeSave()">Salva</button>
+                    <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='editAssenze' (click)="onAssenzeCancel()">Annulla</button>
                 </ion-card-header>
                 <ion-card-content margin-top>
                     <ion-grid *ngIf="editAssenze" no-padding no-margin><ion-row><ion-col col-4>
@@ -95,10 +97,6 @@
                         </ion-item>
                         <ion-item *ngIf="selectedSchool.assenze.length === 0">Nessuna tipologia di assenza</ion-item> 
                     </ion-list>
-                    <ion-fab style="bottom: -5px; right: -5px">
-                        <button ion-fab mini *ngIf="!editAssenze" (click)="onAssenzeEdit()" color='magenta1'><ion-icon name="md-create"></ion-icon></button>
-                        <button ion-fab mini *ngIf="editAssenze" (click)="onAssenzeEdit()" color='magenta1'><ion-icon name="checkmark-circle"></ion-icon></button>
-                    </ion-fab>
                 </ion-card-content>
             </ion-card>
         </ion-col>
@@ -108,6 +106,9 @@
             <ion-card>
                 <ion-card-header>
                 Tipologia di malattie
+                <button class='edit' ion-button color='magenta1' float-end *ngIf='!editMalattie' (click)="onMalattieEdit()">Modifica</button>
+                <button class='edit' ion-button color='magenta1' float-end *ngIf='editMalattie' (click)="onMalattieSave()">Salva</button>
+                <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='editMalattie' (click)="onMalattieCancel()">Annulla</button>
                 </ion-card-header>
                 <ion-card-content margin-top>
                     <ion-grid *ngIf="editMalattie" no-padding no-margin><ion-row><ion-col col-4>
@@ -123,10 +124,6 @@
                         </ion-item>
                         <ion-item *ngIf="selectedSchool.malattie.length === 0">Nessuna tipologia di malattia</ion-item> 
                     </ion-list>
-                    <ion-fab style="bottom: -5px; right: -5px">
-                        <button ion-fab mini *ngIf="!editMalattie"  (click)="onMalattieEdit()" color='magenta1'><ion-icon name="md-create"></ion-icon></button>
-                        <button ion-fab mini *ngIf="editMalattie" (click)="onMalattieEdit()" color='magenta1'><ion-icon name="checkmark-circle"></ion-icon></button>
-                    </ion-fab>
                 </ion-card-content>
             </ion-card>
         </ion-col>

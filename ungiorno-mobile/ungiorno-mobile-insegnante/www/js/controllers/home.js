@@ -1,0 +1,864 @@
+angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home', [])
+
+.controller('HomeCtrl', function ($scope, $location, dataServerService, profileService, babyConfigurationService, $filter, $q, $state, Toast, $ionicModal, $ionicLoading, moment, teachersService, sectionService, communicationService, Config, $ionicSideMenuDelegate, $ionicPopup, $rootScope, loginService, pushNotificationService, $ionicHistory) {
+  $scope.sections = null;
+  $scope.section = null;
+  $scope.childrenConfigurations = [];
+  $scope.childrenProfiles = [];
+  $scope.childrenNotes = [];
+  $scope.availableChildren = [];
+  $scope.totalChildrenNumber = [];
+  $rootScope.numberMessageUnread = {};
+  $scope.colors = [];
+  $scope.noteExpanded = false;
+  $scope.teachersNote = true;
+  $scope.parentsNote = false;
+  $scope.newNoteExpandend = false;
+  $scope.communicationExpanded = false;
+  $scope.schoolProfile = null;
+  $scope.numberOfChildren = 0;
+  $scope.communications = [];
+  $scope.noConnection = false;
+  $scope.numberOfDeliveries = 0;
+  // $scope.communicationTocheck = {};
+
+  $scope.childrenCommunicationDelivery = null;
+  $scope.selectedNote = false;
+  $scope.data = {
+    communication: ""
+  };
+  $scope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
+    //if I come from login, initialize
+    if (fromState.name == 'app.login') {
+
+      $scope.initialize();
+      sectionService.setSection(null);
+
+    }
+  });
+
+  function contains(a, obj) {
+    var i = a.length;
+    while (i--) {
+      if (a[i] === obj) {
+        return true;
+      }
+    }
+    return false;
+  }
+  $scope.calculateNumberDeliveriesByClass = function (classID) {
+    $scope.numberOfDeliveries = 0;
+    if ('all' === classID) {
+      $scope.numberOfDeliveries = $scope.childrenCommunicationDelivery.length;
+    } else {
+      //check deliveries id with current babies id
+      for (var i = 0; i < $scope.childrenProfiles['allPeriod'].length; i++) {
+        if (contains($scope.childrenCommunicationDelivery, $scope.childrenProfiles['allPeriod'][i].kidId)) {
+          $scope.numberOfDeliveries++;
+        }
+      }
+    }
+  }
+  $scope.$on('$ionicView.beforeEnter', function () {
+    if (communicationService.getToCheck()) {
+      //expand side menu on communication
+      $scope.openCommunications();
+      //hide sidemenu
+      $rootScope.hideMenu = true;
+      if (communicationService.getCommunication()) {
+        $scope.data = {
+          communication: communicationService.getCommunication().communicationId,
+          description: communicationService.getCommunication().description,
+          dateToCheck: new Date(communicationService.getCommunication().dateToCheck),
+          creationDate: new Date(communicationService.getCommunication().creationDate)
+        }
+      };
+      $scope.childrenCommunicationDelivery = communicationService.getCommunication().children;
+      //$scope.numberOfDeliveries = $scope.childrenCommunicationDelivery.length;
+    }
+    if ($scope.communicationExpanded) {
+      $ionicSideMenuDelegate.canDragContent(false);
+    }
+  });
+
+  $scope.getDateString = function () {
+    var today = new Date();
+    $scope.date = today.getTime();;
+  }
+  $scope.viewClose = function () {
+    return $scope.noteExpanded || $scope.communicationExpanded;
+  }
+
+  $scope.cancelNotesAndComm = function () {
+    $state.go('app.communications').then(function () {
+      //$ionicLoading.hide();
+      communicationService.setToCheck(false);
+    });
+  }
+
+  $scope.closeNotesAndComm = function () {
+    if ($scope.communicationExpanded) {
+      //popup;
+      var myPopup = $ionicPopup.show({
+        title: $filter('translate')('comm_you_must_save_title'),
+        template: $filter('translate')('comm_you_must_save_text'),
+        scope: $scope,
+        buttons: [
+          {
+            text: $filter('translate')('ok'),
+            type: 'cancel-button',
+            onTap: function (e) {
+              $scope.communicationExpanded = false;
+
+            }
+                    }
+                ]
+      });
+
+    } else {
+      $scope.noteExpanded = false;
+      $scope.teachersNote = true;
+      $scope.parentsNote = false;
+      $scope.newNoteExpandend = false;
+    }
+    //put the same list of children on the check
+  }
+
+  $scope.saveNotesAndComm = function () {
+    //    $scope.noteExpanded = false;
+    //    $scope.communicationExpanded = false;
+    //    $scope.teachersNote = true;
+    //    $scope.parentsNote = false;
+    //    $scope.newNoteExpandend = false;
+    $ionicLoading.show();
+    //save the new list
+    var communication = communicationService.getCommunication();
+    if (communication.creationDate instanceof Date) {
+      communication.creationDate = new Date(communication.creationDate).getTime();
+    }
+    if (communication.dateToCheck instanceof Date) {
+      communication.dateToCheck = new Date(communication.dateToCheck).getTime();
+    }
+    //          tmp.creationDate = new Date(tmp.creationDate).getTime();
+    //      if (tmp.creation) {
+    //        delete tmp['creation'];
+    //      }
+    //      tmp.dateToCheck = new Date(tmp.dateToCheck).getTime();
+    communication.children = $scope.childrenCommunicationDelivery;
+    dataServerService.modifyCommunication($scope.schoolProfile.schoolId, communicationService.getCommunication().coomunicationId, communication).then(function (data) {
+      Toast.show($filter('translate')('communication_modified'), 'short', 'bottom');
+      communicationService.modifyCommunication(communication);
+      $state.go('app.communications').then(function () {
+        //$ionicLoading.hide();
+        communicationService.setToCheck(false);
+        $scope.noteExpanded = false;
+        $scope.communicationExpanded = false;
+        $scope.teachersNote = true;
+        $scope.parentsNote = false;
+        $scope.newNoteExpandend = false;
+      });
+    }, function (data) {
+      Toast.show($filter('translate')('communication_not_modified'), 'short', 'bottom');
+      //      communicationService.setToCheck(false);
+      //      $scope.noteExpanded = false;
+      //      $scope.communicationExpanded = false;
+      //      $scope.teachersNote = true;
+      //      $scope.parentsNote = false;
+      //      $scope.newNoteExpandend = false;
+      $ionicLoading.hide();
+    });
+  }
+  $scope.data = {
+    communication: null
+  };
+  $scope.newNote = {
+    possibleChildrens: [],
+    associatedKids: [],
+    search: '',
+    kidIds: [],
+    showHints: false
+  };
+
+  $scope.sendNewNote = function () {
+    var noteToSend = {
+      date: new Date().getTime(),
+      note: $scope.newNote.description
+    };
+    var ids;
+    if ($scope.newNote.assignedBaby) {
+      ids = $scope.newNote.kidIds;
+    } else {
+      if ($scope.section.sectionId !== "all") {
+        ids = [$scope.section.sectionId];
+      }
+    }
+
+    var requestFail = function () {
+      var myPopup = $ionicPopup.show({
+        title: $filter('translate')('new_note_fail'),
+        scope: $scope,
+        buttons: [
+          {
+            text: $filter('translate')('cancel'),
+            type: 'cancel-button'
+                    },
+          {
+            text: '<b>' + $filter('translate')('retry') + '</b>',
+            type: 'create-button',
+            onTap: function (e) {
+              $scope.sendNewNote();
+            }
+                    }
+                ]
+      });
+    }
+
+    var requestSuccess = function (data) {
+      Toast.show($filter('translate')('new_note_sent'), 'short', 'bottom');
+      $scope.newNote = {
+        possibleChildrens: [],
+        associatedKids: [],
+        search: '',
+        kidIds: [],
+        showHints: false
+      };
+      var note = data.data;
+      injectBabyInformationsInNote(note);
+      $scope.teacherNotes.push(note);
+    }
+
+    dataServerService.addNewInternalNote($scope.schoolProfile.schoolId, $scope.newNote.assignedBaby, ids, noteToSend).then(function (data) {
+      requestSuccess(data);
+      $scope.cancelNewNote(); //close panel of new note
+    }, function (data) {
+      requestFail(data);
+    });
+  }
+
+  $scope.selectChildrenForNote = function (children) {
+    if ($scope.newNote.kidIds.indexOf(children.kidId) === -1) {
+      $scope.newNote.kidIds.push(children.kidId);
+      $scope.newNote.associatedKids.push(children);
+    }
+    $scope.newNote.search = "";
+    $scope.newNote.possibleChildrens = [];
+  }
+
+  $scope.deleteChildrenFromNewNote = function (children) {
+    var index = $scope.newNote.kidIds.indexOf(children.kidId);
+    $scope.newNote.kidIds.splice(index, 1);
+    $scope.newNote.associatedKids.splice($scope.newNote.associatedKids.indexOf(children), 1);
+  }
+
+  $scope.hintSearchBoxFocus = false;
+  $scope.hintPanelFocus = false;
+
+  $scope.focused = function (searchbox, state) {
+    if (searchbox) {
+      $scope.hintSearchBoxFocus = state;
+    } else {
+      $scope.hintPanelFocus = state;
+    }
+  }
+
+  $scope.displayHint = function () {
+    return $scope.hintSearchBoxFocus || $scope.hintPanelFocus;
+  }
+
+
+  $scope.search = function () {
+    if ($scope.newNote.search != "") {
+      profileService.searchChildrenBySection($scope.newNote.search, $scope.section).then(
+        function (children) {
+          $scope.newNote.possibleChildrens = children;
+        }
+      )
+    } else {
+      $scope.newNote.possibleChildrens = [];
+    }
+  }
+
+  var getPeriodToNow = function () {
+    var period;
+    var now = $filter('date')(new Date(), 'HH:mm'); //bad workaround, but current schoolprofile timings aren't timestamps!
+    if (now >= $scope.schoolProfile.regularTiming.fromTime && now < $scope.schoolProfile.regularTiming.toTime) {
+      period = 'mensa';
+    } else if (now >= $scope.schoolProfile.posticipoTiming.fromTime && now < $scope.schoolProfile.posticipoTiming.toTime) {
+      period = 'posticipo';
+    } else {
+      period = 'anticipo';
+    }
+    return period;
+  }
+
+  $scope.title = moment().locale('it').format("dddd, D MMMM gggg");
+  //  $scope.checkConnection = function () {
+  //    var deferred = $q.defer();
+  //    if (window.Connection) {
+  //      if (navigator.connection.type == Connection.NONE) {
+  //        deferred.reject();
+  //      } else {
+  //        deferred.resolve();
+  //
+  //      }
+  //    };
+  //return deferred.promise;
+  // }
+  $scope.refreshHome = function () {
+    $scope.checkConnection().then(function () {
+      $scope.initialize();
+      $scope.noConnection = false;
+    }, function (err) {
+      //Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+      $scope.showNoConnection();
+      $scope.noConnection = true;
+    });
+  }
+  $scope.initialize = function () {
+    //    $ionicLoading.show({
+    //      template: $filter('translate')('loading_data')
+    //    });
+    $ionicLoading.show();
+    $scope.title = $filter('date')(new Date(), 'EEEE, dd MMMM yyyy'); // cat - profile teacher
+
+    dataServerService.getSchoolProfileForTeacher().then(function (schoolProfile) {
+      if (schoolProfile) {
+        $scope.schoolProfile = schoolProfile;
+        $scope.datePosticipo = new Date();
+        var timeArr = $scope.schoolProfile.posticipoTiming.fromTime.split(':')
+        $scope.datePosticipo.setHours(timeArr[0]);
+        $scope.datePosticipo.setMinutes(timeArr[1]);
+        profileService.setSchoolProfile($scope.schoolProfile);
+        if ($rootScope.selectedPeriod == null) {
+          $rootScope.selectedPeriod = getPeriodToNow();
+          $scope.changeHorizzontalLineStyle($rootScope.selectedPeriod);
+        }
+        pushNotificationService.register($scope.schoolProfile.schoolId);
+
+        //loginService.getTeacherName($scope.schoolProfile.schoolId);
+
+        dataServerService.getSections($scope.schoolProfile.schoolId).then(function (data) {
+          if (data != null) {
+            //order by sectionName
+            $scope.sections = $filter('orderBy')(data, 'sectionName');
+            $rootScope.sharedSections = data;
+            if (sectionService.getSection() == null) {
+              $scope.section = $scope.sections[0];
+              sectionService.setSection(0);
+            } else {
+              $scope.changeSection(sectionService.getSection());
+            }
+            $scope.getChildrenByCurrentSection();
+            $scope.loadNotes();
+            $ionicLoading.hide();
+            if (!$scope.communicationExpanded) {
+              Toast.show($filter('translate')('data_updated'), 'short', 'bottom');
+            }
+          }
+        }, function (err) {
+          //manage error sections
+          Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+          $ionicLoading.hide();
+        })
+        dataServerService.getTeachers($scope.schoolProfile.schoolId).then(function (data) {
+          teachersService.setTeachers(data);
+          // select the right teacher
+          for (var k = 0; k < data.length; k++) {
+            if (data[k].username == localStorage.username) {
+              $scope.selectedTeacher = data[k];
+              $scope.title += ' - ' + $scope.selectedTeacher.teacherFullname;
+            }
+          }
+
+
+          //                if (localStorage.name || localStorage.surname) {
+          //                    $scope.title += ' - ' + localStorage.name + ' ' + localStorage.surname;
+          //                }
+          teachersService.setSelectedTeacher($scope.selectedTeacher);
+          console.log($scope.selectedTeacher);
+          $ionicLoading.hide();
+
+        }, function (err) {
+          //manage error teachers
+          Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+          $ionicLoading.hide();
+        });
+      } else {
+        $ionicLoading.hide();
+
+      }
+      if ($scope.schoolProfile) {
+        communicationService.getCommunicationsFromServer($scope.schoolProfile.schoolId).then(function (data) {
+          $scope.communications = [];
+          if (data) {
+            for (var i = 0; i < data.length; i++) {
+              if (data[i].doCheck) {
+                $scope.communications.push(data[i]);
+              }
+            }
+          }
+          //manage kids' profiles with notifications for messages
+          //check if parameter is sent otherwise take the first
+          /*$scope.data.communication = $scope.communications[0].communicationId;
+          $scope.changeCommunication($scope.data.communication);*/
+        }, function (err) {
+          //manage error communications
+          Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+          $ionicLoading.hide();
+        });
+      }
+    }, function (err) {
+      Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+      $ionicLoading.hide();
+    });
+
+
+  };
+
+  $scope.getClassByPeriod = function (child, selectedPeriod) {
+    switch (selectedPeriod) {
+    case 'anticipo':
+
+      if (child.exitTime != null && child.anticipo.enabled) {
+        //presente se iscritto ad anticipo e non assente
+        return 'child-presente';
+      } else return 'child-assente';
+      break;
+    case 'mensa':
+      //totale di bambini iscritti a scuola
+      if (child.exitTime != null) {
+        //presente se iscritto e non assente
+        return 'child-presente';
+      } else return 'child-assente';
+      break;
+    case 'posticipo':
+
+      if (child.exitTime != null && child.exitTime > $scope.datePosticipo.getTime() && child.posticipo.enabled) {
+        //presente se iscritto  a posticipo e non assente e non ritirto prima dell'inizio del posticipo
+
+        return 'child-presente';
+      } else return 'child-assente';
+      break;
+    }
+  }
+  $scope.openParentsNotes = function () {
+    $scope.parentsNote = true;
+    $scope.teachersNote = false;
+    $scope.newNoteExpandend = false;
+  }
+
+  $scope.openTeacherNotes = function () {
+    $scope.parentsNote = false;
+    $scope.teachersNote = true;
+    $scope.newNoteExpandend = false;
+  }
+
+  $scope.createNotes = function () {
+    $scope.parentsNote = false;
+    $scope.teachersNote = false;
+    $scope.newNoteExpandend = true;
+  }
+
+  $scope.cancelNewNote = function () {
+    $scope.newNoteExpandend = false;
+    $scope.parentsNote = false;
+    $scope.teachersNote = true;
+  }
+
+
+  //when select is clicked
+  $scope.changeCommunication = function (communicationId) {
+    communicationService.setCommunicationById(communicationId);
+    $scope.childrenCommunicationDelivery = communicationService.getCommunication().children;
+    $scope.numberOfDeliveries = $scope.childrenCommunicationDelivery.length;
+  }
+  $scope.getChildrenDeliveryByID = function (id) {
+    if ($scope.communicationExpanded && $scope.childrenCommunicationDelivery != null) {
+      if ($scope.childrenCommunicationDelivery.indexOf(id) >= 0)
+        return true
+      return false
+    }
+    return false
+  }
+  $scope.switchChildrenDeliveryByID = function (childId) {
+      // if ($scope.childrenCommunicationDelivery.indexOf(id) >= 0) {
+      //se presente rimuovi, se assente aggiungi
+      //var childrenID = $scope.childrenProfiles[id].kidId
+      var index = -1;
+      if ($scope.childrenCommunicationDelivery) {
+        index = $scope.childrenCommunicationDelivery.indexOf(childId);
+        if (index > -1) {
+          $scope.childrenCommunicationDelivery.splice(index, 1);
+          //remove delivery
+          $scope.numberOfDeliveries--;
+        } else {
+          $scope.childrenCommunicationDelivery.push(childId);
+          //add delivery
+          $scope.numberOfDeliveries++;
+        }
+      }
+
+
+    }
+    //  $scope.showNoConnection = function () {
+    //    var alertPopup = $ionicPopup.alert({
+    //      title: $filter('translate')("signal_send_no_connection_title"),
+    //      template: $filter('translate')("signal_send_no_connection_template"),
+    //      cssClass: 'no-connection-popup',
+    //      buttons: [
+    //        {
+    //          text: $filter('translate')("signal_send_toast_alarm"),
+    //          type: 'button-custom'
+    //            }
+    //        ]
+    //    });
+    //
+    //    alertPopup.then(function (res) {
+    //      console.log('no place');
+    //    });
+    //  };
+  $scope.detailOrCommunication = function (child) {
+    $scope.checkConnection().then(function () {
+
+      //se modalita' communication, modifico lista consegne e poi confermo
+      //altrimenti openDetail(index)
+      if (child.active) {
+        if ($scope.communicationExpanded) {
+          $scope.switchChildrenDeliveryByID(child.kidId)
+        } else {
+          $scope.openDetail(child);
+        }
+      } else {
+        Toast.show($filter('translate')('child_not_partecipate'), 'short', 'bottom');
+      }
+    }, function (err) {
+      $scope.showNoConnection();
+
+    })
+  }
+  $scope.communicationDone = function (childId) {
+    //se sono in modalita' communication e id contenuto nella lista attuale return true
+
+    if ($scope.communicationExpanded && communicationService.childSelectedCommunication(childId)) {
+      return true;
+    }
+    return false;
+  }
+  $scope.getChildrenByCurrentSection = function () {
+    //get children info
+    $scope.childrenProfiles = [];
+    $scope.getChildrenNumber('anticipo');
+    $scope.getChildrenNumber('posticipo');
+    $scope.getChildrenNumber('mensa');
+
+    $scope.getChildrenProfilesByPeriod($rootScope.selectedPeriod);
+
+    $scope.numberOfChildren = $scope.section.children.length;
+    for (var i = 0; i < $scope.numberOfChildren; i++) {
+      //      profileService.getBabyProfileById($scope.schoolProfile.schoolId, $scope.section.children[i].kidId).then(function (profile) {
+      //        $scope.childrenProfiles.push(profile);
+      //      });
+      //    useless because u can't change configuration
+      //    babyConfigurationService.getBabyConfigurationById($scope.schoolProfile.schoolId, $scope.section.children[i].kidId).then(function (configuration) {
+      //        $scope.childrenConfigurations.push(configuration);
+      //      });
+      /*
+                  babyConfigurationService.getBabyNotesById($scope.schoolProfile.schoolId, $scope.section.children[i].childrenId).then(function (notes) {
+                      $scope.childrenNotes.push(notes);
+                  });*/
+    };
+  }
+  var getAllChildren = function () {
+    var allchildren = [];
+    for (var i = 0; i < $scope.sections.length; i++) {
+      allchildren = allchildren.concat($scope.sections[i].children);
+    }
+    return allchildren;
+  }
+  $scope.isThisSection = function (sectionId) {
+    if (sectionId != 'all') {
+      return sectionService.getSection() === sectionId;
+    } else {
+      return sectionService.getSection() === -1;
+    }
+
+  }
+  $scope.changeSection = function (sectionId) {
+    sectionService.setSection(sectionId);
+    //if (sectionId != -1) {
+    if (sectionId != 'all' && sectionId != -1) {
+      $scope.section = $scope.sections[sectionId];
+      $scope.getChildrenByCurrentSection();
+    } else {
+      //section == allchildren
+      sectionService.setSection(-1);
+
+      $scope.section = {
+        appId: "a",
+        schoolId: "a",
+        sectionId: "all",
+        sectionName: "All",
+        children: getAllChildren()
+      }
+      $scope.getChildrenByCurrentSection();
+    }
+    $scope.loadNotes();
+    //id I'm in delivery mode
+    if ($scope.childrenCommunicationDelivery != null) {
+      $scope.calculateNumberDeliveriesByClass(sectionId);
+    }
+  }
+
+  var injectBabyInformationsInNote = function (note) {
+    if (note.kidIds !== null) {
+      note.kids = [];
+
+      var kidToFind = note.kidIds.length;
+      var sectionChildrenIndex = 0;
+      while (kidToFind !== 0 && sectionChildrenIndex < $scope.section.children.length) {
+        for (var i = 0; i < note.kidIds.length; i++) {
+          if ($scope.section.children[sectionChildrenIndex].kidId === note.kidIds[i]) {
+            var baby = {
+              kidId: $scope.section.children[sectionChildrenIndex].kidId,
+              image: $scope.section.children[sectionChildrenIndex].image,
+              name: $scope.section.children[sectionChildrenIndex].childrenName
+
+            }
+            note.kids.push(baby);
+            kidToFind--;
+          }
+        }
+        sectionChildrenIndex++;
+      }
+    }
+  }
+  var updateMsg = function (unreadMsgs) {
+    if (!$rootScope.numberMessageUnread) {
+      $rootScope.numberMessageUnread = {};
+    }
+    for (var schoolClass in unreadMsgs) {
+      if (unreadMsgs.hasOwnProperty(schoolClass)) {
+        for (var kid in unreadMsgs[schoolClass]) {
+          if (unreadMsgs[schoolClass].hasOwnProperty(kid)) {
+            // $scope.msg[kid] = unreadMsgs[schoolClass][kid];
+            $rootScope.numberMessageUnread[kid] = unreadMsgs[schoolClass][kid];
+          }
+        }
+      }
+    }
+  }
+  $scope.loadNotes = function () {
+    dataServerService.getUnreadMessages($scope.schoolProfile.schoolId).then(function (data) {
+      console.log(JSON.stringify(data));
+      //put the icon of new messages on the right children
+      updateMsg(data);
+    });
+  }
+
+  $scope.isBabyAssignedToNote = function (note) {
+    var asd = note.kidIds !== null;
+    return note.kidIds !== null;
+  }
+
+  $scope.openDetailById = function (childId) {
+    var found = false;
+    var i = 0;
+    var child;
+    while (!found && i < $scope.section.children.length) {
+      if ($scope.section.children[i].kidId === childId) {
+        child = $scope.section.children[i];
+        found = true;
+      }
+      i++;
+    }
+    $scope.openDetail(child);
+  }
+
+  $scope.openDetail = function (child) {
+    profileService.setCurrentBaby(child);
+    window.location.assign('#/app/babyprofile');
+  }
+
+  $scope.openNotes = function () {
+    if (!$scope.noteExpanded) {
+      $scope.noteExpanded = true;
+      $scope.communicationExpanded = false;
+
+    } else {
+      $scope.noteExpanded = false;
+    }
+  }
+  $scope.openCommunications = function () {
+    if (!$scope.communicationExpanded) {
+      $scope.communicationExpanded = true;
+      $scope.noteExpanded = false;
+
+    } else {
+      $scope.communicationExpanded = false;
+
+    }
+  }
+
+  $scope.changeHorizzontalLineStyle = function (period) {
+    if (!$scope.communicationExpanded) {
+      var leftLine = document.getElementById("leftLine");
+      var rightLine = document.getElementById("rightLine");
+      switch (period) {
+      case 'anticipo':
+        leftLine.style.width = "15%";
+        rightLine.style.width = "81%";
+        break;
+      case 'mensa':
+        leftLine.style.width = "48%";
+        rightLine.style.width = "48%";
+        break;
+      case 'posticipo':
+        leftLine.style.width = "82%";
+        rightLine.style.width = "14%";
+        break;
+      }
+    }
+  };
+
+  $scope.getChildrenProfilesByPeriod = function (periodOfTheDay) {
+    $scope.childrenProfiles[periodOfTheDay] = [];
+    if (!$scope.childrenProfiles['allPeriod']) {
+      $scope.childrenProfiles['allPeriod'] = [];
+    }
+    $scope.colors['anticipo'] = '#ddd';
+    $scope.colors['posticipo'] = '#ddd';
+    $scope.colors['mensa'] = '#ddd';
+
+    $scope.colors[periodOfTheDay] = '#98ba3c';
+
+    if ($scope.section != null) {
+      for (var i = 0; i < $scope.section.children.length; i++) {
+        //create string child[selectedPeriod].presenza
+        if ($scope.section.children[i].exitTime == null) {
+          $scope.section.children[i].presenza = $filter('translate')('absent');
+        } else {
+          var oraUscita = new Date($scope.section.children[i].exitTime);
+          $scope.section.children[i].presenza = $filter('translate')('exit_to') + $filter('date')(oraUscita, 'HH:mm');
+        }
+        //putNotification($scope.section.children[i]):
+        switch (periodOfTheDay) {
+        case 'anticipo':
+          if ($scope.section.children[i][periodOfTheDay].enabled) {
+            //aggiungi se iscritto al servizio
+            $scope.childrenProfiles[periodOfTheDay].push($scope.section.children[i]);
+          }
+          break;
+        case 'mensa':
+          //totale di bambini iscritti a scuola
+          $scope.childrenProfiles[periodOfTheDay].push($scope.section.children[i]);
+          break;
+        case 'posticipo':
+          if ($scope.section.children[i][periodOfTheDay].enabled) {
+            //totalNumber++;
+            $scope.childrenProfiles[periodOfTheDay].push($scope.section.children[i]);
+          }
+          break;
+        }
+        $scope.childrenProfiles['allPeriod'].push($scope.section.children[i]);
+      }
+    }
+  }
+  $scope.getNowDate = function () {
+    return Date.now()
+  }
+  $scope.getChildrenNumber = function (periodOfTheDay) {
+    $scope.totalChildrenNumber[periodOfTheDay] = 0;
+    $scope.availableChildren[periodOfTheDay] = 0;
+
+    if ($scope.section != null) {
+      for (var i = 0; i < $scope.section.children.length; i++) {
+        switch (periodOfTheDay) {
+        case 'anticipo':
+          if ($scope.section.children[i][periodOfTheDay].enabled) {
+            //aggiungi se iscritto al servizio
+            $scope.totalChildrenNumber[periodOfTheDay]++;
+          }
+          if ($scope.section.children[i].exitTime != null && $scope.section.children[i][periodOfTheDay].enabled) {
+            //aggiungi se iscritto ad anticipo e non assente
+            $scope.availableChildren[periodOfTheDay]++;
+          }
+          break;
+        case 'mensa':
+          //totale di bambini iscritti a scuola
+          $scope.totalChildrenNumber[periodOfTheDay]++;
+          if ($scope.section.children[i].exitTime != null) {
+            //aggiungi se iscritto e non assente
+            $scope.availableChildren[periodOfTheDay]++;
+          }
+          break;
+        case 'posticipo':
+          if ($scope.section.children[i][periodOfTheDay].enabled) {
+            //totalNumber++;
+            $scope.totalChildrenNumber[periodOfTheDay]++;
+          }
+          if ($scope.section.children[i].exitTime != null && $scope.section.children[i].exitTime > $scope.datePosticipo.getTime() && $scope.section.children[i][periodOfTheDay].enabled) {
+            //totalNumber++;
+            $scope.availableChildren[periodOfTheDay]++;
+          }
+          break;
+        }
+
+
+      }
+    }
+  }
+
+
+
+  //    return true if the actual time is the same of the period
+  $scope.isNow = function (periodOfTheDay) {
+    if ($scope.schoolProfile) {
+      var now = $filter('date')(new Date(), 'HH:mm'); //bad workaround, but current schoolprofile timings aren't timestamps!
+      switch (periodOfTheDay) {
+      case 'anticipo':
+        if (now >= $scope.schoolProfile.anticipoTiming.fromTime && now < $scope.schoolProfile.anticipoTiming.toTime) {
+          return true;
+        }
+        break;
+      case 'posticipo':
+        if (now >= $scope.schoolProfile.posticipoTiming.fromTime && now < $scope.schoolProfile.posticipoTiming.toTime) {
+          return true;
+        }
+        break;
+      case 'mensa':
+        if (now >= $scope.schoolProfile.regularTiming.fromTime && now < $scope.schoolProfile.regularTiming.toTime) {
+          return true;
+        }
+
+        break;
+      }
+    }
+
+  }
+
+  $scope.getLineStroke = function (getNumberChildren, totalNumberOfChildren) {
+    var lineStroke = null;
+    lineStroke = (250 / totalNumberOfChildren) * getNumberChildren;
+    return lineStroke + ",250";
+  }
+
+  $scope.sectionColor = function (period) {
+    if (period == $rootScope.selectedPeriod)
+      return '#abc';
+    return '#ddd';
+  }
+
+  $scope.changeSectionPeriod = function (period) {
+    $rootScope.selectedPeriod = period;
+    $scope.getChildrenProfilesByPeriod(period);
+    $scope.changeHorizzontalLineStyle(period);
+  }
+
+  $scope.getChildImage = function (child) {
+    var image = Config.URL() + "/" + Config.app() + "/student/" + Config.appId() + "/" + $scope.schoolProfile.schoolId + "/" + child.kidId + "/true/images";
+    return image;
+  }
+
+
+  $scope.refreshHome();
+});

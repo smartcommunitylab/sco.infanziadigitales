@@ -1,0 +1,47 @@
+<ion-view id="login" hide-nav-bar="true">
+    <ion-content id="login-container" has-header="true" class="page-padding login-container">
+        <!--<h1>Diario Condiviso</h1>
+        <h3 style="margin-top:100px; text-align:center">Accedi con:</h3>
+        <p class="button login-buttons">Vivoscuola</p>
+        <p class="button login-buttons">Gmail</p>
+        <div class="steps-indicator-container">
+            <div ng-repeat="step in steps" class="step-indicator" ng-class="{'step-indicator-done': step.done}"></div>
+        </div>-->
+
+        <div class="login-title">Diario Condiviso</div>
+        <div class="text-center">
+            <h4>{{'access_with_credentials'|translate}}</h4>
+            <label class="item item-input item-floating-label">
+                <span class="input-label login-label">{{'signup_email'|translate}}</span>
+                <input type="email" class="login-label input-login" placeholder="{{'signup_email'|translate}}" ng-model="user.email">
+            </label>
+            <label class="item item-input item-floating-label">
+                <span class="input-label login-label">{{'signup_pwd'|translate}}</span>
+                <input type="password" class="login-label input-login" placeholder="{{'signup_pwd'|translate}}" ng-model="user.password">
+            </label>
+            <a class="login-link" ng-click="passwordRecover()">
+                  {{'signin_pwd_reset' | translate}}
+              </a>
+            <button class="button login-button-internal" ng-click="signin()">
+                {{'login_signin' | translate}}
+            </button>
+            <a class=" login-link login-margin" ng-click="goRegister()">
+                    {{'login_signup' | translate}}
+                </a>
+            <h4>{{'access_with'|translate}}</h4>
+            <button class="button login-buttons" ng-click="login(login_googlelocal)">{{'gmail_login'|translate}}</button>
+        </div>
+        <!--
+        <div class="enter_credentials">Inserisci le tue credenziali:</div>
+
+        <label class="item item-input id-container">
+            <input type="text" placeholder="Inserisci nome utente o e-mail">
+        </label>
+        <label class="item item-input password-container">
+            <input type="text" placeholder="Inserisci password">
+        </label>
+
+        <p class="button login-buttons">Entra</p>
+-->
+    </ion-content>
+</ion-view>

@@ -1,0 +1,63 @@
+<ion-view id="bus">
+  <ion-nav-bar class="bar bar-ungiorno">
+    <ion-nav-back-button>
+    </ion-nav-back-button>
+  </ion-nav-bar>
+
+  <!--
+<ion-nav-buttons side="right">
+    <button class="button btn_disabled" ng-click="print()">
+        <i class="icon ion-printer"></i>
+    </button>
+</ion-nav-buttons>
+-->
+
+  <ion-nav-title>
+    <div>{{'buses' | translate}}</div>
+  </ion-nav-title>
+  <ion-content has-header="true">
+    <div ng-if="dataLoaded">
+      <div class="row section-row home-container">
+        <div class="col section-row">
+          <div class="row section-row">
+            <div class="tabs-striped tabs-top tabs-background-dark tabs-color-light">
+              <div class="tabs section-tabs">
+                <a class="tab-item section-tab" ng-repeat="bus in buses track by $index" class="col" ng-click="changeSelectedBus(bus)" ng-class="{'active' :  (isThisBus(bus.busName))}"> {{bus.busName}} </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="babiesDisplay">
+        <div class="row">
+          <div class="col">
+            <div class="card bus-resume">{{'today' | translate}}, {{nowDate | date:'EEEE dd MMMM y'}}{{'baby_bus_1' | translate}} {{selectedBus.busName}} <span ng-if="realBabyNumer>1">{{'baby_bus_2a' | translate}}</span><span ng-if="realBabyNumer==1">{{'baby_bus_2b' | translate}}</span> <b>{{realBabyNumer}} <span ng-if="realBabyNumer>1">{{'baby_bus_3a'|translate}}</span><span ng-if="realBabyNumer==1">{{'baby_bus_3b'|translate}}</span></b> </div>
+          </div>
+        </div>
+        <div class="row" ng-repeat="nRow in totalNumRow()">
+          <div class="col" ng-repeat="baby in getBabiesByRow(nRow)">
+            <div class="card babyItemBus" ng-click="openBabyDetails(baby)" ng-if="!baby.isFake">
+              <div class="baby-card-element">
+                <!--                                <img  ng-src="{{baby.image}}" class="baby-card-image">-->
+                <img ng-src="{{getChildImage(baby)}}" class="baby-card-image">
+              </div>
+              <div class="baby-card-element baby-card-element-right">
+                <h3 class="busBabyDetail firstrow">{{baby.fullName}}</h3>
+                <h3 class="busBabyDetail accent-color"><span class="busBabyDetail description-color">{{'bus_stop_drops_off' | translate}} </span>{{baby.busStop}}</h3>
+                <!--<h3 class="busBabyDetail"><span class="busBabyDetail description-color">{{'bus_stop_person_wait' | translate}} </span>{{baby.personWhoWaitName}}-->
+                <!--                                    ({{baby.personWhoWaitRelation}})
+                                </h3>-->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="nothing-to-show-placeholder-wrapper">
+      <div class="nothing-to-show-placeholder" ng-if="dataLoaded && totalNumRow().length === 0">
+        {{'no_baby_bus' | translate}}
+      </div>
+    </div>
+
+  </ion-content>
+</ion-view>

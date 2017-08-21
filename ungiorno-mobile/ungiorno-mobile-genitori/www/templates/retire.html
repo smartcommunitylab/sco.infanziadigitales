@@ -1,0 +1,67 @@
+<ion-view id="retire" title="{{'retire' | translate}}" ng-init="getRetire()">
+  <ion-nav-bar class="bar bar-ungiorno">
+    <!-- back button -->
+    <ion-nav-back-button></ion-nav-back-button>
+
+    <!-- Send server button -->
+    <ion-nav-buttons side="right">
+      <button class="button icon button-clear " ng-click="showConfirm()">{{'send'|translate}}</button>
+    </ion-nav-buttons>
+  </ion-nav-bar>
+
+  <ion-content class="page-padding" has-header="true" scrollbar-y="true">
+    <div>
+      <div class=" form-container ">
+        <!-- Date -->
+        <div class="row ">
+            <span class="accent-color input-retire-description-padding inline"><b>{{'date' | translate}}:</b></span>
+            <button class="button button-clear button-dark " ng-click="openDatePicker() "><span class="label-time-date">{{temporary.date|date: 'dd/MM/yyyy'}}</span></button>
+          <!-- Hour -->
+          <!--        <div ng-if="!isUsingBus() ">-->
+
+          <!--        </div>-->
+        </div>
+          <div class="row">
+                    <div ng-if="!isUsingBus()" >
+            <span class="accent-color input-retire-description-padding inline"><b>{{'hour' | translate}}:</b></span>
+            <button class="button button-clear button-dark " ng-click="openTimePicker() "><span class="label-time-date">{{temporary.time|date: 'HH:mm'}}</span></button>
+          </div>
+              </div>
+        <div class="row" ng-if="babyProfile.services.bus.enabled ">
+          <!--
+                    <ion-checkbox ng-model="busChecked.value " ng-checked="busChecked.value " ng-change="checkBus(busChecked.value) " class="accent-color input-description-padding ">
+                        <b> {{'retire_bus' | translate}}</b>
+                    </ion-checkbox>
+-->
+          <ion-toggle ng-model="busChecked.value" ng-checked="busChecked.value " ng-change="checkBus(busChecked.value) " toggle-class="toggle-calm" class="retire-toggle"><span class="input-retire-description-padding"><b> {{'retire_bus' | translate}}</b></span></ion-toggle>
+        </div>
+
+
+        <!--
+The person is not important anymore, just date, time and bus
+Who takes baby -->
+        <!--        <h5 class="accent-color input-description-padding "><b>{{'who_takes_baby' | translate}}</b></h5>-->
+        <!--                <p class="delegate-label description ">{{'delegate_status' | translate}}:</p>-->
+        <!--
+                <ion-list>
+                    <ion-list class="padlist ">
+                        <ion-radio class="retire-list" ng-repeat="item in retirePersons" ng-value="item.personId" ng-model="data.personId" ng-change="selectPerson(item) ">
+                            {{ item.fullName }}
+                        </ion-radio>
+                    </ion-list>
+                </ion-list>
+-->
+
+        <!--<div class="delegate-input ">
+                <button class="button button-norm " ng-click="setRetire() " ui-sref="app.authorization ">{{'nav_delegate' | translate}}</button>
+            </div>-->
+
+        <!--
+<h5 class="accent-color input-description-padding "><b>{{'note' | translate}}:</b></h4>
+            <textarea id="note " ng-model="temporary.note " placeholder="{{ 'note_description' | translate}} "/>
+-->
+      </div>
+    </div>
+
+  </ion-content>
+</ion-view>

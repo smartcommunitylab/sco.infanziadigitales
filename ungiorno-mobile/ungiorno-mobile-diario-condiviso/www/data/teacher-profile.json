@@ -1,0 +1,14 @@
+{
+    "appId": "a",
+    "fullname": "Chiara Rossi",
+    "name": "Chiara",
+    "surname": "Rossi",
+    "teacher": {
+        "schoolId": "a",
+        "sectionIds": ["azzura"],
+        "userId": "a"
+    },
+    "parent": {
+        "userId": "b"
+    }
+}

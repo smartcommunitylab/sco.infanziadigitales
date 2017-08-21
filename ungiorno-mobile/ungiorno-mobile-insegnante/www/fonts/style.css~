@@ -1,0 +1,144 @@
+@font-face {
+  font-family: 'infanzia_digitales';
+  src:  url('fonts/infanzia_digitales.eot?7cwl9t');
+  src:  url('fonts/infanzia_digitales.eot?7cwl9t#iefix') format('embedded-opentype'),
+    url('fonts/infanzia_digitales.ttf?7cwl9t') format('truetype'),
+    url('fonts/infanzia_digitales.woff?7cwl9t') format('woff'),
+    url('fonts/infanzia_digitales.svg?7cwl9t#infanzia_digitales') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="inf_dig"], [class*=" inf_dig"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'infanzia_digitales' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.inf_dignotifica_messaggi:before {
+  content: "\e91c";
+}
+.inf_digaccount:before {
+  content: "\e900";
+}
+.inf_digalarm:before {
+  content: "\e901";
+}
+.inf_digalert:before {
+  content: "\e902";
+}
+.inf_digarrow_back:before {
+  content: "\e903";
+}
+.inf_digassignment:before {
+  content: "\e904";
+}
+.inf_digbus:before {
+  content: "\e905";
+}
+.inf_digcalendar:before {
+  content: "\e906";
+}
+.inf_digcall:before {
+  content: "\e907";
+}
+.inf_digcheck_circle:before {
+  content: "\e908";
+}
+.inf_digcheck:before {
+  content: "\e909";
+}
+.inf_digchildren_list:before {
+  content: "\e90a";
+}
+.inf_digclock:before {
+  content: "\e90b";
+}
+.inf_digclose:before {
+  content: "\e90c";
+}
+.inf_digdelete:before {
+  content: "\e90d";
+}
+.inf_digedit:before {
+  content: "\e90e";
+}
+.inf_digfilter:before {
+  content: "\e90f";
+}
+.inf_dighome:before {
+  content: "\e910";
+}
+.inf_digimage:before {
+  content: "\e911";
+}
+.inf_diginfo:before {
+  content: "\e912";
+}
+.inf_diglog-out:before {
+  content: "\e913";
+}
+.inf_digmail:before {
+  content: "\e914";
+}
+.inf_digmenu:before {
+  content: "\e915";
+}
+.inf_dignote:before {
+  content: "\e916";
+}
+.inf_digprint:before {
+  content: "\e917";
+}
+.inf_digsearch:before {
+  content: "\e918";
+}
+.inf_digsettings:before {
+  content: "\e919";
+}
+.inf_digshare:before {
+  content: "\e91a";
+}
+.inf_digtags:before {
+  content: "\e91b";
+}
+.inf_digverdura:before {
+  content: "\e600";
+}
+.inf_digfrutta:before {
+  content: "\e601";
+}
+.inf_digpesce:before {
+  content: "\e602";
+}
+.inf_digdolce:before {
+  content: "\e603";
+}
+.inf_digpizza:before {
+  content: "\e604";
+}
+.inf_digcarne-rossa:before {
+  content: "\e605";
+}
+.inf_diglatticini:before {
+  content: "\e606";
+}
+.inf_digriso:before {
+  content: "\e607";
+}
+.inf_digpasta:before {
+  content: "\e608";
+}
+.inf_digcarne-bianca:before {
+  content: "\e609";
+}
+

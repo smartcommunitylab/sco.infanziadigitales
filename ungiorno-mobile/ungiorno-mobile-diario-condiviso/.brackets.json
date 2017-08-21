@@ -1,0 +1,31 @@
+{
+    "jscodehints.detectedExclusions": [
+        "/home/chin8/Documents/work/InfanziaDigitales/code/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-genitori/platforms/android/assets/www/lib/ionic/js/ionic.bundle.js",
+        "/home/chin8/Documents/work/InfanziaDigitales/code/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-genitori/platforms/android/assets/www/lib/ionic/js/ionic-angular.min.js",
+        "/home/chin8/Documents/work/InfanziaDigitales/code/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-genitori/platforms/android/assets/www/lib/ionic/js/ionic.bundle.min.js",
+        "/home/chin8/Documents/work/InfanziaDigitales/code/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-genitori/platforms/android/assets/www/lib/ionic/js/ionic.js",
+        "/home/chin8/Documents/work/InfanziaDigitales/code/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-genitori/platforms/android/assets/www/lib/angular-sanitize/angular-sanitize.min.js",
+        "/home/chin8/Documents/work/InfanziaDigitales/code/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-genitori/platforms/android/assets/www/lib/angular/angular.min.js",
+        "/home/chin8/Documents/work/InfanziaDigitales/code/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-genitori/platforms/android/assets/www/lib/angular-filter/angular-filter.min.js",
+        "/home/chin8/Documents/work/InfanziaDigitales/code/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-genitori/platforms/android/assets/www/cordova.js",
+        "/home/chin8/Documents/work/InfanziaDigitales/code/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-genitori/platforms/android/cordova/lib/appinfo.js",
+        "/home/chin8/Documents/work/InfanziaDigitales/code/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-genitori/www/js/services/ritiroService.js",
+        "/home/chin8/Documents/work/InfanziaDigitales/code/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-genitori/www/js/services/assenzaService.js",
+        "/home/chin8/Documents/work/InfanziaDigitales/code/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-genitori/platforms/android/assets/www/lib/angular-sanitize/angular-sanitize.js",
+        "/home/chin8/Documents/work/InfanziaDigitales/code/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-genitori/www/js/services/getConfigurationsService.js",
+        "/home/chin8/Documents/work/InfanziaDigitales/code/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-genitori/www/js/services/getProfilesService.js",
+        "/home/chin8/Documents/work/InfanziaDigitales/code/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-genitori/platforms/android/assets/www/lib/ngCordova/ng-cordova.min.js",
+        "/home/chin8/Documents/work/InfanziaDigitales/code/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-genitori/www/js/services/conf.js",
+        "/home/chin8/Documents/work/InfanziaDigitales/code/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-genitori/www/js/controllers/home.js",
+        "/home/chin8/Documents/work/InfanziaDigitales/code/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-genitori/platforms/android/cordova/lib/build.js",
+        "/home/chin8/Documents/work/InfanziaDigitales/code/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-genitori/www/js/services/profileService.js",
+        "/home/chin8/Documents/work/InfanziaDigitales/code/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-genitori/www/js/services/configurazionService.js",
+        "C:/Users/user/Documents/GitHub/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-diario-condiviso/www/js/app.js",
+        "C:/Users/user/Documents/GitHub/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-diario-condiviso/www/js/services/galleryService.js",
+        "/Users/raman/Documents/Work/SO/platform/smartcampus-vas/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-diario-condiviso/www/js/controllers/loginCtrl.js",
+        "/Users/raman/Documents/Work/SO/platform/smartcampus-vas/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-diario-condiviso/www/js/services/dataServerService.js",
+        "/Users/raman/Documents/Work/SO/platform/smartcampus-vas/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-diario-condiviso/www/js/services/profileService.js",
+        "/Users/raman/Documents/Work/SO/platform/smartcampus-vas/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-diario-condiviso/www/js/controllers/galleryCtrl.js",
+        "/Users/raman/Documents/Work/SO/platform/smartcampus-vas/sco.infanziadigitales/ungiorno-mobile/ungiorno-mobile-diario-condiviso/www/js/app.js"
+    ]
+}

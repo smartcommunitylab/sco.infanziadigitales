@@ -1,0 +1,159 @@
+{
+    "data": [
+        {
+            "appId": "a",
+            "schoolId": "a",
+            "date": 1442589600,
+            "lunch": [{
+                    "name": "battuta di manzo",
+                    "type": "meat"
+            },
+                {
+                    "name": "insalata",
+                    "type": "veg"
+            }],
+            "break": [{
+                "name": "yogurt",
+                "type": "milk"
+            }]
+        },
+        {
+            "appId": "a",
+            "schoolId": "a",
+            "date": 1442812000,
+            "lunch": [{
+                    "name": "minestrone",
+                    "type": "soup"
+            },
+                {
+                    "name": "insalata",
+                    "type": "veg"
+            }],
+            "break": [{
+                "name": "mela",
+                "type": "fruit"
+            }]
+        },
+        {
+            "appId": "a",
+            "schoolId": "a",
+            "date": 1442898400,
+            "lunch": [{
+                    "name": "branzino",
+                    "type": "fish"
+            },
+                {
+                    "name": "insalata",
+                    "type": "veg"
+            }],
+            "break": [{
+                "name": "uva",
+                "type": "fruit"
+            }]
+        },
+        {
+            "appId": "a",
+            "schoolId": "a",
+            "date": 1442984800,
+            "lunch": [{
+                    "name": "riso allo zafferano",
+                    "type": "rise"
+            },
+                {
+                    "name": "pomodoro",
+                    "type": "veg"
+            }],
+            "break": [{
+                "name": "torta di mele",
+                "type": "sweet"
+            }]
+        },
+        {
+            "appId": "a",
+            "schoolId": "a",
+            "date": 1443071200,
+            "lunch": [{
+                    "name": "minestrone",
+                    "type": "soup"
+            },
+                {
+                    "name": "insalata",
+                    "type": "veg"
+            }],
+            "break": [{
+                "name": "mela",
+                "type": "fruit"
+            }]
+        },
+
+        {
+            "appId": "a",
+            "schoolId": "a",
+            "date": 1443157600,
+            "lunch": [{
+                    "name": "branzino",
+                    "type": "fish"
+            },
+                {
+                    "name": "insalata",
+                    "type": "veg"
+            }],
+            "break": [{
+                "name": "uva",
+                "type": "fruit"
+            }]
+        },
+        {
+            "appId": "a",
+            "schoolId": "a",
+            "date": 1443503200,
+            "lunch": [{
+                    "name": "spaghetti al pomodoro",
+                    "type": "pasta"
+            },
+                {
+                    "name": "pollo al forno",
+                    "type": "white_meat"
+            }],
+            "break": [{
+                "name": "bicchiere di latte",
+                "type": "milk"
+            }]
+        },
+
+        {
+            "appId": "a",
+            "schoolId": "a",
+            "date": 1443416800,
+            "lunch": [{
+                    "name": "minestrone",
+                    "type": "soup"
+            },
+                {
+                    "name": "sogliola",
+                    "type": "fish"
+            }],
+            "break": [{
+                "name": "pera",
+                "type": "fruit"
+            }]
+        },
+        {
+            "appId": "a",
+            "schoolId": "a",
+            "date": 1443589600,
+            "lunch": [{
+                    "name": "riso allo zafferano",
+                    "type": "rise"
+            },
+                {
+                    "name": "pomodoro",
+                    "type": "veg"
+            }],
+            "break": [{
+                "name": "torta di mele",
+                "type": "sweet"
+            }]
+        }
+    ]
+}

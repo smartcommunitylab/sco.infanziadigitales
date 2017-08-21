@@ -1,0 +1,88 @@
+[
+        {
+            "appId": "a",
+            "schoolId": "a",
+            "date": 1442589600,
+            "lunch": [{
+                    "name": "battuta di manzo",
+                    "type": "meat"
+            },
+                {
+                    "name": "insalata",
+                    "type": "veg"
+            }],
+            "break": [{
+                "name": "yogurt",
+                "type": "milk"
+            }]
+        },
+        {
+            "appId": "a",
+            "schoolId": "a",
+            "date": 1443503200,
+            "lunch": [{
+                    "name": "minestrone",
+                    "type": "soup"
+            },
+                {
+                    "name": "insalata",
+                    "type": "veg"
+            }],
+            "break": [{
+                "name": "mela",
+                "type": "fruit"
+            }]
+        },
+
+        {
+            "appId": "a",
+            "schoolId": "a",
+            "date": 1443416800,
+            "lunch": [{
+                    "name": "minestrone",
+                    "type": "soup"
+            },
+                {
+                    "name": "insalata",
+                    "type": "veg"
+            }],
+            "break": [{
+                "name": "mela",
+                "type": "fruit"
+            }]
+        },
+        {
+            "appId": "a",
+            "schoolId": "a",
+            "date": 1443589600,
+            "lunch": [{
+                    "name": "minestrone",
+                    "type": "soup"
+            },
+                {
+                    "name": "insalata",
+                    "type": "veg"
+            }],
+            "break": [{
+                "name": "mela",
+                "type": "fruit"
+            }]
+        },
+        {
+            "appId": "a",
+            "schoolId": "a",
+            "date": 1443676000,
+            "lunch": [{
+                    "name": "minestrone",
+                    "type": "soup"
+            },
+                {
+                    "name": "insalata",
+                    "type": "veg"
+            }],
+            "break": [{
+                "name": "mela",
+                "type": "fruit"
+            }]
+        }
+    ]

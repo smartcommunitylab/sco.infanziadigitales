@@ -1,0 +1,14 @@
+(already added by ionic)
+cordova plugin add cordova-plugin-console
+cordova plugin add cordova-plugin-device
+cordova plugin add cordova-plugin-statusbar
+cordova plugin add cordova-plugin-inappbrowser
+cordova plugin add cordova-plugin-whitelist
+
+(project related)
+cordova plugin add cordova-plugin-x-toast
+cordova plugin add cordova-plugin-splashscreen
+cordova plugin add cordova-plugin-camera
+cordova plugin add ionic-plugin-keyboard
+cordova plugin add https://github.com/Rohfosho/CordovaCallNumberPlugin.git
+

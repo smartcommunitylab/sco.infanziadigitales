@@ -1,0 +1,33 @@
+[
+        {
+            "appId": "a",
+            "schoolId": "a",
+            "start": 1443528909,
+            "end": 1443528909,
+            "sectionId": "sectionId1",
+            "type": "gita",
+            "forWhom": "kid",
+            "title": "Gita sul pasubio"
+        },
+        {
+            "appId": "a",
+            "schoolId": "a",
+            "start": 1443096909,
+            "end": 1443096909,
+            "sectionId": "sectionId1",
+            "type": "meeting",
+            "forWhom": "parent",
+            "title": "Incontro con genitori"
+        },
+
+        {
+            "appId": "a",
+            "schoolId": "a",
+            "start": 1443528909,
+            "end": 1443528909,
+            "sectionId": "sectionId1",
+            "type": "meeting",
+            "forWhom": "parent",
+            "title": "Incontro con genitori"
+        }
+    ]

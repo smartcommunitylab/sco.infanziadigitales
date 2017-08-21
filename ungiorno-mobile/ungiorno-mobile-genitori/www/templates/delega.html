@@ -1,0 +1,27 @@
+<ion-view id="ritiro">
+
+    <ion-nav-bar class="bar bar-ungiorno">
+        <ion-nav-back-button>
+        </ion-nav-back-button>
+            <ion-nav-buttons side="right">
+      <button class="button" ng-click="NavigateToRitiro()">
+        Invia
+      </button>
+    </ion-nav-buttons>
+    </ion-nav-bar>
+    <ion-content has-header="true">
+
+<!---
+    p    {color:deeppink; font: Georgia}
+    div {padding-left:20px}-->
+
+
+        <div class="retireDiv">
+        <p><b>Cognome:</b></p>
+        <input type="text" ng-model="Delega[0].extraPersons.lastName" class="retireInput" placeholder="Inserisci il Cognome...">
+        <p><b>Nome:</b></p>
+        <input type="text" ng-model="Delega[0].extraPersons.firstName" class="retireInput" placeholder="Inserisci il Nome...">
+        </div>
+
+    </ion-content>
+</ion-view>

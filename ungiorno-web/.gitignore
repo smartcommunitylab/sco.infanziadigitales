@@ -1,0 +1,11 @@
+/target/
+<<<<<<< HEAD
+/tmp/
+/.classpath
+/.project
+/.settings/
+=======
+/.settings/
+/.classpath
+/.project
+>>>>>>> 352af52bc925564f1fde3b2523b80a0c13ef7c83

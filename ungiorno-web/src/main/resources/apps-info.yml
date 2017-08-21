@@ -1,0 +1,25 @@
+uploadDirectory: c:/tmp/pics
+apps:
+  - appId: trento
+    password: trento
+    messagingAppId : ugas.trento 
+    gcmSenderApiKey : GCM_SENDER_API_KEY
+    gcmSenderId : GCM_SENDER_ID
+    schools:
+      - 
+        schoolId: scuola
+        tags: 
+          - tag1
+          - tag2
+      - 
+        schoolId: scuola2
+      - 
+        schoolId: cogolo
+  - appId: test
+    messagingAppId : ugas.test 
+    gcmSenderApiKey : GCM_SENDER_API_KEY
+    gcmSenderId : GCM_SENDER_ID
+    password: test
+    schools:
+      -
+        schoolId: test

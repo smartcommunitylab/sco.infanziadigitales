@@ -1,0 +1,137 @@
+<!--<ion-view id="home" ng-init="initialize()" title="{{teacherName}} - {{title}}">-->
+<ion-view id="home" ng-init="initialize()" title="{{title}}">
+  <ion-nav-buttons side="right">
+    <button class="button" ng-if="!viewClose()" ng-click="refreshHome()">
+      <i class="icon ion-loop action-icon"></i>
+    </button>
+    <!--
+        <button class="button" ng-if="!viewClose()" ng-click="openNotes()">
+            <i class="icon ion-document-text action-icon "></i>
+        </button>
+        <button class="button" ng-if="!viewClose()" ng-click="openCommunications()">
+            <i class="icon ion-android-alarm-clock action-icon"></i>
+        </button>
+        <button class="button" ng-if="viewClose()" ng-click="closeNotesAndComm()">{{'close' | translate | uppercase}}</button>
+        <button class="button" ng-if="viewClose() && communicationExpanded " ng-click="saveNotesAndComm()">{{'save' | translate | uppercase}}</button>
+-->
+    <button class="button button-save" ng-if="viewClose() && communicationExpanded " ng-click="cancelNotesAndComm()">{{'cancel' | translate | uppercase}}</button>
+
+    <button class="button button-save" ng-if="viewClose() && communicationExpanded " ng-click="saveNotesAndComm()">{{'save' | translate | uppercase}}</button>
+
+  </ion-nav-buttons>
+  <!--
+    <ion-nav-title ng-init="getDateString()">
+        <div>{{date | date:'EEEE, d MMMM yyyy'}} - Maestra Chiara</div>
+    </ion-nav-title>
+-->
+  <ion-content has-header="true">
+    <div class="row section-row home-container" ng-if="!noConnection">
+      <!--            <div class="col section-row" ng-class="{'sections-displayer-short': noteExpanded || communicationExpanded, 'sections-displayer-full': !(noteExpanded || communicationExpanded)}">-->
+      <div class="col section-row sections-displayer-full">
+        <div class=" row section-row ">
+          <div class="tabs-striped tabs-top tabs-background-dark tabs-color-light ">
+            <div class="tabs section-tabs ">
+              <a class="tab-item section-tab " ng-repeat="section in sections | orderBy: 'sectionName' track by $index  " class="col " ng-click="changeSection($index) " ng-class="{ 'active' : (isThisSection($index))} "> {{section.sectionName}} </a>
+              <a class="tab-item section-tab " class="col " ng-click="changeSection( 'all') " ng-class="{ 'active' : (isThisSection( 'all'))} ">  {{'all_section' | translate}} </a>
+            </div>
+          </div>
+        </div>
+        <div class="row home-section-space " ng-if="!communicationExpanded ">
+          <div class="col ">
+            <div class="sectionPeriod " ng-click="changeSectionPeriod( 'anticipo') ">
+              <svg ng-class="{ 'sectionBabyIndicator-now':isNow( 'anticipo'), 'sectionBabyIndicator-notnow':!isNow( 'anticipo')} " id="svg " viewbox="0 0 100 100 ">
+                <circle cx="50 " cy="50 " r="45 " fill="{{colors[ 'anticipo']}} " />
+                <path fill="none " stroke-linecap="round " stroke-width="5 " stroke="#bd3e4d " stroke-dasharray="{{getLineStroke(availableChildren[ 'anticipo'],totalChildrenNumber[ 'anticipo'])}} " d="M50 10 a 40 40 0 0 1 0 80 a 40 40 0 0 1 0 -80 " />
+                <text x="50 " y="50 " text-anchor="middle " dy="7 " font-size="19 ">{{availableChildren['anticipo']}} su {{totalChildrenNumber['anticipo']}}</text>
+              </svg>
+            </div>
+            <div class="section-text ">
+              {{'home_anticipo' | translate}}
+            </div>
+          </div>
+          <div class="col ">
+            <div class="sectionPeriod " ng-click="changeSectionPeriod( 'mensa') ">
+
+              <svg ng-class="{ 'sectionBabyIndicator-now':isNow( 'mensa'), 'sectionBabyIndicator-notnow':!isNow( 'mensa')} " id="svg " viewbox="0 0 100 100 ">
+                <circle cx="50 " cy="50 " r="45 " fill="{{colors[ 'mensa']}} " />
+                <path fill="none " stroke-linecap="round " stroke-width="5 " stroke="#bd3e4d " stroke-dasharray="{{getLineStroke(availableChildren[ 'mensa'],totalChildrenNumber[ 'mensa'])}} " d="M50 10 a 40 40 0 0 1 0 80 a 40 40 0 0 1 0 -80 " />
+                <text x="50 " y="50 " text-anchor="middle " dy="7 " font-size="19 ">{{availableChildren['mensa']}} su {{totalChildrenNumber['mensa']}}</text>
+              </svg>
+            </div>
+            <div class="section-text ">
+              {{'home_orario_normale' | translate}}
+            </div>
+          </div>
+          <div class="col ">
+            <div ng-class="{ 'sectionBabyIndicator-now':isNow( 'posticipo'), 'sectionBabyIndicator-notnow':!isNow( 'posticipo')} " ng-click="changeSectionPeriod( 'posticipo') ">
+              <svg class="sectionBabyIndicator " id="svg " viewbox="0 0 100 100 ">
+                <circle cx="50 " cy="50 " r="45 " fill="{{colors[ 'posticipo']}} " />
+                <path fill="none " stroke-linecap="round " stroke-width="5 " stroke="#bd3e4d " stroke-dasharray="{{getLineStroke(availableChildren[ 'posticipo'],totalChildrenNumber[ 'posticipo'])}} " d="M50 10 a 40 40 0 0 1 0 80 a 40 40 0 0 1 0 -80 " />
+                <text x="50 " y="50 " text-anchor="middle " dy="7 " font-size="19 ">{{availableChildren['posticipo']}} su {{totalChildrenNumber['posticipo']}}</text>
+              </svg>
+            </div>
+            <div class="section-text ">
+              {{'home_posticipo' | translate}}
+            </div>
+            <!--                <div section></div>-->
+          </div>
+        </div>
+
+        <!--        <div class="home-separator "></div>-->
+        <div class="line-separator" ng-if="!communicationExpanded">
+          <div class="side-line" id="leftLine"> </div>
+          <div class="triangle"> </div>
+          <div class="side-line" id="rightLine"> </div>
+        </div>
+        <div class="home-communication-description " ng-if="communicationExpanded ">
+          <div class="row">
+            <div class="col">
+              <div class="comm-creation-date">{{'communication_of' | translate}} {{data.creationDate | date}}</div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <a class="communication-text">{{data.description}}</a>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col col-50">
+              {{'deadline' | translate}}: {{data.dateToCheck | date}}</div>
+            <div class="col col-50">
+              <div class="number-devilevered">
+                {{'home_number_deliveries' | translate}}{{numberOfDeliveries}}{{'home_out_of_deliveries' | translate}}{{numberOfChildren}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="section-text " ng-if="communicationExpanded ">
+          {{'home_scadenze' | translate}}
+        </div>
+        <!--<ion-scroll>-->
+        <div class=" children-home " ng-repeat="child in childrenProfiles[selectedPeriod] track by $index " ng-click="detailOrCommunication(child) " ng-if="!communicationExpanded">
+          <div class="children-container" ng-class="{ 'img-assente':child.exitTime==null || (child.exitTime < getTime(selectedPeriod)), 'img-presente':(child.exitTime !=null && (numberMessageUnread[child.kidId]==0 || numberMessageUnread[child.kidId]==null)||communicationExpanded), 'img-not-active':!child.active, 'img-communication':communicationExpanded, 'img-messages':child.exitTime !=null && numberMessageUnread[child.kidId]>0 } ">
+            <div class="badge-msg " ng-if="numberMessageUnread[child.kidId]>0 && !communicationExpanded"><i class="icon center icon-message inf_dignotifica_messaggi"></i>
+            </div>
+            <i class="icon ion-checkmark-round ribbon" ng-if="(getChildrenDeliveryByID(child.kidId) && communicationExpanded)"></i>
+            <img ng-src="{{getChildImage(child)}} ">
+            <!--          <div class="name-of-child " ng-if="!child.image || child.image=='' ">{{child.childrenName}}</div>-->
+            <!--            <div class="name-of-child ">{{child.childrenName}}</div>-->
+            <div class="name-of-child ">{{child.childrenName | homeName}}</div>
+            <div class="children-presenza " ng-if="child.active && !communicationExpanded " ng-class="{ 'child-assente':child.exitTime==null, 'child-presente':child.exitTime !=null} ">{{child.presenza}}</div>
+          </div>
+        </div>
+
+        <div class=" children-home " ng-repeat="child in childrenProfiles['allPeriod'] track by $index " ng-click="detailOrCommunication(child) " ng-if="communicationExpanded">
+          <i class="icon ion-checkmark-round ribbon" ng-if="(getChildrenDeliveryByID(child.kidId) && communicationExpanded)"></i>
+          <img ng-src="{{getChildImage(child)}} " ng-class="{ 'img-presente':(child.exitTime !=null && (numberMessageUnread[child.kidId]==0 || numberMessageUnread[child.kidId]==null)||communicationExpanded), 'img-not-active':!child.active, 'img-communication':communicationExpanded } ">
+          <!--          <div class="name-of-child " ng-if="!child.image || child.image=='' ">{{child.childrenName}}</div>-->
+          <div class="name-of-child ">{{child.childrenName | homeName}}</div>
+        </div>
+        <!--        </ion-scroll>-->
+      </div>
+
+    </div>
+    <div class="row section-row home-container" ng-if="noConnection">
+      <div class="no-connection-message">{{'no_connection_message'|translate}}</div>
+    </div>
+  </ion-content>
+</ion-view>

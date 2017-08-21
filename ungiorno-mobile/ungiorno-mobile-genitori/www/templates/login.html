@@ -1,0 +1,104 @@
+<ion-view title="{{'lbl_login' | translate}}" class="login" hide-nav-bar="true">
+  <ion-content>
+    <div class="login-title">
+      <div class="stuffcontainer">
+        <!--
+                <img src="img/login_page_logo.png" width="70%" />
+                <h4 style="color:#fff;">{{'text_login_subtitle' | translate}}</h4>
+-->
+      </div>
+      <!--            <img class="bgimg" src="img/login_page_background.png" />-->
+    </div>
+    <!--
+        <div class="list">
+    <ion-md-input placeholder="Name" hightlight-color="assertive" type="text"></ion-md-input>
+
+    <ion-md-input placeholder="Email" hightlight-color="royal" type="email"></ion-md-input>
+
+    <ion-md-input placeholder="Password" hightlight-color="energized" type="password"></ion-md-input>
+
+</div>
+<div class="list">
+    <label class="item item-input item-floating-label">
+        <span class="input-label">First Name</span>
+        <input type="text" placeholder="First Name">
+    </label>
+    <label class="item item-input item-floating-label">
+        <span class="input-label">Last Name</span>
+        <input type="text" placeholder="Last Name">
+    </label>
+    <label class="item item-input item-floating-label">
+        <span class="input-label">Email</span>
+        <input type="text" placeholder="Email">
+    </label>
+</div>
+<div class="list list-inset">
+    <label class="item item-input">
+        <input type="text" placeholder="First Name">
+    </label>
+    <label class="item item-input">
+        <input type="text" placeholder="Last Name">
+    </label>
+</div>
+-->
+    <div class="login-buttons">
+      <div class="stuffcontainer">
+        <div class="login-title-top">{{'text_login_title' | translate}}</div>
+
+        <h4>{{'signin_google_title' | translate}}</h4>
+        <div class="row">
+          <div class="col ">
+            <button class="button button-block login-button-google" ng-click="login('google')">
+              Google
+            </button>
+          </div>
+          <!--
+<div class="col">
+    <button class="button button-block login-button-facebook" ng-click="login(login_facebooklocal)">
+        Facebook
+    </button>
+</div>
+-->
+        </div>
+        <!--
+
+
+                <ion-md-input type="email" placeholder="{{'signup_email'|translate}}" ng-model="user.email" hightlight-color="royal" type="email"></ion-md-input>
+
+                <ion-md-input type="password" placeholder="{{'signup_pwd'|translate}}" ng-model="user.password" hightlight-color="energized"></ion-md-input>
+-->
+        <h4>{{'signin_alternative_title' | translate}}</h4>
+
+        <label class="item item-input item-floating-label">
+          <span class="input-label login-label">{{'signup_email'|translate}}</span>
+          <input type="email" class="login-label input-login" placeholder="{{'signup_email'|translate}}" ng-model="user.email">
+        </label>
+        <label class="item item-input item-floating-label">
+          <span class="input-label login-label">{{'signup_pwd'|translate}}</span>
+          <input type="password" class="login-label input-login" placeholder="{{'signup_pwd'|translate}}" ng-model="user.password">
+        </label>
+
+        <!--
+                <label class="item item-input login-input">
+                    <input type="email" placeholder="{{'signup_email'|translate}}" ng-model="user.email">
+                </label>
+                <label class="item item-input login-input">
+                    <input type="password" placeholder="{{'signup_pwd'|translate}}" ng-model="user.password">
+                </label>
+-->
+        <a class="text-left login-link" ng-click="passwordRecover()">
+                  {{'signin_pwd_reset' | translate}}
+              </a>
+<!--        <button class="button button-block login-button-internal login-margin" ng-click="signin()">-->
+          <button class="button button-block login-button-internal login-margin" ng-click="login('internal')">
+          {{'login_signin' | translate}}
+        </button>
+        <a class=" login-link login-margin" ng-click="goRegister()">
+                    {{'login_signup' | translate}}
+                </a>
+        <br/>
+
+      </div>
+    </div>
+  </ion-content>
+</ion-view>

@@ -1,0 +1,16 @@
+<ion-view id="postgallery">
+    <ion-nav-bar class="bar bar-ungiorno">
+        <ion-nav-back-button>
+        </ion-nav-back-button>
+    </ion-nav-bar>
+    <ion-content id="gallery-container" has-bouncing="false">
+        <ion-slide-box class="gallery-slider" active-slide="galleryDefaultPhotoIndex" show-pager="false">
+
+            <ion-slide ng-repeat="photo in photos">
+                <div class="gallery-photo-container">
+                    <img ng-src="{{photo}}" class="gallery-photo-view">
+                </div>
+            </ion-slide>
+        </ion-slide-box>
+    </ion-content>
+</ion-view>

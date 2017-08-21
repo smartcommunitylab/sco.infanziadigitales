@@ -1,0 +1,40 @@
+<ion-view id="communications">
+    <ion-nav-bar class="bar bar-ungiorno">
+        <ion-nav-back-button>
+        </ion-nav-back-button>
+        <ion-nav-buttons side="right">
+            <button class="button" ng-click="addCommunication()" ng-show="!selected && !addNewCommunicationState">
+                <i class="icon ion-plus-round"></i>
+            </button>
+            <button class="button" ng-click="deleteCommunication()" ng-show="selected">
+                <i class="icon ion-trash-a"></i>
+            </button>
+            <button class="button" ng-click="modifyCommunication()" ng-show="selected">
+                <i class="icon ion-edit"></i>
+            </button>
+            <button class="button" ng-click="cancelNewCommunication()" ng-show="addNewCommunicationState">
+                <i class="icon ion-close-round"></i>
+            </button>
+            <button class="button" ng-click="confirmNewCommunication()" ng-show="addNewCommunicationState">
+                <i class="icon ion-checkmark-round"></i>
+            </button>
+        </ion-nav-buttons>
+    </ion-nav-bar>
+    <ion-content has-header="true">
+        <div class="new-communication" ng-show="addNewCommunicationState">
+            nuova comunicazione
+        </div>
+        <div class="list">
+            <div class="item communication" ng-repeat="communication in communications track by $index" ng-click="selectCommunication($index)">
+                <div ng-class="{'communication-selected' : (isThisCommunication($index)), 'communication-not-selected' :  (!isThisCommunication($index))} ">
+                    <div class="communication-description">{{communication.description}}</div>
+                    <div class="communication-date"> {{(communication.date*1000) | date:'dd/mm/yyyy'}}</div>
+                </div>
+                <div class="new-communication" ng-show="modifyThisCommunication($index)">
+                    modifica
+                </div>
+            </div>
+        </div>
+
+    </ion-content>
+</ion-view>

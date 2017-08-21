@@ -1,0 +1,204 @@
+<ion-view id="babyprofile" view-title="{{babyProfile.fullName}}">
+  <ion-nav-bar class="bar bar-ungiorno">
+    <ion-nav-back-button>
+    </ion-nav-back-button>
+  </ion-nav-bar>
+  <ion-content has-header="true" scroll="false">
+    <div>
+      <div class="row">
+        <div class="col   profile-column">
+          <div id="kid-profile">
+            <div style="display:inline-block; vertical-align:top;">
+              <img ng-src="{{getProfileImage()}}" class="baby-profile-image">
+            </div>
+            <div>
+              <div class=" detailItem" ng-if="babyInformations.active">{{babyProfile.firstName}} {{'is' | translate}} <b>{{babyStatus | uppercase}}</b> <span ng-if="babyInformations.exitTime == null && babyInformations.absenceType!=null && babyInformations.absenceType!=''">{{'because' | translate}} <b>{{babyInformations.absenceType}} <span ng-if="absenceSubtype!=''">({{absenceSubtype}})</span></b>
+                </span>
+              </div>
+              <div class=" detailItem" ng-if="!babyInformations.active">{{babyProfile.firstName}}{{'baby_not_monitored' | translate}}</div>
+              <div class=" detailItem" ng-if="babyInformations.exitTime !== null">{{'enter_at' | translate}}<b> {{babyEnterHour}}</b></div>
+              <div class=" detailItem" ng-if="checkBusServiceActive() && babyInformations.exitTime !== null">{{'bus_stop_back' | translate}} <b>{{babyBusStopBackName}}</b></div>
+              <div class=" detailItem" ng-if="babyInformations.exitTime !== null && !checkBusServiceActive()">{{'exit_at' | translate}}<b>{{babyInformations.exitTime | date:'HH:mm'}}</b></div>
+              <div class=" detailItem" style="color: #ff0000;" ng-if="babyInformations.personException && babyInformations.exitTime !== null">{{'extra_delegation' | translate}}</div>
+              <a href="http://www.google.it" class=" detailItem" ng-if="personWhoRetire.isDelegate && babyInformations.exitTime !== null">{{'view_delegation' | translate}}</a>
+            </div>
+          </div>
+          <div class="babyprofile-separator"></div>
+          <div ng-if="babyInformations.active">
+            <div class="baby-info-label">{{'baby_info' | translate}}</div>
+            <div>
+              <div class="row">
+                <!--                <div ng-repeat="person in parents track by $index" ng-class="{'second-parent':($index %2 == 1);}" ng-if="parents.length>0">-->
+                <!--                <div class="row">-->
+                <div ng-if="parents[0]" class="col col-50">
+                  <div class="col col-30" ng-if="parents[0].parent">
+                    <div class="babyprofile-parent">
+                      <div class=" detailsTitle">{{'parent' | translate}}1</div>
+                      <div class="babyprofile-parent-name">{{parents[0].fullName}}</div>
+                      <ion-list>
+                        <div ng-repeat="num in parents[0].phone" ng-click="callPhone('{{num}}');" class="babyprofile-phone">
+                          <i class="icon voice-menu ion-ios-telephone babyprofile-phone"></i>{{num}}
+                        </div>
+                      </ion-list>
+                    </div>
+                  </div>
+                </div>
+                <div ng-if="parents[1]" class="col col-50">
+                  <div class="col col-30 second-parent" ng-if="parents[1].parent">
+                    <div class="babyprofile-parent">
+                      <div class=" detailsTitle">{{'parent' | translate}}2</div>
+                      <div class="babyprofile-parent-name">{{parents[1].fullName}}</div>
+                      <ion-list>
+                        <div ng-repeat="num in parents[1].phone" ng-click="callPhone('{{num}}');" class="babyprofile-phone">
+                          <i class="icon voice-menu ion-ios-telephone babyprofile-phone"></i>{{num}}
+                        </div>
+                      </ion-list>
+                    </div>
+                  </div>
+                </div>
+                <!--
+                  <div class="col">
+                    <div class="babyprofile-parent">
+                      <div class=" detailsTitle">{{'parent' | translate}}{{$index+1}}</div>
+                      <div class="babyprofile-parent-name">{{parents[$index].fullName}}</div>
+                      <ion-list>
+                        <div ng-repeat="num in parents[$index].phone" ng-click="callPhone('{{num}}');" class="babyprofile-phone">
+                          <i class="icon voice-menu ion-ios-telephone babyprofile-phone"></i>{{num}}
+                        </div>
+                      </ion-list>
+                    </div>
+                  </div>
+                  <div class="col" ng-if="parents.length> ($index + 2)">
+                    <div class=" detailsTitle">{{'parent' | translate}}{{$index+2}}</div>
+                    <div class="babyprofile-parent-name">{{parents[$index+1].fullName}}</div>
+                    <ion-list>
+                      <div ng-repeat="num in parents[$index+1].phone" ng-click="callPhone('{{num}}');" class="babyprofile-phone">
+                        <i class="icon voice-menu ion-ios-telephone babyprofile-phone-icon"></i>{{num}}
+                      </div>
+                    </ion-list>
+                  </div>
+-->
+                <!--                </div>-->
+                <!--                </div>-->
+              </div>
+              <div ng-if="parents.length==0">
+                {{'no_parents' | translate}}
+              </div>
+              <div class="row">
+                <div class="col">
+                  <div class="babyprofile-other">
+                    <div class=" detailsTitle">{{'people_retire' | translate}}</div>
+                    <div ng-repeat="person in otherPeople track by $index" ng-if="otherPeople.length>0">
+                      <div class="row" ng-if="$index%2==0">
+                        <div class="col">
+
+                          <div class="babyprofile-other-name"><i class="icon ion-record bullet-other-people"></i>{{otherPeople[$index].fullName}}</div>
+
+                        </div>
+                        <div class="col" ng-if="otherPeople.length> ($index + 2)">
+                          <div class="babyprofile-other-name"><i class="icon ion-record bullet-other-people"></i>{{otherPeople[$index+1].fullName}}</div>
+
+                        </div>
+                      </div>
+                    </div>
+                    <div ng-hide="otherPeople.length!=0" class="babyprofile-others">
+                      {{'no_other_people' | translate}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col col-30  card profile-column">
+          <div class="no-messages-placeholder" ng-if="messages[babyProfile.kidId].length === 0 ">
+            {{'no_messages' | translate}}
+          </div>
+          <ion-scroll direction="y" id="chat-box" delegate-handle="handler" on-scroll="refresh()">
+            <div class="box-ion-spinner">
+              <ion-spinner ng-if="loading" icon="spiral"></ion-spinner>
+            </div>
+            <ion-item ng-repeat="ms in messages[babyProfile.kidId]">
+              <div class="dateOfChatMessage">
+                <label ng-if="isToday(ms.creationDate) && isANewDate($index)">{{'lbl_today' | translate}} </label>
+                <label ng-if="isYesterday(ms.creationDate) && isANewDate($index)">{{'lbl_yesterday' | translate}} </label>
+                <label ng-if="!isToday(ms.creationDate) && !isYesterday(ms.creationDate) && isANewDate($index)">{{ ms.creationDate | date: dateDayMask }} </label>
+              </div>
+              <div ng-class="{'message-container-parent': isMe(ms.sender), 'message-container-teacher': !isMe(ms.sender) }" class="message-container">
+                <div id="{{ ms.creationDate }}" class="card-chat" ng-class="{'card-chat-my': (isMe(ms.sender) && !chatExtraLength(ms.text)), 'card-chat-my-extra': (isMe(ms.sender) && chatExtraLength(ms.text))}">
+                  <div class="item">
+                    <span>{{ ms.text }}</span>
+                  </div>
+                  <div ng-if="!isMe(ms.sender)" class="item item-divider parent-label" ng-init="checkMessage(ms)">
+                    <span>{{ ms.author.name }} {{ ms.author.surname }} </span><span class="chat-time">{{ ms.creationDate | date:'HH:mm' }}</span>
+                  </div>
+
+                  <div class="item item-divider" ng-if="isMe(ms.sender)">
+                    <span><i class="icon ion-checkmark-round" ng-class="{'message-flag': ms.seen}"></i><i ng-if="ms.received" class="icon ion-checkmark-round" ng-class="{'message-flag': ms.seen}"></i></span><span class="chat-time">{{ ms.creationDate | date:'HH:mm' }}</span><span class="teacher-label">{{ ms.author.name }} {{ ms.author.surname }} </span>
+                  </div>
+                </div>
+              </div>
+            </ion-item>
+            <ion-item ng-class="{'disabled': !userAction.typing}">
+              <div class="message-container-parent message-container">
+                <div class="card-chat">
+                  <div class="item item-divider">
+                  </div>
+                  <div class="item">
+                    <span class="loading"></span>
+                  </div>
+                </div>
+              </div>
+            </ion-item>
+          </ion-scroll>
+          <ion-footer-bar class="bar  item-input chat-teacher-input auto-height" id="chat-footer">
+            <div ng-if="userAuth" class="chat-user"><span>{{teacher.teacherFullname}}</span>
+              <button class="button button-chat-exit" ng-click="exit()">{{'chat_exit_button'|translate|uppercase}}
+              </button>
+            </div>
+            <div class="row chat-write" ng-if="userAuth">
+              <!--
+              <textarea class="input-chat-footer" placeholder="{{'input_chat_placeholder' | translate}}" ng-model="newMessage.text" id="txtnotes" ng-focus="inputUp()" ng-blur="inputDown()" ng-keyup="startTyping()" ng-keydown="expandText()">
+              </textarea>
+-->
+              <textarea class="input-chat-footer" placeholder="{{'input_chat_placeholder' | translate}}" ng-keyup="startTyping()" ng-model="newMessage.text" msd-elastic>
+
+              </textarea>
+              <button class="button button-chat-send icon ion-android-send" ng-click="sendMessage(newMessage.text)">
+              </button>
+            </div>
+            <div class="row" ng-if="!userAuth">
+              <button class="button button-chat-unlock" ng-click="unlock()">{{'chat_lock_button'|translate|uppercase}}
+              </button>
+            </div>
+          </ion-footer-bar>
+        </div>
+      </div>
+      <!--
+==========================Old input with selection of teacher==========================================
+          <div class="bar bar-subfooter item-input chat-teacher-input auto-height">
+            <div class="item-input chat-teacher-input auto-height">
+              <div class="row chat-chose">
+                <div class="input-label-teacher">
+                  {{'note_teacher_label'|translate}}
+                </div>
+                <div class="note-teacher" ng-click="popover.show($event)">
+                  <div class="input-label">
+                    <span> {{teacher.teacherFullname}} </span></div>
+                  <button class="button button-icon button-teacher-list ion-arrow-down-b"></button>
+                </div>
+              </div>
+            </div>
+            <div class="row chat-write">
+              <textarea class="input-chat-footer" placeholder="{{'input_chat_placeholder' | translate}}" ng-model="newMessage.text" id="txtnotes" ng-focus="inputUp()" ng-blur="inputDown()" ng-keyup="startTyping()" ng-keydown="expandText()">
+              </textarea>
+              <button class="button button-chat-send icon ion-android-send" ng-click="sendMessage(newMessage.text)">
+              </button>
+            </div>
+          </div>
+
+      </div>-->
+    </div>
+    </div>
+  </ion-content>
+</ion-view>

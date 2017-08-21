@@ -1,0 +1,35 @@
+{
+    "data": [
+        {
+            "appId": "a",
+            "schoolId": "a",
+            "communicationId": "commId1",
+            "dateToCheck": 1539296618,
+            "creationDate": 1439296618,
+            "description": "Questa comunicazione è per la una consegna!",
+            "doCheck": true,
+            "children": ["a", "c", "d"]
+        },
+        {
+            "appId": "a",
+            "schoolId": "a",
+            "communicationId": "commId2",
+            "dateToCheck": null,
+            "creationDate": 1439296618,
+            "description": "Questa comunicazione è per la mamma di Marco!",
+            "doCheck": false,
+            "children": null
+        }
+        ,
+        {
+            "appId": "a",
+            "schoolId": "a",
+            "communicationId": "commId3",
+            "dateToCheck": 1539296618,
+            "creationDate": 1439296618,
+            "description": "Questa comunicazione è per un'altra consegna 2!",
+            "doCheck": true,
+            "children": ["a", "d", "e"]
+        }
+    ]
+}

@@ -43,13 +43,18 @@ export class HomePage implements OnInit {
   ngOnInit(): void {
     this.webService.getData().then(item => { 
       this.schools = item;
+      console.log(item[0].id);
       this.selectedId = this.schools[0].id;
       this.onSchoolChange(this.selectedId)
     });
   }
 
   onSchoolChange(selectedId : string) {
-    this.webService.getSchool(selectedId).then(item => this.selectedSchool = item);
+    this.webService.getSchool(selectedId).then(school => {
+      this.selectedSchool = school;
+      console.log(this.selectedSchool);
+      }
+    );
   }
 
   onSegmentChange() {

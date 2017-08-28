@@ -2,7 +2,7 @@ import { PopoverPage } from './../pages/Components/Modals/orariModal/popoverOrar
 import { Insegnanti } from './../pages/Components/teacherSection/teacher.component';
 import { TeacherModal } from './../pages/Components/Modals/teacherModal/teacherModal';
 import { BusModal } from './../pages/Components/Modals/busModal/busModal';
-import { InMemoryDataService } from './in-memory-data.service';
+//import { InMemoryDataService } from './in-memory-data.service';
 import { WebService } from './WebService';
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
@@ -11,7 +11,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
-import { InMemoryWebApiModule } from "angular-in-memory-web-api";
+//import { InMemoryWebApiModule } from "angular-in-memory-web-api";
 import { HttpModule } from "@angular/http";
 import { GroupModal } from "../pages/Components/Modals/groupModal/groupModal";
 import { Gruppi } from "../pages/Components/gruppiSection/gruppi.component";
@@ -45,7 +45,7 @@ import { PopoverTimepicker } from "../pages/Components/Modals/orariModal/popover
     BrowserModule,
     IonicModule.forRoot(MyApp),
     HttpModule,
-    InMemoryWebApiModule.forRoot(InMemoryDataService)
+    //InMemoryWebApiModule.forRoot(InMemoryDataService)
   ],
   bootstrap: [IonicApp],
   entryComponents: [

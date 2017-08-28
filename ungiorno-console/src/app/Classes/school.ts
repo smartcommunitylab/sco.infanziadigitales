@@ -10,7 +10,7 @@ export class School {
     telephone: string;
     email: string;
     address: string;
-    servizi: Service[];s
+    servizi: Service[];
     kids: Kid[];
     teachers: Teacher[];
     buses: Bus[];

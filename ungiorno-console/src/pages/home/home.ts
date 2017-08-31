@@ -52,13 +52,13 @@ export class HomePage implements OnInit {
   onSchoolChange(selectedId : string) {
     this.webService.getSchool(selectedId).then(school => {
       this.selectedSchool = school;
-      console.log(this.selectedSchool);
+      this.webService.getTeachers(selectedId).then(teachers => this.selectedSchool.teachers = teachers);
       }
     );
   }
 
   onSegmentChange() {
-    this.webService.getSchool(this.selectedId).then(x => this.selectedSchool = x)
+    //this.webService.getSchool(this.selectedId).then(x => this.selectedSchool = x)
   }
 
   goBack() {

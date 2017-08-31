@@ -1199,6 +1199,25 @@ public class RepositoryManager {
         return template.findOne(q, Teacher.class);
     }
 
+    public Teacher deleteTeacherByTeacherId(String teacherId, String appId, String schoolId) {
+        Query q = schoolQuery(appId, schoolId);
+        q.addCriteria(new Criteria("teacherId").is(teacherId));
+        Teacher toRemove = getTeacherByTeacherId(teacherId, appId, schoolId);
+        if (toRemove != null) {
+            template.remove(q, Teacher.class);
+        }
+        return toRemove;
+    }
+
+    // public Teacher saveOrUpdateTeacher(String appId,String schoolId, Teacher teacher) {
+    // Query q = schoolQuery(appId, schoolId);
+    // q.addCriteria(new Criteria("teacherId").is(teacher.getTeacherId()));
+    // Teacher actualTeacherProfile = template.findOne(q, Teacher.class);
+    // if(actualTeacherProfile != null) {
+    // teacher.set
+    // }
+    // }
+
     public Teacher getTeacherByPin(String pin, String appId, String schoolId) {
         Query q = schoolQuery(appId, schoolId);
         q.addCriteria(new Criteria("pin").is(pin));

@@ -7,6 +7,7 @@ import { Kid } from "./Classes/kid";
 import { SchoolContacts} from "./Classes/schoolContacts"
 
 import { ServerSchoolData } from './Classes/serverModel/serverSchoolData';
+import { ServerTeacherData} from './Classes/serverModel/serverTeacherData';
 
 import { Injectable }    from '@angular/core';
 import { Http, Headers } from '@angular/http';
@@ -19,6 +20,8 @@ export class WebService {
   private schoolUrl = 'http://localhost:8080/ungiorno2/consoleweb/testApp'
   private headers = new Headers({'Content-Type': 'application/json'});
 
+  private appId = 'testApp';
+  private schoolId = '';
   school : School;
   
   constructor(private http : Http) {}
@@ -35,11 +38,11 @@ export class WebService {
 
   getSchool(id: string) : Promise<School> {
     const url = `${this.schoolUrl}/${id}`;
-     return this.http.get(`http://localhost:8080/ungiorno2/school/testApp/${id}/profile`)
+     return this.http.get(`http://localhost:8080/ungiorno2/school/${this.appId}/${id}/profile`)
     .toPromise()
     .then(response => {
       let serverSchoolData = response.json().data as ServerSchoolData;
-      return this.convertToConsoleStructure(serverSchoolData);
+      return this.convertToSchool(serverSchoolData);
     })
     .catch(this.handleError);
   }
@@ -56,14 +59,35 @@ export class WebService {
     return Promise.reject(error.message || error);
   }
 
-  add(schoolId: string, item : any) : Promise<School> {
+  private addTeacher(schoolId : string, teacherProfile : Teacher) : Promise<Teacher> {
+    let convertedTeacher: ServerTeacherData = this.convertToServerTeacher(teacherProfile);
+    return this.http.post(`http://localhost:8080/ungiorno2/consoleweb/${this.appId}/${schoolId}/teacher`,convertedTeacher).toPromise().then(
+      response => this.convertToTeacher(response.json().data)
+  ).catch(this.handleError);
+  }
+
+  getTeachers(schoolId: string) : Promise<Teacher[]> {
+    return this.http.get(`http://localhost:8080/ungiorno2/consoleweb/${this.appId}/${schoolId}/teacher`).toPromise().then(
+      response => response.json().data.map(serverTeacher => this.convertToTeacher(serverTeacher))
+    ).catch(this.handleError);
+  }
+  
+
+  private removeTeacher(schoolId : string, teacherId : string) : Promise<Teacher> {
+    return this.http.delete(`http://localhost:8080/ungiorno2/consoleweb/${this.appId}/${schoolId}/teacher/${teacherId}`).toPromise().then(
+      response => this.convertToTeacher(response.json().data)
+  ).catch(this.handleError);
+  }
+
+  add(schoolId: string, item : any) : Promise<any> {
     var sch;
     const url = `${this.schoolUrl}/${schoolId}`
     if (item instanceof Teacher) {
-      return this.getSchool(schoolId).then(tmp => {
-        tmp.teachers.push(item); 
-        return this.http.put(url, JSON.stringify(tmp), {headers: this.headers}).toPromise().then(() => tmp).catch(this.handleError);
-      });
+      // return this.getSchool(schoolId).then(tmp => {
+      //   tmp.teachers.push(item); 
+      //   return this.http.put(url, JSON.stringify(tmp), {headers: this.headers}).toPromise().then(() => tmp).catch(this.handleError);
+      // });
+      return this.addTeacher(schoolId, item);
     }
     else if (item instanceof Bus) {
       return this.getSchool(schoolId).then(tmp => {
@@ -91,7 +115,7 @@ export class WebService {
     }
   }
 
-  remove(schoolId: string, item: any) : Promise<School> {
+  remove(schoolId: string, item: any) : Promise<any> {
     const url = `${this.schoolUrl}/${schoolId}`;
     if (item instanceof Group) {
       return this.getSchool(schoolId).then(tmp => {
@@ -108,11 +132,12 @@ export class WebService {
       });
     }
     else if(item instanceof Teacher) {
-      return this.getSchool(schoolId).then(tmp => {
-        var pos = tmp.teachers.findIndex(x => x.id === item.id)
-        tmp.teachers.splice(pos, 1); 
-        return this.http.put(url, JSON.stringify(tmp), {headers: this.headers}).toPromise().then(() => tmp).catch(this.handleError);
-      });
+      // return this.getSchool(schoolId).then(tmp => {
+      //   var pos = tmp.teachers.findIndex(x => x.id === item.id)
+      //   tmp.teachers.splice(pos, 1); 
+      //   return this.http.put(url, JSON.stringify(tmp), {headers: this.headers}).toPromise().then(() => tmp).catch(this.handleError);
+      // });
+      return this.removeTeacher(schoolId,item.id);
     }
     else if(item instanceof Kid) {
       return this.getSchool(schoolId).then(tmp => {
@@ -125,7 +150,7 @@ export class WebService {
 
   update(school : School) {
     const url = `${this.schoolUrl}/${school.id}`;
-    let convertedSchool = this.convertToServerStructure(school);
+    let convertedSchool = this.convertToServerSchool(school);
     return this.http
     .put(url, JSON.stringify(convertedSchool), {headers: this.headers})
     .toPromise()
@@ -133,7 +158,23 @@ export class WebService {
     .catch(this.handleError);
   }
 
-  private convertToConsoleStructure = function(serverSchoolData : ServerSchoolData) : School {
+  private convertToTeacher = function(serverTeacherData : ServerTeacherData) : Teacher {
+    let teacher = new Teacher(serverTeacherData.teacherId,serverTeacherData.teacherName,serverTeacherData.teacherSurname,serverTeacherData.pin,'NOT SUPPORTED BY SERVER','NOT SUPPORTED BY SERVER',serverTeacherData.username);
+    return teacher;
+  }
+
+  private convertToServerTeacher = function(teacher : Teacher) : ServerTeacherData {
+    let convertedTeacher = new ServerTeacherData();
+    convertedTeacher.pin = teacher.pin;
+    convertedTeacher.teacherFullname = `${teacher.name} ${teacher.surname}`;
+    convertedTeacher.teacherName = teacher.name;
+    convertedTeacher.teacherSurname = teacher.surname;
+    convertedTeacher.teacherId = teacher.id;
+    convertedTeacher.sectionIds = [];
+    return convertedTeacher;
+  }
+
+  private convertToSchool = function(serverSchoolData : ServerSchoolData) : School {
     let school = new School();
     school.id = serverSchoolData.schoolId;
     school.email = serverSchoolData.contacts && serverSchoolData.contacts.email.length > 0 ? serverSchoolData.contacts.email[0] : "";
@@ -149,6 +190,11 @@ export class WebService {
     school.malattia = school.assenze.indexOf(ServerSchoolData.ILLNESS_VALUE) >= 0;
     school.familiari = school.assenze.indexOf(ServerSchoolData.FAMILY_MOTIVATION_VALUE) >= 0;
     school.assenze = school.assenze.filter(absenceType => absenceType !== ServerSchoolData.ILLNESS_VALUE && absenceType !== ServerSchoolData.FAMILY_MOTIVATION_VALUE);
+    school.groups = [];
+    
+    // DA TOGLIERE
+    school.teachers = [];
+    
     //school.buses = serverSchoolData.buses;
 
     
@@ -157,12 +203,10 @@ export class WebService {
     // kids: Kid[];
     // teachers: Teacher[];
     // buses: Bus[];
-    // assenze:string[];
-    // malattie: string[];
+    
     // groups: Group[];
     // fermate : string[];
-    // malattia : boolean;
-    // familiari : boolean;
+    
 
   // MODELLO SERVER
   // private Timing regularTiming, anticipoTiming, posticipoTiming;
@@ -178,7 +222,7 @@ export class WebService {
     return school;
   }
 
-  private convertToServerStructure = function (school : School) : ServerSchoolData {
+  private convertToServerSchool = function (school : School) : ServerSchoolData {
     let convertedSchool = new ServerSchoolData();
     convertedSchool.schoolId = school.id;
     convertedSchool.name = school.name;
@@ -216,6 +260,8 @@ export class WebService {
         convertedSchool.frequentIllnesses.push({typeId: absence, type: absence});
       });
     }
+
+    
     return convertedSchool;
 
 

@@ -15,11 +15,13 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
+import it.smartcommunitylab.ungiorno.diary.model.DiaryKid;
 import it.smartcommunitylab.ungiorno.diary.model.DiaryTeacher;
 import it.smartcommunitylab.ungiorno.model.AuthPerson;
 import it.smartcommunitylab.ungiorno.model.KidProfile;
 import it.smartcommunitylab.ungiorno.model.Parent;
 import it.smartcommunitylab.ungiorno.model.SchoolProfile;
+import it.smartcommunitylab.ungiorno.model.SectionDef;
 import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.test.TestConfig;
 
@@ -278,6 +280,72 @@ public class RepositoryManagerTest {
 		q.addCriteria(new Criteria("username").is(username));
 		Teacher tempParent = mongo.findOne(q, Teacher.class);
 		Assert.assertEquals(firstName, tempParent.getTeacherName());
+	}
+
+	@Test
+	public void test_updateDiaryKidPersonsEmptyDiary() {
+		String appId = "TEST";
+		String schoolId = "SCHOOL_ID";
+		KidProfile firstKid = new KidProfile();
+		String kidId = "KID1";
+		firstKid.setKidId(kidId);
+		String fullName = "NAME";
+		firstKid.setFullName(fullName);
+		String lastName = "LNAME";
+		firstKid.setLastName(lastName);
+		String firstName = "FNAME";
+		firstKid.setFirstName(firstName);
+		firstKid.setAppId(appId);
+		firstKid.setSchoolId(schoolId);
+		String personId = "personid1";
+		AuthPerson personFirst = new AuthPerson(personId, "parent", true);
+		List<AuthPerson> persons = new ArrayList<AuthPerson>();
+		persons.add(personFirst);
+		firstKid.setPersons(persons);
+		SectionDef section = new SectionDef();
+		String sectionId = "sectionid";
+		section.setSectionId(sectionId);
+		String title = "title";
+		section.setTitle(title);
+		firstKid.setSection(section);
+		mongo.insert(firstKid);
+
+		Teacher firstTeach = new Teacher();
+		firstTeach.setAppId(appId);
+		firstTeach.setSchoolId(schoolId);
+		List<String> sectionIds = new ArrayList<String>();
+		sectionIds.add("sectionid");
+		firstTeach.setSectionIds(sectionIds);
+		String teacherId = "teacherId";
+		firstTeach.setTeacherId(teacherId);
+		String username = "username";
+		firstTeach.setUsername(username);
+		String teacherFullname = "teacherFullname";
+		firstTeach.setTeacherFullname(teacherFullname);
+		mongo.insert(firstTeach);
+		repoManager.updateDiaryKidPersons(appId, schoolId);
+
+		Query q = kidQuery(appId, schoolId, kidId);
+		DiaryKid diaryKid = mongo.findOne(q, DiaryKid.class);
+		Assert.assertEquals(firstName, diaryKid.getFirstName());
+	}
+
+	@Test
+	public void test_updateDiaryKidPersonsNonEmptyDiary() {
+		this.test_updateDiaryKidPersonsEmptyDiary();
+		String appId = "TEST";
+		String schoolId = "SCHOOL_ID";
+		String personId = "personid2";
+		AuthPerson personFirst = new AuthPerson(personId, "other", true);
+		List<AuthPerson> persons = new ArrayList<AuthPerson>();
+		persons.add(personFirst);
+		String kidId = "KID1";
+		Query q = kidQuery(appId, schoolId, kidId);
+		KidProfile kid = mongo.findOne(q, KidProfile.class);
+		kid.getPersons().add(personFirst);
+		mongo.save(kid);
+		repoManager.updateDiaryKidPersons(appId, schoolId);
+
 	}
 
 }

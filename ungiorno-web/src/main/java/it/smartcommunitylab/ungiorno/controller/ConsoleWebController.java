@@ -8,10 +8,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import it.smartcommunitylab.ungiorno.config.exception.ProfileNotFoundException;
 import it.smartcommunitylab.ungiorno.model.AppInfo;
+import it.smartcommunitylab.ungiorno.model.KidProfile;
 import it.smartcommunitylab.ungiorno.model.Response;
 import it.smartcommunitylab.ungiorno.model.School;
 import it.smartcommunitylab.ungiorno.model.SchoolProfile;
@@ -58,6 +60,46 @@ public class ConsoleWebController {
             @PathVariable String schoolId) {
         List<Teacher> teacherProfiles = storage.getTeachers(appId, schoolId);
         return new Response<>(teacherProfiles);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/consoleweb/{appId}/{schoolId}/kid")
+    public @ResponseBody Response<List<KidProfile>> getKidProfiles(@PathVariable String appId,
+            @PathVariable String schoolId) throws ProfileNotFoundException {
+
+        List<KidProfile> profiles = storage.getKidProfilesBySchool(appId, schoolId);
+        return new Response<>(profiles);
+    }
+
+    @CrossOrigin
+    @RequestMapping(method = RequestMethod.POST, value = "/consoleweb/{appId}/{schoolId}/kid")
+    public @ResponseBody Response<KidProfile> saveKidProfile(@PathVariable String appId,
+            @PathVariable String schoolId, @RequestBody KidProfile kid) {
+        kid.setAppId(appId);
+        kid.setSchoolId(schoolId);
+        List<KidProfile> kidProfiles = storage.getKidProfilesBySchool(appId, schoolId);
+        KidProfile selectedKidProfile = storage.getKidProfile(appId, schoolId, kid.getKidId());
+        if (selectedKidProfile == null) {
+            kidProfiles.add(kid);
+        } else {
+            int profileIndex = kidProfiles.indexOf(selectedKidProfile);
+            kidProfiles.remove(profileIndex);
+            kidProfiles.add(profileIndex, kid);
+        }
+
+        storage.updateChildren(appId, schoolId, kidProfiles);
+        return new Response<>(kid);
+    }
+
+    @CrossOrigin
+    @RequestMapping(method = RequestMethod.DELETE,
+            value = "/consoleweb/{appId}/{schoolId}/kid/{kidId}")
+    public Response<KidProfile> removeKidProfile(@PathVariable String appId,
+            @PathVariable String schoolId, @PathVariable String kidId) {
+        List<KidProfile> kidProfiles = storage.getKidProfilesBySchool(appId, schoolId);
+        KidProfile kidToRemove = storage.getKidProfile(appId, schoolId, kidId);
+        kidProfiles.remove(kidToRemove);
+        storage.updateChildren(appId, schoolId, kidProfiles);
+        return new Response<>(kidToRemove);
     }
 
     @CrossOrigin

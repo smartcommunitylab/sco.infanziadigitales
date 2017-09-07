@@ -200,6 +200,8 @@ public class RepositoryManager {
     }
 
     /**
+     * Updates profiles of kids
+     * 
      * @param appId
      * @param schoolId
      * @param children
@@ -450,6 +452,12 @@ public class RepositoryManager {
         q = appQuery(appId);
         q.addCriteria(new Criteria("persons")
                 .elemMatch(new Criteria("personId").is(p.getPersonId()).and("parent").is(true)));
+        return template.find(q, KidProfile.class);
+    }
+
+    public List<KidProfile> getKidProfilesBySchool(String appId, String schoolId) {
+        Query q = appQuery(appId);
+        q.addCriteria(new Criteria("schoolId").is(schoolId));
         return template.find(q, KidProfile.class);
     }
 

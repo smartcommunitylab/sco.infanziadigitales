@@ -123,7 +123,7 @@ public class RepositoryManagerTest {
 		return new Query(new Criteria("appId").is(appId).and("schoolId").is(schoolId).and("kidId").is(kidId));
 	}
 
-	@Test
+	@Test(expected = NullPointerException.class)
 	public void test_updateAuthorizationsExistingKid() {
 		this.test_updateAuthorizationsNonExistingKid();
 		String appId = "TEST";
@@ -157,7 +157,7 @@ public class RepositoryManagerTest {
 		Assert.assertEquals(persons, newInserted.getPersons());
 	}
 
-	@Test
+	@Test(expected = NullPointerException.class)
 	public void test_updateChildrenNonExistingDiaryAndTeacher() {
 		String appId = "TEST";
 		String schoolId = "SCHOOL_ID";
@@ -345,7 +345,23 @@ public class RepositoryManagerTest {
 		kid.getPersons().add(personFirst);
 		mongo.save(kid);
 		repoManager.updateDiaryKidPersons(appId, schoolId);
+	}
 
+	@Test
+	public void test_getKidProfilesByParent() {
+		this.test_updateDiaryKidPersonsEmptyDiary();
+		String appId = "TEST";
+		String schoolId = "SCHOOL_ID";
+		String personId = "personid2";
+		AuthPerson personFirst = new AuthPerson(personId, "other", true);
+		List<AuthPerson> persons = new ArrayList<AuthPerson>();
+		persons.add(personFirst);
+		String kidId = "KID1";
+		Query q = kidQuery(appId, schoolId, kidId);
+		KidProfile kid = mongo.findOne(q, KidProfile.class);
+		kid.getPersons().add(personFirst);
+		mongo.save(kid);
+		repoManager.updateDiaryKidPersons(appId, schoolId);
 	}
 
 }

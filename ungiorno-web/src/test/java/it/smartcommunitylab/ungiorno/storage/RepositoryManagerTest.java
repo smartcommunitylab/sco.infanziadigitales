@@ -18,7 +18,9 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import it.smartcommunitylab.ungiorno.diary.model.DiaryTeacher;
 import it.smartcommunitylab.ungiorno.model.AuthPerson;
 import it.smartcommunitylab.ungiorno.model.KidProfile;
+import it.smartcommunitylab.ungiorno.model.Parent;
 import it.smartcommunitylab.ungiorno.model.SchoolProfile;
+import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.test.TestConfig;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -229,4 +231,53 @@ public class RepositoryManagerTest {
 		// Assert.assertEquals(kidId, newInserted.getKidId());
 
 	}
+
+	@Test
+	public void test_updateParents() {
+		String appId = "TEST";
+		String schoolId = "SCHOOL_ID";
+		List<Parent> parents = new ArrayList<Parent>();
+		Parent firstParent = new Parent();
+		firstParent.setAppId(appId);
+		String firstName = "firstname";
+		firstParent.setFirstName(firstName);
+		String lastName = "lastname";
+		firstParent.setLastName(lastName);
+		String fullName = "fullName";
+		firstParent.setFullName(fullName);
+		String username = "username";
+		firstParent.setUsername(username);
+		parents.add(firstParent);
+		repoManager.updateParents(appId, schoolId, parents);
+
+		Query q = new Query(new Criteria("appId").is(appId));
+		q.addCriteria(new Criteria("username").is(username));
+		Parent tempParent = mongo.findOne(q, Parent.class);
+		Assert.assertEquals(firstName, tempParent.getFirstName());
+	}
+
+	@Test
+	public void test_updateTeachers() {
+		String appId = "TEST";
+		String schoolId = "SCHOOL_ID";
+		List<Teacher> teachers = new ArrayList<Teacher>();
+		Teacher firstTeacher = new Teacher();
+		firstTeacher.setAppId(appId);
+		String firstName = "firstname";
+		firstTeacher.setTeacherName(firstName);
+		String lastName = "lastname";
+		firstTeacher.setTeacherSurname(lastName);
+		String fullName = "fullName";
+		firstTeacher.setTeacherFullname(fullName);
+		String username = "username";
+		firstTeacher.setUsername(username);
+		teachers.add(firstTeacher);
+		repoManager.updateTeachers(appId, schoolId, teachers);
+
+		Query q = new Query(new Criteria("appId").is(appId));
+		q.addCriteria(new Criteria("username").is(username));
+		Teacher tempParent = mongo.findOne(q, Teacher.class);
+		Assert.assertEquals(firstName, tempParent.getTeacherName());
+	}
+
 }

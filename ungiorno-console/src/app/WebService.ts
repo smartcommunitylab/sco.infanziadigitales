@@ -4,10 +4,14 @@ import { Bus } from './Classes/bus';
 import { Parent } from './Classes/parent';
 import { Teacher } from './Classes/teacher';
 import { Kid } from "./Classes/kid";
-import { SchoolContacts} from "./Classes/schoolContacts"
+import { SchoolContacts } from "./Classes/schoolContacts"
 
 import { ServerSchoolData } from './Classes/serverModel/serverSchoolData';
-import { ServerTeacherData} from './Classes/serverModel/serverTeacherData';
+import { ServerTeacherData } from './Classes/serverModel/serverTeacherData';
+import { ServerKidData } from './Classes/serverModel/serverKidData';
+import { AuthPerson } from './Classes/serverModel/authPerson';
+import { KidServices } from './Classes/serverModel/kidServices';
+import { Allergy } from './Classes/serverModel/allergy';
 
 import { Injectable }    from '@angular/core';
 import { Http, Headers } from '@angular/http';
@@ -53,6 +57,10 @@ export class WebService {
       return tmp.kids.find(x=>x.id.toLowerCase() == kidId.toLowerCase());
     });
   }
+
+  getKids(schoolId: string): Promise<Kid[]> {
+    return this.http.get(`http://localhost:8080/ungiorno2/consoleweb/${this.appId}/${schoolId}/kid`).toPromise().then(response => response.json().data.map(serverKid => this.convertToKid(serverKid))).catch(this.handleError);
+  }
     
   private handleError(error: any): Promise<any> {
     console.error('An error occurred', error);
@@ -66,6 +74,13 @@ export class WebService {
   ).catch(this.handleError);
   }
 
+  private addKid(schoolId: string, kidProfile: Kid) : Promise<Kid> {
+    let convertedKid : ServerKidData = this.convertToServerKid(kidProfile);
+    return this.http.post(`http://localhost:8080/ungiorno2/consoleweb/${this.appId}/${schoolId}/kid`,convertedKid).toPromise().then(
+      response => this.convertToKid(response.json().data)
+  ).catch(this.handleError);
+  }
+
   getTeachers(schoolId: string) : Promise<Teacher[]> {
     return this.http.get(`http://localhost:8080/ungiorno2/consoleweb/${this.appId}/${schoolId}/teacher`).toPromise().then(
       response => response.json().data.map(serverTeacher => this.convertToTeacher(serverTeacher))
@@ -76,6 +91,12 @@ export class WebService {
   private removeTeacher(schoolId : string, teacherId : string) : Promise<Teacher> {
     return this.http.delete(`http://localhost:8080/ungiorno2/consoleweb/${this.appId}/${schoolId}/teacher/${teacherId}`).toPromise().then(
       response => this.convertToTeacher(response.json().data)
+  ).catch(this.handleError);
+  }
+
+  private removeKid(schoolId : string, kidId : string) : Promise<Kid> {
+    return this.http.delete(`http://localhost:8080/ungiorno2/consoleweb/${this.appId}/${schoolId}/kid/${kidId}`).toPromise().then(
+      response => this.convertToKid(response.json().data)
   ).catch(this.handleError);
   }
 
@@ -102,10 +123,11 @@ export class WebService {
       });
     }
     else if(item instanceof Kid) {
-      return this.getSchool(schoolId).then(tmp => {
-        tmp.kids.push(item); 
-        return this.http.put(url, JSON.stringify(tmp), {headers: this.headers}).toPromise().then(() => tmp).catch(this.handleError);
-      });
+      // return this.getSchool(schoolId).then(tmp => {
+      //   tmp.kids.push(item); 
+      //   return this.http.put(url, JSON.stringify(tmp), {headers: this.headers}).toPromise().then(() => tmp).catch(this.handleError);
+      // });
+      return this.addKid(schoolId, item);
     }
     else if(item instanceof Service) {
       return this.getSchool(schoolId).then(tmp => {
@@ -140,11 +162,12 @@ export class WebService {
       return this.removeTeacher(schoolId,item.id);
     }
     else if(item instanceof Kid) {
-      return this.getSchool(schoolId).then(tmp => {
-        var pos = tmp.kids.findIndex(x => x.id === item.id)
-        tmp.kids.splice(pos, 1); 
-        return this.http.put(url, JSON.stringify(tmp), {headers: this.headers}).toPromise().then(() => tmp).catch(this.handleError);
-      });
+      // return this.getSchool(schoolId).then(tmp => {
+      //   var pos = tmp.kids.findIndex(x => x.id === item.id)
+      //   tmp.kids.splice(pos, 1); 
+      //   return this.http.put(url, JSON.stringify(tmp), {headers: this.headers}).toPromise().then(() => tmp).catch(this.handleError);
+      // });
+      return this.removeKid(schoolId,item.id);
     }
   }
 
@@ -174,6 +197,26 @@ export class WebService {
     return convertedTeacher;
   }
 
+  private convertToKid = function(serverKidData : ServerKidData) : Kid {
+    let allergies  = serverKidData.allergies ? serverKidData.allergies.map(allergy => allergy.name) : null;
+    let convertedKid = new Kid(serverKidData.kidId,serverKidData.firstName,serverKidData.lastName,null,null,serverKidData.image,null,null,null,null,null,null,allergies,null,null);
+    return convertedKid;
+  }
+
+  private convertToServerKid = function(kid : Kid) : ServerKidData {
+    let convertedKid = new ServerKidData();
+    convertedKid.kidId = kid.id;
+    convertedKid.firstName = kid.name;
+    convertedKid.lastName = kid.surname;
+    convertedKid.persons = [];
+    convertedKid.services = new KidServices();
+
+    convertedKid.allergies = kid.allergie.map(allergy => new Allergy(allergy,allergy));
+
+
+    return convertedKid;
+  }
+ 
   private convertToSchool = function(serverSchoolData : ServerSchoolData) : School {
     let school = new School();
     school.id = serverSchoolData.schoolId;
@@ -190,11 +233,12 @@ export class WebService {
     school.malattia = school.assenze.indexOf(ServerSchoolData.ILLNESS_VALUE) >= 0;
     school.familiari = school.assenze.indexOf(ServerSchoolData.FAMILY_MOTIVATION_VALUE) >= 0;
     school.assenze = school.assenze.filter(absenceType => absenceType !== ServerSchoolData.ILLNESS_VALUE && absenceType !== ServerSchoolData.FAMILY_MOTIVATION_VALUE);
-    school.groups = [];
+    
     
     // DA TOGLIERE
     school.teachers = [];
-    
+    school.servizi = [];
+    school.groups = [];
     //school.buses = serverSchoolData.buses;
 
     

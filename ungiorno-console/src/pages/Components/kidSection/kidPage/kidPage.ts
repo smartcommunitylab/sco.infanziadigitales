@@ -105,7 +105,7 @@ export class KidPage implements OnInit{
         ) { }
 
     ngOnInit(): void {    
-        this.thisKid = JSON.parse(JSON.stringify(this.selectedKid)) as Kid;
+        //this.thisKid = JSON.parse(JSON.stringify(this.selectedKid)) as Kid;
         // Object.assign(this.thisKid, this.selectedKid)
         // this.thisKid.allergie = new Array();
         // this.selectedKid.allergie.forEach(x => this.thisKid.allergie.push(x));
@@ -116,6 +116,7 @@ export class KidPage implements OnInit{
         // this.thisKid.services = new Array();
         // this.selectedKid.services.forEach(x => this.thisKid.services.push(x));
 
+        this.thisKid = this.selectedKid;
         this.selectedKidGroups = this.selectedSchool.groups.filter(x => x.kids.findIndex(d => d.toLowerCase() === this.selectedKid.id.toLowerCase()) >= 0);
 
         this.isNew = this.thisKid.id == ''; 
@@ -159,7 +160,6 @@ export class KidPage implements OnInit{
     }
 
     onInfoSave() {
-        this.webService.update(this.selectedSchool);
         this.editInfo = false;
         if(this.isNew) {
             if(this.selectedSchool.kids.findIndex(x => x.id.toLowerCase() === this.thisKid.id.toLowerCase()) >= 0) {
@@ -178,8 +178,14 @@ export class KidPage implements OnInit{
                 this.selectedSchool.kids.push(this.selectedKid);              
             }
         }
-        this.webService.update(this.selectedSchool);
-        this.saveClick();
+        
+        // FIX for strange issue
+        this.thisKid.services = this.thisKid.services.filter(service => service != undefined);
+        this.webService.add(this.selectedSchool.id,this.thisKid);
+
+        // TO IMPROVE
+        this.isNew = false;
+        //this.saveClick();
     }
 
     onInfoCancel() {
@@ -228,9 +234,9 @@ export class KidPage implements OnInit{
     }
 
     onAllergiaSave() {
-        this.webService.update(this.selectedSchool);
         this.editAllergia = false;
-        this.saveClick();
+        this.webService.add(this.selectedSchool.id,this.thisKid);
+       // this.saveClick();
     }
 
     onAllergiaCancel() {

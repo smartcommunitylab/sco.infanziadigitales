@@ -35,7 +35,7 @@ import { NavController, AlertController, ModalController } from 'ionic-angular';
 
 export class Gruppi implements OnInit {
   @Input() selectedSchool : School;
-  thisSchool : School = new School();
+  //thisSchool : School = new School();
 
   toDeleteGroup : Group = new Group('', [], false, []);
 
@@ -46,15 +46,15 @@ export class Gruppi implements OnInit {
   constructor(private webService : WebService, public alertCtrl: AlertController, public modalCtrl: ModalController) {}
 
   ngOnInit(): void {
-    Object.assign(this.thisSchool, this.selectedSchool);
+    //Object.assign(this.thisSchool, this.selectedSchool);
     this.filteredGroups = this.selectedSchool.groups;
     this.onFiltroGroupChange(this.filtro);
   }
 
   showGroupModal(item: Group, isNew : boolean) {
-    let modal = this.modalCtrl.create(GroupModal, {'group' : item, 'school' : this.thisSchool, 'isNew' : isNew}, {enableBackdropDismiss: false, showBackdrop: false});
+    let modal = this.modalCtrl.create(GroupModal, {'group' : item, 'school' : this.selectedSchool, 'isNew' : isNew}, {enableBackdropDismiss: false, showBackdrop: false});
     modal.present().then(x=>{
-      Object.assign(this.selectedSchool, this.thisSchool);
+      //Object.assign(this.selectedSchool, this.thisSchool);
     });
   }
 
@@ -73,8 +73,8 @@ export class Gruppi implements OnInit {
         {
           text: 'OK',
           handler: () => {
-            this.thisSchool.groups.splice(this.thisSchool.groups.findIndex(tmp => tmp.name.toLowerCase() === item.name.toLowerCase()), 1);
-            Object.assign(this.selectedSchool, this.thisSchool);
+            this.selectedSchool.groups.splice(this.selectedSchool.groups.findIndex(tmp => tmp.name.toLowerCase() === item.name.toLowerCase()), 1);
+            //Object.assign(this.selectedSchool, this.thisSchool);
             this.webService.update(this.selectedSchool);
           }
         }

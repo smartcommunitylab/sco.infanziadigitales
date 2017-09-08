@@ -200,6 +200,11 @@ export class WebService {
   private convertToKid = function(serverKidData : ServerKidData) : Kid {
     let allergies  = serverKidData.allergies ? serverKidData.allergies.map(allergy => allergy.name) : null;
     let convertedKid = new Kid(serverKidData.kidId,serverKidData.firstName,serverKidData.lastName,null,null,serverKidData.image,null,null,null,null,null,null,allergies,null,null);
+    let parents = serverKidData.persons.filter(person => person.parent);
+    if(parents.length > 0) {
+      convertedKid.parent1 = this.convertToParent(parents[0]);
+      convertedKid.parent2 = parents.length == 2 ? this.convertToParent(parents[1]) : null;
+    }
     return convertedKid;
   }
 
@@ -212,9 +217,39 @@ export class WebService {
     convertedKid.services = new KidServices();
 
     convertedKid.allergies = kid.allergie.map(allergy => new Allergy(allergy,allergy));
-
+    if(kid.parent1) {
+     convertedKid.persons.push(this.convertToAuthPerson(kid.parent1));
+    }
+    if(kid.parent2) {
+      convertedKid.persons.push(this.convertToAuthPerson(kid.parent2));
+     }
 
     return convertedKid;
+  }
+
+  private convertToAuthPerson = function(parent : Parent) : AuthPerson {
+    let convertedParent = new AuthPerson();
+    convertedParent.personId = parent.id;
+    convertedParent.email.push(parent.email);
+    if(parent.cellphone) {
+      convertedParent.phone.push(parent.cellphone);
+    }
+    if(parent.telephone) {
+      convertedParent.phone.push(parent.telephone);
+    }
+    convertedParent.firstName = parent.name;
+    convertedParent.lastName =  parent.surname;
+    convertedParent.fullName = `${convertedParent.firstName} ${convertedParent.lastName}`;
+    convertedParent.parent = true;
+    return convertedParent;
+  }
+
+  private convertToParent = function(authPerson : AuthPerson) : Parent {
+    let cellphone = authPerson.phone ? authPerson.phone[0] : null;
+    let email = authPerson.email ? authPerson.email[0] : null;
+    let parent = new Parent(authPerson.personId,authPerson.firstName,authPerson.lastName,cellphone, null, email);
+
+    return parent;
   }
  
   private convertToSchool = function(serverSchoolData : ServerSchoolData) : School {

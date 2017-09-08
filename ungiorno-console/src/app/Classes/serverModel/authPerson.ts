@@ -13,6 +13,7 @@ export class AuthPerson {
     _default: boolean;
 
     constructor() {
-
+        this.phone = [];
+        this.email = [];
     }
 }

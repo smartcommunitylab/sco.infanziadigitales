@@ -510,8 +510,18 @@ public class RepositoryManagerTest {
 		c.set(Calendar.MINUTE, 0);
 		c.set(Calendar.SECOND, 0);
 		c.set(Calendar.MILLISECOND, 0);
-		System.out.println(c.getTimeInMillis());
 		return c.getTimeInMillis();
+	}
+
+	private Date timestampToDate2(long timestamp) {
+		timestamp = timestamp == 0 ? System.currentTimeMillis() : timestamp;
+		Calendar c = Calendar.getInstance();
+		c.setTimeInMillis(timestamp);
+		c.set(Calendar.HOUR_OF_DAY, 0);
+		c.set(Calendar.MINUTE, 0);
+		c.set(Calendar.SECOND, 0);
+		c.set(Calendar.MILLISECOND, 0);
+		return c.getTime();
 	}
 
 	@Test
@@ -526,7 +536,6 @@ public class RepositoryManagerTest {
 		Date date = new Date();
 		long temp = timestampToDate(date.getTime());
 		stop.setDate(temp);
-		System.out.println(temp);
 		mongo.save(stop);
 
 		KidConfig kConfig = new KidConfig();
@@ -556,4 +565,74 @@ public class RepositoryManagerTest {
 		Assert.assertEquals(0, kidCalAss.size());
 	}
 
+	@Test
+	public void test_saveAbsence() {
+		String appId = "TEST";
+		String schoolId = "SCHOOL_ID";
+		String kidId = "kidId";
+		Date date = new Date();
+		long temp = timestampToDate(date.getTime());
+		long tempTo = date.getTime() + 1 * 24 * 60 * 60 * 1000;
+		System.out.println(timestampToDate2(tempTo));
+
+		KidCalAssenza kalAssenza = new KidCalAssenza();
+		kalAssenza.setAppId(appId);
+		kalAssenza.setSchoolId(schoolId);
+		kalAssenza.setKidId(kidId);
+		kalAssenza.setDateFrom(temp);
+		kalAssenza.setDateTo(tempTo);
+		mongo.save(kalAssenza);
+
+		KidCalFermata stop = new KidCalFermata();
+		stop.setAppId(appId);
+		stop.setSchoolId(schoolId);
+		stop.setKidId(kidId);
+		stop.setDate(temp);
+		mongo.save(stop);
+
+		KidCalRitiro kalRitiro = new KidCalRitiro();
+		kalRitiro.setAppId(appId);
+		kalRitiro.setSchoolId(schoolId);
+		kalRitiro.setKidId(kidId);
+		kalRitiro.setDate(temp);
+		mongo.save(kalRitiro);
+
+		repoManager.saveAbsence(kalAssenza);
+		Query q = kidQuery(stop.getAppId(), stop.getSchoolId(), stop.getKidId());
+		q.addCriteria(new Criteria("date").is(stop.getDate()));
+		List<KidCalFermata> kidCalFer = mongo.find(q, KidCalFermata.class);
+		List<KidCalRitiro> kidCalRit = mongo.find(q, KidCalRitiro.class);
+
+		q = kidQuery(kalAssenza.getAppId(), kalAssenza.getSchoolId(), kalAssenza.getKidId());
+		q.addCriteria(new Criteria().andOperator(new Criteria("dateFrom").gte(kalAssenza.getDateFrom())));
+		List<KidCalAssenza> kidCalAssenza = mongo.find(q, KidCalAssenza.class);
+
+		Assert.assertEquals(0, kidCalFer.size());
+		Assert.assertEquals(0, kidCalRit.size());
+		Assert.assertEquals(2, kidCalAssenza.size());
+	}
+
+	@Test
+	public void test_saveReturn() {
+		String appId = "TEST";
+		String schoolId = "SCHOOL_ID";
+		String kidId = "kidId";
+		Date date = new Date();
+		long temp = timestampToDate(date.getTime());
+
+		KidCalRitiro kalRitiro = new KidCalRitiro();
+		kalRitiro.setAppId(appId);
+		kalRitiro.setSchoolId(schoolId);
+		kalRitiro.setKidId(kidId);
+		kalRitiro.setDate(temp);
+		kalRitiro.setNote("TEST_NOTE");
+		mongo.save(kalRitiro);
+
+		repoManager.saveReturn(kalRitiro);
+		Query q = kidQuery(appId, schoolId, kidId);
+		q.addCriteria(new Criteria().andOperator(new Criteria("date").gte(temp),
+				new Criteria("date").lt(temp + 1000 * 60 * 60 * 24)));
+		List<KidCalRitiro> kalR = mongo.find(q, KidCalRitiro.class);
+		Assert.assertEquals("TEST_NOTE", kalR.get(0).getNote());
+	}
 }

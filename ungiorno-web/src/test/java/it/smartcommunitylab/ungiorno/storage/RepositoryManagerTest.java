@@ -15,9 +15,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
+import it.smartcommunitylab.ungiorno.config.exception.ProfileNotFoundException;
 import it.smartcommunitylab.ungiorno.diary.model.DiaryKid;
 import it.smartcommunitylab.ungiorno.diary.model.DiaryTeacher;
 import it.smartcommunitylab.ungiorno.model.AuthPerson;
+import it.smartcommunitylab.ungiorno.model.CalendarItem;
+import it.smartcommunitylab.ungiorno.model.KidConfig;
 import it.smartcommunitylab.ungiorno.model.KidProfile;
 import it.smartcommunitylab.ungiorno.model.Parent;
 import it.smartcommunitylab.ungiorno.model.SchoolProfile;
@@ -348,20 +351,119 @@ public class RepositoryManagerTest {
 	}
 
 	@Test
-	public void test_getKidProfilesByParent() {
-		this.test_updateDiaryKidPersonsEmptyDiary();
+	public void test_getCalendar() {
 		String appId = "TEST";
 		String schoolId = "SCHOOL_ID";
-		String personId = "personid2";
-		AuthPerson personFirst = new AuthPerson(personId, "other", true);
-		List<AuthPerson> persons = new ArrayList<AuthPerson>();
-		persons.add(personFirst);
 		String kidId = "KID1";
-		Query q = kidQuery(appId, schoolId, kidId);
-		KidProfile kid = mongo.findOne(q, KidProfile.class);
-		kid.getPersons().add(personFirst);
-		mongo.save(kid);
-		repoManager.updateDiaryKidPersons(appId, schoolId);
+
+		List<CalendarItem> result = repoManager.getCalendar(appId, schoolId, kidId, 1443528909, 1443528909);
+		Assert.assertEquals("Gita sul pasubio", result.get(0).getTitle());
+	}
+
+	@Test
+	public void test_saveConfig() {
+		String appId = "TEST";
+		String schoolId = "SCHOOL_ID";
+		String kidId = "KID1";
+		KidConfig kidc = new KidConfig();
+		kidc.setAppId(appId);
+		kidc.setSchoolId(schoolId);
+		kidc.setKidId(kidId);
+		String _id = "_id";
+		kidc.set_id(_id);
+		mongo.save(kidc);
+		KidConfig kidToBeUpdated = new KidConfig();
+		kidToBeUpdated.setKidId(kidId);
+		kidToBeUpdated.setAppId(appId);
+		kidToBeUpdated.setSchoolId(schoolId);
+
+		KidConfig result = repoManager.saveConfig(kidToBeUpdated);
+		Assert.assertEquals(_id, result.get_id());
+	}
+
+	@Test(expected = ProfileNotFoundException.class)
+	public void test_getKidProfilesByParentNonExistingParent() throws ProfileNotFoundException {
+		String appId = "TEST";
+		String username = "USERNAME";
+
+		repoManager.getKidProfilesByParent(appId, username);
+	}
+
+	@Test
+	public void test_getKidProfilesByParent() throws ProfileNotFoundException {
+		String appId = "TEST";
+		String username = "USERNAME";
+		Parent p = new Parent();
+		String personId = "personid";
+		p.setPersonId(personId);
+		p.setUsername(username);
+		p.setAppId(appId);
+		mongo.save(p);// create parent
+
+		KidProfile kidp = new KidProfile();
+		kidp.setAppId(appId);
+		AuthPerson person = new AuthPerson();
+		person.setParent(true);
+		String personId2 = "personid";
+		person.setPersonId(personId2);
+		List<AuthPerson> persons = new ArrayList<>();
+		persons.add(person);
+		kidp.setPersons(persons);
+		mongo.save(kidp);// create kid profile
+
+		List<KidProfile> r = repoManager.getKidProfilesByParent(appId, username);
+		Assert.assertEquals(personId2, r.get(0).getPersons().get(0).getPersonId());
+	}
+
+	@Test
+	public void test_getKidProfilesBySchool() {
+		String appId = "TEST";
+		String schoolId = "SCHOOL_ID";
+
+		KidProfile kidp = new KidProfile();
+		kidp.setAppId(appId);
+		kidp.setSchoolId(schoolId);
+		String kidId = "kidid";
+		kidp.setKidId(kidId);
+		String firstName = "firstName";
+		kidp.setFirstName(firstName);
+		mongo.save(kidp);// create kid profile
+
+		List<KidProfile> r = repoManager.getKidProfilesBySchool(appId, schoolId);
+		Assert.assertEquals(firstName, r.get(0).getFirstName());
+	}
+
+	@Test(expected = IndexOutOfBoundsException.class)
+	public void test_getKidProfilesByTeacher() {
+		String appId = "TEST";
+		String username = "USERNAME";
+		Teacher t = new Teacher();
+		t.setAppId(appId);
+		t.setUsername(username);
+		String teacherId = "teacherId";
+		t.setTeacherId(teacherId);
+		mongo.save(t);
+
+		KidProfile kidp = new KidProfile();
+		kidp.setAppId(appId);
+		String kidId = "kidid";
+		kidp.setKidId(kidId);
+		String firstName = "firstName";
+		kidp.setFirstName(firstName);
+		DiaryTeacher diaryTeacher = new DiaryTeacher();
+		diaryTeacher.setTeacherId(teacherId);
+		List<DiaryTeacher> diaryTeachers = new ArrayList<>();
+		diaryTeachers.add(diaryTeacher);
+		kidp.setDiaryTeachers(diaryTeachers);
+		mongo.save(kidp);// create kid profile
+
+		List<KidProfile> r = repoManager.getKidProfilesByTeacher(appId, username);
+		// it will return empty array since there is no teacherId in KidProfile Class
+		// q.addCriteria(new Criteria("teacherId").is(p.getTeacherId()));
+		// instead we have to check for the list of teachers
+
+		System.out.println(r);
+		Assert.assertEquals(teacherId, r.get(0).getDiaryTeachers().get(0).getTeacherId());
 	}
 
 }

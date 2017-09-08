@@ -1,6 +1,8 @@
 package it.smartcommunitylab.ungiorno.storage;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.Assert;
@@ -17,9 +19,14 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import it.smartcommunitylab.ungiorno.config.exception.ProfileNotFoundException;
 import it.smartcommunitylab.ungiorno.diary.model.DiaryKid;
+import it.smartcommunitylab.ungiorno.diary.model.DiaryKid.DiaryKidPerson;
+import it.smartcommunitylab.ungiorno.diary.model.DiaryKidProfile;
 import it.smartcommunitylab.ungiorno.diary.model.DiaryTeacher;
 import it.smartcommunitylab.ungiorno.model.AuthPerson;
 import it.smartcommunitylab.ungiorno.model.CalendarItem;
+import it.smartcommunitylab.ungiorno.model.KidCalAssenza;
+import it.smartcommunitylab.ungiorno.model.KidCalFermata;
+import it.smartcommunitylab.ungiorno.model.KidCalRitiro;
 import it.smartcommunitylab.ungiorno.model.KidConfig;
 import it.smartcommunitylab.ungiorno.model.KidProfile;
 import it.smartcommunitylab.ungiorno.model.Parent;
@@ -462,8 +469,91 @@ public class RepositoryManagerTest {
 		// q.addCriteria(new Criteria("teacherId").is(p.getTeacherId()));
 		// instead we have to check for the list of teachers
 
-		System.out.println(r);
 		Assert.assertEquals(teacherId, r.get(0).getDiaryTeachers().get(0).getTeacherId());
+	}
+
+	@Test
+	public void test_getDiaryKidProfilesByAuthId() {
+		String appId = "TEST";
+		String schoolId = "SCHOOL_ID";
+		String authId = "authId";
+		boolean isTeacher = false;
+
+		DiaryKid dkid = new DiaryKid();
+		dkid.setAppId(appId);
+		dkid.setSchoolId(schoolId);
+		String kidid = "kidId";
+		dkid.setKidId(kidid);
+		List<DiaryKidPerson> dkpAll = new ArrayList<>();
+		DiaryKidPerson dkp = new DiaryKidPerson();
+		String firstName = "firstName";
+		dkp.setFirstName(firstName);
+		String personId = authId;
+		dkp.setPersonId(personId);
+		dkp.setParent(true);
+		dkp.setAuthorized(true);
+		dkpAll.add(dkp);
+		dkid.setPersons(dkpAll);
+
+		mongo.save(dkid);// create kid profile
+
+		List<DiaryKidProfile> r = repoManager.getDiaryKidProfilesByAuthId(appId, schoolId, authId, isTeacher);
+		System.out.println(r);
+		Assert.assertEquals(kidid, r.get(0).getKidId());
+	}
+
+	private long timestampToDate(long timestamp) {
+		timestamp = timestamp == 0 ? System.currentTimeMillis() : timestamp;
+		Calendar c = Calendar.getInstance();
+		c.setTimeInMillis(timestamp);
+		c.set(Calendar.HOUR_OF_DAY, 0);
+		c.set(Calendar.MINUTE, 0);
+		c.set(Calendar.SECOND, 0);
+		c.set(Calendar.MILLISECOND, 0);
+		System.out.println(c.getTimeInMillis());
+		return c.getTimeInMillis();
+	}
+
+	@Test
+	public void test_saveStop() {
+		String appId = "TEST";
+		String schoolId = "SCHOOL_ID";
+		KidCalFermata stop = new KidCalFermata();
+		stop.setAppId(appId);
+		stop.setSchoolId(schoolId);
+		String kidId = "kidId";
+		stop.setKidId(kidId);
+		Date date = new Date();
+		long temp = timestampToDate(date.getTime());
+		stop.setDate(temp);
+		System.out.println(temp);
+		mongo.save(stop);
+
+		KidConfig kConfig = new KidConfig();
+		kConfig.setAppId(appId);
+		kConfig.setSchoolId(schoolId);
+		kConfig.setKidId(kidId);
+		mongo.save(kConfig);
+
+		KidCalRitiro kalRitiro = new KidCalRitiro();
+		kalRitiro.setAppId(appId);
+		kalRitiro.setSchoolId(schoolId);
+		kalRitiro.setKidId(kidId);
+		kalRitiro.setDate(temp);
+		mongo.save(kalRitiro);
+
+		KidCalAssenza kalAssenza = new KidCalAssenza();
+		kalAssenza.setAppId(appId);
+		kalAssenza.setSchoolId(schoolId);
+		kalAssenza.setKidId(kidId);
+		kalAssenza.setDateFrom(temp);
+		mongo.save(kalAssenza);
+
+		repoManager.saveStop(stop);
+		Query q = kidQuery(stop.getAppId(), stop.getSchoolId(), stop.getKidId());
+		q.addCriteria(new Criteria("dateFrom").is(stop.getDate()));
+		List<KidCalAssenza> kidCalAss = mongo.find(q, KidCalAssenza.class);
+		Assert.assertEquals(0, kidCalAss.size());
 	}
 
 }

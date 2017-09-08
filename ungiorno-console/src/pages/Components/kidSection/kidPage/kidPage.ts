@@ -236,7 +236,6 @@ export class KidPage implements OnInit{
     onAllergiaSave() {
         this.editAllergia = false;
         this.webService.add(this.selectedSchool.id,this.thisKid);
-       // this.saveClick();
     }
 
     onAllergiaCancel() {
@@ -337,9 +336,8 @@ export class KidPage implements OnInit{
     }
 
     onP1InfoSave() {
-        this.webService.update(this.selectedSchool);
         this.editP1Info = false;
-        this.saveClick();
+        this.webService.add(this.selectedSchool.id,this.thisKid);
     }
 
     onP1InfoCancel() {
@@ -359,9 +357,8 @@ export class KidPage implements OnInit{
     }
 
     onP1ContattiSave() {
-        this.webService.update(this.selectedSchool);
         this.editP1Contatti = false;
-        this.saveClick();
+        this.webService.add(this.selectedSchool.id,this.thisKid);
     }
 
     onP1ContattiCancel() {
@@ -382,9 +379,8 @@ export class KidPage implements OnInit{
     }
 
     onP2InfoSave() {
-        this.webService.update(this.selectedSchool);
         this.editP2Info = false;
-        this.saveClick();
+        this.webService.add(this.selectedSchool.id,this.thisKid);
     }
 
     onP2InfoCancel() {
@@ -404,9 +400,8 @@ export class KidPage implements OnInit{
     }
 
     onP2ContattiSave() {
-        this.webService.update(this.selectedSchool);
         this.editP2Contatti = false;
-        this.saveClick();
+        this.webService.add(this.selectedSchool.id,this.thisKid);
     }
 
     onP2ContattiCancel() {

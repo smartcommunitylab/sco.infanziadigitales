@@ -1,0 +1,4 @@
+users:
+ - username: admin
+   password: adminpwd
+   role: ADMIN

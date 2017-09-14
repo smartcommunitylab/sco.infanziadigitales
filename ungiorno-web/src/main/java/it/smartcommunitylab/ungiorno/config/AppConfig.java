@@ -45,7 +45,7 @@ import com.mongodb.MongoException;
 
 @Configuration
 @ComponentScan("it.smartcommunitylab.ungiorno")
-@PropertySource("classpath:app.properties")
+//@PropertySource("classpath:app.properties")
 @EnableWebMvc
 public class AppConfig extends WebMvcConfigurerAdapter {
 

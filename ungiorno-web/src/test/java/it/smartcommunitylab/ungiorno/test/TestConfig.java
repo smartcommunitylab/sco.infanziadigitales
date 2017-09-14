@@ -32,7 +32,7 @@ import com.mongodb.MongoException;
 @Configuration
 @ComponentScan(basePackages = {"it.smartcommunitylab.ungiorno.storage",
         "it.smartcommunitylab.ungiorno.usage"})
-@PropertySource("classpath:app.properties")
+//@PropertySource("classpath:app.properties")
 public class TestConfig {
 
     private String dbName = "ungiorno-test";

@@ -12,6 +12,7 @@ import { ServerKidData } from './Classes/serverModel/serverKidData';
 import { AuthPerson } from './Classes/serverModel/authPerson';
 import { KidServices } from './Classes/serverModel/kidServices';
 import { Allergy } from './Classes/serverModel/allergy';
+import { Delega } from './Classes/delega'
 
 import { Injectable }    from '@angular/core';
 import { Http, Headers } from '@angular/http';
@@ -205,6 +206,11 @@ export class WebService {
       convertedKid.parent1 = this.convertToParent(parents[0]);
       convertedKid.parent2 = parents.length == 2 ? this.convertToParent(parents[1]) : null;
     }
+
+    let deleghe = serverKidData.persons.filter(person => !person.parent);
+    if(deleghe.length > 0) {
+      deleghe.map(delega => this.convertToDelega(delega)).forEach(convertedDelega => convertedKid.deleghe.push(convertedDelega));
+    }
     return convertedKid;
   }
 
@@ -222,6 +228,10 @@ export class WebService {
     }
     if(kid.parent2) {
       convertedKid.persons.push(this.convertToAuthPerson(kid.parent2));
+     }
+
+     if(kid.deleghe) {
+       kid.deleghe.forEach(delega => convertedKid.persons.push(this.convertFromDelegaToAuthPerson(delega)));
      }
 
     return convertedKid;
@@ -244,12 +254,35 @@ export class WebService {
     return convertedParent;
   }
 
+
+  private convertFromDelegaToAuthPerson = function(delega : Delega) : AuthPerson {
+    let convertedParent = new AuthPerson();
+    convertedParent.phone.push(delega.cellphone);
+    convertedParent.email.push(delega.email);
+    convertedParent.personId  = delega.id;
+    convertedParent.relation = delega.legame;
+    convertedParent.adult = delega.maggiorenne;
+    convertedParent.firstName = delega.name;
+    convertedParent.authorizationDeadline = new Date(delega.scadenza).getTime();
+    convertedParent.lastName = delega.surname;
+    // NOT USED delega.telephone
+    return convertedParent;
+  }
+
   private convertToParent = function(authPerson : AuthPerson) : Parent {
     let cellphone = authPerson.phone ? authPerson.phone[0] : null;
     let email = authPerson.email ? authPerson.email[0] : null;
     let parent = new Parent(authPerson.personId,authPerson.firstName,authPerson.lastName,cellphone, null, email);
 
     return parent;
+  }
+
+  private convertToDelega = function(authPerson : AuthPerson) : Delega {
+    let cellphone = authPerson.phone ? authPerson.phone[0] : null;
+    let email = authPerson.email ? authPerson.email[0] : null;
+    let deadline = new Date(authPerson.authorizationDeadline.valueOf());
+    let delega = new Delega(authPerson.personId,authPerson.firstName,authPerson.lastName,cellphone,null,email,authPerson.relation,deadline,authPerson.adult);
+    return delega;
   }
  
   private convertToSchool = function(serverSchoolData : ServerSchoolData) : School {

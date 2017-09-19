@@ -435,7 +435,7 @@ export class KidPage implements OnInit{
             text: 'OK',
             handler: () => {
                 this.thisKid.deleghe.splice(this.thisKid.deleghe.findIndex(tmp => tmp.id === delega.id), 1);
-                this.saveClick();
+               // this.saveClick();
             }
             }
         ]
@@ -455,7 +455,6 @@ export class KidPage implements OnInit{
     }
 
     onDelegaInfoSave() {
-        this.webService.update(this.selectedSchool);
         this.editDelegaInfo = false;
         if(this.isNewD)
             if(this.selectedDelega !== undefined && this.selectedDelega.id !== '')
@@ -472,7 +471,7 @@ export class KidPage implements OnInit{
                     });
                     alert.present();
                 }
-        this.saveDClick();
+        this.webService.add(this.selectedSchool.id,this.thisKid);
     }
 
     onDelegaInfoCancel() {
@@ -493,9 +492,8 @@ export class KidPage implements OnInit{
     }
 
     onDelegaContattiSave() {
-        this.webService.update(this.selectedSchool);
         this.editDelegaContatti = false;
-        this.saveDClick();
+        this.webService.add(this.selectedSchool.id,this.thisKid);
     }
 
     onDelegaContattiCancel() {
@@ -508,20 +506,19 @@ export class KidPage implements OnInit{
     editDelegaAutor : boolean;
 
     onDelegaAutorEdit() {
-        this.oldDelega.scadenza = JSON.parse(JSON.stringify(this.selectedDelega.scadenza));
-        this.oldDelega.maggiorenne = this.selectedDelega.maggiorenne;
+        //this.oldDelega.scadenza = JSON.parse(JSON.stringify(this.selectedDelega.scadenza));
+        //this.oldDelega.maggiorenne = this.selectedDelega.maggiorenne;
         this.editDelegaAutor = true;
     }
 
     onDelegaAutorSave() {
-        this.webService.update(this.selectedSchool);
         this.editDelegaAutor = false;
-        this.saveDClick();
+        this.webService.add(this.selectedSchool.id,this.thisKid);
     }
 
     onDelegaAutorCancel() {
-        this.selectedDelega.scadenza = JSON.parse(JSON.stringify(this.oldDelega.scadenza));
-        this.selectedDelega.maggiorenne = this.oldDelega.maggiorenne;
+        //this.selectedDelega.scadenza = JSON.parse(JSON.stringify(this.oldDelega.scadenza));
+        //this.selectedDelega.maggiorenne = this.oldDelega.maggiorenne;
         this.editDelegaAutor = false;
     }
 

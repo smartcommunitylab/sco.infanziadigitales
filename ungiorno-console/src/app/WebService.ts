@@ -200,7 +200,7 @@ export class WebService {
 
   private convertToKid = function(serverKidData : ServerKidData) : Kid {
     let allergies  = serverKidData.allergies ? serverKidData.allergies.map(allergy => allergy.name) : null;
-    let convertedKid = new Kid(serverKidData.kidId,serverKidData.firstName,serverKidData.lastName,null,null,serverKidData.image,null,null,null,null,null,null,allergies,null,null);
+    let convertedKid = new Kid(serverKidData.kidId,serverKidData.firstName,serverKidData.lastName,serverKidData.gender,serverKidData.birthDate,serverKidData.image,null,null,null,null,null,null,allergies,serverKidData.partecipateToSperimentation,null);
     let parents = serverKidData.persons.filter(person => person.parent);
     if(parents.length > 0) {
       convertedKid.parent1 = this.convertToParent(parents[0]);
@@ -220,6 +220,9 @@ export class WebService {
     convertedKid.firstName = kid.name;
     convertedKid.lastName = kid.surname;
     convertedKid.persons = [];
+    convertedKid.partecipateToSperimentation = kid.sperimentazione;
+    convertedKid.gender = kid.gender;
+    convertedKid.birthDate = new Date(Date.parse(kid.nascitaStr));
     convertedKid.services = new KidServices();
 
     convertedKid.allergies = kid.allergie.map(allergy => new Allergy(allergy,allergy));
@@ -263,7 +266,7 @@ export class WebService {
     convertedParent.relation = delega.legame;
     convertedParent.adult = delega.maggiorenne;
     convertedParent.firstName = delega.name;
-    convertedParent.authorizationDeadline = new Date(delega.scadenza).getTime();
+    convertedParent.authorizationDeadline = new Date(delega.scadenzaStr).getTime();
     convertedParent.lastName = delega.surname;
     // NOT USED delega.telephone
     return convertedParent;

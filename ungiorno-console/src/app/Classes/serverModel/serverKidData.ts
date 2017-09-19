@@ -12,7 +12,9 @@ export class ServerKidData {
 	services: KidServices;
 	persons: AuthPerson[];
 	allergies: Allergy[];
-	
+	birthDate: Date;
+	partecipateToSperimentation :boolean;
+	gender: string;
 
     // private String kidId, fullName, lastName, firstName, image;
 	// private SectionDef section;

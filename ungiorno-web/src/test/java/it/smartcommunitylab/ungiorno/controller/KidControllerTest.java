@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import javax.annotation.PostConstruct;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,11 @@ public class KidControllerTest {
     @Autowired
     private MongoTemplate mongo;
 
+    @Before
+    public void clean() {
+        mongo.getDb().dropDatabase();
+    }
+
     @PostConstruct
     public void setup() {
         mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
@@ -53,6 +59,7 @@ public class KidControllerTest {
         kid.setKidId(KID_ID);
         kid.setSchoolId(SCHOOL_ID);
         kid.setAppId(APP_ID);
+        kid.setPartecipateToSperimentation(true);
 
         mongo.save(kid);
 
@@ -60,7 +67,7 @@ public class KidControllerTest {
                 get("/student/{appId}/{schoolId}/{kidId}/profile", APP_ID, SCHOOL_ID, KID_ID));
 
         callResult.andExpect(status().isOk()).andExpect(jsonPath("$.data.schoolId", is(SCHOOL_ID)))
-                .andExpect(jsonPath("$.data.partecipateToSperimentation").doesNotExist());
+                .andExpect(jsonPath("$.data.partecipateToSperimentation", is(true)));
 
     }
 

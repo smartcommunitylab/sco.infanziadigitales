@@ -14,6 +14,7 @@
 package it.smartcommunitylab.ungiorno.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -53,6 +54,9 @@ public class KidProfile extends SchoolObject {
     private List<AuthPerson> persons;
     private List<Allergy> allergies;
     private boolean active = true;
+    private String gender;
+    private Date birthDate;
+    private boolean partecipateToSperimentation;
 
     private List<DiaryTeacher> diaryTeachers;
     private Boolean sharedDiary;
@@ -195,5 +199,29 @@ public class KidProfile extends SchoolObject {
     @Override
     public String toString() {
         return String.format("[kidId: %s, name: %s, surname: %s]", kidId, firstName, lastName);
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public Date getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public boolean isPartecipateToSperimentation() {
+        return partecipateToSperimentation;
+    }
+
+    public void setPartecipateToSperimentation(boolean partecipateToSperimentation) {
+        this.partecipateToSperimentation = partecipateToSperimentation;
     }
 }

@@ -22,6 +22,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
   $rootScope.retireLimit = 10;
   $scope.noConnection = false;
   $scope.gettingComm = false;
+  $scope.briefInfo={};
   $scope.noConnectionMessage = $filter('translate')('home_no_connection');
   $scope.refresh = function () {
     //window.location.reload(true);
@@ -99,6 +100,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     } else if ($scope.dailyRitiro) {
       note = $filter('translate')('home_entry_to') + $scope.fromTime + $filter('translate')('home_exit_to') + $scope.toTime;
     }
+    
+    $scope.briefInfo=getBriefInfo($scope.kidProfile.schoolId);
+    /*
     $scope.elements.push({
       click: "app.retire",
       string: $filter('translate')('home_retire') + $scope.kidProfile.firstName,
@@ -116,7 +120,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
       img: 'img/assenza.png',
       disabled: false
     });
-
+*/
 
     style = ($rootScope.numberCommunicationsUnread[$scope.kidProfile.schoolId] ? "button-alrt" : "button-norm");
     $rootScope.buttonHomeCommunication = {
@@ -238,6 +242,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     //return number of comunications from localstorage (all the new omunication not visualized get from push)
     // return pushNotificationService.getNewComunications(schoolId);
     return communicationsService.getNewComunications($filter('orderBy')(Allcommunications, '-creationDate'), schoolId);
+  }
+  var getBriefInfo = function (schoolId) {
+    var kidId = $scope.kidProfile.kidId;
+     //return dataServerService.getBriefInfo(schoolId,kidId);
+     var jsonTest={'ore_entrata':'09:20','ore_uscita':'14:20','addressBus':'Via Test',
+     'delegaName':'Nome Test','assente':false,'motivazione':'Motivazione Test'};
+     return jsonTest;
   }
   $scope.isContact = function (element) {
     return (element.string == $filter('translate')('home_contatta'));

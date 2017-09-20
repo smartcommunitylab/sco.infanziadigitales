@@ -1,0 +1,37 @@
+<ion-view id="home">
+
+  <ion-nav-title ng-init="getDateString()">
+    <!--        {{date | date:'EEEE, d MMMM yyyy'}}-->
+    {{date | date:'EEEE, d MMMM yyyy'}}
+  </ion-nav-title>
+ 
+  <ion-content has-header="true">
+    <ion-scroll class="home-area" scrollbar-y="true">
+      <input type=
+      <div class="brief_info" ng-if="!assente">
+        <div class="button-norm">Entrata Ore  &nbsp;&nbsp; {{briefInfo.ore_entrata}}</div>
+        <div class="button-norm">Uscita Ore  &nbsp;&nbsp; {{briefInfo.ore_uscita}}</div>
+        <div ng-if="addressBus!=null && addressBus!=''"><img src=""> {{briefInfo.addressBus}}</div>
+        <div><img src=""> {{briefInfo.delegaName}}</div>
+      </div>
+      <div class="brief_info" ng-if="assente">
+        <div class="button-norm">Assente  &nbsp;&nbsp; {{briefInfo.motivazione}}</div>
+      </div>
+      <hr class="hrstyle"/>
+      <div ng-repeat="element in elements track by $index" class="list" ng-if="!noConnection || isContact(element)">
+        <div class="card" ng-class="elements[$index].class">
+          <a class=" button-block item-thumbnail-left" ng-click="execute(elements[$index])" ng-disabled="elements[$index].disabled">
+            <img ng-src="{{element.img}}">
+            <div class="row">
+              <div class="col">
+                <p class="title">{{element.string|uppercase}}</p>
+                <p class="note">{{element.note}}</p>
+
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </ion-scroll>
+  </ion-content>
+</ion-view>

@@ -77,6 +77,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.communicationsService',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.messagesService',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.notification',
+    'it.smartcommunitylab.infanziadigitales.diario.parents.services.week_planService',
+    'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.week_plan',
     'angularMoment',
   'monospaced.elastic'
 ])
@@ -278,7 +280,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
 
   // for BlackBerry 10, WP8, iOS
   setTimeout(function () {
-    $cordovaSplashscreen.hide();
+    if (window.$cordovaSplashscreen) $cordovaSplashscreen.hide();
     //navigator.splashscreen.hide();
   }, 3000);
 
@@ -294,9 +296,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
 
 })
 
-.config(function ($stateProvider, $urlRouterProvider, $translateProvider, $ionicConfigProvider) {
+.config(function ($stateProvider, $urlRouterProvider, $translateProvider, $ionicConfigProvider,$httpProvider) {
   $ionicConfigProvider.backButton.text('').previousTitleText(false);
 
+  $httpProvider.defaults.withCredentials=true;
   $stateProvider.state('app', {
     url: "/app",
     abstract: true,
@@ -460,6 +463,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
           controller: 'MessagesCtrl'
         }
       }
+    }).state('app.week_plan', {
+      url: '/week_plan',
+      cache: false,
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/week_plan.html',
+          controller: 'WeekPlanCtrl'
+        }
+      }
     });
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/login');
@@ -488,6 +500,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     menu_exit: 'Logout',
     menu_enter: 'Entra',
     menu_impostazioni: 'Informazioni',
+    menu_week_plan: 'Piano Settimanale',
+    menu_default_week_plan:'Settimana default',
     menu_issue: 'Segnala un problema',
     menu_privacy: 'Privacy',
     babysetting_intro: 'Informazioni relative al bambino.',
@@ -660,7 +674,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     type_illness: 'Tipo di malattia:',
     no_messages: 'Non sono presenti messaggi',
     babysetting_active: 'Attivo',
-    babysetting_not_active: 'Non attivo'
+    babysetting_not_active: 'Non attivo',
+    modifica: 'Modifica',
+    load_default_week:'Carica settimana default',
+    copy_previous_week:'Copia settimana precedente'
   });
 
   $translateProvider.translations('en', {
@@ -685,6 +702,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     menu_exit: 'Logout',
     menu_enter: 'Entra',
     menu_impostazioni: 'Informazioni',
+    menu_week_plan: 'Week Planning',
+    menu_default_week_plan:'Default Week',
     babysetting_intro: 'Definisci i seguenti dati relativi all\'orario scolastico del bambino.',
     babysetting_services: 'Servizi',
     babysetting_hours: 'Orario di uscita:',
@@ -848,8 +867,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     type_illness: 'Tipo di malattia:',
     no_messages: 'Non sono presenti messaggi',
     babysetting_active: 'Attivo',
-    babysetting_not_active: 'Non attivo'
-
+    babysetting_not_active: 'Non attivo',
+    modifica: 'Edit',
+    load_default_week:'Load default week',
+    copy_previous_week:'Copy previous week'
   });
 
   $translateProvider.translations('de', {
@@ -1043,8 +1064,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     type_illness: 'Tipo di malattia:',
     no_messages: 'Non sono presenti messaggi',
     babysetting_active: 'Attivo',
-    babysetting_not_active: 'Non attivo'
-
+    babysetting_not_active: 'Non attivo',
+    modifica: 'Modifica',
+    menu_week_plan: 'Piano Settimanale',
+    menu_default_week_plan:'Settimana default',
+    load_default_week:'Carica settimana default',   
+    copy_previous_week:'Copia settimana precedente'
   });
 
   $translateProvider.preferredLanguage("it");

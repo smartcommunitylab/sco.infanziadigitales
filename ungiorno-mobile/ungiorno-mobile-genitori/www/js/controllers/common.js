@@ -261,6 +261,11 @@ $scope.logout = function () {
     });
   }
 
+  $scope.goToWeekPlan = function (kidid) {
+    $state.go('app.week_plan', {
+      id: kidid
+    });
+  }
   $scope.getProfileImage = function (kid) {
     var image = Config.URL() + "/" + Config.app() + "/student/" + Config.appId() + "/" + kid.schoolId + "/" + kid.kidId + "/false/images";
     return image;

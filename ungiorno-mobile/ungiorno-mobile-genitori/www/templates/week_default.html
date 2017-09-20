@@ -1,0 +1,102 @@
+<ion-view id="week_plan" title="{{mode}}  {{'menu_default_week_plan' | translate}}">
+  
+      <ion-nav-bar class="bar bar-ungiorno">
+          <ion-nav-back-button>
+          </ion-nav-back-button>
+      </ion-nav-bar>
+  
+    <ion-content has-header="true" ng-init="getDateString()">
+      <ion-scroll scrollbar-y="true">
+  
+        <!-- Readonly DetailView of Week-->
+        <div ng-show="!editView" class="week_plan_detail">
+          <table class="week_plan_detail_table" border="1">
+            <tr ng-repeat="day in days track by $index"  ng-class="{'current-day': isActive($index)}" >
+              <td class="day-name">
+                  <p class="title">{{day.name| translate | uppercase}}</p>
+              </td style="vertical-align: middle;">
+              <td ng-if="!day.assente">
+                  <p class="button-day noneditable">E <span class="val_time">{{day.entrata}}</span></p>
+              </td>
+              <td ng-if="!day.assente">
+                  <p class="button-day noneditable">U <span class="val_time">{{day.uscita}}</span></p>
+              </td>
+              <td ng-if="day.service_bus && !day.assente">
+                  <p class="button-day noneditable"><img src="img/ic-login.png" class="iconStyle" /></p>
+              </td>
+              <td ng-if="!day.assente">
+                <div class="delega_day noneditable">
+                  <img src="img/ic-login.png" class="iconStyle" />
+                  <div class="delega_name">
+                      <span>{{day.delega_name}}</span>
+                      <span>({{day.delega_type}})</span>
+                  </div>
+              </div>
+              </td>
+              <td ng-if="day.assente" colspan="2">
+                 <p  class="button-day noneditable">{{'home_absent' | translate | uppercase}}: {{day.motivazione}}</p>
+              </td>
+            </tr>
+          </table>
+          <div class="button_bottom">
+           <div class="button_cancel" ng-click="modifyWeek()">
+              {{'Modifica' | translate | uppercase}} 
+           </div>
+          </div>
+        </div>      
+      </div>
+  
+      <!-- Editable EditView of Week-->
+  
+       <div ng-show="editView" class="week_plan_detail">
+          <div class="actions">
+              <p class="button_top"><img src="img/ic-login.png" class="iconStyleHead"/><span class="actHeader">{{'load_default_week' | translate | uppercase}}</span></p>
+              <p class="button_top"><img src="img/ic-login.png" class="iconStyleHead"/><span class="actHeader">{{'copy_previous_week' | translate | uppercase}}</span></p>
+           </div> 
+          <div class="non_active_cal_buttons">
+             <ion-icon name="arrow-dropleft"><img src="img/ic-login.png" class="iconStyleHead" style="width:8px;height:8px;"/> </ion-icon>
+             <div>{{date | date:'EEEE, d MMMM yyyy'}}</div>
+             <ion-icon name="arrow-dropright"> <img src="img/ic-login.png" class="iconStyleHead" style="width:8px;height:8px;"/></ion-icon>
+          </div> 
+          <table class="week_plan_detail_table">
+            <tr ng-repeat="day in days track by $index"  ng-class="{'current-day': isActive($index)}"  ng-click="gotoEditDate($index)">
+              <td class="day-name">
+                  <p class="title">{{day.name| translate | uppercase}}</p>
+              </td style="vertical-align: middle;">
+              <td ng-if="!day.assente">
+                  <p ng-class="whatClassIsIt($index,'')">E <span class="val_time">{{day.entrata}}</span></p>
+              </td>
+              <td ng-if="!day.assente">
+                  <p ng-class="whatClassIsIt($index,'')">U <span class="val_time">{{day.uscita}}</span></p>
+              </td>
+              <td ng-if="day.service_bus && !day.assente">
+                  <p ng-class="whatClassIsIt($index,'')"><img src="img/ic-login.png" class="iconStyle"  /></p>
+              </td>
+              <td ng-if="!day.assente">
+                <div ng-class="whatClassIsIt($index,'delega')" class="delega_day editable">
+                  <img src="img/ic-login.png" class="iconStyle"  />
+                  <div class="delega_name">
+                      <span>{{day.delega_name}}</span>
+                      <span>({{day.delega_type}})</span>
+                  </div>
+              </div>
+              </td>
+              <td ng-if="day.assente" colspan="2">
+                 <p  ng-class="whatClassIsIt($index,'')">{{'home_absent' | translate | uppercase}}: {{day.motivazione}}</p>
+              </td>
+            </tr>
+          </table>
+        <div class="button_bottom">
+          <div class="button_cancel" ng-click="cancel()">
+             {{'cancel' | translate | uppercase}}
+          </div>
+          <div class="button_save" ng-click="setWeekPlan()">
+            {{'Salva' | translate | uppercase}}
+          </div>
+        </div>
+      </div>
+  
+      </ion-scroll>
+    </ion-content>
+  </ion-view>
+  

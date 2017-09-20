@@ -5,6 +5,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import javax.annotation.PostConstruct;
 
 import org.junit.Before;
@@ -66,9 +70,25 @@ public class KidControllerTest {
         ResultActions callResult = mockMvc.perform(
                 get("/student/{appId}/{schoolId}/{kidId}/profile", APP_ID, SCHOOL_ID, KID_ID));
 
-        callResult.andExpect(status().isOk()).andExpect(jsonPath("$.data.schoolId", is(SCHOOL_ID)))
-                .andExpect(jsonPath("$.data.partecipateToSperimentation", is(true)));
 
+        Map<String, Object> expectedKid = new HashMap<>();
+        expectedKid.put("kidId", KID_ID);
+        expectedKid.put("schoolId", SCHOOL_ID);
+        expectedKid.put("appId", APP_ID);
+        expectedKid.put("partecipateToSperimentation", true);
+        expectedKid.put("firstName", null);
+        callResult.andExpect(status().isOk());
+        constructAssertionFromMap(callResult, expectedKid);
+    }
+
+
+    private ResultActions constructAssertionFromMap(ResultActions resultActions,
+            Map<String, Object> expectedJsonFields) throws Exception {
+        for (Entry<String, Object> mapEntry : expectedJsonFields.entrySet()) {
+            resultActions.andExpect(jsonPath(String.format("$.data.%s", mapEntry.getKey()),
+                    is(mapEntry.getValue())));
+        }
+        return resultActions;
     }
 
 }

@@ -293,6 +293,7 @@ export class WebService {
     school.id = serverSchoolData.schoolId;
     school.email = serverSchoolData.contacts && serverSchoolData.contacts.email.length > 0 ? serverSchoolData.contacts.email[0] : "";
     school.telephone = serverSchoolData.contacts && serverSchoolData.contacts.telephone.length > 0 ? serverSchoolData.contacts.telephone[0] : "";
+    school.phoneNumbers = serverSchoolData.contacts ? serverSchoolData.contacts.telephone : null;
     school.name = serverSchoolData.name;
     school.address = serverSchoolData.address;
 
@@ -342,7 +343,8 @@ export class WebService {
     convertedSchool.schoolId = school.id;
     convertedSchool.name = school.name;
     convertedSchool.contacts = new SchoolContacts();
-    convertedSchool.contacts.addTelephone(school.telephone);
+    convertedSchool.contacts.telephone = school.phoneNumbers;
+    //convertedSchool.contacts.addTelephone(school.telephone);
     convertedSchool.contacts.addEmail(school.email);
     if(school.assenze) {
       convertedSchool.absenceTypes = [];

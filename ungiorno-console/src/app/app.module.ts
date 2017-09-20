@@ -22,6 +22,7 @@ import { KidPage } from "../pages/Components/kidSection/kidPage/kidPage";
 import { Orari } from "../pages/Components/orariSection/orari.component";
 import { OrariModal } from "../pages/Components/Modals/orariModal/orariModal";
 import { PopoverTimepicker } from "../pages/Components/Modals/orariModal/popoverTimepicker";
+import { ListWidget } from "../pages/Components/list-widget/list-widget"
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { PopoverTimepicker } from "../pages/Components/Modals/orariModal/popover
     Info,
     Orari,
     PopoverPage,
-    PopoverTimepicker
+    PopoverTimepicker,
+    ListWidget
   ],
   imports: [
     BrowserModule,
@@ -63,7 +65,8 @@ import { PopoverTimepicker } from "../pages/Components/Modals/orariModal/popover
     Info,   
     Orari,
     PopoverPage,
-    PopoverTimepicker
+    PopoverTimepicker,
+    ListWidget
   ],
   providers: [
     StatusBar,

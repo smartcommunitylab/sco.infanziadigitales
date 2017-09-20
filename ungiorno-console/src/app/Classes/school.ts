@@ -8,6 +8,7 @@ export class School {
     id: string;
     name: string;
     telephone: string;
+    phoneNumbers: string[];
     email: string;
     address: string;
     servizi: Service[];

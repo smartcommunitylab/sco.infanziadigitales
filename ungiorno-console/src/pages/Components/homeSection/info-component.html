@@ -39,14 +39,7 @@
                 </ion-card-header>
                 <ion-card-content margin-top>
                     <ion-grid inset>
-                        <ion-row margin-bottom>
-                            <ion-col col-1>
-                                Telefono:
-                            </ion-col>
-                            <ion-col col-11>
-                                <ion-input type="tel" [(ngModel)]="selectedSchool.telephone" [disabled]='!editContatti' no-margin></ion-input>
-                            </ion-col>
-                        </ion-row>
+                        <list-widget [items]="selectedSchool.phoneNumbers" [editMode]="editContatti" [label]="'Telefono'" ></list-widget>
                         <ion-row margin-bottom>
                             <ion-col col-1>
                                 Indirizzo email:

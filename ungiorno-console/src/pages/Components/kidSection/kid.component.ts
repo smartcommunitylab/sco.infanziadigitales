@@ -42,7 +42,7 @@ export class Bambini implements OnInit {
   }
 
   onAddKid() {
-    var k = new Kid('', '', '', '', new Date(''), '', false, new Parent('', '', '', '', '', ''), new Parent('', '', '', '', '', ''), new Bus('', '', []), [], [], [], false, []);
+    var k = new Kid('', '', '', '', null, '', false, new Parent('', '', '', '', '', ''), new Parent('', '', '', '', '', ''), new Bus('', '', []), [], [], [], false, []);
     this.onEditKid(k);
   }
 

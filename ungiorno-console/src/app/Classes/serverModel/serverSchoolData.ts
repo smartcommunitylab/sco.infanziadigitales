@@ -4,6 +4,7 @@ import {TypeDef} from './typeDef';
 export class ServerSchoolData {
     schoolId : string;
     name : string;
+    address : string;
     contacts : SchoolContacts;
     accessEmail : string;
     absenceTiming : string;

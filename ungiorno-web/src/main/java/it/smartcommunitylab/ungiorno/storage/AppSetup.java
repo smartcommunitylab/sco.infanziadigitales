@@ -43,6 +43,8 @@ public class AppSetup {
                 SchoolProfile schoolProfile = new SchoolProfile();
                 schoolProfile.setSchoolId(school.getSchoolId());
                 schoolProfile.setAppId(cred.getAppId());
+                schoolProfile.setName(school.getName());
+                schoolProfile.setAddress(school.getAddress());
                 if (storage.getSchoolProfile(cred.getAppId(), school.getSchoolId()) == null) {
                     storage.storeSchoolProfile(schoolProfile);
                 }

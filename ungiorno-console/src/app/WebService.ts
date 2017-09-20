@@ -294,7 +294,7 @@ export class WebService {
     school.email = serverSchoolData.contacts && serverSchoolData.contacts.email.length > 0 ? serverSchoolData.contacts.email[0] : "";
     school.telephone = serverSchoolData.contacts && serverSchoolData.contacts.telephone.length > 0 ? serverSchoolData.contacts.telephone[0] : "";
     school.name = serverSchoolData.name;
-    school.address = "NOT SUPPORTED BY SERVER";
+    school.address = serverSchoolData.address;
 
     school.assenze = serverSchoolData.absenceTypes ? serverSchoolData.absenceTypes.map(typeDef => typeDef.type) : [];
     school.malattie = serverSchoolData.frequentIllnesses ? serverSchoolData.frequentIllnesses.map(typeDef => typeDef.type) : [];

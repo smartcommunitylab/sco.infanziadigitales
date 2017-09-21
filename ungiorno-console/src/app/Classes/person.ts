@@ -3,16 +3,16 @@ export class Person {
     name: string;
     surname: string;
     phoneNumbers : string[];
+    emails : string[];
     cellphone: string;
     telephone: string;
-    email: string;
     
 
-    constructor(id:string, name:string, surname:string, phoneNumbers?: string[], email?:string) {
+    constructor(id:string, name:string, surname:string, phoneNumbers?: string[], emails?:string[]) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.phoneNumbers = phoneNumbers || [];
-        this.email = email || "";
+        this.emails = emails;
     }
 }

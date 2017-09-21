@@ -338,9 +338,9 @@ export class KidPage implements OnInit{
     editP1Contatti : boolean;
 
     onP1ContattiEdit() {
-        this.oldParent1.telephone = this.thisKid.parent1.telephone;
-        this.oldParent1.cellphone = this.thisKid.parent1.cellphone;
-        this.oldParent1.email = this.thisKid.parent1.email;
+        // this.oldParent1.telephone = this.thisKid.parent1.telephone;
+        // this.oldParent1.cellphone = this.thisKid.parent1.cellphone;
+        // this.oldParent1.email = this.thisKid.parent1.email;
         this.editP1Contatti = true;
     }
 
@@ -350,9 +350,9 @@ export class KidPage implements OnInit{
     }
 
     onP1ContattiCancel() {
-        this.thisKid.parent1.telephone = this.oldParent1.telephone;
-        this.thisKid.parent1.cellphone = this.oldParent1.cellphone;
-        this.thisKid.parent1.email = this.oldParent1.email;
+        // this.thisKid.parent1.telephone = this.oldParent1.telephone;
+        // this.thisKid.parent1.cellphone = this.oldParent1.cellphone;
+        // this.thisKid.parent1.email = this.oldParent1.email;
         this.editP1Contatti = false;
     }
 
@@ -381,9 +381,9 @@ export class KidPage implements OnInit{
     editP2Contatti : boolean;
 
     onP2ContattiEdit() {
-        this.oldParent2.telephone = this.thisKid.parent2.telephone;
-        this.oldParent2.cellphone = this.thisKid.parent2.cellphone;
-        this.oldParent2.email = this.thisKid.parent2.email;
+        // this.oldParent2.telephone = this.thisKid.parent2.telephone;
+        // this.oldParent2.cellphone = this.thisKid.parent2.cellphone;
+        // this.oldParent2.email = this.thisKid.parent2.email;
         this.editP2Contatti = true;
     }
 
@@ -393,9 +393,9 @@ export class KidPage implements OnInit{
     }
 
     onP2ContattiCancel() {
-        this.thisKid.parent2.telephone = this.oldParent2.telephone;
-        this.thisKid.parent2.cellphone = this.oldParent2.cellphone;
-        this.thisKid.parent2.email = this.oldParent2.email;
+        // this.thisKid.parent2.telephone = this.oldParent2.telephone;
+        // this.thisKid.parent2.cellphone = this.oldParent2.cellphone;
+        // this.thisKid.parent2.email = this.oldParent2.email;
         this.editP2Contatti = false;
     }
 

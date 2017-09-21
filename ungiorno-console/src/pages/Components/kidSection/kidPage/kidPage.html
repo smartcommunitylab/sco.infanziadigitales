@@ -254,14 +254,15 @@
                                             <ion-card-content margin-top>
                                                 <ion-grid inset>
                                                     <list-widget [items]="thisKid.parent1.phoneNumbers" [editMode]="editP1Contatti" [label]="'Telefono'" ></list-widget>
-                                                    <ion-row margin-bottom>
+                                                    <list-widget [items]="thisKid.parent1.emails" [editMode]="editP1Contatti" [label]="'Email'" ></list-widget>
+                                                    <!-- <ion-row margin-bottom>
                                                         <ion-col col-2>
                                                             Indirizzo email:
                                                         </ion-col>
                                                         <ion-col col-10>
                                                             <ion-input [(ngModel)]="thisKid.parent1.email" [disabled]='!editP1Contatti' no-margin></ion-input>
                                                         </ion-col>
-                                                    </ion-row>
+                                                    </ion-row> -->
                                                 </ion-grid>
                                             </ion-card-content>
                                         </ion-card>
@@ -322,14 +323,15 @@
                                             <ion-card-content margin-top>
                                                 <ion-grid inset>
                                                     <list-widget [items]="thisKid.parent2.phoneNumbers" [editMode]="editP2Contatti" [label]="'Telefono'" ></list-widget>
-                                                    <ion-row margin-bottom>
+                                                    <list-widget [items]="thisKid.parent2.emails" [editMode]="editP2Contatti" [label]="'Email'" ></list-widget>
+                                                    <!-- <ion-row margin-bottom>
                                                         <ion-col col-2>
                                                             Indirizzo email:
                                                         </ion-col>
                                                         <ion-col col-10>
                                                             <ion-input [(ngModel)]="thisKid.parent2.email" [disabled]='!editP2Contatti' no-margin></ion-input>
                                                         </ion-col>
-                                                    </ion-row>
+                                                    </ion-row> -->
                                                 </ion-grid>
                                             </ion-card-content>
                                         </ion-card>

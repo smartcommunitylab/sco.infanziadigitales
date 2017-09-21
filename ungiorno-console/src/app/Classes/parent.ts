@@ -3,7 +3,7 @@ import { Person } from "./person";
 
 export class Parent extends Person {
     
-    constructor(id:string, name:string, surname:string, phoneNumbers? : string[], email?:string) {
-        super(id, name, surname, phoneNumbers, email);
+    constructor(id:string, name:string, surname:string, phoneNumbers? : string[], emails?:string[]) {
+        super(id, name, surname, phoneNumbers, emails);
     }
 }

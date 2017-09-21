@@ -226,7 +226,7 @@ export class WebService {
   private convertToAuthPerson = function(parent : Parent) : AuthPerson {
     let convertedParent = new AuthPerson();
     convertedParent.personId = parent.id;
-    convertedParent.email.push(parent.email);
+    convertedParent.email = parent.emails;
     convertedParent.phone = parent.phoneNumbers;
     convertedParent.firstName = parent.name;
     convertedParent.lastName =  parent.surname;
@@ -239,7 +239,7 @@ export class WebService {
   private convertFromDelegaToAuthPerson = function(delega : Delega) : AuthPerson {
     let convertedParent = new AuthPerson();
     convertedParent.phone = delega.phoneNumbers;
-    convertedParent.email.push(delega.email);
+    convertedParent.email = delega.emails;
     convertedParent.personId  = delega.id;
     convertedParent.relation = delega.legame;
     convertedParent.adult = delega.maggiorenne;
@@ -250,15 +250,13 @@ export class WebService {
   }
 
   private convertToParent = function(authPerson : AuthPerson) : Parent {
-    let email = authPerson.email ? authPerson.email[0] : null;
-    let parent = new Parent(authPerson.personId,authPerson.firstName,authPerson.lastName,authPerson.phone, email);
+    let parent = new Parent(authPerson.personId,authPerson.firstName,authPerson.lastName,authPerson.phone, authPerson.email);
     return parent;
   }
 
   private convertToDelega = function(authPerson : AuthPerson) : Delega {
-    let email = authPerson.email ? authPerson.email[0] : null;
     let deadline = new Date(authPerson.authorizationDeadline.valueOf());
-    let delega = new Delega(authPerson.personId,authPerson.firstName,authPerson.lastName,authPerson.phone,email,authPerson.relation,deadline,authPerson.adult);
+    let delega = new Delega(authPerson.personId,authPerson.firstName,authPerson.lastName,authPerson.phone,authPerson.email,authPerson.relation,deadline,authPerson.adult);
     return delega;
   }
  

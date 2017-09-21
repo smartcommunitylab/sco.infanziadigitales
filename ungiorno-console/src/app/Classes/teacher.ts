@@ -6,7 +6,11 @@ export class Teacher extends Person {
     pin: string;
 
     constructor(id:string, name:string, surname:string, pin:string, phoneNumbers?:string[], email?:string) {
-        super(id, name, surname, phoneNumbers, email);
+        let emails : string[] = [];
+        if(email) {
+            emails.push(email);
+        }
+        super(id, name, surname, phoneNumbers, emails);
         this.pin = pin || "";
     }
 }

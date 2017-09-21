@@ -27,6 +27,7 @@ import it.smartcommunitylab.ungiorno.diary.model.DiaryKid.DiaryKidPerson;
 public class Teacher extends SchoolObject {
     private String teacherId, username, teacherFullname, teacherSurname, teacherName,
             colorToDisplay, pin;
+    private List<String> phones;
     private List<String> sectionIds;
 
     public String getTeacherId() {
@@ -134,6 +135,14 @@ public class Teacher extends SchoolObject {
     @Override
     public int hashCode() {
         return new HashCodeBuilder(11, 15).append(teacherId).hashCode();
+    }
+
+    public List<String> getPhones() {
+        return phones;
+    }
+
+    public void setPhones(List<String> phones) {
+        this.phones = phones;
     }
 
 }

@@ -77,7 +77,6 @@ export class Info {
                 type: 'tel',
                 name: 'tel',
                 placeholder: 'Telefono',
-                value: this.selectedSchool.telephone
                 },
                 {
                 type: 'email',
@@ -94,7 +93,6 @@ export class Info {
                 {
                 text: 'Salva',
                 handler: data => {
-                    this.selectedSchool.telephone = data.tel;
                     this.selectedSchool.email = data.email;
                     this.webService.update(this.selectedSchool);
                 }
@@ -109,7 +107,6 @@ export class Info {
     onContattiEdit() {
         this.editContatti = true;
         if(this.editContatti) {
-            this.oldTel = this.selectedSchool.telephone;
             this.oldMail = this.selectedSchool.email;
         }
     }
@@ -121,7 +118,6 @@ export class Info {
 
     onContattiCancel() {
         this.selectedSchool.email = this.oldMail;
-        this.selectedSchool.telephone = this.oldTel;
         this.editContatti = false;
     }
 

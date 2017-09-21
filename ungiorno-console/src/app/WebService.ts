@@ -266,7 +266,6 @@ export class WebService {
     let school = new School();
     school.id = serverSchoolData.schoolId;
     school.email = serverSchoolData.contacts && serverSchoolData.contacts.email.length > 0 ? serverSchoolData.contacts.email[0] : "";
-    school.telephone = serverSchoolData.contacts && serverSchoolData.contacts.telephone.length > 0 ? serverSchoolData.contacts.telephone[0] : "";
     school.phoneNumbers = serverSchoolData.contacts ? serverSchoolData.contacts.telephone : null;
     school.name = serverSchoolData.name;
     school.address = serverSchoolData.address;

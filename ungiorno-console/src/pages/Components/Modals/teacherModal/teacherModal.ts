@@ -55,7 +55,6 @@ export class TeacherModal implements OnInit{
   }
 
   close() {
-    //this.webService.update(this.selectedSchool);
     this.navCtrl.pop();
   }
 

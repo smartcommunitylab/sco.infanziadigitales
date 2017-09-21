@@ -105,17 +105,6 @@ export class KidPage implements OnInit{
         ) { }
 
     ngOnInit(): void {    
-        //this.thisKid = JSON.parse(JSON.stringify(this.selectedKid)) as Kid;
-        // Object.assign(this.thisKid, this.selectedKid)
-        // this.thisKid.allergie = new Array();
-        // this.selectedKid.allergie.forEach(x => this.thisKid.allergie.push(x));
-        // this.thisKid.deleghe = new Array();
-        // this.selectedKid.deleghe.forEach(x => this.thisKid.deleghe.push(x));
-        // this.thisKid.ritiro = new Array();
-        // this.selectedKid.ritiro.forEach(x => this.thisKid.ritiro.push(x));
-        // this.thisKid.services = new Array();
-        // this.selectedKid.services.forEach(x => this.thisKid.services.push(x));
-
         this.thisKid = this.selectedKid;
         this.selectedKidGroups = this.selectedSchool.groups.filter(x => x.kids.findIndex(d => d.toLowerCase() === this.selectedKid.id.toLowerCase()) >= 0);
 
@@ -185,7 +174,6 @@ export class KidPage implements OnInit{
 
         // TO IMPROVE
         this.isNew = false;
-        //this.saveClick();
     }
 
     onInfoCancel() {
@@ -421,7 +409,6 @@ export class KidPage implements OnInit{
 
     onSelectDelega(delega: Delega) {
         this.selectedDelega = delega;
-        // Object.assign(this.selectedDelega, delega);
     }
 
     onDeleteDelega(delega : Delega) {
@@ -435,7 +422,7 @@ export class KidPage implements OnInit{
             text: 'OK',
             handler: () => {
                 this.thisKid.deleghe.splice(this.thisKid.deleghe.findIndex(tmp => tmp.id === delega.id), 1);
-               // this.saveClick();
+                this.webService.add(this.selectedSchool.id,this.thisKid);
             }
             }
         ]
@@ -447,10 +434,10 @@ export class KidPage implements OnInit{
     oldDelega : Delega = new Delega('', '', '');
 
     onDelegaInfoEdit() {
-        this.oldDelega.id = this.selectedDelega.id;
-        this.oldDelega.name = this.selectedDelega.name;
-        this.oldDelega.surname = this.selectedDelega.surname;
-        this.oldDelega.legame = this.selectedDelega.legame;
+        //this.oldDelega.id = this.selectedDelega.id;
+        //this.oldDelega.name = this.selectedDelega.name;
+        //this.oldDelega.surname = this.selectedDelega.surname;
+        //this.oldDelega.legame = this.selectedDelega.legame;
         this.editDelegaInfo = true;
     }
 
@@ -475,19 +462,19 @@ export class KidPage implements OnInit{
     }
 
     onDelegaInfoCancel() {
-        this.selectedDelega.id = this.oldDelega.id;
-        this.selectedDelega.name = this.oldDelega.name;
-        this.selectedDelega.surname = this.oldDelega.surname;
-        this.selectedDelega.legame = this.oldDelega.legame;
+        //this.selectedDelega.id = this.oldDelega.id;
+        //this.selectedDelega.name = this.oldDelega.name;
+        //this.selectedDelega.surname = this.oldDelega.surname;
+        //this.selectedDelega.legame = this.oldDelega.legame;
         this.editDelegaInfo = false;
     }
 
     editDelegaContatti:boolean;
 
     onDelegaContattiEdit() {
-        this.oldDelega.telephone = this.selectedDelega.telephone;
-        this.oldDelega.cellphone = this.selectedDelega.cellphone;
-        this.oldDelega.email = this.selectedDelega.email;
+        //this.oldDelega.telephone = this.selectedDelega.telephone;
+        //this.oldDelega.cellphone = this.selectedDelega.cellphone;
+        //this.oldDelega.email = this.selectedDelega.email;
         this.editDelegaContatti = true;
     }
 
@@ -497,17 +484,15 @@ export class KidPage implements OnInit{
     }
 
     onDelegaContattiCancel() {
-        this.selectedDelega.telephone = this.oldDelega.telephone;
-        this.selectedDelega.cellphone = this.oldDelega.cellphone;
-        this.selectedDelega.email = this.oldDelega.email;
+        //this.selectedDelega.telephone = this.oldDelega.telephone;
+        //this.selectedDelega.cellphone = this.oldDelega.cellphone;
+        //this.selectedDelega.email = this.oldDelega.email;
         this.editDelegaContatti = false;
     }
 
     editDelegaAutor : boolean;
 
     onDelegaAutorEdit() {
-        //this.oldDelega.scadenza = JSON.parse(JSON.stringify(this.selectedDelega.scadenza));
-        //this.oldDelega.maggiorenne = this.selectedDelega.maggiorenne;
         this.editDelegaAutor = true;
     }
 
@@ -517,8 +502,6 @@ export class KidPage implements OnInit{
     }
 
     onDelegaAutorCancel() {
-        //this.selectedDelega.scadenza = JSON.parse(JSON.stringify(this.oldDelega.scadenza));
-        //this.selectedDelega.maggiorenne = this.oldDelega.maggiorenne;
         this.editDelegaAutor = false;
     }
 

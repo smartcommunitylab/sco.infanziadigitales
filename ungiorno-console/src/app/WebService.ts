@@ -244,12 +244,7 @@ export class WebService {
     let convertedParent = new AuthPerson();
     convertedParent.personId = parent.id;
     convertedParent.email.push(parent.email);
-    if(parent.cellphone) {
-      convertedParent.phone.push(parent.cellphone);
-    }
-    if(parent.telephone) {
-      convertedParent.phone.push(parent.telephone);
-    }
+    convertedParent.phone = parent.phoneNumbers;
     convertedParent.firstName = parent.name;
     convertedParent.lastName =  parent.surname;
     convertedParent.fullName = `${convertedParent.firstName} ${convertedParent.lastName}`;
@@ -260,7 +255,7 @@ export class WebService {
 
   private convertFromDelegaToAuthPerson = function(delega : Delega) : AuthPerson {
     let convertedParent = new AuthPerson();
-    convertedParent.phone.push(delega.cellphone);
+    convertedParent.phone = delega.phoneNumbers;
     convertedParent.email.push(delega.email);
     convertedParent.personId  = delega.id;
     convertedParent.relation = delega.legame;
@@ -273,18 +268,15 @@ export class WebService {
   }
 
   private convertToParent = function(authPerson : AuthPerson) : Parent {
-    let cellphone = authPerson.phone ? authPerson.phone[0] : null;
     let email = authPerson.email ? authPerson.email[0] : null;
-    let parent = new Parent(authPerson.personId,authPerson.firstName,authPerson.lastName,cellphone, null, email);
-
+    let parent = new Parent(authPerson.personId,authPerson.firstName,authPerson.lastName,authPerson.phone, email);
     return parent;
   }
 
   private convertToDelega = function(authPerson : AuthPerson) : Delega {
-    let cellphone = authPerson.phone ? authPerson.phone[0] : null;
     let email = authPerson.email ? authPerson.email[0] : null;
     let deadline = new Date(authPerson.authorizationDeadline.valueOf());
-    let delega = new Delega(authPerson.personId,authPerson.firstName,authPerson.lastName,cellphone,null,email,authPerson.relation,deadline,authPerson.adult);
+    let delega = new Delega(authPerson.personId,authPerson.firstName,authPerson.lastName,authPerson.phone,email,authPerson.relation,deadline,authPerson.adult);
     return delega;
   }
  

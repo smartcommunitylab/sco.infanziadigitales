@@ -16,7 +16,6 @@ import { Parent } from "../../../app/Classes/parent";
 
 export class Bambini implements OnInit {
   @Input() selectedSchool: School; 
-  //thisSchool:School = new School();
 
   selectedKid : Kid;
 
@@ -32,7 +31,6 @@ export class Bambini implements OnInit {
   constructor(private webService : WebService, public alertCtrl: AlertController) {}
 
   ngOnInit(): void {
-   // Object.assign(this.thisSchool, this.selectedSchool)
     this.filteredKid = this.selectedSchool.kids;
     this.onFiltroKidChange(this.filtro);
   }
@@ -42,7 +40,7 @@ export class Bambini implements OnInit {
   }
 
   onAddKid() {
-    var k = new Kid('', '', '', '', null, '', false, new Parent('', '', '', '', '', ''), new Parent('', '', '', '', '', ''), new Bus('', '', []), [], [], [], false, []);
+    var k = new Kid('', '', '', '', null, '', false, new Parent('', '', ''), new Parent('', '', ''), new Bus('', '', []), [], [], [], false, []);
     this.onEditKid(k);
   }
 
@@ -50,16 +48,14 @@ export class Bambini implements OnInit {
     this.selectedKid = kid;
     this.edit = false;
     this.kidClick[0] = true;
-    //Object.assign(this.selectedSchool, this.thisSchool);
-    //this.webService.update(this.selectedSchool);
+   
   }
 
   onEditKid(kid : Kid) {
     this.selectedKid = kid;
     this.edit = true;
     this.kidClick[0]= true;
-    //Object.assign(this.selectedSchool, this.thisSchool);
-    //this.webService.update(this.selectedSchool);
+  
   }
 
   onDeleteKid(item : Kid) {
@@ -72,9 +68,8 @@ export class Bambini implements OnInit {
         {
           text: 'OK',
           handler: () => {
-            //this.thisSchool.kids.splice(this.thisSchool.kids.findIndex(tmp => tmp.id === item.id), 1);
+           
             this.selectedSchool.kids.splice(this.selectedSchool.kids.findIndex(tmp => tmp.id === item.id), 1);
-           // Object.assign(this.selectedSchool, this.selectedSchool);
             this.webService.remove(this.selectedSchool.id, item);
           }
         }

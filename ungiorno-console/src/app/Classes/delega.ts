@@ -6,8 +6,8 @@ export class Delega extends Person {
     scadenzaStr: string;
     maggiorenne:boolean;
 
-    constructor(id:string, name:string, surname:string, cellphone?:string, telephone?:string, email?:string, legame?:string, scadenza?:Date, maggiorenne?:boolean) {
-        super(id, name, surname, cellphone, telephone, email);
+    constructor(id:string, name:string, surname:string, phoneNumbers?:string[], email?:string, legame?:string, scadenza?:Date, maggiorenne?:boolean) {
+        super(id, name, surname, phoneNumbers, email);
         this.legame = legame || "";
         this.scadenza = scadenza || new Date();
         this.scadenzaStr = this.scadenza.toISOString().substring(0,10);

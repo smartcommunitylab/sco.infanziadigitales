@@ -253,22 +253,7 @@
                                             </ion-card-header>
                                             <ion-card-content margin-top>
                                                 <ion-grid inset>
-                                                    <ion-row margin-bottom>
-                                                        <ion-col col-2>
-                                                            Telefono:
-                                                        </ion-col>
-                                                        <ion-col col-10>
-                                                            <ion-input [(ngModel)]="thisKid.parent1.telephone" [disabled]='!editP1Contatti' no-margin></ion-input>
-                                                        </ion-col>
-                                                    </ion-row>
-                                                    <ion-row margin-bottom>
-                                                        <ion-col col-2>
-                                                            Cellulare:
-                                                        </ion-col>
-                                                        <ion-col col-10>
-                                                            <ion-input [(ngModel)]="thisKid.parent1.cellphone" [disabled]='!editP1Contatti' no-margin></ion-input>
-                                                        </ion-col>
-                                                    </ion-row>
+                                                    <list-widget [items]="thisKid.parent1.phoneNumbers" [editMode]="editP1Contatti" [label]="'Telefono'" ></list-widget>
                                                     <ion-row margin-bottom>
                                                         <ion-col col-2>
                                                             Indirizzo email:
@@ -336,22 +321,7 @@
                                             </ion-card-header>
                                             <ion-card-content margin-top>
                                                 <ion-grid inset>
-                                                    <ion-row margin-bottom>
-                                                        <ion-col col-2>
-                                                            Telefono:
-                                                        </ion-col>
-                                                        <ion-col col-10>
-                                                            <ion-input [(ngModel)]="thisKid.parent2.telephone" [disabled]='!editP2Contatti' no-margin></ion-input>
-                                                        </ion-col>
-                                                    </ion-row>
-                                                    <ion-row margin-bottom>
-                                                        <ion-col col-2>
-                                                            Cellulare:
-                                                        </ion-col>
-                                                        <ion-col col-10>
-                                                            <ion-input [(ngModel)]="thisKid.parent2.cellphone" [disabled]='!editP2Contatti' no-margin></ion-input>
-                                                        </ion-col>
-                                                    </ion-row>
+                                                    <list-widget [items]="thisKid.parent2.phoneNumbers" [editMode]="editP2Contatti" [label]="'Telefono'" ></list-widget>
                                                     <ion-row margin-bottom>
                                                         <ion-col col-2>
                                                             Indirizzo email:
@@ -468,22 +438,7 @@
                                                         </ion-card-header>
                                                         <ion-card-content margin-top>
                                                             <ion-grid inset>
-                                                                <ion-row margin-bottom>
-                                                                    <ion-col col-2>
-                                                                        Telefono:
-                                                                    </ion-col>
-                                                                    <ion-col col-10>
-                                                                        <ion-input [(ngModel)]="selectedDelega.telephone" [disabled]='!editDelegaContatti' no-margin></ion-input>
-                                                                    </ion-col>
-                                                                </ion-row>
-                                                                <ion-row margin-bottom>
-                                                                    <ion-col col-2>
-                                                                        Cellulare:
-                                                                    </ion-col>
-                                                                    <ion-col col-10>
-                                                                        <ion-input [(ngModel)]="selectedDelega.cellphone" [disabled]='!editDelegaContatti' no-margin></ion-input>
-                                                                    </ion-col>
-                                                                </ion-row>
+                                                                <list-widget [items]="selectedDelega.phoneNumbers" [editMode]="editDelegaContatti" [label]="'Telefono'" ></list-widget>
                                                                 <ion-row margin-bottom>
                                                                     <ion-col col-2>
                                                                         Indirizzo email:

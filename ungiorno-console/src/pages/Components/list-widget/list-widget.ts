@@ -62,12 +62,15 @@ import { Component, OnInit, Input } from '@angular/core';
         if(this.newItem.trim().length == 0){
             return;
         }
+        if(!this.items) {
+            this.items = [];
+        }
         this.items.push(this.newItem);
         this.newItem = "";
     }
 
     removeItem(item) {
-        this.items.forEach((i,idx) => {
+        this.items && this.items.forEach((i,idx) => {
             if(i === item) {
                 this.items.splice(idx,1);
             }

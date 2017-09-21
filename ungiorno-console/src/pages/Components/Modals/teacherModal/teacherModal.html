@@ -48,14 +48,15 @@
                             Contatti
                         </ion-card-header>
                         <ion-card-content>
-                            <ion-item class='input-calza'>
+                            <list-widget [items]="copiedTeacher.phoneNumbers" [editMode]="true" [label]="'Telefono'" ></list-widget>
+                            <!-- <ion-item class='input-calza'>
                                 <ion-label>Telefono</ion-label>
                                 <ion-input name="tel" type="text" [(ngModel)]="copiedTeacher.telephone"></ion-input>
                             </ion-item>
                             <ion-item class='input-calza'>
                                 <ion-label>Cellulare</ion-label>
                                 <ion-input name="tel" type="text" [(ngModel)]="copiedTeacher.cellphone"></ion-input>
-                            </ion-item>
+                            </ion-item> -->
                         </ion-card-content>
                     </ion-card>
                 </ion-col>

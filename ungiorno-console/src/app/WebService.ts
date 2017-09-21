@@ -105,10 +105,6 @@ export class WebService {
     var sch;
     const url = `${this.schoolUrl}/${schoolId}`
     if (item instanceof Teacher) {
-      // return this.getSchool(schoolId).then(tmp => {
-      //   tmp.teachers.push(item); 
-      //   return this.http.put(url, JSON.stringify(tmp), {headers: this.headers}).toPromise().then(() => tmp).catch(this.handleError);
-      // });
       return this.addTeacher(schoolId, item);
     }
     else if (item instanceof Bus) {
@@ -124,10 +120,6 @@ export class WebService {
       });
     }
     else if(item instanceof Kid) {
-      // return this.getSchool(schoolId).then(tmp => {
-      //   tmp.kids.push(item); 
-      //   return this.http.put(url, JSON.stringify(tmp), {headers: this.headers}).toPromise().then(() => tmp).catch(this.handleError);
-      // });
       return this.addKid(schoolId, item);
     }
     else if(item instanceof Service) {
@@ -155,19 +147,9 @@ export class WebService {
       });
     }
     else if(item instanceof Teacher) {
-      // return this.getSchool(schoolId).then(tmp => {
-      //   var pos = tmp.teachers.findIndex(x => x.id === item.id)
-      //   tmp.teachers.splice(pos, 1); 
-      //   return this.http.put(url, JSON.stringify(tmp), {headers: this.headers}).toPromise().then(() => tmp).catch(this.handleError);
-      // });
       return this.removeTeacher(schoolId,item.id);
     }
     else if(item instanceof Kid) {
-      // return this.getSchool(schoolId).then(tmp => {
-      //   var pos = tmp.kids.findIndex(x => x.id === item.id)
-      //   tmp.kids.splice(pos, 1); 
-      //   return this.http.put(url, JSON.stringify(tmp), {headers: this.headers}).toPromise().then(() => tmp).catch(this.handleError);
-      // });
       return this.removeKid(schoolId,item.id);
     }
   }
@@ -183,7 +165,7 @@ export class WebService {
   }
 
   private convertToTeacher = function(serverTeacherData : ServerTeacherData) : Teacher {
-    let teacher = new Teacher(serverTeacherData.teacherId,serverTeacherData.teacherName,serverTeacherData.teacherSurname,serverTeacherData.pin,'NOT SUPPORTED BY SERVER','NOT SUPPORTED BY SERVER',serverTeacherData.username);
+    let teacher = new Teacher(serverTeacherData.teacherId,serverTeacherData.teacherName,serverTeacherData.teacherSurname,serverTeacherData.pin,serverTeacherData.phones,serverTeacherData.username);
     return teacher;
   }
 
@@ -195,6 +177,7 @@ export class WebService {
     convertedTeacher.teacherSurname = teacher.surname;
     convertedTeacher.teacherId = teacher.id;
     convertedTeacher.sectionIds = [];
+    convertedTeacher.phones = teacher.phoneNumbers;
     return convertedTeacher;
   }
 
@@ -263,7 +246,6 @@ export class WebService {
     convertedParent.firstName = delega.name;
     convertedParent.authorizationDeadline = new Date(delega.scadenzaStr).getTime();
     convertedParent.lastName = delega.surname;
-    // NOT USED delega.telephone
     return convertedParent;
   }
 
@@ -336,7 +318,6 @@ export class WebService {
     convertedSchool.name = school.name;
     convertedSchool.contacts = new SchoolContacts();
     convertedSchool.contacts.telephone = school.phoneNumbers;
-    //convertedSchool.contacts.addTelephone(school.telephone);
     convertedSchool.contacts.addEmail(school.email);
     if(school.assenze) {
       convertedSchool.absenceTypes = [];

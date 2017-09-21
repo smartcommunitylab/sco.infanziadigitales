@@ -7,6 +7,7 @@ export class ServerTeacherData {
     colorToDisplay : string; // ???
     pin : string;
     sectionIds : string[];
+    phones: string[]
     
     constructor() {}
    

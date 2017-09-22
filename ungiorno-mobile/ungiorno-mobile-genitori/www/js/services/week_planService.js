@@ -8,6 +8,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.w
   var weekDefaultDataDefault = {};
   var actualDayNrDefault = 0;
   var modeDefault = '';
+  var dateFormat='';
+  var currWeek='';
   var globalUrl=Config.URL() + '/' + Config.app();
   
   week_planService.setDayData = function (day,dayData,modeActual) {
@@ -48,7 +50,19 @@ week_planService.setModeDefault = function (modeActual) {
   week_planService.getModeDefault = function () {
   return modeDefault;
 };
+week_planService.setSelectedDateInfo= function (dateFormatActual) {
+    dateFormat=dateFormatActual;
+};
+week_planService.getSelectedDateInfo= function () {
+    return dateFormat;
+  };
 
+  week_planService.setCurrentWeek= function (currWeekActual) {
+    currWeek=currWeekActual;
+};
+week_planService.getCurrentWeek= function () {
+    return currWeek;
+  };
   week_planService.getWeekPlan = function (weekNr,kidid) {
     var deferred = $q.defer();
     

@@ -74,10 +74,10 @@ angular.module('smartcommunitylab.services.login', [])
 			$window.localStorage.setItem(this.PROFILE, JSON.stringify(user.profile));
 		},
 		getTokenInfo: function () {
-			return JSON.parse($window.localStorage.getItem(this.TOKENINFO));
+			return JSON.parse($window.localStorage.getItem(this.TOKENINFO)||"{}");
 		},
 		saveTokenInfo: function () {
-			$window.localStorage.setItem(this.TOKENINFO, JSON.stringify(user.tokenInfo));
+			$window.localStorage.setItem(this.TOKENINFO, JSON.stringify(user.tokenInfo?user.tokenInfo:""));
 		},
 		getUser: function () {
 			user = {
@@ -748,7 +748,36 @@ angular.module('smartcommunitylab.services.login', [])
 							deferred.resolve(msg);
 						},
 						function (error) {
-							deferred.reject();
+                           window.plugins.googleplus.trySilentLogin(
+			{
+			},
+			function (obj) {
+				console.error('Google trySilentLogin success');
+				//try logout again
+				window.plugins.googleplus.logout(
+					function (msg) {
+						console.error('Google logout success');
+                      resetUser();
+							console.log('[LOGIN] ' + service.PROVIDER.INTERNAL + ' logout successfully (token revoked)');
+							if (settings.loginType == service.LOGIN_TYPE.COOKIE) {
+								$window.cookies.clear(function () {
+									console.log('[LOGIN] Cookies cleared!');
+								});
+							}
+							deferred.resolve(msg);
+					},
+					function (err) {
+						console.error('Error logging out from Google for the 2nd time: ' + err);
+					}
+				);
+			},
+			function (err) {
+				console.error('Google trySilentLogin error: ' + err);
+              							deferred.reject(reason);
+
+			}
+						)
+
 						}
 					);
 					break;

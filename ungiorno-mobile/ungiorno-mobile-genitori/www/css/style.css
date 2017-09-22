@@ -86,7 +86,7 @@ a.item-content {
 .home-area {
   display: grid!important;
   height: 100%!important;
-  padding-top: 20px;
+  padding-top: 2px;
 }
 .home-info {
   background-color: #FFAD00;
@@ -1976,4 +1976,181 @@ textarea {
 }
 .expired-popup .popup-body {
   text-align: justify;
+}
+
+/*
+
+*/
+
+.button-norm-brief {
+  background-color: #009AA8;
+  color: #ffffff;
+  border: 0;
+  margin: 4px 80px 0px 80px!important;
+  padding-top:3px;
+  padding-bottom: 5px;
+}
+
+.hrstyle {
+  border: 0;
+  height: 2px;
+  background: #0EB8CB;
+  margin: 7px;
+}
+.brief_info{
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+.button_top{
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+}
+
+.button_bottom{
+  display: flex;
+  flex-direction: row;
+  margin-top:20px;
+}
+ 
+.button_save{
+  text-align: center;
+  margin:auto;
+  width:40%;
+  background-color: #f8ab15;
+  color: #ffffff;
+  border: 0;
+  box-shadow: -1px 2px 5px #888888;
+  padding: 8px;
+  margin-bottom:20px;
+}
+
+.button_cancel{
+  text-align: center;
+  margin:auto;
+  width:40%;
+  background-color: #5FC3DF;
+  color: #ffffff;
+  border: 0;
+  box-shadow: -1px 2px 5px #888888;
+  padding: 8px;
+  margin-bottom:20px;
+}
+
+.current-day {
+  background-color: #80D0E6;
+}
+
+.currentDate{
+  margin-bottom:14px;
+  color:  #F8A913;
+}
+.active_cal_buttons {
+  color : #F8A913;
+  margin: auto;
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  margin-top:10px;
+}
+
+.non_active_cal_buttons {
+  color : #B0B0B0;
+  margin: auto;
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  margin-top:10px;
+}
+
+.non_active_days {
+  color : #B0B0B0;
+}
+
+.week_plan_detail{
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  padding-left:10px;
+  padding-right:10px;
+}
+
+.week_plan_detail .day{
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+}
+.delega_day{
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  color: #ffffff;
+  border: 0;
+  margin:4px;
+  padding: 2px;
+}
+.editable{
+  background-color: #f8ab15;
+}
+.actions{
+  color: #f8ab15;
+  display: flex;
+  flex-direction: row;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  margin-left: 25px;
+  font-size: 10px; 
+}
+.actHeader{
+  text-align: left;
+}
+.noneditable{
+  background-color: #009AA8;
+}
+
+.readonly{
+  background-color: #B0B0B0;
+}
+
+.button-day {
+  color: #ffffff;
+  border: 0;
+  margin:4px;
+  padding: 2px;
+}
+
+.day-name {
+  padding-right:8px;
+}
+.week_plan_detail_table{
+  text-align: center;
+  width:100%;
+  padding: 10px;
+  margin-top:17px;
+}
+.week_plan_detail_table td{
+  vertical-align: middle;
+  padding-bottom:10px;
+}
+.val_time{
+  font-weight: bold;
+}
+.delega_name{
+  font-size: 9px;
+  display: flex;
+  flex-direction: column;
+  line-height: 10px;
+  text-align: center;
+  padding-right:0px;
+  margin-right:0px;
+}
+
+.iconStyle{
+  width:15px;
+  height:15px;
+}
+.iconStyleHead{
+  width:25px;
+  height:35px;
 }

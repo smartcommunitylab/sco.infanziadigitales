@@ -708,6 +708,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     restore:'Ripristina impostazioni iniziali',
     repeat_days:'Ripeti il giorno',
     edit: 'Modifica',
+    remove_reason:'Rimuovi Motivazione'
   });
 
   $translateProvider.translations('en', {
@@ -904,6 +905,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     restore:'Restore initial config',
     repeat_days:'Repeat the day',
     edit: 'Edit',
+    remove_reason:'Remove Reason'
   });
 
   $translateProvider.translations('de', {
@@ -1106,6 +1108,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     restore:'Ripristina impostazioni iniziali',
     repeat_days:'Ripeti il giorno',
     edit: 'Modifica',
+    remove_reason:'Remove Reason'
   });
 
   $translateProvider.preferredLanguage("it");

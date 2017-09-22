@@ -43,7 +43,7 @@
             </div>
             </td>
             <td ng-if="day.assente" colspan="2">
-               <p  class="button-day noneditable">{{'home_absent' | translate | uppercase}}: {{day.motivazione}}</p>
+               <p  class="button-day noneditable">{{'home_absent' | translate | uppercase}}: {{day.motivazione.type}}</p>
             </td>
           </tr>
         </table>
@@ -91,7 +91,7 @@
             </div>
             </td>
             <td ng-if="day.assente" colspan="2">
-               <p  ng-class="whatClassIsIt($index,'')">{{'home_absent' | translate | uppercase}}: {{day.motivazione}}</p>
+               <p  ng-class="whatClassIsIt($index,'')">{{'home_absent' | translate | uppercase}}: {{day.motivazione.type}}</p>
             </td>
           </tr>
         </table>

@@ -35,18 +35,11 @@
               <p>{{'Fermata'| translate}}:</p>
           </td>
           <td>
-              <ion-select>
-                  <ion-option value="f">Female</ion-option>
-                  <ion-option value="m">Male</ion-option>
-                </ion-select>
-                <select>
-                  <option>Blue</option>
-                  <option selected>Green</option>
-                  <option>Red</option>
-                </select>
-               <!-- <select  >
-                  <option ng-repeat="option in fermataOptions" value="option.value">{{option.label}}</option>
-                </select>-->
+              <div data-tap-disabled="true">
+                  <select ng-model="currData.fermata">
+                    <option ng-repeat="option in fermataOptions" value="option.value">{{option.label | translate}}</option>
+                  </select>
+              </div>
           </td>
         </tr>
         <tr>
@@ -54,9 +47,11 @@
               <p>{{'Ritira'| translate}}:</p>
           </td>
           <td>
-            <ion-list class="padlist">
-              <ion-item ng-repeat="option in ritiraOptions" ng-model="currData.delega" >{{option | translate}}</ion-item>
-            </ion-list>
+              <div data-tap-disabled="true">
+                  <select ng-model="currData.delega_name">
+                    <option ng-repeat="option in ritiraOptions" value="option.value">{{option.label | translate}}</option>
+                  </select>
+              </div>
           </td>
         </tr>
       </table>

@@ -1997,7 +1997,7 @@ textarea {
   background: #0EB8CB;
   margin-left: -12px;
   margin-right: -15px;
-  margin-bottom:8px;
+  margin-bottom:12px;
 }
 .brief_info{
   text-align: center;
@@ -2183,6 +2183,11 @@ textarea {
   font-size: small;
 }
 
+.span_motiv {
+  font-size: 70%;
+  padding-left:50px;
+  color:#F2A816;
+}
 
 .day_checkbox{
   font-size: 15px;
@@ -2247,9 +2252,6 @@ textarea {
   background: #F2A816;
   border: 0px solid #000000;
 }
-.control-radio .control_indicator {
-  border-radius: undefined%;
-}
 
 .control:hover input ~ .control_indicator,
 .control input:focus ~ .control_indicator {
@@ -2294,4 +2296,23 @@ textarea {
 .repeat_str{
   margin-top:20px;
   margin-bottom:15px;
+}
+
+.assenza{
+  display: flex;
+  flex-direction: column;
+}
+.assenza table{
+  width:70%;
+  margin-top: 8px;
+}
+.assenza table td{
+  width:70%;
+  margin-top: 8px;
+  padding-bottom:10px;
+  font-size: small;
+} 
+.reason{
+  display: flex;
+  flex-direction: row;
 }

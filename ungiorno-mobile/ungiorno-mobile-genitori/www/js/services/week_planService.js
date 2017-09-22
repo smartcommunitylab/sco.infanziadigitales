@@ -198,6 +198,28 @@ week_planService.getCurrentWeek= function () {
     
             return deferred.promise;
   }
+
+  week_planService.getRitiroOptions = function () {
+    var deferred = $q.defer();
+    
+            $http({
+                method: 'GET',
+                url: globalUrl + '/week_plan/getRitiroOptions',
+                headers: {
+                  'Accept': 'application/json'
+              },
+                timeout: Config.httpTimout()
+            }).
+            success(function (data, status, headers, config) {
+                deferred.resolve(data.data);
+            }).
+            error(function (data, status, headers, config) {
+                console.log(data + status + headers + config);
+                deferred.reject(data);
+            });
+    
+            return deferred.promise;
+    }
   
   return week_planService;
 })

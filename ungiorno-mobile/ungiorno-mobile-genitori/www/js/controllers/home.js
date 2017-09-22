@@ -245,8 +245,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
   }
   var getBriefInfo = function (schoolId) {
     var kidId = $scope.kidProfile.kidId;
+    $scope.kidname=$scope.kidProfile.firstName;
      //return dataServerService.getBriefInfo(schoolId,kidId);
-     var jsonTest={'ore_entrata':'09:20','ore_uscita':'14:20','addressBus':'Via Test',
+     var jsonTest={'ore_entrata':'09:20','ore_uscita':'14:20','addressBus':'Nome Test',
      'delegaName':'Nome Test','assente':false,'motivazione':'Motivazione Test'};
      return jsonTest;
   }

@@ -58,9 +58,9 @@
       <hr class="hrstyle"/>
       <div class="repeat_str">{{'repeat_days' | translate}}:</div>
       <div class="day_checkbox">
-          <label class="control control-checkbox" ng-repeat="dayex in repeatDays" ng-if="$index!=currDay">
+          <label class="control control-checkbox" ng-repeat="dayex in repeatDays">
               {{dayex['label'] | translate | uppercase}}
-                  <input type="checkbox" ng-model="currData[dayex['name']]" name="currData[dayex['name']]"  />
+                  <input type="checkbox" ng-model="currData[dayex['name']]" name="currData[dayex['name']]" ng-disabled="$index==currDay" ng-checked="$index==currDay" />
               <div class="control_indicator"></div>
           </label>
       </div>

@@ -2091,8 +2091,9 @@ textarea {
   flex-direction: row;
   color: #ffffff;
   border: 0;
-  margin:4px;
+  margin-left:2px;
   padding: 2px;
+  font-size: :90%;
 }
 .editable{
   background-color: #f8ab15;
@@ -2214,7 +2215,12 @@ textarea {
 }
 .iconStyleHead{
   font-size: 30px;
-  padding: 4px;
+  width:35px;
+  height:35px;
+  vertical-align: middle;
+}
+.br_in{
+  padding: 6px;
 }
 .dateStyleHead{
   padding-left:30px;

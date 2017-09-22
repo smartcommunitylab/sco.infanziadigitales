@@ -43,19 +43,6 @@
                       </td>
                     </tr>
                 </table>
-             <!-- <div class="reason"><div >{{'reason' | translate}} </div>
-              <div>
-                  
-              </div>
-            </div>
-          <div>
-            <div ng-if="currData.motivazione.type=='malattia'">{{'type_illness' | translate}} </div>
-              <div ng-if="currData.motivazione.type=='malattia'">
-                  <select ng-model="currData.motivazione.subtype">
-                      <option ng-repeat="option in listProblems" value="{{option.value}}">{{option.label | translate}}</option>
-                  </select>
-              </div>
-            </div>-->
             </div>
           </div>
         <div>
@@ -89,8 +76,8 @@
           </td>
           <td>
              <div data-tap-disabled="true">
-              <select ng-model="currData.fermata">
-                <option ng-repeat="option in fermataOptions" value="option.value">{{option.label | translate}}</option>
+              <select ng-model="currData.fermata" ng-disabled="currData.assente">
+                <option ng-repeat="option in fermataOptions" value="{{option.value}}">{{option.label | translate}}</option>
               </select>
              </div>
           </td>
@@ -101,8 +88,8 @@
           </td>
           <td>
               <div data-tap-disabled="true">
-                  <select ng-model="currData.delega_name">
-                    <option ng-repeat="option in ritiraOptions" value="option.value">{{option.label | translate}}</option>
+                  <select ng-model="currData.delega_name" ng-disabled="currData.assente">
+                    <option ng-repeat="option in ritiraOptions" value="{{option.value}}">{{option.label | translate}}</option>
                   </select>
               </div>
           </td>
@@ -111,9 +98,9 @@
       <hr class="hrstyle"/>
       <div class="repeat_str">{{'repeat_days' | translate}}:</div>
       <div class="day_checkbox">
-        <label class="control control-checkbox" ng-repeat="dayex in repeatDays" ng-if="$index!=currDay">
+        <label class="control control-checkbox" ng-repeat="dayex in repeatDays">
           {{dayex['label'] | translate | uppercase}}
-              <input type="checkbox" ng-model="currData[dayex['name']]" name="currData[dayex['name']]"  />
+              <input type="checkbox" ng-model="currData[dayex['name']]" ng-disabled="$index==currDay" name="currData[dayex['name']]"  ng-checked="$index==currDay"/>
           <div class="control_indicator"></div>
         </label>
           </div>

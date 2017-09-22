@@ -119,6 +119,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         if(selected>=$scope.currentDate){
           $scope.mode='edit';
           var dayData=$scope.days[day];
+          dayData['monday']=false;
+          dayData['tuesday']=false;
+          dayData['wednesday']=false;
+          dayData['thursday']=false;
+          dayData['friday']=false;
           var dateFormat=selected.format('dddd D MMMM');
           week_planService.setCurrentWeek($scope.currWeek);
           week_planService.setSelectedDateInfo(dateFormat);
@@ -206,6 +211,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.gotoEditDate = function(day) {
         $scope.mode='edit';
         var dayData=$scope.days[day];
+        dayData['monday']=false;
+        dayData['tuesday']=false;
+        dayData['wednesday']=false;
+        dayData['thursday']=false;
+        dayData['friday']=false;
         week_planService.setDayDataDefault(day,dayData,$scope.mode);
         $state.go('app.week_default_edit_day', {
              day: day
@@ -231,8 +241,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     
     $scope.getDateString = function () {
         var curr = new Date;
-        var firstday = new Date(curr.setDate(curr.getDate() - curr.getDay()-1));
-        var lastday = new Date(curr.setDate(curr.getDate() - curr.getDay()+5));
         $scope.date = curr.getTime();
     }
     $scope.getActualData = function() {
@@ -252,7 +260,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         week_planService.setDayDataDefault($scope.currDay,$scope.currData,'edit');
         var temp =angular.copy(($scope.currData));
         for(var i=0;i<=4;i++){
-            if($scope.currData[$scope.repeatDays[i]['name']]){
+            if(temp[$scope.repeatDays[i]['name']]){
                 temp['name']=$scope.repeatDays[i]['label'];
                 week_planService.setDayDataDefault(i,temp,'');//copy same info to the selected day of week
             }
@@ -319,8 +327,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.getActualData = function() {
         $scope.currDay=week_planService.getActualDay();
         $scope.currData=angular.copy(week_planService.getDayData($scope.currDay));
-        $scope.currData.motivazione.type=""+$scope.currData.motivazione.type;
-        $scope.currData.motivazione.subtype=""+$scope.currData.motivazione.subtype;
     };
     $scope.getActualData();
 
@@ -345,9 +351,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         week_planService.setDayData($scope.currDay,$scope.currData,'edit');
         var temp =angular.copy(($scope.currData));
         for(var i=0;i<=4;i++){
-            if($scope.currData[$scope.repeatDays[i]['name']]){
+            if(temp[$scope.repeatDays[i]['name']]){
                 temp['name']=$scope.repeatDays[i]['label'];
-                week_planService.setDayData(i,temp,'');//copy same info to the selected day of week
+                week_planService.setDayData(i,temp,'');//copy same info to the selected days of week
             }
         }
         week_planService.setMode('edit');

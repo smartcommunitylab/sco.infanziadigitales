@@ -256,7 +256,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     4:{'name':'friday','label':'friday_reduced'}};
 
     $scope.setDefaultDay = function() {
-        $scope.currData['entrata']='17:00';
         week_planService.setDayDataDefault($scope.currDay,$scope.currData,'edit');
         var temp =angular.copy(($scope.currData));
         for(var i=0;i<=4;i++){
@@ -295,12 +294,36 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
     $scope.getRitiroOptions();
 
-    $scope.openPopup= function() {
+    $scope.getListServices = function(day) {
+        $scope.listServices=[{'value':'anticipo1','label':'Anticipop1','entry':'09:00',out:'13:40',type:'anticipo'},
+        {'value':'posticipo1','label':'Posticipo1','entry':'13:20',out:'16:40',type:'posticipo'},
+        {'value':'posticipo2','label':'Posticipo2','entry':'13:20',out:'14:40',type:'posticipo'}];
+        //week_planService.getListServices().then(function (data) {
+        //    $scope.listServices=data;
+        //}, function (error) {
+        //})
+    };
+    $scope.getListServices();
+
+    $scope.setEntry = function(item) {
+        $scope.currData.entrata=item.entry;
+    };
+
+    $scope.setOut = function(item) {
+        $scope.currData.uscita=item.out;
+    };
+
+    $scope.openPopupEntry= function() {
         if (true) {//test
             var myPopup = $ionicPopup.show({
-              title: $filter('translate')('retire_popup_toolate_title'),
+              scope: $scope,
+              title: $filter('translate')('orario_entrata'),
               cssClass: 'expired-popup',
-              template: $filter('translate')('retire_popup_toolate_text') + " " + $filter('date')($scope.modifyBefore, 'HH:mm') + "<div class\"row\"><a href=\"tel:" + profileService.getSchoolProfile().contacts.telephone[0] + "\" class=\"button button-expired-call\">" + $filter('translate')('home_contatta') + "</a></div>",
+              //templateUrl: '../../templates/week_entry_out_services.html',
+              template: '<input type="text" ng-model="currData.entrata"/>'+
+                  ' <div><ion-list class="padlist">'+
+                  '<ion-radio ng-repeat="item in listServices" ng-click="setEntry(item)">{{item.entry}}</ion-radio>'+
+              '</ion-list></div>' ,
               buttons: [
                 {
                   text: $filter('translate')('retire_popup_absent_close'),
@@ -311,6 +334,28 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
           }
     }
 
+    $scope.openPopupOut= function() {
+        if (true) {//test
+            var myPopup = $ionicPopup.show({
+              scope: $scope,
+              title: $filter('translate')('orario_uscita'),
+              cssClass: 'expired-popup',
+              //templateUrl: '../../templates/week_entry_out_services.html',
+              template: '<input type="text" ng-model="currData.uscita"/>'+
+              ' <div><ion-list class="padlist">'+
+              '<ion-radio ng-repeat="item in listServices" ng-click="setOut(item)">{{item.out}}</ion-radio>'+
+          '</ion-list></div>' ,
+              buttons: [
+                {
+                  text: $filter('translate')('retire_popup_absent_close'),
+                  type: 'button-positive'
+                              }
+                          ]
+            });
+          }
+    }
+
+
 })
 .controller('WeekEditDayCtrl', function ($scope, moment, dataServerService, week_planService, profileService , $ionicModal, $filter, $ionicPopup,$state) {
     $scope.days={};
@@ -320,6 +365,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.kidId=profileService.getBabyProfile().kidId;
     $scope.fermataOptions=[];
     $scope.ritiraOptions=[];
+    $scope.listServices=[];
     
     $scope.getDateString = function () {
         $scope.date = week_planService.getSelectedDateInfo();
@@ -347,7 +393,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
      $scope.listProblems=[{value:'malattia',label:'Influenza'},{value:'malattia1',label:'Influenza1'},{value:'malattia2',label:'Influenza2'}];
 
     $scope.setDay = function() {
-        $scope.currData['entrata']='17:00';
         week_planService.setDayData($scope.currDay,$scope.currData,'edit');
         var temp =angular.copy(($scope.currData));
         for(var i=0;i<=4;i++){
@@ -387,12 +432,57 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
     $scope.getRitiroOptions();
 
-    $scope.openPopup= function() {
+    $scope.getListServices = function(day) {
+        $scope.listServices=[{'value':'anticipo1','label':'Anticipop1','entry':'09:00',out:'13:40',type:'anticipo'},
+        {'value':'posticipo1','label':'Posticipo1','entry':'13:20',out:'16:40',type:'posticipo'},
+        {'value':'posticipo2','label':'Posticipo2','entry':'13:20',out:'14:40',type:'posticipo'}];
+        //week_planService.getListServices().then(function (data) {
+        //    $scope.listServices=data;
+        //}, function (error) {
+        //})
+    };
+    $scope.getListServices();
+
+    $scope.setEntry = function(item) {
+        $scope.currData.entrata=item.entry;
+    };
+
+    $scope.setOut = function(item) {
+        $scope.currData.uscita=item.out;
+    };
+
+    $scope.openPopupEntry= function() {
         if (true) {//test
             var myPopup = $ionicPopup.show({
-              title: $filter('translate')('retire_popup_toolate_title'),
+              scope: $scope,
+              title: $filter('translate')('orario_entrata'),
               cssClass: 'expired-popup',
-              template: $filter('translate')('retire_popup_toolate_text') + " " + $filter('date')($scope.modifyBefore, 'HH:mm') + "<div class\"row\"><a href=\"tel:" + profileService.getSchoolProfile().contacts.telephone[0] + "\" class=\"button button-expired-call\">" + $filter('translate')('home_contatta') + "</a></div>",
+              //templateUrl: '../../templates/week_entry_out_services.html',
+              template: '<input type="text" ng-model="currData.entrata"/>'+
+                  ' <div><ion-list class="padlist">'+
+                  '<ion-radio ng-repeat="item in listServices" ng-click="setEntry(item)">{{item.entry}}</ion-radio>'+
+              '</ion-list></div>' ,
+              buttons: [
+                {
+                  text: $filter('translate')('retire_popup_absent_close'),
+                  type: 'button-positive'
+                              }
+                          ]
+            });
+          }
+    }
+
+    $scope.openPopupOut= function() {
+        if (true) {//test
+            var myPopup = $ionicPopup.show({
+              scope: $scope,
+              title: $filter('translate')('orario_uscita'),
+              cssClass: 'expired-popup',
+              //templateUrl: '../../templates/week_entry_out_services.html',
+              template: '<input type="text" ng-model="currData.uscita"/>'+
+              ' <div><ion-list class="padlist">'+
+              '<ion-radio ng-repeat="item in listServices" ng-click="setOut(item)">{{item.out}}</ion-radio>'+
+          '</ion-list></div>' ,
               buttons: [
                 {
                   text: $filter('translate')('retire_popup_absent_close'),

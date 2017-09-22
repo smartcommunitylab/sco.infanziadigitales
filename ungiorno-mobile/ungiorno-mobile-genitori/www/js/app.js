@@ -709,7 +709,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     repeat_days:'Ripeti il giorno',
     edit: 'Modifica',
     remove_reason:'Rimuovi Motivazione',
-    brief_txt:'La giornata di'
+    brief_txt:'La giornata di',
+    orario_entrata:'Orario Entrata',
+    orario_uscita:'Orario Uscita'
   });
 
   $translateProvider.translations('en', {
@@ -907,7 +909,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     repeat_days:'Repeat the day',
     edit: 'Edit',
     remove_reason:'Remove Reason',
-    brief_txt:'The day of'
+    brief_txt:'The day of',
+    orario_entrata:'Entry Time',
+    orario_uscita:'Orario Uscita'
   });
 
   $translateProvider.translations('de', {
@@ -1111,7 +1115,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     repeat_days:'Ripeti il giorno',
     edit: 'Modifica',
     remove_reason:'Remove Reason',
-    brief_txt:'La giornata di'
+    brief_txt:'La giornata di',
+    orario_entrata:'Orario Entrata',
+    orario_uscita:'Orario Uscita'
   });
 
   $translateProvider.preferredLanguage("it");

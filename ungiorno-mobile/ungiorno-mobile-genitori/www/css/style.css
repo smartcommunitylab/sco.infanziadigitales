@@ -2074,6 +2074,7 @@ textarea {
   flex-direction: column;
   padding-left:10px;
   padding-right:10px;
+  padding-top:10px;
 }
 
 .week_plan_detail .day{
@@ -2081,6 +2082,7 @@ textarea {
   display: flex;
   flex-direction: row;
 }
+
 .delega_day{
   text-align: center;
   display: flex;
@@ -2093,6 +2095,9 @@ textarea {
 .editable{
   background-color: #f8ab15;
 }
+.editable2{
+  color: black;
+}
 .actions{
   color: #f8ab15;
   display: flex;
@@ -2102,11 +2107,32 @@ textarea {
   margin-left: 25px;
   font-size: 10px; 
 }
+.actions_default{
+  color: #f8ab15;
+  display: flex;
+  flex-direction: row;
+  margin:auto;
+  margin-top:10px;
+  width:30%;
+  font-size: 10px; 
+}
+.actions_default_restore{
+  color: #f8ab15;
+  display: flex;
+  flex-direction: row;
+  margin:auto;
+  margin-top:10px;
+  padding: 3px;
+  font-size: 10px; 
+}
 .actHeader{
   text-align: left;
 }
 .noneditable{
   background-color: #009AA8;
+}
+.noneditable2{
+  color: lightgray;
 }
 
 .readonly{
@@ -2133,6 +2159,28 @@ textarea {
   vertical-align: middle;
   padding-bottom:10px;
 }
+.dayEdit{
+  text-align: left;
+  width:90%;
+  padding-left: 20px;
+  margin-top:17px;
+}
+.dayEdit_table{
+  padding:20px;
+  margin-top:15px;
+  width: 80%;
+}
+.dayEdit_table td {
+  vertical-align: middle;
+  padding-bottom:10px;
+  font-size: 15px;
+}
+.day_checkbox{
+  font-size: 15px;
+  color:#f8ab15;
+  display: flex;
+  flex-direction: row;
+}
 .val_time{
   font-weight: bold;
 }
@@ -2151,6 +2199,90 @@ textarea {
   height:15px;
 }
 .iconStyleHead{
-  width:25px;
-  height:35px;
+  font-size: 30px;
+  padding: 4px;
+}
+.dateStyleHead{
+  padding-left:30px;
+  padding-right:30px;
+}
+.weekicon{
+  margin-top: 10px;
+  margin-right: 5px;
+}
+
+/* checkbox styling */
+
+.control {
+  font-family: arial;
+  display: block;
+  position: relative;
+  padding-left: 22px;
+  padding-right: 10px;
+  margin-bottom: 5px;
+  padding-top: 3px;
+  cursor: pointer;
+  font-size: 10px;
+}
+  .control input {
+      position: absolute;
+      z-index: -1;
+      opacity: 0;
+  }
+.control_indicator {
+  position: absolute;
+  top: 0px;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background: #F2A816;
+  border: 0px solid #000000;
+}
+.control-radio .control_indicator {
+  border-radius: undefined%;
+}
+
+.control:hover input ~ .control_indicator,
+.control input:focus ~ .control_indicator {
+  background: #F8AB15;
+}
+
+.control input:checked ~ .control_indicator {
+  background: #F8AB15;
+}
+.control:hover input:not([disabled]):checked ~ .control_indicator,
+.control input:checked:focus ~ .control_indicator {
+  background: #F8AB15;
+}
+.control input:disabled ~ .control_indicator {
+  background: #e6e6e6;
+  opacity: 0.6;
+  pointer-events: none;
+}
+.control_indicator:after {
+  box-sizing: unset;
+  content: '';
+  position: absolute;
+  display: none;
+}
+.control input:checked ~ .control_indicator:after {
+  display: block;
+}
+.control-checkbox .control_indicator:after {
+  left: 8px;
+  top: 4px;
+  width: 3px;
+  height: 8px;
+  border: solid #ffffff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+.control-checkbox input:disabled ~ .control_indicator:after {
+  border-color: #7b7b7b;
+}
+/* checkbox style */
+
+.repeat_str{
+  margin-top:20px;
+  margin-bottom:15px;
 }

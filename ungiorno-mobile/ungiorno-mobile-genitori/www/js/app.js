@@ -472,6 +472,33 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
           controller: 'WeekPlanCtrl'
         }
       }
+    }).state('app.default_week_plan', {
+      url: '/default_week_plan',
+      cache: false,
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/week_default.html',
+          controller: 'DefaultWeekPlanCtrl'
+        }
+      }
+    }).state('app.week_default_edit_day', {
+      url: '/week_default_edit_day',
+      cache: false,
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/week_default_edit_day.html',
+          controller: 'WeekDefaultEditDayCtrl'
+        }
+      }
+    }).state('app.week_edit_day', {
+      url: '/week_edit_day',
+      cache: false,
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/week_edit_day.html',
+          controller: 'WeekEditDayCtrl'
+        }
+      }
     });
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/login');
@@ -677,7 +704,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     babysetting_not_active: 'Non attivo',
     modifica: 'Modifica',
     load_default_week:'Carica settimana default',
-    copy_previous_week:'Copia settimana precedente'
+    copy_previous_week:'Copia settimana precedente',
+    restore:'Ripristina impostazioni iniziali',
+    repeat_days:'Ripeti il giorno',
+    edit: 'Modifica',
   });
 
   $translateProvider.translations('en', {
@@ -870,7 +900,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     babysetting_not_active: 'Non attivo',
     modifica: 'Edit',
     load_default_week:'Load default week',
-    copy_previous_week:'Copy previous week'
+    copy_previous_week:'Copy previous week',
+    restore:'Restore initial config',
+    repeat_days:'Repeat the day',
+    edit: 'Edit',
   });
 
   $translateProvider.translations('de', {
@@ -1069,7 +1102,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     menu_week_plan: 'Piano Settimanale',
     menu_default_week_plan:'Settimana default',
     load_default_week:'Carica settimana default',   
-    copy_previous_week:'Copia settimana precedente'
+    copy_previous_week:'Copia settimana precedente',
+    restore:'Ripristina impostazioni iniziali',
+    repeat_days:'Ripeti il giorno',
+    edit: 'Modifica',
   });
 
   $translateProvider.preferredLanguage("it");

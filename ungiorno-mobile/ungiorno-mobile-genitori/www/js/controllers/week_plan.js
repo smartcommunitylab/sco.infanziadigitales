@@ -3,7 +3,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 .controller('WeekPlanCtrl', function ($scope, moment, dataServerService, week_planService, profileService , $ionicModal, $filter, $ionicPopup,$state) {
     $scope.days={};
     var dated = new Date();
-    $scope.currWeek = (0 | dated.getDate() / 7)+1;
+    $scope.currentDate = moment();
+    $scope.currWeek = $scope.currentDate.format('w');
     $scope.currDay = dated.getDay()-1;//0 ,1 ...6
     $scope.kidId=profileService.getBabyProfile().kidId;
     var jsonTest={0:{'name':'monday_reduced','entrata':'08:20','uscita':'13:20','service_bus':true,'delega_name':'NameTest','delega_type':'nono','assente':false},
@@ -12,17 +13,24 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     3:{'name':'thursday_reduced','entrata':'08:20','uscita':'13:20','service_bus':true,'delega_name':'NameTest','delega_type':'nono','assente':false},
     4:{'name':'friday_reduced','entrata':'08:20','uscita':'13:20','service_bus':true,'delega_name':'NameTest','delega_type':'nono','assente':false}};
 
-    $scope.getDateString = function () {
-        var curr = new Date;
-        var firstday = new Date(curr.setDate(curr.getDate() - curr.getDay()-1));
-        var lastday = new Date(curr.setDate(curr.getDate() - curr.getDay()+5));
-        $scope.date = curr.getTime();
+    $scope.getDateString = function (currentDate) {
+        var weekStart = currentDate.clone().startOf('week');
+        var weekEnd = currentDate.clone().endOf('week');
+        var sDate=moment(weekStart).format("D");
+        var eDate=moment(weekEnd).format("D");
+        var month=moment(weekEnd).format("MMMM");
+        var year=moment(weekEnd).format("YYYY");
+        $scope.date = sDate+' - '+eDate+' '+month+' '+year;
     }
 
     $scope.isActive =  function(day) {
         return (day==$scope.currDay ? true : false);
     };
 
+    $scope.currentWeek = function(){ 
+        return $scope.currentDate.format('w');      
+     };
+    
     $scope.getWeekPlan = function() {
         $scope.mode=week_planService.getMode();
         if($scope.mode=='edit'){
@@ -68,30 +76,22 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
     
     $scope.prev_week = function() {
-        var currentDate = moment();
-        var weekStart = currentDate.clone().startOf('week');
-        var weekEnd = currentDate.clone().endOf('week');
-        var days = [];
-        for (i = 0; i <= 6; i++) {
-            days.push(moment(weekStart).add(i, 'days').format("MMMM Do,dddd"));
-        };
-        console.log(days);
-        console.log(moment('01/19/2016').format("MMMM Do,dddd"));
-        var oneWeekAgo = new Date();
-        oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-        $scope.currWeek=(0 | oneWeekAgo.getDate() / 7)+1;
-        $scope.currDay = oneWeekAgo.getDay();
-        week_planService.setCurrentWeek($scope.currWeek);
-        $scope.getWeekPlan();
+        //days.push(moment(weekStart).add(i, 'days').format("MMMM Do,dddd"));
+        var prev = moment().day("Monday").week($scope.currWeek);
+        prev.subtract(1, "weeks");
+        $scope.currWeek=prev.format('w');
+        $scope.getDateString(prev);
+        //week_planService.setCurrentWeek($scope.currWeek);
+        //$scope.getWeekPlan();
     };
     
     $scope.next_week = function() {
-        var oneWeek = new Date();
-        oneWeek.setDate(oneWeek.getDate() + 7);
-        $scope.currWeek=(0 | oneWeek.getDate() / 7)+1;
-        $scope.currDay = oneWeek.getDay();
-        week_planService.setCurrentWeek($scope.currWeek);
-        $scope.getWeekPlan();
+        var next = moment().day("Monday").week($scope.currWeek);
+        next.add(1, 'weeks');
+        $scope.currWeek=next.format('w');
+        $scope.getDateString(next);
+        //week_planService.setCurrentWeek($scope.currWeek);
+        //$scope.getWeekPlan();
     };
     
     $scope.modifyWeek = function() {

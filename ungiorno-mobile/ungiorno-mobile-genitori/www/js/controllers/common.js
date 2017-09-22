@@ -52,7 +52,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
   };
 })
 
-.controller('AppCtrl', function ($scope, $rootScope, $cordovaDevice, $ionicModal, $ionicHistory, $timeout, $filter, $ionicPopover, $state, $ionicSideMenuDelegate, Toast, Config, profileService, $ionicPopup) {
+.controller('AppCtrl', function ($scope, $rootScope, $cordovaDevice, $ionicModal, $ionicHistory, $timeout, $filter, $ionicPopover, $state, $ionicSideMenuDelegate, Toast, Config, profileService, week_planService, $ionicPopup) {
   $scope.profilesOpen = false;
   $scope.expandProfiles = false;
 
@@ -262,7 +262,14 @@ $scope.logout = function () {
   }
 
   $scope.goToWeekPlan = function (kidid) {
+    week_planService.setMode('');
     $state.go('app.week_plan', {
+      id: kidid
+    });
+  }
+  $scope.goToDefaultWeekPlan = function (kidid) {
+    week_planService.setModeDefault('');
+    $state.go('app.default_week_plan', {
       id: kidid
     });
   }

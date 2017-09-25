@@ -93,6 +93,12 @@
 			<version>${spring-version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>2.9.9</version>
+		</dependency>
+
 		<!-- Security -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
@@ -135,11 +141,11 @@
 			<version>2.3.0</version>
 		</dependency>
 
+		<!-- android version because it supports Java7 -->
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
-			<version>15.0</version>
-			<type>jar</type>
+			<version>23.0-android</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-lang</groupId>

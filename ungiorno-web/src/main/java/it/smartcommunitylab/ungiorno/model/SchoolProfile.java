@@ -13,7 +13,9 @@
  ******************************************************************************/
 package it.smartcommunitylab.ungiorno.model;
 
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author raman
@@ -102,6 +104,20 @@ public class SchoolProfile extends SchoolObject {
     private List<BusProfile> buses;
     private String absenceTiming, retireTiming;
     private String accessEmail;
+    private Set<TimeSlotSchoolService> timeSlotServices;
+
+    public SchoolProfile(TimeSlotSchoolService regular) {
+        timeSlotServices = new LinkedHashSet<>();
+        timeSlotServices.add(regular);
+    }
+
+    /*
+     * FIXME: Actually to maintain because the class is used as Java Bean: serialized in JSON to be
+     * persisted and sent to the web clients
+     */
+    public SchoolProfile() {
+
+    }
 
     public String getAccessEmail() {
         return accessEmail;
@@ -231,5 +247,16 @@ public class SchoolProfile extends SchoolObject {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public Set<TimeSlotSchoolService> getTimeSlotServices() {
+        return timeSlotServices;
+    }
+
+    /*
+     * FIXME: not the best way to expose directly internal collection
+     */
+    public void setTimeSlotServices(Set<TimeSlotSchoolService> timeSlotServices) {
+        this.timeSlotServices = timeSlotServices;
     }
 }

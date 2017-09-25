@@ -106,7 +106,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
 })
 
-.controller('RegisterCtrl', function ($scope, $rootScope, $state, $filter, $ionicHistory, $ionicPopup, loginService, Config, $translate, $ionicLoading) {
+.controller('RegisterCtrl', function ($scope, $rootScope, $state, $filter, $ionicHistory, $ionicPopup, LoginService, loginService, Config, $translate, $ionicLoading) {
     $scope.user = {
         lang: $translate.preferredLanguage(),
         name: '',

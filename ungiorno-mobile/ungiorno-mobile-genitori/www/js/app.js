@@ -46,6 +46,7 @@ angular.module('ngIOS9UIWebViewPatch', ['ng']).config(['$provide', function ($pr
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     'ionic',
     'ngCordova',
+    'angular.filter',
     'ngIOS9UIWebViewPatch',
     'pascalprecht.translate',
     'smartcommunitylab.services.login',
@@ -77,6 +78,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.communicationsService',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.messagesService',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.notification',
+    'it.smartcommunitylab.infanziadigitales.diario.parents.services.week_planService',
+    'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.week_plan',
     'angularMoment',
   'monospaced.elastic'
 ])
@@ -278,7 +281,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
 
   // for BlackBerry 10, WP8, iOS
   setTimeout(function () {
-    $cordovaSplashscreen.hide();
+    if (window.$cordovaSplashscreen) $cordovaSplashscreen.hide();
     //navigator.splashscreen.hide();
   }, 3000);
 
@@ -294,9 +297,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
 
 })
 
-.config(function ($stateProvider, $urlRouterProvider, $translateProvider, $ionicConfigProvider) {
+.config(function ($stateProvider, $urlRouterProvider, $translateProvider, $ionicConfigProvider,$httpProvider) {
   $ionicConfigProvider.backButton.text('').previousTitleText(false);
 
+  $httpProvider.defaults.withCredentials=true;
   $stateProvider.state('app', {
     url: "/app",
     abstract: true,
@@ -460,6 +464,42 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
           controller: 'MessagesCtrl'
         }
       }
+    }).state('app.week_plan', {
+      url: '/week_plan',
+      cache: false,
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/week_plan.html',
+          controller: 'WeekPlanCtrl'
+        }
+      }
+    }).state('app.default_week_plan', {
+      url: '/default_week_plan',
+      cache: false,
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/week_default.html',
+          controller: 'DefaultWeekPlanCtrl'
+        }
+      }
+    }).state('app.week_default_edit_day', {
+      url: '/week_default_edit_day',
+      cache: false,
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/week_default_edit_day.html',
+          controller: 'WeekDefaultEditDayCtrl'
+        }
+      }
+    }).state('app.week_edit_day', {
+      url: '/week_edit_day',
+      cache: false,
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/week_edit_day.html',
+          controller: 'WeekEditDayCtrl'
+        }
+      }
     });
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/login');
@@ -488,11 +528,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     menu_exit: 'Logout',
     menu_enter: 'Entra',
     menu_impostazioni: 'Informazioni',
+    menu_week_plan: 'Piano Settimanale',
+    menu_default_week_plan:'Settimana default',
     menu_issue: 'Segnala un problema',
     menu_privacy: 'Privacy',
     babysetting_intro: 'Informazioni relative al bambino.',
     babysetting_services: 'Servizi:',
-    babysetting_hours: 'Orario di uscita predefinito:',
+    babysetting_hours: 'Orario uscita predefinito',
+    babysetting_hours_entry: 'Orario entrata predefinito',
     babysetting_who: 'Autorizzati al ritiro del bambino:',
     babysetting_bus: 'Fermate bus:',
     babysetting_busGo: 'Fermata bus andata:',
@@ -660,7 +703,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     type_illness: 'Tipo di malattia:',
     no_messages: 'Non sono presenti messaggi',
     babysetting_active: 'Attivo',
-    babysetting_not_active: 'Non attivo'
+    babysetting_not_active: 'Non attivo',
+    modifica: 'Modifica',
+    load_default_week:'Carica settimana default',
+    copy_previous_week:'Copia settimana precedente',
+    restore:'Ripristina impostazioni iniziali',
+    repeat_days:'Ripeti il giorno',
+    edit: 'Modifica',
+    remove_reason:'Rimuovi Motivazione',
+    brief_txt:'La giornata di',
+    orario_entrata:'Orario Entrata',
+    orario_uscita:'Orario Uscita'
   });
 
   $translateProvider.translations('en', {
@@ -685,9 +738,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     menu_exit: 'Logout',
     menu_enter: 'Entra',
     menu_impostazioni: 'Informazioni',
+    menu_week_plan: 'Week Planning',
+    menu_default_week_plan:'Default Week',
     babysetting_intro: 'Definisci i seguenti dati relativi all\'orario scolastico del bambino.',
     babysetting_services: 'Servizi',
-    babysetting_hours: 'Orario di uscita:',
+    babysetting_hours: 'Orario uscita predefinito',
+    babysetting_hours_entry: 'Orario entrata predefinito',
     babysetting_who: 'Chi ritira il bambino:',
     babysetting_bus: 'Autobus',
     babysetting_busGo: 'Fermata bus andata:',
@@ -848,8 +904,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     type_illness: 'Tipo di malattia:',
     no_messages: 'Non sono presenti messaggi',
     babysetting_active: 'Attivo',
-    babysetting_not_active: 'Non attivo'
-
+    babysetting_not_active: 'Non attivo',
+    modifica: 'Edit',
+    load_default_week:'Load default week',
+    copy_previous_week:'Copy previous week',
+    restore:'Restore initial config',
+    repeat_days:'Repeat the day',
+    edit: 'Edit',
+    remove_reason:'Remove Reason',
+    brief_txt:'The day of',
+    orario_entrata:'Entry Time',
+    orario_uscita:'Orario Uscita'
   });
 
   $translateProvider.translations('de', {
@@ -876,7 +941,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     menu_impostazioni: 'Informazioni',
     babysetting_intro: 'Definisci i seguenti dati relativi all\'orario scolastico del bambino.',
     babysetting_services: 'Servizi',
-    babysetting_hours: 'Orario di uscita:',
+    babysetting_hours: 'Orario uscita predefinito',
+    babysetting_hours_entry: 'Orario entrata predefinito',
     babysetting_who: 'Chi ritira il bambino:',
     babysetting_bus: 'Autobus',
     babysetting_busGo: 'Fermata bus andata:',
@@ -1043,8 +1109,19 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     type_illness: 'Tipo di malattia:',
     no_messages: 'Non sono presenti messaggi',
     babysetting_active: 'Attivo',
-    babysetting_not_active: 'Non attivo'
-
+    babysetting_not_active: 'Non attivo',
+    modifica: 'Modifica',
+    menu_week_plan: 'Piano Settimanale',
+    menu_default_week_plan:'Settimana default',
+    load_default_week:'Carica settimana default',   
+    copy_previous_week:'Copia settimana precedente',
+    restore:'Ripristina impostazioni iniziali',
+    repeat_days:'Ripeti il giorno',
+    edit: 'Modifica',
+    remove_reason:'Remove Reason',
+    brief_txt:'La giornata di',
+    orario_entrata:'Orario Entrata',
+    orario_uscita:'Orario Uscita'
   });
 
   $translateProvider.preferredLanguage("it");

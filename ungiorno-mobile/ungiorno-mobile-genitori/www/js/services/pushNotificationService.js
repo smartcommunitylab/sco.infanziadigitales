@@ -13,7 +13,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.n
   //set behaviour of local notification click: change context, go to the right page and delete entry in the local storage
 
   $ionicPlatform.ready(function () {
-    cordova.plugins.notification.local.on("click", function (notification) {
+    if (window.cordova && cordova.plugins.notification) cordova.plugins.notification.local.on("click", function (notification) {
       if (notification && notification.data) {
         //manage kind of notification if message or communication
         if (JSON.parse(notification.data)["content.type"] == "chat") {
@@ -181,6 +181,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.n
     }
     // Register to GCM
   pushNotificationService.register = function (schooldIds) {
+    if (!window.PushNotification) return;
+
     console.log("registration");
     var arrayOfSchools = [];
 

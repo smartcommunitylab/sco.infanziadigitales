@@ -5,11 +5,35 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
     var babyProfile = null;
     var schoolProfile = null; //static info
     var dataServerService = {};
+    var globalUrl=Config.URL() + '/' + Config.app();
 
 
 
 
 
+   
+    dataServerService.getBriefInfo = function (schoolId, kidId) {
+        var deferred = $q.defer();
+        $http({
+            method: 'GET',
+            url: Config.URL() + '/' + Config.app() + '/briefinfo' ,
+            headers: {
+                'Accept': 'application/json'
+            },
+            timeout: Config.httpTimout()
+
+        }).
+        success(function (data, status, headers, config) {
+            deferred.resolve(data.data);
+        }).
+        error(function (data, status, headers, config) {
+            console.log(data + status + headers + config);
+            deferred.reject(data);
+        });
+
+        return deferred.promise;
+    }
+    
     dataServerService.getBabyConfigurationById = function (schoolId, kidId) {
         var deferred = $q.defer();
         $http({

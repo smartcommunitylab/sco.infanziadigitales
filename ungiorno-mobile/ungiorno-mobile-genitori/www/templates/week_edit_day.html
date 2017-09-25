@@ -1,0 +1,125 @@
+<ion-view id="home">
+
+  <ion-nav-bar class="bar bar-ungiorno">
+    <ion-nav-back-button>
+    </ion-nav-back-button>
+</ion-nav-bar>
+<ion-nav-title ng-init="getDateString()">
+  {{date | uppercase}}
+</ion-nav-title>
+ 
+  <ion-content has-header="true">
+    <ion-scroll scrollbar-y="true">
+      <div class="dayEdit">
+          <div class="assenza">
+              <div class="reason">
+                <label class="control control-checkbox">
+                  {{'home_absent' | translate}}
+                      <input type="checkbox" ng-model="currData.assente" name="assente"  />
+                    <div class="control_indicator"></div>
+                 </label>
+                 <span class="span_motiv" ng-click="removeReason()">{{'remove_reason' | translate | uppercase}}</span>
+              </div>
+              <div ng-if="currData.assente" class="assenza">
+                <table>
+                  <tr>
+                    <td>{{'reason' | translate}}: </td>
+                    <td>
+                      <div data-tap-disabled="true">
+                        <select ng-model="currData.motivazione.type">
+                            <option ng-repeat="option in listReasons" value="{{option.value}}">{{option.label | translate}}</option>
+                        </select>
+                        </div>
+                      </td>
+                  </tr>
+                  <tr ng-if="currData.motivazione.type=='malattia'">
+                      <td>{{'type_illness' | translate}}: </td>
+                      <td>
+                        <div data-tap-disabled="true">
+                          <select ng-model="currData.motivazione.subtype">
+                              <option ng-repeat="option in listProblems" value="{{option.value}}">{{option.label | translate}}</option>
+                          </select>
+                        </div>
+                      </td>
+                    </tr>
+                </table>
+            </div>
+          </div>
+        <div>
+        <hr class="hrstyle"/>
+        <label class="control control-checkbox">
+          {{'Bus' | translate}}
+              <input type="checkbox" ng-model="currData.service_bus" name="service_bus"  />
+          <div class="control_indicator"></div>
+        </label>
+      <table class="dayEdit_table" >
+        <tr>
+          <td>
+              <p>{{'Entrata ore'| translate}}:</p>{{currData.entry}}
+          </td>
+          <td>
+              <p class="editable2" ng-click="openPopupEntry()">{{currData.entrata}}</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+              <p>{{'Uscita ore'| translate}}:</p>
+          </td>
+          <td>
+              <p class="editable2" ng-click="openPopupOut()" ng-show="!currData.service_bus">{{currData.uscita}}</p>
+              <p class="noneditable2" ng-show="currData.service_bus">{{currData.uscita}}</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+              <p>{{'Fermata'| translate}}:</p>
+          </td>
+          <td>
+             <div data-tap-disabled="true">
+              <select ng-model="currData.fermata" ng-disabled="currData.assente">
+                <option ng-repeat="option in fermataOptions" value="{{option.value}}">{{option.label | translate}}</option>
+              </select>
+             </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+              <p>{{'Ritira'| translate}}:</p>
+          </td>
+          <td>
+              <div data-tap-disabled="true">
+                  <select ng-model="currData.delega_name" ng-disabled="currData.assente">
+                    <option ng-repeat="option in ritiraOptions" value="{{option.value}}">{{option.label | translate}}</option>
+                  </select>
+              </div>
+          </td>
+        </tr>
+      </table>
+      <hr class="hrstyle"/>
+      <div class="repeat_str">{{'repeat_days' | translate}}:</div>
+      <div class="day_checkbox">
+        <label class="control control-checkbox" ng-repeat="dayex in repeatDays">
+          {{dayex['label'] | translate | uppercase}}
+              <input type="checkbox" ng-model="currData[dayex['name']]" ng-disabled="$index==currDay" name="currData[dayex['name']]"  ng-checked="$index==currDay"/>
+          <div class="control_indicator"></div>
+        </label>
+          </div>
+        <div class="button_bottom">
+        <div class="button_cancel" ng-click="cancel()">
+           {{'cancel' | translate | uppercase}}
+        </div>
+
+        <div class="button_save" ng-click="setDay()">
+          {{'Conferma' | translate | uppercase}}
+        </div>
+      </div>
+
+    </div>
+    </ion-scroll>
+  </ion-content>
+</ion-view>
+<!-- 
+  <ion-list class="padlist">
+			<ion-item ng-repeat="option in options" ng-click="changeView(option)">{{option | translate}}</ion-item>
+    </ion-list>
+  -->

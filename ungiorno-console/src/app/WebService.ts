@@ -36,7 +36,7 @@ export class WebService {
       let serverSchoolsData = x.json().data;
       serverSchoolsData.forEach(data => {
         data.id = data.schoolId;
-      });
+      }); 
       return  serverSchoolsData as School[]
     })
   }

@@ -112,5 +112,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     return result;
   }
 
+  $scope.getTimeLabelEntry = function () {
+    var day = moment($scope.time.value);
+    var result = day.format('HH:mm');
+    return result;
+  }
+
 
 });

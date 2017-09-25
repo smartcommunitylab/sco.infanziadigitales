@@ -257,9 +257,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
     $scope.setDefaultDay = function() {
         week_planService.setDayDataDefault($scope.currDay,$scope.currData,'edit');
-        var temp =angular.copy(($scope.currData));
         for(var i=0;i<=4;i++){
-            if(temp[$scope.repeatDays[i]['name']]){
+            if($scope.currData[$scope.repeatDays[i]['name']]){
+                var temp =angular.copy(($scope.currData));
                 temp['name']=$scope.repeatDays[i]['label'];
                 week_planService.setDayDataDefault(i,temp,'');//copy same info to the selected day of week
             }
@@ -295,9 +295,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.getRitiroOptions();
 
     $scope.getListServices = function(day) {
-        $scope.listServices=[{'value':'anticipo1','label':'Anticipop1','entry':'09:00',out:'13:40',type:'anticipo'},
-        {'value':'posticipo1','label':'Posticipo1','entry':'13:20',out:'16:40',type:'posticipo'},
-        {'value':'posticipo2','label':'Posticipo2','entry':'13:20',out:'14:40',type:'posticipo'}];
+        $scope.listServices=[{'value':'anticipo1','label':'Anticipop1','entry':'09:00',out:'13:40','type':'anticipo'},
+        {'value':'posticipo1','label':'Posticipo1','entry':'13:20',out:'16:40','type':'posticipo'},
+        {'value':'posticipo2','label':'Posticipo2','entry':'13:20',out:'14:40','type':'posticipo'}];
         //week_planService.getListServices().then(function (data) {
         //    $scope.listServices=data;
         //}, function (error) {
@@ -319,11 +319,23 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
               scope: $scope,
               title: $filter('translate')('orario_entrata'),
               cssClass: 'expired-popup',
-              //templateUrl: '../../templates/week_entry_out_services.html',
+              //templateUrl: '../../templates/week_entry_out_services.html
+              /*<ul>
+              <li ng-repeat="(key, value) in players | groupBy: 'team'">
+                Group name: {{ key }}
+                <ul>
+                  <li ng-repeat="player in value">
+                    player: {{ player.name }}
+                  </li>
+                </ul>
+              </li>
+            </ul>',*/
               template: '<input type="text" ng-model="currData.entrata"/>'+
-                  ' <div><ion-list class="padlist">'+
-                  '<ion-radio ng-repeat="item in listServices" ng-click="setEntry(item)">{{item.entry}}</ion-radio>'+
-              '</ion-list></div>' ,
+                  ' <div><ion-list class="padlist" ng-repeat="(key, item) in listServices | groupBy: \'type\'" >'+
+                  '<ion-item >{{key}}</ion-item >'+
+                  '<ion-radio ng-repeat="itemValue in item" ng-click="setEntry(itemValue)">{{itemValue.entry}}</ion-radio>'+
+              '</ion-list>'+
+          '</ion-list></div>' ,
               buttons: [
                 {
                   text: $filter('translate')('retire_popup_absent_close'),
@@ -342,9 +354,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
               cssClass: 'expired-popup',
               //templateUrl: '../../templates/week_entry_out_services.html',
               template: '<input type="text" ng-model="currData.uscita"/>'+
-              ' <div><ion-list class="padlist">'+
-              '<ion-radio ng-repeat="item in listServices" ng-click="setOut(item)">{{item.out}}</ion-radio>'+
-          '</ion-list></div>' ,
+              ' <div><ion-list class="padlist" ng-repeat="(key, item) in listServices | groupBy: \'type\'" >'+
+              '<ion-item >{{key}}</ion-item >'+
+              '<ion-radio ng-repeat="itemValue in item" ng-click="setOut(itemValue)">{{itemValue.out}}</ion-radio>'+
+          '</ion-list>'+
+      '</ion-list></div>' ,
               buttons: [
                 {
                   text: $filter('translate')('retire_popup_absent_close'),
@@ -394,11 +408,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
     $scope.setDay = function() {
         week_planService.setDayData($scope.currDay,$scope.currData,'edit');
-        var temp =angular.copy(($scope.currData));
         for(var i=0;i<=4;i++){
-            if(temp[$scope.repeatDays[i]['name']]){
+            if($scope.currData[$scope.repeatDays[i]['name']]){
+                var temp =angular.copy(($scope.currData));
                 temp['name']=$scope.repeatDays[i]['label'];
-                week_planService.setDayData(i,temp,'');//copy same info to the selected days of week
+                week_planService.setDayData(i,temp,'');//copy same info to the selected day of week
             }
         }
         week_planService.setMode('edit');
@@ -457,11 +471,23 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
               scope: $scope,
               title: $filter('translate')('orario_entrata'),
               cssClass: 'expired-popup',
-              //templateUrl: '../../templates/week_entry_out_services.html',
+              //templateUrl: '../../templates/week_entry_out_services.html
+              /*<ul>
+              <li ng-repeat="(key, value) in players | groupBy: 'team'">
+                Group name: {{ key }}
+                <ul>
+                  <li ng-repeat="player in value">
+                    player: {{ player.name }}
+                  </li>
+                </ul>
+              </li>
+            </ul>',*/
               template: '<input type="text" ng-model="currData.entrata"/>'+
-                  ' <div><ion-list class="padlist">'+
-                  '<ion-radio ng-repeat="item in listServices" ng-click="setEntry(item)">{{item.entry}}</ion-radio>'+
-              '</ion-list></div>' ,
+                  ' <div><ion-list class="padlist" ng-repeat="(key, item) in listServices | groupBy: \'type\'" >'+
+                  '<ion-item >{{key}}</ion-item >'+
+                  '<ion-radio ng-repeat="itemValue in item" ng-click="setEntry(itemValue)">{{itemValue.entry}}</ion-radio>'+
+              '</ion-list>'+
+          '</ion-list></div>' ,
               buttons: [
                 {
                   text: $filter('translate')('retire_popup_absent_close'),
@@ -480,9 +506,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
               cssClass: 'expired-popup',
               //templateUrl: '../../templates/week_entry_out_services.html',
               template: '<input type="text" ng-model="currData.uscita"/>'+
-              ' <div><ion-list class="padlist">'+
-              '<ion-radio ng-repeat="item in listServices" ng-click="setOut(item)">{{item.out}}</ion-radio>'+
-          '</ion-list></div>' ,
+              ' <div><ion-list class="padlist" ng-repeat="(key, item) in listServices | groupBy: \'type\'" >'+
+              '<ion-item >{{key}}</ion-item >'+
+              '<ion-radio ng-repeat="itemValue in item" ng-click="setOut(itemValue)">{{itemValue.out}}</ion-radio>'+
+          '</ion-list>'+
+      '</ion-list></div>' ,
               buttons: [
                 {
                   text: $filter('translate')('retire_popup_absent_close'),

@@ -21,5 +21,7 @@ export class School {
     malattia : boolean;
     familiari : boolean;
 
-    constructor() {}
+    constructor() {
+        this.phoneNumbers = [];
+    }
 }

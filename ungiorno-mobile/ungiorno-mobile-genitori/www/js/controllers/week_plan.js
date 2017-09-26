@@ -47,7 +47,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             for(var i=0;i<=4;i++){
                 week_planService.setDayData(i,$scope.days[i],'');
             }
-            //week_planService.getWeekPlan($scope.kidId).then(function (data) {
+            //week_planService.getWeekPlan($scope.currWeek,$scope.kidId).then(function (data) {
             //    $scope.days=data;
             //    jsonTest=data;
             //}, function (error) {
@@ -132,6 +132,23 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                day: day
           });
        }
+    };
+
+    $scope.load_def_week= function() {
+        //week_planService.getDefaultWeekPlan($scope.kidId).then(function (data) {
+        //        $scope.days=data;
+        //        jsonTest=data;
+        //}, function (error) {
+        //});
+    };
+
+    $scope.copy_prev_week= function() {
+        var week=$scope.currWeek-1;
+        //week_planService.getWeekPlan(week,$scope.kidId).then(function (data) {
+        //        $scope.days=data;
+        //        jsonTest=data;
+        //}, function (error) {
+        //});
     };
 
 })

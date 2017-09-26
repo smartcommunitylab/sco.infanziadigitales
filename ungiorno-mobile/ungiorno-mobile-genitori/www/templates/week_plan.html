@@ -59,12 +59,12 @@
 
      <div ng-show="mode=='edit'" class="week_plan_detail">
         <div class="actions">
-          <p class="button_top"><i class="icon ion-refresh iconStyleHead"></i>{{'load_default_week' | translate | uppercase}}</p>
-          <p class="button_top"><i class="icon ion-ios-photos-outline iconStyleHead"></i>{{'copy_previous_week' | translate | uppercase}}</p>
+          <p class="button_top" ng-click="load_def_week()"><i class="icon ion-refresh iconStyleHead"></i>{{'load_default_week' | translate | uppercase}}</p>
+          <p class="button_top" ng-click="copy_prev_week()"><i class="icon ion-ios-photos-outline iconStyleHead"></i>{{'copy_previous_week' | translate | uppercase}}</p>
          </div> 
         <div class="non_active_cal_buttons">
             <i class="icon ion-arrow-left-b"></i>
-            <div class="dateStyleHead">{{date | date:'EEEE, d MMMM yyyy'}}</div>
+            <div class="dateStyleHead">{{date}}</div>
             <i class="icon ion-arrow-right-b"></i>
         </div> 
         <table class="week_plan_detail_table">

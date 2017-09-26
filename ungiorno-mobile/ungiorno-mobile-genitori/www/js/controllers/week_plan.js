@@ -158,12 +158,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.currWeek = (0 | dated.getDate() / 7)+1;
     $scope.currDay = dated.getDay()-1;//0 ,1 ...6
     $scope.kidId=profileService.getBabyProfile().kidId;
+    $scope.appId=profileService.getBabyProfile().appId;
+    $scope.schoolId=profileService.getBabyProfile().schoolId;
+    week_planService.setGlobalParam($scope.appId,$scope.schoolId);
     $scope.editView=false;
-    var jsonTest={0:{'name':'monday_reduced','entrata':'08:20','uscita':'15:20','service_bus':true,'delega_name':'NameTest','delega_type':'nono','assente':false},
-    1:{'name':'tuesday_reduced','entrata':'10:20','uscita':'11:20','service_bus':true,'delega_name':'NameTest','delega_type':'nono','assente':false},
-    2:{'name':'wednesday_reduced','entrata':'07:20','uscita':'14:20','service_bus':true,'delega_name':'NameTest','delega_type':'nono','assente':false},
-    3:{'name':'thursday_reduced','entrata':'09:20','uscita':'18:20','service_bus':true,'delega_name':'NameTest','delega_type':'nono','assente':false},
-    4:{'name':'friday_reduced','entrata':'11:20','uscita':'16:20','service_bus':true,'delega_name':'NameTest','delega_type':'nono','assente':false}};
+    var jsonTest={0:{'name':'monday_reduced','entrata':'08:20','uscita':'15:20','service_bus':true,'delega_name':'NameTest','delega_type':'nono'},
+    1:{'name':'tuesday_reduced','entrata':'10:20','uscita':'11:20','service_bus':true,'delega_name':'NameTest','delega_type':'nono'},
+    2:{'name':'wednesday_reduced','entrata':'07:20','uscita':'14:20','service_bus':true,'delega_name':'NameTest','delega_type':'nono'},
+    3:{'name':'thursday_reduced','entrata':'09:20','uscita':'18:20','service_bus':true,'delega_name':'NameTest','delega_type':'nono'},
+    4:{'name':'friday_reduced','entrata':'11:20','uscita':'16:20','service_bus':true,'delega_name':'NameTest','delega_type':'nono'}};
 
     $scope.getDateString = function () {
         var curr = new Date;

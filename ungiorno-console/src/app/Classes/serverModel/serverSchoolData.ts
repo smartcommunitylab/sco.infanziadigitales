@@ -1,5 +1,6 @@
 import {SchoolContacts} from '../schoolContacts';
 import {TypeDef} from './typeDef';
+import {ServerServiceData} from './serverServiceData';
 
 export class ServerSchoolData {
     schoolId : string;
@@ -11,6 +12,7 @@ export class ServerSchoolData {
     retireTiming : string;
     absenceTypes : TypeDef[];
     frequentIllnesses : TypeDef[];
+    services: ServerServiceData[];
 
     static readonly ILLNESS_VALUE : string = 'Malattia';
     static readonly FAMILY_MOTIVATION_VALUE : string = 'Motivi Familiari';

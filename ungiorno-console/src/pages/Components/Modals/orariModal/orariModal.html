@@ -61,14 +61,22 @@
                                     <ion-col col-3 style="bottom: 0px">
                                         <ion-item>
                                             <ion-label>Da</ion-label>
-                                            <ion-input readonly class='start' [(ngModel)]='fascia.start' [max]='fascia.end' (ngModelChange)='changeFascia(fascia)' (click)='timepickerPresent($event, copiedOrario.fasce[i], "s")'></ion-input> 
+                                            <ion-datetime displayFormat="HH:mm" pickerFormat="HH:mm" [(ngModel)]="fascia.start"></ion-datetime>
                                         </ion-item>
+                                        <!-- <ion-item>
+                                            <ion-label>Da</ion-label>
+                                            <ion-input readonly class='start' [(ngModel)]='fascia.start' [max]='fascia.end' (ngModelChange)='changeFascia(fascia)' (click)='timepickerPresent($event, copiedOrario.fasce[i], "s")'></ion-input> 
+                                        </ion-item> -->
                                     </ion-col>
                                     <ion-col col-3 style="bottom: 0px">
-                                        <ion-item class='input-calza'>
+                                        <ion-item>
+                                             <ion-label>A</ion-label>
+                                             <ion-datetime displayFormat="HH:mm" pickerFormat="HH:mm" [(ngModel)]="fascia.end"></ion-datetime>
+                                        </ion-item>
+                                        <!-- <ion-item class='input-calza'>
                                             <ion-label>A</ion-label>
                                             <ion-input readonly class='end' [(ngModel)]='fascia.end' [min]='fascia.start' (ngModelChange)='changeFascia(fascia)' (click)='timepickerPresent($event, copiedOrario.fasce[i], "e")'></ion-input> 
-                                        </ion-item>
+                                        </ion-item> -->
                                     </ion-col>
                                     <ion-col col-1>
                                         <button style="padding-left: 3px" ion-item icon-only (click)='removeFascia(fascia)'><ion-icon style="padding-left: 0" name="trash" item-end color="magenta1"></ion-icon></button>

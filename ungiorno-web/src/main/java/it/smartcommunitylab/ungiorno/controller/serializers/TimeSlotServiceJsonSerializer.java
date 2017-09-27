@@ -12,9 +12,16 @@ import it.smartcommunitylab.ungiorno.model.TimeSlotSchoolService;
 public class TimeSlotServiceJsonSerializer extends JsonSerializer<TimeSlotSchoolService> {
 
     @Override
-    public void serialize(TimeSlotSchoolService arg0, JsonGenerator arg1, SerializerProvider arg2)
-            throws IOException, JsonProcessingException {
+    public void serialize(TimeSlotSchoolService obj, JsonGenerator generator,
+            SerializerProvider provider) throws IOException, JsonProcessingException {
 
+        generator.writeStartObject();
+        generator.writeStringField("name", obj.getName());
+        generator.writeBooleanField("regular", obj.isRegular());
+        generator.writeBooleanField("enabled", obj.isEnabled());
+        generator.writeStringField("note", obj.getNote());
+        generator.writeObjectField("timeSlots", obj.getTimeSlots());
+        generator.writeEndObject();
     }
 
 }

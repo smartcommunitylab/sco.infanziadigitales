@@ -33,12 +33,12 @@
             <td ng-if="day.service_bus && !day.assente">
                 <p class="button-day noneditable"><img src="img/ic-login.png" class="iconStyle" /></p>
             </td>
-            <td ng-if="!day.assente">
+            <td ng-if="!day.assente" style="white-space: nowrap;">
               <div class="delega_day noneditable">
                 <img src="img/ic-login.png" class="iconStyle" />
                 <div class="delega_name">
-                    <span>{{day.delega_name}}</span>
-                    <span>({{day.delega_type}})</span>
+                    <span class="delega_name_span">{{day.delega_name}}</span>
+                    <span class="delega_name_span">({{day.delega_type}})</span>
                 </div>
             </div>
             </td>

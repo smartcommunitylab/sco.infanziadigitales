@@ -11,7 +11,7 @@
         <!-- Readonly DetailView of Week-->
         <div ng-show="mode==''" class="week_plan_detail">
           <table class="week_plan_detail_table">
-            <tr ng-repeat="day in days track by $index" >
+            <tr ng-repeat="day in days track by $index" class="nowrap">
               <td class="day-name">
                   <p class="title">{{day.name| translate | uppercase}}</p>
               </td>
@@ -53,7 +53,7 @@
             <p class="button_top"><i class="icon ion-loop iconStyleHead" ng-click="restore()"></i> {{'restore' | translate | uppercase}}</p>
           </div> 
           <table class="week_plan_detail_table">
-            <tr ng-repeat="day in days track by $index" ng-click="gotoEditDate($index)">
+            <tr ng-repeat="day in days track by $index" ng-click="gotoEditDate($index)" class="nowrap">
               <td class="day-name">
                   <p class="title">{{day.name| translate | uppercase}}</p>
               </td>

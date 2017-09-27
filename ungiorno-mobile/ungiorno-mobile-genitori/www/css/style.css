@@ -2042,6 +2042,7 @@ textarea {
 
 .current-day {
   background-color: #80D0E6;
+  white-space: nowrap;
 }
 
 .currentDate{
@@ -2207,6 +2208,9 @@ textarea {
   text-align: center;
   padding-right:0px;
   margin-right:0px;
+}
+.nowrap{
+  white-space: nowrap;
 }
 
 .iconStyle{

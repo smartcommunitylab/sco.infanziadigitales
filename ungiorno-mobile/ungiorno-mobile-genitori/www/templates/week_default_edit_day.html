@@ -37,7 +37,7 @@
           <td>
               <div data-tap-disabled="true">
                   <select ng-model="currData.fermata">
-                    <option ng-repeat="option in fermataOptions" value="option.value">{{option.label | translate}}</option>
+                    <option ng-repeat="option in fermataOptions" value="{{option.value}}">{{option.label | translate}}</option>
                   </select>
               </div>
           </td>
@@ -49,7 +49,7 @@
           <td>
               <div data-tap-disabled="true">
                   <select ng-model="currData.delega_name">
-                    <option ng-repeat="option in ritiraOptions" value="option.value">{{option.label | translate}}</option>
+                    <option ng-repeat="option in ritiraOptions" value="{{option.value}}">{{option.label | translate}}</option>
                   </select>
               </div>
           </td>

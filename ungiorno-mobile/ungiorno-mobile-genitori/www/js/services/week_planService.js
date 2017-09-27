@@ -2,15 +2,23 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.w
 
 .factory('week_planService', function ($http, $q, Config) {
   var week_planService = {};
-  var weekData = {};
+  var weekData = []
   var actualDayNr = 0;
   var mode = '';
-  var weekDefaultDataDefault = {};
+  var weekDefaultDataDefault = [];
   var actualDayNrDefault = 0;
   var modeDefault = '';
   var dateFormat='';
   var currWeek='';
+
+  var appId='';
+  var schoolId='';
   var globalUrl=Config.URL() + '/' + Config.app();
+  week_planService.setGlobalParam = function (app,school) {
+    appId=app;
+    schoolId=school;
+  };
+
   
   week_planService.setDayData = function (day,dayData,modeActual) {
        weekData[day]=dayData;
@@ -68,7 +76,7 @@ week_planService.getCurrentWeek= function () {
     
             $http({
                 method: 'GET',
-                url: globalUrl + '/week_plan/' +weekNr + '/' + kidid + '/retrieve_plan',
+                url: globalUrl + '/student/'  +appId+'/'+schoolId+'/'+weekNr + '/' + kidid + '/retrieve_plan',
                 headers: {
                     'Accept': 'application/json'
                 },
@@ -90,7 +98,7 @@ week_planService.getCurrentWeek= function () {
     
             $http({
                 method: 'GET',
-                url: globalUrl + '/week_plan/' + kidid + '/retrieve_default_plan',
+                url: globalUrl + '/student/' +appId+'/'+schoolId+'/'+ kidid + '/retrieve_default_plan',
                 headers: {
                     'Accept': 'application/json'
                 },
@@ -112,7 +120,7 @@ week_planService.getCurrentWeek= function () {
     
             $http({
                 method: 'POST',
-                url: globalUrl + '/week_plan/' +weekNr + '/' + kidid + '/set_plan',
+                url: globalUrl + '/student/' +appId+'/'+schoolId+'/' +weekNr + '/' + kidid + '/set_plan',
                 headers: {
                   'Accept': 'application/json',
                   'Content-Type': 'application/json'
@@ -136,7 +144,7 @@ week_planService.getCurrentWeek= function () {
     
             $http({
                 method: 'POST',
-                url: globalUrl + '/week_plan/' + kidid + '/set_default_plan',
+                url: globalUrl + '/student/' +appId+'/'+schoolId+'/' + kidid + '/set_default_plan',
                 headers: {
                   'Accept': 'application/json',
                   'Content-Type': 'application/json'
@@ -160,7 +168,7 @@ week_planService.getCurrentWeek= function () {
     
             $http({
                 method: 'GET',
-                url: globalUrl + '/week_plan/' +weekNr + '/' + kidid + '/copy_previous_plan',
+                url: globalUrl + '/student/' +appId+'/'+schoolId+'/' +weekNr + '/' + kidid + '/copy_previous_plan',
                 headers: {
                     'Accept': 'application/json'
                 },
@@ -182,7 +190,7 @@ week_planService.getCurrentWeek= function () {
     
             $http({
                 method: 'GET',
-                url: globalUrl + '/week_plan/getFermataOptions',
+                url: globalUrl + '/student/' +appId+'/'+schoolId+'/'+'getFermataOptions',
                 headers: {
                   'Accept': 'application/json'
               },
@@ -204,7 +212,7 @@ week_planService.getCurrentWeek= function () {
     
             $http({
                 method: 'GET',
-                url: globalUrl + '/week_plan/getRitiroOptions',
+                url: globalUrl + '/student/' +appId+'/'+schoolId+'/'+'getRitiroOptions',
                 headers: {
                   'Accept': 'application/json'
               },
@@ -226,7 +234,7 @@ week_planService.getCurrentWeek= function () {
         
                 $http({
                     method: 'GET',
-                    url: globalUrl + '/week_plan/getListServices',
+                    url: globalUrl + '/student/' +appId+'/'+schoolId+'/'+'getListServices',
                     headers: {
                       'Accept': 'application/json'
                   },

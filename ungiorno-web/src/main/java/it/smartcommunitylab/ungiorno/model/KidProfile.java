@@ -28,200 +28,262 @@ import it.smartcommunitylab.ungiorno.diary.model.DiaryTeacher;
  */
 public class KidProfile extends SchoolObject {
 
-    public static class Allergy {
-        private String name, type;
+	public static class Allergy {
+		private String name, type;
 
-        public String getName() {
-            return name;
-        }
+		public String getName() {
+			return name;
+		}
 
-        public void setName(String name) {
-            this.name = name;
-        }
+		public void setName(String name) {
+			this.name = name;
+		}
 
-        public String getType() {
-            return type;
-        }
+		public String getType() {
+			return type;
+		}
 
-        public void setType(String type) {
-            this.type = type;
-        }
-    }
+		public void setType(String type) {
+			this.type = type;
+		}
+	}
 
-    private String kidId, fullName, lastName, firstName, image;
-    private SectionDef section;
-    private KidServices services;
-    private List<AuthPerson> persons;
-    private List<Allergy> allergies;
-    private boolean active = true;
-    private String gender;
-    private Date birthDate;
-    private boolean partecipateToSperimentation;
+	public static class DayDefault {
+		private String name, entrata, uscita, delega_name, delega_type;
+		private boolean service_bus;
 
-    private List<DiaryTeacher> diaryTeachers;
-    private Boolean sharedDiary;
+		public String getName() {
+			return name;
+		}
 
-    public String getKidId() {
-        return kidId;
-    }
+		public void setName(String name) {
+			this.name = name;
+		}
 
-    public void setKidId(String kidId) {
-        this.kidId = kidId;
-    }
+		public String getEntrata() {
+			return entrata;
+		}
 
-    public String getFullName() {
-        return fullName;
-    }
+		public void setEntrata(String entrata) {
+			this.entrata = entrata;
+		}
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
+		public String getUscita() {
+			return uscita;
+		}
 
-    public String getLastName() {
-        return lastName;
-    }
+		public void setUscita(String uscita) {
+			this.uscita = uscita;
+		}
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+		public String getDelega_name() {
+			return delega_name;
+		}
 
-    public String getFirstName() {
-        return firstName;
-    }
+		public void setDelega_name(String delega_name) {
+			this.delega_name = delega_name;
+		}
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
+		public boolean getService_bus() {
+			return service_bus;
+		}
 
-    public String getImage() {
-        return image;
-    }
+		public void setService_bus(boolean service_bus) {
+			this.service_bus = service_bus;
+		}
 
-    public void setImage(String image) {
-        this.image = image;
-    }
+		public String getDelega_type() {
+			return delega_type;
+		}
 
-    public SectionDef getSection() {
-        return section;
-    }
+		public void setDelega_type(String delega_type) {
+			this.delega_type = delega_type;
+		}
+	}
 
-    public void setSection(SectionDef section) {
-        this.section = section;
-    }
+	private String kidId, fullName, lastName, firstName, image;
+	private SectionDef section;
+	private KidServices services;
+	private List<AuthPerson> persons;
+	private List<Allergy> allergies;
+	private boolean active = true;
+	private String gender;
+	private Date birthDate;
+	private boolean partecipateToSperimentation;
+	private List<DayDefault> weekdefault;
 
-    public KidServices getServices() {
-        return services;
-    }
+	private List<DiaryTeacher> diaryTeachers;
+	private Boolean sharedDiary;
 
-    public void setServices(KidServices services) {
-        this.services = services;
-    }
+	public String getKidId() {
+		return kidId;
+	}
 
-    public List<AuthPerson> getPersons() {
-        return persons;
-    }
+	public void setKidId(String kidId) {
+		this.kidId = kidId;
+	}
 
-    public void setPersons(List<AuthPerson> persons) {
-        this.persons = persons;
-    }
+	public String getFullName() {
+		return fullName;
+	}
 
-    public List<Allergy> getAllergies() {
-        if (allergies == null) {
-            allergies = new ArrayList<KidProfile.Allergy>();
-        }
-        return allergies;
-    }
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
 
-    public void setAllergies(List<Allergy> allergies) {
-        this.allergies = allergies;
-    }
+	public String getLastName() {
+		return lastName;
+	}
 
-    public Boolean getSharedDiary() {
-        return sharedDiary;
-    }
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
 
-    public void setSharedDiary(Boolean sharedDiary) {
-        this.sharedDiary = sharedDiary;
-    }
+	public String getFirstName() {
+		return firstName;
+	}
 
-    public List<DiaryTeacher> getDiaryTeachers() {
-        if (diaryTeachers == null) {
-            diaryTeachers = new ArrayList<DiaryTeacher>();
-        }
-        return diaryTeachers;
-    }
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
 
-    public void setDiaryTeachers(List<DiaryTeacher> diaryTeachers) {
-        this.diaryTeachers = diaryTeachers;
-    }
+	public String getImage() {
+		return image;
+	}
 
-    private String _id;
+	public void setImage(String image) {
+		this.image = image;
+	}
 
-    public String get_id() {
-        return _id;
-    }
+	public SectionDef getSection() {
+		return section;
+	}
 
-    public void set_id(String _id) {
-        this._id = _id;
-    }
+	public void setSection(SectionDef section) {
+		this.section = section;
+	}
 
-    public boolean isActive() {
-        return active;
-    }
+	public KidServices getServices() {
+		return services;
+	}
 
-    public void setActive(boolean active) {
-        this.active = active;
-    }
+	public void setServices(KidServices services) {
+		this.services = services;
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
+	public List<AuthPerson> getPersons() {
+		return persons;
+	}
 
-        if (this == obj) {
-            return true;
-        }
+	public void setPersons(List<AuthPerson> persons) {
+		this.persons = persons;
+	}
 
-        if (obj.getClass() != this.getClass()) {
-            return false;
-        }
+	public List<DayDefault> getWeekDef() {
+		return weekdefault;
+	}
 
-        KidProfile rhs = (KidProfile) obj;
-        return new EqualsBuilder().append(kidId, rhs.kidId).isEquals();
-    }
+	public void setWeekDefault(List<DayDefault> days) {
+		this.weekdefault = days;
+	}
 
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(31, 7).append(kidId).hashCode();
-    }
+	public List<Allergy> getAllergies() {
+		if (allergies == null) {
+			allergies = new ArrayList<KidProfile.Allergy>();
+		}
+		return allergies;
+	}
 
-    @Override
-    public String toString() {
-        return String.format("[kidId: %s, name: %s, surname: %s]", kidId, firstName, lastName);
-    }
+	public void setAllergies(List<Allergy> allergies) {
+		this.allergies = allergies;
+	}
 
-    public String getGender() {
-        return gender;
-    }
+	public Boolean getSharedDiary() {
+		return sharedDiary;
+	}
 
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
+	public void setSharedDiary(Boolean sharedDiary) {
+		this.sharedDiary = sharedDiary;
+	}
 
-    public Date getBirthDate() {
-        return birthDate;
-    }
+	public List<DiaryTeacher> getDiaryTeachers() {
+		if (diaryTeachers == null) {
+			diaryTeachers = new ArrayList<DiaryTeacher>();
+		}
+		return diaryTeachers;
+	}
 
-    public void setBirthDate(Date birthDate) {
-        this.birthDate = birthDate;
-    }
+	public void setDiaryTeachers(List<DiaryTeacher> diaryTeachers) {
+		this.diaryTeachers = diaryTeachers;
+	}
 
-    public boolean isPartecipateToSperimentation() {
-        return partecipateToSperimentation;
-    }
+	private String _id;
 
-    public void setPartecipateToSperimentation(boolean partecipateToSperimentation) {
-        this.partecipateToSperimentation = partecipateToSperimentation;
-    }
+	public String get_id() {
+		return _id;
+	}
+
+	public void set_id(String _id) {
+		this._id = _id;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+
+		if (this == obj) {
+			return true;
+		}
+
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
+
+		KidProfile rhs = (KidProfile) obj;
+		return new EqualsBuilder().append(kidId, rhs.kidId).isEquals();
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(31, 7).append(kidId).hashCode();
+	}
+
+	@Override
+	public String toString() {
+		return String.format("[kidId: %s, name: %s, surname: %s]", kidId, firstName, lastName);
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public Date getBirthDate() {
+		return birthDate;
+	}
+
+	public void setBirthDate(Date birthDate) {
+		this.birthDate = birthDate;
+	}
+
+	public boolean isPartecipateToSperimentation() {
+		return partecipateToSperimentation;
+	}
+
+	public void setPartecipateToSperimentation(boolean partecipateToSperimentation) {
+		this.partecipateToSperimentation = partecipateToSperimentation;
+	}
 }

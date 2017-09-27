@@ -55,6 +55,7 @@ import it.smartcommunitylab.ungiorno.model.KidCalNote.Note;
 import it.smartcommunitylab.ungiorno.model.KidCalRitiro;
 import it.smartcommunitylab.ungiorno.model.KidConfig;
 import it.smartcommunitylab.ungiorno.model.KidProfile;
+import it.smartcommunitylab.ungiorno.model.KidProfile.DayDefault;
 import it.smartcommunitylab.ungiorno.model.Parent;
 import it.smartcommunitylab.ungiorno.model.Response;
 import it.smartcommunitylab.ungiorno.model.SchoolObject;
@@ -476,23 +477,18 @@ public class KidController {
 
 	}
 
-	/**
-	 * @RequestMapping(method = RequestMethod.POST, value =
-	 *                        "/student/{appId}/{schoolId}/{kidId}/set_default_plan")
-	 *                        public @ResponseBody String
-	 *                        setWeekDefault(@PathVariable String
-	 *                        appId, @PathVariable String schoolId,
-	 * @PathVariable String kidId, @RequestBody List<DayDefault> data) { try {
-	 *               List<SchoolObject> result = new ArrayList<SchoolObject>();
-	 *               List<KidCalRitiro> returns = storage.getReturn(appId,
-	 *               schoolId, kidId, from, to); if (returns != null) {
-	 *               result.addAll(returns); }
-	 * 
-	 *               return "testAlbana"; } catch (Exception e) { return
-	 *               "jomore"; }
-	 * 
-	 *               }
-	 */
+	@RequestMapping(method = RequestMethod.POST, value = "/student/{appId}/{schoolId}/{kidId}/set_default_plan")
+	public @ResponseBody String setWeekDefault(@PathVariable String appId, @PathVariable String schoolId,
+			@PathVariable String kidId, @RequestBody List<DayDefault> data) {
+		try {
+			System.out.print(data);
+			storage.saveWeekDefault(appId, schoolId, kidId, data);
+			return "testAlbana";
+		} catch (Exception e) {
+			return "jomore";
+		}
+
+	}
 
 	@ExceptionHandler(Exception.class)
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

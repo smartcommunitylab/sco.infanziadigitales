@@ -71,6 +71,7 @@ import it.smartcommunitylab.ungiorno.model.KidCalNote.Note;
 import it.smartcommunitylab.ungiorno.model.KidCalRitiro;
 import it.smartcommunitylab.ungiorno.model.KidConfig;
 import it.smartcommunitylab.ungiorno.model.KidProfile;
+import it.smartcommunitylab.ungiorno.model.KidProfile.DayDefault;
 import it.smartcommunitylab.ungiorno.model.LoginData;
 import it.smartcommunitylab.ungiorno.model.Menu;
 import it.smartcommunitylab.ungiorno.model.Parent;
@@ -743,20 +744,15 @@ public class RepositoryManager {
 
 	/**
 	 * @param note
-	 * 
-	 *            public List<DayDefault> saveWeekDefault(List<DayDefault> days)
-	 *            { KidCalNote result = null; Query q =
-	 *            kidQuery(days.getAppId(), days.getSchoolId(),
-	 *            days.getKidId()); q.addCriteria(new
-	 *            Criteria("date").is(timestampToDate(note.getDate())));
-	 *            KidCalNote old = template.findOne(q, KidCalNote.class); if
-	 *            (old != null) { old.merge(note); template.save(old); result =
-	 *            old; } else { note.setDate(timestampToDate(note.getDate()));
-	 *            template.save(note); result = note; } List<Note> parentNotes =
-	 *            result.getParentNotes(); sortNotes(parentNotes); List<Note>
-	 *            schoolNotes = result.getSchoolNotes(); sortNotes(schoolNotes);
-	 *            return result; }
 	 */
+	public List<DayDefault> saveWeekDefault(String appId, String schoolId, String kidId, List<DayDefault> days) {
+		Query q = schoolQuery(appId, schoolId);
+		q.addCriteria(new Criteria("kidId").is(kidId));
+		KidProfile kid = template.findOne(q, KidProfile.class);
+		kid.setWeekDefault(days);
+		template.save(kid);
+		return days;
+	}
 
 	/**
 	 * @param appId

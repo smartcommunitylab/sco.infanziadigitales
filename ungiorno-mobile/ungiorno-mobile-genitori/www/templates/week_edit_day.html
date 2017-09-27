@@ -49,7 +49,7 @@
         <hr class="hrstyle"/>
         <label class="control control-checkbox">
           {{'Bus' | translate}}
-              <input type="checkbox" ng-model="currData.service_bus" name="service_bus"  />
+              <input type="checkbox" ng-model="currData.service_bus" name="service_bus"  ng-disabled="currData.assente"/>
           <div class="control_indicator"></div>
         </label>
       <table class="dayEdit_table" >
@@ -58,7 +58,8 @@
               <p>{{'Entrata ore'| translate}}:</p>{{currData.entry}}
           </td>
           <td>
-              <p class="editable2" ng-click="openPopupEntry()">{{currData.entrata}}</p>
+              <p class="editable2" ng-click="openPopupEntry()" ng-show="!currData.assente">{{currData.entrata}}</p>
+              <p class="noneditable2" ng-show="currData.assente">{{currData.entrata}}</p>
           </td>
         </tr>
         <tr>
@@ -66,8 +67,8 @@
               <p>{{'Uscita ore'| translate}}:</p>
           </td>
           <td>
-              <p class="editable2" ng-click="openPopupOut()" ng-show="!currData.service_bus">{{currData.uscita}}</p>
-              <p class="noneditable2" ng-show="currData.service_bus">{{currData.uscita}}</p>
+              <p class="editable2" ng-click="openPopupOut()" ng-show="!currData.service_bus && !currData.assente">{{currData.uscita}}</p>
+              <p class="noneditable2" ng-show="currData.service_bus || currData.assente">{{currData.uscita}}</p>
           </td>
         </tr>
         <tr>

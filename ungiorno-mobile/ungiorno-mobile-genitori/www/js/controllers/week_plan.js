@@ -190,11 +190,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             for(var i=0;i<=4;i++){
                 week_planService.setDayDataDefault(i,$scope.days[i],'');
             }
-            //week_planService.getDefaultWeekPlan($scope.kidId).then(function (data) {
-            //    $scope.days=data;
-            //    jsonTest=data;
-            //}, function (error) {
-            //});
+            week_planService.getDefaultWeekPlan($scope.kidId).then(function (data) {
+                $scope.days=data;
+                console.log(data);
+                jsonTest=data;
+                //for(var i=0;i<=4;i++){
+                //    week_planService.setDayDataDefault(i,$scope.days[i],'');
+                //}
+            }, function (error) {
+            });
         }
     };
     $scope.getWeekPlan();

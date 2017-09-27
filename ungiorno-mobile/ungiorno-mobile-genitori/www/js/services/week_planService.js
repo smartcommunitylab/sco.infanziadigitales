@@ -2,10 +2,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.w
 
 .factory('week_planService', function ($http, $q, Config) {
   var week_planService = {};
-  var weekData = {};
+  var weekData = []
   var actualDayNr = 0;
   var mode = '';
-  var weekDefaultDataDefault = {};
+  var weekDefaultDataDefault = [];
   var actualDayNrDefault = 0;
   var modeDefault = '';
   var dateFormat='';

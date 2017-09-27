@@ -481,7 +481,6 @@ public class KidController {
 	public @ResponseBody String setWeekDefault(@PathVariable String appId, @PathVariable String schoolId,
 			@PathVariable String kidId, @RequestBody List<DayDefault> data) {
 		try {
-			System.out.print(data);
 			storage.saveWeekDefault(appId, schoolId, kidId, data);
 			return "testAlbana";
 		} catch (Exception e) {

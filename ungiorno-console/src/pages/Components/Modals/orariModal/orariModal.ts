@@ -50,7 +50,7 @@ export class OrariModal implements OnInit{
 
         Object.assign(this.copiedOrario, this.selectedOrario);
         this.copiedOrario.fasce = [];
-        this.selectedOrario.fasce.forEach(x => this.copiedOrario.fasce.push(new Time(x.name, new Date(0, 0, 0, parseInt(x.start.substring(0, 2)), parseInt(x.start.substring(3, 5))),  new Date(0, 0, 0, parseInt(x.end.substring(0, 2)), parseInt(x.end.substring(3, 5))))));
+        this.selectedOrario.fasce && this.selectedOrario.fasce.forEach(x => this.copiedOrario.fasce.push(new Time(x.name, new Date(0, 0, 0, parseInt(x.start.substring(0, 2)), parseInt(x.start.substring(3, 5))),  new Date(0, 0, 0, parseInt(x.end.substring(0, 2)), parseInt(x.end.substring(3, 5))))));
     }
 
     ngOnInit() {
@@ -68,7 +68,9 @@ export class OrariModal implements OnInit{
 
         if(this.isNew) {
             if(this.selectedSchool.servizi.findIndex(x => x.servizio.toLowerCase() == this.selectedOrario.servizio.toLowerCase()) < 0) {
-                this.webService.add(this.selectedSchool.id, this.copiedOrario).then(tmp => this.selectedSchool.servizi.push(tmp.servizi[tmp.servizi.length - 1])); //aggiungere case servizio webservice
+                this.selectedSchool.servizi.push(this.selectedOrario);
+                this.webService.update(this.selectedSchool);
+                //this.webService.add(this.selectedSchool.id, this.copiedOrario).then(tmp => this.selectedSchool.servizi.push(tmp.servizi[tmp.servizi.length - 1])); //aggiungere case servizio webservice
             }
             else {
                 let alert = this.alertCtrl.create({

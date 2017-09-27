@@ -104,11 +104,11 @@ public class SchoolProfile extends SchoolObject {
     private List<BusProfile> buses;
     private String absenceTiming, retireTiming;
     private String accessEmail;
-    private Set<TimeSlotSchoolService> timeSlotServices;
+    private Set<TimeSlotSchoolService> services;
 
     public SchoolProfile(TimeSlotSchoolService regular) {
-        timeSlotServices = new LinkedHashSet<>();
-        timeSlotServices.add(regular);
+        services = new LinkedHashSet<>();
+        services.add(regular);
     }
 
     /*
@@ -249,14 +249,14 @@ public class SchoolProfile extends SchoolObject {
         this.address = address;
     }
 
-    public Set<TimeSlotSchoolService> getTimeSlotServices() {
-        return timeSlotServices;
+    public Set<TimeSlotSchoolService> getServices() {
+        return services;
     }
 
     /*
      * FIXME: not the best way to expose directly internal collection
      */
-    public void setTimeSlotServices(Set<TimeSlotSchoolService> timeSlotServices) {
-        this.timeSlotServices = timeSlotServices;
+    public void setServices(Set<TimeSlotSchoolService> timeSlotServices) {
+        this.services = timeSlotServices;
     }
 }

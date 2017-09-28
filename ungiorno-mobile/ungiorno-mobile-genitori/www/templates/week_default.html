@@ -28,8 +28,8 @@
                 <div class="delega_day noneditable">
                   <img src="img/ic-login.png" class="iconStyle" />
                   <div class="delega_name">
-                      <span>{{day.delega_name}}</span>
-                      <span>({{day.delega_type}})</span>
+                      <span>{{day.delega_name|getRitiroName:ritiraOptions}}</span>
+                      <span>({{day.delega_name|getRitiroType:ritiraOptions}})</span>
                   </div>
               </div>
               </td>
@@ -70,8 +70,8 @@
                 <div ng-class="whatClassIsIt($index,'delega')" class="delega_day editable">
                   <img src="img/ic-login.png" class="iconStyle"  />
                   <div class="delega_name">
-                      <span>{{day.delega_name}}</span>
-                      <span>({{day.delega_type}})</span>
+                      <span>{{day.delega_name|getRitiroName:ritiraOptions}}</span>
+                      <span>({{day.delega_name|getRitiroType:ritiraOptions}})</span>
                   </div>
               </div>
               </td>

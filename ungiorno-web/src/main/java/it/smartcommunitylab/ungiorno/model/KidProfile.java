@@ -49,7 +49,7 @@ public class KidProfile extends SchoolObject {
 	}
 
 	public static class DayDefault {
-		private String name, entrata, uscita, delega_name, delega_type;
+		private String name, entrata, uscita, delega_name;
 		private boolean bus;
 
 		public String getName() {
@@ -92,13 +92,6 @@ public class KidProfile extends SchoolObject {
 			this.bus = bus2;
 		}
 
-		public String getDelega_type() {
-			return delega_type;
-		}
-
-		public void setDelega_type(String delega_type) {
-			this.delega_type = delega_type;
-		}
 	}
 
 	private String kidId, fullName, lastName, firstName, image;

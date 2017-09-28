@@ -8,12 +8,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.currWeek = (currW != '') ? currW : $scope.currentDate.format('w');
     $scope.currDay = dated.getDay()-1;//0 ,1 ...6
     $scope.kidId=profileService.getBabyProfile().kidId;
-    var jsonTest=[{'name':'monday_reduced','entrata':'08:20','uscita':'13:20','service_bus':true,'fermata':'via test1','delega_name':'NameTest','delega_type':'nono','assente':false},
-    {'name':'tuesday_reduced','entrata':'08:20','uscita':'13:20','service_bus':true,'fermata':'via test1','delega_name':'NameTest','delega_type':'nono','assente':false},
-    {'name':'wednesday_reduced','entrata':'08:20','uscita':'13:20','service_bus':true,'fermata':'via test1','delega_name':'NameTest','delega_type':'nono','assente':true,
+    $scope.appId=profileService.getBabyProfile().appId;
+    $scope.schoolId=profileService.getBabyProfile().schoolId;
+    week_planService.setGlobalParam($scope.appId,$scope.schoolId);
+    var jsonTest=[{'name':'monday_reduced','entrata':'08:20','uscita':'13:20','bus':true,'fermata':'via test1','delega_name':'NameTest','delega_type':'nono','assente':false},
+    {'name':'tuesday_reduced','entrata':'08:20','uscita':'13:20','bus':true,'fermata':'via test1','delega_name':'NameTest','delega_type':'nono','assente':false},
+    {'name':'wednesday_reduced','entrata':'08:20','uscita':'13:20','bus':true,'fermata':'via test1','delega_name':'NameTest','delega_type':'nono','assente':true,
                         'motivazione':{type:'malattia',subtype:'Influenza'}},
-    {'name':'thursday_reduced','entrata':'08:20','uscita':'13:20','service_bus':true,'fermata':'via test1','delega_name':'NameTest','delega_type':'nono','assente':false},
-    {'name':'friday_reduced','entrata':'08:20','uscita':'13:20','service_bus':true,'fermata':'via test1','delega_name':'NameTest','delega_type':'nono','assente':false}];
+    {'name':'thursday_reduced','entrata':'08:20','uscita':'13:20','bus':true,'fermata':'via test1','delega_name':'NameTest','delega_type':'nono','assente':false},
+    {'name':'friday_reduced','entrata':'08:20','uscita':'13:20','bus':true,'fermata':'via test1','delega_name':'NameTest','delega_type':'nono','assente':false}];
 
     $scope.getDateString = function () {
         var currentDate = moment().week($scope.currWeek);
@@ -36,6 +39,18 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         return $scope.currentDate.format('w');      
     };
     
+    $scope.getWeekPlanDB =  function(day) {
+       // week_planService.getWeekPlan($scope.kidId).then(function (data) {
+         //   $scope.days=data;
+         //jsonTest=data;
+         $scope.days=jsonTest;
+            for(var i=0;i<=4;i++){
+                week_planService.setDayData(i,$scope.days[i],'');
+            }
+        //}, function (error) {
+        //});
+    };
+
     $scope.getWeekPlan = function() {
         $scope.mode=week_planService.getMode();
         if($scope.mode=='edit'){
@@ -43,15 +58,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 $scope.days[i]=week_planService.getDayData(i);
             }
         }else{
-            $scope.days=jsonTest;
-            for(var i=0;i<=4;i++){
-                week_planService.setDayData(i,$scope.days[i],'');
-            }
-            //week_planService.getWeekPlan($scope.currWeek,$scope.kidId).then(function (data) {
-            //    $scope.days=data;
-            //    jsonTest=data;
-            //}, function (error) {
-            //});
+            $scope.getWeekPlanDB();
         }
     };
     $scope.getWeekPlan();
@@ -135,11 +142,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
 
     $scope.load_def_week= function() {
-        //week_planService.getDefaultWeekPlan($scope.kidId).then(function (data) {
-        //        $scope.days=data;
-        //        jsonTest=data;
-        //}, function (error) {
-        //});
+        week_planService.getDefaultWeekPlan($scope.kidId).then(function (data) {
+                $scope.days=data;
+                jsonTest=data;
+                for(var i=0;i<=4;i++){
+                    week_planService.setDayData(i,$scope.days[i],'');
+                }
+        }, function (error) {
+        });
     };
 
     $scope.copy_prev_week= function() {
@@ -150,6 +160,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         //}, function (error) {
         //});
     };
+    $scope.ritiraOptions=profileService.getBabyProfile().persons;
 
 })
 .controller('DefaultWeekPlanCtrl', function ($scope, moment, dataServerService, week_planService, profileService , $ionicModal, $filter, $ionicPopup,$state) {
@@ -162,6 +173,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.schoolId=profileService.getBabyProfile().schoolId;
     week_planService.setGlobalParam($scope.appId,$scope.schoolId);
     $scope.editView=false;
+    $scope.ritiraOptions=[];
     var jsonTest=[];
     //var jsonTest=[{'name':'monday_reduced','entrata':'08:20','uscita':'15:20','service_bus':true,'delega_name':'NameTest','delega_type':'nono'},
     //{'name':'tuesday_reduced','entrata':'10:20','uscita':'11:20','service_bus':true,'delega_name':'NameTest','delega_type':'nono'},
@@ -192,6 +204,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
 
     $scope.getWeekPlan = function() {
+        $scope.ritiraOptions=profileService.getBabyProfile().persons;
         $scope.mode=week_planService.getModeDefault();
         if($scope.mode=='edit'){
             for(var i=0;i<=4;i++){
@@ -297,7 +310,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.cancel = function() {
         for(var i=0;i<=4;i++){
             $scope.days[i]=week_planService.getDayDataDefault(i);
-            console.log($scope.days[i]);
         }
         
         week_planService.setModeDefault('edit');
@@ -305,20 +317,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
 
     $scope.getFermataOptions = function(day) {
-        $scope.fermataOptions=[{'value':'via test1','label':'Test1'},{'value':'test2','label':'Test2'}];
-        //week_planService.getFermataOptions().then(function (data) {
-        //    $scope.fermataOptions=data;
-        //}, function (error) {
-        //})
+        if(profileService.getBabyProfile().services.bus && profileService.getBabyProfile().services.bus.stops){
+            $scope.fermataOptions=profileService.getBabyProfile().services.bus.stops;
+        }
     };
     $scope.getFermataOptions();
 
     $scope.getRitiroOptions = function(day) {
-        $scope.ritiraOptions=[{'value':'via test1','label':'Test1'},{'value':'test2','label':'Test2'}];
-        //week_planService.getRitiroOptions().then(function (data) {
-        //    $scope.getRitiroOptions=data;
-        //}, function (error) {
-        //})
+        $scope.ritiraOptions=profileService.getBabyProfile().persons;
     };
     $scope.getRitiroOptions();
 
@@ -326,8 +332,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         $scope.listServices=[{'value':'anticipo1','label':'Anticipop1','entry':'09:00',out:'13:40','type':'anticipo'},
         {'value':'posticipo1','label':'Posticipo1','entry':'13:20',out:'16:40','type':'posticipo'},
         {'value':'posticipo2','label':'Posticipo2','entry':'13:20',out:'14:40','type':'posticipo'}];
-        $scope.listServices=profileService.getBabyProfile().services;
-        console.log($scope.listServices);
+        $scope.listServicesDb=profileService.getBabyProfile().services;
         //week_planService.getListServices().then(function (data) {
         //    $scope.listServices=data;
         //}, function (error) {
@@ -349,18 +354,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
               scope: $scope,
               title: $filter('translate')('orario_entrata'),
               cssClass: 'expired-popup',
-              //templateUrl: '../../templates/week_entry_out_services.html
-              /*<ul>
-              <li ng-repeat="(key, value) in players | groupBy: 'team'">
-                Group name: {{ key }}
-                <ul>
-                  <li ng-repeat="player in value">
-                    player: {{ player.name }}
-                  </li>
-                </ul>
-              </li>
-            </ul>',*/
-              template: '<input type="text" ng-model="currData.entrata"/>'+
+             template: '<input type="text" ng-model="currData.entrata"/>'+
                   ' <div><ion-list class="padlist" ng-repeat="(key, item) in listServices | groupBy: \'type\'" >'+
                   '<ion-item >{{key}}</ion-item >'+
                   '<ion-radio ng-repeat="itemValue in item" ng-click="setEntry(itemValue)">{{itemValue.entry}}</ion-radio>'+
@@ -459,27 +453,22 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
 
     $scope.getFermataOptions = function(day) {
-        $scope.fermataOptions=[{'value':'via test1','label':'Test1'},{'value':'test2','label':'Test2'}];
-        //week_planService.getFermataOptions().then(function (data) {
-        //    $scope.fermataOptions=data;
-        //}, function (error) {
-        //})
+        if(profileService.getBabyProfile().services.bus && profileService.getBabyProfile().services.bus.stops){
+            $scope.fermataOptions=profileService.getBabyProfile().services.bus.stops;
+        }
     };
     $scope.getFermataOptions();
 
     $scope.getRitiroOptions = function(day) {
-        $scope.ritiraOptions=[{'value':'NameTest','label':'NameTest'},{'value':'NameTest','label':'NameTest'}];
-        //week_planService.getRitiroOptions().then(function (data) {
-        //    $scope.getRitiroOptions=data;
-        //}, function (error) {
-        //})
+        $scope.ritiraOptions=profileService.getBabyProfile().persons;
     };
     $scope.getRitiroOptions();
 
-    $scope.getListServices = function(day) {
-        $scope.listServices=[{'value':'anticipo1','label':'Anticipop1','entry':'09:00',out:'13:40',type:'anticipo'},
-        {'value':'posticipo1','label':'Posticipo1','entry':'13:20',out:'16:40',type:'posticipo'},
-        {'value':'posticipo2','label':'Posticipo2','entry':'13:20',out:'14:40',type:'posticipo'}];
+     $scope.getListServices = function(day) {
+        $scope.listServices=[{'value':'anticipo1','label':'Anticipop1','entry':'09:00',out:'13:40','type':'anticipo'},
+        {'value':'posticipo1','label':'Posticipo1','entry':'13:20',out:'16:40','type':'posticipo'},
+        {'value':'posticipo2','label':'Posticipo2','entry':'13:20',out:'14:40','type':'posticipo'}];
+        $scope.listServicesDb=profileService.getBabyProfile().services;
         //week_planService.getListServices().then(function (data) {
         //    $scope.listServices=data;
         //}, function (error) {

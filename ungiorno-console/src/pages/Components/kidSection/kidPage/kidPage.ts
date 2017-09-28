@@ -254,9 +254,6 @@ export class KidPage implements OnInit{
     oldChecked = {};
 
     onServiceEdit() {
-        //this.oldService = [];
-        //this.thisKid.services.forEach(x => this.oldService.push(x));
-        //this.oldChecked = JSON.parse(JSON.stringify(this.servicesChecked));
         this.editService = true;
     }
 
@@ -266,9 +263,6 @@ export class KidPage implements OnInit{
     }
 
     onServiceCancel() {
-        //this.thisKid.services = [];
-        //this.oldService.forEach(x=>this.thisKid.services.push(x));
-        //this.servicesChecked = JSON.parse(JSON.stringify(this.oldChecked));
         this.editService = false;
     }
 
@@ -337,9 +331,6 @@ export class KidPage implements OnInit{
     editP1Contatti : boolean;
 
     onP1ContattiEdit() {
-        // this.oldParent1.telephone = this.thisKid.parent1.telephone;
-        // this.oldParent1.cellphone = this.thisKid.parent1.cellphone;
-        // this.oldParent1.email = this.thisKid.parent1.email;
         this.editP1Contatti = true;
     }
 
@@ -349,9 +340,6 @@ export class KidPage implements OnInit{
     }
 
     onP1ContattiCancel() {
-        // this.thisKid.parent1.telephone = this.oldParent1.telephone;
-        // this.thisKid.parent1.cellphone = this.oldParent1.cellphone;
-        // this.thisKid.parent1.email = this.oldParent1.email;
         this.editP1Contatti = false;
     }
 
@@ -380,9 +368,6 @@ export class KidPage implements OnInit{
     editP2Contatti : boolean;
 
     onP2ContattiEdit() {
-        // this.oldParent2.telephone = this.thisKid.parent2.telephone;
-        // this.oldParent2.cellphone = this.thisKid.parent2.cellphone;
-        // this.oldParent2.email = this.thisKid.parent2.email;
         this.editP2Contatti = true;
     }
 
@@ -392,9 +377,6 @@ export class KidPage implements OnInit{
     }
 
     onP2ContattiCancel() {
-        // this.thisKid.parent2.telephone = this.oldParent2.telephone;
-        // this.thisKid.parent2.cellphone = this.oldParent2.cellphone;
-        // this.thisKid.parent2.email = this.oldParent2.email;
         this.editP2Contatti = false;
     }
 
@@ -433,10 +415,6 @@ export class KidPage implements OnInit{
     oldDelega : Delega = new Delega('', '', '');
 
     onDelegaInfoEdit() {
-        //this.oldDelega.id = this.selectedDelega.id;
-        //this.oldDelega.name = this.selectedDelega.name;
-        //this.oldDelega.surname = this.selectedDelega.surname;
-        //this.oldDelega.legame = this.selectedDelega.legame;
         this.editDelegaInfo = true;
     }
 
@@ -461,19 +439,12 @@ export class KidPage implements OnInit{
     }
 
     onDelegaInfoCancel() {
-        //this.selectedDelega.id = this.oldDelega.id;
-        //this.selectedDelega.name = this.oldDelega.name;
-        //this.selectedDelega.surname = this.oldDelega.surname;
-        //this.selectedDelega.legame = this.oldDelega.legame;
         this.editDelegaInfo = false;
     }
 
     editDelegaContatti:boolean;
 
     onDelegaContattiEdit() {
-        //this.oldDelega.telephone = this.selectedDelega.telephone;
-        //this.oldDelega.cellphone = this.selectedDelega.cellphone;
-        //this.oldDelega.email = this.selectedDelega.email;
         this.editDelegaContatti = true;
     }
 
@@ -483,9 +454,6 @@ export class KidPage implements OnInit{
     }
 
     onDelegaContattiCancel() {
-        //this.selectedDelega.telephone = this.oldDelega.telephone;
-        //this.selectedDelega.cellphone = this.oldDelega.cellphone;
-        //this.selectedDelega.email = this.oldDelega.email;
         this.editDelegaContatti = false;
     }
 

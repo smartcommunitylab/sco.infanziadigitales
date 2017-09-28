@@ -15,6 +15,9 @@ package it.smartcommunitylab.ungiorno.model;
 
 import java.util.List;
 
+import it.smartcommunitylab.ungiorno.controller.serializers.TimeSlotServiceJsonDeserializer;
+import it.smartcommunitylab.ungiorno.controller.serializers.TimeSlotServiceJsonSerializer;
+
 /**
  * @author raman
  *
@@ -23,6 +26,10 @@ public class KidServices {
 
     private SchoolService anticipo, posticipo, mensa;
     private BusService bus;
+    /**
+     * the serialization process of this class is maneged by {@link TimeSlotServiceJsonSerializer}
+     * and {@link TimeSlotServiceJsonDeserializer}
+     */
     private List<TimeSlotSchoolService> timeSlotServices;
 
 

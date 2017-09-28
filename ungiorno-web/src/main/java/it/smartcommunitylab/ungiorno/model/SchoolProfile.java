@@ -17,8 +17,15 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import it.smartcommunitylab.ungiorno.controller.serializers.SchoolProfileJsonSerializer;
+import it.smartcommunitylab.ungiorno.controller.serializers.TimeSlotServiceJsonDeserializer;
+import it.smartcommunitylab.ungiorno.controller.serializers.TimeSlotServiceJsonSerializer;
+
 /**
- * @author raman
+ * the JSON serialization of this class is managed by {@link SchoolProfileJsonSerializer}
+ * 
+ * 
+ * @author raman , mirko
  *
  */
 public class SchoolProfile extends SchoolObject {
@@ -104,6 +111,10 @@ public class SchoolProfile extends SchoolObject {
     private List<BusProfile> buses;
     private String absenceTiming, retireTiming;
     private String accessEmail;
+    /**
+     * the serialization process of this class is maneged by {@link TimeSlotServiceJsonSerializer}
+     * and {@link TimeSlotServiceJsonDeserializer}
+     */
     private Set<TimeSlotSchoolService> services;
 
     public SchoolProfile(TimeSlotSchoolService regular) {

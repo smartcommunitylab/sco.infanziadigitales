@@ -469,7 +469,6 @@ public class KidController {
 			@PathVariable String schoolId, @PathVariable String kidId) {
 		try {
 			List<KidProfile.DayDefault> returns = storage.getWeekDefault(appId, schoolId, kidId);
-			System.out.println(returns.get(1).getUscita());
 			return new Response<>(returns);
 		} catch (Exception e) {
 			return new Response<>(e.getMessage());
@@ -478,13 +477,13 @@ public class KidController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/student/{appId}/{schoolId}/{kidId}/set_default_plan")
-	public @ResponseBody String setWeekDefault(@PathVariable String appId, @PathVariable String schoolId,
-			@PathVariable String kidId, @RequestBody List<DayDefault> data) {
+	public @ResponseBody Response<List<KidProfile.DayDefault>> setWeekDefault(@PathVariable String appId,
+			@PathVariable String schoolId, @PathVariable String kidId, @RequestBody List<DayDefault> data) {
 		try {
-			storage.saveWeekDefault(appId, schoolId, kidId, data);
-			return "testAlbana";
+			List<KidProfile.DayDefault> ret = storage.saveWeekDefault(appId, schoolId, kidId, data);
+			return new Response<>(ret);
 		} catch (Exception e) {
-			return "jomore";
+			return new Response<>(e.getMessage());
 		}
 
 	}

@@ -21,7 +21,7 @@
               <td ng-if="!day.assente">
                   <p class="button-day noneditable">U <span class="val_time">{{day.uscita}}</span></p>
               </td>
-              <td ng-if="day.service_bus && !day.assente">
+              <td ng-if="day.bus && !day.assente">
                   <p class="button-day noneditable"><img src="img/ic-login.png" class="iconStyle" /></p>
               </td>
               <td ng-if="!day.assente">
@@ -63,7 +63,7 @@
               <td ng-if="!day.assente">
                   <p ng-class="whatClassIsIt($index,'')">U <span class="val_time">{{day.uscita}}</span></p>
               </td>
-              <td ng-if="day.service_bus && !day.assente">
+              <td ng-if="day.bus && !day.assente">
                   <p ng-class="whatClassIsIt($index,'')"><img src="img/ic-login.png" class="iconStyle"  /></p>
               </td>
               <td ng-if="!day.assente">

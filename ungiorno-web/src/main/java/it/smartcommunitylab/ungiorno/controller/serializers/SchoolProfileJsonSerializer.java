@@ -32,7 +32,7 @@ public class SchoolProfileJsonSerializer extends JsonSerializer<SchoolProfile> {
         generator.writeObjectField("foodTypes", obj.getFoodTypes());
         generator.writeObjectField("sections", obj.getSections());
         generator.writeObjectField("buses", obj.getBuses());
-        generator.writeObjectField("timeSlotServices", obj.getTimeSlotServices());
+        generator.writeObjectField("services", obj.getServices());
         generator.writeEndObject();
 
     }

@@ -5,6 +5,7 @@ import { Parent } from './Classes/parent';
 import { Teacher } from './Classes/teacher';
 import { Kid } from "./Classes/kid";
 import { SchoolContacts } from "./Classes/schoolContacts"
+import { Time } from "./Classes/time"
 
 import { ServerSchoolData } from './Classes/serverModel/serverSchoolData';
 import { ServerTeacherData } from './Classes/serverModel/serverTeacherData';
@@ -19,6 +20,10 @@ import { Http, Headers } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
 import { School } from "./Classes/school";
+import { ServerServiceData } from "./Classes/serverModel/serverServiceData";
+import { ServiceTimeSlot } from "./Classes/serverModel/serviceTimeSlot";
+
+import moment from 'moment';
 
 @Injectable()
 export class WebService {
@@ -122,12 +127,12 @@ export class WebService {
     else if(item instanceof Kid) {
       return this.addKid(schoolId, item);
     }
-    else if(item instanceof Service) {
-      return this.getSchool(schoolId).then(tmp => {
-        tmp.servizi.push(item); 
-        return this.http.put(url, JSON.stringify(tmp), {headers: this.headers}).toPromise().then(() => tmp).catch(this.handleError);
-      });
-    }
+    // else if(item instanceof Service) {
+    //   return this.getSchool(schoolId).then(tmp => {
+    //     tmp.servizi.push(item); 
+    //     return this.http.put(url, JSON.stringify(tmp), {headers: this.headers}).toPromise().then(() => tmp).catch(this.handleError);
+    //   });
+    // }
   }
 
   remove(schoolId: string, item: any) : Promise<any> {
@@ -280,8 +285,9 @@ export class WebService {
     
     // DA TOGLIERE
     school.teachers = [];
-    school.servizi = [];
+    school.servizi = serverSchoolData.services ? serverSchoolData.services.map(serverService => this.convertToService(serverService)) : [];
     school.groups = [];
+
     //school.buses = serverSchoolData.buses;
 
     
@@ -309,6 +315,33 @@ export class WebService {
     return school;
   }
 
+  private convertToService = function(serverService : ServerServiceData) : Service {
+    let slots = serverService.timeSlots.map(timeSlot => this.convertToTime(timeSlot));
+    let service = new Service(serverService.name,slots,null,serverService.regular);
+    return service;
+  }
+
+  private convertToServerService = function(service : Service) : ServerServiceData {
+    let serverService = new ServerServiceData();
+    serverService.name = service.servizio;
+    serverService.regular = service.normale;
+    serverService.timeSlots = service.fasce ? service.fasce.map(fascia => this.convertToServiceTimeSlot(fascia)) : [];
+    return serverService;
+  }
+
+  private convertToTime(serviceTimeSlot : ServiceTimeSlot) : Time {
+    let fromTime : Date = moment(serviceTimeSlot.fromTime).toDate();
+    let toTime : Date = moment(serviceTimeSlot.toTime).toDate();
+    let t = new Time(serviceTimeSlot.name,fromTime,toTime);
+    return t;
+  }
+  private convertToServiceTimeSlot(fascia : Time) : ServiceTimeSlot {
+    let serviceTimeSlot = new ServiceTimeSlot();
+    serviceTimeSlot.name = fascia.name;
+    serviceTimeSlot.fromTime = moment(fascia.start,"HH:mm").toDate();
+    serviceTimeSlot.toTime = moment(fascia.end,"HH:mm").toDate();
+    return serviceTimeSlot;
+  }
   private convertToServerSchool = function (school : School) : ServerSchoolData {
     let convertedSchool = new ServerSchoolData();
     convertedSchool.schoolId = school.id;
@@ -348,6 +381,9 @@ export class WebService {
       });
     }
 
+    if(school.servizi) {
+      convertedSchool.services = school.servizi.map(service => this.convertToServerService(service));
+    }
     
     return convertedSchool;
 

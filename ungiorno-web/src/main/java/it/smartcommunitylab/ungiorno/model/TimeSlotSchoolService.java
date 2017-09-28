@@ -18,13 +18,12 @@ public class TimeSlotSchoolService extends SchoolService {
     private Set<ServiceTimeSlot> timeSlots = new LinkedHashSet<>();
     private final boolean regular;
 
-
-    public TimeSlotSchoolService(@Nonnull String name, boolean isRegular) {
+    public TimeSlotSchoolService(@Nonnull String name, boolean regular) {
         if (name == null) {
             throw new IllegalArgumentException("Name cannot be null");
         }
         this.name = name;
-        this.regular = isRegular;
+        this.regular = regular;
     }
 
 

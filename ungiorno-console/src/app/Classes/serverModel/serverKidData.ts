@@ -23,6 +23,9 @@ export class ServerKidData {
 	// private List<Allergy> allergies;
 	// private boolean active = true;
     
-    constructor() {}
+    constructor() {
+		this.services = new KidServices();
+
+	}
    
 }

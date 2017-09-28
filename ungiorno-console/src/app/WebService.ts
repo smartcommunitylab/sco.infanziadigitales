@@ -127,12 +127,6 @@ export class WebService {
     else if(item instanceof Kid) {
       return this.addKid(schoolId, item);
     }
-    // else if(item instanceof Service) {
-    //   return this.getSchool(schoolId).then(tmp => {
-    //     tmp.servizi.push(item); 
-    //     return this.http.put(url, JSON.stringify(tmp), {headers: this.headers}).toPromise().then(() => tmp).catch(this.handleError);
-    //   });
-    // }
   }
 
   remove(schoolId: string, item: any) : Promise<any> {
@@ -188,7 +182,8 @@ export class WebService {
 
   private convertToKid = function(serverKidData : ServerKidData) : Kid {
     let allergies  = serverKidData.allergies ? serverKidData.allergies.map(allergy => allergy.name) : null;
-    let convertedKid = new Kid(serverKidData.kidId,serverKidData.firstName,serverKidData.lastName,serverKidData.gender,serverKidData.birthDate,serverKidData.image,null,null,null,null,null,null,allergies,serverKidData.partecipateToSperimentation,null);
+    let services = serverKidData.services && serverKidData.services.timeSlotServices ? serverKidData.services.timeSlotServices.map(service => this.convertToService(service)) : null;
+    let convertedKid = new Kid(serverKidData.kidId,serverKidData.firstName,serverKidData.lastName,serverKidData.gender,serverKidData.birthDate,serverKidData.image,null,null,null,null,null,null,allergies,serverKidData.partecipateToSperimentation,services);
     let parents = serverKidData.persons.filter(person => person.parent);
     if(parents.length > 0) {
       convertedKid.parent1 = this.convertToParent(parents[0]);
@@ -211,7 +206,12 @@ export class WebService {
     convertedKid.partecipateToSperimentation = kid.sperimentazione;
     convertedKid.gender = kid.gender;
     convertedKid.birthDate = new Date(Date.parse(kid.nascitaStr));
-    convertedKid.services = new KidServices();
+    convertedKid.services.timeSlotServices = kid.services.map(service =>  {
+      let serverService : ServerServiceData = this.convertToServerService(service);
+      serverService.enabled = true; // if a service if present in this array, it MUST be a enabled service for the kid
+      return serverService;
+    });
+
 
     convertedKid.allergies = kid.allergie.map(allergy => new Allergy(allergy,allergy));
     if(kid.parent1) {
@@ -389,9 +389,8 @@ export class WebService {
 
 
     // private Timing regularTiming, anticipoTiming, posticipoTiming;
-    // private Contact contacts;
-    // private List<TypeDef> absenceTypes;
-    // private List<TypeDef> frequentIllnesses;
+    
+    
     // private List<TypeDef> teacherNoteTypes;
     // private List<TypeDef> foodTypes;
     // private List<SectionProfile> sections;

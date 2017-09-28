@@ -76,7 +76,7 @@ week_planService.getCurrentWeek= function () {
     
             $http({
                 method: 'GET',
-                url: globalUrl + '/student/'  +appId+'/'+schoolId+'/'+weekNr + '/' + kidid + '/retrieve_plan',
+                url: globalUrl + '/student/'  +appId+'/'+schoolId+'/'+ kidid + '/'  + weekNr + '/retrieve_specific_week',
                 headers: {
                     'Accept': 'application/json'
                 },
@@ -120,7 +120,7 @@ week_planService.getCurrentWeek= function () {
     
             $http({
                 method: 'POST',
-                url: globalUrl + '/student/' +appId+'/'+schoolId+'/' +weekNr + '/' + kidid + '/set_plan',
+                url: globalUrl + '/student/' +appId+'/'+schoolId+'/'+ kidid + '/'  + weekNr + '/set_specific_week',
                 headers: {
                   'Accept': 'application/json',
                   'Content-Type': 'application/json'

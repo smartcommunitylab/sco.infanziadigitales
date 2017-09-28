@@ -51,6 +51,7 @@ public class KidProfile extends SchoolObject {
 	public static class DayDefault {
 		private String name, entrata, uscita, delega_name;
 		private boolean bus;
+		private boolean absence;
 
 		public String getName() {
 			return name;
@@ -90,6 +91,14 @@ public class KidProfile extends SchoolObject {
 
 		public void setBus(boolean bus2) {
 			this.bus = bus2;
+		}
+
+		public boolean getAbsence() {
+			return absence;
+		}
+
+		public void setAbsence(boolean absence2) {
+			this.absence = absence2;
 		}
 
 	}

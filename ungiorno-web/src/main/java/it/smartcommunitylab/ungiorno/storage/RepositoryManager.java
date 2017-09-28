@@ -72,6 +72,7 @@ import it.smartcommunitylab.ungiorno.model.KidCalRitiro;
 import it.smartcommunitylab.ungiorno.model.KidConfig;
 import it.smartcommunitylab.ungiorno.model.KidProfile;
 import it.smartcommunitylab.ungiorno.model.KidProfile.DayDefault;
+import it.smartcommunitylab.ungiorno.model.KidWeeks;
 import it.smartcommunitylab.ungiorno.model.LoginData;
 import it.smartcommunitylab.ungiorno.model.Menu;
 import it.smartcommunitylab.ungiorno.model.Parent;
@@ -743,7 +744,11 @@ public class RepositoryManager {
 	}
 
 	/**
-	 * @param note
+	 * @param appId
+	 * @param schoolId
+	 * @param kidId
+	 * @param days
+	 * @return
 	 */
 	public List<DayDefault> saveWeekDefault(String appId, String schoolId, String kidId, List<DayDefault> days) {
 		Query q = schoolQuery(appId, schoolId);
@@ -751,6 +756,45 @@ public class RepositoryManager {
 		KidProfile kid = template.findOne(q, KidProfile.class);
 		kid.setWeekDefault(days);
 		template.save(kid);
+		return days;
+	}
+
+	/**
+	 * @param appId
+	 * @param schoolId
+	 * @param kidId
+	 * @return
+	 */
+	public List<KidProfile.DayDefault> getWeekSpecific(String appId, String schoolId, String kidId, int weeknr) {
+		Query q = schoolQuery(appId, schoolId);
+		q.addCriteria(new Criteria("kidId").is(kidId));
+		q.addCriteria(new Criteria("weeknr").is(weeknr));
+		KidWeeks week = template.findOne(q, KidWeeks.class);
+		List<KidProfile.DayDefault> days = week.getDays();
+		return days;
+	}
+
+	/**
+	 * @param appId
+	 * @param schoolId
+	 * @param kidId
+	 * @param days
+	 * @return
+	 */
+	public List<DayDefault> saveWeekSpecific(String appId, String schoolId, String kidId, List<DayDefault> days,
+			int weeknr) {
+		Query q = schoolQuery(appId, schoolId);
+		q.addCriteria(new Criteria("kidId").is(kidId));
+		q.addCriteria(new Criteria("weeknr").is(weeknr));
+		template.remove(q, KidWeeks.class);
+
+		KidWeeks week = new KidWeeks();
+		week.setAppId(appId);
+		week.setSchoolId(schoolId);
+		week.setKidId(kidId);
+		week.setWeeknr(weeknr);
+		week.setDays(days);
+		template.save(week);
 		return days;
 	}
 

@@ -11,12 +11,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.appId=profileService.getBabyProfile().appId;
     $scope.schoolId=profileService.getBabyProfile().schoolId;
     week_planService.setGlobalParam($scope.appId,$scope.schoolId);
-    var jsonTest=[{'name':'monday_reduced','entrata':'08:20','uscita':'13:20','bus':true,'fermata':'via test1','delega_name':'NameTest','delega_type':'nono','assente':false},
-    {'name':'tuesday_reduced','entrata':'08:20','uscita':'13:20','bus':true,'fermata':'via test1','delega_name':'NameTest','delega_type':'nono','assente':false},
-    {'name':'wednesday_reduced','entrata':'08:20','uscita':'13:20','bus':true,'fermata':'via test1','delega_name':'NameTest','delega_type':'nono','assente':true,
+    var jsonTest=[{'name':'monday_reduced','entrata':'08:20','uscita':'13:20','bus':true,'fermata':'via test1','delega_name':'NameTest','assente':false},
+    {'name':'tuesday_reduced','entrata':'08:20','uscita':'13:20','bus':true,'fermata':'via test1','delega_name':'NameTest','assente':false},
+    {'name':'wednesday_reduced','entrata':'08:20','uscita':'13:20','bus':true,'fermata':'via test1','delega_name':'NameTest','assente':true,
                         'motivazione':{type:'malattia',subtype:'Influenza'}},
-    {'name':'thursday_reduced','entrata':'08:20','uscita':'13:20','bus':true,'fermata':'via test1','delega_name':'NameTest','delega_type':'nono','assente':false},
-    {'name':'friday_reduced','entrata':'08:20','uscita':'13:20','bus':true,'fermata':'via test1','delega_name':'NameTest','delega_type':'nono','assente':false}];
+    {'name':'thursday_reduced','entrata':'08:20','uscita':'13:20','bus':true,'fermata':'via test1','delega_name':'NameTest','assente':false},
+    {'name':'friday_reduced','entrata':'08:20','uscita':'13:20','bus':true,'fermata':'via test1','delega_name':'NameTest','assente':false}];
 
     $scope.getDateString = function () {
         var currentDate = moment().week($scope.currWeek);
@@ -40,15 +40,27 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
     
     $scope.getWeekPlanDB =  function(day) {
-       // week_planService.getWeekPlan($scope.kidId).then(function (data) {
-         //   $scope.days=data;
-         //jsonTest=data;
-         $scope.days=jsonTest;
-            for(var i=0;i<=4;i++){
-                week_planService.setDayData(i,$scope.days[i],'');
+        week_planService.getWeekPlan($scope.currWeek,$scope.kidId).then(function (data) {
+            if(data!=null){
+                $scope.days=data;
+                jsonTest=data;
+                for(var i=0;i<=4;i++){
+                    week_planService.setDayData(i,$scope.days[i],'');
+                }
             }
-        //}, function (error) {
-        //});
+            else{
+                week_planService.getDefaultWeekPlan($scope.kidId).then(function (data) {
+                    $scope.days=data;
+                    jsonTest=data;
+                    for(var i=0;i<=4;i++){
+                        week_planService.setDayData(i,$scope.days[i],'');
+                    }
+                }, function (error) {
+                });
+            }
+            
+        }, function (error) {
+        });
     };
 
     $scope.getWeekPlan = function() {
@@ -64,13 +76,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.getWeekPlan();
 
     $scope.setWeekPlan = function() {
-        $scope.mode='';
-        week_planService.setMode($scope.mode);
-        //week_planService.setWeekPlan($scope.days,$scope.kidId).then(function (data) {
-           // $scope.mode='';
-           //$scope.getWeekPlan();
-        //}, function (error) {
-        //});
+        week_planService.setWeekPlan($scope.days,$scope.kidId,$scope.currWeek).then(function (data) {
+            $scope.mode='';
+            week_planService.setMode($scope.mode);
+        }, function (error) {
+        });
     };
 
     $scope.whatClassIsIt = function(day,type) {
@@ -96,8 +106,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         prev.subtract(1, "weeks");
         $scope.currWeek=prev.format('w');
         $scope.getDateString(prev);
-        //week_planService.setCurrentWeek($scope.currWeek);
-        //$scope.getWeekPlan();
+        week_planService.setCurrentWeek($scope.currWeek);
+        $scope.getWeekPlan();
     };
     
     $scope.next_week = function() {
@@ -105,8 +115,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         next.add(1, 'weeks');
         $scope.currWeek=next.format('w');
         $scope.getDateString(next);
-        //week_planService.setCurrentWeek($scope.currWeek);
-        //$scope.getWeekPlan();
+        week_planService.setCurrentWeek($scope.currWeek);
+        $scope.getWeekPlan();
     };
     
     $scope.modifyWeek = function() {

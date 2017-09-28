@@ -1,10 +1,13 @@
 package it.smartcommunitylab.ungiorno.storage;
 
+import static org.hamcrest.Matchers.hasSize;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,6 +36,7 @@ import it.smartcommunitylab.ungiorno.model.Parent;
 import it.smartcommunitylab.ungiorno.model.SchoolProfile;
 import it.smartcommunitylab.ungiorno.model.SectionDef;
 import it.smartcommunitylab.ungiorno.model.Teacher;
+import it.smartcommunitylab.ungiorno.model.TimeSlotSchoolService;
 import it.smartcommunitylab.ungiorno.test.TestConfig;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -85,6 +89,39 @@ public class RepositoryManagerTest {
         SchoolProfile schoolAfter = repoManager.getSchoolProfile(appId, schoolId);
         Assert.assertEquals(appId, schoolAfter.getAppId());
         Assert.assertEquals(schoolId, schoolAfter.getSchoolId());
+    }
+
+    @Test
+    public void test_storeProfileWithoutRegularService() {
+        SchoolProfile school = new SchoolProfile();
+        String appId = "TEST";
+        school.setAppId(appId);
+        String schoolId = "SCHOOL_ID";
+        school.setSchoolId(schoolId);
+
+        Assert.assertTrue(school.getServices().isEmpty());
+        repoManager.storeSchoolProfile(school);
+
+        school = repoManager.getSchoolProfile(appId, schoolId);
+        Assert.assertThat(school.getServices(), Matchers.hasItem(new TimeSlotSchoolService(
+                TimeSlotSchoolService.DEFAULT_REGULAR_SERVICE_NAME, true)));
+    }
+
+
+    @Test
+    public void test_storeProfileContainingRegularService() {
+        SchoolProfile school = new SchoolProfile();
+        String appId = "TEST";
+        school.setAppId(appId);
+        String schoolId = "SCHOOL_ID";
+        school.setSchoolId(schoolId);
+        school.getServices().add(new TimeSlotSchoolService(
+                TimeSlotSchoolService.DEFAULT_REGULAR_SERVICE_NAME, true));
+
+        Assert.assertThat(school.getServices(), hasSize(1));
+        repoManager.storeSchoolProfile(school);
+        school = repoManager.getSchoolProfile(appId, schoolId);
+        Assert.assertThat(school.getServices(), hasSize(1));
     }
 
     @Test

@@ -270,7 +270,7 @@ export class KidPage implements OnInit{
         var x = new Array();
         for(var i in this.servicesChecked) {
             if(this.servicesChecked[i]) {
-               x.push(this.selectedSchool.servizi.find(c => c.servizio.toLowerCase() === i.toLowerCase()));
+               x.push(this.selectedSchool.servizi.find(c => c.servizio && c.servizio.toLowerCase() === i.toLowerCase()));
             }
         }
         this.thisKid.services = x

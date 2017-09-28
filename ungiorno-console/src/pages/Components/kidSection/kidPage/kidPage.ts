@@ -254,22 +254,21 @@ export class KidPage implements OnInit{
     oldChecked = {};
 
     onServiceEdit() {
-        this.oldService = [];
-        this.thisKid.services.forEach(x => this.oldService.push(x));
-        this.oldChecked = JSON.parse(JSON.stringify(this.servicesChecked));
+        //this.oldService = [];
+        //this.thisKid.services.forEach(x => this.oldService.push(x));
+        //this.oldChecked = JSON.parse(JSON.stringify(this.servicesChecked));
         this.editService = true;
     }
 
     onServiceSave() {
-        this.webService.update(this.selectedSchool);
         this.editService = false;
-        this.saveClick();
+        this.webService.add(this.selectedSchool.id,this.thisKid);
     }
 
     onServiceCancel() {
-        this.thisKid.services = [];
-        this.oldService.forEach(x=>this.thisKid.services.push(x));
-        this.servicesChecked = JSON.parse(JSON.stringify(this.oldChecked));
+        //this.thisKid.services = [];
+        //this.oldService.forEach(x=>this.thisKid.services.push(x));
+        //this.servicesChecked = JSON.parse(JSON.stringify(this.oldChecked));
         this.editService = false;
     }
 

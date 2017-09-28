@@ -469,7 +469,6 @@ public class KidController {
 			@PathVariable String schoolId, @PathVariable String kidId) {
 		try {
 			List<KidProfile.DayDefault> returns = storage.getWeekDefault(appId, schoolId, kidId);
-			System.out.println(returns.get(1).getUscita());
 			return new Response<>(returns);
 		} catch (Exception e) {
 			return new Response<>(e.getMessage());
@@ -478,13 +477,40 @@ public class KidController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/student/{appId}/{schoolId}/{kidId}/set_default_plan")
-	public @ResponseBody String setWeekDefault(@PathVariable String appId, @PathVariable String schoolId,
-			@PathVariable String kidId, @RequestBody List<DayDefault> data) {
+	public @ResponseBody Response<List<KidProfile.DayDefault>> setWeekDefault(@PathVariable String appId,
+			@PathVariable String schoolId, @PathVariable String kidId, @RequestBody List<DayDefault> data) {
 		try {
-			storage.saveWeekDefault(appId, schoolId, kidId, data);
-			return "testAlbana";
+			List<KidProfile.DayDefault> ret = storage.saveWeekDefault(appId, schoolId, kidId, data);
+			return new Response<>(ret);
 		} catch (Exception e) {
-			return "jomore";
+			return new Response<>(e.getMessage());
+		}
+
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/student/{appId}/{schoolId}/{kidId}/{weeknr}/retrieve_specific_week")
+	public @ResponseBody Response<List<KidProfile.DayDefault>> getWeekSpecific(@PathVariable String appId,
+			@PathVariable String schoolId, @PathVariable String kidId, @PathVariable int weeknr) {
+		try {
+			List<KidProfile.DayDefault> returns = storage.getWeekSpecific(appId, schoolId, kidId, weeknr);
+			return new Response<>(returns);
+		} catch (Exception e) {
+			return new Response<>(e.getMessage());
+		}
+
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "/student/{appId}/{schoolId}/{kidId}/{weeknr}/set_specific_week")
+	public @ResponseBody Response<List<KidProfile.DayDefault>> setWeekSpecific(@PathVariable String appId,
+			@PathVariable String schoolId, @PathVariable String kidId, @PathVariable int weeknr,
+			@RequestBody List<DayDefault> data) {
+		try {
+			System.out.println(weeknr);
+			List<KidProfile.DayDefault> ret = storage.saveWeekSpecific(appId, schoolId, kidId, data, weeknr);
+			System.out.println(ret);
+			return new Response<>(ret);
+		} catch (Exception e) {
+			return new Response<>(e.getMessage());
 		}
 
 	}

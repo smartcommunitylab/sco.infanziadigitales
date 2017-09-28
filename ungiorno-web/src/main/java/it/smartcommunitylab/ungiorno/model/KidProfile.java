@@ -49,8 +49,9 @@ public class KidProfile extends SchoolObject {
 	}
 
 	public static class DayDefault {
-		private String name, entrata, uscita, delega_name, delega_type;
-		private boolean service_bus;
+		private String name, entrata, uscita, delega_name;
+		private boolean bus;
+		private boolean absence;
 
 		public String getName() {
 			return name;
@@ -84,21 +85,22 @@ public class KidProfile extends SchoolObject {
 			this.delega_name = delega_name;
 		}
 
-		public boolean getService_bus() {
-			return service_bus;
+		public boolean getBus() {
+			return bus;
 		}
 
-		public void setService_bus(boolean service_bus) {
-			this.service_bus = service_bus;
+		public void setBus(boolean bus2) {
+			this.bus = bus2;
 		}
 
-		public String getDelega_type() {
-			return delega_type;
+		public boolean getAbsence() {
+			return absence;
 		}
 
-		public void setDelega_type(String delega_type) {
-			this.delega_type = delega_type;
+		public void setAbsence(boolean absence2) {
+			this.absence = absence2;
 		}
+
 	}
 
 	private String kidId, fullName, lastName, firstName, image;
@@ -180,7 +182,7 @@ public class KidProfile extends SchoolObject {
 	}
 
 	public List<DayDefault> getWeekDef() {
-		return weekdefault;
+		return this.weekdefault;
 	}
 
 	public void setWeekDefault(List<DayDefault> days) {

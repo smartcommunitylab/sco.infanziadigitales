@@ -104,4 +104,25 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.filters', 
     input = input.toLowerCase();
     return input.substring(0,1).toUpperCase()+input.substring(1);
   }
-});
+})
+.filter('getRitiroName', function() {
+    return function(input, persons) {
+      for(var i=0;i<persons.length;i++){
+          if(persons[i].personId==input){
+              return persons[i].firstName;
+          }
+      }
+      return '';
+    }
+  })
+  .filter('getRitiroType', function() {
+    return function(input, persons) {
+      for(var i=0;i<persons.length;i++){
+          if(persons[i].personId==input){
+              var type =(persons[i].parent ? 'parent' : persons[i].relation);
+              return type;
+          }
+      }
+      return '';
+    }
+  });

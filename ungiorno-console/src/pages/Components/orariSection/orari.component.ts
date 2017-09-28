@@ -31,47 +31,22 @@ import { NavController, AlertController, ModalController } from 'ionic-angular';
 
 export class Orari implements OnInit {
     @Input() selectedSchool: School;
-//    thisSchool : School = new School();
-
-//    ordine: string = '2';
 
     filteredOrari : Service[];
 
     constructor(public navCtrl: NavController, private webService : WebService, public alertCtrl: AlertController, public modalCtrl: ModalController) {}
 
     ngOnInit() {
-        //Object.assign(this.thisSchool, this.selectedSchool);
         this.filteredOrari = this.selectedSchool.servizi;
-        //this.onOrdineChange(this.ordine);
-        //this.selectedSchool.servizi.sort((item1, item2) => item1.fasce && item1.fasce[0].start.localeCompare(item2.fasce[0].start));
     }
 
-    // onOrdineChange(ordine : string) {
-    //     switch(ordine) {
-    //         case '0':
-    //             this.filteredOrari.sort((item1, item2) => item1.servizio.localeCompare(item2.servizio));
-    //         break;
-    //         case '1':
-    //             this.filteredOrari.sort((item1, item2) => item2.servizio.localeCompare(item1.servizio));
-    //         break;
-    //         case '2':
-    //             this.filteredOrari.sort((item1, item2) => item1.fasce && item1.fasce[0].start.localeCompare(item2.fasce[0].start));
-    //         break;
-    //         case '3':
-    //             this.filteredOrari.sort((item1, item2) => item2.fasce && item2.fasce[0].start.localeCompare(item1.fasce[0].start));
-    //         break;
-    //     }
-    // }
-
     showOrariModal(item: Service, isNew : boolean) {
-        let modal = this.modalCtrl.create(OrariModal, {'orario' : item, 'school' : this.selectedSchool, 'isNew' : isNew, 'giaNorm' : [this.selectedSchool.servizi.findIndex(x=>x.normale === true) >= 0]}, {enableBackdropDismiss: false, showBackdrop: false});
+        let modal = this.modalCtrl.create(OrariModal, {'orario' : item, 'school' : this.selectedSchool, 'isNew' : isNew, 'giaNorm' : [item.normale]});
         modal.present();
     }
 
     newOrariModal() {
         this.showOrariModal(new Service('', [], [], false), true);
-        //this.onOrdineChange(this.ordine);
-       // this.selectedSchool.servizi.sort((item1, item2) => item1.fasce[0].start.localeCompare(item2.fasce[0].start));
     }
 
     onDeleteOrario(item : Service) {
@@ -85,10 +60,7 @@ export class Orari implements OnInit {
                 text: 'OK',
                 handler: () => {
                     this.selectedSchool.servizi.splice(this.selectedSchool.servizi.findIndex(tmp => tmp.servizio.toLowerCase() === item.servizio.toLowerCase()), 1);
-                    //Object.assign(this.selectedSchool, this.thisSchool);
                     this.webService.update(this.selectedSchool);
-                   // this.onOrdineChange(this.ordine);
-                  //  this.selectedSchool.servizi.sort((item1, item2) => item1.fasce[0].start.localeCompare(item2.fasce[0].start));
                 },
                 }
             ]

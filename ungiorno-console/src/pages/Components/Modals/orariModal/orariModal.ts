@@ -84,7 +84,7 @@ export class OrariModal implements OnInit{
     }
 
     addFascia() {
-        var newFascia = new Time('', new Date(0, 0, 0, 0, 1), new Date(0, 0, 0, 23, 59));
+        var newFascia = new Time('', new Date(0, 0, 0, 8, 0), new Date(0, 0, 0, 17, 0));
         this.copiedOrario.fasce.push(newFascia);
         this.changeName(this.copiedOrario.fasce[this.copiedOrario.fasce.length - 1].name);
     }

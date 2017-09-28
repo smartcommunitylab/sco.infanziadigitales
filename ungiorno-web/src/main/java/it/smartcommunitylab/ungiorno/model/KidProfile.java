@@ -50,7 +50,7 @@ public class KidProfile extends SchoolObject {
 
 	public static class DayDefault {
 		private String name, entrata, uscita, delega_name, delega_type;
-		private boolean service_bus;
+		private boolean bus;
 
 		public String getName() {
 			return name;
@@ -84,12 +84,12 @@ public class KidProfile extends SchoolObject {
 			this.delega_name = delega_name;
 		}
 
-		public boolean getService_bus() {
-			return service_bus;
+		public boolean getBus() {
+			return bus;
 		}
 
-		public void setService_bus(boolean service_bus) {
-			this.service_bus = service_bus;
+		public void setBus(boolean bus2) {
+			this.bus = bus2;
 		}
 
 		public String getDelega_type() {
@@ -180,7 +180,7 @@ public class KidProfile extends SchoolObject {
 	}
 
 	public List<DayDefault> getWeekDef() {
-		return weekdefault;
+		return this.weekdefault;
 	}
 
 	public void setWeekDefault(List<DayDefault> days) {

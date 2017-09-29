@@ -23,5 +23,13 @@ export class School {
 
     constructor() {
         this.phoneNumbers = [];
+        this.servizi = [];
+        this.kids = [];
+        this.teachers = [];
+        this.buses = [];
+        this.assenze = [];
+        this.malattie = [];
+        this.groups = [];
+        this.fermate = [];
     }
 }

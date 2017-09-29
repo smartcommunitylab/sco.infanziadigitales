@@ -18,6 +18,8 @@ public class TimeSlotSchoolService extends SchoolService {
     private Set<ServiceTimeSlot> timeSlots = new LinkedHashSet<>();
     private final boolean regular;
 
+    public static final String DEFAULT_REGULAR_SERVICE_NAME = "Normale";
+
     public TimeSlotSchoolService(@Nonnull String name, boolean regular) {
         if (name == null) {
             throw new IllegalArgumentException("Name cannot be null");

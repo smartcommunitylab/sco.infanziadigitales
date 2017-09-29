@@ -20,7 +20,7 @@
           <span>{{item.servizio}}</span>
           <button ion-button color="green2" class='btnFasce' item-end [disabled]='true' style='margin-left: 10px' *ngFor="let fascia of item.fasce" >{{fascia.name}} ({{fascia.start}} - {{fascia.end}})</button>
           <ion-icon name="md-create" item-end color="magenta1" style="margin-right: 30px; margin-left: 250px" (click)="showOrariModal(item, false)"></ion-icon>  
-          <ion-icon name="trash" item-end color="magenta1" style="margin-right: 10px" (click)="onDeleteOrario(item)"></ion-icon> 
+          <ion-icon name="trash" item-end color="magenta1" style="margin-right: 10px" (click)="onDeleteOrario(item)" *ngIf="!item.normale"></ion-icon> 
         </ion-item>
       </ion-list>
     </ion-col>

@@ -115,10 +115,9 @@ public class SchoolProfile extends SchoolObject {
      * the serialization process of this class is maneged by {@link TimeSlotServiceJsonSerializer}
      * and {@link TimeSlotServiceJsonDeserializer}
      */
-    private Set<TimeSlotSchoolService> services;
+    private Set<TimeSlotSchoolService> services = new LinkedHashSet<>();
 
     public SchoolProfile(TimeSlotSchoolService regular) {
-        services = new LinkedHashSet<>();
         services.add(regular);
     }
 
@@ -261,6 +260,9 @@ public class SchoolProfile extends SchoolObject {
     }
 
     public Set<TimeSlotSchoolService> getServices() {
+        if (services == null) {
+            services = new LinkedHashSet<>();
+        }
         return services;
     }
 

@@ -34,8 +34,8 @@
                                 <ion-input name="name" type="text" [(ngModel)]="copiedOrario.servizio"></ion-input>
                             </ion-item>
                             <ion-item>
-                                <ion-label>Questo è il servizio normale</ion-label>
-                                <ion-checkbox [(ngModel)]="copiedOrario.normale" (ngModelChange)='giaNorm[0] = copiedOrario.normale' [disabled]='giaNorm[0] && !copiedOrario.normale'></ion-checkbox>
+                                <ion-label *ngIf="giaNorm[0]">Questo è il servizio normale</ion-label>
+                                <!-- <ion-checkbox [(ngModel)]="copiedOrario.normale" (ngModelChange)='giaNorm[0] = copiedOrario.normale' [disabled]='giaNorm[0] && !copiedOrario.normale'></ion-checkbox> -->
                             </ion-item>
                         </ion-list>
                     </ion-card-content>

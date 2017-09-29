@@ -39,8 +39,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         return $scope.currentDate.format('w');      
     };
     
-    $scope.getWeekPlanDB =  function(day) {
-        week_planService.getWeekPlan($scope.currWeek,$scope.kidId).then(function (data) {
+    $scope.getWeekPlanDB =  function(week) {
+        week_planService.getWeekPlan(week,$scope.kidId).then(function (data) {
             if(data!=null){
                 $scope.days=data;
                 jsonTest=data;
@@ -70,7 +70,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 $scope.days[i]=week_planService.getDayData(i);
             }
         }else{
-            $scope.getWeekPlanDB();
+            $scope.getWeekPlanDB($scope.currWeek);
         }
     };
     $scope.getWeekPlan();
@@ -126,8 +126,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
     $scope.cancel = function() {
         $scope.mode='';
-        $scope.days=jsonTest;
         week_planService.setMode($scope.mode);
+        $scope.getWeekPlanDB($scope.currWeek);
     };
 
     $scope.gotoEditDate = function(day) {
@@ -164,11 +164,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
     $scope.copy_prev_week= function() {
         var week=$scope.currWeek-1;
-        //week_planService.getWeekPlan(week,$scope.kidId).then(function (data) {
-        //        $scope.days=data;
-        //        jsonTest=data;
-        //}, function (error) {
-        //});
+        $scope.getWeekPlanDB(week);
     };
     $scope.ritiraOptions=profileService.getBabyProfile().persons;
 
@@ -227,6 +223,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.getWeekPlan();
 
     $scope.setWeekPlan = function() {
+        //TODO add confirm popup 
         $scope.mode='';
         week_planService.setModeDefault($scope.mode);
         week_planService.setDefaultWeekPlan($scope.days,$scope.kidId).then(function (data) {
@@ -270,7 +267,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
 
     $scope.restore = function() {
-        $scope.days=jsonTest;
+        $scope.getWeekPlanDB();
     };
 
 
@@ -403,6 +400,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
           }
     }
 
+    $scope.setBusHour= function() {
+
+    }
 
 })
 .controller('WeekEditDayCtrl', function ($scope, moment, dataServerService, week_planService, profileService , $ionicModal, $filter, $ionicPopup,$state) {

@@ -24,16 +24,16 @@
             <td class="day-name">
                 <p class="title">{{day.name| translate | uppercase}}</p>
             </td>
-            <td ng-if="!day.assente">
+            <td ng-if="!day.absence">
                 <p class="button-day noneditable">E <span class="val_time">{{day.entrata}}</span></p>
             </td>
-            <td ng-if="!day.assente">
+            <td ng-if="!day.absence">
                 <p class="button-day noneditable">U <span class="val_time">{{day.uscita}}</span></p>
             </td>
-            <td ng-if="day.bus && !day.assente">
+            <td ng-if="day.bus && !day.absence">
                 <p class="button-day noneditable"><img src="img/ic-login.png" class="iconStyle" /></p>
             </td>
-            <td ng-if="!day.assente" style="white-space: nowrap;">
+            <td ng-if="!day.absence" style="white-space: nowrap;">
               <div class="delega_day noneditable">
                 <img src="img/ic-login.png" class="iconStyle" />
                 <div class="delega_name">
@@ -42,7 +42,7 @@
                 </div>
             </div>
             </td>
-            <td ng-if="day.assente" colspan="2">
+            <td ng-if="day.absence" colspan="2">
                <p  class="button-day noneditable">{{'home_absent' | translate | uppercase}}: {{day.motivazione.type}}</p>
             </td>
           </tr>
@@ -72,16 +72,16 @@
             <td class="day-name">
                 <p class="title">{{day.name| translate | uppercase}}</p>
             </td>
-            <td ng-if="!day.assente">
+            <td ng-if="!day.absence">
                 <p ng-class="whatClassIsIt($index,'')">E <span class="val_time">{{day.entrata}}</span></p>
             </td>
-            <td ng-if="!day.assente">
+            <td ng-if="!day.absence">
                 <p ng-class="whatClassIsIt($index,'')">U <span class="val_time">{{day.uscita}}</span></p>
             </td>
-            <td ng-if="day.bus && !day.assente">
+            <td ng-if="day.bus && !day.absence">
                 <p ng-class="whatClassIsIt($index,'')"><img src="img/ic-login.png" class="iconStyle"  /></p>
             </td>
-            <td ng-if="!day.assente">
+            <td ng-if="!day.absence">
               <div ng-class="whatClassIsIt($index,'delega')" class="delega_day editable">
                 <img src="img/ic-login.png" class="iconStyle"  />
                 <div class="delega_name">
@@ -90,7 +90,7 @@
                 </div>
             </div>
             </td>
-            <td ng-if="day.assente" colspan="2">
+            <td ng-if="day.absence" colspan="2">
                <p  ng-class="whatClassIsIt($index,'')">{{'home_absent' | translate | uppercase}}: {{day.motivazione.type}}</p>
             </td>
           </tr>

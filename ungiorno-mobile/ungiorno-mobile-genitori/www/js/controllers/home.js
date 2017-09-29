@@ -255,19 +255,23 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     var jsonTest={};
     week_planService.getWeekPlan(week,kidId).then(function (data) {
       if(data!=null){
+        var motiv_type=(data[day]['motivazione']!=undefined && data[day]['motivazione']!=null ? data[day]['motivazione']['type'] : '');
+        var motiv_subtype=(data[day]['motivazione']!=undefined && data[day]['motivazione']!=null ? data[day]['motivazione']['subtype'] : '');
         jsonTest={'ore_entrata':data[day]['entrata'],'ore_uscita':data[day]['uscita'],'addressBus':'Nome Test',
         'delegaName':$filter('getRitiroName')(data[day]['delega_name'],$scope.ritiraOptions),'delegaType':$filter('getRitiroType')(data[day]['delega_name'],$scope.ritiraOptions),
-        'bus':data[day]['bus'],'assente':data[day]['absence'],
-        'motivazione':{type:data[day]['motivazione']['type'],subtype:data[day]['motivazione']['subtype']}
+        'bus':data[day]['bus'],'absence':data[day]['absence'],
+        'motivazione':{type:motiv_type,subtype:motiv_subtype}
       };
         $scope.briefInfo= jsonTest;
       }
       else{
           week_planService.getDefaultWeekPlan(kidId).then(function (data) {
+            var motiv_type=(data[day]['motivazione']!=undefined && data[day]['motivazione']!=null ? data[day]['motivazione']['type'] : '');
+            var motiv_subtype=(data[day]['motivazione']!=undefined && data[day]['motivazione']!=null ? data[day]['motivazione']['subtype'] : '');
             jsonTest={'ore_entrata':data[day]['entrata'],'ore_uscita':data[day]['uscita'],'addressBus':'Nome Test',
             'delegaName':$filter('getRitiroName')(data[day]['delega_name'],$scope.ritiraOptions),'delegaType':$filter('getRitiroType')(data[day]['delega_name'],$scope.ritiraOptions),
-            'bus':data[day]['bus'],'assente':data[day]['absence'],
-            'motivazione':{type:data[day]['motivazione']['type'],subtype:data[day]['motivazione']['subtype']}
+            'bus':data[day]['bus'],'absence':data[day]['absence'],
+            'motivazione':{type:motiv_type,subtype:motiv_subtype}
           };
             $scope.briefInfo= jsonTest;
           }, function (error) {

@@ -7,9 +7,10 @@
   <ion-content has-header="true">
     <ion-scroll scrollbar-y="true">
       <div class="dayEdit">
-          <label class="control control-checkbox" ng-repeat="(key, data) in listServicesDb" ng-if="key!='mensa'">
-              {{key | translate | uppercase}}
-                  <input type="checkbox" ng-model="currData[key]" name="{{key}}"  />
+          <label class="control control-checkbox">
+              <!-- ng-repeat="(key, data) in listServicesDb" ng-if="key!='mensa'" -->
+              {{'bus' | translate | uppercase}}
+                  <input type="checkbox" ng-model="currData[key]" name="bus"  ng-change="setBusHour()" />
               <div class="control_indicator"></div>
           </label>
       <table class="dayEdit_table" >

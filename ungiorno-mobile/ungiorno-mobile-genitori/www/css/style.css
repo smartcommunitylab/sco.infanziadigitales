@@ -2224,7 +2224,9 @@ textarea {
   vertical-align: middle;
 }
 .br_in{
-  padding: 6px;
+  padding-left: 10px;
+  text-align: left;
+  margin: 4px 80px 0px 80px!important;
 }
 .dateStyleHead{
   padding-left:30px;

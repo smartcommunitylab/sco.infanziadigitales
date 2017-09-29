@@ -263,6 +263,9 @@ $scope.logout = function () {
 
   $scope.goToWeekPlan = function (kidid) {
     week_planService.setMode('');
+    $scope.currentDate = moment();
+    $scope.currWeek = $scope.currentDate.format('w');
+    week_planService.setCurrentWeek($scope.currWeek);
     $state.go('app.week_plan', {
       id: kidid
     });

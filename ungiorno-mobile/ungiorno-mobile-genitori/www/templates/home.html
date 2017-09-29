@@ -20,8 +20,8 @@
         <div class="currentDate">{{date | date:'EEEE, d MMMM yyyy' | capitalize}}</div>
         <div class="button-norm-brief">&nbsp;&nbsp;Entrata Ore  &nbsp;&nbsp; {{briefInfo.ore_entrata}}</div>
         <div class="button-norm-brief">&nbsp;&nbsp;Uscita Ore  &nbsp;&nbsp; {{briefInfo.ore_uscita}}</div>
-        <div ng-if="briefInfo.addressBus!=null && briefInfo.addressBus!=''" class="br_in"><img src="img/ic-login.png" class="iconStyleHead"/> {{briefInfo.addressBus}}</div>
-        <div class="br_in"><img src="img/ic-login.png" class="iconStyleHead"/> {{briefInfo.delegaName}}</div>
+        <div class="br_in" ng-if="briefInfo.bus"><img src="img/ic-login.png" class="iconStyleHead"/> {{briefInfo.addressBus}}</div>
+        <div class="br_in"><img src="img/ic-login.png" class="iconStyleHead"/> {{briefInfo.delegaName}} ({{briefInfo.delegaType}})</div>
       </div>
       <div class="brief_info" ng-if="assente">
           {{date | date:'EEEE, d MMMM yyyy' | capitalize}}

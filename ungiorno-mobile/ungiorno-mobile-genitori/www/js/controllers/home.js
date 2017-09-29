@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.home', [])
 
-.controller('HomeCtrl', function ($scope, $rootScope, $location, $state, $filter, $q, $ionicPopup, $ionicPlatform, $ionicLoading, dataServerService, profileService, configurationService, retireService, busService, Toast, Config, pushNotificationService, messagesService, communicationsService) {
+.controller('HomeCtrl', function ($scope, $rootScope, $location, $state, $filter, $q, $ionicPopup, $ionicPlatform, $ionicLoading, dataServerService, profileService, configurationService, retireService, busService, Toast, Config, pushNotificationService, messagesService, communicationsService,week_planService) {
 
   $scope.date = "";
   $scope.kidProfile = {};
@@ -101,7 +101,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
       note = $filter('translate')('home_entry_to') + $scope.fromTime + $filter('translate')('home_exit_to') + $scope.toTime;
     }
     
-    $scope.briefInfo=getBriefInfo($scope.kidProfile.schoolId);
     /*
     $scope.elements.push({
       click: "app.retire",
@@ -246,11 +245,38 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
   var getBriefInfo = function (schoolId) {
     var kidId = $scope.kidProfile.kidId;
     $scope.kidname=$scope.kidProfile.firstName;
-     //return dataServerService.getBriefInfo(schoolId,kidId);
-     var jsonTest={'ore_entrata':'09:20','ore_uscita':'14:20','addressBus':'Nome Test',
-     'delegaName':'Nome Test','assente':false,'motivazione':'Motivazione Test'};
-     return jsonTest;
+    var schoolId = $scope.kidProfile.schoolId;
+    var appId = $scope.kidProfile.appId;
+    week_planService.setGlobalParam(appId,schoolId);
+    var currentDate = moment();
+    var week=currentDate.format('w');
+    var day=currentDate.format('d')-1;
+    $scope.ritiraOptions=$scope.kidProfile.persons;
+    var jsonTest={};
+    week_planService.getWeekPlan(week,kidId).then(function (data) {
+      if(data!=null){
+        jsonTest={'ore_entrata':data[day]['entrata'],'ore_uscita':data[day]['uscita'],'addressBus':'Nome Test',
+        'delegaName':$filter('getRitiroName')(data[day]['delega_name'],$scope.ritiraOptions),'delegaType':$filter('getRitiroType')(data[day]['delega_name'],$scope.ritiraOptions),
+        'bus':data[day]['bus'],'assente':data[day]['absence'],
+        'motivazione':{type:data[day]['motivazione']['type'],subtype:data[day]['motivazione']['subtype']}
+      };
+        $scope.briefInfo= jsonTest;
+      }
+      else{
+          week_planService.getDefaultWeekPlan(kidId).then(function (data) {
+            jsonTest={'ore_entrata':data[day]['entrata'],'ore_uscita':data[day]['uscita'],'addressBus':'Nome Test',
+            'delegaName':$filter('getRitiroName')(data[day]['delega_name'],$scope.ritiraOptions),'delegaType':$filter('getRitiroType')(data[day]['delega_name'],$scope.ritiraOptions),
+            'bus':data[day]['bus'],'assente':data[day]['absence'],
+            'motivazione':{type:data[day]['motivazione']['type'],subtype:data[day]['motivazione']['subtype']}
+          };
+            $scope.briefInfo= jsonTest;
+          }, function (error) {
+          });
+      }
+  }, function (error) {
+  });
   }
+
   $scope.isContact = function (element) {
     return (element.string == $filter('translate')('home_contatta'));
   }
@@ -272,39 +298,33 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         var profile = data;
         profileService.setSchoolProfile(profile);
         $scope.school = profile;
+        getBriefInfo($scope.kidProfile.schoolId);
         dataServerService.getRitiro($scope.kidProfile.schoolId, $scope.kidProfile.kidId, new Date().getTime()).then(function (data) {
           $scope.dailyRitiro = data;
           dataServerService.getFermata($scope.kidProfile.schoolId, $scope.kidProfile.kidId, new Date().getTime()).then(function (data) {
             $scope.dailyFermata = data;
             if (config == null) {
-              //use default data from profile to create config
-              var exitTime = null;
-              if (!$scope.kidProfile.services.posticipo.enabled) {
-                exitTime = $filter('date')(new Date(profileService.getSchoolProfile().regularTiming.toTime), 'H:mm');
-              } else {
-                exitTime = $filter('date')(new Date(profileService.getSchoolProfile().posticipoTiming.toTime), 'H:mm');
-              }
               config = {
                 "appId": Config.appId(),
                 "schoolId": schoolId,
                 "kidId": kidId,
-                "services": {
-                  "anticipo": {
-                    "active": $scope.kidProfile.services.anticipo.enabled
-                  },
-                  "posticipo": {
-                    "active": $scope.kidProfile.services.posticipo.enabled
-                  },
-                  "bus": {
-                    "active": $scope.kidProfile.services.bus.enabled,
-                    "defaultIdGo": $scope.kidProfile.services.bus.stops[0].stopId,
-                    "defaultIdBack": $scope.kidProfile.services.bus.stops[0].stopId
-                  },
-                  "mensa": {
-                    "active": $scope.kidProfile.services.mensa.enabled
-                  }
-                },
-                "exitTime": exitTime,
+                "services": $scope.kidProfile.services.timeSlotServices,
+                  //{"anticipo": {
+                  //  "active": $scope.kidProfile.services.anticipo.enabled
+                  //},
+                  //"posticipo": {
+                 //   "active": $scope.kidProfile.services.posticipo.enabled
+                 // },
+                 // "bus": {
+                   // "active": $scope.kidProfile.services.bus.enabled,
+                   // "defaultIdGo": $scope.kidProfile.services.bus.stops[0].stopId,
+                   // "defaultIdBack": $scope.kidProfile.services.bus.stops[0].stopId
+                  //},
+                  //"mensa": {
+                   // "active": $scope.kidProfile.services.mensa.enabled
+                 // }
+                 //}
+                "exitTime": $scope.briefInfo['ore_uscita'],
                 "defaultPerson": $scope.kidProfile.persons[0].personId,
                 "receiveNotification": true,
                 "extraPersons": null
@@ -312,48 +332,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
               $scope.kidConfiguration = config;
               configurationService.setBabyConfiguration(config);
             }
-            dataServerService.getAbsence($scope.kidProfile.schoolId, $scope.kidProfile.kidId, new Date().getTime()).then(function (data) {
-              if (data.data == null) {
-                $scope.isPresent = true;
-
-                if (($scope.kidProfile.services.anticipo.enabled && !$scope.kidConfiguration) || ($scope.kidProfile.services.anticipo.enabled && $scope.kidConfiguration.services.anticipo.active)) {
-                  $scope.fromTime = $scope.school.anticipoTiming.fromTime;
-                } else {
-                  $scope.fromTime = $scope.school.regularTiming.fromTime;
-                }
-
-                if ($scope.dailyRitiro) {
-                  $scope.toTime = new Date($scope.dailyRitiro.date).toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1").substr(0, 5);
-                } else {
-                  if (!$scope.kidProfile.services.posticipo.enabled) {
-                    $scope.toTime = profileService.getSchoolProfile().regularTiming.toTime;
-                  } else {
-                    $scope.toTime = profileService.getSchoolProfile().posticipoTiming.toTime;
-                  }
-                  if ($scope.dailyFermata) {
-                    //                                            $scope.toTime = $scope.toTime + " con il servizio bus";
-                    $scope.toTime = " con il servizio bus";
-                  }
-                }
-              } else {
-                //il ragazzo e' assente
-                $scope.isPresent = false;
-              }
-              $scope.noConnection = false;
-              buildHome();
-
-              //Toast.show($filter('translate')('data_updated'), 'short', 'bottom');
-              deferred.resolve();
-
-            }, function (error) {
-              console.log("ERROR -> " + error);
-              Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
-              $scope.noConnection = true;
-              buildHome();
-              $ionicLoading.hide();
-              deferred.reject();
-
-            });
+            $scope.noConnection = false;
+            buildHome();
+            
           }, function (error) {
             console.log("ERROR -> " + error);
             Toast.show($filter('translate')('communication_error'), 'short', 'bottom');

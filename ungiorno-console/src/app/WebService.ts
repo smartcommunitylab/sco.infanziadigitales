@@ -27,17 +27,17 @@ import moment from 'moment';
 
 @Injectable()
 export class WebService {
-  private schoolUrl = 'http://localhost:8080/ungiorno2/consoleweb/testApp'
+  private appId = 'trento';
+  private apiUrl = `http://localhost:8080/ungiorno2`;
   private headers = new Headers({'Content-Type': 'application/json'});
 
-  private appId = 'testApp';
   private schoolId = '';
   school : School;
   
   constructor(private http : Http) {}
 
   getData(): Promise<School[]> {
-    return this.http.get('http://localhost:8080/ungiorno2/consoleweb/testApp/me').toPromise().then(x => {
+    return this.http.get(`${this.apiUrl}/consoleweb/${this.appId}/me`).toPromise().then(x => {
       let serverSchoolsData = x.json().data;
       serverSchoolsData.forEach(data => {
         data.id = data.schoolId;
@@ -47,8 +47,8 @@ export class WebService {
   }
 
   getSchool(id: string) : Promise<School> {
-    const url = `${this.schoolUrl}/${id}`;
-     return this.http.get(`http://localhost:8080/ungiorno2/school/${this.appId}/${id}/profile`)
+    const url = `${this.apiUrl}/${id}`;
+     return this.http.get(`${this.apiUrl}/consoleweb/${this.appId}/${id}/profile`)
     .toPromise()
     .then(response => {
       let serverSchoolData = response.json().data as ServerSchoolData;
@@ -58,14 +58,13 @@ export class WebService {
   }
 
   getKid(schoolId: string, kidId : string): Promise<Kid> {
-    const url = `${this.schoolUrl}/${schoolId}`;
     return this.getSchool(schoolId).then(tmp => {
       return tmp.kids.find(x=>x.id.toLowerCase() == kidId.toLowerCase());
     });
   }
 
   getKids(schoolId: string): Promise<Kid[]> {
-    return this.http.get(`http://localhost:8080/ungiorno2/consoleweb/${this.appId}/${schoolId}/kid`).toPromise().then(response => response.json().data.map(serverKid => this.convertToKid(serverKid))).catch(this.handleError);
+    return this.http.get(`${this.apiUrl}/consoleweb/${this.appId}/${schoolId}/kid`).toPromise().then(response => response.json().data.map(serverKid => this.convertToKid(serverKid))).catch(this.handleError);
   }
     
   private handleError(error: any): Promise<any> {
@@ -75,40 +74,40 @@ export class WebService {
 
   private addTeacher(schoolId : string, teacherProfile : Teacher) : Promise<Teacher> {
     let convertedTeacher: ServerTeacherData = this.convertToServerTeacher(teacherProfile);
-    return this.http.post(`http://localhost:8080/ungiorno2/consoleweb/${this.appId}/${schoolId}/teacher`,convertedTeacher).toPromise().then(
+    return this.http.post(`${this.apiUrl}/consoleweb/${this.appId}/${schoolId}/teacher`,convertedTeacher).toPromise().then(
       response => this.convertToTeacher(response.json().data)
   ).catch(this.handleError);
   }
 
   private addKid(schoolId: string, kidProfile: Kid) : Promise<Kid> {
     let convertedKid : ServerKidData = this.convertToServerKid(kidProfile);
-    return this.http.post(`http://localhost:8080/ungiorno2/consoleweb/${this.appId}/${schoolId}/kid`,convertedKid).toPromise().then(
+    return this.http.post(`${this.apiUrl}/consoleweb/${this.appId}/${schoolId}/kid`,convertedKid).toPromise().then(
       response => this.convertToKid(response.json().data)
   ).catch(this.handleError);
   }
 
   getTeachers(schoolId: string) : Promise<Teacher[]> {
-    return this.http.get(`http://localhost:8080/ungiorno2/consoleweb/${this.appId}/${schoolId}/teacher`).toPromise().then(
+    return this.http.get(`${this.apiUrl}/consoleweb/${this.appId}/${schoolId}/teacher`).toPromise().then(
       response => response.json().data.map(serverTeacher => this.convertToTeacher(serverTeacher))
     ).catch(this.handleError);
   }
   
 
   private removeTeacher(schoolId : string, teacherId : string) : Promise<Teacher> {
-    return this.http.delete(`http://localhost:8080/ungiorno2/consoleweb/${this.appId}/${schoolId}/teacher/${teacherId}`).toPromise().then(
+    return this.http.delete(`${this.apiUrl}/consoleweb/${this.appId}/${schoolId}/teacher/${teacherId}`).toPromise().then(
       response => this.convertToTeacher(response.json().data)
   ).catch(this.handleError);
   }
 
   private removeKid(schoolId : string, kidId : string) : Promise<Kid> {
-    return this.http.delete(`http://localhost:8080/ungiorno2/consoleweb/${this.appId}/${schoolId}/kid/${kidId}`).toPromise().then(
+    return this.http.delete(`${this.apiUrl}/consoleweb/${this.appId}/${schoolId}/kid/${kidId}`).toPromise().then(
       response => this.convertToKid(response.json().data)
   ).catch(this.handleError);
   }
 
   add(schoolId: string, item : any) : Promise<any> {
     var sch;
-    const url = `${this.schoolUrl}/${schoolId}`
+    const url = `${this.apiUrl}/consoleweb/${this.appId}/${schoolId}`;
     if (item instanceof Teacher) {
       return this.addTeacher(schoolId, item);
     }
@@ -130,7 +129,7 @@ export class WebService {
   }
 
   remove(schoolId: string, item: any) : Promise<any> {
-    const url = `${this.schoolUrl}/${schoolId}`;
+    const url = `${this.apiUrl}/consoleweb/${this.appId}/${schoolId}`;
     if (item instanceof Group) {
       return this.getSchool(schoolId).then(tmp => {
         var pos = tmp.groups.findIndex(x => x.name === item.name)
@@ -154,7 +153,7 @@ export class WebService {
   }
 
   update(school : School) {
-    const url = `${this.schoolUrl}/${school.id}`;
+    const url = `${this.apiUrl}/consoleweb/${this.appId}/${school.id}`;
     let convertedSchool = this.convertToServerSchool(school);
     return this.http
     .put(url, JSON.stringify(convertedSchool), {headers: this.headers})

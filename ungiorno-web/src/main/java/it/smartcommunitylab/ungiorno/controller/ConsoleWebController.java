@@ -2,6 +2,8 @@ package it.smartcommunitylab.ungiorno.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +22,7 @@ import it.smartcommunitylab.ungiorno.model.SchoolProfile;
 import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.storage.AppSetup;
 import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
+import it.smartcommunitylab.ungiorno.utils.JsonUtil;
 
 /**
  * ConsoleWebController exposes API used to insert data in system from the web insertion console
@@ -29,6 +32,9 @@ import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
  */
 @RestController
 public class ConsoleWebController {
+
+    private static final transient Logger logger =
+            LoggerFactory.getLogger(ConsoleWebController.class);
 
     @Autowired
     private AppSetup appSetup;
@@ -43,6 +49,32 @@ public class ConsoleWebController {
         AppInfo appInfo = appSetup.findAppById(appId);
         return new Response<List<School>>(appInfo.getSchools());
     }
+
+    /*
+     * FIXME -> this method clone exactly the ones in SchoolController. Used only because actually
+     * console-web is without authentication
+     */
+
+    @RequestMapping(method = RequestMethod.GET, value = "/consoleweb/{appId}/{schoolId}/profile")
+    public @ResponseBody Response<SchoolProfile> getSchoolProfile(@PathVariable String appId,
+            @PathVariable String schoolId) {
+        try {
+            SchoolProfile profile = storage.getSchoolProfile(appId, schoolId);
+            if (logger.isDebugEnabled()) {
+                logger.debug("getSchoolProfile:" + appId + " - " + schoolId + " - "
+                        + JsonUtil.convertObject(profile));
+            }
+            return new Response<SchoolProfile>(profile);
+        } catch (Exception e) {
+            if (logger.isWarnEnabled()) {
+                logger.warn("getSchoolProfile:" + appId + " - " + schoolId);
+                logger.warn("error", e);
+            }
+            return new Response<>(e.getMessage());
+        }
+    }
+
+
 
     @CrossOrigin
     @RequestMapping(method = RequestMethod.PUT, value = "/consoleweb/{appId}/{schoolId}")

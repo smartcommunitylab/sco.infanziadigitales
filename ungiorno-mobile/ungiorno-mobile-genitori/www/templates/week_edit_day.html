@@ -15,29 +15,29 @@
               <div class="reason">
                 <label class="control control-checkbox">
                   {{'home_absent' | translate}}
-                      <input type="checkbox" ng-model="currData.assente" name="assente"  />
+                      <input type="checkbox" ng-model="currData.absence" name="absence"  />
                     <div class="control_indicator"></div>
                  </label>
-                 <span class="span_motiv" ng-click="removeReason()">{{'remove_reason' | translate | uppercase}}</span>
+                 <span class="span_motiv" ng-click="removeReason()" ng-show="currData.absence && currData.motivazione.type!=''">{{'remove_reason' | translate | uppercase}}</span>
               </div>
-              <div ng-if="currData.assente" class="assenza">
+              <div ng-if="currData.absence" class="assenza">
                 <table>
                   <tr>
                     <td>{{'reason' | translate}}: </td>
                     <td>
                       <div data-tap-disabled="true">
                         <select ng-model="currData.motivazione.type">
-                            <option ng-repeat="option in listReasons" value="{{option.value}}">{{option.label | translate}}</option>
+                            <option ng-repeat="option in listReasons" value="{{option.typeId}}" ng-selected="currData.motivazione.type==option.value">{{option.type | translate}}</option>
                         </select>
                         </div>
                       </td>
                   </tr>
-                  <tr ng-if="currData.motivazione.type=='malattia'">
+                  <tr ng-if="currData.motivazione.type=='Malattia'">
                       <td>{{'type_illness' | translate}}: </td>
                       <td>
                         <div data-tap-disabled="true">
                           <select ng-model="currData.motivazione.subtype">
-                              <option ng-repeat="option in listProblems" value="{{option.value}}">{{option.label | translate}}</option>
+                              <option ng-repeat="option in listProblems" value="{{option.typeId}}" ng-selected="currData.motivazione.subtype==option.value">{{option.type | translate}}</option>
                           </select>
                         </div>
                       </td>
@@ -47,9 +47,10 @@
           </div>
         <div>
         <hr class="hrstyle"/>
-        <label class="control control-checkbox" ng-repeat="(key, data) in listServicesDb" ng-if="key!='mensa'">
-            {{key | translate | uppercase}}
-                <input type="checkbox" ng-model="currData[key]" name="{{key}}"  />
+        <label class="control control-checkbox">
+            <!-- ng-repeat="(key, data) in listServicesDb" ng-if="key!='mensa'" -->
+            {{'bus' | translate | uppercase}}
+                <input type="checkbox" ng-model="currData['bus']" name="bus"  ng-change="setBusHour()" ng-disabled="currData.absence" />
             <div class="control_indicator"></div>
         </label>
       <table class="dayEdit_table" >
@@ -58,8 +59,8 @@
               <p>{{'Entrata ore'| translate}}:</p>{{currData.entry}}
           </td>
           <td>
-              <p class="editable2" ng-click="openPopupEntry()" ng-show="!currData.assente">{{currData.entrata}}</p>
-              <p class="noneditable2" ng-show="currData.assente">{{currData.entrata}}</p>
+              <p class="editable2" ng-click="openPopupEntry()" ng-show="!currData.absence">{{currData.entrata}}</p>
+              <p class="noneditable2" ng-show="currData.absence">{{currData.entrata}}</p>
           </td>
         </tr>
         <tr>
@@ -67,8 +68,8 @@
               <p>{{'Uscita ore'| translate}}:</p>
           </td>
           <td>
-              <p class="editable2" ng-click="openPopupOut()" ng-show="!currData.bus && !currData.assente">{{currData.uscita}}</p>
-              <p class="noneditable2" ng-show="currData.bus || currData.assente">{{currData.uscita}}</p>
+              <p class="editable2" ng-click="openPopupOut()" ng-show="!currData.bus && !currData.absence">{{currData.uscita}}</p>
+              <p class="noneditable2" ng-show="currData.bus || currData.absence">{{currData.uscita}}</p>
           </td>
         </tr>
         <tr>
@@ -89,7 +90,7 @@
           </td>
           <td>
               <div data-tap-disabled="true">
-                  <select ng-model="currData.delega_name" ng-disabled="currData.assente">
+                  <select ng-model="currData.delega_name" ng-disabled="currData.absence">
                       <option ng-repeat="option in ritiraOptions" value="{{option.personId}}" ng-selected="currData.delega_name==option.personId">
                           {{option.firstName}} {{option.lastName}}
                           ({{ option.parent ? 'parent'  : option.relation  | translate}})

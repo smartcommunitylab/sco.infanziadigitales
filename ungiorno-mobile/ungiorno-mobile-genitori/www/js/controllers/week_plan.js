@@ -11,12 +11,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.appId=profileService.getBabyProfile().appId;
     $scope.schoolId=profileService.getBabyProfile().schoolId;
     week_planService.setGlobalParam($scope.appId,$scope.schoolId);
-    var jsonTest=[{'name':'monday_reduced','entrata':'08:20','uscita':'13:20','bus':true,'fermata':'via test1','delega_name':'NameTest','assente':false},
-    {'name':'tuesday_reduced','entrata':'08:20','uscita':'13:20','bus':true,'fermata':'via test1','delega_name':'NameTest','assente':false},
-    {'name':'wednesday_reduced','entrata':'08:20','uscita':'13:20','bus':true,'fermata':'via test1','delega_name':'NameTest','assente':true,
-                        'motivazione':{type:'malattia',subtype:'Influenza'}},
-    {'name':'thursday_reduced','entrata':'08:20','uscita':'13:20','bus':true,'fermata':'via test1','delega_name':'NameTest','assente':false},
-    {'name':'friday_reduced','entrata':'08:20','uscita':'13:20','bus':true,'fermata':'via test1','delega_name':'NameTest','assente':false}];
+    var jsonTest=[];
 
     $scope.getDateString = function () {
         var currentDate = moment().week($scope.currWeek);
@@ -336,14 +331,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.getRitiroOptions();
 
     $scope.getListServices = function(day) {
-        $scope.listServices=[{'value':'anticipo1','label':'Anticipop1','entry':'09:00',out:'13:40','type':'anticipo'},
-        {'value':'posticipo1','label':'Posticipo1','entry':'13:20',out:'16:40','type':'posticipo'},
-        {'value':'posticipo2','label':'Posticipo2','entry':'13:20',out:'14:40','type':'posticipo'}];
-        $scope.listServicesDb=profileService.getBabyProfile().services;
-        //week_planService.getListServices().then(function (data) {
-        //    $scope.listServices=data;
-        //}, function (error) {
-        //})
+        $scope.listServicesDb=profileService.getBabyProfile().services.timeSlotServices;
+        for(var i=0;i<$scope.listServicesDb.length;i++){
+            var type=$scope.listServicesDb[i].name;
+            var tempServ=$scope.listServicesDb[i].timeSlots;
+            for(var j=0;j<tempServ.length;j++){
+                var temp={'value':tempServ[j]['name'],'label':tempServ[j]['name'],'entry':tempServ[j]['fromTime'],out:tempServ[j]['toTime'],'type':type};
+                $scope.listServices.push(temp);
+            }
+        }
     };
     $scope.getListServices();
 
@@ -411,6 +407,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.currDay = 0;
     $scope.currData = {};
     $scope.kidId=profileService.getBabyProfile().kidId;
+    $scope.schoolProf=profileService.getSchoolProfile();
     $scope.fermataOptions=[];
     $scope.ritiraOptions=[];
     $scope.listServices=[];
@@ -434,11 +431,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         if($scope.currData.motivazione!=undefined){
            $scope.currData.motivazione.type=''; 
            $scope.currData.motivazione.subtype=''; 
-        }     
+        }   
     };
 
-     $scope.listReasons=[{value:'malattia1',label:'Malattia1'},{value:'malattia',label:'Malattia'},{value:'malattia2',label:'Malattia2'}];
-     $scope.listProblems=[{value:'malattia',label:'Influenza'},{value:'malattia1',label:'Influenza1'},{value:'malattia2',label:'Influenza2'}];
+     $scope.listReasons=$scope.schoolProf.absenceTypes;
+     $scope.listProblems=$scope.schoolProf.frequentIllnesses;
 
     $scope.setDay = function() {
         week_planService.setDayData($scope.currDay,$scope.currData,'edit');
@@ -474,15 +471,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
     $scope.getRitiroOptions();
 
-     $scope.getListServices = function(day) {
-        $scope.listServices=[{'value':'anticipo1','label':'Anticipop1','entry':'09:00',out:'13:40','type':'anticipo'},
-        {'value':'posticipo1','label':'Posticipo1','entry':'13:20',out:'16:40','type':'posticipo'},
-        {'value':'posticipo2','label':'Posticipo2','entry':'13:20',out:'14:40','type':'posticipo'}];
-        $scope.listServicesDb=profileService.getBabyProfile().services;
-        //week_planService.getListServices().then(function (data) {
-        //    $scope.listServices=data;
-        //}, function (error) {
-        //})
+    $scope.getListServices = function(day) {
+        $scope.listServicesDb=profileService.getBabyProfile().services.timeSlotServices;
+        for(var i=0;i<$scope.listServicesDb.length;i++){
+            var type=$scope.listServicesDb[i].name;
+            var tempServ=$scope.listServicesDb[i].timeSlots;
+            for(var j=0;j<tempServ.length;j++){
+                var temp={'value':tempServ[j]['name'],'label':tempServ[j]['name'],'entry':tempServ[j]['fromTime'],out:tempServ[j]['toTime'],'type':type};
+                $scope.listServices.push(temp);
+            }
+        }
     };
     $scope.getListServices();
 

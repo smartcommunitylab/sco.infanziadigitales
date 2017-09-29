@@ -124,11 +124,11 @@ public class KidProfile extends SchoolObject {
             this.type = type2;
         }
 
-        public String getAbsence() {
+        public String getSubtype() {
             return subtype;
         }
 
-        public void setAbsence(String subtype2) {
+        public void setSubtype(String subtype2) {
             this.subtype = subtype2;
         }
 

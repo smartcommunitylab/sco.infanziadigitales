@@ -39,6 +39,9 @@
         <ion-item nav-clear menu-close class="item item-icon-left" ng-click="goToWeekPlan()" ng-if="userIsLogged">
           <i class="icon voice-menu  inf_digsettings"></i>{{'menu_week_plan' | translate}}
         </ion-item>
+        <ion-item nav-clear menu-close class="item item-icon-left" ng-click="gotoPromemoria({{babyselected.id}})" ng-if="userIsLogged">
+            <i class="icon voice-menu  inf_digsettings"></i>{{'menu_promemoria' | translate}}
+          </ion-item>
         <ion-item nav-clear menu-close class="item item-icon-left" ng-click="login()" ng-if="!userIsLogged">
           <i class="icon voice-menu  inf_digaccount"></i>{{'menu_enter' | translate}}
         </ion-item>

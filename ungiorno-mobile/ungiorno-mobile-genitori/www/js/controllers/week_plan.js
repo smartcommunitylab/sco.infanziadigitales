@@ -71,11 +71,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.getWeekPlan();
 
     $scope.setWeekPlan = function() {
-        week_planService.setWeekPlan($scope.days,$scope.kidId,$scope.currWeek).then(function (data) {
-            $scope.mode='';
-            week_planService.setMode($scope.mode);
-        }, function (error) {
-        });
+        if(confirm('Siete sicuri di voler salvare questi dati?')){
+            week_planService.setWeekPlan($scope.days,$scope.kidId,$scope.currWeek).then(function (data) {
+                $scope.mode='';
+                week_planService.setMode($scope.mode);
+            }, function (error) {
+            });
+        }
     };
 
     $scope.whatClassIsIt = function(day,type) {
@@ -219,12 +221,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
     $scope.setWeekPlan = function() {
         //TODO add confirm popup 
+        if(confirm('Siete sicuri di voler salvare questi dati?')){
         $scope.mode='';
         week_planService.setModeDefault($scope.mode);
         week_planService.setDefaultWeekPlan($scope.days,$scope.kidId).then(function (data) {
             //$scope.getWeekPlan();
         }, function (error) {
         });
+    }
     };
 
     $scope.whatClassIsIt = function(day,type) {
@@ -275,6 +279,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.kidId=profileService.getBabyProfile().kidId;
     $scope.fermataOptions=[];
     $scope.ritiraOptions=[];
+    $scope.listServices=[];
     var t=week_planService.getDayDataDefault($scope.currDay);
     
     $scope.getActualData = function() {
@@ -334,10 +339,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         $scope.listServicesDb=profileService.getBabyProfile().services.timeSlotServices;
         for(var i=0;i<$scope.listServicesDb.length;i++){
             var type=$scope.listServicesDb[i].name;
-            var tempServ=$scope.listServicesDb[i].timeSlots;
-            for(var j=0;j<tempServ.length;j++){
-                var temp={'value':tempServ[j]['name'],'label':tempServ[j]['name'],'entry':tempServ[j]['fromTime'],out:tempServ[j]['toTime'],'type':type};
-                $scope.listServices.push(temp);
+            var enabled=$scope.listServicesDb[i].enabled;
+            if(enabled){
+               var tempServ=$scope.listServicesDb[i].timeSlots;
+               for(var j=0;j<tempServ.length;j++){
+                   var temp={'value':tempServ[j]['name'],'label':tempServ[j]['name'],'entry':tempServ[j]['fromTime'],out:tempServ[j]['toTime'],'type':type};
+                   $scope.listServices.push(temp);
+               }
             }
         }
     };
@@ -475,10 +483,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         $scope.listServicesDb=profileService.getBabyProfile().services.timeSlotServices;
         for(var i=0;i<$scope.listServicesDb.length;i++){
             var type=$scope.listServicesDb[i].name;
-            var tempServ=$scope.listServicesDb[i].timeSlots;
-            for(var j=0;j<tempServ.length;j++){
-                var temp={'value':tempServ[j]['name'],'label':tempServ[j]['name'],'entry':tempServ[j]['fromTime'],out:tempServ[j]['toTime'],'type':type};
-                $scope.listServices.push(temp);
+            var enabled=$scope.listServicesDb[i].enabled;
+            if(enabled){
+               var tempServ=$scope.listServicesDb[i].timeSlots;
+               for(var j=0;j<tempServ.length;j++){
+                   var temp={'value':tempServ[j]['name'],'label':tempServ[j]['name'],'entry':tempServ[j]['fromTime'],out:tempServ[j]['toTime'],'type':type};
+                   $scope.listServices.push(temp);
+               }
             }
         }
     };
@@ -549,4 +560,23 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     }
 
 })
-
+.controller('Promemoria', function ($scope, moment, dataServerService, profileService , $ionicModal, $filter, $ionicPopup,$state,$cordovaLocalNotification) {
+    $scope.days={};
+    var dated = new Date();
+    $scope.currDay = 0;
+    $scope.currData = {};
+    $scope.kidId=profileService.getBabyProfile().kidId;
+    $scope.schoolId=profileService.getBabyProfile().schoolId;
+    $scope.currData==dataServerService.getNotificationSettings($scope.schoolId,$scope.kidId);
+   
+    
+    //$cordovaLocalNotification.schedule({
+    //    id: new Date().getTime(),
+    //    title: 'test',
+    //    text: 'test',
+    //    icon: 'res://icon.png',
+    //    autoClear: false,
+    //    at: new Date(),
+    //    data: {'test':"test1"}
+    //});
+})

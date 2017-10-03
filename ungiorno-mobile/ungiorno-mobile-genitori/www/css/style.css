@@ -2251,6 +2251,7 @@ textarea {
   cursor: pointer;
   font-size: 10px;
 }
+
   .control input {
       position: absolute;
       z-index: -1;
@@ -2328,4 +2329,24 @@ textarea {
 .reason{
   display: flex;
   flex-direction: row;
+}
+.promemoria{
+  display: flex;
+  flex-direction: column;
+  margin: 30px;
+  font-size: 12px;
+}
+
+.prom{
+  font-size: 12px;
+}
+.prom_param{
+  display: flex;
+  flex-direction: row;
+  padding-left: 20px;
+}
+#prom_param_val{
+  width:30%;
+  margin-top:-8px;
+  margin-left: 8px;
 }

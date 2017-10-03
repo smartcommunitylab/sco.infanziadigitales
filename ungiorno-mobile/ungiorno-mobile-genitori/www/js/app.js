@@ -500,6 +500,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
           controller: 'WeekEditDayCtrl'
         }
       }
+    }).state('app.settings_promemoria', {
+      url: '/settings_promemoria',
+      cache: false,
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/settings_promemoria.html',
+          controller: 'Promemoria'
+        }
+      }
     });
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/login');
@@ -713,7 +722,20 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     remove_reason:'Rimuovi Motivazione',
     brief_txt:'La giornata di',
     orario_entrata:'Orario Entrata',
-    orario_uscita:'Orario Uscita'
+    orario_uscita:'Orario Uscita',
+    menu_promemoria:'Impostazioni',
+    prom_day_summary_first:'Desidero ricevere un ',
+    prom_day_summary_what:'promemoria giornaliero',
+    prom_day_summary_reason:'per l\'invio delle informazioni sulla presenza di mio/a figlio/a a scuola.',
+    prom_week_first:'Desidero ricevere un ',
+    prom_week_what:'promemoria settimanale',
+    prom_week_reason:'per la planificazione della presenza di mio/a figlio/a a scuola.',
+    prom_day_ritiro_first:'Desidero ricevere un ',
+    prom_day_ritiro_what:'promemoria giornaliero',
+    prom_day_ritiro_reason:'per il ritiro di mio/a figlio/a da scuola.',
+    at_time:'Alle ore',
+    at_day:'Il giorno',
+    time_before:'ore prima dell\'orario di uscita'
   });
 
   $translateProvider.translations('en', {
@@ -914,7 +936,20 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     remove_reason:'Remove Reason',
     brief_txt:'The day of',
     orario_entrata:'Entry Time',
-    orario_uscita:'Orario Uscita'
+    orario_uscita:'Orario Uscita',
+    menu_promemoria:'Settings',
+    prom_day_summary_first:'Desidero ricevere un ',
+    prom_day_summary_what:'promemoria giornaliero',
+    prom_day_summary_reason:'per l\'invio delle informazioni sulla presenza di mio/a figlio/a a scuola.',
+    prom_week_first:'Desidero ricevere un ',
+    prom_week_what:'promemoria settimanale',
+    prom_week_reason:'per la planificazione della presenza di mio/a figlio/a a scuola.',
+    prom_day_ritiro_first:'Desidero ricevere un ',
+    prom_day_ritiro_what:'promemoria giornaliero',
+    prom_day_ritiro_reason:'per il ritiro di mio/a figlio/a da scuola.',
+    at_time:'Alle ore',
+    at_day:'Il giorno',
+    time_before:'ore prima dell\'orario di uscita'
   });
 
   $translateProvider.translations('de', {
@@ -1121,7 +1156,20 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     remove_reason:'Remove Reason',
     brief_txt:'La giornata di',
     orario_entrata:'Orario Entrata',
-    orario_uscita:'Orario Uscita'
+    orario_uscita:'Orario Uscita',
+    menu_promemoria:'Impostazioni',
+    prom_day_summary_first:'Desidero ricevere un ',
+    prom_day_summary_what:'promemoria giornaliero',
+    prom_day_summary_reason:'per l\'invio delle informazioni sulla presenza di mio/a figlio/a a scuola.',
+    prom_week_first:'Desidero ricevere un ',
+    prom_week_what:'promemoria settimanale',
+    prom_week_reason:'per la planificazione della presenza di mio/a figlio/a a scuola.',
+    prom_day_ritiro_first:'Desidero ricevere un ',
+    prom_day_ritiro_what:'promemoria giornaliero',
+    prom_day_ritiro_reason:'per il ritiro di mio/a figlio/a da scuola.',
+    at_time:'Alle ore',
+    at_day:'Il giorno',
+    time_before:'ore prima dell\'orario di uscita'
   });
 
   $translateProvider.preferredLanguage("it");

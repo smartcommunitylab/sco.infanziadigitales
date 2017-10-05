@@ -23,18 +23,38 @@ import { School } from "./Classes/school";
 import { ServerServiceData } from "./Classes/serverModel/serverServiceData";
 import { ServiceTimeSlot } from "./Classes/serverModel/serviceTimeSlot";
 
+import {ConfigService} from "../services/config.service"
+
 import moment from 'moment';
 
 @Injectable()
 export class WebService {
   private appId = 'trento';
-  private apiUrl = `http://localhost:8080/ungiorno2`;
+  
   private headers = new Headers({'Content-Type': 'application/json'});
-
+  private apiUrl;
   private schoolId = '';
   school : School;
   
-  constructor(private http : Http) {}
+  constructor(private http : Http, private configService : ConfigService) {
+    this.apiUrl = configService.getConfig('apiUrl');
+
+  }
+
+  getProfile(): Promise<any> {
+    let url: string = this.apiUrl + '/profile';
+
+    return this.http.get(url)
+      .timeout(5000)
+      .toPromise()
+      .then(response => {
+        return response.json()
+      }
+      ).catch(response => {
+        return this.handleError
+      });
+}
+
 
   getData(): Promise<School[]> {
     return this.http.get(`${this.apiUrl}/consoleweb/${this.appId}/me`).toPromise().then(x => {

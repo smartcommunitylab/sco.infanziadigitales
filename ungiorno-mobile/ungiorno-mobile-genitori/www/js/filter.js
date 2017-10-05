@@ -125,4 +125,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.filters', 
       }
       return '';
     }
+  })
+  .filter('getSchoolNormalService', function() {
+    return function(services) {
+        var retArr={};
+
+      for(var i=0;i<services.length;i++){
+          if(services[i].regular==true && services[i]['timeSlots']!==null && services[i]['timeSlots'].length>0){
+             retArr =services[i]['timeSlots'][0];//get the first timeslot supposing there is only one
+             return retArr;
+          }
+      }
+      return retArr;
+    }
   });

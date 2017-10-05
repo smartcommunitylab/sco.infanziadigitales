@@ -10,6 +10,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.kidId=profileService.getBabyProfile().kidId;
     $scope.appId=profileService.getBabyProfile().appId;
     $scope.schoolId=profileService.getBabyProfile().schoolId;
+    $scope.getSchoolProfileNormalConfig=$filter('getSchoolNormalService')(profileService.getSchoolProfile().services);
+    var fromtime=$scope.getSchoolProfileNormalConfig['fromTime'];
+    fromtime=$filter('date')( fromtime, 'HH:mm' );
+    var totime=$scope.getSchoolProfileNormalConfig['toTime'];
+    totime=$filter('date')( totime, 'HH:mm' );
     week_planService.setGlobalParam($scope.appId,$scope.schoolId);
     var jsonTest=[];
 
@@ -36,6 +41,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     
     $scope.getWeekPlanDB =  function(week) {
         week_planService.getWeekPlan(week,$scope.kidId).then(function (data) {
+            data=null;
             if(data!=null){
                 $scope.days=data;
                 jsonTest=data;
@@ -45,10 +51,23 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             }
             else{
                 week_planService.getDefaultWeekPlan($scope.kidId).then(function (data) {
-                    $scope.days=data;
-                    jsonTest=data;
-                    for(var i=0;i<=4;i++){
-                        week_planService.setDayData(i,$scope.days[i],'');
+                    if(data!=null){
+                        $scope.days=data;
+                        jsonTest=data;
+                        for(var i=0;i<=4;i++){
+                           week_planService.setDayData(i,$scope.days[i],'');
+                        }
+                    }
+                    else{
+                        var jsonTest=[{'name':'monday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':'NameTest'},
+                        {'name':'tuesday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':'NameTest'},
+                        {'name':'wednesday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':'NameTest'},
+                        {'name':'thursday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':'NameTest'},
+                        {'name':'friday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':'NameTest'}];
+                        $scope.days=jsonTest;
+                        for(var i=0;i<=4;i++){
+                           week_planService.setDayData(i,$scope.days[i],'');
+                        }
                     }
                 }, function (error) {
                 });
@@ -174,6 +193,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.kidId=profileService.getBabyProfile().kidId;
     $scope.appId=profileService.getBabyProfile().appId;
     $scope.schoolId=profileService.getBabyProfile().schoolId;
+    $scope.getSchoolProfileNormalConfig=$filter('getSchoolNormalService')(profileService.getSchoolProfile().services);
+    var fromtime=$scope.getSchoolProfileNormalConfig['fromTime'];
+    fromtime=$filter('date')( fromtime, 'HH:mm' );
+    var totime=$scope.getSchoolProfileNormalConfig['toTime'];
+    totime=$filter('date')( totime, 'HH:mm' );
     week_planService.setGlobalParam($scope.appId,$scope.schoolId);
     $scope.editView=false;
     $scope.ritiraOptions=[];
@@ -197,10 +221,23 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
     $scope.getWeekPlanDB =  function(day) {
         week_planService.getDefaultWeekPlan($scope.kidId).then(function (data) {
-            $scope.days=data;
-            jsonTest=data;
-            for(var i=0;i<=4;i++){
-                week_planService.setDayDataDefault(i,$scope.days[i],'');
+            if(data!=null){
+                $scope.days=data;
+                jsonTest=data;
+                for(var i=0;i<=4;i++){
+                    week_planService.setDayDataDefault(i,$scope.days[i],'');
+                }
+            }
+            else{
+                var jsonTest=[{'name':'monday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':'NameTest'},
+                {'name':'tuesday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':'NameTest'},
+                {'name':'wednesday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':'NameTest'},
+                {'name':'thursday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':'NameTest'},
+                {'name':'friday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':'NameTest'}];
+                $scope.days=jsonTest;
+                for(var i=0;i<=4;i++){
+                   week_planService.setDayData(i,$scope.days[i],'');
+                }
             }
         }, function (error) {
         });

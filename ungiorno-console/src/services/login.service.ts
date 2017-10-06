@@ -55,19 +55,20 @@ export class LoginService  {
       // if the service return empty profile, resolve NEW
       // if the service return non-empty profile, resolve EXISTING
       // in case of error resolve NOTSIGNEDIN
-      this.connectorService.getProfile().then(profile =>{
-        //check the case
-        this.userService.setUserId(profile.studentId);
-        if (profile.authorized){
-           resolve(LOGIN_STATUS.EXISTING);
-        }else {
-           resolve(LOGIN_STATUS.NEW);
-        }
-      },
-      err => {
-        // TODO handle error
-        resolve(LOGIN_STATUS.NOTSIGNEDIN);
-      }); 
+      resolve(LOGIN_STATUS.EXISTING);
+      // this.connectorService.getProfile().then(profile =>{
+      //   //check the case
+      //   this.userService.setUserId(profile.studentId);
+      //   if (profile.authorized){
+      //      resolve(LOGIN_STATUS.EXISTING);
+      //   }else {
+      //      resolve(LOGIN_STATUS.NEW);
+      //   }
+      // },
+      // err => {
+      //   // TODO handle error
+      //   resolve(LOGIN_STATUS.NOTSIGNEDIN);
+      // }); 
       
     });
   }

@@ -6,6 +6,7 @@ import { WebService } from './../../app/WebService';
 import { School } from './../../app/Classes/school';
 import { Component, OnInit } from '@angular/core';
 import { NavController, AlertController, ModalController } from 'ionic-angular';
+import { LoginService } from '../../services/login.service'
 
 @Component({
   selector: 'page-home',
@@ -38,7 +39,7 @@ export class HomePage implements OnInit {
   selectedSchool : School;
   selectedId : string;
 
-  constructor(public navCtrl: NavController, private webService : WebService, public alertCtrl: AlertController, public modalCtrl: ModalController) {}
+  constructor(public navCtrl: NavController, private webService : WebService, public alertCtrl: AlertController, public modalCtrl: ModalController, public loginService : LoginService) {}
 
   ngOnInit(): void {
     this.webService.getData().then(item => { 
@@ -62,7 +63,8 @@ export class HomePage implements OnInit {
     //this.webService.getSchool(this.selectedId).then(x => this.selectedSchool = x)
   }
 
-  goBack() {
-    console.log()
+  logout() {
+    this.loginService.logout();
+    window.location.reload();
   }
 }

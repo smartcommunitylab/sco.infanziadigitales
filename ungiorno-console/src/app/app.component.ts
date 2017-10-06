@@ -23,10 +23,13 @@ export class MyApp {
         status => {
           switch (status) {
             case LOGIN_STATUS.EXISTING: {
+              console.log('login ok')
               this.rootPage = HomePage;
               break;
             } 
-            default : this.rootPage = LoginPage;
+            default : 
+              this.rootPage = LoginPage;
+              console.log('default case..loginpage')
           }          
         },
         error => {

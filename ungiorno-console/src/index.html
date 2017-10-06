@@ -39,15 +39,12 @@
 
   <script>
     function captureOauthToken() {
-      console.log('controllo token')
       var queryString = location.hash.substring(1);
-      console.log('querystring ' + queryString);
       var params = {};
       var regex = /([^&=]+)=([^&]*)/g, m;
       while (m = regex.exec(queryString)) {
         params[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
         // Try to exchange the param values for an access token.
-        console.log('params ' + params);
         if (params['access_token']) {
           sessionStorage.access_token = params['access_token'];
           window.location.hash = '/home';

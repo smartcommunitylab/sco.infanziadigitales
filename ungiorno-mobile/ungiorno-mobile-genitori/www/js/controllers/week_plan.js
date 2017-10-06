@@ -15,6 +15,30 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     fromtime=$filter('date')( fromtime, 'HH:mm' );
     var totime=$scope.getSchoolProfileNormalConfig['toTime'];
     totime=$filter('date')( totime, 'HH:mm' );
+    if(fromtime=='' && totime==''){
+        alert('No school Config');//TODO translate this
+    }
+
+    $scope.listServicesDb=profileService.getBabyProfile().services.timeSlotServices;
+    if($scope.listServicesDb!=undefined){
+    for(var i=0;i<$scope.listServicesDb.length;i++){
+            var type=$scope.listServicesDb[i].name;
+            var enabled=$scope.listServicesDb[i].enabled;
+            if(enabled && type=='Anticipo'){
+               var tempServ=$scope.listServicesDb[i].timeSlots;
+               fromtime=tempServ[0]['fromTime'];
+               fromtime=$filter('date')( fromtime, 'HH:mm' );
+            }
+            if(enabled && type=='Posticipo'){
+                var tempServ=$scope.listServicesDb[i].timeSlots;
+                totime=tempServ[0]['toTime'];
+                totime=$filter('date')( totime, 'HH:mm' );
+            }
+    }
+    }
+    console.log($scope.listServicesDb);
+    console.log(profileService.getSchoolProfile());
+    
     week_planService.setGlobalParam($scope.appId,$scope.schoolId);
     var jsonTest=[];
 
@@ -198,6 +222,29 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     fromtime=$filter('date')( fromtime, 'HH:mm' );
     var totime=$scope.getSchoolProfileNormalConfig['toTime'];
     totime=$filter('date')( totime, 'HH:mm' );
+    if(fromtime=='' && totime==''){
+        alert('No school Config');//TODO translate this
+    }
+
+    $scope.listServicesDb=profileService.getBabyProfile().services.timeSlotServices;
+    if($scope.listServicesDb!=undefined){
+    for(var i=0;i<$scope.listServicesDb.length;i++){
+            var type=$scope.listServicesDb[i].name;
+            var enabled=$scope.listServicesDb[i].enabled;
+            if(enabled && type=='Anticipo'){
+               var tempServ=$scope.listServicesDb[i].timeSlots;
+               fromtime=tempServ[0]['fromTime'];
+               fromtime=$filter('date')( fromtime, 'HH:mm' );
+            }
+            if(enabled && type=='Posticipo'){
+                var tempServ=$scope.listServicesDb[i].timeSlots;
+                totime=tempServ[0]['toTime'];
+                totime=$filter('date')( totime, 'HH:mm' );
+            }
+    }
+    }
+    console.log($scope.listServicesDb);
+    console.log(profileService.getSchoolProfile());
     week_planService.setGlobalParam($scope.appId,$scope.schoolId);
     $scope.editView=false;
     $scope.ritiraOptions=[];
@@ -380,7 +427,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             if(enabled){
                var tempServ=$scope.listServicesDb[i].timeSlots;
                for(var j=0;j<tempServ.length;j++){
-                   var temp={'value':tempServ[j]['name'],'label':tempServ[j]['name'],'entry':tempServ[j]['fromTime'],out:tempServ[j]['toTime'],'type':type};
+                   var temp={'value':tempServ[j]['name'],'label':tempServ[j]['name'],
+                   'entry':$filter('date')( tempServ[j]['fromTime'], 'HH:mm' ),out:$filter('date')(tempServ[j]['toTime'], 'HH:mm' ),
+                   'type':type};
                    $scope.listServices.push(temp);
                }
             }
@@ -524,7 +573,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             if(enabled){
                var tempServ=$scope.listServicesDb[i].timeSlots;
                for(var j=0;j<tempServ.length;j++){
-                   var temp={'value':tempServ[j]['name'],'label':tempServ[j]['name'],'entry':tempServ[j]['fromTime'],out:tempServ[j]['toTime'],'type':type};
+                   var temp={'value':tempServ[j]['name'],'label':tempServ[j]['name'],
+                   'entry':$filter('date')(tempServ[j]['fromTime']),out:$filter('date')(tempServ[j]['toTime']),
+                   'type':type};
                    $scope.listServices.push(temp);
                }
             }

@@ -253,6 +253,32 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     var day=currentDate.format('d')-1;
     $scope.ritiraOptions=$scope.kidProfile.persons;
     var jsonTest={};
+    $scope.getSchoolProfileNormalConfig=$filter('getSchoolNormalService')(profileService.getSchoolProfile().services);
+    var fromtime=$scope.getSchoolProfileNormalConfig['fromTime'];
+    fromtime=$filter('date')( fromtime, 'HH:mm' );
+    var totime=$scope.getSchoolProfileNormalConfig['toTime'];
+    totime=$filter('date')( totime, 'HH:mm' );
+    if(fromtime=='' && totime==''){
+        alert('No school Config');//TODO translate this
+    }
+
+    $scope.listServicesDb=profileService.getBabyProfile().services.timeSlotServices;
+    if($scope.listServicesDb!=undefined){
+    for(var i=0;i<$scope.listServicesDb.length;i++){
+            var type=$scope.listServicesDb[i].name;
+            var enabled=$scope.listServicesDb[i].enabled;
+            if(enabled && type=='Anticipo'){
+               var tempServ=$scope.listServicesDb[i].timeSlots;
+               fromtime=tempServ[0]['fromTime'];
+               fromtime=$filter('date')( fromtime, 'HH:mm' );
+            }
+            if(enabled && type=='Posticipo'){
+                var tempServ=$scope.listServicesDb[i].timeSlots;
+                totime=tempServ[0]['toTime'];
+                totime=$filter('date')( totime, 'HH:mm' );
+            }
+    }
+    }
     week_planService.getWeekPlan(week,kidId).then(function (data) {
       if(data!=null){
         var motiv_type=(data[day]['motivazione']!=undefined && data[day]['motivazione']!=null ? data[day]['motivazione']['type'] : '');
@@ -266,15 +292,22 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
       }
       else{
           week_planService.getDefaultWeekPlan(kidId).then(function (data) {
-            var motiv_type=(data[day]['motivazione']!=undefined && data[day]['motivazione']!=null ? data[day]['motivazione']['type'] : '');
-            var motiv_subtype=(data[day]['motivazione']!=undefined && data[day]['motivazione']!=null ? data[day]['motivazione']['subtype'] : '');
-            jsonTest={'ore_entrata':data[day]['entrata'],'ore_uscita':data[day]['uscita'],'addressBus':'Nome Test',
-            'delegaName':$filter('getRitiroName')(data[day]['delega_name'],$scope.ritiraOptions),'delegaType':$filter('getRitiroType')(data[day]['delega_name'],$scope.ritiraOptions),
-            'bus':data[day]['bus'],'absence':data[day]['absence'],
-            'motivazione':{type:motiv_type,subtype:motiv_subtype}
-          };
-            $scope.briefInfo= jsonTest;
-          }, function (error) {
+            if(data!=null){
+                var motiv_type=(data[day]['motivazione']!=undefined && data[day]['motivazione']!=null ? data[day]['motivazione']['type'] : '');
+               var motiv_subtype=(data[day]['motivazione']!=undefined && data[day]['motivazione']!=null ? data[day]['motivazione']['subtype'] : '');
+               jsonTest={'ore_entrata':data[day]['entrata'],'ore_uscita':data[day]['uscita'],'addressBus':'Nome Test',
+               'delegaName':$filter('getRitiroName')(data[day]['delega_name'],$scope.ritiraOptions),'delegaType':$filter('getRitiroType')(data[day]['delega_name'],$scope.ritiraOptions),
+               'bus':data[day]['bus'],'absence':data[day]['absence'],
+               'motivazione':{type:motiv_type,subtype:motiv_subtype}
+             };
+             $scope.briefInfo= jsonTest;
+            }else{
+              jsonTest={'ore_entrata':fromtime,'ore_uscita':totime,'addressBus':'Nome Test',
+              'delegaName':$filter('getRitiroName')(data[day]['delega_name'],$scope.ritiraOptions),'delegaType':$filter('getRitiroType')(data[day]['delega_name'],$scope.ritiraOptions),
+              'bus':data[day]['bus'],'absence':data[day]['absence'],
+              'motivazione':{type:'',subtype:''}
+            }
+          }}, function (error) {
           });
       }
   }, function (error) {

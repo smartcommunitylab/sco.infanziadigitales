@@ -275,6 +275,11 @@ $scope.logout = function () {
     $state.go('app.default_week_plan', {
       id: kidid
     });
+  };
+  $scope.gotoPromemoria = function (kidid) {
+    $state.go('app.settings_promemoria', {
+      id: kidid
+    });
   }
   $scope.getProfileImage = function (kid) {
     var image = Config.URL() + "/" + Config.app() + "/student/" + Config.appId() + "/" + kid.schoolId + "/" + kid.kidId + "/false/images";

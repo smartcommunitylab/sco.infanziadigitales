@@ -657,15 +657,44 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.kidId=profileService.getBabyProfile().kidId;
     $scope.schoolId=profileService.getBabyProfile().schoolId;
     $scope.currData==dataServerService.getNotificationSettings($scope.schoolId,$scope.kidId);
-   
+
+    var date =new Date();
+    var idNotification = 0;
+    var notifArray = [];
+    notifArray.push({
+        id: idNotification,
+        title: $filter('translate')('notification_day_summary_title'),
+        text: $filter('translate')('notification_day_summary_text'),
+        icon: 'res://notification.png',
+        //autoCancel: false,
+        autoClear: false,
+        every:'minute',
+        at: 5
+    });
+    notifArray.push({
+        id: idNotification,
+        title: $filter('translate')('notification_day_summary_title'),
+        text: $filter('translate')('notification_week_text'),
+        icon: 'res://notification.png',
+        //autoCancel: false,
+        autoClear: false,
+        every:'week',
+        at: 1
+    });
+    notifArray.push({
+        id: idNotification,
+        title: $filter('translate')('notification_day_summary_title'),
+        text: $filter('translate')('notification_ritiro_text'),
+        icon: 'res://notification.png',
+        //autoCancel: false,
+        autoClear: false,
+        every:'day',
+        at: '08:30'
+    });
+
+    cordova.plugins.notification.local.schedule(notifArray);
     
-    //$cordovaLocalNotification.schedule({
-    //    id: new Date().getTime(),
-    //    title: 'test',
-    //    text: 'test',
-    //    icon: 'res://icon.png',
-    //    autoClear: false,
-    //    at: new Date(),
-    //    data: {'test':"test1"}
-    //});
+    cordova.plugins.notification.local.on("click", function (notification) {
+        $state.go("app.week_plan")
+    });
 })

@@ -27,7 +27,7 @@
   <link href="build/main.css" rel="stylesheet">
 
 </head>
-<body>
+<body onload="captureOauthToken()">
   <!-- Ionic's root component and where the app will load -->
    <ion-app></ion-app> 
 
@@ -37,5 +37,21 @@
   <!-- The bundle js is generated during the build process -->
   <script src="build/main.js"></script>
 
+  <script>
+    function captureOauthToken() {
+      var queryString = location.hash.substring(1);
+      var params = {};
+      var regex = /([^&=]+)=([^&]*)/g, m;
+      while (m = regex.exec(queryString)) {
+        params[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
+        // Try to exchange the param values for an access token.
+        if (params['access_token']) {
+          sessionStorage.access_token = params['access_token'];
+          window.location.hash = '/home';
+          window.location.reload();
+        }
+      }
+    } 
+  </script> 
 </body>
 </html>

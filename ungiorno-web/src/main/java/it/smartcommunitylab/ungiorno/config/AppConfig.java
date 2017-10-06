@@ -155,4 +155,9 @@ public class AppConfig extends WebMvcConfigurerAdapter {
     public MultipartResolver multipartResolver() {
         return new CommonsMultipartResolver();
     }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**").allowedMethods("PUT", "DELETE", "GET", "POST");
+    }
 }

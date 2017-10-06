@@ -16,25 +16,60 @@ import { Allergy } from './Classes/serverModel/allergy';
 import { Delega } from './Classes/delega'
 
 import { Injectable }    from '@angular/core';
-import { Http, Headers } from '@angular/http';
+import { Http, Headers, BaseRequestOptions, RequestOptions } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
 import { School } from "./Classes/school";
 import { ServerServiceData } from "./Classes/serverModel/serverServiceData";
 import { ServiceTimeSlot } from "./Classes/serverModel/serviceTimeSlot";
 
+import {ConfigService} from "../services/config.service"
+
 import moment from 'moment';
+
+@Injectable()
+export class DefaultRequestOptions extends BaseRequestOptions {
+
+  constructor() {
+    super();
+    this.headers.set('Accept', 'application/json');
+    this.headers.set('Content-Type', 'application/json');
+    this.headers.set('Authorization', `Bearer ${sessionStorage.getItem('access_token')}`);
+  }
+}
+
+export const requestOptionsProvider = { provide: RequestOptions, useClass: DefaultRequestOptions };
+
+
 
 @Injectable()
 export class WebService {
   private appId = 'trento';
-  private apiUrl = `http://localhost:8080/ungiorno2`;
+  
   private headers = new Headers({'Content-Type': 'application/json'});
-
+  private apiUrl;
   private schoolId = '';
   school : School;
   
-  constructor(private http : Http) {}
+  constructor(private http : Http, private configService : ConfigService) {
+    this.apiUrl = configService.getConfig('apiUrl');
+
+  }
+
+  getProfile(): Promise<any> {
+    let url: string = this.apiUrl + '/consoleweb/profile/me';
+    
+    return this.http.get(url)
+      .timeout(5000)
+      .toPromise()
+      .then(response => {
+        return response.json()
+      }
+      ).catch(response => {
+        return this.handleError
+      });
+}
+
 
   getData(): Promise<School[]> {
     return this.http.get(`${this.apiUrl}/consoleweb/${this.appId}/me`).toPromise().then(x => {
@@ -114,13 +149,13 @@ export class WebService {
     else if (item instanceof Bus) {
       return this.getSchool(schoolId).then(tmp => {
         tmp.buses.push(item); 
-        return this.http.put(url, JSON.stringify(tmp), {headers: this.headers}).toPromise().then(() => tmp).catch(this.handleError);
+        return this.http.put(url, JSON.stringify(tmp)).toPromise().then(() => tmp).catch(this.handleError);
       });
     }
     else if (item instanceof Group) {
       return this.getSchool(schoolId).then(tmp => {
         tmp.groups.push(item); 
-        return this.http.put(url, JSON.stringify(tmp), {headers: this.headers}).toPromise().then(() => tmp).catch(this.handleError);
+        return this.http.put(url, JSON.stringify(tmp)).toPromise().then(() => tmp).catch(this.handleError);
       });
     }
     else if(item instanceof Kid) {
@@ -134,14 +169,14 @@ export class WebService {
       return this.getSchool(schoolId).then(tmp => {
         var pos = tmp.groups.findIndex(x => x.name === item.name)
         tmp.groups.splice(pos, 1); 
-        return this.http.put(url, JSON.stringify(tmp), {headers: this.headers}).toPromise().then(() => tmp).catch(this.handleError);
+        return this.http.put(url, JSON.stringify(tmp)).toPromise().then(() => tmp).catch(this.handleError);
       });
     }
     else if(item instanceof Bus) {
       return this.getSchool(schoolId).then(tmp => {
         var pos = tmp.buses.findIndex(x => x.name === item.name)
         tmp.buses.splice(pos, 1); 
-        return this.http.put(url, JSON.stringify(tmp), {headers: this.headers}).toPromise().then(() => tmp).catch(this.handleError);
+        return this.http.put(url, JSON.stringify(tmp)).toPromise().then(() => tmp).catch(this.handleError);
       });
     }
     else if(item instanceof Teacher) {
@@ -156,7 +191,7 @@ export class WebService {
     const url = `${this.apiUrl}/consoleweb/${this.appId}/${school.id}`;
     let convertedSchool = this.convertToServerSchool(school);
     return this.http
-    .put(url, JSON.stringify(convertedSchool), {headers: this.headers})
+    .put(url, JSON.stringify(convertedSchool))
     .toPromise()
     .then(() => school)
     .catch(this.handleError);

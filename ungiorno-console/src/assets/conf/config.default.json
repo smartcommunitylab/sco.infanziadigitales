@@ -1,0 +1,8 @@
+
+{
+    "apiUrl": "http://localhost:8080/ungiorno2",
+    "aacUrl": "https://dev.smartcommunitylab.it/aac",
+    "aacClientId": "CLIENT_ID",
+    "redirectUrl": "http://localhost:8100",
+    "enableOauth" : false
+}

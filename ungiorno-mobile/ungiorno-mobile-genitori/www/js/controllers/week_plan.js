@@ -11,6 +11,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.appId=profileService.getBabyProfile().appId;
     $scope.schoolId=profileService.getBabyProfile().schoolId;
     $scope.getSchoolProfileNormalConfig=$filter('getSchoolNormalService')(profileService.getSchoolProfile().services);
+    console.log(profileService.getSchoolProfile());
+    console.log(profileService.getBabyProfile());
     var fromtime=$scope.getSchoolProfileNormalConfig['fromTime'];
     fromtime=$filter('date')( fromtime, 'HH:mm' );
     var totime=$scope.getSchoolProfileNormalConfig['toTime'];
@@ -65,7 +67,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     
     $scope.getWeekPlanDB =  function(week) {
         week_planService.getWeekPlan(week,$scope.kidId).then(function (data) {
-            data=null;
             if(data!=null){
                 $scope.days=data;
                 jsonTest=data;
@@ -574,7 +575,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                var tempServ=$scope.listServicesDb[i].timeSlots;
                for(var j=0;j<tempServ.length;j++){
                    var temp={'value':tempServ[j]['name'],'label':tempServ[j]['name'],
-                   'entry':$filter('date')(tempServ[j]['fromTime']),out:$filter('date')(tempServ[j]['toTime']),
+                   'entry':$filter('date')(tempServ[j]['fromTime'],'HH:mm'),out:$filter('date')(tempServ[j]['toTime'],'HH:mm'),
                    'type':type};
                    $scope.listServices.push(temp);
                }

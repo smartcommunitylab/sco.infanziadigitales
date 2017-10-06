@@ -303,8 +303,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
              $scope.briefInfo= jsonTest;
             }else{
               jsonTest={'ore_entrata':fromtime,'ore_uscita':totime,'addressBus':'Nome Test',
-              'delegaName':$filter('getRitiroName')(data[day]['delega_name'],$scope.ritiraOptions),'delegaType':$filter('getRitiroType')(data[day]['delega_name'],$scope.ritiraOptions),
-              'bus':data[day]['bus'],'absence':data[day]['absence'],
+              'delegaName':'','delegaType':'',
+              'bus':false,'absence':false,
               'motivazione':{type:'',subtype:''}
             }
           }}, function (error) {

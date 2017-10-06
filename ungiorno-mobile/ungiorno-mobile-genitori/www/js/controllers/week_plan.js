@@ -34,7 +34,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             if(enabled && type=='Posticipo'){
                 var tempServ=$scope.listServicesDb[i].timeSlots;
                 totime=tempServ[0]['toTime'];
-                totime=$filter('date')( totime, 'HH:mm' );
+                totime=$filter('date')( totime, 'H:mm' );
             }
     }
     }
@@ -656,11 +656,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.currData = {};
     $scope.kidId=profileService.getBabyProfile().kidId;
     $scope.schoolId=profileService.getBabyProfile().schoolId;
-    $scope.currData==dataServerService.getNotificationSettings($scope.schoolId,$scope.kidId);
+    //$scope.currData==dataServerService.getNotificationSettings($scope.schoolId,$scope.kidId);
 
     var date =new Date();
     var idNotification = 0;
     var notifArray = [];
+    var now = new Date().getTime(),
+    _60_seconds_from_now = new Date(now + 60*1000);
+
     notifArray.push({
         id: idNotification,
         title: $filter('translate')('notification_day_summary_title'),
@@ -668,8 +671,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         icon: 'res://notification.png',
         //autoCancel: false,
         autoClear: false,
-        every:'minute',
-        at: 5
+        firstAt: _60_seconds_from_now,
+        every: 100
     });
     notifArray.push({
         id: idNotification,
@@ -692,9 +695,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         at: '08:30'
     });
 
-    //cordova.plugins.notification.local.schedule(notifArray);
+    if (window.cordova && cordova.plugins && cordova.plugins.notification){
+        cordova.plugins.notification.local.schedule(notifArray);
     
-   // cordova.plugins.notification.local.on("click", function (notification) {
-   //     $state.go("app.week_plan")
-   // });
+       cordova.plugins.notification.local.on("click", function (notification) {
+          $state.go("app.week_plan")
+        });
+    }
 })

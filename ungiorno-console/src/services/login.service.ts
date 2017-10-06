@@ -50,25 +50,24 @@ export class LoginService  {
     if (!sessionStorage.access_token) {
       return Promise.resolve(LOGIN_STATUS.NOTSIGNEDIN);
     }
+    console.log('TOKEN ' + sessionStorage.access_token);
     return new Promise((resolve, reject) => {
-      // TODO make a call to the profile service.
-      // if the service return empty profile, resolve NEW
-      // if the service return non-empty profile, resolve EXISTING
-      // in case of error resolve NOTSIGNEDIN
-      resolve(LOGIN_STATUS.EXISTING);
-      // this.connectorService.getProfile().then(profile =>{
-      //   //check the case
-      //   this.userService.setUserId(profile.studentId);
-      //   if (profile.authorized){
-      //      resolve(LOGIN_STATUS.EXISTING);
-      //   }else {
-      //      resolve(LOGIN_STATUS.NEW);
-      //   }
-      // },
-      // err => {
-      //   // TODO handle error
-      //   resolve(LOGIN_STATUS.NOTSIGNEDIN);
-      // }); 
+      this.connectorService.getProfile().then(response =>{
+        //check the case
+        console.log('profile response ' + JSON.stringify(response));
+        this.userService.setUserId(response.data.username);
+        console.log('logged as ' + this.userService.getUserId());
+        resolve(LOGIN_STATUS.EXISTING);
+        // if (profile.authorized){
+        //    resolve(LOGIN_STATUS.EXISTING);
+        // }else {
+        //    resolve(LOGIN_STATUS.NEW);
+        // }
+      },
+      err => {
+        // TODO handle error
+        resolve(LOGIN_STATUS.NOTSIGNEDIN);
+      }); 
       
     });
   }

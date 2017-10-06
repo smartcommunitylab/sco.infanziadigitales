@@ -2,7 +2,7 @@ import { PopoverPage } from './../pages/Components/Modals/orariModal/popoverOrar
 import { Insegnanti } from './../pages/Components/teacherSection/teacher.component';
 import { TeacherModal } from './../pages/Components/Modals/teacherModal/teacherModal';
 import { BusModal } from './../pages/Components/Modals/busModal/busModal';
-import { WebService } from './WebService';
+import { WebService, requestOptionsProvider } from './WebService';
 import { LoginService } from '../services/login.service'
 import { ConfigService } from '../services/config.service'
 import { BrowserModule } from '@angular/platform-browser';
@@ -87,7 +87,8 @@ function initConfig(config: ConfigService) {
     LoginService,
     ConfigService,
     { provide: APP_INITIALIZER, useFactory: initConfig, deps: [ConfigService], multi: true },
-    UserService
+    UserService,
+    requestOptionsProvider
   ]
 })
 export class AppModule {}

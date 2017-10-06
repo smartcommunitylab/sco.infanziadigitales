@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import it.smartcommunitylab.ungiorno.config.exception.ProfileNotFoundException;
 import it.smartcommunitylab.ungiorno.model.AppInfo;
+import it.smartcommunitylab.ungiorno.model.ConsoleWebUser;
 import it.smartcommunitylab.ungiorno.model.KidProfile;
 import it.smartcommunitylab.ungiorno.model.Response;
 import it.smartcommunitylab.ungiorno.model.School;
@@ -23,6 +24,7 @@ import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.storage.AppSetup;
 import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
 import it.smartcommunitylab.ungiorno.utils.JsonUtil;
+import it.smartcommunitylab.ungiorno.utils.PermissionsManager;
 
 /**
  * ConsoleWebController exposes API used to insert data in system from the web insertion console
@@ -42,6 +44,9 @@ public class ConsoleWebController {
     @Autowired
     private RepositoryManager storage;
 
+    @Autowired
+    private PermissionsManager permissionsManager;
+
     @RequestMapping(method = RequestMethod.GET, value = "/consoleweb/{appId}/me")
     public Response<List<School>> getMyData(@PathVariable String appId)
             throws ProfileNotFoundException {
@@ -50,11 +55,23 @@ public class ConsoleWebController {
         return new Response<List<School>>(appInfo.getSchools());
     }
 
+
+    @RequestMapping(method = RequestMethod.GET, value = "/consoleweb/profile/me")
+    public Response<ConsoleWebUser> getMyProfile() {
+        // mi serve il token
+        logger.info(permissionsManager.getUserId());
+        ConsoleWebUser consoleWebUser = new ConsoleWebUser(permissionsManager.getUserId());
+        // permissionsManager.getProfileService().getAccountProfile(token);
+        return new Response<ConsoleWebUser>(consoleWebUser);
+    }
+
+
+
     /*
      * FIXME -> this method clone exactly the ones in SchoolController. Used only because actually
      * console-web is without authentication
      */
-
+    @CrossOrigin
     @RequestMapping(method = RequestMethod.GET, value = "/consoleweb/{appId}/{schoolId}/profile")
     public @ResponseBody Response<SchoolProfile> getSchoolProfile(@PathVariable String appId,
             @PathVariable String schoolId) {

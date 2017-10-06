@@ -490,5 +490,46 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
         return deferred.promise;
     }
 
+    dataServerService.setNotificationSettings = function (schoolId, kidId,params) {
+        var deferred = $q.defer();
+        $http({
+            method: 'POST',
+            url: Config.URL() + '/' + Config.app() + '/parent/' + Config.appId() + '/'+ schoolId + '/'+kidid+'/set_notification',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            data: params,
+        }).
+        success(function (data, status, headers, config) {
+            deferred.resolve(data);
+        }).
+        error(function (data, status, headers, config) {
+            console.log(data + status + headers + config);
+            deferred.reject(data);
+        });
+        return deferred.promise;
+    }
+
+    dataServerService.getNotificationSettings = function (schoolId, kidId) {
+        var deferred = $q.defer();
+        $http({
+            method: 'GET',
+            url: Config.URL() + '/' + Config.app() + '/parent/' + Config.appId() + '/'+ schoolId + '/'+kidId+'/get_notification',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        }).
+        success(function (data, status, headers, config) {
+            deferred.resolve(data);
+        }).
+        error(function (data, status, headers, config) {
+            console.log(data + status + headers + config);
+            deferred.reject(data);
+        });
+        return deferred.promise;
+    }
+
     return dataServerService;
 })

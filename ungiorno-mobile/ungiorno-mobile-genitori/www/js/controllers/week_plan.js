@@ -692,9 +692,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         at: '08:30'
     });
 
-    cordova.plugins.notification.local.schedule(notifArray);
+    //cordova.plugins.notification.local.schedule(notifArray);
     
-    cordova.plugins.notification.local.on("click", function (notification) {
-        $state.go("app.week_plan")
-    });
+   // cordova.plugins.notification.local.on("click", function (notification) {
+   //     $state.go("app.week_plan")
+   // });
 })

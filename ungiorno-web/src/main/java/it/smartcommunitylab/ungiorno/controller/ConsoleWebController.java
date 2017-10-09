@@ -58,10 +58,11 @@ public class ConsoleWebController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/consoleweb/profile/me")
     public Response<ConsoleWebUser> getMyProfile() {
-        // mi serve il token
-        logger.info(permissionsManager.getUserId());
         ConsoleWebUser consoleWebUser = new ConsoleWebUser(permissionsManager.getUserId());
-        // permissionsManager.getProfileService().getAccountProfile(token);
+        logger.info("login for user {} in console-web", permissionsManager.getUserId());
+        List<School> schoolsByAccount =
+                appSetup.findSchoolsByAccount(permissionsManager.getUserId());
+        consoleWebUser.setAuthorizedSchools(schoolsByAccount);
         return new Response<ConsoleWebUser>(consoleWebUser);
     }
 

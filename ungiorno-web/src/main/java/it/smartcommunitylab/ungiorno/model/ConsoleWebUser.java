@@ -4,7 +4,7 @@ import java.util.List;
 
 public class ConsoleWebUser {
     private String username;
-    private List<School> schoolAuthorized;
+    private List<School> authorizedSchools;
 
     public ConsoleWebUser(String username) {
         this.username = username;
@@ -14,13 +14,12 @@ public class ConsoleWebUser {
         return username;
     }
 
-    public List<School> getSchoolAuthorized() {
-        return schoolAuthorized;
+    public List<School> getAuthorizedSchools() {
+        return authorizedSchools;
     }
 
-    public void setSchoolAuthorized(List<School> schoolAuthorized) {
-        this.schoolAuthorized = schoolAuthorized;
+    public void setAuthorizedSchools(List<School> schools) {
+        this.authorizedSchools = schools;
     }
-
 
 }

@@ -26,9 +26,11 @@ public class School implements Serializable {
 
     private static final long serialVersionUID = -2439551592309461718L;
 
+    private String appId;
     private String schoolId;
     private String name;
     private String address;
+    private String account;
     private List<String> tags;
 
     public String getSchoolId() {
@@ -61,6 +63,22 @@ public class School implements Serializable {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
+    public String getAppId() {
+        return appId;
+    }
+
+    public void setAppId(String appId) {
+        this.appId = appId;
     }
 
 }

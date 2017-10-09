@@ -1,6 +1,7 @@
 package it.smartcommunitylab.ungiorno.storage;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,12 @@ public class AppSetup {
 
     @Autowired
     private RepositoryManager storage;
+
+    private String uploadDirectory;
+    private List<AppInfo> apps;
+    private Map<String, AppInfo> appsMap;
+
+    private Map<String, List<School>> schoolsByAccount = new HashMap<>();
 
 
     @PostConstruct
@@ -59,11 +66,6 @@ public class AppSetup {
         }
     }
 
-
-    private String uploadDirectory;
-    private List<AppInfo> apps;
-    private Map<String, AppInfo> appsMap;
-
     public String getUploadDirectory() {
         return uploadDirectory;
     }
@@ -95,5 +97,26 @@ public class AppSetup {
 
     public AppInfo findAppById(String username) {
         return appsMap.get(username);
+    }
+
+    public List<School> findSchoolsByAccount(String account) {
+        if (account == null) {
+            return new ArrayList<>();
+        }
+        List<School> schools = schoolsByAccount.get(account);
+        if (schools == null) {
+            schools = new ArrayList<>();
+            for (AppInfo app : apps) {
+                for (School school : app.getSchools()) {
+                    if (account.equals(school.getAccount())) {
+                        school.setAppId(app.getAppId());
+                        schools.add(school);
+                    }
+                }
+            }
+            schoolsByAccount.put(account, schools);
+        }
+
+        return schools;
     }
 }

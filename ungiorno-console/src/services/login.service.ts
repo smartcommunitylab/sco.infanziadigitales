@@ -55,7 +55,8 @@ export class LoginService  {
       this.connectorService.getProfile().then(response =>{
         //check the case
         console.log('profile response ' + JSON.stringify(response));
-        this.userService.setUserId(response.data.username);
+        this.userService.setUserId(response.getUserId());
+        this.userService.setAuthorizedSchools(response.getAuthorizedSchools());
         console.log('logged as ' + this.userService.getUserId());
         resolve(LOGIN_STATUS.EXISTING);
         // if (profile.authorized){

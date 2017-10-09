@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core'
-//import {WebAPIConnectorService} from './webAPIConnector.service';
+import { School } from "../app/Classes/school";
+
 
 @Injectable()
 export class UserService {
     private userId: string;
+    private authorizedSchools : School[];
 
-    //   constructor(private webAPIConnector: WebAPIConnectorService, private config: ConfigService) {
-    //   };
     constructor() {
     }
 
@@ -15,5 +15,13 @@ export class UserService {
     }
     setUserId(newId: string) {
         this.userId = newId;
+    }
+
+    getAuthorizedSchools() : School[] {
+        return this.authorizedSchools;
+    }
+
+    setAuthorizedSchools(schools : School[]) {
+        this.authorizedSchools = schools;
     }
 }

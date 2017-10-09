@@ -26,6 +26,7 @@ import { ServiceTimeSlot } from "./Classes/serverModel/serviceTimeSlot";
 import {ConfigService} from "../services/config.service"
 
 import moment from 'moment';
+import { UserService } from "../services/user.service";
 
 @Injectable()
 export class DefaultRequestOptions extends BaseRequestOptions {
@@ -56,19 +57,20 @@ export class WebService {
 
   }
 
-  getProfile(): Promise<any> {
+  getProfile(): Promise<UserService> {
     let url: string = this.apiUrl + '/consoleweb/profile/me';
     
     return this.http.get(url)
-      .timeout(5000)
       .toPromise()
       .then(response => {
-        return response.json()
+        console.log('profile response ' + JSON.stringify(response));
+        let userService = new UserService();
+        userService.setUserId(response.json().data.username);
+        userService.setAuthorizedSchools(response.json().data.authorizedSchools.map(rawSchool => this.convertToSchool(rawSchool)));
+        console.log('logged as ' + userService.getUserId());
+        return userService;
+      }).catch(this.handleError);
       }
-      ).catch(response => {
-        return this.handleError
-      });
-}
 
 
   getData(): Promise<School[]> {

@@ -7,6 +7,7 @@ import { School } from './../../app/Classes/school';
 import { Component, OnInit } from '@angular/core';
 import { NavController, AlertController, ModalController } from 'ionic-angular';
 import { LoginService } from '../../services/login.service'
+import { UserService } from "../../services/user.service";
 
 @Component({
   selector: 'page-home',
@@ -39,15 +40,16 @@ export class HomePage implements OnInit {
   selectedSchool : School;
   selectedId : string;
 
-  constructor(public navCtrl: NavController, private webService : WebService, public alertCtrl: AlertController, public modalCtrl: ModalController, public loginService : LoginService) {}
+  constructor(public navCtrl: NavController, private webService : WebService, public alertCtrl: AlertController, public modalCtrl: ModalController, public loginService : LoginService, private userService : UserService) {}
 
   ngOnInit(): void {
-    this.webService.getData().then(item => { 
-      this.schools = item;
-      console.log(item[0].id);
-      this.selectedId = this.schools[0].id;
-      this.onSchoolChange(this.selectedId)
-    });
+    let authorizedSchools = this.userService.getAuthorizedSchools();
+    if(authorizedSchools.length == 0) {
+      console.log('user cannot manage any schools');
+    } 
+    this.schools = this.userService.getAuthorizedSchools();
+    this.selectedId = this.userService.getAuthorizedSchools()[0].id;
+    this.onSchoolChange(this.selectedId);
   }
 
   onSchoolChange(selectedId : string) {

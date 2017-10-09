@@ -255,9 +255,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     var jsonTest={};
     $scope.getSchoolProfileNormalConfig=$filter('getSchoolNormalService')(profileService.getSchoolProfile().services);
     var fromtime=$scope.getSchoolProfileNormalConfig['fromTime'];
-    fromtime=$filter('date')( fromtime, 'HH:mm' );
+    fromtime=fromtime.replace(/^0+/, '');
     var totime=$scope.getSchoolProfileNormalConfig['toTime'];
-    totime=$filter('date')( totime, 'HH:mm' );
+    totime=totime.replace(/^0+/, '');
     if(fromtime=='' && totime==''){
         alert('No school Config');//TODO translate this
     }
@@ -270,12 +270,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             if(enabled && type=='Anticipo'){
                var tempServ=$scope.listServicesDb[i].timeSlots;
                fromtime=tempServ[0]['fromTime'];
-               fromtime=$filter('date')( fromtime, 'HH:mm' );
+               fromtime=fromtime.replace(/^0+/, '');
             }
             if(enabled && type=='Posticipo'){
                 var tempServ=$scope.listServicesDb[i].timeSlots;
                 totime=tempServ[0]['toTime'];
-                totime=$filter('date')( totime, 'HH:mm' );
+                totime=totime.replace(/^0+/, '');
             }
     }
     }
@@ -283,7 +283,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
       if(data!=null){
         var motiv_type=(data[day]['motivazione']!=undefined && data[day]['motivazione']!=null ? data[day]['motivazione']['type'] : '');
         var motiv_subtype=(data[day]['motivazione']!=undefined && data[day]['motivazione']!=null ? data[day]['motivazione']['subtype'] : '');
-        jsonTest={'ore_entrata':data[day]['entrata'],'ore_uscita':data[day]['uscita'],'addressBus':'Nome Test',
+        jsonTest={'ore_entrata':data[day]['entrata'].replace(/^0+/, ''),'ore_uscita':data[day]['uscita'].replace(/^0+/, ''),'addressBus':'Nome Test',
         'delegaName':$filter('getRitiroName')(data[day]['delega_name'],$scope.ritiraOptions),'delegaType':$filter('getRitiroType')(data[day]['delega_name'],$scope.ritiraOptions),
         'bus':data[day]['bus'],'absence':data[day]['absence'],
         'motivazione':{type:motiv_type,subtype:motiv_subtype}
@@ -295,7 +295,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             if(data!=null){
                 var motiv_type=(data[day]['motivazione']!=undefined && data[day]['motivazione']!=null ? data[day]['motivazione']['type'] : '');
                var motiv_subtype=(data[day]['motivazione']!=undefined && data[day]['motivazione']!=null ? data[day]['motivazione']['subtype'] : '');
-               jsonTest={'ore_entrata':data[day]['entrata'],'ore_uscita':data[day]['uscita'],'addressBus':'Nome Test',
+               jsonTest={'ore_entrata':data[day]['entrata'].replace(/^0+/, ''),'ore_uscita':data[day]['uscita'].replace(/^0+/, ''),'addressBus':'Nome Test',
                'delegaName':$filter('getRitiroName')(data[day]['delega_name'],$scope.ritiraOptions),'delegaType':$filter('getRitiroType')(data[day]['delega_name'],$scope.ritiraOptions),
                'bus':data[day]['bus'],'absence':data[day]['absence'],
                'motivazione':{type:motiv_type,subtype:motiv_subtype}

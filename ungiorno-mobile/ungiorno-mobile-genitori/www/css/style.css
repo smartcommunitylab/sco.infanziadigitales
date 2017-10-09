@@ -2042,12 +2042,12 @@ textarea {
 
 .current-day {
   background-color: #80D0E6;
-  white-space: nowrap;
 }
 
 .currentDate{
   margin-bottom:14px;
   color:  #F8A913;
+  font-size: 20px;
 }
 .active_cal_buttons {
   color : #F8A913;
@@ -2056,6 +2056,17 @@ textarea {
   display: flex;
   flex-direction: row;
   margin-top:10px;
+  padding:20px;
+}
+
+.navicon
+{
+  font-size: 40px;
+}
+
+.navicon2
+{
+  font-size: 20px;
 }
 
 .non_active_cal_buttons {
@@ -2072,6 +2083,7 @@ textarea {
 }
 
 .week_plan_detail{
+  font-size: 18px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -2094,7 +2106,6 @@ textarea {
   border: 0;
   margin-left:2px;
   padding: 2px;
-  font-size: :90%;
 }
 .editable{
   background-color: #f8ab15;
@@ -2151,7 +2162,7 @@ textarea {
 }
 
 .day-name {
-  padding-right:8px;
+  padding-right:5px;
 }
 .week_plan_detail_table{
   text-align: center;
@@ -2162,6 +2173,8 @@ textarea {
 .week_plan_detail_table td{
   vertical-align: middle;
   padding-bottom:10px;
+  padding-top:10px;
+  font-size: 90%;
 }
 .dayEdit{
   text-align: left;
@@ -2201,21 +2214,28 @@ textarea {
   font-weight: bold;
 }
 .delega_name{
-  font-size: 9px;
+  font-size: 10px;
   display: flex;
   flex-direction: column;
   line-height: 10px;
   text-align: center;
   padding-right:0px;
   margin-right:0px;
+  text-overflow: ellipsis;
 }
 .nowrap{
   white-space: nowrap;
 }
-
+.delegaStyle{
+  white-space: nowrap; 
+  width: 5em; 
+  overflow: hidden;
+  text-overflow: ellipsis; 
+}
 .iconStyle{
-  width:15px;
+  width:10px;
   height:15px;
+  font-size: 20px;
 }
 .iconStyleHead{
   font-size: 30px;
@@ -2223,14 +2243,28 @@ textarea {
   height:35px;
   vertical-align: middle;
 }
+.iconStyleHome{
+  font-size: 50px;
+  vertical-align: middle;
+  color: #009AA8;
+}
+.iconStyleHome1{
+  font-size: 40px;
+  vertical-align: middle;
+  color: #f8ab15;
+}
 .br_in{
-  padding-left: 10px;
+  padding-left: 20px;
   text-align: left;
   margin: 4px 80px 0px 80px!important;
+}
+.busStyle{;
+  width:40%
 }
 .dateStyleHead{
   padding-left:30px;
   padding-right:30px;
+  padding-top: 10px;
 }
 .weekicon{
   margin-top: 10px;

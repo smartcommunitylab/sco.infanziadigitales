@@ -22,14 +22,14 @@
                   <p class="button-day noneditable">U <span class="val_time">{{day.uscita}}</span></p>
               </td>
               <td ng-if="day.bus && !day.assente">
-                  <p class="button-day noneditable"><img src="img/ic-login.png" class="iconStyle" /></p>
+                  <p class="button-day noneditable"><i class="icon ion-android-bus iconStyle"></i></p>
               </td>
               <td ng-if="!day.assente">
                 <div class="delega_day noneditable">
-                  <img src="img/ic-login.png" class="iconStyle" />
+                    &nbsp;<i class="icon ion-android-person iconStyle"></i>&nbsp;
                   <div class="delega_name">
-                      <span>{{day.delega_name|getRitiroName:ritiraOptions}}</span>
-                      <span>({{day.delega_name|getRitiroType:ritiraOptions}})</span>
+                      <span class="delegaStyle">{{day.delega_name|getRitiroName:ritiraOptions}}</span>
+                      <span class="delegaStyle">({{day.delega_name|getRitiroType:ritiraOptions}})</span>
                   </div>
               </div>
               </td>
@@ -64,14 +64,14 @@
                   <p ng-class="whatClassIsIt($index,'')">U <span class="val_time">{{day.uscita}}</span></p>
               </td>
               <td ng-if="day.bus && !day.assente">
-                  <p ng-class="whatClassIsIt($index,'')"><img src="img/ic-login.png" class="iconStyle"  /></p>
+                  <p ng-class="whatClassIsIt($index,'')"><i class="icon ion-android-bus iconStyle"></i></p>
               </td>
               <td ng-if="!day.assente">
                 <div ng-class="whatClassIsIt($index,'delega')" class="delega_day editable">
-                  <img src="img/ic-login.png" class="iconStyle"  />
+                    &nbsp;<i class="icon ion-android-person iconStyle"></i>&nbsp;
                   <div class="delega_name">
-                      <span>{{day.delega_name|getRitiroName:ritiraOptions}}</span>
-                      <span>({{day.delega_name|getRitiroType:ritiraOptions}})</span>
+                      <span class="delegaStyle">{{day.delega_name|getRitiroName:ritiraOptions}}</span>
+                      <span class="delegaStyle">({{day.delega_name|getRitiroType:ritiraOptions}})</span>
                   </div>
               </div>
               </td>

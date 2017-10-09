@@ -15,11 +15,11 @@
       <!-- Readonly DetailView of Week-->
       <div ng-show="mode==''" class="week_plan_detail">
         <div class="active_cal_buttons">
-           <i class="icon ion-arrow-left-b" ng-click="prev_week()"></i>
-           <div class="dateStyleHead">{{date}}</div>
-           <i class="icon ion-arrow-right-b" ng-click="next_week()"></i>
+           <i class="icon ion-arrow-left-b navicon" ng-click="prev_week()"></i>
+           <div class="dateStyleHead navicon2">{{date}}</div>
+           <i class="icon ion-arrow-right-b navicon" ng-click="next_week()"></i>
         </div> 
-        <table class="week_plan_detail_table" >
+        <table class="week_plan_detail_table"  cellpadding="10">
           <tr ng-repeat="day in days track by $index"  ng-class="{'current-day': isActive($index)}" >
             <td class="day-name">
                 <p class="title">{{day.name| translate | uppercase}}</p>
@@ -31,14 +31,14 @@
                 <p class="button-day noneditable">U <span class="val_time">{{day.uscita}}</span></p>
             </td>
             <td ng-if="day.bus && !day.absence">
-                <p class="button-day noneditable"><img src="img/ic-login.png" class="iconStyle" /></p>
+                <p class="button-day noneditable"><i class="icon ion-android-bus iconStyle"></i></p>
             </td>
-            <td ng-if="!day.absence" style="white-space: nowrap;">
+            <td ng-if="!day.absence" class="day-name">
               <div class="delega_day noneditable">
-                <img src="img/ic-login.png" class="iconStyle" />
-                <div class="delega_name">
-                    <span>{{day.delega_name|getRitiroName:ritiraOptions}}</span>
-                    <span>({{day.delega_name|getRitiroType:ritiraOptions}})</span>
+                &nbsp;<i class="icon ion-android-person iconStyle"></i>&nbsp;
+                <div class="delega_name" >
+                    <span class="delegaStyle">{{day.delega_name|getRitiroName:ritiraOptions}}</span>
+                    <span class="delegaStyle">({{day.delega_name|getRitiroType:ritiraOptions}})</span>
                 </div>
             </div>
             </td>
@@ -63,9 +63,9 @@
           <p class="button_top" ng-click="copy_prev_week()"><i class="icon ion-ios-photos-outline iconStyleHead"></i>{{'copy_previous_week' | translate | uppercase}}</p>
          </div> 
         <div class="non_active_cal_buttons">
-            <i class="icon ion-arrow-left-b"></i>
+            <i class="icon ion-arrow-left-b navicon"></i>
             <div class="dateStyleHead">{{date}}</div>
-            <i class="icon ion-arrow-right-b"></i>
+            <i class="icon ion-arrow-right-b navicon"></i>
         </div> 
         <table class="week_plan_detail_table">
           <tr ng-repeat="day in days track by $index"  ng-class="{'current-day': isActive($index)}"  ng-click="gotoEditDate($index)">
@@ -79,14 +79,14 @@
                 <p ng-class="whatClassIsIt($index,'')">U <span class="val_time">{{day.uscita}}</span></p>
             </td>
             <td ng-if="day.bus && !day.absence">
-                <p ng-class="whatClassIsIt($index,'')"><img src="img/ic-login.png" class="iconStyle"  /></p>
+                <p ng-class="whatClassIsIt($index,'')"><i class="icon ion-android-bus iconStyle"></i></p>
             </td>
-            <td ng-if="!day.absence">
-              <div ng-class="whatClassIsIt($index,'delega')" class="delega_day editable">
-                <img src="img/ic-login.png" class="iconStyle"  />
+            <td ng-if="!day.absence" class="day-name">
+              <div ng-class="whatClassIsIt($index,'delega')">
+                  &nbsp;<i class="icon ion-android-person iconStyle"></i>&nbsp;
                 <div class="delega_name">
-                    <span>{{day.delega_name|getRitiroName:ritiraOptions}}</span>
-                    <span>({{day.delega_name|getRitiroType:ritiraOptions}})</span>
+                    <span class="delegaStyle">{{day.delega_name|getRitiroName:ritiraOptions}}</span>
+                    <span class="delegaStyle">({{day.delega_name|getRitiroType:ritiraOptions}})</span>
                 </div>
             </div>
             </td>

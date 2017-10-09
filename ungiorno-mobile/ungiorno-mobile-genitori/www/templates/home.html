@@ -18,8 +18,8 @@
       </div>
       <div class="brief_info" ng-if="!briefInfo.absence">
         <div class="currentDate"><i class="icon ion-android-calendar iconStyleHome1"></i> {{date | date:'EEEE, d MMMM yyyy' | capitalize}}</div>
-        <div class="button-norm-brief">&nbsp;&nbsp;Entrata Ore  &nbsp;&nbsp; {{briefInfo.ore_entrata}}</div>
-        <div class="button-norm-brief">&nbsp;&nbsp;Uscita Ore  &nbsp;&nbsp; {{briefInfo.ore_uscita}}</div>
+        <div class="button-norm-brief" ng-click="gotoEditDate();">&nbsp;&nbsp;Entrata Ore  &nbsp;&nbsp; {{briefInfo.ore_entrata}}</div>
+        <div class="button-norm-brief" ng-click="gotoEditDate();">&nbsp;&nbsp;Uscita Ore  &nbsp;&nbsp; {{briefInfo.ore_uscita}}</div>
         <div class="br_in" ng-if="briefInfo.bus">
             <i class="icon ion-android-bus iconStyleHome"></i> {{briefInfo.addressBus}}</div>
         <div class="br_in">

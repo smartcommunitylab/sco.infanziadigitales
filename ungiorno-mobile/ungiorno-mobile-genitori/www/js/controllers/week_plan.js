@@ -14,9 +14,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     console.log(profileService.getSchoolProfile());
     console.log(profileService.getBabyProfile());
     var fromtime=$scope.getSchoolProfileNormalConfig['fromTime'];
-    fromtime=fromtime.replace(/^0+/, '');
+    fromtime=$filter('date')( fromtime, 'H:mm' ).replace(/^0+/, '');
     var totime=$scope.getSchoolProfileNormalConfig['toTime'];
-    totime=totime.replace(/^0+/, '');
+    totime=$filter('date')( totime, 'H:mm' ).replace(/^0+/, '');
     if(fromtime=='' && totime==''){
         alert('No school Config');//TODO translate this
     }
@@ -29,17 +29,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             if(enabled && type=='Anticipo'){
                var tempServ=$scope.listServicesDb[i].timeSlots;
                fromtime=tempServ[0]['fromTime'];
-               fromtime=fromtime.replace(/^0+/, '');
+               fromtime=$filter('date')( fromtime, 'H:mm' ).replace(/^0+/, '');
             }
             if(enabled && type=='Posticipo'){
                 var tempServ=$scope.listServicesDb[i].timeSlots;
                 totime=tempServ[0]['toTime'];
-                totime=totime.replace(/^0+/, '');
+                totime=$filter('date')( totime, 'H:mm' ).replace(/^0+/, '');
             }
     }
     }
     console.log($scope.listServicesDb);
-    console.log(profileService.getSchoolProfile());
     
     week_planService.setGlobalParam($scope.appId,$scope.schoolId);
     var jsonTest=[];
@@ -68,9 +67,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.formatInfo = function(info){ 
         for(var i=0;i<=4;i++){
             if(info[i]['uscita']!=null && info[i]['uscita']!=undefined)
-                info[i]['uscita']=info[i]['uscita'].replace(/^0+/, '');
+                info[i]['uscita']=$filter('date')( info[i]['uscita'], 'H:mm' ).replace(/^0+/, '');
             if(info[i]['entrata']!=null && info[i]['entrata']!=undefined)
-                info[i]['entrata']=info[i]['entrata'].replace(/^0+/, '');
+                info[i]['entrata']=$filter('date')( info[i]['entrata'], 'H:mm' ).replace(/^0+/, '');
          } 
          return info;
     };
@@ -233,9 +232,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.schoolId=profileService.getBabyProfile().schoolId;
     $scope.getSchoolProfileNormalConfig=$filter('getSchoolNormalService')(profileService.getSchoolProfile().services);
     var fromtime=$scope.getSchoolProfileNormalConfig['fromTime'];
-    fromtime=fromtime.replace(/^0+/, '');
+    fromtime=$filter('date')(fromtime, 'H:mm' ).replace(/^0+/, '');
     var totime=$scope.getSchoolProfileNormalConfig['toTime'];
-    totime=totime.replace(/^0+/, '');
+    totime=$filter('date')(totime, 'H:mm' ).replace(/^0+/, '');
     if(fromtime=='' && totime==''){
         alert('No school Config');//TODO translate this
     }
@@ -248,17 +247,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             if(enabled && type=='Anticipo'){
                var tempServ=$scope.listServicesDb[i].timeSlots;
                fromtime=tempServ[0]['fromTime'];
-               fromtime=fromtime.replace(/^0+/, '');
+               fromtime=$filter('date')(fromtime, 'H:mm' ).replace(/^0+/, '');
             }
             if(enabled && type=='Posticipo'){
                 var tempServ=$scope.listServicesDb[i].timeSlots;
                 totime=tempServ[0]['toTime'];
-                totime=totime.replace(/^0+/, '');
+                totime=$filter('date')(totime, 'H:mm' ).replace(/^0+/, '');
             }
     }
     }
-    console.log($scope.listServicesDb);
-    console.log(profileService.getSchoolProfile());
     week_planService.setGlobalParam($scope.appId,$scope.schoolId);
     $scope.editView=false;
     $scope.ritiraOptions=[];
@@ -280,9 +277,20 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         return (day==$scope.currDay ? true : false);
     };
 
+    $scope.formatInfo = function(info){ 
+        for(var i=0;i<=4;i++){
+            if(info[i]['uscita']!=null && info[i]['uscita']!=undefined)
+                info[i]['uscita']=$filter('date')( info[i]['uscita'], 'H:mm' ).replace(/^0+/, '');
+            if(info[i]['entrata']!=null && info[i]['entrata']!=undefined)
+                info[i]['entrata']=$filter('date')( info[i]['entrata'], 'H:mm' ).replace(/^0+/, '');
+         } 
+         return info;
+    };
+
     $scope.getWeekPlanDB =  function(day) {
         week_planService.getDefaultWeekPlan($scope.kidId).then(function (data) {
             if(data!=null){
+                data=$scope.formatInfo(data);
                 $scope.days=data;
                 jsonTest=data;
                 for(var i=0;i<=4;i++){
@@ -295,6 +303,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 {'name':'wednesday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':'NameTest'},
                 {'name':'thursday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':'NameTest'},
                 {'name':'friday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':'NameTest'}];
+                jsonTest=$scope.formatInfo(jsonTest);
                 $scope.days=jsonTest;
                 for(var i=0;i<=4;i++){
                    week_planService.setDayData(i,$scope.days[i],'');
@@ -443,10 +452,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             if(enabled){
                var tempServ=$scope.listServicesDb[i].timeSlots;
                for(var j=0;j<tempServ.length;j++){
-                   fr=$filter('date')( tempServ[j]['fromTime'], 'H:mm' ).replace(/^0+/, '');
-                   to=$filter('date')( tempServ[j]['toTime'], 'H:mm' ).replace(/^0+/, '');
+                   fr=moment(tempServ[j]['fromTime']).format('H:mm');
+                   to=moment(tempServ[j]['toTime']).format('H:mm');
                    var temp={'value':tempServ[j]['name'],'label':tempServ[j]['name'],
-                   'entry':fr,'out':to,
+                   'entry':fr,'out':to,'entry_time':new Date(moment(tempServ[j]['fromTime']).format()).getTime(),'out_time':new Date(moment(tempServ[j]['toTime']).format()).getTime(),
                    'type':type};
                    $scope.listServices.push(temp);
                }
@@ -454,19 +463,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         }
         $scope.getSchoolProfileNormalConfig=$filter('getSchoolNormalService')(profileService.getSchoolProfile().services);
         var fromtime=$scope.getSchoolProfileNormalConfig['fromTime'];
-        fromtime=$filter('date')(fromtime, 'H:mm' ).replace(/^0+/, '');
+        fromtimeFormatted=moment(fromtime).format('H:mm');
+        fromtime=new Date(moment(fromtime).format()).getTime();
         var totime=$scope.getSchoolProfileNormalConfig['toTime'];
-        totime=$filter('date')(totime, 'H:mm' ).replace(/^0+/, '');
+        totimeFormatted=moment(totime).format('H:mm');
+        totime=new Date(moment(totime).format()).getTime();
         var temp={'value':'Normale','label':'Normale',
-        'entry':fr,'out':to,
+        'entry':fromtimeFormatted,'out':totimeFormatted,'entry_time':fromtime,'out_time':totime,
         'type':'Normale'};
         $scope.listServices.push(temp);
-        ($scope.listServices).forEach(function(data){
-            console.log(data);console.log(data.entry);
-            data.entry = new Date(data.entry);
-            data.out = new Date(data.out);
-       });
-       console.log($scope.listServices);
     };
     $scope.getListServices();
 
@@ -485,7 +490,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
               title: $filter('translate')('orario_entrata'),
               cssClass: 'expired-popup',
              template: '<input type="text" ng-model="currData.entrata"/>'+
-                  ' <div><ion-list class="padlist" ng-repeat="(key, item) in listServices | groupBy: \'type\'" >'+
+                  ' <div><ion-list class="padlist" ng-repeat="(key, item) in listServices | orderBy:\'entry_time\' | groupBy: \'type\'   " >'+
                   '<ion-item >{{key}}</ion-item >'+
                   '<ion-radio ng-repeat="itemValue in item" ng-click="setEntry(itemValue)">{{itemValue.entry}}</ion-radio>'+
               '</ion-list>'+
@@ -508,7 +513,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
               cssClass: 'expired-popup',
               //templateUrl: '../../templates/week_entry_out_services.html',
               template: '<input type="text" ng-model="currData.uscita"/>'+
-              ' <div><ion-list class="padlist" ng-repeat="(key, item) in listServices | groupBy: \'type\'" >'+
+              ' <div><ion-list class="padlist" ng-repeat="(key, item) in listServices | orderBy:\'out_time\' | groupBy: \'type\'  " >'+
               '<ion-item >{{key}}</ion-item >'+
               '<ion-radio ng-repeat="itemValue in item" ng-click="setOut(itemValue)">{{itemValue.out}}</ion-radio>'+
           '</ion-list>'+
@@ -529,7 +534,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
 })
 .controller('WeekEditDayCtrl', function ($scope, moment, dataServerService, week_planService, profileService , $ionicModal, $filter, $ionicPopup,$state) {
-    $scope.days={};
+    $scope.days=[];
     var dated = new Date();
     $scope.currDay = 0;
     $scope.currData = {};
@@ -574,7 +579,20 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             }
         }
         week_planService.setMode('edit');
-        $state.go('app.week_plan');
+        var getIsFromHome=week_planService.getIsFromHome();
+        if(getIsFromHome){
+            var currWeek=week_planService.getCurrentWeek();
+            for(var i=0;i<=4;i++){
+                $scope.days[i]=week_planService.getDayData(i);
+            }
+            week_planService.setWeekPlan($scope.days,$scope.kidId,currWeek).then(function (data) {
+                $state.go('app.home');
+            }, function (error) {
+            });
+            
+        }else{
+            $state.go('app.week_plan');
+        }
     };
     
     $scope.modifyDay = function() {
@@ -582,7 +600,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
 
     $scope.cancel = function() {
-        $state.go('app.week_plan');
+        var getIsFromHome=week_planService.getIsFromHome();
+        if(getIsFromHome){
+            $state.go('app.home');
+        }else{
+            $state.go('app.week_plan');
+        }
     };
 
 
@@ -681,57 +704,86 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     }
 
 })
-.controller('Promemoria', function ($scope, moment, dataServerService, profileService , $ionicModal, $filter, $ionicPopup,$state,$cordovaLocalNotification) {
+.controller('Promemoria', function ($scope, moment, dataServerService, profileService , $ionicModal, $filter, $ionicPopup,$state,$cordovaLocalNotification,week_planService) {
     $scope.days={};
     var dated = new Date();
     $scope.currDay = 0;
     $scope.currData = {};
     $scope.kidId=profileService.getBabyProfile().kidId;
     $scope.schoolId=profileService.getBabyProfile().schoolId;
-    //$scope.currData==dataServerService.getNotificationSettings($scope.schoolId,$scope.kidId);
 
     var date =new Date();
     var idNotification = 0;
     var notifArray = [];
-    var now = new Date().getTime(),
-    _60_seconds_from_now = new Date(now + 60*1000);
-
-    notifArray.push({
+    var now = new Date().getTime();
+    var day_summ={
         id: idNotification,
         title: $filter('translate')('notification_day_summary_title'),
         text: $filter('translate')('notification_day_summary_text'),
         icon: 'res://notification.png',
-        //autoCancel: false,
         autoClear: false,
-        firstAt: _60_seconds_from_now,
-        every: 100
-    });
-    notifArray.push({
-        id: idNotification,
+        every: "minute",
+        data: {
+            'type': 'day_summary'
+        }
+    };
+    var week = {
+        id: idNotification++,
         title: $filter('translate')('notification_day_summary_title'),
         text: $filter('translate')('notification_week_text'),
         icon: 'res://notification.png',
         //autoCancel: false,
         autoClear: false,
         every:'week',
-        at: 1
-    });
-    notifArray.push({
-        id: idNotification,
+        at: 1,
+        data: {
+            'type': 'week'
+        }
+    };
+    var ritiro ={
+        id: idNotification++,
         title: $filter('translate')('notification_day_summary_title'),
         text: $filter('translate')('notification_ritiro_text'),
         icon: 'res://notification.png',
         //autoCancel: false,
         autoClear: false,
         every:'day',
-        at: '08:30'
-    });
+        at: '08:30',
+        data: {
+            'type': 'ritiro'
+        }
+    };
 
-    if (window.cordova && cordova.plugins && cordova.plugins.notification){
-        cordova.plugins.notification.local.schedule(notifArray);
-    
-       cordova.plugins.notification.local.on("click", function (notification) {
-          $state.go("app.week_plan")
+    $scope.setNotify = function() {
+        cordova.plugins.notification.local.clearAll(function () {
+            cordova.plugins.notification.local.cancelAll(function () {
+                cordova.plugins.notification.local.getAll(function (notifications) {
+                    console.log(JSON.stringify(notifications));
+                });
+            });
         });
-    }
+        console.log($scope.currData);
+            if($scope.currData['prom_day_summary']){
+                console.log('ketu');
+                cordova.plugins.notification.local.schedule(day_summ);
+                cordova.plugins.notification.local.on("click", function (notification) {
+                    $state.go("app.home");
+                });
+            }
+            if($scope.currData['prom_week']){console.log('ketu1');
+                cordova.plugins.notification.local.schedule(week);
+                cordova.plugins.notification.local.on("click", function (notification) {
+                    $state.go("app.week_plan");
+                });
+            }
+            if($scope.currData['prom_day_ritiro']){console.log('ketu2');
+                cordova.plugins.notification.local.schedule(ritiro);
+                cordova.plugins.notification.local.on("click", function (notification) {
+                    $state.go("app.home");
+                });
+            }
+            cordova.plugins.notification.local.getAll(function (notifications) {
+                console.log(notifications);
+            });
+        }    
 })

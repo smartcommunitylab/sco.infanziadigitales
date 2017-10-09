@@ -253,6 +253,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     var day=currentDate.format('d')-1;
     $scope.ritiraOptions=$scope.kidProfile.persons;
     var jsonTest={};
+    $scope.weekInfo=[];
     $scope.getSchoolProfileNormalConfig=$filter('getSchoolNormalService')(profileService.getSchoolProfile().services);
     var fromtime=$scope.getSchoolProfileNormalConfig['fromTime'];
     fromtime=fromtime.replace(/^0+/, '');
@@ -288,6 +289,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         'bus':data[day]['bus'],'absence':data[day]['absence'],
         'motivazione':{type:motiv_type,subtype:motiv_subtype}
       };
+        $scope.weekInfo=data;
         $scope.briefInfo= jsonTest;
       }
       else{
@@ -300,6 +302,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                'bus':data[day]['bus'],'absence':data[day]['absence'],
                'motivazione':{type:motiv_type,subtype:motiv_subtype}
              };
+             $scope.weekInfo=data;
              $scope.briefInfo= jsonTest;
             }else{
               jsonTest={'ore_entrata':fromtime,'ore_uscita':totime,'addressBus':'Nome Test',
@@ -307,12 +310,40 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
               'bus':false,'absence':false,
               'motivazione':{type:'',subtype:''}
             }
+              $scope.weekInfo=data;
+              $scope.briefInfo= jsonTest;
           }}, function (error) {
           });
       }
   }, function (error) {
   });
   }
+
+  $scope.gotoEditDate = function() {
+    $scope.currentDate = moment();
+    $scope.currWeek = $scope.currentDate.format('w');
+    var day=$scope.currentDate.format('d')-1;
+    var selected = moment().weekday(day).week($scope.currWeek);
+
+    $scope.mode='edit';
+    var dayData=$scope.weekInfo[day];
+    for(var i=0;i<=4;i++){
+      week_planService.setDayData(i,$scope.weekInfo[i],'');
+    }
+    dayData['monday']=false;
+    dayData['tuesday']=false;
+    dayData['wednesday']=false;
+    dayData['thursday']=false;
+    dayData['friday']=false;
+    var dateFormat=selected.format('dddd D MMMM');
+    week_planService.setCurrentWeek($scope.currWeek);
+    week_planService.setSelectedDateInfo(dateFormat);
+    week_planService.setDayData(day,dayData,$scope.mode);
+    week_planService.fromHome(true);
+    $state.go('app.week_edit_day', {
+         day: day
+    });
+};
 
   $scope.isContact = function (element) {
     return (element.string == $filter('translate')('home_contatta'));

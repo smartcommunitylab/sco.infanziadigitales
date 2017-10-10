@@ -5,6 +5,7 @@ apps:
     messagingAppId : ugas.trento 
     gcmSenderApiKey : GCM_SENDER_API_KEY
     gcmSenderId : GCM_SENDER_ID
+    accountManager: EMAIL_TO_MANAGE_ALL_APP_DATA
     schools:
       - 
         schoolId: scuola

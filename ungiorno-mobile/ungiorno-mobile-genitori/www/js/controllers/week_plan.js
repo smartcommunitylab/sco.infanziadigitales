@@ -704,25 +704,141 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     }
 
 })
-.controller('Promemoria', function ($scope, moment, dataServerService, profileService , $ionicModal, $filter, $ionicPopup,$state,$cordovaLocalNotification,week_planService) {
+.controller('Promemoria', function ($scope, moment, dataServerService, profileService , $ionicModal ,$filter, $ionicPopup,$state,$cordovaLocalNotification,week_planService) {
     $scope.days={};
-    var dated = new Date();
     $scope.currDay = 0;
     $scope.currData = {};
+    $scope.selectables=['Monday','Tuesday','Wednesday','Thursday','Friday'];
+    $scope.currData['prom_day_summary']=(localStorage.getItem('prom_day_summary') =='true' ? true : false);
+    $scope.currData['prom_week']=(localStorage.getItem('prom_week') =='true' ? true : false);
+    $scope.currData['prom_day_ritiro']=(localStorage.getItem('prom_day_ritiro') =='true' ? true : false);
+    $scope.currData['prom_week_day']=(localStorage.getItem('prom_week_day') !== null && localStorage.getItem('prom_week_day') !== undefined ? localStorage.getItem('prom_week_day') : $scope.selectables[0]);
     $scope.kidId=profileService.getBabyProfile().kidId;
     $scope.schoolId=profileService.getBabyProfile().schoolId;
+    $scope.hourTimestamp = null;
+    $scope.timePickerObject24Hour={};
 
+    function setTimeWidget() {
+        var tempVal=(new Date()).getHours() * 60 * 60 + (new Date()).getMinutes() * 60;
+        if(localStorage.getItem('prom_day_time') !== null && localStorage.getItem('prom_day_time') !== undefined){
+            temp=localStorage.getItem('prom_day_time').split(':');
+            var selectedTime = new Date();
+            selectedTime.setHours(temp[0]);
+            selectedTime.setMinutes(temp[1]);
+            selectedTime.setSeconds(0);
+            tempVal=(selectedTime).getHours() * 60 * 60 + (selectedTime).getMinutes() * 60;
+        }
+        $scope.timePickerObject24Hour = {
+            inputEpochTime: tempVal, //Optional
+            step: 5, //Optional
+            format: 24, //Optional
+            titleLabel: $filter('translate')('popup_timepicker_title'), //Optional
+            closeLabel: $filter('translate')('popup_timepicker_cancel'), //Optional
+            setLabel: $filter('translate')('popup_timepicker_select'), //Optional
+            setButtonType: 'button-norm', //Optional
+            closeButtonType: 'button-norm', //Optional
+            callback: function (val) { //Mandatory
+                timePicker24Callback(val,'day',$scope.timePickerObject24Hour,'prom_day_time');
+            }
+        };
+        var val = tempVal;
+        var selectedTime = new Date();
+        selectedTime.setHours(val / 3600);
+        selectedTime.setMinutes((val % 3600) / 60);
+        selectedTime.setSeconds(0);
+        $scope.currData['prom_day_time'] = $filter('date')(selectedTime, 'H:mm');
+
+        // params for weekly notification
+        tempVal=(new Date()).getHours() * 60 * 60 + (new Date()).getMinutes() * 60;
+        if(localStorage.getItem('prom_week_time') !== null && localStorage.getItem('prom_week_time') !== undefined){
+            temp=localStorage.getItem('prom_week_time').split(':');
+            var selectedTime = new Date();
+            selectedTime.setHours(temp[0]);
+            selectedTime.setMinutes(temp[1]);
+            selectedTime.setSeconds(0);
+            tempVal=(selectedTime).getHours() * 60 * 60 + (selectedTime).getMinutes() * 60;
+        }
+        $scope.timePickerObject24HourWeek = {
+            inputEpochTime: tempVal, //Optional
+            step: 5, //Optional
+            format: 24, //Optional
+            titleLabel: $filter('translate')('popup_timepicker_title'), //Optional
+            closeLabel: $filter('translate')('popup_timepicker_cancel'), //Optional
+            setLabel: $filter('translate')('popup_timepicker_select'), //Optional
+            setButtonType: 'button-norm', //Optional
+            closeButtonType: 'button-norm', //Optional
+            callback: function (val) { //Mandatory
+                timePicker24Callback(val,'day',$scope.timePickerObject24HourWeek,'prom_week_time');
+            }
+        };
+        val = tempVal;
+        var selectedTime = new Date();
+        selectedTime.setHours(val / 3600);
+        selectedTime.setMinutes((val % 3600) / 60);
+        selectedTime.setSeconds(0);
+        $scope.currData['prom_week_time']=$filter('date')(selectedTime, 'H:mm');
+
+        // params for DAILY RITIRO notification
+        tempVal=(new Date()).getHours() * 60 * 60 + (new Date()).getMinutes() * 60;
+        if(localStorage.getItem('prom_ritiro_time') !== null && localStorage.getItem('prom_ritiro_time') !== undefined){
+            temp=localStorage.getItem('prom_ritiro_time').split(':');
+            var selectedTime = new Date();
+            selectedTime.setHours(temp[0]);
+            selectedTime.setMinutes(temp[1]);
+            selectedTime.setSeconds(0);
+            tempVal=(selectedTime).getHours() * 60 * 60 + (selectedTime).getMinutes() * 60;
+        }
+        $scope.timePickerObject24HourRitiro = {
+            inputEpochTime: tempVal, //Optional
+            step: 5, //Optional
+            format: 24, //Optional
+            titleLabel: $filter('translate')('popup_timepicker_title'), //Optional
+            closeLabel: $filter('translate')('popup_timepicker_cancel'), //Optional
+            setLabel: $filter('translate')('popup_timepicker_select'), //Optional
+            setButtonType: 'button-norm', //Optional
+            closeButtonType: 'button-norm', //Optional
+            callback: function (val) { //Mandatory
+                timePicker24Callback(val,'day',$scope.timePickerObject24HourRitiro,'prom_ritiro_time');
+            }
+        };
+        var val = tempVal;
+        var selectedTime = new Date();
+        selectedTime.setHours(val / 3600);
+        selectedTime.setMinutes((val % 3600) / 60);
+        selectedTime.setSeconds(0);
+        $scope.currData['prom_ritiro_time']=$filter('date')(selectedTime, 'H:mm');
+    }
+    
+    function timePicker24Callback(val,type,variable,name) {
+        if (typeof (val) === 'undefined') {
+            console.log('Time not selected');
+        } else {
+            variable.inputEpochTime = val;
+            var selectedTime = new Date();
+            selectedTime.setHours(val / 3600);
+            selectedTime.setMinutes((val % 3600) / 60);
+            selectedTime.setSeconds(0);
+            $scope.currData[name] = $filter('date')(selectedTime, 'H:mm');
+            localStorage.setItem(name,$filter('date')(selectedTime, 'H:mm')) ;
+        }
+    }
+    setTimeWidget();
+    
+    $scope.save_week_day=  function() {
+        localStorage.setItem('prom_week_day',$scope.currData['prom_week_day']) ;
+    }
     var date =new Date();
-    var idNotification = 0;
+    var idNotification = 7;
     var notifArray = [];
     var now = new Date().getTime();
     var day_summ={
-        id: idNotification,
+        id: idNotification++,
         title: $filter('translate')('notification_day_summary_title'),
         text: $filter('translate')('notification_day_summary_text'),
         icon: 'res://notification.png',
         autoClear: false,
-        every: "minute",
+        every: 1,
+        at :new Date(),
         data: {
             'type': 'day_summary'
         }
@@ -734,8 +850,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         icon: 'res://notification.png',
         //autoCancel: false,
         autoClear: false,
-        every:'week',
-        at: 1,
+        every:1, //1 * 60 * 24 * 7  // 1 week.
+        at:new Date(),
         data: {
             'type': 'week'
         }
@@ -747,43 +863,66 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         icon: 'res://notification.png',
         //autoCancel: false,
         autoClear: false,
-        every:'day',
-        at: '08:30',
+        every:1 ,//  1 * 60 * 24 //1 day
+        at:new Date(),
         data: {
             'type': 'ritiro'
         }
     };
+    
 
     $scope.setNotify = function() {
-        cordova.plugins.notification.local.clearAll(function () {
-            cordova.plugins.notification.local.cancelAll(function () {
-                cordova.plugins.notification.local.getAll(function (notifications) {
-                    console.log(JSON.stringify(notifications));
-                });
-            });
-        });
+        if (window.plugin && cordova && cordova.plugins && cordova.plugins.notification) {
+            cordova.plugins.notification.local.clearAll(function () {
+                cordova.plugins.notification.local.cancelAll(function () {
+            
         console.log($scope.currData);
+        localStorage.setItem('prom_day_summary', false);
+        localStorage.setItem('prom_week', false);
+        localStorage.setItem('prom_day_ritiro', false);
+        var notific=[];
             if($scope.currData['prom_day_summary']){
-                console.log('ketu');
-                cordova.plugins.notification.local.schedule(day_summ);
+                localStorage.setItem('prom_day_summary', true);
+                notific.push(day_summ);
+                //if (window.plugin && cordova && cordova.plugins && cordova.plugins.notification) {
+                //    cordova.plugins.notification.local.schedule(day_summ);
+                //    cordova.plugins.notification.local.on("click", function (notification) {
+                //        $state.go("app.home");
+                //    });
+                //}
+            }
+            if($scope.currData['prom_week']){
+                localStorage.setItem('prom_week', true);
+                notific.push(week);
+                //if (window.plugin && cordova && cordova.plugins && cordova.plugins.notification) {
+                //    cordova.plugins.notification.local.schedule(week);
+                //    cordova.plugins.notification.local.on("click", function (notification) {
+                //        $state.go("app.week_plan");
+                //    });
+                //}
+            }
+            if($scope.currData['prom_day_ritiro']){
+                localStorage.setItem('prom_day_ritiro', true);
+                notific.push(ritiro);
+                //if (window.plugin && cordova && cordova.plugins && cordova.plugins.notification) {
+                //    cordova.plugins.notification.local.schedule(ritiro);
+                //    cordova.plugins.notification.local.on("click", function (notification) {
+                //        $state.go("app.home");
+                //    });
+                //}
+            }
+
+                console.log(notific);
+                cordova.plugins.notification.local.schedule(notific);
                 cordova.plugins.notification.local.on("click", function (notification) {
                     $state.go("app.home");
                 });
-            }
-            if($scope.currData['prom_week']){console.log('ketu1');
-                cordova.plugins.notification.local.schedule(week);
-                cordova.plugins.notification.local.on("click", function (notification) {
-                    $state.go("app.week_plan");
+                cordova.plugins.notification.local.getAll(function (notifications) {
+                    console.log(localStorage);
+                    console.log(notifications);
                 });
-            }
-            if($scope.currData['prom_day_ritiro']){console.log('ketu2');
-                cordova.plugins.notification.local.schedule(ritiro);
-                cordova.plugins.notification.local.on("click", function (notification) {
-                    $state.go("app.home");
-                });
-            }
-            cordova.plugins.notification.local.getAll(function (notifications) {
-                console.log(notifications);
-            });
+        });
+        });
+    }
         }    
 })

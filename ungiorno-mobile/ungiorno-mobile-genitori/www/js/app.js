@@ -80,7 +80,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.notification',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.week_planService',
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.week_plan',
+    'it.smartcommunitylab.infanziadigitales.diario.parents.directives',
     'angularMoment',
+    'ionic-timepicker',
+    'ionic-modal-select',
   'monospaced.elastic'
 ])
 
@@ -776,7 +779,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     notification_day_summary_title:'Un Giorno a scuola',
     notification_day_summary_text:'Promemoria giornaliera',
     notification_week_text:'Promemoria settimanale',
-    notification_ritiro_text:'Promemoria ritiro'
+    notification_ritiro_text:'Promemoria ritiro',
+    popup_timepicker_title: 'Selezionare l\'ora',
+    popup_timepicker_cancel: 'Annulla',
+    popup_timepicker_select: 'Ok',
   });
 
   $translateProvider.translations('en', {

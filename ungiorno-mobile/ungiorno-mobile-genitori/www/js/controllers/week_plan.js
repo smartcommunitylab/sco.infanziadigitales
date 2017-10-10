@@ -489,7 +489,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
               scope: $scope,
               title: $filter('translate')('orario_entrata'),
               cssClass: 'expired-popup',
-             template: '<input type="text" ng-model="currData.entrata"/>'+
+             template: '<div class="space-from-top">'+
+             '<label class="plan-item-time">'+
+                ' <ionic-timepicker input-obj="timePickerObject24HourEntrata">'+
+                '<button ng-hide="true"></button>'+
+                '<span>'+
+                '  <standard-time-no-meridian etime="timePickerObject24HourEntrata.inputEpochTime"></standard-time-no-meridian>'+
+                ' </span>'+
+                ' </ionic-timepicker>'+
+                '</label>'+
+                '</div>'+
                   ' <div><ion-list class="padlist" ng-repeat="(key, item) in listServices | orderBy:\'entry_time\' | groupBy: \'type\'   " >'+
                   '<ion-item >{{key}}</ion-item >'+
                   '<ion-radio ng-repeat="itemValue in item" ng-click="setEntry(itemValue)">{{itemValue.entry}}</ion-radio>'+
@@ -512,7 +521,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
               title: $filter('translate')('orario_uscita'),
               cssClass: 'expired-popup',
               //templateUrl: '../../templates/week_entry_out_services.html',
-              template: '<input type="text" ng-model="currData.uscita"/>'+
+              template: '<div class="space-from-top">'+
+              '<label class="plan-item-time">'+
+                 ' <ionic-timepicker input-obj="timePickerObject24Hour">'+
+                 '<button ng-hide="true"></button>'+
+                 '<span>'+
+                 '  <standard-time-no-meridian etime="timePickerObject24Hour.inputEpochTime"></standard-time-no-meridian>'+
+                 ' </span>'+
+                 ' </ionic-timepicker>'+
+                 '</label>'+
+                 '</div>'+
               ' <div><ion-list class="padlist" ng-repeat="(key, item) in listServices | orderBy:\'out_time\' | groupBy: \'type\'  " >'+
               '<ion-item >{{key}}</ion-item >'+
               '<ion-radio ng-repeat="itemValue in item" ng-click="setOut(itemValue)">{{itemValue.out}}</ion-radio>'+
@@ -529,8 +547,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     }
 
     function setTimeWidget() {
+        var tempVal=(new Date()).getHours() * 60 * 60 + (new Date()).getMinutes() * 60;
+        if($scope.currData.uscita !== null && $scope.currData.uscita !== undefined){
+            temp=$scope.currData.uscita.split(':');
+            var selectedTime = new Date();
+            selectedTime.setHours(temp[0]);
+            selectedTime.setMinutes(temp[1]);
+            selectedTime.setSeconds(0);
+            tempVal=(selectedTime).getHours() * 60 * 60 + (selectedTime).getMinutes() * 60;
+        }
         $scope.timePickerObject24Hour = {
-            inputEpochTime: ((new Date()).getHours() * 60 * 60 + (new Date()).getMinutes() * 60), //Optional
+            inputEpochTime: tempVal, //Optional
             step: 5, //Optional
             format: 24, //Optional
             titleLabel: $filter('translate')('popup_timepicker_title'), //Optional
@@ -539,21 +566,44 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             setButtonType: 'button-popup', //Optional
             closeButtonType: 'button-popup', //Optional
             callback: function (val) { //Mandatory
-                timePicker24Callback(val);
+                timePicker24Callback(val,$scope.timePickerObject24Hour,'uscita');
+            }
+        };
+        tempVal=(new Date()).getHours() * 60 * 60 + (new Date()).getMinutes() * 60;
+        if($scope.currData.entrata !== null && $scope.currData.entrata !== undefined){
+            temp=$scope.currData.entrata.split(':');
+            var selectedTime = new Date();
+            selectedTime.setHours(temp[0]);
+            selectedTime.setMinutes(temp[1]);
+            selectedTime.setSeconds(0);
+            tempVal=(selectedTime).getHours() * 60 * 60 + (selectedTime).getMinutes() * 60;
+        }
+        $scope.timePickerObject24HourEntrata = {
+            inputEpochTime: tempVal, //Optional
+            step: 5, //Optional
+            format: 24, //Optional
+            titleLabel: $filter('translate')('popup_timepicker_title'), //Optional
+            closeLabel: $filter('translate')('popup_timepicker_cancel'), //Optional
+            setLabel: $filter('translate')('popup_timepicker_select'), //Optional
+            setButtonType: 'button-popup', //Optional
+            closeButtonType: 'button-popup', //Optional
+            callback: function (val) { //Mandatory
+                timePicker24Callback(val,$scope.timePickerObject24HourEntrata,'entrata');
             }
         };
     }
 
-    function timePicker24Callback(val) {
+    function timePicker24Callback(val,variable,name) {
         if (typeof (val) === 'undefined') {
             console.log('Time not selected');
         } else {
-            $scope.timePickerObject24Hour.inputEpochTime = val;
+            variable.inputEpochTime = val;
             var selectedTime = new Date();
             selectedTime.setHours(val / 3600);
             selectedTime.setMinutes((val % 3600) / 60);
             selectedTime.setSeconds(0);
-            $scope.hourTimestamp = $filter('date')(selectedTime, 'hh:mma');
+            $scope.currData[name] = $filter('date')(selectedTime, 'H:mm');
+            localStorage.setItem(name,$filter('date')(selectedTime, 'H:mm')) ;
         }
     }
     setTimeWidget();

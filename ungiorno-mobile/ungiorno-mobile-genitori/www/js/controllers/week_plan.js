@@ -528,6 +528,36 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
           }
     }
 
+    function setTimeWidget() {
+        $scope.timePickerObject24Hour = {
+            inputEpochTime: ((new Date()).getHours() * 60 * 60 + (new Date()).getMinutes() * 60), //Optional
+            step: 5, //Optional
+            format: 24, //Optional
+            titleLabel: $filter('translate')('popup_timepicker_title'), //Optional
+            closeLabel: $filter('translate')('popup_timepicker_cancel'), //Optional
+            setLabel: $filter('translate')('popup_timepicker_select'), //Optional
+            setButtonType: 'button-popup', //Optional
+            closeButtonType: 'button-popup', //Optional
+            callback: function (val) { //Mandatory
+                timePicker24Callback(val);
+            }
+        };
+    }
+
+    function timePicker24Callback(val) {
+        if (typeof (val) === 'undefined') {
+            console.log('Time not selected');
+        } else {
+            $scope.timePickerObject24Hour.inputEpochTime = val;
+            var selectedTime = new Date();
+            selectedTime.setHours(val / 3600);
+            selectedTime.setMinutes((val % 3600) / 60);
+            selectedTime.setSeconds(0);
+            $scope.hourTimestamp = $filter('date')(selectedTime, 'hh:mma');
+        }
+    }
+    setTimeWidget();
+
     $scope.setBusHour= function() {
 
     }
@@ -820,12 +850,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             selectedTime.setSeconds(0);
             $scope.currData[name] = $filter('date')(selectedTime, 'H:mm');
             localStorage.setItem(name,$filter('date')(selectedTime, 'H:mm')) ;
+            $scope.setNotify();
         }
     }
     setTimeWidget();
     
     $scope.save_week_day=  function() {
         localStorage.setItem('prom_week_day',$scope.currData['prom_week_day']) ;
+        $scope.setNotify();
     }
     var date =new Date();
     var idNotification = 7;
@@ -837,7 +869,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         text: $filter('translate')('notification_day_summary_text'),
         icon: 'res://notification.png',
         autoClear: false,
-        every: 1,
+        every:  1 * 60 * 24, //1 day
         at :new Date(),
         data: {
             'type': 'day_summary'
@@ -850,7 +882,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         icon: 'res://notification.png',
         //autoCancel: false,
         autoClear: false,
-        every:1, //1 * 60 * 24 * 7  // 1 week.
+        every: 1 * 60 * 24 * 7,  // 1 week.
         at:new Date(),
         data: {
             'type': 'week'
@@ -863,7 +895,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         icon: 'res://notification.png',
         //autoCancel: false,
         autoClear: false,
-        every:1 ,//  1 * 60 * 24 //1 day
+        every:  1 * 60 * 24, //1 day
         at:new Date(),
         data: {
             'type': 'ritiro'
@@ -883,44 +915,59 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         var notific=[];
             if($scope.currData['prom_day_summary']){
                 localStorage.setItem('prom_day_summary', true);
+                temp=$scope.currData['prom_day_time'].split(':');
+                var selectedTime = new Date();
+                selectedTime.setHours(temp[0]);
+                selectedTime.setMinutes(temp[1]);
+                selectedTime.setSeconds(0);
+                console.log(selectedTime.getHours());
+                console.log(selectedTime.getMinutes());
+                day_summ.at=selectedTime;
                 notific.push(day_summ);
-                //if (window.plugin && cordova && cordova.plugins && cordova.plugins.notification) {
-                //    cordova.plugins.notification.local.schedule(day_summ);
-                //    cordova.plugins.notification.local.on("click", function (notification) {
-                //        $state.go("app.home");
-                //    });
-                //}
             }
             if($scope.currData['prom_week']){
                 localStorage.setItem('prom_week', true);
+                temp=$scope.currData['prom_week_time'].split(':');
+                var tempDay=$scope.currData['prom_week_day'];
+                var next = moment(new Date());
+                next.set({
+                    'hour' : temp[0],
+                    'minute'  : temp[1], 
+                    'day' : tempDay
+                 });
+                var selectedTime = next.toDate();
+                console.log(selectedTime.getDate());
+                console.log(selectedTime.getDay());
+                console.log(selectedTime.getHours());
+                console.log(selectedTime.getMinutes());
+                console.log(next.format('YYYY-MM-DD HH:mm'));
+                week.at=selectedTime;
                 notific.push(week);
-                //if (window.plugin && cordova && cordova.plugins && cordova.plugins.notification) {
-                //    cordova.plugins.notification.local.schedule(week);
-                //    cordova.plugins.notification.local.on("click", function (notification) {
-                //        $state.go("app.week_plan");
-                //    });
-                //}
             }
             if($scope.currData['prom_day_ritiro']){
                 localStorage.setItem('prom_day_ritiro', true);
+                temp=$scope.currData['prom_ritiro_time'].split(':');
+                $scope.briefInfo=profileService.getBriefInfo();
+                var ore_uscita = $scope.briefInfo.ore_uscita.split(':');
+                var usc=moment().hour(ore_uscita[0]);
+                var usc=moment().minute(ore_uscita[1]);
+                dateFrom = usc.subtract(temp[0],'hours');
+                dateFrom = dateFrom.subtract(temp[1],'minutes');
+                var selectedTime = dateFrom.toDate();
+                //console.log(selectedTime);
+                //console.log(dateFrom.format('YYYY/mm/dm HH:mm'));
+                ritiro.at=selectedTime;
                 notific.push(ritiro);
-                //if (window.plugin && cordova && cordova.plugins && cordova.plugins.notification) {
-                //    cordova.plugins.notification.local.schedule(ritiro);
-                //    cordova.plugins.notification.local.on("click", function (notification) {
-                //        $state.go("app.home");
-                //    });
-                //}
             }
 
-                console.log(notific);
-                cordova.plugins.notification.local.schedule(notific);
-                cordova.plugins.notification.local.on("click", function (notification) {
-                    $state.go("app.home");
-                });
-                cordova.plugins.notification.local.getAll(function (notifications) {
-                    console.log(localStorage);
+            console.log(notific);
+            cordova.plugins.notification.local.schedule(notific);
+            cordova.plugins.notification.local.on("click", function (notification) {
+                 $state.go("app.home");
+            });
+            cordova.plugins.notification.local.getAll(function (notifications) {
                     console.log(notifications);
-                });
+            });
         });
         });
     }

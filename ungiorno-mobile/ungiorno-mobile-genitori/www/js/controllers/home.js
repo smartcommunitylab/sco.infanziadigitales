@@ -291,6 +291,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
       };
         $scope.weekInfo=data;
         $scope.briefInfo= jsonTest;
+        profileService.setBriefInfo($scope.briefInfo);
       }
       else{
           week_planService.getDefaultWeekPlan(kidId).then(function (data) {
@@ -304,6 +305,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
              };
              $scope.weekInfo=data;
              $scope.briefInfo= jsonTest;
+             profileService.setBriefInfo($scope.briefInfo);
             }else{
               jsonTest={'ore_entrata':fromtime,'ore_uscita':totime,'addressBus':'Nome Test',
               'delegaName':'','delegaType':'',
@@ -312,6 +314,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             }
               $scope.weekInfo=data;
               $scope.briefInfo= jsonTest;
+              profileService.setBriefInfo($scope.briefInfo);
           }}, function (error) {
           });
       }

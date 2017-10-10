@@ -11,7 +11,8 @@ apps:
         name: scuola1
         address: school1-address
         accessEmail: EMAIL_TO_ACCESS_UN_GIORNO_INSEGNANTE
-        account: EMAIL_SCHOOL_DATA_MANAGER
+        accounts: 
+          - EMAIL_SCHOOL_DATA_MANAGER
         tags: 
           - tag1
           - tag2
@@ -27,4 +28,3 @@ apps:
     schools:
       -
         schoolId: test
-        

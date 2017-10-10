@@ -114,7 +114,7 @@ public class AppSetup {
             schools = new ArrayList<>();
             for (AppInfo app : apps) {
                 for (School school : app.getSchools()) {
-                    if (account.equals(school.getAccount())) {
+                    if (school.getAccounts() != null && school.getAccounts().contains(account)) {
                         school.setAppId(app.getAppId());
                         schools.add(school);
                     }

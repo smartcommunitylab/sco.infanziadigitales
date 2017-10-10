@@ -30,7 +30,7 @@ public class School implements Serializable {
     private String schoolId;
     private String name;
     private String address;
-    private String account;
+    private List<String> accounts;
     private String accessEmail;
     private List<String> tags;
 
@@ -66,12 +66,12 @@ public class School implements Serializable {
         this.address = address;
     }
 
-    public String getAccount() {
-        return account;
+    public List<String> getAccounts() {
+        return accounts;
     }
 
-    public void setAccount(String account) {
-        this.account = account;
+    public void setAccounts(List<String> accounts) {
+        this.accounts = accounts;
     }
 
     public String getAppId() {

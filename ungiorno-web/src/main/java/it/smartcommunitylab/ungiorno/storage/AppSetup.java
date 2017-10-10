@@ -8,6 +8,8 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -21,6 +23,8 @@ import it.smartcommunitylab.ungiorno.model.SchoolProfile;
 
 @Component
 public class AppSetup {
+
+    private static final Logger logger = LoggerFactory.getLogger(AppSetup.class);
 
     @Value("classpath:/apps-info.yml")
     private Resource resource;
@@ -52,7 +56,9 @@ public class AppSetup {
                 schoolProfile.setAppId(cred.getAppId());
                 schoolProfile.setName(school.getName());
                 schoolProfile.setAddress(school.getAddress());
+                schoolProfile.setAccessEmail(school.getAccessEmail());
                 if (storage.getSchoolProfile(cred.getAppId(), school.getSchoolId()) == null) {
+                    logger.info("Creating schoolProfile, appId: %s, schoolId: %s");
                     storage.storeSchoolProfile(schoolProfile);
                 }
             }

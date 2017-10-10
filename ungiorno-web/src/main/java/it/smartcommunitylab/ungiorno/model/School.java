@@ -31,6 +31,7 @@ public class School implements Serializable {
     private String name;
     private String address;
     private String account;
+    private String accessEmail;
     private List<String> tags;
 
     public String getSchoolId() {
@@ -79,6 +80,14 @@ public class School implements Serializable {
 
     public void setAppId(String appId) {
         this.appId = appId;
+    }
+
+    public String getAccessEmail() {
+        return accessEmail;
+    }
+
+    public void setAccessEmail(String accessEmail) {
+        this.accessEmail = accessEmail;
     }
 
 }

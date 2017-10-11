@@ -4,7 +4,7 @@ package it.smartcommunitylab.ungiorno.controller;
 import it.smartcommunitylab.ungiorno.config.exception.ProfileNotFoundException;
 import it.smartcommunitylab.ungiorno.model.Author;
 import it.smartcommunitylab.ungiorno.model.ChatMessage;
-import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
+import it.smartcommunitylab.ungiorno.services.RepositoryService;
 import it.smartcommunitylab.ungiorno.usage.UsageEntity.UsageActor;
 import it.smartcommunitylab.ungiorno.usage.UsageManager;
 import it.smartcommunitylab.ungiorno.utils.NotificationManager;
@@ -39,7 +39,7 @@ public class ChatController {
 	private static final transient Logger logger = LoggerFactory.getLogger(ChatController.class);
 	
 	@Autowired
-	private RepositoryManager storage;
+	private RepositoryService storage;
 
 	@Autowired
 	private PermissionsManager permissions;

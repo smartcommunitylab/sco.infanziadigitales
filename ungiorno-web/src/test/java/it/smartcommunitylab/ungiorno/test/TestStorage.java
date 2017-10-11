@@ -17,7 +17,7 @@ import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import it.smartcommunitylab.ungiorno.model.KidCalRitiro;
-import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
+import it.smartcommunitylab.ungiorno.services.RepositoryService;
 
 /**
  * @author raman
@@ -29,7 +29,7 @@ import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
 public class TestStorage {
 
     @Autowired
-    private RepositoryManager storage;
+    private RepositoryService storage;
 
 
     // FIXME disable because it fail

@@ -9,7 +9,7 @@ import it.smartcommunitylab.ungiorno.model.Parent;
 import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.security.UnGiornoUserDetails;
 import it.smartcommunitylab.ungiorno.services.PermissionsService;
-import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
+import it.smartcommunitylab.ungiorno.services.RepositoryService;
 
 import java.util.List;
 
@@ -40,7 +40,7 @@ import eu.trentorise.smartcampus.profileservice.model.BasicProfile;
 public class PermissionsManager implements PermissionsService {
 
 	@Autowired
-	private RepositoryManager storage;
+	private RepositoryService storage;
 
 	private AACService service;
 	@Autowired

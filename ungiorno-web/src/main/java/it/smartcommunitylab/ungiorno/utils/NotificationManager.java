@@ -45,8 +45,8 @@ import it.smartcommunitylab.ungiorno.model.Communication;
 import it.smartcommunitylab.ungiorno.model.KidProfile;
 import it.smartcommunitylab.ungiorno.model.LoginData;
 import it.smartcommunitylab.ungiorno.model.School;
+import it.smartcommunitylab.ungiorno.services.RepositoryService;
 import it.smartcommunitylab.ungiorno.storage.AppSetup;
-import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
 
 /**
  * @author raman
@@ -76,7 +76,7 @@ public class NotificationManager {
     private CommunicatorConnector communicator;
 
     @Autowired
-    private RepositoryManager storage;
+    private RepositoryService storage;
 
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;

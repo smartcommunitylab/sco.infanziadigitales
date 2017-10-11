@@ -219,9 +219,12 @@
   "prom_day_ritiro_reason": "per il ritiro di mio/a figlio/a da scuola.",
   "at_time": "Alle ore",
   "at_day": "Il giorno",
-  "time_before": "ore prima dell'orario di uscita",
-  "notification_day_summary_title": "Un Giorno a scuola",
-  "notification_day_summary_text": "Promemoria giornaliera",
-  "notification_week_text": "Promemoria settimanale",
-  "notification_ritiro_text": "Promemoria ritiro"
+  "time_before":"ore prima dell'orario di uscita",
+  "notification_day_summary_title":"Un Giorno a scuola",
+  "notification_day_summary_text":"Promemoria giornaliera",
+  "notification_week_text":"Promemoria settimanale",
+  "notification_ritiro_text":"Promemoria ritiro",
+  "popup_timepicker_title": "Selezionare l'ora",
+  "popup_timepicker_cancel": "Annulla",
+  "popup_timepicker_select": "Ok"
 }

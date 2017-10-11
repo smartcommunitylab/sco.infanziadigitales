@@ -1,0 +1,93 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "angular-translate-loader-url",
+        "scope": null,
+        "escapedName": "angular-translate-loader-url",
+        "name": "angular-translate-loader-url",
+        "rawSpec": "",
+        "spec": "latest",
+        "type": "tag"
+      },
+      "/home/albana/Desktop/www/infanziadigitales/ungiorno-mobile/ungiorno-mobile-genitori"
+    ]
+  ],
+  "_from": "angular-translate-loader-url@latest",
+  "_id": "angular-translate-loader-url@2.15.2",
+  "_inCache": true,
+  "_location": "/angular-translate-loader-url",
+  "_nodeVersion": "4.3.2",
+  "_npmOperationalInternal": {
+    "host": "s3://npm-registry-packages",
+    "tmp": "tmp/angular-translate-loader-url-2.15.2.tgz_1498148288121_0.4019762952812016"
+  },
+  "_npmUser": {
+    "name": "knalli",
+    "email": "knallisworld@googlemail.com"
+  },
+  "_npmVersion": "3.8.5",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "angular-translate-loader-url",
+    "scope": null,
+    "escapedName": "angular-translate-loader-url",
+    "name": "angular-translate-loader-url",
+    "rawSpec": "",
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/angular-translate-loader-url/-/angular-translate-loader-url-2.15.2.tgz",
+  "_shasum": "d83e5b1abb3bd08b47fdbc02f7547975510c175f",
+  "_shrinkwrap": null,
+  "_spec": "angular-translate-loader-url",
+  "_where": "/home/albana/Desktop/www/infanziadigitales/ungiorno-mobile/ungiorno-mobile-genitori",
+  "author": {
+    "name": "Pascal Precht"
+  },
+  "bugs": {
+    "url": "https://github.com/angular-translate/angular-translate/issues"
+  },
+  "dependencies": {
+    "angular-translate": "~2.15.2"
+  },
+  "description": "Creates a loading function for a typical dynamic url pattern: \"locale.php?lang=en_US\", \"locale.php?lang=de_DE\", \"locale.php?language=nl_NL\" etc. Prefixing the specified url, the current requested, language id will be applied with \"?{queryParameter}={key}\"",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "d83e5b1abb3bd08b47fdbc02f7547975510c175f",
+    "tarball": "https://registry.npmjs.org/angular-translate-loader-url/-/angular-translate-loader-url-2.15.2.tgz"
+  },
+  "gitHead": "2c22ee13dbf9881c8d691b6113dacd2ac43a5299",
+  "homepage": "https://angular-translate.github.io",
+  "keywords": [
+    "angular",
+    "translate",
+    "loader"
+  ],
+  "license": "MIT",
+  "main": "angular-translate-loader-url.js",
+  "maintainers": [
+    {
+      "name": "mchambaud",
+      "email": "mchambaud@gmail.com"
+    },
+    {
+      "name": "knalli",
+      "email": "knallisworld@googlemail.com"
+    }
+  ],
+  "name": "angular-translate-loader-url",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/angular-translate/bower-angular-translate-loader-url.git"
+  },
+  "scripts": {},
+  "version": "2.15.2"
+}

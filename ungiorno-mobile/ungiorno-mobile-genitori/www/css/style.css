@@ -2159,6 +2159,8 @@ textarea {
   border: 0;
   margin:4px;
   padding: 2px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .day-name {

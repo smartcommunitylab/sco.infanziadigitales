@@ -5,6 +5,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.p
     var schoolProfile = null;
     var profileService = {};
     var babiesProfiles = [];
+    var briefInfo = {};
 
     profileService.setBabiesProfiles = function (input) {
         babiesProfiles = input;
@@ -28,6 +29,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.p
 
     profileService.getSchoolProfile = function () {
         return schoolProfile;
+    }
+
+    profileService.setBriefInfo = function (input) {
+        briefInfo = input;
+    }
+
+    profileService.getBriefInfo = function () {
+        return briefInfo;
     }
 
 

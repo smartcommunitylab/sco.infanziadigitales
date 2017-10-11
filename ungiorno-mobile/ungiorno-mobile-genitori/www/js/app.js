@@ -80,7 +80,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.notification',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.week_planService',
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.week_plan',
+    'it.smartcommunitylab.infanziadigitales.diario.parents.directives',
     'angularMoment',
+    'ionic-timepicker',
+    'ionic-modal-select',
   'monospaced.elastic'
 ])
 
@@ -184,6 +187,39 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
 	};
 
 	LoginService.init(cookieInitOptions);
+
+  //update notifications
+  var notificationInit = function () {
+    //scrivo le ultime di una settimana
+    if (localStorage.getItem(Config.getAppId() + '_lastUpdateTime') == null) {
+      date = new Date();
+      //date.setDate(date.getDate() - 7);
+      lastUpdateTime = date.getTime();
+    } else {
+      lastUpdateTime = localStorage.getItem(Config.getAppId() + '_lastUpdateTime');
+    }
+    notificationService.getNotifications(lastUpdateTime, 0, 10).then(function (items) { //solo le nuove
+      if (items) {
+        $rootScope.countNotification = items.length;
+
+        //last update time is the last time of notification
+        if (items.length > 0) {
+
+          lastUpdateTime = items[0].updateTime + 1;
+        }
+        localStorage.setItem(Config.getAppId() + '_lastUpdateTime', lastUpdateTime);
+      }
+    }, function (err) {
+
+      $rootScope.countNotification = 0;
+
+    });
+  }
+
+  document.addEventListener("resume", function () {
+    //notificationInit();
+  }, false);
+  
 
       if (window.cordova && window.cordova.plugins.Keyboard) {
         cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
@@ -300,7 +336,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
 .config(function ($stateProvider, $urlRouterProvider, $translateProvider, $ionicConfigProvider,$httpProvider) {
   $ionicConfigProvider.backButton.text('').previousTitleText(false);
 
-  $httpProvider.defaults.withCredentials=true;
+  var view=ionic.Platform.isWebView();
+  console.log(view);
+  if(!view){
+    $httpProvider.defaults.withCredentials=true;
+  }
   $stateProvider.state('app', {
     url: "/app",
     abstract: true,
@@ -735,7 +775,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     prom_day_ritiro_reason:'per il ritiro di mio/a figlio/a da scuola.',
     at_time:'Alle ore',
     at_day:'Il giorno',
-    time_before:'ore prima dell\'orario di uscita'
+    time_before:'ore prima dell\'orario di uscita',
+    notification_day_summary_title:'Un Giorno a scuola',
+    notification_day_summary_text:'Promemoria giornaliera',
+    notification_week_text:'Promemoria settimanale',
+    notification_ritiro_text:'Promemoria ritiro',
+    popup_timepicker_title: 'Selezionare l\'ora',
+    popup_timepicker_cancel: 'Annulla',
+    popup_timepicker_select: 'Ok',
   });
 
   $translateProvider.translations('en', {
@@ -949,7 +996,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     prom_day_ritiro_reason:'per il ritiro di mio/a figlio/a da scuola.',
     at_time:'Alle ore',
     at_day:'Il giorno',
-    time_before:'ore prima dell\'orario di uscita'
+    time_before:'ore prima dell\'orario di uscita',
+    notification_day_summary_title:'Un Giorno a scuola',
+    notification_day_summary_text:'Promemoria giornaliera',
+    notification_week_text:'Promemoria settimanale',
+    notification_ritiro_text:'Promemoria ritiro'
   });
 
   $translateProvider.translations('de', {
@@ -1169,9 +1220,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     prom_day_ritiro_reason:'per il ritiro di mio/a figlio/a da scuola.',
     at_time:'Alle ore',
     at_day:'Il giorno',
-    time_before:'ore prima dell\'orario di uscita'
+    time_before:'ore prima dell\'orario di uscita',
+    notification_day_summary_title:'Un Giorno a scuola',
+    notification_day_summary_text:'Promemoria giornaliera',
+    notification_week_text:'Promemoria settimanale',
+    notification_ritiro_text:'Promemoria ritiro'
   });
 
+  //$translateProvider.useUrlLoader('locales/it_it.lang.json');
   $translateProvider.preferredLanguage("it");
   $translateProvider.fallbackLanguage("it");
 });

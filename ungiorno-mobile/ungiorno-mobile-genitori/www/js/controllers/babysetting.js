@@ -15,24 +15,29 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
   if ($scope.babyConfiguration.services && $scope.babyConfiguration.services.bus) {
     $scope.busEnabled = $scope.babyConfiguration.services.bus.active;
   }
-  for (var k in $scope.babyProfile.services) {
-    if ($scope.babyProfile.services.hasOwnProperty(k)) {
-      if ($scope.babyProfile.services[k].enabled)
+  console.log($scope.babyProfile);
+  var count=0;
+  var temp;
+  for (var k in $scope.babyProfile.services.timeSlotServices) {
+    temp=$scope.babyProfile.services.timeSlotServices[count];
+      if (temp.enabled){
         $scope.babyServices.push({
-          text: k,
-          checked: $scope.babyConfiguration.services[k].active
-        })
-    }
+          text: temp.name,
+          checked: temp.enabled
+        });
+        count++;
+      }
   }
   //set hour
   var exitTime = new Date();
-  if (!$scope.babyProfile.services.posticipo.enabled) {
-    //creo data nuova con ora configurata e setto il model della pagina
-    exitTime.setHours(profileService.getSchoolProfile().regularTiming.toTime.substring(0, 2), profileService.getSchoolProfile().posticipoTiming.toTime.substring(3, 5), 0, 0);
-  } else {
-    exitTime.setHours(profileService.getSchoolProfile().posticipoTiming.toTime.substring(0, 2), profileService.getSchoolProfile().posticipoTiming.toTime.substring(3, 5), 0, 0);
-  }
+  $scope.briefInfo=profileService.getBriefInfo();
+  var ore_uscita=$scope.briefInfo['ore_uscita'].split(':');
+  var ore_entrata=$scope.briefInfo['ore_entrata'].split(':');
+  exitTime.setHours(ore_uscita[0], ore_uscita[1], 0, 0);
   $scope.time.value = exitTime;
+  var entryTime = new Date();
+  entryTime.setHours(ore_entrata[0], ore_entrata[1], 0, 0);
+  $scope.entrytime = entryTime;
 
   //set who get child
   $scope.retireDefault = {
@@ -40,12 +45,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
   };
 
   //if bus set stop
-  for (var i = 0; i < $scope.babyProfile.services.bus.stops.length; i++) {
-    $scope.busStops.push({
-      id: $scope.babyProfile.services.bus.stops[i].stopId,
-      //tmp I have only stopId
-      name: $scope.babyProfile.services.bus.stops[i].stopId
-    });
+  if($scope.babyProfile.services.bus!==null && $scope.babyProfile.services.bus!==undefined){
+    for (var i = 0; i < $scope.babyProfile.services.bus.stops.length; i++) {
+      $scope.busStops.push({
+        id: $scope.babyProfile.services.bus.stops[i].stopId,
+        //tmp I have only stopId
+        name: $scope.babyProfile.services.bus.stops[i].stopId
+      });
+    }
   }
   $scope.selectedBusGo = $scope.busStops[0];
   $scope.selectedBusBack = $scope.busStops[0];
@@ -108,13 +115,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
   $scope.getTimeLabel = function () {
     var day = moment($scope.time.value);
-    var result = day.format('HH:mm');
+    var result = day.format('H:mm');
     return result;
   }
 
   $scope.getTimeLabelEntry = function () {
-    var day = moment($scope.time.value);
-    var result = day.format('HH:mm');
+    var day = moment($scope.entrytime);
+    var result = day.format('H:mm');
     return result;
   }
 

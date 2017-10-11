@@ -253,11 +253,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     var day=currentDate.format('d')-1;
     $scope.ritiraOptions=$scope.kidProfile.persons;
     var jsonTest={};
+    $scope.weekInfo=[];
     $scope.getSchoolProfileNormalConfig=$filter('getSchoolNormalService')(profileService.getSchoolProfile().services);
     var fromtime=$scope.getSchoolProfileNormalConfig['fromTime'];
-    fromtime=$filter('date')( fromtime, 'HH:mm' );
+    fromtime=fromtime.replace(/^0+/, '');
     var totime=$scope.getSchoolProfileNormalConfig['toTime'];
-    totime=$filter('date')( totime, 'HH:mm' );
+    totime=totime.replace(/^0+/, '');
     if(fromtime=='' && totime==''){
         alert('No school Config');//TODO translate this
     }
@@ -270,12 +271,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             if(enabled && type=='Anticipo'){
                var tempServ=$scope.listServicesDb[i].timeSlots;
                fromtime=tempServ[0]['fromTime'];
-               fromtime=$filter('date')( fromtime, 'HH:mm' );
+               fromtime=fromtime.replace(/^0+/, '');
             }
             if(enabled && type=='Posticipo'){
                 var tempServ=$scope.listServicesDb[i].timeSlots;
                 totime=tempServ[0]['toTime'];
-                totime=$filter('date')( totime, 'HH:mm' );
+                totime=totime.replace(/^0+/, '');
             }
     }
     }
@@ -283,36 +284,69 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
       if(data!=null){
         var motiv_type=(data[day]['motivazione']!=undefined && data[day]['motivazione']!=null ? data[day]['motivazione']['type'] : '');
         var motiv_subtype=(data[day]['motivazione']!=undefined && data[day]['motivazione']!=null ? data[day]['motivazione']['subtype'] : '');
-        jsonTest={'ore_entrata':data[day]['entrata'],'ore_uscita':data[day]['uscita'],'addressBus':'Nome Test',
+        jsonTest={'ore_entrata':data[day]['entrata'].replace(/^0+/, ''),'ore_uscita':data[day]['uscita'].replace(/^0+/, ''),'addressBus':'Nome Test',
         'delegaName':$filter('getRitiroName')(data[day]['delega_name'],$scope.ritiraOptions),'delegaType':$filter('getRitiroType')(data[day]['delega_name'],$scope.ritiraOptions),
         'bus':data[day]['bus'],'absence':data[day]['absence'],
         'motivazione':{type:motiv_type,subtype:motiv_subtype}
       };
+        $scope.weekInfo=data;
         $scope.briefInfo= jsonTest;
+        profileService.setBriefInfo($scope.briefInfo);
       }
       else{
           week_planService.getDefaultWeekPlan(kidId).then(function (data) {
             if(data!=null){
                 var motiv_type=(data[day]['motivazione']!=undefined && data[day]['motivazione']!=null ? data[day]['motivazione']['type'] : '');
                var motiv_subtype=(data[day]['motivazione']!=undefined && data[day]['motivazione']!=null ? data[day]['motivazione']['subtype'] : '');
-               jsonTest={'ore_entrata':data[day]['entrata'],'ore_uscita':data[day]['uscita'],'addressBus':'Nome Test',
+               jsonTest={'ore_entrata':data[day]['entrata'].replace(/^0+/, ''),'ore_uscita':data[day]['uscita'].replace(/^0+/, ''),'addressBus':'Nome Test',
                'delegaName':$filter('getRitiroName')(data[day]['delega_name'],$scope.ritiraOptions),'delegaType':$filter('getRitiroType')(data[day]['delega_name'],$scope.ritiraOptions),
                'bus':data[day]['bus'],'absence':data[day]['absence'],
                'motivazione':{type:motiv_type,subtype:motiv_subtype}
              };
+             $scope.weekInfo=data;
              $scope.briefInfo= jsonTest;
+             profileService.setBriefInfo($scope.briefInfo);
             }else{
               jsonTest={'ore_entrata':fromtime,'ore_uscita':totime,'addressBus':'Nome Test',
               'delegaName':'','delegaType':'',
               'bus':false,'absence':false,
               'motivazione':{type:'',subtype:''}
             }
+              $scope.weekInfo=data;
+              $scope.briefInfo= jsonTest;
+              profileService.setBriefInfo($scope.briefInfo);
           }}, function (error) {
           });
       }
   }, function (error) {
   });
   }
+
+  $scope.gotoEditDate = function() {
+    $scope.currentDate = moment();
+    $scope.currWeek = $scope.currentDate.format('w');
+    var day=$scope.currentDate.format('d')-1;
+    var selected = moment().weekday(day).week($scope.currWeek);
+
+    $scope.mode='edit';
+    var dayData=$scope.weekInfo[day];
+    for(var i=0;i<=4;i++){
+      week_planService.setDayData(i,$scope.weekInfo[i],'');
+    }
+    dayData['monday']=false;
+    dayData['tuesday']=false;
+    dayData['wednesday']=false;
+    dayData['thursday']=false;
+    dayData['friday']=false;
+    var dateFormat=selected.format('dddd D MMMM');
+    week_planService.setCurrentWeek($scope.currWeek);
+    week_planService.setSelectedDateInfo(dateFormat);
+    week_planService.setDayData(day,dayData,$scope.mode);
+    week_planService.fromHome(true);
+    $state.go('app.week_edit_day', {
+         day: day
+    });
+};
 
   $scope.isContact = function (element) {
     return (element.string == $filter('translate')('home_contatta'));

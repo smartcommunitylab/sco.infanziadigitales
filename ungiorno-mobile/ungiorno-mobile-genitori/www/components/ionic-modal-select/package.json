@@ -1,0 +1,87 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "ionic-modal-select",
+        "scope": null,
+        "escapedName": "ionic-modal-select",
+        "name": "ionic-modal-select",
+        "rawSpec": "",
+        "spec": "latest",
+        "type": "tag"
+      },
+      "/home/albana/Desktop/www/infanziadigitales/ungiorno-mobile/ungiorno-mobile-genitori"
+    ]
+  ],
+  "_from": "ionic-modal-select@latest",
+  "_id": "ionic-modal-select@1.3.1-alpha.0",
+  "_inCache": true,
+  "_location": "/ionic-modal-select",
+  "_nodeVersion": "5.11.1",
+  "_npmOperationalInternal": {
+    "host": "packages-16-east.internal.npmjs.com",
+    "tmp": "tmp/ionic-modal-select-1.3.1-alpha.0.tgz_1467639626307_0.30433971085585654"
+  },
+  "_npmUser": {
+    "name": "bianchimro",
+    "email": "bianchimro@gmail.com"
+  },
+  "_npmVersion": "3.8.6",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "ionic-modal-select",
+    "scope": null,
+    "escapedName": "ionic-modal-select",
+    "name": "ionic-modal-select",
+    "rawSpec": "",
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "#USER"
+  ],
+  "_resolved": "https://registry.npmjs.org/ionic-modal-select/-/ionic-modal-select-1.3.1-alpha.0.tgz",
+  "_shasum": "3f55eb56bfccbf71982e406b4fb98fb7f7c98fa7",
+  "_shrinkwrap": null,
+  "_spec": "ionic-modal-select",
+  "_where": "/home/albana/Desktop/www/infanziadigitales/ungiorno-mobile/ungiorno-mobile-genitori",
+  "author": {
+    "name": "bianchimro@gmail.com"
+  },
+  "dependencies": {},
+  "description": "Modal select for ionic",
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-add-src": "^0.2.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-jsify-html-templates": "^0.1.0",
+    "gulp-minify-css": "^1.2.4",
+    "gulp-order": "^1.1.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-replace": "^0.5.4",
+    "gulp-uglify": "^1.3.0",
+    "jasmine-core": "^2.3.4",
+    "karma": "^0.13.15",
+    "karma-jasmine": "^0.3.6",
+    "karma-phantomjs-launcher": "^0.2.1",
+    "phantomjs": "^1.9.18"
+  },
+  "directories": {},
+  "dist": {
+    "shasum": "3f55eb56bfccbf71982e406b4fb98fb7f7c98fa7",
+    "tarball": "https://registry.npmjs.org/ionic-modal-select/-/ionic-modal-select-1.3.1-alpha.0.tgz"
+  },
+  "gitHead": "e074d3ddc9a2abbe9e099307292387e8d86a6eb9",
+  "license": "MIT",
+  "maintainers": [
+    {
+      "name": "bianchimro",
+      "email": "bianchimro@gmail.com"
+    }
+  ],
+  "name": "ionic-modal-select",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "scripts": {},
+  "version": "1.3.1-alpha.0"
+}

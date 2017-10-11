@@ -17,8 +17,10 @@
         </div>
 -->
         <ul class="home-info-content my-list home-comm">
-
-          <li class="huge row" ng-repeat="(key, data) in babyConfiguration.services" ng-if="key!='mensa'"><span class="col">{{ key|capitalize }}</span> <span class="col" ng-if="data.active">{{'babysetting_active' | translate| uppercase}}</span><span class="col" ng-if="!data.active">{{'babysetting_not_active' | translate | uppercase}}</span>
+          <li class="huge row" ng-repeat="service in babyConfiguration.services" ng-if="key!='mensa'">
+            <span class="col">{{ service.name |capitalize }}</span> 
+            <span class="col" ng-if="service.enabled">{{'babysetting_active' | translate| uppercase}}</span>
+            <span class="col" ng-if="!service.enabled">{{'babysetting_not_active' | translate | uppercase}}</span>
           </li>
 
         </ul>
@@ -29,16 +31,14 @@
         </ul>
 -->
 
-        <div class="input-description-padding row">{{'babysetting_hours' | translate}}:
-          <label class="item item-input setting setting-line">{{getTimeLabel()}}</label>
-        </div>
-
         <div class="input-description-padding row">{{'babysetting_hours_entry' | translate}}:
             <label class="item item-input setting setting-line">{{getTimeLabelEntry()}}</label>
         </div>
 
-
-
+        <div class="input-description-padding row">{{'babysetting_hours' | translate}}:
+          <label class="item item-input setting setting-line">{{getTimeLabel()}}</label>
+        </div>
+        
         <div class="input-description-padding">{{'babysetting_who' | translate}}</div>
         <ul class="home-info-content my-list home-comm">
           <li class="huge row" ng-repeat="person in babyProfile.persons"><span class="col">{{person.fullName}}</span></li>

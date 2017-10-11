@@ -250,10 +250,10 @@ export class WebService {
 
 
     convertedKid.allergies = kid.allergie.map(allergy => new Allergy(allergy,allergy));
-    if(kid.parent1) {
+    if(kid.parent1 && kid.parent1.id) {
      convertedKid.persons.push(this.convertToAuthPerson(kid.parent1));
     }
-    if(kid.parent2) {
+    if(kid.parent2 && kid.parent2.id) {
       convertedKid.persons.push(this.convertToAuthPerson(kid.parent2));
      }
 

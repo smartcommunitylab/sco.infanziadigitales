@@ -1,12 +1,15 @@
 package it.smartcommunitylab.ungiorno.storage;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -21,11 +24,19 @@ import it.smartcommunitylab.ungiorno.model.SchoolProfile;
 @Component
 public class AppSetup {
 
+    private static final Logger logger = LoggerFactory.getLogger(AppSetup.class);
+
     @Value("classpath:/apps-info.yml")
     private Resource resource;
 
     @Autowired
     private RepositoryManager storage;
+
+    private String uploadDirectory;
+    private List<AppInfo> apps;
+    private Map<String, AppInfo> appsMap;
+
+    private Map<String, List<School>> schoolsByAccount = new HashMap<>();
 
 
     @PostConstruct
@@ -45,7 +56,9 @@ public class AppSetup {
                 schoolProfile.setAppId(cred.getAppId());
                 schoolProfile.setName(school.getName());
                 schoolProfile.setAddress(school.getAddress());
+                schoolProfile.setAccessEmail(school.getAccessEmail());
                 if (storage.getSchoolProfile(cred.getAppId(), school.getSchoolId()) == null) {
+                    logger.info("Creating schoolProfile, appId: %s, schoolId: %s");
                     storage.storeSchoolProfile(schoolProfile);
                 }
             }
@@ -58,11 +71,6 @@ public class AppSetup {
             }
         }
     }
-
-
-    private String uploadDirectory;
-    private List<AppInfo> apps;
-    private Map<String, AppInfo> appsMap;
 
     public String getUploadDirectory() {
         return uploadDirectory;
@@ -95,5 +103,26 @@ public class AppSetup {
 
     public AppInfo findAppById(String username) {
         return appsMap.get(username);
+    }
+
+    public List<School> findSchoolsByAccount(String account) {
+        if (account == null) {
+            return new ArrayList<>();
+        }
+        List<School> schools = schoolsByAccount.get(account);
+        if (schools == null) {
+            schools = new ArrayList<>();
+            for (AppInfo app : apps) {
+                for (School school : app.getSchools()) {
+                    if (school.getAccounts() != null && school.getAccounts().contains(account)) {
+                        school.setAppId(app.getAppId());
+                        schools.add(school);
+                    }
+                }
+            }
+            schoolsByAccount.put(account, schools);
+        }
+
+        return schools;
     }
 }

@@ -37,6 +37,7 @@ import it.smartcommunitylab.ungiorno.model.SchoolProfile;
 import it.smartcommunitylab.ungiorno.model.SectionDef;
 import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.model.TimeSlotSchoolService;
+import it.smartcommunitylab.ungiorno.services.RepositoryService;
 import it.smartcommunitylab.ungiorno.test.TestConfig;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -44,7 +45,7 @@ import it.smartcommunitylab.ungiorno.test.TestConfig;
 public class RepositoryManagerTest {
 
     @Autowired
-    private RepositoryManager repoManager;
+    private RepositoryService repoManager;
 
     @Autowired
     private MongoTemplate mongo;

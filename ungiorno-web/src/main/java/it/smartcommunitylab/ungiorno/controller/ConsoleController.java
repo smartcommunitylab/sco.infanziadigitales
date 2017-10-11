@@ -22,9 +22,9 @@ import it.smartcommunitylab.ungiorno.importer.Importer;
 import it.smartcommunitylab.ungiorno.model.SchoolProfile;
 import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.security.AppDetails;
+import it.smartcommunitylab.ungiorno.services.RepositoryService;
 import it.smartcommunitylab.ungiorno.storage.App;
 import it.smartcommunitylab.ungiorno.storage.AppSetup;
-import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
 import it.smartcommunitylab.ungiorno.usage.UsageManager;
 
 import java.util.List;
@@ -53,7 +53,7 @@ public class ConsoleController {
 	private ServletContext context;
 
 	@Autowired
-	private RepositoryManager storage;
+	private RepositoryService storage;
 
 	@Autowired
 	private UsageManager usageManager;

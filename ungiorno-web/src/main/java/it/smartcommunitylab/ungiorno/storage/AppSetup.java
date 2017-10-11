@@ -20,6 +20,7 @@ import org.yaml.snakeyaml.constructor.Constructor;
 import it.smartcommunitylab.ungiorno.model.AppInfo;
 import it.smartcommunitylab.ungiorno.model.School;
 import it.smartcommunitylab.ungiorno.model.SchoolProfile;
+import it.smartcommunitylab.ungiorno.services.RepositoryService;
 
 @Component
 public class AppSetup {
@@ -30,7 +31,7 @@ public class AppSetup {
     private Resource resource;
 
     @Autowired
-    private RepositoryManager storage;
+    private RepositoryService storage;
 
     private String uploadDirectory;
     private List<AppInfo> apps;

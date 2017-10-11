@@ -21,8 +21,9 @@ import it.smartcommunitylab.ungiorno.model.Response;
 import it.smartcommunitylab.ungiorno.model.School;
 import it.smartcommunitylab.ungiorno.model.SchoolProfile;
 import it.smartcommunitylab.ungiorno.model.Teacher;
+import it.smartcommunitylab.ungiorno.services.RepositoryService;
+import it.smartcommunitylab.ungiorno.services.impl.KidManager;
 import it.smartcommunitylab.ungiorno.storage.AppSetup;
-import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
 import it.smartcommunitylab.ungiorno.utils.JsonUtil;
 import it.smartcommunitylab.ungiorno.utils.PermissionsManager;
 
@@ -42,10 +43,13 @@ public class ConsoleWebController {
     private AppSetup appSetup;
 
     @Autowired
-    private RepositoryManager storage;
+    private RepositoryService storage;
 
     @Autowired
     private PermissionsManager permissionsManager;
+
+    @Autowired
+    private KidManager kidManager;
 
     @RequestMapping(method = RequestMethod.GET, value = "/consoleweb/{appId}/me")
     public Response<List<School>> getMyData(@PathVariable String appId)
@@ -137,6 +141,7 @@ public class ConsoleWebController {
         }
 
         storage.updateChildren(appId, schoolId, kidProfiles);
+        kidManager.updateParents(kid);
         return new Response<>(kid);
     }
 

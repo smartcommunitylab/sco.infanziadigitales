@@ -61,7 +61,7 @@ import it.smartcommunitylab.ungiorno.model.Response;
 import it.smartcommunitylab.ungiorno.model.SchoolObject;
 import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.services.PermissionsService;
-import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
+import it.smartcommunitylab.ungiorno.services.RepositoryService;
 import it.smartcommunitylab.ungiorno.usage.UsageManager;
 import it.smartcommunitylab.ungiorno.utils.JsonUtil;
 
@@ -75,7 +75,7 @@ public class KidController {
 	private String imageDownloadDir;
 
 	@Autowired
-	private RepositoryManager storage;
+	private RepositoryService storage;
 
 	@Autowired
 	private PermissionsService permissions;

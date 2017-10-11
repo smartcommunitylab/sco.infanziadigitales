@@ -221,11 +221,15 @@ export class WebService {
     let services = serverKidData.services && serverKidData.services.timeSlotServices ? serverKidData.services.timeSlotServices.map(service => this.convertToService(service)) : null;
     let convertedKid = new Kid(serverKidData.kidId,serverKidData.firstName,serverKidData.lastName,serverKidData.gender,serverKidData.birthDate,serverKidData.image,null,null,null,null,null,null,allergies,serverKidData.partecipateToSperimentation,services);
     let parents = serverKidData.persons.filter(person => person.parent);
-    if(parents.length > 0) {
+    
+    if(parents.length == 1) {
       convertedKid.parent1 = this.convertToParent(parents[0]);
-      convertedKid.parent2 = parents.length == 2 ? this.convertToParent(parents[1]) : null;
+    }
+    if(parents.length == 2) {
+      convertedKid.parent2 = this.convertToParent(parents[1]);
     }
 
+    
     let deleghe = serverKidData.persons.filter(person => !person.parent);
     if(deleghe.length > 0) {
       deleghe.map(delega => this.convertToDelega(delega)).forEach(convertedDelega => convertedKid.deleghe.push(convertedDelega));

@@ -29,7 +29,7 @@ import { UserService } from '../services/user.service';
 import { LoginPage } from '../pages/login/login';
 
 
-function initConfig(config: ConfigService) {
+export function initConfig(config: ConfigService) {
   return () => config.load()
 }
 

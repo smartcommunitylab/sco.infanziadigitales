@@ -442,25 +442,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
     $scope.getRitiroOptions();
 
+    $scope.listServicesAnticipo=[];
+    $scope.listServicesPosticipo=[];
     $scope.getListServices = function(day) {
         $scope.listServicesDb=profileService.getBabyProfile().services.timeSlotServices;
-        var fr='';
-        var to='';
-        for(var i=0;i<$scope.listServicesDb.length;i++){
-            var type=$scope.listServicesDb[i].name;
-            var enabled=$scope.listServicesDb[i].enabled;
-            if(enabled){
-               var tempServ=$scope.listServicesDb[i].timeSlots;
-               for(var j=0;j<tempServ.length;j++){
-                   fr=moment(tempServ[j]['fromTime']).format('H:mm');
-                   to=moment(tempServ[j]['toTime']).format('H:mm');
-                   var temp={'value':tempServ[j]['name'],'label':tempServ[j]['name'],
-                   'entry':fr,'out':to,'entry_time':new Date(moment(tempServ[j]['fromTime']).format()).getTime(),'out_time':new Date(moment(tempServ[j]['toTime']).format()).getTime(),
-                   'type':type};
-                   $scope.listServices.push(temp);
-               }
-            }
-        }
+
         $scope.getSchoolProfileNormalConfig=$filter('getSchoolNormalService')(profileService.getSchoolProfile().services);
         var fromtime=$scope.getSchoolProfileNormalConfig['fromTime'];
         fromtimeFormatted=moment(fromtime).format('H:mm');
@@ -472,6 +458,33 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         'entry':fromtimeFormatted,'out':totimeFormatted,'entry_time':fromtime,'out_time':totime,
         'type':'Normale'};
         $scope.listServices.push(temp);
+        $scope.listServicesAnticipo.push(temp);
+        $scope.listServicesPosticipo.push(temp);
+        var fr='',fr2='';
+        var to='',to2='';
+        for(var i=0;i<$scope.listServicesDb.length;i++){
+            var type=$scope.listServicesDb[i].name;
+            var enabled=$scope.listServicesDb[i].enabled;
+            if(enabled){
+               var tempServ=$scope.listServicesDb[i].timeSlots;
+               for(var j=0;j<tempServ.length;j++){
+                   fr=moment(tempServ[j]['fromTime']).format('H:mm');
+                   to=moment(tempServ[j]['toTime']).format('H:mm');
+                   fr2=new Date(moment(tempServ[j]['fromTime']).format()).getTime();
+                   to2=new Date(moment(tempServ[j]['toTime']).format()).getTime();
+                   var temp={'value':tempServ[j]['name'],'label':tempServ[j]['name'],
+                   'entry':fr,'out':to,'entry_time':fr2,'out_time':to2,
+                   'type':type};
+                   $scope.listServices.push(temp);
+                   if(fr2<fromtime){
+                    $scope.listServicesAnticipo.push(temp);
+                   }
+                   if(to2>totime){
+                    $scope.listServicesPosticipo.push(temp);
+                   }
+               }
+            }
+        }
     };
     $scope.getListServices();
 
@@ -493,15 +506,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
              '<label class="plan-item-time">'+
                 ' <ionic-timepicker input-obj="timePickerObject24HourEntrata">'+
                 '<button ng-hide="true"></button>'+
-                '<span>'+
-                '  <standard-time-no-meridian etime="timePickerObject24HourEntrata.inputEpochTime"></standard-time-no-meridian>'+
+                '<span class="bar selez" >'+
+                ' <div>{{"Selezziona" | translate}}</div> &nbsp;<standard-time-no-meridian etime="timePickerObject24HourEntrata.inputEpochTime" class="lookeditable"></standard-time-no-meridian>'+
                 ' </span>'+
                 ' </ionic-timepicker>'+
                 '</label>'+
                 '</div>'+
-                  ' <div><ion-list class="padlist" ng-repeat="(key, item) in listServices | orderBy:\'entry_time\' | groupBy: \'type\'   " >'+
-                  '<ion-item >{{key}}</ion-item >'+
-                  '<ion-radio ng-repeat="itemValue in item" ng-click="setEntry(itemValue)">{{itemValue.entry}}</ion-radio>'+
+                  ' <div><ion-list class="padlist" ng-repeat="(key, item) in listServicesAnticipo | orderBy:\'entry_time\' | groupBy: \'type\'   " >'+
+                  '<ion-radio ng-repeat="itemValue in item" ng-click="setEntry(itemValue)">'
+                  +'<span style="float:left;">{{itemValue.value}}</span> <span style="float:right;">{{itemValue.entry}}</span></ion-radio>'+
               '</ion-list>'+
           '</ion-list></div>' ,
               buttons: [
@@ -525,15 +538,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
               '<label class="plan-item-time">'+
                  ' <ionic-timepicker input-obj="timePickerObject24Hour">'+
                  '<button ng-hide="true"></button>'+
-                 '<span>'+
-                 '  <standard-time-no-meridian etime="timePickerObject24Hour.inputEpochTime"></standard-time-no-meridian>'+
+                 '<span class="bar selez" >'+
+                 '  <div>{{"Selezziona" | translate}}</div> &nbsp;<standard-time-no-meridian etime="timePickerObject24Hour.inputEpochTime" class="lookeditable"></standard-time-no-meridian>'+
                  ' </span>'+
                  ' </ionic-timepicker>'+
                  '</label>'+
                  '</div>'+
-              ' <div><ion-list class="padlist" ng-repeat="(key, item) in listServices | orderBy:\'out_time\' | groupBy: \'type\'  " >'+
-              '<ion-item >{{key}}</ion-item >'+
-              '<ion-radio ng-repeat="itemValue in item" ng-click="setOut(itemValue)">{{itemValue.out}}</ion-radio>'+
+              ' <div><ion-list class="padlist" ng-repeat="(key, item) in listServicesPosticipo | orderBy:\'out_time\' | groupBy: \'type\'  " >'+
+              '<ion-radio ng-repeat="itemValue in item" ng-click="setOut(itemValue)">'
+              +'<span style="float:left;">{{itemValue.value}}</span> <span style="float:right;">{{itemValue.out}}</span></ion-radio>'+
           '</ion-list>'+
       '</ion-list></div>' ,
               buttons: [
@@ -701,18 +714,46 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
     $scope.getRitiroOptions();
 
+    $scope.listServicesAnticipo=[];
+    $scope.listServicesPosticipo=[];
     $scope.getListServices = function(day) {
         $scope.listServicesDb=profileService.getBabyProfile().services.timeSlotServices;
+
+        $scope.getSchoolProfileNormalConfig=$filter('getSchoolNormalService')(profileService.getSchoolProfile().services);
+        var fromtime=$scope.getSchoolProfileNormalConfig['fromTime'];
+        fromtimeFormatted=moment(fromtime).format('H:mm');
+        fromtime=new Date(moment(fromtime).format()).getTime();
+        var totime=$scope.getSchoolProfileNormalConfig['toTime'];
+        totimeFormatted=moment(totime).format('H:mm');
+        totime=new Date(moment(totime).format()).getTime();
+        var temp={'value':'Normale','label':'Normale',
+        'entry':fromtimeFormatted,'out':totimeFormatted,'entry_time':fromtime,'out_time':totime,
+        'type':'Normale'};
+        $scope.listServices.push(temp);
+        $scope.listServicesAnticipo.push(temp);
+        $scope.listServicesPosticipo.push(temp);
+        var fr='',fr2='';
+        var to='',to2='';
         for(var i=0;i<$scope.listServicesDb.length;i++){
             var type=$scope.listServicesDb[i].name;
             var enabled=$scope.listServicesDb[i].enabled;
             if(enabled){
                var tempServ=$scope.listServicesDb[i].timeSlots;
                for(var j=0;j<tempServ.length;j++){
+                   fr=moment(tempServ[j]['fromTime']).format('H:mm');
+                   to=moment(tempServ[j]['toTime']).format('H:mm');
+                   fr2=new Date(moment(tempServ[j]['fromTime']).format()).getTime();
+                   to2=new Date(moment(tempServ[j]['toTime']).format()).getTime();
                    var temp={'value':tempServ[j]['name'],'label':tempServ[j]['name'],
-                   'entry':$filter('date')(tempServ[j]['fromTime'],'H:mm'),out:$filter('date')(tempServ[j]['toTime'],'H:mm'),
+                   'entry':fr,'out':to,'entry_time':fr2,'out_time':to2,
                    'type':type};
                    $scope.listServices.push(temp);
+                   if(fr2<fromtime){
+                    $scope.listServicesAnticipo.push(temp);
+                   }
+                   if(to2>totime){
+                    $scope.listServicesPosticipo.push(temp);
+                   }
                }
             }
         }
@@ -737,15 +778,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
              '<label class="plan-item-time">'+
                 ' <ionic-timepicker input-obj="timePickerObject24HourEntrata">'+
                 '<button ng-hide="true"></button>'+
-                '<span>'+
-                '  <standard-time-no-meridian etime="timePickerObject24HourEntrata.inputEpochTime"></standard-time-no-meridian>'+
+                '<span class="bar selez" >'+
+                ' <div>{{"Selezziona" | translate}}</div> &nbsp;<standard-time-no-meridian etime="timePickerObject24HourEntrata.inputEpochTime" class="lookeditable"></standard-time-no-meridian>'+
                 ' </span>'+
                 ' </ionic-timepicker>'+
                 '</label>'+
                 '</div>'+
-                  ' <div><ion-list class="padlist" ng-repeat="(key, item) in listServices | orderBy:\'entry_time\' | groupBy: \'type\'   " >'+
-                  '<ion-item >{{key}}</ion-item >'+
-                  '<ion-radio ng-repeat="itemValue in item" ng-click="setEntry(itemValue)">{{itemValue.entry}}</ion-radio>'+
+                  ' <div><ion-list class="padlist" ng-repeat="(key, item) in listServicesAnticipo | orderBy:\'entry_time\' | groupBy: \'type\'   " >'+
+                  '<ion-radio ng-repeat="itemValue in item" ng-click="setEntry(itemValue)">'
+                  +'<span style="float:left;">{{itemValue.value}}</span> <span style="float:right;">{{itemValue.entry}}</span></ion-radio>'+
               '</ion-list>'+
           '</ion-list></div>' ,
               buttons: [
@@ -769,15 +810,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
               '<label class="plan-item-time">'+
                  ' <ionic-timepicker input-obj="timePickerObject24Hour">'+
                  '<button ng-hide="true"></button>'+
-                 '<span>'+
-                 '  <standard-time-no-meridian etime="timePickerObject24Hour.inputEpochTime"></standard-time-no-meridian>'+
+                 '<span class="bar selez" >'+
+                 '  <div>{{"Selezziona" | translate}}</div> &nbsp;<standard-time-no-meridian etime="timePickerObject24Hour.inputEpochTime" class="lookeditable"></standard-time-no-meridian>'+
                  ' </span>'+
                  ' </ionic-timepicker>'+
                  '</label>'+
                  '</div>'+
-              ' <div><ion-list class="padlist" ng-repeat="(key, item) in listServices | orderBy:\'out_time\' | groupBy: \'type\'  " >'+
-              '<ion-item >{{key}}</ion-item >'+
-              '<ion-radio ng-repeat="itemValue in item" ng-click="setOut(itemValue)">{{itemValue.out}}</ion-radio>'+
+              ' <div><ion-list class="padlist" ng-repeat="(key, item) in listServicesPosticipo | orderBy:\'out_time\' | groupBy: \'type\'  " >'+
+              '<ion-radio ng-repeat="itemValue in item" ng-click="setOut(itemValue)">'
+              +'<span style="float:left;">{{itemValue.value}}</span> <span style="float:right;">{{itemValue.out}}</span></ion-radio>'+
           '</ion-list>'+
       '</ion-list></div>' ,
               buttons: [
@@ -1039,8 +1080,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 selectedTime.setHours(temp[0]);
                 selectedTime.setMinutes(temp[1]);
                 selectedTime.setSeconds(0);
-                console.log(selectedTime.getHours());
-                console.log(selectedTime.getMinutes());
+                //console.log(selectedTime.getHours());
+                //console.log(selectedTime.getMinutes());
                 day_summ.at=selectedTime;
                 notific.push(day_summ);
             }
@@ -1048,17 +1089,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 localStorage.setItem('prom_week', true);
                 temp=$scope.currData['prom_week_time'].split(':');
                 var tempDay=$scope.currData['prom_week_day'];
-                var next = moment(new Date());
+                var next = moment();
                 next.set({
                     'hour' : temp[0],
                     'minute'  : temp[1], 
                     'day' : tempDay
                  });
                 var selectedTime = next.toDate();
-                console.log(selectedTime.getDate());
-                console.log(selectedTime.getDay());
-                console.log(selectedTime.getHours());
-                console.log(selectedTime.getMinutes());
+                //console.log(selectedTime.getDate());
+                //console.log(selectedTime.getDay());
+                //console.log(selectedTime.getHours());
+                //console.log(selectedTime.getMinutes());
                 console.log(next.format('YYYY-MM-DD HH:mm'));
                 week.at=selectedTime;
                 notific.push(week);
@@ -1067,14 +1108,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 localStorage.setItem('prom_day_ritiro', true);
                 temp=$scope.currData['prom_ritiro_time'].split(':');
                 $scope.briefInfo=profileService.getBriefInfo();
+                console.log($scope.briefInfo.ore_uscita);
                 var ore_uscita = $scope.briefInfo.ore_uscita.split(':');
                 var usc=moment().hour(ore_uscita[0]);
-                var usc=moment().minute(ore_uscita[1]);
+                var usc=usc.minute(ore_uscita[1]);
                 dateFrom = usc.subtract(temp[0],'hours');
                 dateFrom = dateFrom.subtract(temp[1],'minutes');
                 var selectedTime = dateFrom.toDate();
-                //console.log(selectedTime);
-                //console.log(dateFrom.format('YYYY/mm/dm HH:mm'));
+                console.log(selectedTime);
+                console.log(dateFrom.format('YYYY-MM-DD HH:mm'));
                 ritiro.at=selectedTime;
                 notific.push(ritiro);
             }

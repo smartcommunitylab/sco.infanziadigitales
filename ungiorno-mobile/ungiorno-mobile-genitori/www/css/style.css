@@ -2402,3 +2402,28 @@ textarea {
 .item-select select {
   left: 0;
 }
+
+.lookeditable {
+  -moz-appearance: textfield;
+  -webkit-appearance: textfield;
+  background-color: white;
+  background-color: -moz-field;
+  border: 1px solid darkgray;
+  box-shadow: 1px 1px 1px 0 lightgray inset;  
+  font: -moz-field;
+  font: -webkit-small-control;
+  margin-top: 5px;
+  padding: 10px 10px;
+}
+
+.selez{
+  background-color: #009BA9 ;
+  margin-top: -10px;
+  color: black;
+  position: relative;
+}
+
+.selez div{
+  margin-top:10px;
+  color: white;
+}

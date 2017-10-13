@@ -88,7 +88,7 @@
                             {{item}}
                             <ion-icon *ngIf="selectedSchool.assenze.length > 0 && editAssenze" name="close" float-end (click)="removeAssenza(item)"></ion-icon>
                         </ion-item>
-                        <ion-item *ngIf="selectedSchool.assenze.length === 0 &&  !selectedSchool.familiari && !selectedSchool.malattia">Nessuna tipologia di assenza</ion-item> 
+                        <ion-item *ngIf="selectedSchool.assenze.length === 0 && !editAssenze && !selectedSchool.familiari && !selectedSchool.malattia">Nessuna tipologia di assenza</ion-item> 
                     </ion-list>
                 </ion-card-content>
             </ion-card>

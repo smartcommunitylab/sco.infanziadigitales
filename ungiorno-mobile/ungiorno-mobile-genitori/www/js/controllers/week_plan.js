@@ -76,7 +76,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     
     $scope.getWeekPlanDB =  function(week) {
         week_planService.getWeekPlan(week,$scope.kidId).then(function (data) {
-            if(data!=null){
+            if(data!=null && data!= undefined && data.length>0){
                 data=$scope.formatInfo(data);
                 $scope.days=data;
                 jsonTest=data;
@@ -86,7 +86,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             }
             else{
                 week_planService.getDefaultWeekPlan($scope.kidId).then(function (data) {
-                    if(data!=null){
+                    if(data!=null && data!= undefined && data.length>0){
                         data=$scope.formatInfo(data);
                         $scope.days=data;
                         jsonTest=data;
@@ -289,7 +289,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
     $scope.getWeekPlanDB =  function(day) {
         week_planService.getDefaultWeekPlan($scope.kidId).then(function (data) {
-            if(data!=null){
+            if(data!=null && data!= undefined && data.length>0){
                 data=$scope.formatInfo(data);
                 $scope.days=data;
                 jsonTest=data;
@@ -306,7 +306,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 jsonTest=$scope.formatInfo(jsonTest);
                 $scope.days=jsonTest;
                 for(var i=0;i<=4;i++){
-                   week_planService.setDayData(i,$scope.days[i],'');
+                   week_planService.setDayDataDefault(i,$scope.days[i],'');
                 }
             }
         }, function (error) {
@@ -448,14 +448,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         $scope.listServicesDb=profileService.getBabyProfile().services.timeSlotServices;
 
         $scope.getSchoolProfileNormalConfig=$filter('getSchoolNormalService')(profileService.getSchoolProfile().services);
+        console.log($scope.getSchoolProfileNormalConfig);
         var fromtime=$scope.getSchoolProfileNormalConfig['fromTime'];
         fromtimeFormatted=moment(fromtime).format('H:mm');
-        fromtime=new Date(moment(fromtime).format()).getTime();
         var totime=$scope.getSchoolProfileNormalConfig['toTime'];
         totimeFormatted=moment(totime).format('H:mm');
-        totime=new Date(moment(totime).format()).getTime();
         var temp={'value':'Normale','label':'Normale',
-        'entry':fromtimeFormatted,'out':totimeFormatted,'entry_time':fromtime,'out_time':totime,
+        'entry':fromtimeFormatted,'out':totimeFormatted,
         'type':'Normale'};
         $scope.listServices.push(temp);
         $scope.listServicesAnticipo.push(temp);
@@ -470,18 +469,19 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                for(var j=0;j<tempServ.length;j++){
                    fr=moment(tempServ[j]['fromTime']).format('H:mm');
                    to=moment(tempServ[j]['toTime']).format('H:mm');
-                   fr2=new Date(moment(tempServ[j]['fromTime']).format()).getTime();
-                   to2=new Date(moment(tempServ[j]['toTime']).format()).getTime();
                    var temp={'value':tempServ[j]['name'],'label':tempServ[j]['name'],
-                   'entry':fr,'out':to,'entry_time':fr2,'out_time':to2,
+                   'entry':fr,'out':to,
                    'type':type};
                    $scope.listServices.push(temp);
-                   if(fr2<fromtime){
+                   if(moment(fr,'H:mm').isBefore(moment(fromtimeFormatted,'H:mm'))){
                     $scope.listServicesAnticipo.push(temp);
                    }
-                   if(to2>totime){
+                   if(moment(to,'H:mm').isAfter(moment(totimeFormatted,'H:mm'))){
                     $scope.listServicesPosticipo.push(temp);
                    }
+                   //console.log(to);console.log(totimeFormatted);
+                   //console.log(moment(to,'H:mm').isAfter(moment(totimeFormatted,'H:mm')));
+                   //console.log($scope.listServicesPosticipo);
                }
             }
         }
@@ -512,7 +512,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 ' </ionic-timepicker>'+
                 '</label>'+
                 '</div>'+
-                  ' <div><ion-list class="padlist" ng-repeat="(key, item) in listServicesAnticipo | orderBy:\'entry_time\' | groupBy: \'type\'   " >'+
+                  ' <div><ion-list class="padlist" ng-repeat="(key, item) in listServicesAnticipo | orderBy:\'entry\' | groupBy: \'type\'   " >'+
                   '<ion-radio ng-repeat="itemValue in item" ng-click="setEntry(itemValue)">'
                   +'<span style="float:left;">{{itemValue.value}}</span> <span style="float:right;">{{itemValue.entry}}</span></ion-radio>'+
               '</ion-list>'+
@@ -544,7 +544,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                  ' </ionic-timepicker>'+
                  '</label>'+
                  '</div>'+
-              ' <div><ion-list class="padlist" ng-repeat="(key, item) in listServicesPosticipo | orderBy:\'out_time\' | groupBy: \'type\'  " >'+
+              ' <div><ion-list class="padlist" ng-repeat="(key, item) in listServicesPosticipo | orderBy:\'out\' | groupBy: \'type\'  " >'+
               '<ion-radio ng-repeat="itemValue in item" ng-click="setOut(itemValue)">'
               +'<span style="float:left;">{{itemValue.value}}</span> <span style="float:right;">{{itemValue.out}}</span></ion-radio>'+
           '</ion-list>'+
@@ -720,14 +720,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         $scope.listServicesDb=profileService.getBabyProfile().services.timeSlotServices;
 
         $scope.getSchoolProfileNormalConfig=$filter('getSchoolNormalService')(profileService.getSchoolProfile().services);
+        console.log($scope.getSchoolProfileNormalConfig);
         var fromtime=$scope.getSchoolProfileNormalConfig['fromTime'];
         fromtimeFormatted=moment(fromtime).format('H:mm');
-        fromtime=new Date(moment(fromtime).format()).getTime();
         var totime=$scope.getSchoolProfileNormalConfig['toTime'];
         totimeFormatted=moment(totime).format('H:mm');
-        totime=new Date(moment(totime).format()).getTime();
         var temp={'value':'Normale','label':'Normale',
-        'entry':fromtimeFormatted,'out':totimeFormatted,'entry_time':fromtime,'out_time':totime,
+        'entry':fromtimeFormatted,'out':totimeFormatted,
         'type':'Normale'};
         $scope.listServices.push(temp);
         $scope.listServicesAnticipo.push(temp);
@@ -742,18 +741,19 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                for(var j=0;j<tempServ.length;j++){
                    fr=moment(tempServ[j]['fromTime']).format('H:mm');
                    to=moment(tempServ[j]['toTime']).format('H:mm');
-                   fr2=new Date(moment(tempServ[j]['fromTime']).format()).getTime();
-                   to2=new Date(moment(tempServ[j]['toTime']).format()).getTime();
                    var temp={'value':tempServ[j]['name'],'label':tempServ[j]['name'],
-                   'entry':fr,'out':to,'entry_time':fr2,'out_time':to2,
+                   'entry':fr,'out':to,
                    'type':type};
                    $scope.listServices.push(temp);
-                   if(fr2<fromtime){
+                   if(moment(fr,'H:mm').isBefore(moment(fromtimeFormatted,'H:mm'))){
                     $scope.listServicesAnticipo.push(temp);
                    }
-                   if(to2>totime){
+                   if(moment(to,'H:mm').isAfter(moment(totimeFormatted,'H:mm'))){
                     $scope.listServicesPosticipo.push(temp);
                    }
+                   //console.log(to);console.log(totimeFormatted);
+                   //console.log(moment(to,'H:mm').isAfter(moment(totimeFormatted,'H:mm')));
+                   //console.log($scope.listServicesPosticipo);
                }
             }
         }
@@ -784,7 +784,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 ' </ionic-timepicker>'+
                 '</label>'+
                 '</div>'+
-                  ' <div><ion-list class="padlist" ng-repeat="(key, item) in listServicesAnticipo | orderBy:\'entry_time\' | groupBy: \'type\'   " >'+
+                  ' <div><ion-list class="padlist" ng-repeat="(key, item) in listServicesAnticipo | orderBy:\'entry\' | groupBy: \'type\'   " >'+
                   '<ion-radio ng-repeat="itemValue in item" ng-click="setEntry(itemValue)">'
                   +'<span style="float:left;">{{itemValue.value}}</span> <span style="float:right;">{{itemValue.entry}}</span></ion-radio>'+
               '</ion-list>'+
@@ -816,7 +816,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                  ' </ionic-timepicker>'+
                  '</label>'+
                  '</div>'+
-              ' <div><ion-list class="padlist" ng-repeat="(key, item) in listServicesPosticipo | orderBy:\'out_time\' | groupBy: \'type\'  " >'+
+              ' <div><ion-list class="padlist" ng-repeat="(key, item) in listServicesPosticipo | orderBy:\'out\' | groupBy: \'type\'  " >'+
               '<ion-radio ng-repeat="itemValue in item" ng-click="setOut(itemValue)">'
               +'<span style="float:left;">{{itemValue.value}}</span> <span style="float:right;">{{itemValue.out}}</span></ion-radio>'+
           '</ion-list>'+
@@ -1080,8 +1080,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 selectedTime.setHours(temp[0]);
                 selectedTime.setMinutes(temp[1]);
                 selectedTime.setSeconds(0);
-                //console.log(selectedTime.getHours());
-                //console.log(selectedTime.getMinutes());
+                console.log(selectedTime.getHours());
+                console.log(selectedTime.getMinutes());
                 day_summ.at=selectedTime;
                 notific.push(day_summ);
             }
@@ -1115,8 +1115,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 dateFrom = usc.subtract(temp[0],'hours');
                 dateFrom = dateFrom.subtract(temp[1],'minutes');
                 var selectedTime = dateFrom.toDate();
-                console.log(selectedTime);
-                console.log(dateFrom.format('YYYY-MM-DD HH:mm'));
+                //console.log(selectedTime);
+                //console.log(dateFrom.format('YYYY-MM-DD HH:mm'));
                 ritiro.at=selectedTime;
                 notific.push(ritiro);
             }

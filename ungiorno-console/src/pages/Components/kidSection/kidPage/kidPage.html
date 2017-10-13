@@ -88,7 +88,7 @@
                                                 </ion-col>
                                                 <ion-col col-10>
                                                     <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="thisKid.nascitaStr" *ngIf='editInfo' no-margin></ion-datetime >
-                                                    <span *ngIf="!editInfo" style="padding-left: 8px;">{{thisKid.nascitaStr}}</span>
+                                                    <span *ngIf="!editInfo" style="padding-left: 8px;">{{thisKid.nascitaStr | date: 'dd/MM/yyyy'}}</span>
                                                 </ion-col>
                                             </ion-row>
                                             <ion-row margin-bottom>

@@ -6,7 +6,7 @@ import { Kid } from './../../../../app/Classes/kid';
 import { Teacher } from './../../../../app/Classes/teacher';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { School } from '../../../../app/Classes/school';
-import { WebService } from '../../../../app/WebService';
+import { WebService } from '../../../../services/WebService';
 import { Component, OnInit } from '@angular/core';
 import { NavParams, NavController, AlertController, PopoverController, ViewController } from "ionic-angular";
 

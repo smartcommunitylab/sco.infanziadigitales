@@ -1,27 +1,27 @@
-import { Service } from './Classes/service';
-import { Group } from './Classes/group';
-import { Bus } from './Classes/bus';
-import { Parent } from './Classes/parent';
-import { Teacher } from './Classes/teacher';
-import { Kid } from "./Classes/kid";
-import { SchoolContacts } from "./Classes/schoolContacts"
-import { Time } from "./Classes/time"
+import { Service } from './../app/Classes/service';
+import { Group } from './../app/Classes/group';
+import { Bus } from './../app/Classes/bus';
+import { Parent } from './../app/Classes/parent';
+import { Teacher } from './../app/Classes/teacher';
+import { Kid } from "./../app/Classes/kid";
+import { SchoolContacts } from "./../app/Classes/schoolContacts"
+import { Time } from "./../app/Classes/time"
 
-import { ServerSchoolData } from './Classes/serverModel/serverSchoolData';
-import { ServerTeacherData } from './Classes/serverModel/serverTeacherData';
-import { ServerKidData } from './Classes/serverModel/serverKidData';
-import { AuthPerson } from './Classes/serverModel/authPerson';
-import { KidServices } from './Classes/serverModel/kidServices';
-import { Allergy } from './Classes/serverModel/allergy';
-import { Delega } from './Classes/delega'
+import { ServerSchoolData } from './../app/Classes/serverModel/serverSchoolData';
+import { ServerTeacherData } from './../app/Classes/serverModel/serverTeacherData';
+import { ServerKidData } from './../app/Classes/serverModel/serverKidData';
+import { AuthPerson } from './../app/Classes/serverModel/authPerson';
+import { KidServices } from './../app/Classes/serverModel/kidServices';
+import { Allergy } from './../app/Classes/serverModel/allergy';
+import { Delega } from './../app/Classes/delega'
 
 import { Injectable }    from '@angular/core';
 import { Http, Headers, BaseRequestOptions, RequestOptions } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
-import { School } from "./Classes/school";
-import { ServerServiceData } from "./Classes/serverModel/serverServiceData";
-import { ServiceTimeSlot } from "./Classes/serverModel/serviceTimeSlot";
+import { School } from "./../app/Classes/school";
+import { ServerServiceData } from "./../app/Classes/serverModel/serverServiceData";
+import { ServiceTimeSlot } from "./../app/Classes/serverModel/serviceTimeSlot";
 
 import {ConfigService} from "../services/config.service"
 
@@ -69,7 +69,10 @@ export class WebService {
         userService.setAuthorizedSchools(response.json().data.authorizedSchools.map(rawSchool => this.convertToSchool(rawSchool)));
         console.log('logged as ' + userService.getUserId());
         return userService;
-      }).catch(this.handleError);
+      }).catch(error => {
+        console.log(error);
+        return this.handleError(error);
+      });
       }
 
 

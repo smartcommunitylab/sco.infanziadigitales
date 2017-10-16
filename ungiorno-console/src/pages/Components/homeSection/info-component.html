@@ -74,16 +74,16 @@
                             <ion-label>Malattia</ion-label>
                             <ion-checkbox [(ngModel)]="isMalattiaEnabled"></ion-checkbox>
                         </ion-item>
-                        <ion-item *ngIf="editAssenze">
+                        <!--<ion-item *ngIf="editAssenze">
                             <ion-label>Motivi familiari</ion-label>
                             <ion-checkbox [(ngModel)]="selectedSchool.familiari"></ion-checkbox>
-                        </ion-item>
+                        </ion-item>-->
                         <ion-item *ngIf="!editAssenze && selectedSchool.malattia">
                             Malattia
                         </ion-item>
-                        <ion-item *ngIf="!editAssenze && selectedSchool.familiari">
+                        <!--<ion-item *ngIf="!editAssenze && selectedSchool.familiari">
                             Motivi familiari
-                        </ion-item>
+                        </ion-item>-->
                         <ion-item *ngFor="let item of selectedSchool.assenze">
                             {{item}}
                             <ion-icon *ngIf="selectedSchool.assenze.length > 0 && editAssenze" name="close" float-end (click)="removeAssenza(item)"></ion-icon>

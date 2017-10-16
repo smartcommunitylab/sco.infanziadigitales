@@ -1,4 +1,4 @@
-import { WebService } from './../../../app/WebService';
+import { WebService } from './../../../services/WebService';
 import { AlertController } from 'ionic-angular';
 import { School } from './../../../app/Classes/school';
 import { Component, OnInit, Input } from '@angular/core';
@@ -122,13 +122,13 @@ export class Info {
     }
 
     oldMal : boolean;
-    oldMf : boolean;
+    // oldMf : boolean;
     oldAsse : string[] = [];
     onAssenzeEdit() {
         this.oldAsse = [];
         this.selectedSchool.assenze.forEach(x=>this.oldAsse.push(x));
 
-        this.oldMf = this.selectedSchool.familiari;
+        // this.oldMf = this.selectedSchool.familiari;
         this.oldMal = this.selectedSchool.malattia;
 
         this.isMalattiaEnabled = this.selectedSchool.malattia;
@@ -147,7 +147,7 @@ export class Info {
         this.oldAsse.forEach(x=>this.selectedSchool.assenze.push(x));
 
         this.selectedSchool.malattia = this.oldMal;
-        this.selectedSchool.familiari = this.oldMf;
+        // this.selectedSchool.familiari = this.oldMf;
 
         this.editAssenze = false;
         this.newAssenza = '';

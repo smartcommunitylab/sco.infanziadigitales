@@ -2,7 +2,7 @@ import { Kid } from './../../../../app/Classes/kid';
 import { Teacher } from './../../../../app/Classes/teacher';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { School } from './../../../../app/Classes/school';
-import { WebService } from './../../../../app/WebService';
+import { WebService } from '../../../../services/WebService';
 import { Bus } from './../../../../app/Classes/bus';
 import { Component, OnInit } from '@angular/core';
 import { NavParams, NavController, AlertController } from "ionic-angular";

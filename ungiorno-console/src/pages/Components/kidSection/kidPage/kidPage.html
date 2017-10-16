@@ -36,18 +36,19 @@
                     <ion-grid inset>
                         <ion-row>
                             <ion-col col-12>
+                                <p style="color: #ccc; margin-left: 25px;" ><ion-icon name="help-circle"></ion-icon> Tutti i campi contrassegnati dal simbolo * sono obbligatori</p>
                                 <ion-card>
                                     <ion-card-header>
                                         Informazioni di base
                                         <button class='edit' ion-button color='magenta1' float-end *ngIf='!editInfo' (click)="onInfoEdit()">Modifica</button>
-                                        <button class='edit' ion-button color='magenta1' float-end *ngIf='editInfo' (click)="onInfoSave()">Salva</button>
+                                        <button class='edit' ion-button color='magenta1' float-end *ngIf='editInfo' (click)="onInfoSave()" [disabled]='!(thisKid.name && thisKid.surname && thisKid.id )'>Salva</button>
                                         <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='editInfo' (click)="onInfoCancel()">Annulla</button>
                                     </ion-card-header>
                                     <ion-card-content margin-top>
                                         <ion-grid inset>
                                             <ion-row margin-bottom>
                                                 <ion-col col-2>
-                                                    C.F. (ID):
+                                                    C.F. (ID)*:
                                                 </ion-col>
                                                 <ion-col col-10>
                                                     <ion-input [(ngModel)]="thisKid.id" [disabled]='!isNew' no-margin></ion-input>
@@ -55,7 +56,7 @@
                                             </ion-row>
                                             <ion-row margin-bottom>
                                                 <ion-col col-2>
-                                                    Nome:
+                                                    Nome*:
                                                 </ion-col>
                                                 <ion-col col-10>
                                                     <ion-input [(ngModel)]="thisKid.name" [disabled]='!editInfo' no-margin></ion-input>
@@ -63,7 +64,7 @@
                                             </ion-row>
                                             <ion-row margin-bottom>
                                                 <ion-col col-2>
-                                                    Cognome:
+                                                    Cognome*:
                                                 </ion-col>
                                                 <ion-col col-10>
                                                     <ion-input [(ngModel)]="thisKid.surname" [disabled]='!editInfo' no-margin></ion-input>

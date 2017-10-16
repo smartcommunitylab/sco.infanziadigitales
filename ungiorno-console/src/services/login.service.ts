@@ -1,7 +1,7 @@
 import { Injectable }    from '@angular/core';
 import {Http,RequestOptions,Headers} from '@angular/http'
 import {ConfigService} from './config.service'
-import {WebService} from '../app/WebService'
+import { WebService } from './WebService';
 import {UserService} from './user.service'
 import 'rxjs/add/operator/toPromise';
 

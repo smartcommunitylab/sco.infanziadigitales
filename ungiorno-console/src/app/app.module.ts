@@ -2,7 +2,7 @@ import { PopoverPage } from './../pages/Components/Modals/orariModal/popoverOrar
 import { Insegnanti } from './../pages/Components/teacherSection/teacher.component';
 import { TeacherModal } from './../pages/Components/Modals/teacherModal/teacherModal';
 import { BusModal } from './../pages/Components/Modals/busModal/busModal';
-import { WebService, requestOptionsProvider } from './WebService';
+import { WebService, requestOptionsProvider } from '../services/WebService';
 import { LoginService } from '../services/login.service'
 import { ConfigService } from '../services/config.service'
 import { BrowserModule } from '@angular/platform-browser';
@@ -27,6 +27,7 @@ import { IonicStorageModule } from '@ionic/storage';
 import { APP_INITIALIZER } from '@angular/core';
 import { UserService } from '../services/user.service';
 import { LoginPage } from '../pages/login/login';
+import { Ng2OrderModule } from 'ng2-order-pipe';
 
 
 export function initConfig(config: ConfigService) {
@@ -57,6 +58,7 @@ export function initConfig(config: ConfigService) {
     BrowserModule,
     IonicModule.forRoot(MyApp),
     HttpModule,
+    Ng2OrderModule,
     IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],

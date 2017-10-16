@@ -1,4 +1,4 @@
-import { WebService } from './../../../app/WebService';
+import { WebService } from './../../../services/WebService';
 import { GroupModal } from './../Modals/groupModal/groupModal';
 import { School } from './../../../app/Classes/school';
 import { Group } from './../../../app/Classes/group';

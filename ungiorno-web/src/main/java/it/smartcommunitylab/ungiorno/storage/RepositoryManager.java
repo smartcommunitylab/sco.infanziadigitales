@@ -18,6 +18,7 @@ import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
@@ -47,7 +48,10 @@ import org.springframework.stereotype.Component;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 
+import it.smartcommunitylab.ungiorno.beans.GroupDTO;
 import it.smartcommunitylab.ungiorno.config.exception.ProfileNotFoundException;
 import it.smartcommunitylab.ungiorno.diary.model.DiaryEntry;
 import it.smartcommunitylab.ungiorno.diary.model.DiaryKid;
@@ -81,10 +85,10 @@ import it.smartcommunitylab.ungiorno.model.SchoolProfile.BusProfile;
 import it.smartcommunitylab.ungiorno.model.SchoolProfile.SectionProfile;
 import it.smartcommunitylab.ungiorno.model.SectionData;
 import it.smartcommunitylab.ungiorno.model.SectionData.ServiceProfile;
-import it.smartcommunitylab.ungiorno.services.RepositoryService;
 import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.model.TeacherCalendar;
 import it.smartcommunitylab.ungiorno.model.TimeSlotSchoolService;
+import it.smartcommunitylab.ungiorno.services.RepositoryService;
 import it.smartcommunitylab.ungiorno.usage.UsageEntity;
 import it.smartcommunitylab.ungiorno.usage.UsageEntity.UsageAction;
 import it.smartcommunitylab.ungiorno.usage.UsageEntity.UsageActor;
@@ -1229,6 +1233,19 @@ public class RepositoryManager implements RepositoryService {
         return kids;
     }
 
+    private List<KidProfile> readKidsForSectionsOrGroups(String appId, String schoolId,
+            Collection<String> sections) {
+        Query q = schoolQuery(appId, schoolId);
+        if (sections != null) {
+            q.addCriteria(
+                    new Criteria().orOperator(Criteria.where("section.sectionId").in(sections),
+                            Criteria.where("groups.sectionId").in(sections)));
+        }
+        List<KidProfile> kids = template.find(q, KidProfile.class);
+        return kids;
+    }
+
+
     /**
      * @param kp
      * @return
@@ -1883,5 +1900,62 @@ public class RepositoryManager implements RepositoryService {
 
         return resultN;
     }
+
+    @Override
+    public KidProfile updateKid(KidProfile kid) {
+        Criteria criteria =
+                new Criteria("appId").is(kid.getAppId()).and("schoolId").is(kid.getSchoolId());
+        criteria.and("kidId").is(kid.getKidId());
+        Query q = new Query(criteria);
+        DBObject dbObject = new BasicDBObject();
+        template.getConverter().write(kid, dbObject);
+        Update updateDoc = Update.fromDBObject(dbObject);
+        return template.findAndModify(q, updateDoc, KidProfile.class);
+
+    }
+
+    @Override
+    public GroupDTO getGroupData(String appId, String schoolId, String groupId) {
+        SchoolProfile profile = getSchoolProfile(appId, schoolId);
+        List<SectionProfile> sections = profile.getSections();
+        GroupDTO group = null;
+        for (SectionProfile section : sections) {
+            if (section.getSectionId().equalsIgnoreCase(groupId)) {
+                group = new GroupDTO();
+                group.setId(groupId);
+                group.setName(section.getName());
+                group.setSection(!section.isGroup());
+                List<KidProfile> kidsInGroup =
+                        readKidsForSectionsOrGroups(appId, schoolId, Arrays.asList(groupId));
+                List<String> kidIdsInGroup = new ArrayList<>();
+                for (KidProfile kid : kidsInGroup) {
+                    kidIdsInGroup.add(kid.getKidId());
+                }
+                group.setKidIds(kidIdsInGroup);
+                List<Teacher> teachers = getTeachers(appId, schoolId);
+                List<String> teacherIdsInGroup = new ArrayList<>();
+                for (Teacher teacher : teachers) {
+                    if (teacher.getSectionIds().contains(groupId)) {
+                        teacherIdsInGroup.add(teacher.getTeacherId());
+                    }
+                }
+
+                group.setTeacherIds(teacherIdsInGroup);
+            }
+        }
+
+        return group;
+    }
+
+    @Override
+    public List<GroupDTO> getGroupsDataBySchool(String appId, String schoolId) {
+        SchoolProfile school = getSchoolProfile(appId, schoolId);
+        List<GroupDTO> groups = new ArrayList<>();
+        for (SectionProfile section : school.getSections()) {
+            groups.add(getGroupData(appId, schoolId, section.getSectionId()));
+        }
+        return groups;
+    }
+
 
 }

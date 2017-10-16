@@ -33,6 +33,10 @@ export class GroupModal implements OnInit{
 
   disabledSection : boolean;
 
+  addKidToGroupMap = {}
+
+  removeKidToGroupMap = {}
+
   constructor(public params: NavParams, public navCtrl:NavController, private webService : WebService, public alertCtrl : AlertController) {
     this.selectedSchool = this.params.get('school') as School;
     this.selectedGroup = this.params.get('group') as Group;
@@ -50,7 +54,6 @@ export class GroupModal implements OnInit{
   }
 
   close() {
-    this.webService.update(this.selectedSchool);
     this.navCtrl.pop();
   }
 
@@ -63,8 +66,32 @@ export class GroupModal implements OnInit{
 
     if(this.isNew) {
       if(this.selectedSchool.groups.findIndex(x => x.name.toLowerCase() == this.selectedGroup.name.toLowerCase()) < 0) {
-        this.webService.add(this.selectedSchool.id, this.copiedGroup).then(tmp => this.selectedSchool.groups.push(tmp.groups[tmp.groups.length - 1]));
+        this.selectedSchool.groups.push(this.selectedGroup);
         this.webService.update(this.selectedSchool);
+        let kidsToAdd = this.addKidToGroupMap[this.selectedGroup.name]
+        let kidsToRemove = this.removeKidToGroupMap[this.selectedGroup.name]
+        if(kidsToAdd != undefined) {
+          kidsToAdd.forEach(kidId => {
+            if(this.selectedGroup.section) {
+              this.webService.putKidInSection(this.selectedSchool,kidId,this.selectedGroup);
+            } else {
+              this.webService.addKidToGroup(this.selectedSchool,kidId,this.selectedGroup);
+            }
+          })
+        }
+
+        if(kidsToRemove != undefined) {
+          kidsToRemove.forEach(kidId => {
+            if(this.selectedGroup.section) {
+              this.webService.removeKidFromSection(this.selectedSchool,kidId,this.selectedGroup.name);
+            } else {
+              this.webService.removeKidFromGroup(this.selectedSchool,kidId, this.selectedGroup.name);
+            }
+          });
+        }
+
+        console.log("add kid " + JSON.stringify(this.addKidToGroupMap));
+        console.log("remove kid " + JSON.stringify(this.removeKidToGroupMap));
       }
       else {
         let alert = this.alertCtrl.create({
@@ -73,6 +100,31 @@ export class GroupModal implements OnInit{
         });
         alert.present();
       }
+    } else {
+      this.webService.update(this.selectedSchool);
+      let kidsToAdd = this.addKidToGroupMap[this.selectedGroup.name]
+      let kidsToRemove = this.removeKidToGroupMap[this.selectedGroup.name]
+      if(kidsToAdd != undefined) {
+        kidsToAdd.forEach(kidId => {
+          if(this.selectedGroup.section) {
+            this.webService.putKidInSection(this.selectedSchool,kidId,this.selectedGroup);
+          } else {
+            this.webService.addKidToGroup(this.selectedSchool,kidId,this.selectedGroup);
+          }
+        })
+      }
+
+      if(kidsToRemove != undefined) {
+        kidsToRemove.forEach(kidId => {
+          if(this.selectedGroup.section) {
+            this.webService.removeKidFromSection(this.selectedSchool,kidId,this.selectedGroup.name);
+          } else {
+            this.webService.removeKidFromGroup(this.selectedSchool,kidId, this.selectedGroup.name);
+          }
+        });
+      }
+      console.log("add kid " + JSON.stringify(this.addKidToGroupMap));
+      console.log("remove kid " + JSON.stringify(this.removeKidToGroupMap));
     }
     this.close();
   }
@@ -89,7 +141,7 @@ export class GroupModal implements OnInit{
       this.selectedGroupKids.push(this.selectedSchool.kids.find(f=>f.id.toLowerCase() === x.toLowerCase()));
     });
     
-    this.webService.update(this.selectedSchool);
+  
   }
   
   addTeacher() {
@@ -139,7 +191,18 @@ export class GroupModal implements OnInit{
       handler: data => {
         data.forEach(element => {
           this.copiedGroup.kids.push(element);
+          if(this.addKidToGroupMap[this.copiedGroup.name] == undefined ) {
+            this.addKidToGroupMap[this.copiedGroup.name] = []
+          } 
+          this.addKidToGroupMap[this.copiedGroup.name].push(element)
+
           if(this.copiedGroup.section) this.selectedSchool.kids.find(c=> c.id.toLowerCase() === element.toLowerCase()).section = true;
+          // if(this.copiedGroup.section) {
+          //   this.webService.putKidInSection(this.selectedSchool,element,this.copiedGroup);
+          // } else {
+          //   this.webService.addKidToGroup(this.selectedSchool,element,this.copiedGroup);
+          // }
+
           this.updateArrays();
         });
       }
@@ -150,6 +213,16 @@ export class GroupModal implements OnInit{
   removeKid(id : string) {
     this.copiedGroup.kids.splice(this.copiedGroup.kids.findIndex(x => id === x), 1);
     this.selectedSchool.kids.find(c=> c.id.toLowerCase() === id.toLowerCase()).section = false;
+    if(this.removeKidToGroupMap[this.copiedGroup.name] == undefined ) {
+      this.removeKidToGroupMap[this.copiedGroup.name] = []
+    } 
+    this.removeKidToGroupMap[this.copiedGroup.name].push(id)
+
+    // if(this.copiedGroup.section) {
+    //   this.webService.removeKidFromSection(this.selectedSchool,id,this.copiedGroup.name);
+    // } else {
+    //   this.webService.removeKidFromGroup(this.selectedSchool,id,this.copiedGroup.name);
+    // }
     this.updateArrays();
   }
 

@@ -70,7 +70,6 @@ export class OrariModal implements OnInit{
             if(this.selectedSchool.servizi.findIndex(x => x.servizio.toLowerCase() == this.selectedOrario.servizio.toLowerCase()) < 0) {
                 this.selectedSchool.servizi.push(this.selectedOrario);
                 this.webService.update(this.selectedSchool);
-                //this.webService.add(this.selectedSchool.id, this.copiedOrario).then(tmp => this.selectedSchool.servizi.push(tmp.servizi[tmp.servizi.length - 1])); //aggiungere case servizio webservice
             }
             else {
                 let alert = this.alertCtrl.create({

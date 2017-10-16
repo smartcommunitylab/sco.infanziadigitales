@@ -24,6 +24,7 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoException;
 
+import it.smartcommunitylab.ungiorno.beans.GroupDTO;
 import it.smartcommunitylab.ungiorno.config.exception.ProfileNotFoundException;
 import it.smartcommunitylab.ungiorno.diary.model.DiaryEntry;
 import it.smartcommunitylab.ungiorno.diary.model.DiaryKid;
@@ -652,6 +653,24 @@ class KidManagerTestConfig {
             @Override
             public ChatMessage chatMessageReceived(String appId, String schoolId,
                     String messageId) {
+                // TODO Auto-generated method stub
+                return null;
+            }
+
+            @Override
+            public KidProfile updateKid(KidProfile kid) {
+                // TODO Auto-generated method stub
+                return null;
+            }
+
+            @Override
+            public GroupDTO getGroupData(String appId, String schoolId, String groupId) {
+                // TODO Auto-generated method stub
+                return null;
+            }
+
+            @Override
+            public List<GroupDTO> getGroupsDataBySchool(String appId, String schoolId) {
                 // TODO Auto-generated method stub
                 return null;
             }

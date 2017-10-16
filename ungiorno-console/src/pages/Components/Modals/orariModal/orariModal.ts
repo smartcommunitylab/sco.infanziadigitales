@@ -41,7 +41,8 @@ export class OrariModal implements OnInit{
     early: string;
 
     sovrapp:boolean;
-
+public datePickerConfig: Object = {
+    }
     constructor(public params: NavParams, public navCtrl:NavController, private webService : WebService, public alertCtrl : AlertController, public popoverCtrl:PopoverController) {
         this.selectedSchool = this.params.get('school') as School;
         this.selectedOrario = this.params.get('orario') as Service;

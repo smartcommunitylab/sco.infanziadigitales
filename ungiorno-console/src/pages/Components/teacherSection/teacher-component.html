@@ -27,8 +27,9 @@
     </ion-col>
     <ion-col col-4>
       <ion-item>
-        <ion-label floating>Cerca</ion-label> 
-        <ion-input (input)="searchTeachers($event)"></ion-input>
+         <div>Cerca<input class="text-generic" type="text" (input)="searchTeachers($event)"></div>
+        <!--<ion-label floating>Cerca</ion-label> 
+        <ion-input (input)="searchTeachers($event)"></ion-input>-->
       </ion-item>
     </ion-col>
   </ion-row>

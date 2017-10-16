@@ -1,8 +1,8 @@
 <ion-header>
     <ion-navbar>
         <ion-title>
-             {{selectedTeacher.name}} {{selectedTeacher.surname}}
-             <span *ngIf="selectedTeacher.name===''">Nuovo insegnante</span> 
+            {{selectedTeacher.name}} {{selectedTeacher.surname}}
+            <span *ngIf="selectedTeacher.name===''">Nuovo insegnante</span>
         </ion-title>
         <ion-buttons start>
             <button ion-button (click)="close()">Annulla</button>
@@ -10,12 +10,13 @@
         <ion-buttons end>
             <button ion-button (click)="save()" [disabled]='!(copiedTeacher.name && copiedTeacher.surname && copiedTeacher.id && copiedTeacher.pin)'>Salva</button>
         </ion-buttons>
-            
+
     </ion-navbar>
 </ion-header>
 
 <ion-content>
-    <p style="color: #ccc; margin-left: 25px;" ><ion-icon name="help-circle"></ion-icon> Tutti i campi contrassegnati dal simbolo * sono obbligatori</p>
+    <p style="color: #ccc; margin-left: 25px;">
+        <ion-icon name="help-circle"></ion-icon> Tutti i campi contrassegnati dal simbolo * sono obbligatori</p>
     <ion-list inset>
         <ion-grid inset>
             <ion-row>
@@ -25,17 +26,23 @@
                             Informazioni di base
                         </ion-card-header>
                         <ion-card-content>
-                            <ion-item class='input-calza'>
-                                <ion-label>ID (C.F.)*</ion-label>
-                                <ion-input name="name" type="text" [(ngModel)]="copiedTeacher.id" [disabled]='!isNew'></ion-input>
+                            <ion-item>
+                                <ion-row><ion-col col-2>ID (C.F.)*</ion-col><ion-col col-10><input class="text-generic" name="name" type="text" [(ngModel)]="copiedTeacher.id"
+                                        [disabled]='!isNew'></ion-col></ion-row>
+                                <!--<ion-label>ID (C.F.)*</ion-label>
+                                <ion-input name="name" type="text" [(ngModel)]="copiedTeacher.id" [disabled]='!isNew'></ion-input>-->
                             </ion-item>
-                            <ion-item class='input-calza'>
-                                <ion-label>Nome*</ion-label>
-                                <ion-input name="name" type="text" [(ngModel)]="copiedTeacher.name"></ion-input>
+                            <ion-item>
+                                <ion-row><ion-col col-2>Nome*</ion-col><ion-col col-10><input class="text-generic" name="name" type="text" [(ngModel)]="copiedTeacher.name"
+                                        [disabled]='!isNew'></ion-col></ion-row>
+                                <!--<ion-label>Nome*</ion-label>
+                                <ion-input name="name" type="text" [(ngModel)]="copiedTeacher.name"></ion-input>-->
                             </ion-item>
-                            <ion-item class='input-calza'>
-                                <ion-label>Cognome*</ion-label>
-                                <ion-input name="name" type="text" [(ngModel)]="copiedTeacher.surname"></ion-input>
+                            <ion-item>
+                                <ion-row><ion-col col-2>Cognome*</ion-col><ion-col col-10><input class="text-generic" name="name" type="text" [(ngModel)]="copiedTeacher.surname"
+                                        [disabled]='!isNew'></ion-col></ion-row>
+                                <!--<ion-label>Cognome*</ion-label>
+                                <ion-input name="name" type="text" [(ngModel)]="copiedTeacher.surname"></ion-input>-->
                             </ion-item>
                         </ion-card-content>
                     </ion-card>
@@ -48,7 +55,7 @@
                             Contatti
                         </ion-card-header>
                         <ion-card-content>
-                            <list-widget [items]="copiedTeacher.phoneNumbers" [editMode]="true" [label]="'Telefono'" ></list-widget>
+                            <list-widget [items]="copiedTeacher.phoneNumbers" [editMode]="true" [label]="'Telefono'"></list-widget>
                             <!-- <ion-item class='input-calza'>
                                 <ion-label>Telefono</ion-label>
                                 <ion-input name="tel" type="text" [(ngModel)]="copiedTeacher.telephone"></ion-input>
@@ -68,13 +75,16 @@
                             Accesso
                         </ion-card-header>
                         <ion-card-content>
-                            <ion-item class='input-calza'>
-                                <ion-label>E-Mail</ion-label>
-                                <ion-input name="email" type="text" [(ngModel)]="copiedTeacher.email"></ion-input>
+                            <ion-item>
+                                <ion-row><ion-col col-2>E-Mail</ion-col><ion-col col-10><input class="text-generic" name="name" type="text" [(ngModel)]="copiedTeacher.email"></ion-col></ion-row>
+
+                                <!--<ion-label>E-Mail</ion-label>
+                                <ion-input name="email" type="text" [(ngModel)]="copiedTeacher.email"></ion-input>-->
                             </ion-item>
                             <ion-item>
-                                <ion-label>PIN*</ion-label>
-                                <ion-input name="text" type="text" [(ngModel)]="copiedTeacher.pin"></ion-input>
+                                <ion-row><ion-col col-2>PIN*</ion-col><ion-col col-10><input class="text-generic" name="name" [(ngModel)]="copiedTeacher.pin"></ion-col></ion-row>
+                                <!--<ion-label>PIN*</ion-label>
+                                <ion-input name="text" type="text" [(ngModel)]="copiedTeacher.pin"></ion-input>-->
                             </ion-item>
                         </ion-card-content>
                     </ion-card>
@@ -82,7 +92,7 @@
             </ion-row>
             <ion-row>
                 <ion-col col-10 offset-1>
-                    <ion-card> 
+                    <ion-card>
                         <ion-card-header>
                             Gruppi e sezioni
                         </ion-card-header>
@@ -92,14 +102,13 @@
                                 <ion-icon name="close" float-end (click)="onRemoveGroup(gr)"></ion-icon>
                             </ion-item>
                             <ion-item *ngIf="selectedTeacherGroups.length === 0" style='color: grey'>
-                                Nessun gruppo o sezione <br />
-                                Creando una sezione o un gruppo e associandolo a <br />
-                                questa/o insegnante lo vedrai apparire in questa sezione
-                            </ion-item> 
+                                Nessun gruppo o sezione <br /> Creando una sezione o un gruppo e associandolo a <br /> questa/o
+                                insegnante lo vedrai apparire in questa sezione
+                            </ion-item>
                         </ion-card-content>
                     </ion-card>
                 </ion-col>
-        </ion-row>
+            </ion-row>
         </ion-grid>
-    </ion-list> 
+    </ion-list>
 </ion-content>

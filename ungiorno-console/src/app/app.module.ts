@@ -28,6 +28,7 @@ import { APP_INITIALIZER } from '@angular/core';
 import { UserService } from '../services/user.service';
 import { LoginPage } from '../pages/login/login';
 import { Ng2OrderModule } from 'ng2-order-pipe';
+import {DpDatePickerModule} from 'ng2-date-picker';
 
 
 export function initConfig(config: ConfigService) {
@@ -59,6 +60,7 @@ export function initConfig(config: ConfigService) {
     IonicModule.forRoot(MyApp),
     HttpModule,
     Ng2OrderModule,
+    DpDatePickerModule,
     IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
@@ -74,7 +76,7 @@ export function initConfig(config: ConfigService) {
     Insegnanti,
     Bambini,
     KidPage,
-    Info,   
+    Info,
     Orari,
     PopoverPage,
     PopoverTimepicker,
@@ -84,7 +86,7 @@ export function initConfig(config: ConfigService) {
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    { provide: ErrorHandler, useClass: IonicErrorHandler },
     WebService,
     LoginService,
     ConfigService,
@@ -93,4 +95,4 @@ export function initConfig(config: ConfigService) {
     requestOptionsProvider
   ]
 })
-export class AppModule {}
+export class AppModule { }

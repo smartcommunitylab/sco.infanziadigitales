@@ -27,7 +27,7 @@ import {ConfigService} from "../services/config.service"
 
 import moment from 'moment';
 import { UserService } from "../services/user.service";
-import { ServerSection } from "./Classes/serverModel/serverSection";
+import { ServerSection } from "../app/Classes/serverModel/serverSection";
 
 @Injectable()
 export class DefaultRequestOptions extends BaseRequestOptions {

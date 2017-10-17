@@ -6,11 +6,14 @@ import { Component, OnInit, Input } from '@angular/core';
     styles: [`
     ion-grid {
         font-size: 17px !important;
+         padding-left: 16px !important;
     }
     ion-card-header {
         font-size: 20px !important;
-        background-color: rgba(152,186,60, .4);
+        padding-top: 8px !important;
+         background-color: rgba(152,186,60, .4);
     }
+
     .text-input {
         border: solid 1px black;
         border-radius: 7px 7px 7px 7px;

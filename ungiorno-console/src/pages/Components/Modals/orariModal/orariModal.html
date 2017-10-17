@@ -55,7 +55,7 @@
                                 <ion-row>
                                     <ion-col col-5>
                                         <ion-item >
-                                             <ion-row><ion-col col-2>Nome</ion-col><ion-col col-10><input class="text-generic" type="text" [(ngModel)]="fascia.name"  ng-focus="fascia.name === ''" (ngModelChange)='changeName(fascia.name)' (ionBlur)="blurFascia(fascia)"></ion-col></ion-row>
+                                             <ion-row><ion-col col-2>Nome</ion-col><ion-col col-10><input maxlength="20" class="text-generic" type="text" [(ngModel)]="fascia.name"  ng-focus="fascia.name === ''" (ngModelChange)='changeName(fascia.name)' (ionBlur)="blurFascia(fascia)"></ion-col></ion-row>
                                             <!--<ion-label>Nome</ion-label>
                                             <ion-input type="text" [(ngModel)]='fascia.name' ng-focus="fascia.name === ''" (ngModelChange)='changeName(fascia.name)' (ionBlur)="blurFascia(fascia)"></ion-input>-->
                                         </ion-item>
@@ -64,6 +64,7 @@
                                         <ion-item>
                                             <ion-label>Da</ion-label>
                                             <ion-datetime displayFormat="HH:mm" pickerFormat="HH:mm" [(ngModel)]="fascia.start"></ion-datetime>
+                                            <!--<ion-input type="time" [(ngModel)]="fascia.start"></ion-input>-->
                                         </ion-item>
                                         <!-- <ion-item>
                                             <ion-label>Da</ion-label>

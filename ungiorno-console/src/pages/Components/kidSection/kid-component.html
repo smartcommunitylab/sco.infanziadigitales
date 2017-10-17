@@ -36,8 +36,9 @@
     </ion-col>
     <ion-col col-4>
       <ion-item>
-        <ion-label floating>Cerca</ion-label> 
-        <ion-input (input)="searchKids($event)"></ion-input>
+        <!--<ion-label floating>Cerca</ion-label> 
+        <ion-input (input)="searchKids($event)"></ion-input>-->
+        <div>Cerca<input class="text-generic" type="text" (input)="searchKids($event)"></div>
       </ion-item>
     </ion-col>
   </ion-row>

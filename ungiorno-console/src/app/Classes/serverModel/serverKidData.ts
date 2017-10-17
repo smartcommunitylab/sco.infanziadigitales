@@ -1,6 +1,7 @@
 import { AuthPerson } from "./authPerson";
 import { KidServices } from "./kidServices";
 import { Allergy } from "./allergy"
+import { ServerSection } from "./serverSection";
 
 export class ServerKidData {
 	kidId: string;
@@ -8,7 +9,8 @@ export class ServerKidData {
 	lastName: string;
 	firstName: string;
 	image: string;
-	section: any;
+	section: ServerSection;
+	groups :ServerSection[];
 	services: KidServices;
 	persons: AuthPerson[];
 	allergies: Allergy[];

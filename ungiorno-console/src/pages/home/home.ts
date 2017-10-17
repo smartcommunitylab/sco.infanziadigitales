@@ -57,6 +57,7 @@ export class HomePage implements OnInit {
       this.selectedSchool = school;
       this.webService.getTeachers(selectedId).then(teachers => this.selectedSchool.teachers = teachers);
       this.webService.getKids(selectedId).then(kids => this.selectedSchool.kids = kids);
+      this.webService.getGroups(selectedId).then(groups => this.selectedSchool.groups = groups);
       }
     );
   }

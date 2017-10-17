@@ -99,7 +99,8 @@
                         <ion-card-content>
                             <ion-item *ngFor="let gr of selectedTeacherGroups">
                                 {{gr.name}}
-                                <ion-icon name="close" float-end (click)="onRemoveGroup(gr)"></ion-icon>
+                                <!-- NOT SURE TO USE IT
+                                    <ion-icon name="close" float-end (click)="onRemoveGroup(gr)"></ion-icon> -->
                             </ion-item>
                             <ion-item *ngIf="selectedTeacherGroups.length === 0" style='color: grey'>
                                 Nessun gruppo o sezione <br /> Creando una sezione o un gruppo e associandolo a <br /> questa/o

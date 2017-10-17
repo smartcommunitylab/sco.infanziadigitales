@@ -25,6 +25,7 @@ import it.smartcommunitylab.ungiorno.diary.model.DiaryKid.DiaryKidPerson;
  *
  */
 public class Teacher extends SchoolObject {
+    private String id;
     private String teacherId, username, teacherFullname, teacherSurname, teacherName,
             colorToDisplay, pin;
     private List<String> phones;
@@ -143,6 +144,14 @@ public class Teacher extends SchoolObject {
 
     public void setPhones(List<String> phones) {
         this.phones = phones;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
 }

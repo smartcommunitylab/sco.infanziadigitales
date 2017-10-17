@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import it.smartcommunitylab.ungiorno.beans.GroupDTO;
 import it.smartcommunitylab.ungiorno.config.exception.ProfileNotFoundException;
 import it.smartcommunitylab.ungiorno.model.AppInfo;
 import it.smartcommunitylab.ungiorno.model.ConsoleWebUser;
@@ -20,9 +21,12 @@ import it.smartcommunitylab.ungiorno.model.KidProfile;
 import it.smartcommunitylab.ungiorno.model.Response;
 import it.smartcommunitylab.ungiorno.model.School;
 import it.smartcommunitylab.ungiorno.model.SchoolProfile;
+import it.smartcommunitylab.ungiorno.model.SectionDef;
 import it.smartcommunitylab.ungiorno.model.Teacher;
+import it.smartcommunitylab.ungiorno.services.RepositoryService;
+import it.smartcommunitylab.ungiorno.services.impl.KidManager;
+import it.smartcommunitylab.ungiorno.services.impl.TeacherManager;
 import it.smartcommunitylab.ungiorno.storage.AppSetup;
-import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
 import it.smartcommunitylab.ungiorno.utils.JsonUtil;
 import it.smartcommunitylab.ungiorno.utils.PermissionsManager;
 
@@ -42,10 +46,16 @@ public class ConsoleWebController {
     private AppSetup appSetup;
 
     @Autowired
-    private RepositoryManager storage;
+    private RepositoryService storage;
 
     @Autowired
     private PermissionsManager permissionsManager;
+
+    @Autowired
+    private KidManager kidManager;
+
+    @Autowired
+    private TeacherManager teacherManager;
 
     @RequestMapping(method = RequestMethod.GET, value = "/consoleweb/{appId}/me")
     public Response<List<School>> getMyData(@PathVariable String appId)
@@ -137,7 +147,83 @@ public class ConsoleWebController {
         }
 
         storage.updateChildren(appId, schoolId, kidProfiles);
+        kidManager.updateParents(kid);
         return new Response<>(kid);
+    }
+
+
+    @RequestMapping(method = RequestMethod.GET,
+            value = "/consoleweb/{appId}/{schoolId}/group/{groupId}")
+    public @ResponseBody Response<GroupDTO> readGroupInfo(@PathVariable String appId,
+            @PathVariable String schoolId, @PathVariable String groupId) {
+
+        GroupDTO group = storage.getGroupData(appId, schoolId, groupId);
+        if (group != null) {
+            return new Response<>(group);
+        } else {
+            logger.error("section {} is null or it has more than one result", groupId);
+            return new Response<>("section is null or found more than one result");
+        }
+
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/consoleweb/{appId}/{schoolId}/group")
+    public @ResponseBody Response<List<GroupDTO>> readGroupsInfo(@PathVariable String appId,
+            @PathVariable String schoolId) {
+        return new Response<List<GroupDTO>>(storage.getGroupsDataBySchool(appId, schoolId));
+    }
+
+
+    @RequestMapping(method = RequestMethod.PUT,
+            value = "/consoleweb/{appId}/{schoolId}/teacher/{teacherId}/section/{sectionId}")
+    public @ResponseBody Response<Teacher> addTeacherToSection(@PathVariable String appId,
+            @PathVariable String schoolId, @PathVariable String teacherId,
+            @PathVariable String sectionId) {
+        return new Response<>(
+                teacherManager.addToSectionOrGroup(appId, schoolId, teacherId, sectionId));
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE,
+            value = "/consoleweb/{appId}/{schoolId}/teacher/{teacherId}/section/{sectionId}")
+    public @ResponseBody Response<Teacher> removeTeacherFromSection(@PathVariable String appId,
+            @PathVariable String schoolId, @PathVariable String teacherId,
+            @PathVariable String sectionId) {
+        return new Response<>(
+                teacherManager.removeFromSectionOrGroup(appId, schoolId, teacherId, sectionId));
+    }
+
+
+    @RequestMapping(method = RequestMethod.PUT,
+            value = "/consoleweb/{appId}/{schoolId}/kid/{kidId}/group")
+    public @ResponseBody Response<KidProfile> addToGroup(@PathVariable String appId,
+            @PathVariable String schoolId, @PathVariable String kidId,
+            @RequestBody SectionDef group) {
+        return new Response<>(kidManager.addToGroup(appId, schoolId, kidId, group));
+    }
+
+
+    @RequestMapping(method = RequestMethod.DELETE,
+            value = "/consoleweb/{appId}/{schoolId}/kid/{kidId}/group/{groupId}")
+    public @ResponseBody Response<KidProfile> deleteFromGroup(@PathVariable String appId,
+            @PathVariable String schoolId, @PathVariable String kidId,
+            @PathVariable String groupId) {
+        return new Response<>(kidManager.removeFromGroup(appId, schoolId, kidId, groupId));
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE,
+            value = "/consoleweb/{appId}/{schoolId}/kid/{kidId}/section/{sectionId}")
+    public @ResponseBody Response<KidProfile> deleteFromSection(@PathVariable String appId,
+            @PathVariable String schoolId, @PathVariable String kidId,
+            @PathVariable String sectionId) {
+        return new Response<>(kidManager.removeFromSection(appId, schoolId, kidId, sectionId));
+    }
+
+    @RequestMapping(method = RequestMethod.PUT,
+            value = "/consoleweb/{appId}/{schoolId}/kid/{kidId}/section")
+    public @ResponseBody Response<KidProfile> addToSection(@PathVariable String appId,
+            @PathVariable String schoolId, @PathVariable String kidId,
+            @RequestBody SectionDef group) {
+        return new Response<>(kidManager.putInSection(appId, schoolId, kidId, group));
     }
 
     @CrossOrigin

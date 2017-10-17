@@ -1,8 +1,8 @@
 <ion-header>
     <ion-navbar>
         <ion-title>
-             {{selectedGroup.name}} 
-             <span *ngIf="selectedGroup.name===''">Nuovo gruppo</span> 
+            {{selectedGroup.name}}
+            <span *ngIf="selectedGroup.name===''">Nuovo gruppo</span>
         </ion-title>
         <ion-buttons start>
             <button ion-button (click)="close()">Annulla</button>
@@ -10,12 +10,13 @@
         <ion-buttons end>
             <button ion-button (click)="save()" [disabled]='!(copiedGroup.name)'>Salva</button>
         </ion-buttons>
-            
+
     </ion-navbar>
 </ion-header>
 
-<ion-content>       
-    <p style="color: #ccc; margin-left: 25px"><ion-icon name="help-circle"></ion-icon> Tutti i campi contrassegnati dal simbolo * sono obbligatori</p>   
+<ion-content>
+    <p style="color: #ccc; margin-left: 25px">
+        <ion-icon name="help-circle"></ion-icon> Tutti i campi contrassegnati dal simbolo * sono obbligatori</p>
     <ion-grid inset>
         <ion-row>
             <ion-col col-10 offset-1>
@@ -25,9 +26,10 @@
                     </ion-card-header>
                     <ion-card-content>
                         <ion-list inset>
-                            <ion-item class="input-calza">
-                                <ion-label>Nome*</ion-label>
-                                <ion-input name="name" type="text" [(ngModel)]="copiedGroup.name"></ion-input>
+                            <ion-item>
+                                <div><label class="input-label">Nome*</label><input class="text-generic" type="text" [(ngModel)]="copiedGroup.name"></div>
+                                <!--<ion-label>Nome*</ion-label>
+                                <ion-input name="name" type="text" [(ngModel)]="copiedGroup.name"></ion-input>-->
                             </ion-item>
                             <ion-item margin-top>
                                 <ion-label inline>Questo gruppo è una sezione</ion-label>
@@ -40,7 +42,7 @@
         </ion-row>
         <ion-row>
             <ion-col col-10 offset-1>
-                 <ion-card>
+                <ion-card>
                     <ion-card-header>
                         Insegnanti
                     </ion-card-header>
@@ -72,7 +74,7 @@
                                 <ion-icon name="close" float-end (click)="removeKid(kid.id)"></ion-icon>
                             </ion-item>
                             <button ion-button color="green1" (click)='addKid()' margin-top>Aggiungi bambini</button>
-                        </ion-list>  
+                        </ion-list>
                     </ion-card-content>
                 </ion-card>
             </ion-col>

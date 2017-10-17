@@ -52,6 +52,7 @@ public class SchoolProfile extends SchoolObject {
 
     public static class SectionProfile {
         private String sectionId, name;
+        private boolean group;
 
         public String getSectionId() {
             return sectionId;
@@ -67,6 +68,14 @@ public class SchoolProfile extends SchoolObject {
 
         public void setName(String name) {
             this.name = name;
+        }
+
+        public boolean isGroup() {
+            return group;
+        }
+
+        public void setGroup(boolean group) {
+            this.group = group;
         }
     }
 

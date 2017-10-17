@@ -18,17 +18,18 @@
       </ion-item>
     </ion-col>
     <ion-col col-4>
-      <ion-item>
+      <!--<ion-item>
         <ion-label floating>Filtro</ion-label>
         <ion-select interface='popover' [(ngModel)]='filtro' (ngModelChange)="onFiltroTeacherChange(filtro)">
           <ion-option value='0'>Tutti</ion-option>
         </ion-select>
-      </ion-item>
+      </ion-item>-->
     </ion-col>
     <ion-col col-4>
       <ion-item>
-        <ion-label floating>Cerca</ion-label> 
-        <ion-input (input)="searchTeachers($event)"></ion-input>
+         <div>Cerca<input class="text-generic" type="text" (input)="searchTeachers($event)"></div>
+        <!--<ion-label floating>Cerca</ion-label> 
+        <ion-input (input)="searchTeachers($event)"></ion-input>-->
       </ion-item>
     </ion-col>
   </ion-row>

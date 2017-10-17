@@ -2,7 +2,7 @@ import { BusModal } from './../Components/Modals/busModal/busModal';
 import { Bus } from './../../app/Classes/bus';
 import { Group } from './../../app/Classes/group';
 import { GroupModal } from './../Components/Modals/groupModal/groupModal';
-import { WebService } from './../../app/WebService';
+import { WebService } from '../../services/WebService';
 import { School } from './../../app/Classes/school';
 import { Component, OnInit } from '@angular/core';
 import { NavController, AlertController, ModalController } from 'ionic-angular';
@@ -57,6 +57,7 @@ export class HomePage implements OnInit {
       this.selectedSchool = school;
       this.webService.getTeachers(selectedId).then(teachers => this.selectedSchool.teachers = teachers);
       this.webService.getKids(selectedId).then(kids => this.selectedSchool.kids = kids);
+      this.webService.getGroups(selectedId).then(groups => this.selectedSchool.groups = groups);
       }
     );
   }

@@ -136,6 +136,7 @@ public class KidProfile extends SchoolObject {
 
     private String kidId, fullName, lastName, firstName, image;
     private SectionDef section;
+    private List<SectionDef> groups = new ArrayList<>();
     private KidServices services;
     private List<AuthPerson> persons;
     private List<Allergy> allergies;
@@ -318,5 +319,17 @@ public class KidProfile extends SchoolObject {
 
     public void setPartecipateToSperimentation(boolean partecipateToSperimentation) {
         this.partecipateToSperimentation = partecipateToSperimentation;
+    }
+
+    public List<SectionDef> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(List<SectionDef> groups) {
+        this.groups = groups;
+    }
+
+    public void removeFromSection() {
+        section = null;
     }
 }

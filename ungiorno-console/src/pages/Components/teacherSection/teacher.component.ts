@@ -1,7 +1,7 @@
 import { Group } from './../../../app/Classes/group';
 import { TeacherModal } from './../Modals/teacherModal/teacherModal';
 import { Teacher } from './../../../app/Classes/teacher';
-import { WebService } from './../../../app/WebService';
+import { WebService } from './../../../services/WebService';
 import { School } from './../../../app/Classes/school';
 import { Component, Input, OnInit } from '@angular/core';
 import { NavController, AlertController, ModalController } from 'ionic-angular';

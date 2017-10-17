@@ -38,10 +38,10 @@ import it.smartcommunitylab.ungiorno.model.Menu;
 import it.smartcommunitylab.ungiorno.model.Response;
 import it.smartcommunitylab.ungiorno.model.SchoolProfile;
 import it.smartcommunitylab.ungiorno.model.SchoolProfile.SectionProfile;
+import it.smartcommunitylab.ungiorno.services.RepositoryService;
 import it.smartcommunitylab.ungiorno.model.SectionData;
 import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.model.TeacherCalendar;
-import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
 import it.smartcommunitylab.ungiorno.usage.UsageEntity.UsageActor;
 import it.smartcommunitylab.ungiorno.usage.UsageManager;
 import it.smartcommunitylab.ungiorno.utils.JsonUtil;
@@ -53,7 +53,7 @@ public class SchoolController {
     private static final transient Logger logger = LoggerFactory.getLogger(SchoolController.class);
 
     @Autowired
-    private RepositoryManager storage;
+    private RepositoryService storage;
 
     @Autowired
     private PermissionsManager permissions;

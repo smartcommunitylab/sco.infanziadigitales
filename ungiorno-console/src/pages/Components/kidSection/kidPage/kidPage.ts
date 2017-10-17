@@ -5,7 +5,7 @@ import { Service } from './../../../../app/Classes/service';
 import { Group } from './../../../../app/Classes/group';
 import { School } from './../../../../app/Classes/school';
 import { Kid } from './../../../../app/Classes/kid';
-import { WebService } from './../../../../app/WebService';
+import { WebService } from './../../../../services/WebService';
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, ParamMap } from "@angular/router";
 import { Location }                 from '@angular/common';

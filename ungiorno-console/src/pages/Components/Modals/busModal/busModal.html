@@ -1,8 +1,8 @@
 <ion-header>
     <ion-navbar>
         <ion-title>
-             {{selectedBus.name}} 
-             <span *ngIf="selectedBus.name===''">Nuovo bus</span> 
+            {{selectedBus.name}}
+            <span *ngIf="selectedBus.name===''">Nuovo bus</span>
         </ion-title>
         <ion-buttons start>
             <button ion-button (click)="close()">Annulla</button>
@@ -10,12 +10,13 @@
         <ion-buttons end>
             <button ion-button (click)="save()" [disabled]='!(copiedBus.name) || !(copiedBus.capolinea)'>Salva</button>
         </ion-buttons>
-            
+
     </ion-navbar>
 </ion-header>
 
 <ion-content>
-    <p style="color: #ccc; margin-left: 25px" ><ion-icon name="help-circle"></ion-icon> Tutti i campi contrassegnati dal simbolo * sono obbligatori</p>
+    <p style="color: #ccc; margin-left: 25px">
+        <ion-icon name="help-circle"></ion-icon> Tutti i campi contrassegnati dal simbolo * sono obbligatori</p>
     <ion-grid>
         <ion-row>
             <ion-col col-10 offset-1>
@@ -25,15 +26,19 @@
                     </ion-card-header>
                     <ion-card-content>
                         <ion-list inset>
-                            <ion-item class="input-calza">
-                                <ion-label>Nome*</ion-label>
-                                <ion-input name="name" type="text" [(ngModel)]="copiedBus.name"></ion-input>
+                            <ion-item>
+                                
+                                <ion-row><ion-col col-2><label class="input-label">Nome*</label></ion-col><ion-col col-10><input class="text-generic" type="text" [(ngModel)]="copiedBus.name"></ion-col></ion-row>
+                                <!--<ion-label>Nome*</ion-label>
+                                <ion-input name="name" type="text" [(ngModel)]="copiedBus.name"></ion-input>-->
                             </ion-item>
                         </ion-list>
                         <ion-list inset>
-                            <ion-item class="input-calza">
-                                <ion-label>Capolinea*</ion-label>
-                                <ion-input name="name" type="text" [(ngModel)]="copiedBus.capolinea"></ion-input>
+                            <ion-item>
+                                 <ion-row><ion-col col-2><label class="input-label">Capolinea*</label></ion-col><ion-col col-10><input class="text-generic" type="text" [(ngModel)]="copiedBus.capolinea"></ion-col></ion-row>
+
+                                <!--<ion-label>Capolinea*</ion-label>
+                                <ion-input name="name" type="text" [(ngModel)]="copiedBus.capolinea"></ion-input>-->
                             </ion-item>
                         </ion-list>
                     </ion-card-content>
@@ -42,7 +47,7 @@
         </ion-row>
         <ion-row>
             <ion-col col-10 offset-1>
-                 <ion-card>
+                <ion-card>
                     <ion-card-header>
                         Bambini
                     </ion-card-header>
@@ -56,7 +61,7 @@
                                 <ion-icon name="close" float-end (click)="removeKid(kid)"></ion-icon>
                             </ion-item>
                             <button ion-button color="green1" (click)='addKid()' margin-top>Aggiungi bambini</button>
-                        </ion-list>  
+                        </ion-list>
                     </ion-card-content>
                 </ion-card>
             </ion-col>

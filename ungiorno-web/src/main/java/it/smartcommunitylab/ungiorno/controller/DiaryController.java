@@ -10,8 +10,8 @@ import it.smartcommunitylab.ungiorno.model.KidProfile;
 import it.smartcommunitylab.ungiorno.model.Response;
 import it.smartcommunitylab.ungiorno.model.School;
 import it.smartcommunitylab.ungiorno.model.SchoolProfile;
+import it.smartcommunitylab.ungiorno.services.RepositoryService;
 import it.smartcommunitylab.ungiorno.storage.AppSetup;
-import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
 import it.smartcommunitylab.ungiorno.utils.ImageUtils;
 import it.smartcommunitylab.ungiorno.utils.PermissionsManager;
 
@@ -55,7 +55,7 @@ import com.google.common.collect.Lists;
 public class DiaryController {
 
 	@Autowired
-	private RepositoryManager storage;
+	private RepositoryService storage;
 	
 	@Autowired
 	private PermissionsManager permissions;

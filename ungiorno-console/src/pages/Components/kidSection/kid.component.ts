@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ParamMap } from '@angular/router';
 import { Kid } from './../../../app/Classes/kid';
 import { Group } from './../../../app/Classes/group';
-import { WebService } from './../../../app/WebService';
+import { WebService } from './../../../services/WebService';
 import { School } from './../../../app/Classes/school';
 import { Component, Input, OnInit } from '@angular/core';
 import { NavController, AlertController, ModalController } from 'ionic-angular';

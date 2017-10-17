@@ -29,9 +29,10 @@
                     </ion-card-header>
                     <ion-card-content>
                         <ion-list inset>
-                            <ion-item class='input-calza'>
-                                <ion-label>Nome*</ion-label>
-                                <ion-input name="name" type="text" [(ngModel)]="copiedOrario.servizio"></ion-input>
+                            <ion-item >
+                                <div>Nome*<input class="text-generic" type="text" [(ngModel)]="copiedOrario.servizio"></div>
+                                <!--<ion-label>Nome*</ion-label>
+                                <ion-input name="name" type="text" [(ngModel)]="copiedOrario.servizio"></ion-input>-->
                             </ion-item>
                             <ion-item>
                                 <ion-label *ngIf="giaNorm[0]">Questo è il servizio normale</ion-label>
@@ -53,15 +54,17 @@
                             <ion-grid *ngFor="let fascia of copiedOrario.fasce; let i = index">
                                 <ion-row>
                                     <ion-col col-5>
-                                        <ion-item class='input-calza'>
-                                            <ion-label>Nome</ion-label>
-                                            <ion-input type="text" [(ngModel)]='fascia.name' ng-focus="fascia.name === ''" (ngModelChange)='changeName(fascia.name)' (ionBlur)="blurFascia(fascia)"></ion-input>
+                                        <ion-item >
+                                             <ion-row><ion-col col-2>Nome</ion-col><ion-col col-10><input maxlength="20" class="text-generic" type="text" [(ngModel)]="fascia.name"  ng-focus="fascia.name === ''" (ngModelChange)='changeName(fascia.name)' (ionBlur)="blurFascia(fascia)"></ion-col></ion-row>
+                                            <!--<ion-label>Nome</ion-label>
+                                            <ion-input type="text" [(ngModel)]='fascia.name' ng-focus="fascia.name === ''" (ngModelChange)='changeName(fascia.name)' (ionBlur)="blurFascia(fascia)"></ion-input>-->
                                         </ion-item>
                                     </ion-col>
                                     <ion-col col-3 style="bottom: 0px">
                                         <ion-item>
                                             <ion-label>Da</ion-label>
                                             <ion-datetime displayFormat="HH:mm" pickerFormat="HH:mm" [(ngModel)]="fascia.start"></ion-datetime>
+                                            <!--<ion-input type="time" [(ngModel)]="fascia.start"></ion-input>-->
                                         </ion-item>
                                         <!-- <ion-item>
                                             <ion-label>Da</ion-label>

@@ -6,7 +6,7 @@ import { Kid } from './../../../../app/Classes/kid';
 import { Teacher } from './../../../../app/Classes/teacher';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { School } from '../../../../app/Classes/school';
-import { WebService } from '../../../../app/WebService';
+import { WebService } from '../../../../services/WebService';
 import { Component, OnInit } from '@angular/core';
 import { NavParams, NavController, AlertController, PopoverController, ViewController } from "ionic-angular";
 
@@ -41,7 +41,8 @@ export class OrariModal implements OnInit{
     early: string;
 
     sovrapp:boolean;
-
+public datePickerConfig: Object = {
+    }
     constructor(public params: NavParams, public navCtrl:NavController, private webService : WebService, public alertCtrl : AlertController, public popoverCtrl:PopoverController) {
         this.selectedSchool = this.params.get('school') as School;
         this.selectedOrario = this.params.get('orario') as Service;
@@ -70,7 +71,6 @@ export class OrariModal implements OnInit{
             if(this.selectedSchool.servizi.findIndex(x => x.servizio.toLowerCase() == this.selectedOrario.servizio.toLowerCase()) < 0) {
                 this.selectedSchool.servizi.push(this.selectedOrario);
                 this.webService.update(this.selectedSchool);
-                //this.webService.add(this.selectedSchool.id, this.copiedOrario).then(tmp => this.selectedSchool.servizi.push(tmp.servizi[tmp.servizi.length - 1])); //aggiungere case servizio webservice
             }
             else {
                 let alert = this.alertCtrl.create({

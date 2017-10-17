@@ -1,7 +1,7 @@
 import { BusModal } from './../Modals/busModal/busModal';
 import { Bus } from './../../../app/Classes/bus';
 import { School } from './../../../app/Classes/school';
-import { WebService } from './../../../app/WebService';
+import { WebService } from './../../../services/WebService';
 import { Component, OnInit, Input } from '@angular/core';
 import { NavController, AlertController, ModalController } from 'ionic-angular';
 

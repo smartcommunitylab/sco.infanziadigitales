@@ -1,4 +1,4 @@
-import { WebService } from './../../../app/WebService';
+import { WebService } from './../../../services/WebService';
 import { GroupModal } from './../Modals/groupModal/groupModal';
 import { School } from './../../../app/Classes/school';
 import { Group } from './../../../app/Classes/group';
@@ -35,7 +35,6 @@ import { NavController, AlertController, ModalController } from 'ionic-angular';
 
 export class Gruppi implements OnInit {
   @Input() selectedSchool : School;
-  //thisSchool : School = new School();
 
   toDeleteGroup : Group = new Group('', [], false, []);
 
@@ -46,16 +45,13 @@ export class Gruppi implements OnInit {
   constructor(private webService : WebService, public alertCtrl: AlertController, public modalCtrl: ModalController) {}
 
   ngOnInit(): void {
-    //Object.assign(this.thisSchool, this.selectedSchool);
     this.filteredGroups = this.selectedSchool.groups;
     this.onFiltroGroupChange(this.filtro);
   }
 
   showGroupModal(item: Group, isNew : boolean) {
     let modal = this.modalCtrl.create(GroupModal, {'group' : item, 'school' : this.selectedSchool, 'isNew' : isNew}, {enableBackdropDismiss: false, showBackdrop: false});
-    modal.present().then(x=>{
-      //Object.assign(this.selectedSchool, this.thisSchool);
-    });
+    modal.present();
   }
 
   newGroupModal() {
@@ -74,7 +70,6 @@ export class Gruppi implements OnInit {
           text: 'OK',
           handler: () => {
             this.selectedSchool.groups.splice(this.selectedSchool.groups.findIndex(tmp => tmp.name.toLowerCase() === item.name.toLowerCase()), 1);
-            //Object.assign(this.selectedSchool, this.thisSchool);
             this.webService.update(this.selectedSchool);
           }
         }

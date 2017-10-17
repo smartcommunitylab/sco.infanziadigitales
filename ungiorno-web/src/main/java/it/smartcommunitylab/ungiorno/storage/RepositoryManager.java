@@ -18,6 +18,7 @@ import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
@@ -47,7 +48,10 @@ import org.springframework.stereotype.Component;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 
+import it.smartcommunitylab.ungiorno.beans.GroupDTO;
 import it.smartcommunitylab.ungiorno.config.exception.ProfileNotFoundException;
 import it.smartcommunitylab.ungiorno.diary.model.DiaryEntry;
 import it.smartcommunitylab.ungiorno.diary.model.DiaryKid;
@@ -84,13 +88,14 @@ import it.smartcommunitylab.ungiorno.model.SectionData.ServiceProfile;
 import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.model.TeacherCalendar;
 import it.smartcommunitylab.ungiorno.model.TimeSlotSchoolService;
+import it.smartcommunitylab.ungiorno.services.RepositoryService;
 import it.smartcommunitylab.ungiorno.usage.UsageEntity;
 import it.smartcommunitylab.ungiorno.usage.UsageEntity.UsageAction;
 import it.smartcommunitylab.ungiorno.usage.UsageEntity.UsageActor;
 import it.smartcommunitylab.ungiorno.utils.Utils;
 
 @Component
-public class RepositoryManager {
+public class RepositoryManager implements RepositoryService {
 
     private static final Logger logger = LoggerFactory.getLogger(RepositoryManager.class);
     private static final Pattern pattern = Pattern.compile(".*/([^/]*)/image");
@@ -106,6 +111,7 @@ public class RepositoryManager {
     /**
      * @param appId
      */
+    @Override
     public void createApp(AppInfo info) {
         App app = getApp(info.getAppId());
         if (app == null) {
@@ -116,6 +122,7 @@ public class RepositoryManager {
 
     }
 
+    @Override
     public App getApp(String appId) {
         Query query = new Query(new Criteria("appInfo.appId").is(appId));
         return template.findOne(query, App.class);
@@ -137,6 +144,7 @@ public class RepositoryManager {
     /**
      * @param profile
      */
+    @Override
     public void storeSchoolProfile(SchoolProfile profile) {
         SchoolProfile old = template.findOne(schoolQuery(profile.getAppId(), profile.getSchoolId()),
                 SchoolProfile.class);
@@ -170,6 +178,7 @@ public class RepositoryManager {
      * @param schoolId
      * @return SchoolProfile object or null if it doesn't exist
      */
+    @Override
     public SchoolProfile getSchoolProfile(String appId, String schoolId) {
         return template.findOne(schoolQuery(appId, schoolId), SchoolProfile.class);
     }
@@ -179,6 +188,7 @@ public class RepositoryManager {
      * @param username
      * @return
      */
+    @Override
     public SchoolProfile getSchoolProfileForUser(String appId, String username) {
         Query query = Query.query(new Criteria("appId").is(appId).and("accessEmail").is(username));
         return template.findOne(query, SchoolProfile.class);
@@ -194,6 +204,7 @@ public class RepositoryManager {
      * @param schoolId
      * @param children
      */
+    @Override
     public void updateAuthorizations(String appId, String schoolId, List<KidProfile> children) {
         for (KidProfile kid : children) {
             KidProfile old =
@@ -227,6 +238,7 @@ public class RepositoryManager {
      * @param schoolId
      * @param children
      */
+    @Override
     public void updateChildren(String appId, String schoolId, List<KidProfile> children) {
         template.remove(schoolQuery(appId, schoolId), KidProfile.class);
         template.insertAll(children);
@@ -297,6 +309,7 @@ public class RepositoryManager {
      * @param schoolId
      * @param parents
      */
+    @Override
     public void updateParents(String appId, String schoolId, List<Parent> parents) {
         for (Parent parent : parents) {
             Query q = appQuery(appId);
@@ -311,6 +324,7 @@ public class RepositoryManager {
      * @param schoolId
      * @param teachers
      */
+    @Override
     public void updateTeachers(String appId, String schoolId, List<Teacher> teachers) {
         template.remove(schoolQuery(appId, schoolId), Teacher.class);
         template.insertAll(teachers);
@@ -320,6 +334,7 @@ public class RepositoryManager {
      * @param appId
      * @param schoolId
      */
+    @Override
     public List<DiaryKid> updateDiaryKidPersons(String appId, String schoolId) {
         List<DiaryKid> result = new ArrayList<DiaryKid>();
         List<KidProfile> profiles = template.find(schoolQuery(appId, schoolId), KidProfile.class);
@@ -404,6 +419,7 @@ public class RepositoryManager {
      * @param schoolId
      * @return
      */
+    @Override
     public List<Teacher> getTeachers(String appId, String schoolId) {
         return template.find(schoolQuery(appId, schoolId), Teacher.class);
     }
@@ -416,6 +432,7 @@ public class RepositoryManager {
      * @param to
      * @return
      */
+    @Override
     public List<CalendarItem> getCalendar(String appId, String schoolId, String kidId, long from,
             long to) {
         // TODO
@@ -430,6 +447,7 @@ public class RepositoryManager {
      * @param kidId
      * @return
      */
+    @Override
     public KidProfile getKidProfile(String appId, String schoolId, String kidId) {
         return template.findOne(kidQuery(appId, schoolId, kidId), KidProfile.class);
     }
@@ -440,6 +458,7 @@ public class RepositoryManager {
      * @param kidId
      * @return
      */
+    @Override
     public KidConfig getKidConfig(String appId, String schoolId, String kidId) {
         return template.findOne(kidQuery(appId, schoolId, kidId), KidConfig.class);
     }
@@ -448,6 +467,7 @@ public class RepositoryManager {
      * @param config
      * @return
      */
+    @Override
     public KidConfig saveConfig(KidConfig config) {
         // TODO: MERGE of data?
         KidConfig old = getKidConfig(config.getAppId(), config.getSchoolId(), config.getKidId());
@@ -463,6 +483,7 @@ public class RepositoryManager {
      * @param username
      * @return
      */
+    @Override
     public List<KidProfile> getKidProfilesByParent(String appId, String username)
             throws ProfileNotFoundException {
         Query q = appQuery(appId);
@@ -478,6 +499,7 @@ public class RepositoryManager {
         return template.find(q, KidProfile.class);
     }
 
+    @Override
     public List<KidProfile> getKidProfilesBySchool(String appId, String schoolId) {
         Query q = appQuery(appId);
         q.addCriteria(new Criteria("schoolId").is(schoolId));
@@ -489,6 +511,7 @@ public class RepositoryManager {
      * @param username
      * @return
      */
+    @Override
     public List<KidProfile> getKidProfilesByTeacher(String appId, String username) {
         Query q = appQuery(appId);
         q.addCriteria(new Criteria("username").is(username));
@@ -504,6 +527,7 @@ public class RepositoryManager {
      * @param username
      * @return
      */
+    @Override
     public List<DiaryKidProfile> getDiaryKidProfilesByAuthId(String appId, String schoolId,
             String authId, boolean isTeacher) {
         Query q = schoolId == null ? appQuery(appId) : schoolQuery(appId, schoolId);
@@ -530,6 +554,7 @@ public class RepositoryManager {
      * @param stop
      * @return
      */
+    @Override
     public KidConfig saveStop(KidCalFermata stop) {
         stop.setDate(timestampToDate(stop.getDate()));
         Query q = kidQuery(stop.getAppId(), stop.getSchoolId(), stop.getKidId());
@@ -556,12 +581,14 @@ public class RepositoryManager {
      * @param date
      * @return
      */
+    @Override
     public KidCalFermata getStop(String appId, String schoolId, String kidId, long date) {
         Query q = kidQuery(appId, schoolId, kidId);
         q.addCriteria(new Criteria("date").is(timestampToDate(date)));
         return template.findOne(q, KidCalFermata.class);
     }
 
+    @Override
     public List<KidCalFermata> getStop(String appId, String schoolId, String kidId, long dateFrom,
             long dateTo) {
         Query q = kidQuery(appId, schoolId, kidId);
@@ -579,6 +606,7 @@ public class RepositoryManager {
      * @param date
      * @return
      */
+    @Override
     public KidCalAssenza getAbsence(String appId, String schoolId, String kidId, long date) {
         Query q = kidQuery(appId, schoolId, kidId);
         q.addCriteria(new Criteria().andOperator(new Criteria("dateFrom").lte(date),
@@ -593,12 +621,14 @@ public class RepositoryManager {
      * @param date
      * @return
      */
+    @Override
     public KidCalRitiro getReturn(String appId, String schoolId, String kidId, long date) {
         Query q = kidQuery(appId, schoolId, kidId);
         addDayCriteria(date, q);
         return template.findOne(q, KidCalRitiro.class);
     }
 
+    @Override
     public List<KidCalRitiro> getReturn(String appId, String schoolId, String kidId, long dateFrom,
             long dateTo) {
         Query q = kidQuery(appId, schoolId, kidId);
@@ -613,6 +643,7 @@ public class RepositoryManager {
      * @param absence
      * @return
      */
+    @Override
     public KidConfig saveAbsence(KidCalAssenza absence) {
         Query q = kidQuery(absence.getAppId(), absence.getSchoolId(), absence.getKidId());
         q.addCriteria(
@@ -656,6 +687,7 @@ public class RepositoryManager {
      * @param ritiro
      * @return
      */
+    @Override
     public KidConfig saveReturn(KidCalRitiro ritiro) {
         Query q = kidQuery(ritiro.getAppId(), ritiro.getSchoolId(), ritiro.getKidId());
 
@@ -691,6 +723,7 @@ public class RepositoryManager {
      * @param date
      * @return
      */
+    @Override
     public List<KidCalNote> getKidCalNotes(String appId, String schoolId, String kidId, long date) {
         Query q = kidQuery(appId, schoolId, kidId);
         q.addCriteria(new Criteria("date").is(timestampToDate(date)));
@@ -712,6 +745,7 @@ public class RepositoryManager {
      * @param date
      * @return
      */
+    @Override
     public List<KidCalNote> getKidCalNotesForSection(String appId, String schoolId,
             String[] sectionIds, long date) {
         Query q = schoolQuery(appId, schoolId);
@@ -733,6 +767,7 @@ public class RepositoryManager {
     /**
      * @param note
      */
+    @Override
     public KidCalNote saveNote(KidCalNote note) {
         KidCalNote result = null;
         Query q = kidQuery(note.getAppId(), note.getSchoolId(), note.getKidId());
@@ -760,6 +795,7 @@ public class RepositoryManager {
      * @param kidId
      * @return
      */
+    @Override
     public List<KidProfile.DayDefault> getWeekDefault(String appId, String schoolId, String kidId) {
         Query q = schoolQuery(appId, schoolId);
         q.addCriteria(new Criteria("kidId").is(kidId));
@@ -771,6 +807,7 @@ public class RepositoryManager {
     /**
      * @param note
      */
+    @Override
     public List<DayDefault> saveWeekDefault(String appId, String schoolId, String kidId,
             List<DayDefault> days) {
         Query q = schoolQuery(appId, schoolId);
@@ -787,6 +824,7 @@ public class RepositoryManager {
      * @param kidId
      * @return
      */
+    @Override
     public List<KidProfile.DayDefault> getWeekSpecific(String appId, String schoolId, String kidId,
             int weeknr) {
         Query q = schoolQuery(appId, schoolId);
@@ -804,6 +842,7 @@ public class RepositoryManager {
      * @param days
      * @return
      */
+    @Override
     public List<DayDefault> saveWeekSpecific(String appId, String schoolId, String kidId,
             List<DayDefault> days, int weeknr) {
         Query q = schoolQuery(appId, schoolId);
@@ -826,6 +865,7 @@ public class RepositoryManager {
      * @param schoolId
      * @return
      */
+    @Override
     public List<Communication> getCommunications(String appId, String schoolId) {
         return template.find(schoolQuery(appId, schoolId), Communication.class);
     }
@@ -836,6 +876,7 @@ public class RepositoryManager {
      * @param kidId
      * @return
      */
+    @Override
     public List<Communication> getKidCommunications(String appId, String schoolId, String kidId) {
         Query q = schoolQuery(appId, schoolId);
         q.addCriteria(new Criteria("children").is(kidId));
@@ -846,6 +887,7 @@ public class RepositoryManager {
      * @param comm
      * @return
      */
+    @Override
     public Communication saveCommunication(Communication comm) {
         Query q = schoolQuery(comm.getAppId(), comm.getSchoolId());
         q.addCriteria(new Criteria("communicationId").is(comm.getCommunicationId()));
@@ -875,6 +917,7 @@ public class RepositoryManager {
      * @param comm
      * @return
      */
+    @Override
     public Communication getCommunicationById(String appId, String schoolId, String id) {
         Query q = schoolQuery(appId, schoolId);
         q.addCriteria(new Criteria("communicationId").is(id));
@@ -886,6 +929,7 @@ public class RepositoryManager {
      * @param schoolId
      * @param commId
      */
+    @Override
     public void deleteCommunication(String appId, String schoolId, String commId) {
         Query q = schoolQuery(appId, schoolId);
         q.addCriteria(new Criteria("communicationId").is(commId));
@@ -896,6 +940,7 @@ public class RepositoryManager {
      * @param comm
      * @return
      */
+    @Override
     public InternalNote saveInternalNote(InternalNote comm) {
         comm.setDate(timestampToDate(comm.getDate()));
         template.insert(comm);
@@ -908,6 +953,7 @@ public class RepositoryManager {
      * @param kidId
      * @return
      */
+    @Override
     public List<InternalNote> getInternalNotes(String appId, String schoolId, String[] sectionIds,
             long date) {
         Query q = schoolQuery(appId, schoolId);
@@ -940,6 +986,7 @@ public class RepositoryManager {
      * @param to
      * @return
      */
+    @Override
     public List<Menu> getMeals(String appId, String schoolId, long from, long to) {
         // TODO
         return DumpDataHelper.dummyMenu(appId, schoolId);
@@ -952,6 +999,7 @@ public class RepositoryManager {
      * @param date
      * @return
      */
+    @Override
     public BusData getBusData(String appId, String schoolId, long date) {
         Query q = schoolQuery(appId, schoolId);
         // q.addCriteria(new Criteria("dateFrom").is(timestampToDate(date)));
@@ -1027,6 +1075,7 @@ public class RepositoryManager {
      * @param date
      * @return
      */
+    @Override
     public List<SectionData> getSections(String appId, String schoolId, Collection<String> sections,
             long date) {
         SchoolProfile profile = getSchoolProfile(appId, schoolId);
@@ -1184,6 +1233,19 @@ public class RepositoryManager {
         return kids;
     }
 
+    private List<KidProfile> readKidsForSectionsOrGroups(String appId, String schoolId,
+            Collection<String> sections) {
+        Query q = schoolQuery(appId, schoolId);
+        if (sections != null) {
+            q.addCriteria(
+                    new Criteria().orOperator(Criteria.where("section.sectionId").in(sections),
+                            Criteria.where("groups.sectionId").in(sections)));
+        }
+        List<KidProfile> kids = template.find(q, KidProfile.class);
+        return kids;
+    }
+
+
     /**
      * @param kp
      * @return
@@ -1223,6 +1285,7 @@ public class RepositoryManager {
      * @param schoolId
      * @return
      */
+    @Override
     public List<TeacherCalendar> getTeacherCalendar(String appId, String schoolId, long from,
             long to) {
         // TODO
@@ -1245,6 +1308,7 @@ public class RepositoryManager {
      * @param schoolId
      * @param busData
      */
+    @Override
     public void updateKidBusData(String appId, String schoolId, List<KidBusData> busData) {
         template.remove(schoolQuery(appId, schoolId), KidBusData.class);
         template.insertAll(busData);
@@ -1285,18 +1349,21 @@ public class RepositoryManager {
     /**
      * @return
      */
+    @Override
     public Teacher getTeacher(String username, String appId, String schoolId) {
         Query q = schoolQuery(appId, schoolId);
         q.addCriteria(new Criteria("username").is(username));
         return template.findOne(q, Teacher.class);
     }
 
+    @Override
     public Teacher getTeacherByTeacherId(String teacherId, String appId, String schoolId) {
         Query q = schoolQuery(appId, schoolId);
         q.addCriteria(new Criteria("teacherId").is(teacherId));
         return template.findOne(q, Teacher.class);
     }
 
+    @Override
     public Teacher deleteTeacherByTeacherId(String teacherId, String appId, String schoolId) {
         Query q = schoolQuery(appId, schoolId);
         q.addCriteria(new Criteria("teacherId").is(teacherId));
@@ -1317,6 +1384,7 @@ public class RepositoryManager {
     // }
     // }
 
+    @Override
     public Teacher getTeacherByPin(String pin, String appId, String schoolId) {
         Query q = schoolQuery(appId, schoolId);
         q.addCriteria(new Criteria("pin").is(pin));
@@ -1326,6 +1394,7 @@ public class RepositoryManager {
     /**
      * @return
      */
+    @Override
     public Parent getParent(String username, String appId, String schoolId) {
         Query q = appQuery(appId);
         q.addCriteria(new Criteria("username").is(username));
@@ -1333,6 +1402,7 @@ public class RepositoryManager {
         return p;
     }
 
+    @Override
     public List<DiaryEntry> getDiary(String appId, String schoolId, String kidId, String search,
             Integer skip, Integer pageSize, Long from, Long to, String tag) {
         Query q = kidQuery(appId, schoolId, kidId);
@@ -1367,12 +1437,14 @@ public class RepositoryManager {
         return template.find(q, DiaryEntry.class);
     }
 
+    @Override
     public DiaryEntry getDiaryEntry(String appId, String schoolId, String kidId, String entryId) {
         Query q = kidQuery(appId, schoolId, kidId);
         q.addCriteria(new Criteria("entryId").is(entryId));
         return template.findOne(q, DiaryEntry.class);
     }
 
+    @Override
     public void deleteDiaryEntry(String appId, String schoolId, String kidId, String entryId) {
         // TODO cleanup multimedia
         Query q = kidQuery(appId, schoolId, kidId);
@@ -1380,6 +1452,7 @@ public class RepositoryManager {
         template.remove(q, DiaryEntry.class);
     }
 
+    @Override
     public void saveDiaryEntry(DiaryEntry diary) {
         Query q = kidQuery(diary.getAppId(), diary.getSchoolId(), diary.getKidId());
         q.addCriteria(new Criteria("entryId").is(diary.getEntryId()));
@@ -1387,6 +1460,7 @@ public class RepositoryManager {
         template.save(diary);
     }
 
+    @Override
     public MultimediaEntry getMultimediaEntry(String appId, String schoolId, String kidId,
             String multimediaId) {
         Query q = kidQuery(appId, schoolId, kidId);
@@ -1394,6 +1468,7 @@ public class RepositoryManager {
         return template.findOne(q, MultimediaEntry.class);
     }
 
+    @Override
     public void saveMultimediaEntry(MultimediaEntry multimediaEntry) {
         Query q = kidQuery(multimediaEntry.getAppId(), multimediaEntry.getSchoolId(),
                 multimediaEntry.getKidId());
@@ -1402,6 +1477,7 @@ public class RepositoryManager {
         template.save(multimediaEntry);
     }
 
+    @Override
     public void sortNotes(List<Note> notes) {
         if ((notes != null) && (notes.size() > 0)) {
             // order notes inside
@@ -1423,6 +1499,7 @@ public class RepositoryManager {
      * @param kidId
      * @return
      */
+    @Override
     public DiaryKid getDiaryKid(String appId, String schoolId, String kidId) {
         DiaryKid kid = template.findOne(kidQuery(appId, schoolId, kidId), DiaryKid.class);
         return kid;
@@ -1433,6 +1510,7 @@ public class RepositoryManager {
      * @param isTeacher
      * @return
      */
+    @Override
     public DiaryKid updateDiaryKid(DiaryKid kid, boolean isTeacher) {
         DiaryKid old = template.findOne(kidQuery(kid.getAppId(), kid.getSchoolId(), kid.getKidId()),
                 DiaryKid.class);
@@ -1453,6 +1531,7 @@ public class RepositoryManager {
      * @param to
      * @return
      */
+    @Override
     public List<MultimediaEntry> getMultimediaEntries(String appId, String schoolId, String kidId,
             Integer skip, Integer pageSize, Long from, Long to) {
 
@@ -1485,6 +1564,7 @@ public class RepositoryManager {
      * @param kidId
      * @param entryId
      */
+    @Override
     public void cleanImages(String appId, String schoolId, String kidId, String entryId) {
         DiaryEntry de = getDiaryEntry(appId, schoolId, kidId, entryId);
         if (de != null && de.getPictures() != null) {
@@ -1499,6 +1579,7 @@ public class RepositoryManager {
      * @param entryId
      * @param oldPics
      */
+    @Override
     public void cleanImages(String appId, String schoolId, String kidId, String entryId,
             Set<String> oldPics) {
         if (oldPics == null || oldPics.isEmpty())
@@ -1537,6 +1618,7 @@ public class RepositoryManager {
         return null;
     }
 
+    @Override
     public List<ChatMessage> getChatMessages(String appId, String schoolId, String kidId,
             long timestamp, int limit) {
         List<ChatMessage> result = null;
@@ -1554,12 +1636,14 @@ public class RepositoryManager {
         return result;
     }
 
+    @Override
     public ChatMessage saveChatMessage(ChatMessage message) {
         message.setMessageId(Utils.getUUID());
         template.save(message);
         return message;
     }
 
+    @Override
     public ChatMessage removeChatMessage(String appId, String schoolId, String messageId) {
         Criteria criteria = new Criteria("appId").is(appId).and("schoolId").is(schoolId)
                 .and("messageId").is(messageId);
@@ -1571,6 +1655,7 @@ public class RepositoryManager {
         return dbMessage;
     }
 
+    @Override
     public ChatMessage updateChatMessage(ChatMessage message) {
         Criteria criteria = new Criteria("appId").is(message.getAppId()).and("schoolId")
                 .is(message.getSchoolId()).and("messageId").is(message.getMessageId());
@@ -1589,6 +1674,7 @@ public class RepositoryManager {
         return dbMessage;
     }
 
+    @Override
     public ChatMessage chatMessageReceived(String appId, String schoolId, String messageId) {
         Criteria criteria = new Criteria("appId").is(appId).and("schoolId").is(schoolId)
                 .and("messageId").is(messageId);
@@ -1603,6 +1689,7 @@ public class RepositoryManager {
         return dbMessage;
     }
 
+    @Override
     public ChatMessage chatMessageSeen(String appId, String schoolId, String messageId) {
         Criteria criteria = new Criteria("appId").is(appId).and("schoolId").is(schoolId)
                 .and("messageId").is(messageId);
@@ -1617,10 +1704,12 @@ public class RepositoryManager {
         return dbMessage;
     }
 
+    @Override
     public LoginData getTokenData(String username) {
         return template.findOne(new Query(new Criteria("username").is(username)), LoginData.class);
     }
 
+    @Override
     public LoginData getTokenDataByPersonId(String personId, String appId) {
         Query q = appQuery(appId);
         q.addCriteria(new Criteria("personId").is(personId));
@@ -1631,6 +1720,7 @@ public class RepositoryManager {
                 LoginData.class);
     }
 
+    @Override
     public void saveTokenData(LoginData loginData) {
         template.save(loginData);
     }
@@ -1641,6 +1731,7 @@ public class RepositoryManager {
      * @param kidId
      * @return
      */
+    @Override
     public Long getUnreadChatMessageCount(String appId, String schoolId, String kidId,
             String sender) {
         Criteria criteria = new Criteria("appId").is(appId).and("schoolId").is(schoolId)
@@ -1656,6 +1747,7 @@ public class RepositoryManager {
      * @param sentByParent
      * @return
      */
+    @Override
     public Map<String, Map<String, Integer>> getAllUnreadChatMessageCount(String appId,
             String schoolId, String sender) {
         Map<String, Map<String, Integer>> result = new HashMap<String, Map<String, Integer>>();
@@ -1696,6 +1788,7 @@ public class RepositoryManager {
      * @param teacherId
      * @return
      */
+    @Override
     public Author getTeacherAsAuthor(String appId, String schoolId, String teacherId) {
         Teacher teacher = getTeacherByTeacherId(teacherId, appId, schoolId);
         Author a = null;
@@ -1714,6 +1807,7 @@ public class RepositoryManager {
      * @param userId
      * @return
      */
+    @Override
     public Author getTeacherAsParent(String appId, String schoolId, String userId) {
         Parent p = getParent(userId, appId, schoolId);
         Author a = null;
@@ -1726,10 +1820,12 @@ public class RepositoryManager {
         return a;
     }
 
+    @Override
     public void saveUsageEntity(UsageEntity entity) {
         template.save(entity);
     }
 
+    @Override
     public List<UsageEntity> findUsageEntities(String appId, String schoolId, UsageAction action,
             UsageActor from, UsageActor to, Object extra, Long fromTime, Long toTime) {
         Criteria criteria = new Criteria("appId").is(appId).and("schoolId").is(schoolId);
@@ -1767,6 +1863,7 @@ public class RepositoryManager {
         return results;
     }
 
+    @Override
     public long countUsageEntities(String appId, String schoolId, UsageAction action,
             UsageActor from, UsageActor to, Object extra, Long fromTime, Long toTime) {
         Criteria criteria = new Criteria("appId").is(appId).and("schoolId").is(schoolId);
@@ -1803,5 +1900,71 @@ public class RepositoryManager {
 
         return resultN;
     }
+
+    @Override
+    public KidProfile updateKid(KidProfile kid) {
+        Criteria criteria =
+                new Criteria("appId").is(kid.getAppId()).and("schoolId").is(kid.getSchoolId());
+        criteria.and("kidId").is(kid.getKidId());
+        Query q = new Query(criteria);
+        DBObject dbObject = new BasicDBObject();
+        template.getConverter().write(kid, dbObject);
+        Update updateDoc = Update.fromDBObject(dbObject);
+        return template.findAndModify(q, updateDoc, KidProfile.class);
+
+    }
+
+    @Override
+    public GroupDTO getGroupData(String appId, String schoolId, String groupId) {
+        SchoolProfile profile = getSchoolProfile(appId, schoolId);
+        List<SectionProfile> sections = profile.getSections();
+        GroupDTO group = null;
+        for (SectionProfile section : sections) {
+            if (section.getSectionId().equalsIgnoreCase(groupId)) {
+                group = new GroupDTO();
+                group.setId(groupId);
+                group.setName(section.getName());
+                group.setSection(!section.isGroup());
+                List<KidProfile> kidsInGroup =
+                        readKidsForSectionsOrGroups(appId, schoolId, Arrays.asList(groupId));
+                List<String> kidIdsInGroup = new ArrayList<>();
+                for (KidProfile kid : kidsInGroup) {
+                    kidIdsInGroup.add(kid.getKidId());
+                }
+                group.setKidIds(kidIdsInGroup);
+                List<Teacher> teachers = getTeachers(appId, schoolId);
+                List<String> teacherIdsInGroup = new ArrayList<>();
+                for (Teacher teacher : teachers) {
+                    if (teacher.getSectionIds().contains(groupId)) {
+                        teacherIdsInGroup.add(teacher.getTeacherId());
+                    }
+                }
+
+                group.setTeacherIds(teacherIdsInGroup);
+            }
+        }
+
+        return group;
+    }
+
+    @Override
+    public List<GroupDTO> getGroupsDataBySchool(String appId, String schoolId) {
+        SchoolProfile school = getSchoolProfile(appId, schoolId);
+        List<GroupDTO> groups = new ArrayList<>();
+        for (SectionProfile section : school.getSections()) {
+            groups.add(getGroupData(appId, schoolId, section.getSectionId()));
+        }
+        return groups;
+    }
+
+    @Override
+    public Teacher saveOrUpdateTeacher(String appId, String schoolId, Teacher teacher) {
+        teacher.setAppId(appId);
+        teacher.setSchoolId(schoolId);
+        template.save(teacher);
+        return teacher;
+
+    }
+
 
 }

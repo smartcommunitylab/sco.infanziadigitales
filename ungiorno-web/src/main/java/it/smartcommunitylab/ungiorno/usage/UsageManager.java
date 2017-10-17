@@ -1,6 +1,6 @@
 package it.smartcommunitylab.ungiorno.usage;
 
-import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
+import it.smartcommunitylab.ungiorno.services.RepositoryService;
 import it.smartcommunitylab.ungiorno.usage.UsageEntity.UsageAction;
 import it.smartcommunitylab.ungiorno.usage.UsageEntity.UsageActor;
 
@@ -26,7 +26,7 @@ import com.google.common.collect.Sets;
 public class UsageManager {
 
 	@Autowired
-	private RepositoryManager repository;
+	private RepositoryService repository;
 	
 	private SimpleDateFormat osdf = new SimpleDateFormat("yy/MM/dd");
 	private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");

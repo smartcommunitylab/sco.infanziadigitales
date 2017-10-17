@@ -256,9 +256,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.weekInfo=[];
     $scope.getSchoolProfileNormalConfig=$filter('getSchoolNormalService')(profileService.getSchoolProfile().services);
     var fromtime=$scope.getSchoolProfileNormalConfig['fromTime'];
-    fromtime=fromtime.replace(/^0+/, '');
+    var ent=moment(fromtime).format('H:m');
+    fromtime=ent.replace(/^0+/, '');
     var totime=$scope.getSchoolProfileNormalConfig['toTime'];
-    totime=totime.replace(/^0+/, '');
+    var usc=moment(totime).format('H:m');
+    totime=usc.replace(/^0+/, '');
     if(fromtime=='' && totime==''){
         alert('No school Config');//TODO translate this
     }
@@ -271,17 +273,19 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             if(enabled && type=='Anticipo'){
                var tempServ=$scope.listServicesDb[i].timeSlots;
                fromtime=tempServ[0]['fromTime'];
-               fromtime=fromtime.replace(/^0+/, '');
+               var ent=moment(fromtime).format('H:m');
+               fromtime=ent;//fromtime.replace(/^0+/, '');
             }
             if(enabled && type=='Posticipo'){
                 var tempServ=$scope.listServicesDb[i].timeSlots;
                 totime=tempServ[0]['toTime'];
-                totime=totime.replace(/^0+/, '');
+                var usc=moment(totime).format('H:m');
+                totime=usc;//totime.replace(/^0+/, '');
             }
     }
     }
     week_planService.getWeekPlan(week,kidId).then(function (data) {
-      if(data!=null){
+      if(data!=null && data!= undefined && data.length>0){
         var motiv_type=(data[day]['motivazione']!=undefined && data[day]['motivazione']!=null ? data[day]['motivazione']['type'] : '');
         var motiv_subtype=(data[day]['motivazione']!=undefined && data[day]['motivazione']!=null ? data[day]['motivazione']['subtype'] : '');
         jsonTest={'ore_entrata':data[day]['entrata'].replace(/^0+/, ''),'ore_uscita':data[day]['uscita'].replace(/^0+/, ''),'addressBus':'Nome Test',
@@ -295,7 +299,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
       }
       else{
           week_planService.getDefaultWeekPlan(kidId).then(function (data) {
-            if(data!=null){
+            if(data!=null && data!= undefined && data.length>0){
                 var motiv_type=(data[day]['motivazione']!=undefined && data[day]['motivazione']!=null ? data[day]['motivazione']['type'] : '');
                var motiv_subtype=(data[day]['motivazione']!=undefined && data[day]['motivazione']!=null ? data[day]['motivazione']['subtype'] : '');
                jsonTest={'ore_entrata':data[day]['entrata'].replace(/^0+/, ''),'ore_uscita':data[day]['uscita'].replace(/^0+/, ''),'addressBus':'Nome Test',

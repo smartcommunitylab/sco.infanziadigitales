@@ -570,8 +570,8 @@ p {
 }
 
 #home .sectionBabyIndicator-notnow {
-  max-height: 150px;
-  max-width: 150px;
+  max-height: 80px;
+  max-width: 80px;
   margin: auto;
 }
 
@@ -599,8 +599,8 @@ p {
 }
 
 #home .sectionBabyIndicator-now {
-  max-height: 200px;
-  max-width: 200px;
+  max-height: 100px;
+  max-width: 100px;
   margin: auto;
 }
 
@@ -1468,7 +1468,9 @@ textarea {
 .child-presente {
   background-color: #98ba3c;
 }
-
+.child-presente-uscita {
+  background-color: #009688;
+}
 .child-uscito {
   opacity: 0.4;
 }
@@ -2474,4 +2476,29 @@ ion-content .scroll {
 .no-connection-popup .popup-buttons .button {
   color: white;
   background-color: #bd3e4d;
+}
+
+    
+.temp:after {
+    width: 06;
+    height: 5;
+    border-left: 25px solid transparent;
+    border-right: 25px solid transparent;
+    border-bottom: 25px solid #98ba3c;
+    content: " ";
+    bottom: -15px;
+    margin-left: 65px;
+}
+.hrmenu{
+  border: 66;
+  height: 1px;
+  background: #98ba3c;
+  padding-top:5px;
+  margin-top: -8px;
+}
+
+.iconStyle{
+  width:10px;
+  height:15px;
+  font-size: 20px;
 }

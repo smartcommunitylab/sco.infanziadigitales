@@ -4,6 +4,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
   $ionicNavBarDelegate.showBackButton(true);
   $ionicHistory.backView();
   $scope.babyConfiguration = configurationService.getBabyConfiguration();
+  console.log($scope.babyConfiguration);
   $scope.babyProfile = profileService.getBabyProfile();
   $scope.babyServices = [];
   $scope.busEnabled = false;
@@ -15,19 +16,21 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
   if ($scope.babyConfiguration.services && $scope.babyConfiguration.services.bus) {
     $scope.busEnabled = $scope.babyConfiguration.services.bus.active;
   }
-  console.log($scope.babyProfile);
-  var count=0;
+
   var temp;
-  for (var k in $scope.babyProfile.services.timeSlotServices) {
-    temp=$scope.babyProfile.services.timeSlotServices[count];
-      if (temp.enabled){
-        $scope.babyServices.push({
-          text: temp.name,
-          checked: temp.enabled
-        });
-        count++;
-      }
-  }
+  $scope.listServicesDb=$scope.babyConfiguration.services;
+  for(var i=0;i<$scope.listServicesDb.length;i++){
+    var type=$scope.listServicesDb[i].name;
+    var enabled=$scope.listServicesDb[i].enabled;
+       var tempServ=$scope.listServicesDb[i].timeSlots;
+       for(var j=0;j<tempServ.length;j++){
+           $scope.babyServices.push({
+            text: tempServ[j]['name'],
+            active: enabled
+          });
+    }
+}
+  
   //set hour
   var exitTime = new Date();
   $scope.briefInfo=profileService.getBriefInfo();

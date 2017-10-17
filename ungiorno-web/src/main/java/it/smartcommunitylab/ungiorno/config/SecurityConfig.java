@@ -60,8 +60,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(oauthAuthenticationFilter(), BasicAuthenticationFilter.class);
 
 
-        // http.csrf().disable().authorizeRequests().antMatchers("/consoleweb/**").permitAll().and()
-        // .addFilterBefore(oauthAuthenticationFilter(), BasicAuthenticationFilter.class);
+        http.csrf().disable().authorizeRequests().antMatchers("/consoleweb/**").permitAll().and()
+                .addFilterBefore(oauthAuthenticationFilter(), BasicAuthenticationFilter.class);
 
         http.csrf().disable().authorizeRequests().antMatchers("/", "/console/**")
                 .hasAnyAuthority(AppDetails.MANAGER).anyRequest().permitAll();

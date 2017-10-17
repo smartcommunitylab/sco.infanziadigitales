@@ -3,7 +3,7 @@
         <ion-col col-10 offset-1>
             <ion-card>
                 <ion-card-header>
-                Informazioni di base
+                    Informazioni di base
                 </ion-card-header>
                 <ion-card-content margin-top>
                     <ion-grid inset>
@@ -12,7 +12,7 @@
                                 Nome:
                             </ion-col>
                             <ion-col col-11>
-                                {{selectedSchool.name}}
+                                <p *ngIf='selectedSchool.name'>{{selectedSchool.name}}</p><p *ngIf='!selectedSchool.name' class="empty-field">Dato non inserito</p>
                             </ion-col>
                         </ion-row>
                         <!--<ion-row margin-bottom>
@@ -32,20 +32,21 @@
         <ion-col col-10 offset-1>
             <ion-card>
                 <ion-card-header>
-                Contatti
-                <button class='edit' ion-button color='magenta1' float-end *ngIf='!editContatti' (click)="onContattiEdit()">Modifica</button>
-                <button class='edit' ion-button color='magenta1' float-end *ngIf='editContatti' (click)="onContattiSave()">Salva</button>
-                <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='editContatti' (click)="onContattiCancel()">Annulla</button>
+                    Contatti
+                    <button class='edit' ion-button color='magenta1' float-end *ngIf='!editContatti' (click)="onContattiEdit()">Modifica</button>
+                    <button class='edit' ion-button color='magenta1' float-end *ngIf='editContatti' (click)="onContattiSave()">Salva</button>
+                    <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='editContatti' (click)="onContattiCancel()">Annulla</button>
                 </ion-card-header>
                 <ion-card-content margin-top>
                     <ion-grid inset>
-                        <list-widget [items]="selectedSchool.phoneNumbers" [editMode]="editContatti" [label]="'Telefono'" ></list-widget>
+                        <list-widget  [items]="selectedSchool.phoneNumbers" [editMode]="editContatti" [label]="'Telefono'"></list-widget>
                         <ion-row margin-bottom>
-                            <ion-col col-1>
+                            <ion-col col-2>
                                 Indirizzo email:
                             </ion-col>
-                            <ion-col col-11>
+                            <ion-col col-10>
                                 <ion-input type="tel" [(ngModel)]="selectedSchool.email" [disabled]='!editContatti' no-margin></ion-input>
+                                <p *ngIf='!selectedSchool.email && !editContatti' class="empty-field">Dato non inserito</p>
                             </ion-col>
                         </ion-row>
                     </ion-grid>
@@ -63,12 +64,25 @@
                     <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='editAssenze' (click)="onAssenzeCancel()">Annulla</button>
                 </ion-card-header>
                 <ion-card-content margin-top>
-                    <ion-grid *ngIf="editAssenze" no-padding no-margin><ion-row><ion-col col-4>
-                        <ion-item class="ome" no-padding no-margin>
+                    <ion-grid *ngIf="editAssenze" no-padding no-margin>
+                        <ion-row>
+                            <ion-col col-10>
+                                <ion-row margin-bottom>
+                                    <ion-col col-2>
+                                        Nome tipologia:
+                                    </ion-col>
+                                    <ion-col col-10>
+                                        <input type='text' id='giord' [(ngModel)]="newAssenza" placeholder="Inserisci tipologia di assenza" no-padding no-margin>
+                                        <ion-icon name="add-circle" color="green3" (click)="addAssenza(newAssenza)" item-end></ion-icon>
+                                    </ion-col>
+                                </ion-row>
+                                <!--<ion-item class="ome" no-padding no-margin>
                             <input type='text' id='giord' [(ngModel)]="newAssenza" placeholder="Inserisci tipologia di assenza" no-padding no-margin>
                             <ion-icon name="add-circle" color="green3" (click)="addAssenza(newAssenza)" item-end></ion-icon>    
-                        </ion-item> 
-                    </ion-col></ion-row></ion-grid>
+                        </ion-item> -->
+                            </ion-col>
+                        </ion-row>
+                    </ion-grid>
                     <ion-list>
                         <ion-item *ngIf="editAssenze">
                             <ion-label>Malattia</ion-label>
@@ -84,41 +98,55 @@
                         <!--<ion-item *ngIf="!editAssenze && selectedSchool.familiari">
                             Motivi familiari
                         </ion-item>-->
+                        <!--<ion-item *ngIf="selectedSchool.assenze.length === 0 && !selectedSchool.malattia && !editAssenze" text-center>Nessuna tipologia di assenze</ion-item>-->
                         <ion-item *ngFor="let item of selectedSchool.assenze">
                             {{item}}
                             <ion-icon *ngIf="selectedSchool.assenze.length > 0 && editAssenze" name="close" float-end (click)="removeAssenza(item)"></ion-icon>
                         </ion-item>
-                        <ion-item *ngIf="selectedSchool.assenze.length === 0 && !editAssenze && !selectedSchool.familiari && !selectedSchool.malattia">Nessuna tipologia di assenza</ion-item> 
+                        <ion-item *ngIf="selectedSchool.assenze.length === 0 && !editAssenze && !selectedSchool.familiari && !selectedSchool.malattia" text-center>Nessuna tipologia di assenza</ion-item>
                     </ion-list>
                 </ion-card-content>
             </ion-card>
         </ion-col>
-    </ion-row>       
+    </ion-row>
     <ion-row *ngIf="selectedSchool.malattia">
         <ion-col col-10 offset-1>
             <ion-card>
                 <ion-card-header>
-                Tipologia di malattie
-                <button class='edit' ion-button color='magenta1' float-end *ngIf='!editMalattie' (click)="onMalattieEdit()">Modifica</button>
-                <button class='edit' ion-button color='magenta1' float-end *ngIf='editMalattie' (click)="onMalattieSave()">Salva</button>
-                <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='editMalattie' (click)="onMalattieCancel()">Annulla</button>
+                    Tipologia di malattie
+                    <button class='edit' ion-button color='magenta1' float-end *ngIf='!editMalattie' (click)="onMalattieEdit()">Modifica</button>
+                    <button class='edit' ion-button color='magenta1' float-end *ngIf='editMalattie' (click)="onMalattieSave()">Salva</button>
+                    <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='editMalattie' (click)="onMalattieCancel()">Annulla</button>
                 </ion-card-header>
                 <ion-card-content margin-top>
-                    <ion-grid *ngIf="editMalattie" no-padding no-margin><ion-row><ion-col col-4>
-                        <ion-item class="ome" no-padding no-margin>
-                            <input type='text' id='giord' [(ngModel)]="newMalattia" placeholder="Inserisci tipologia di malattia" no-padding no-margin>
-                            <ion-icon name="add-circle" color="green3" (click)="addMalattia(newMalattia)" item-end></ion-icon>    
-                        </ion-item> 
-                    </ion-col></ion-row></ion-grid>
+                    <ion-grid *ngIf="editMalattie" no-padding no-margin>
+                        <ion-row>
+                            <ion-col col-10>
+                                <ion-row margin-bottom>
+                                    <ion-col col-2>
+                                        Nome malattia:
+                                    </ion-col>
+                                    <ion-col col-10>
+                                        <input type='text' id='giord' [(ngModel)]="newMalattia" placeholder="Inserisci tipologia di malattia" no-padding no-margin>
+                                    <ion-icon name="add-circle" color="green3" (click)="addMalattia(newMalattia)" item-end></ion-icon>
+                                    </ion-col>
+                                </ion-row>
+                                <!--<ion-item class="ome" no-padding no-margin>
+                                    <input type='text' id='giord' [(ngModel)]="newMalattia" placeholder="Inserisci tipologia di malattia" no-padding no-margin>
+                                    <ion-icon name="add-circle" color="green3" (click)="addMalattia(newMalattia)" item-end></ion-icon>
+                                </ion-item>-->
+                            </ion-col>
+                        </ion-row>
+                    </ion-grid>
                     <ion-list>
                         <ion-item *ngFor="let item of selectedSchool.malattie">
                             {{item}}
                             <ion-icon *ngIf="selectedSchool.malattie.length > 0 && editMalattie" name="close" float-end (click)="removeMalattia(item)"></ion-icon>
                         </ion-item>
-                        <ion-item *ngIf="selectedSchool.malattie.length === 0">Nessuna tipologia di malattia</ion-item> 
+                        <ion-item *ngIf="selectedSchool.malattie.length === 0 && !editMalattie" text-center class="empty-field ">Nessuna tipologia di malattia</ion-item>
                     </ion-list>
                 </ion-card-content>
             </ion-card>
         </ion-col>
-    </ion-row>    
+    </ion-row>
 </ion-grid>

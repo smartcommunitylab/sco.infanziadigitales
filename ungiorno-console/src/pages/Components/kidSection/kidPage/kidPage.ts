@@ -381,11 +381,16 @@ export class KidPage implements OnInit{
     }
 
     addDelega() {
-        if(!this.isNewD) {
+        // if(!this.isNewD) {
             this.isNewD = true;
             this.selectedDelega = new Delega('', '' ,'');
             this.editD = true;
-        }
+        // }
+        // else {
+        //     //reset field
+        //     this.selectedDelega = new Delega('', '' ,'');
+        //     this.editD = true;
+        // }
     }
 
     onSelectDelega(delega: Delega) {

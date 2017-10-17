@@ -41,6 +41,7 @@
   <ion-row>
     <ion-col col-12>
       <ion-list>
+        <ion-item *ngIf="filteredTeacher.length === 0 " text-center class="empty-field ">Nessun insegnante presente</ion-item>
         <ion-item *ngFor="let item of filteredTeacher">
           <ion-icon name="book" item-start color="green3" ></ion-icon>
           <h2>{{item.name}} {{item.surname}}</h2>

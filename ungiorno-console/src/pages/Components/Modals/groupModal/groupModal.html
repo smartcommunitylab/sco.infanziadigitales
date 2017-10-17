@@ -48,6 +48,7 @@
                     </ion-card-header>
                     <ion-card-content>
                         <ion-list inset>
+                            <ion-item *ngIf="selectedGroupTeachers.length === 0 " text-center class="empty-field ">Nessun insegnante presente</ion-item>
                             <ion-item *ngFor="let tea of selectedGroupTeachers">
                                 {{tea.name}} {{tea.surname}}
                                 <ion-icon name="close" float-end (click)="removeTeacher(tea)"></ion-icon>
@@ -66,6 +67,7 @@
                     </ion-card-header>
                     <ion-card-content>
                         <ion-list inset>
+                            <ion-item *ngIf="selectedGroupKids.length === 0 " text-center class="empty-field ">Nessun alunno presente</ion-item>
                             <ion-item *ngFor="let kid of selectedGroupKids">
                                 <ion-thumbnail item-start>
                                     <img src={{kid.image}}>

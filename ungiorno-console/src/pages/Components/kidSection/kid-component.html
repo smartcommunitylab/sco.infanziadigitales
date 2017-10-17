@@ -50,6 +50,7 @@
   <ion-row>
     <ion-col col-12>
       <ion-list>
+        <ion-item *ngIf="filteredKid.length === 0 " text-center class="empty-field ">Nessun bambino presente</ion-item>
         <ion-item *ngFor="let item of filteredKid">
           <ion-thumbnail item-start>
             <img src="{{item.image}}">

@@ -36,8 +36,21 @@
             </div>
           </div>
         </div>
-        <div class="row home-section-space " ng-if="!communicationExpanded ">
-          <div class="col ">
+        <div class="row home-section-space " ng-if="!communicationExpanded " id="wrapper">
+            <div class="col " ng-class="{ 'temp':isNow(item.value)}" ng-repeat="item in listServices | orderBy:item.entry">
+                <div class="sectionPeriod" ng-click="changeSectionPeriod(item.value) ">
+                  <svg ng-class="{ 'sectionBabyIndicator-now':isNow(item.value), 'sectionBabyIndicator-notnow':!isNow(item.value)} " id="svg " viewbox="0 0 100 100 ">
+                    <circle cx="50 " cy="50 " r="45 " fill="{{colors[item.value]}}" />
+                    <path fill="none " stroke-linecap="round " stroke-width="5 " stroke="#bd3e4d " stroke-dasharray="{{getLineStroke(availableChildren[item.value],totalChildrenNumber[item.value])}} " d="M50 10 a 40 40 0 0 1 0 80 a 40 40 0 0 1 0 -80 " />
+                    <text x="50 " y="50 " text-anchor="middle " dy="7 " font-size="19 ">{{availableChildren[item.value]}} su {{totalChildrenNumber[item.value]}}</text>
+                  </svg>
+                </div>
+                <div class="section-text ">
+                  {{item.value| translate}}
+                </div>
+              </div>
+          <!--
+          <div class="col temp">
             <div class="sectionPeriod " ng-click="changeSectionPeriod( 'anticipo') ">
               <svg ng-class="{ 'sectionBabyIndicator-now':isNow( 'anticipo'), 'sectionBabyIndicator-notnow':!isNow( 'anticipo')} " id="svg " viewbox="0 0 100 100 ">
                 <circle cx="50 " cy="50 " r="45 " fill="{{colors[ 'anticipo']}} " />
@@ -46,10 +59,10 @@
               </svg>
             </div>
             <div class="section-text ">
-              {{'home_anticipo' | translate}}
+              sdasdasd{{'home_anticipo' | translate}}
             </div>
           </div>
-          <div class="col ">
+          <div class="col temp">
             <div class="sectionPeriod " ng-click="changeSectionPeriod( 'mensa') ">
 
               <svg ng-class="{ 'sectionBabyIndicator-now':isNow( 'mensa'), 'sectionBabyIndicator-notnow':!isNow( 'mensa')} " id="svg " viewbox="0 0 100 100 ">
@@ -62,7 +75,7 @@
               {{'home_orario_normale' | translate}}
             </div>
           </div>
-          <div class="col ">
+          <div class="col temp">
             <div ng-class="{ 'sectionBabyIndicator-now':isNow( 'posticipo'), 'sectionBabyIndicator-notnow':!isNow( 'posticipo')} " ng-click="changeSectionPeriod( 'posticipo') ">
               <svg class="sectionBabyIndicator " id="svg " viewbox="0 0 100 100 ">
                 <circle cx="50 " cy="50 " r="45 " fill="{{colors[ 'posticipo']}} " />
@@ -73,16 +86,19 @@
             <div class="section-text ">
               {{'home_posticipo' | translate}}
             </div>
-            <!--                <div section></div>-->
           </div>
+        -->
         </div>
+        <br/>
+        <hr class="hrmenu"/>  
 
-        <!--        <div class="home-separator "></div>-->
+        <!--        <div class="home-separator "></div>
         <div class="line-separator" ng-if="!communicationExpanded">
           <div class="side-line" id="leftLine"> </div>
           <div class="triangle"> </div>
           <div class="side-line" id="rightLine"> </div>
         </div>
+      -->
         <div class="home-communication-description " ng-if="communicationExpanded ">
           <div class="row">
             <div class="col">
@@ -115,8 +131,16 @@
             <img ng-src="{{getChildImage(child)}} ">
             <!--          <div class="name-of-child " ng-if="!child.image || child.image=='' ">{{child.childrenName}}</div>-->
             <!--            <div class="name-of-child ">{{child.childrenName}}</div>-->
-            <div class="name-of-child ">{{child.childrenName | homeName}}</div>
-            <div class="children-presenza " ng-if="child.active && !communicationExpanded " ng-class="{ 'child-assente':child.exitTime==null, 'child-presente':child.exitTime !=null} ">{{child.presenza}}</div>
+            <div class="name-of-child ">test {{child.childrenName | homeName}}</div>
+            <div class="children-presenza " ng-if="child.active && !communicationExpanded && child.exitTime==null" ng-class="{ 'child-assente':child.exitTime==null, 'child-presente':child.exitTime !=null} ">{{child.presenza}}</div>
+            
+            <div class="children-presenza " ng-if="child.active && !communicationExpanded && child.exitTime!==null" ng-class="{ 'child-assente':child.exitTime==null, 'child-presente-uscita':child.exitTime !=null} ">{{'entry_lbl' | translate}} {{child.oraEntrata}}</div>
+            <div class="children-presenza " ng-if="child.active && !communicationExpanded && child.exitTime!==null" ng-class="{ 'child-assente':child.exitTime==null, 'child-presente-uscita':child.exitTime !=null} ">
+              <span ng-if="!child.bus">{{'exit_lbl' | translate}}</span>
+              <span ng-if="child.bus"><i class="icon ion-android-bus iconStyle"></i></span>
+              {{child.presenza}}
+            </div>
+            <div class="children-presenza " ng-if="child.active && !communicationExpanded && child.exitTime!==null" ng-class="{ 'child-assente':child.exitTime==null, 'child-presente-uscita':child.exitTime !=null} ">{{child.presenza}}</div>
           </div>
         </div>
 

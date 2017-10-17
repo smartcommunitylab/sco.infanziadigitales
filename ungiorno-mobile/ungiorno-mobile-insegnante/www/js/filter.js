@@ -114,4 +114,18 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.filters', [])
         input = input.toLowerCase();
       return input.substring(0, 1).toUpperCase() + input.substring(1);
     }
+  })
+  .filter('getSchoolNormalService', function() {
+    return function(services) {
+    var retArr={'fromTime':'','toTime':''};
+    if(services!==undefined){
+      for(var i=0;i<services.length;i++){
+          if(services[i].regular==true && services[i]['timeSlots']!==null && services[i]['timeSlots'].length>0){
+             retArr =services[i]['timeSlots'][0];//get the first timeslot supposing there is only one
+             return retArr;
+          }
+      }
+    }
+      return retArr;
+    }
   });

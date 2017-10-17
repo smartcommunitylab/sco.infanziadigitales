@@ -4,6 +4,7 @@ import {ConfigService} from './config.service'
 import { WebService } from './WebService';
 import {UserService} from './user.service'
 import 'rxjs/add/operator/toPromise';
+import { School } from "../app/Classes/school";
 
 declare var window: any;
 
@@ -45,6 +46,12 @@ export class LoginService  {
    */
   checkLoginStatus():Promise<LOGIN_STATUS> {
     if(!this.enableOauth) {
+      let defaultSchools = [];
+      let school = new School();
+      school.id = 'scuola';
+      defaultSchools.push(school);
+      this.userService.setUserId('sco.infanzia.povo@gmail');
+      this.userService.setAuthorizedSchools(defaultSchools);
       return Promise.resolve(LOGIN_STATUS.EXISTING);
     }
     if (!sessionStorage.access_token) {

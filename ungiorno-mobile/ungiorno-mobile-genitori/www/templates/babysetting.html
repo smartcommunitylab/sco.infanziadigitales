@@ -17,10 +17,10 @@
         </div>
 -->
         <ul class="home-info-content my-list home-comm">
-          <li class="huge row" ng-repeat="service in babyConfiguration.services" ng-if="key!='mensa'">
-            <span class="col">{{ service.name |capitalize }}</span> 
-            <span class="col" ng-if="service.enabled">{{'babysetting_active' | translate| uppercase}}</span>
-            <span class="col" ng-if="!service.enabled">{{'babysetting_not_active' | translate | uppercase}}</span>
+          <li class="huge row" ng-repeat="service in babyServices">
+            <span class="col">{{ service.text |capitalize }}</span> 
+            <span class="col" ng-if="service.active">{{'babysetting_active' | translate| uppercase}}</span>
+            <span class="col" ng-if="!service.active">{{'babysetting_not_active' | translate | uppercase}}</span>
           </li>
 
         </ul>

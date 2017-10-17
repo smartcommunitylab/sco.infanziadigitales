@@ -27,6 +27,7 @@ import {ConfigService} from "../services/config.service"
 
 import moment from 'moment';
 import { UserService } from "../services/user.service";
+import { ServerSection } from "../app/Classes/serverModel/serverSection";
 
 @Injectable()
 export class DefaultRequestOptions extends BaseRequestOptions {
@@ -106,24 +107,17 @@ export class WebService {
   getKids(schoolId: string): Promise<Kid[]> {
     return this.http.get(`${this.apiUrl}/consoleweb/${this.appId}/${schoolId}/kid`).toPromise().then(response => response.json().data.map(serverKid => this.convertToKid(serverKid))).catch(this.handleError);
   }
-    
-  private handleError(error: any): Promise<any> {
-    console.error('An error occurred', error);
-    return Promise.reject(error.message || error);
-  }
 
-  private addTeacher(schoolId : string, teacherProfile : Teacher) : Promise<Teacher> {
-    let convertedTeacher: ServerTeacherData = this.convertToServerTeacher(teacherProfile);
-    return this.http.post(`${this.apiUrl}/consoleweb/${this.appId}/${schoolId}/teacher`,convertedTeacher).toPromise().then(
-      response => this.convertToTeacher(response.json().data)
-  ).catch(this.handleError);
-  }
-
-  private addKid(schoolId: string, kidProfile: Kid) : Promise<Kid> {
-    let convertedKid : ServerKidData = this.convertToServerKid(kidProfile);
-    return this.http.post(`${this.apiUrl}/consoleweb/${this.appId}/${schoolId}/kid`,convertedKid).toPromise().then(
+  addKidToGroup(school :School, kidId : string, group : Group) : Promise<Kid> {
+    return this.http.put(`${this.apiUrl}/consoleweb/${this.appId}/${school.id}/kid/${kidId}/group`, this.convertToServerSection(group)).toPromise().then(
       response => this.convertToKid(response.json().data)
-  ).catch(this.handleError);
+    ).catch(this.handleError);
+  }
+
+  putKidInSection(school :School, kidId : string, section : Group) : Promise<Kid> {
+    return this.http.put(`${this.apiUrl}/consoleweb/${this.appId}/${school.id}/kid/${kidId}/section`, this.convertToServerSection(section)).toPromise().then(
+      response => this.convertToKid(response.json().data)
+    ).catch(this.handleError);
   }
 
   getTeachers(schoolId: string) : Promise<Teacher[]> {
@@ -131,18 +125,33 @@ export class WebService {
       response => response.json().data.map(serverTeacher => this.convertToTeacher(serverTeacher))
     ).catch(this.handleError);
   }
-  
 
-  private removeTeacher(schoolId : string, teacherId : string) : Promise<Teacher> {
-    return this.http.delete(`${this.apiUrl}/consoleweb/${this.appId}/${schoolId}/teacher/${teacherId}`).toPromise().then(
-      response => this.convertToTeacher(response.json().data)
-  ).catch(this.handleError);
+  removeKidFromSection(school : School, kidId :string, sectionId: string) : Promise<Kid> {
+    return this.http.delete(`${this.apiUrl}/consoleweb/${this.appId}/${school.id}/kid/${kidId}/section/${sectionId}`).toPromise().then(
+      response => this.convertToKid(response.json().data)
+    ).catch(this.handleError);
+
   }
 
-  private removeKid(schoolId : string, kidId : string) : Promise<Kid> {
-    return this.http.delete(`${this.apiUrl}/consoleweb/${this.appId}/${schoolId}/kid/${kidId}`).toPromise().then(
+  removeKidFromGroup(school: School, kidId: string, groupId : string) : Promise<Kid> {
+    return this.http.delete(`${this.apiUrl}/consoleweb/${this.appId}/${school.id}/kid/${kidId}/group/${groupId}`).toPromise().then(
       response => this.convertToKid(response.json().data)
-  ).catch(this.handleError);
+    ).catch(this.handleError);
+
+  }
+
+  addTeacherToSectionOrGroup(school : School, teacherId: string, groupId: string) : Promise<Teacher> {
+    return this.http.put(`${this.apiUrl}/consoleweb/${this.appId}/${school.id}/teacher/${teacherId}/section/${groupId}`,{}).toPromise().then(
+      response => this.convertToTeacher(response.json().data)
+    ).catch(this.handleError);
+  }
+
+
+  removeTeacherToSectionOrGroup(school : School, teacherId: string, groupId: string) : Promise<Teacher> {
+    console.log(`remove ${school.id} group ${groupId}`)
+    return this.http.delete(`${this.apiUrl}/consoleweb/${this.appId}/${school.id}/teacher/${teacherId}/section/${groupId}`).toPromise().then(
+      response => this.convertToTeacher(response.json().data)
+    ).catch(this.handleError);
   }
 
   add(schoolId: string, item : any) : Promise<any> {
@@ -202,6 +211,53 @@ export class WebService {
     .catch(this.handleError);
   }
 
+  getGroup = function(schoolId :string, groupId : string) : Promise<Group> {
+    const url = `${this.apiUrl}/consoleweb/${this.appId}/${schoolId}/group/${groupId}`;
+    return this.http
+    .get(url).toPromise().then(response => response.json().data as Group)
+    .catch(this.handleError);
+  }
+
+  getGroups = function(schoolId :string) : Promise<Group[]> {
+    const url = `${this.apiUrl}/consoleweb/${this.appId}/${schoolId}/group`;
+    return this.http
+    .get(url).toPromise().then(response => response.json().data as Group[])
+    .catch(this.handleError);
+  }
+    
+  private handleError(error: any): Promise<any> {
+    console.error('An error occurred', error);
+    return Promise.reject(error.message || error);
+  }
+
+  private addTeacher(schoolId : string, teacherProfile : Teacher) : Promise<Teacher> {
+    let convertedTeacher: ServerTeacherData = this.convertToServerTeacher(teacherProfile);
+    return this.http.post(`${this.apiUrl}/consoleweb/${this.appId}/${schoolId}/teacher`,convertedTeacher).toPromise().then(
+      response => this.convertToTeacher(response.json().data)
+  ).catch(this.handleError);
+  }
+
+  private addKid(schoolId: string, kidProfile: Kid) : Promise<Kid> {
+    let convertedKid : ServerKidData = this.convertToServerKid(kidProfile);
+    return this.http.post(`${this.apiUrl}/consoleweb/${this.appId}/${schoolId}/kid`,convertedKid).toPromise().then(
+      response => this.convertToKid(response.json().data)
+  ).catch(this.handleError);
+  }
+
+  private removeTeacher(schoolId : string, teacherId : string) : Promise<Teacher> {
+    return this.http.delete(`${this.apiUrl}/consoleweb/${this.appId}/${schoolId}/teacher/${teacherId}`).toPromise().then(
+      response => this.convertToTeacher(response.json().data)
+  ).catch(this.handleError);
+  }
+
+  private removeKid(schoolId : string, kidId : string) : Promise<Kid> {
+    return this.http.delete(`${this.apiUrl}/consoleweb/${this.appId}/${schoolId}/kid/${kidId}`).toPromise().then(
+      response => this.convertToKid(response.json().data)
+  ).catch(this.handleError);
+  }
+
+ 
+
   private convertToTeacher = function(serverTeacherData : ServerTeacherData) : Teacher {
     let teacher = new Teacher(serverTeacherData.teacherId,serverTeacherData.teacherName,serverTeacherData.teacherSurname,serverTeacherData.pin,serverTeacherData.phones,serverTeacherData.username);
     return teacher;
@@ -237,6 +293,9 @@ export class WebService {
     if(deleghe.length > 0) {
       deleghe.map(delega => this.convertToDelega(delega)).forEach(convertedDelega => convertedKid.deleghe.push(convertedDelega));
     }
+
+    convertedKid.section = serverKidData.section != undefined;
+    
     return convertedKid;
   }
 
@@ -329,7 +388,7 @@ export class WebService {
     // DA TOGLIERE
     school.teachers = [];
     school.servizi = serverSchoolData.services ? serverSchoolData.services.map(serverService => this.convertToService(serverService)) : [];
-    school.groups = [];
+    school.groups =  serverSchoolData.sections ? serverSchoolData.sections.map(serverSection => this.convertToGroup(serverSection)) : [];
 
     //school.buses = serverSchoolData.buses;
 
@@ -358,6 +417,8 @@ export class WebService {
     return school;
   }
 
+
+
   private convertToService = function(serverService : ServerServiceData) : Service {
     let slots = serverService.timeSlots.map(timeSlot => this.convertToTime(timeSlot));
     let service = new Service(serverService.name,slots,null,serverService.regular);
@@ -384,6 +445,25 @@ export class WebService {
     serviceTimeSlot.fromTime = moment(fascia.start,"HH:mm").toDate();
     serviceTimeSlot.toTime = moment(fascia.end,"HH:mm").toDate();
     return serviceTimeSlot;
+  }
+
+
+  private convertToGroup = function(section : ServerSection) : Group {
+    let group : Group;
+    if(section) {
+      group = new Group(section.name,[],!section.group,[]);
+    }
+
+    return group;
+  }
+
+  private convertToServerSection = function(group : Group) : ServerSection {
+    let serverSection : ServerSection;
+    if(group) {
+      serverSection = new ServerSection(group.name, !group.section);
+    }
+
+    return serverSection;
   }
   private convertToServerSchool = function (school : School) : ServerSchoolData {
     let convertedSchool = new ServerSchoolData();
@@ -428,17 +508,20 @@ export class WebService {
       convertedSchool.services = school.servizi.map(service => this.convertToServerService(service));
     }
     
+    // private List<SectionProfile> sections;
+    if(school.groups) {
+      convertedSchool.sections = school.groups.map(group => this.convertToServerSection(group));
+    }
+    // private List<BusProfile> buses;
+    
     return convertedSchool;
 
 
+
+    // private String accessEmail;
     // private Timing regularTiming, anticipoTiming, posticipoTiming;
-    
-    
+    // private String absenceTiming, retireTiming;
     // private List<TypeDef> teacherNoteTypes;
     // private List<TypeDef> foodTypes;
-    // private List<SectionProfile> sections;
-    // private List<BusProfile> buses;
-    // private String absenceTiming, retireTiming;
-    // private String accessEmail;
   }
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import it.smartcommunitylab.ungiorno.beans.GroupDTO;
 import it.smartcommunitylab.ungiorno.config.exception.ProfileNotFoundException;
 import it.smartcommunitylab.ungiorno.diary.model.DiaryEntry;
 import it.smartcommunitylab.ungiorno.diary.model.DiaryKid;
@@ -21,9 +22,11 @@ import it.smartcommunitylab.ungiorno.model.KidBusData;
 import it.smartcommunitylab.ungiorno.model.KidCalAssenza;
 import it.smartcommunitylab.ungiorno.model.KidCalFermata;
 import it.smartcommunitylab.ungiorno.model.KidCalNote;
+import it.smartcommunitylab.ungiorno.model.KidCalNote.Note;
 import it.smartcommunitylab.ungiorno.model.KidCalRitiro;
 import it.smartcommunitylab.ungiorno.model.KidConfig;
 import it.smartcommunitylab.ungiorno.model.KidProfile;
+import it.smartcommunitylab.ungiorno.model.KidProfile.DayDefault;
 import it.smartcommunitylab.ungiorno.model.LoginData;
 import it.smartcommunitylab.ungiorno.model.Menu;
 import it.smartcommunitylab.ungiorno.model.Parent;
@@ -31,8 +34,6 @@ import it.smartcommunitylab.ungiorno.model.SchoolProfile;
 import it.smartcommunitylab.ungiorno.model.SectionData;
 import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.model.TeacherCalendar;
-import it.smartcommunitylab.ungiorno.model.KidCalNote.Note;
-import it.smartcommunitylab.ungiorno.model.KidProfile.DayDefault;
 import it.smartcommunitylab.ungiorno.storage.App;
 import it.smartcommunitylab.ungiorno.usage.UsageEntity;
 import it.smartcommunitylab.ungiorno.usage.UsageEntity.UsageAction;
@@ -83,6 +84,8 @@ public interface RepositoryService {
      */
     void updateChildren(String appId, String schoolId, List<KidProfile> children);
 
+    KidProfile updateKid(KidProfile kid);
+
     /**
      * @param appId
      * @param schoolId
@@ -97,6 +100,8 @@ public interface RepositoryService {
      * @param teachers
      */
     void updateTeachers(String appId, String schoolId, List<Teacher> teachers);
+
+    Teacher saveOrUpdateTeacher(String appId, String schoolId, Teacher teacher);
 
     /**
      * @param appId
@@ -351,6 +356,10 @@ public interface RepositoryService {
      */
     List<SectionData> getSections(String appId, String schoolId, Collection<String> sections,
             long date);
+
+    GroupDTO getGroupData(String appId, String schoolId, String groupId);
+
+    List<GroupDTO> getGroupsDataBySchool(String appId, String schoolId);
 
     /**
      * @param appId

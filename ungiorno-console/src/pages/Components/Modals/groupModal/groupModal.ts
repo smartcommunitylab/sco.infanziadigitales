@@ -34,8 +34,10 @@ export class GroupModal implements OnInit{
   disabledSection : boolean;
 
   addKidToGroupMap = {}
-
   removeKidToGroupMap = {}
+
+  addTeacherToGroupMap = {}
+  removeTeacherToGroupMap = {}
 
   constructor(public params: NavParams, public navCtrl:NavController, private webService : WebService, public alertCtrl : AlertController) {
     this.selectedSchool = this.params.get('school') as School;
@@ -70,6 +72,9 @@ export class GroupModal implements OnInit{
         this.webService.update(this.selectedSchool);
         let kidsToAdd = this.addKidToGroupMap[this.selectedGroup.name]
         let kidsToRemove = this.removeKidToGroupMap[this.selectedGroup.name]
+        let teacherToAdd = this.addTeacherToGroupMap[this.selectedGroup.name]
+        let teacherToRemove = this.removeTeacherToGroupMap[this.selectedGroup.name]
+
         if(kidsToAdd != undefined) {
           kidsToAdd.forEach(kidId => {
             if(this.selectedGroup.section) {
@@ -89,9 +94,23 @@ export class GroupModal implements OnInit{
             }
           });
         }
+          if(teacherToAdd != undefined) {
+            teacherToAdd.forEach(teacherId => {
+              this.webService.addTeacherToSectionOrGroup(this.selectedSchool,teacherId,this.selectedGroup.name)
+            })
+          }
+  
+          if(teacherToRemove != undefined) {
+            console.log('teacherToRemove ' + teacherToRemove );
+            teacherToRemove.forEach(teacherId => {
+                this.webService.removeTeacherToSectionOrGroup(this.selectedSchool,teacherId,this.selectedGroup.name);
+            });
+        }
 
         console.log("add kid " + JSON.stringify(this.addKidToGroupMap));
         console.log("remove kid " + JSON.stringify(this.removeKidToGroupMap));
+        console.log("add teacher " + JSON.stringify(this.addTeacherToGroupMap));
+        console.log("remove teacher " + JSON.stringify(this.removeTeacherToGroupMap));
       }
       else {
         let alert = this.alertCtrl.create({
@@ -104,6 +123,9 @@ export class GroupModal implements OnInit{
       this.webService.update(this.selectedSchool);
       let kidsToAdd = this.addKidToGroupMap[this.selectedGroup.name]
       let kidsToRemove = this.removeKidToGroupMap[this.selectedGroup.name]
+      let teacherToAdd = this.addTeacherToGroupMap[this.selectedGroup.name]
+      let teacherToRemove = this.removeTeacherToGroupMap[this.selectedGroup.name]
+
       if(kidsToAdd != undefined) {
         kidsToAdd.forEach(kidId => {
           if(this.selectedGroup.section) {
@@ -123,8 +145,24 @@ export class GroupModal implements OnInit{
           }
         });
       }
+
+      if(teacherToAdd != undefined) {
+        teacherToAdd.forEach(teacherId => {
+          this.webService.addTeacherToSectionOrGroup(this.selectedSchool,teacherId,this.selectedGroup.name)
+        })
+      }
+
+      if(teacherToRemove != undefined) {
+        console.log('teacherToRemove ' + teacherToRemove );
+        teacherToRemove.forEach(teacherId => {
+            console.log('remove call ' + teacherId)
+            this.webService.removeTeacherToSectionOrGroup(this.selectedSchool,teacherId,this.selectedGroup.name);
+        });
+    }
       console.log("add kid " + JSON.stringify(this.addKidToGroupMap));
       console.log("remove kid " + JSON.stringify(this.removeKidToGroupMap));
+      console.log("add teacher " + JSON.stringify(this.addTeacherToGroupMap));
+      console.log("remove teacher " + JSON.stringify(this.removeTeacherToGroupMap));
     }
     this.close();
   }
@@ -163,6 +201,10 @@ export class GroupModal implements OnInit{
       handler: data => {
         data.forEach(element => {
           this.copiedGroup.teachers.push(element) //inserimento id teacher in istanza copiedGroup
+          if(this.addTeacherToGroupMap[this.copiedGroup.name] == undefined ) {
+            this.addTeacherToGroupMap[this.copiedGroup.name] = []
+          } 
+          this.addTeacherToGroupMap[this.copiedGroup.name].push(element)
           this.updateArrays();
         });
       }
@@ -197,12 +239,6 @@ export class GroupModal implements OnInit{
           this.addKidToGroupMap[this.copiedGroup.name].push(element)
 
           if(this.copiedGroup.section) this.selectedSchool.kids.find(c=> c.id.toLowerCase() === element.toLowerCase()).section = true;
-          // if(this.copiedGroup.section) {
-          //   this.webService.putKidInSection(this.selectedSchool,element,this.copiedGroup);
-          // } else {
-          //   this.webService.addKidToGroup(this.selectedSchool,element,this.copiedGroup);
-          // }
-
           this.updateArrays();
         });
       }
@@ -217,17 +253,15 @@ export class GroupModal implements OnInit{
       this.removeKidToGroupMap[this.copiedGroup.name] = []
     } 
     this.removeKidToGroupMap[this.copiedGroup.name].push(id)
-
-    // if(this.copiedGroup.section) {
-    //   this.webService.removeKidFromSection(this.selectedSchool,id,this.copiedGroup.name);
-    // } else {
-    //   this.webService.removeKidFromGroup(this.selectedSchool,id,this.copiedGroup.name);
-    // }
     this.updateArrays();
   }
 
   removeTeacher(teacher: Teacher) {
     this.copiedGroup.teachers.splice(this.copiedGroup.teachers.findIndex(x => teacher.id == x), 1);
+    if(this.removeTeacherToGroupMap[this.copiedGroup.name] == undefined ) {
+      this.removeTeacherToGroupMap[this.copiedGroup.name] = []
+    } 
+    this.removeTeacherToGroupMap[this.copiedGroup.name].push(teacher.id)
     this.updateArrays();
   }
 }

@@ -1957,5 +1957,14 @@ public class RepositoryManager implements RepositoryService {
         return groups;
     }
 
+    @Override
+    public Teacher saveOrUpdateTeacher(String appId, String schoolId, Teacher teacher) {
+        teacher.setAppId(appId);
+        teacher.setSchoolId(schoolId);
+        template.save(teacher);
+        return teacher;
+
+    }
+
 
 }

@@ -101,6 +101,8 @@ public interface RepositoryService {
      */
     void updateTeachers(String appId, String schoolId, List<Teacher> teachers);
 
+    Teacher saveOrUpdateTeacher(String appId, String schoolId, Teacher teacher);
+
     /**
      * @param appId
      * @param schoolId

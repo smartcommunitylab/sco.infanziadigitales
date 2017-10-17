@@ -137,6 +137,20 @@ export class WebService {
 
   }
 
+  addTeacherToSectionOrGroup(school : School, teacherId: string, groupId: string) : Promise<Teacher> {
+    return this.http.put(`${this.apiUrl}/consoleweb/${this.appId}/${school.id}/teacher/${teacherId}/section/${groupId}`,{}).toPromise().then(
+      response => this.convertToTeacher(response.json().data)
+    ).catch(this.handleError);
+  }
+
+
+  removeTeacherToSectionOrGroup(school : School, teacherId: string, groupId: string) : Promise<Teacher> {
+    console.log(`remove ${school.id} group ${groupId}`)
+    return this.http.delete(`${this.apiUrl}/consoleweb/${this.appId}/${school.id}/teacher/${teacherId}/section/${groupId}`).toPromise().then(
+      response => this.convertToTeacher(response.json().data)
+    ).catch(this.handleError);
+  }
+
   add(schoolId: string, item : any) : Promise<any> {
     var sch;
     const url = `${this.apiUrl}/consoleweb/${this.appId}/${schoolId}`;

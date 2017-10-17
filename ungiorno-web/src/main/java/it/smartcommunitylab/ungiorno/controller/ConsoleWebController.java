@@ -25,6 +25,7 @@ import it.smartcommunitylab.ungiorno.model.SectionDef;
 import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.services.RepositoryService;
 import it.smartcommunitylab.ungiorno.services.impl.KidManager;
+import it.smartcommunitylab.ungiorno.services.impl.TeacherManager;
 import it.smartcommunitylab.ungiorno.storage.AppSetup;
 import it.smartcommunitylab.ungiorno.utils.JsonUtil;
 import it.smartcommunitylab.ungiorno.utils.PermissionsManager;
@@ -52,6 +53,9 @@ public class ConsoleWebController {
 
     @Autowired
     private KidManager kidManager;
+
+    @Autowired
+    private TeacherManager teacherManager;
 
     @RequestMapping(method = RequestMethod.GET, value = "/consoleweb/{appId}/me")
     public Response<List<School>> getMyData(@PathVariable String appId)
@@ -167,6 +171,25 @@ public class ConsoleWebController {
     public @ResponseBody Response<List<GroupDTO>> readGroupsInfo(@PathVariable String appId,
             @PathVariable String schoolId) {
         return new Response<List<GroupDTO>>(storage.getGroupsDataBySchool(appId, schoolId));
+    }
+
+
+    @RequestMapping(method = RequestMethod.PUT,
+            value = "/consoleweb/{appId}/{schoolId}/teacher/{teacherId}/section/{sectionId}")
+    public @ResponseBody Response<Teacher> addTeacherToSection(@PathVariable String appId,
+            @PathVariable String schoolId, @PathVariable String teacherId,
+            @PathVariable String sectionId) {
+        return new Response<>(
+                teacherManager.addToSectionOrGroup(appId, schoolId, teacherId, sectionId));
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE,
+            value = "/consoleweb/{appId}/{schoolId}/teacher/{teacherId}/section/{sectionId}")
+    public @ResponseBody Response<Teacher> removeTeacherFromSection(@PathVariable String appId,
+            @PathVariable String schoolId, @PathVariable String teacherId,
+            @PathVariable String sectionId) {
+        return new Response<>(
+                teacherManager.removeFromSectionOrGroup(appId, schoolId, teacherId, sectionId));
     }
 
 

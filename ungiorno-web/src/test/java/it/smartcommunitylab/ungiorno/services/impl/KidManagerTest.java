@@ -674,6 +674,13 @@ class KidManagerTestConfig {
                 // TODO Auto-generated method stub
                 return null;
             }
+
+            @Override
+            public Teacher saveOrUpdateTeacher(String appId, String schoolId, Teacher teacher) {
+                return teacher;
+                // TODO Auto-generated method stub
+
+            }
         };
     }
 }

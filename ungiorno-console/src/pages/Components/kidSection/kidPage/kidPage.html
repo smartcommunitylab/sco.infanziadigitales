@@ -70,6 +70,7 @@
                                                     Nome*:
                                                 </ion-col>
                                                 <ion-col col-10>
+                                                    <p *ngIf='!thisKid.name && !editInfo' class="empty-field">Dato non inserito</p>
                                                     <ion-input [(ngModel)]="thisKid.name" [disabled]='!editInfo' no-margin></ion-input>
                                                 </ion-col>
                                             </ion-row>
@@ -78,6 +79,7 @@
                                                     Cognome*:
                                                 </ion-col>
                                                 <ion-col col-10>
+                                                    <p *ngIf='!thisKid.surname && !editInfo' class="empty-field">Dato non inserito</p>
                                                     <ion-input [(ngModel)]="thisKid.surname" [disabled]='!editInfo' no-margin></ion-input>
                                                 </ion-col>
                                             </ion-row>

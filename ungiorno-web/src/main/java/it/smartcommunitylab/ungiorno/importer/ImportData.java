@@ -85,6 +85,7 @@ public class ImportData {
 					person.setPhone(Lists.newArrayList(telGen));
 				}
 				person.setParent(true);
+				person.setAdult(true);
 				kid.getPersons().add(person);
 			}
 		} catch (Exception e) {

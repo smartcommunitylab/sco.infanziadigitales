@@ -1,25 +1,26 @@
 <ion-header>
     <ion-navbar>
         <ion-title>
-             {{selectedOrario.servizio}} 
-             <span *ngIf="selectedOrario.servizio === ''">Nuovo servizio</span> 
+            {{selectedOrario.servizio}}
+            <span *ngIf="selectedOrario.servizio === ''">Nuovo servizio</span>
         </ion-title>
         <ion-buttons start>
             <button ion-button (click)="close()">Annulla</button>
         </ion-buttons>
         <ion-buttons end>
             <div (mouseover)="sovraPopover($event)">
-                <button  ion-button (click)="save()" [disabled]='!(copiedOrario.servizio) || disable || sovrapp'>
+                <button ion-button (click)="save()" [disabled]='!(copiedOrario.servizio) || disable || sovrapp'>
                     Salva
                 </button>
             </div>
         </ion-buttons>
-            
+
     </ion-navbar>
 </ion-header>
 
 <ion-content>
-    <p style="color: #ccc; margin-left: 25px"><ion-icon name="help-circle"></ion-icon> Tutti i campi contrassegnati dal simbolo * sono obbligatori</p>
+    <p style="color: #ccc; margin-left: 25px">
+        <ion-icon name="help-circle"></ion-icon> Tutti i campi contrassegnati dal simbolo * sono obbligatori</p>
     <ion-grid inset>
         <ion-row>
             <ion-col col-10 offset-1>
@@ -29,7 +30,7 @@
                     </ion-card-header>
                     <ion-card-content>
                         <ion-list inset>
-                            <ion-item >
+                            <ion-item>
                                 <div>Nome*<input class="text-generic" type="text" [(ngModel)]="copiedOrario.servizio"></div>
                                 <!--<ion-label>Nome*</ion-label>
                                 <ion-input name="name" type="text" [(ngModel)]="copiedOrario.servizio"></ion-input>-->
@@ -51,11 +52,17 @@
                     </ion-card-header>
                     <ion-card-content>
                         <ion-list inset no-lines>
+                            <ion-item *ngIf="copiedOrario.fasce.length === 0 " text-center class="empty-field ">Nessuna fascia oraria presente</ion-item>
                             <ion-grid *ngFor="let fascia of copiedOrario.fasce; let i = index">
                                 <ion-row>
                                     <ion-col col-5>
-                                        <ion-item >
-                                             <ion-row><ion-col col-2>Nome</ion-col><ion-col col-10><input maxlength="20" class="text-generic" type="text" [(ngModel)]="fascia.name"  ng-focus="fascia.name === ''" (ngModelChange)='changeName(fascia.name)' (ionBlur)="blurFascia(fascia)"></ion-col></ion-row>
+                                        <ion-item>
+                                            <ion-row>
+                                                <ion-col col-2>Nome</ion-col>
+                                                <ion-col col-10><input maxlength="20" class="text-generic" type="text" [(ngModel)]="fascia.name"
+                                                        ng-focus="fascia.name === ''" (ngModelChange)='changeName(fascia.name)'
+                                                        (ionBlur)="blurFascia(fascia)"></ion-col>
+                                            </ion-row>
                                             <!--<ion-label>Nome</ion-label>
                                             <ion-input type="text" [(ngModel)]='fascia.name' ng-focus="fascia.name === ''" (ngModelChange)='changeName(fascia.name)' (ionBlur)="blurFascia(fascia)"></ion-input>-->
                                         </ion-item>
@@ -73,8 +80,8 @@
                                     </ion-col>
                                     <ion-col col-3 style="bottom: 0px">
                                         <ion-item>
-                                             <ion-label>A</ion-label>
-                                             <ion-datetime displayFormat="HH:mm" pickerFormat="HH:mm" [(ngModel)]="fascia.end"></ion-datetime>
+                                            <ion-label>A</ion-label>
+                                            <ion-datetime displayFormat="HH:mm" pickerFormat="HH:mm" [(ngModel)]="fascia.end"></ion-datetime>
                                         </ion-item>
                                         <!-- <ion-item class='input-calza'>
                                             <ion-label>A</ion-label>
@@ -87,11 +94,13 @@
                                 </ion-row>
                             </ion-grid>
                             <button ion-button color="green1" (click)='addFascia()' [disabled]='disable' margin-top>Aggiungi Fascia</button>
-                        </ion-list>  
+                        </ion-list>
                     </ion-card-content>
                 </ion-card>
             </ion-col>
-            <ion-col col-1><p></p></ion-col>
+            <ion-col col-1>
+                <p></p>
+            </ion-col>
         </ion-row>
     </ion-grid>
 </ion-content>

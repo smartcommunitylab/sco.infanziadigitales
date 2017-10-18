@@ -40,6 +40,8 @@
   <ion-row>
     <ion-col col-12>
       <ion-list>
+                                    <ion-item *ngIf="filteredBus.length === 0 " text-center class="empty-field ">Nessun bus presente</ion-item>
+
         <ion-item *ngFor="let item of filteredBus">
           <ion-icon name="bus" item-start color="green3" ></ion-icon>
           {{item.name}} ({{item.capolinea}})

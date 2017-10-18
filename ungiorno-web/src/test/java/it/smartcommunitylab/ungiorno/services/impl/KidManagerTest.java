@@ -681,6 +681,18 @@ class KidManagerTestConfig {
                 // TODO Auto-generated method stub
 
             }
+
+						@Override
+						public SchoolProfile getSchoolProfileByName(String appId, String name) {
+							// TODO Auto-generated method stub
+							return null;
+						}
+
+						@Override
+						public KidProfile saveKidProfile(KidProfile kidProfile) {
+							// TODO Auto-generated method stub
+							return null;
+						}
         };
     }
 }

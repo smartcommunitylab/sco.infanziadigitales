@@ -1,9 +1,7 @@
 package it.smartcommunitylab.ungiorno.services.impl;
 
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -14,6 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.ContextConfiguration;
@@ -30,7 +29,6 @@ import it.smartcommunitylab.ungiorno.diary.model.DiaryKid;
 import it.smartcommunitylab.ungiorno.diary.model.DiaryKidProfile;
 import it.smartcommunitylab.ungiorno.diary.model.MultimediaEntry;
 import it.smartcommunitylab.ungiorno.model.AppInfo;
-import it.smartcommunitylab.ungiorno.model.AuthPerson;
 import it.smartcommunitylab.ungiorno.model.Author;
 import it.smartcommunitylab.ungiorno.model.BusData;
 import it.smartcommunitylab.ungiorno.model.CalendarItem;
@@ -60,75 +58,27 @@ import it.smartcommunitylab.ungiorno.usage.UsageEntity.UsageAction;
 import it.smartcommunitylab.ungiorno.usage.UsageEntity.UsageActor;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {KidManagerTestConfig.class},
+@ContextConfiguration(classes = {TeacherManagerTestConfig.class},
         loader = AnnotationConfigContextLoader.class)
-public class KidManagerTest {
+public class TeacherManagerTest {
 
     @Autowired
-    private KidManager kidManager;
+    private TeacherManager teacherManager;
 
 
-    @Test
-    public void kidProfileWithNullPersonsList() {
-        final String appId = "app-1";
-        final String schoolId = "school1-";
-
-        KidProfile kid = new KidProfile();
-        kid.setAppId(appId);
-        kid.setSchoolId(schoolId);
-        List<Parent> parents = kidManager.updateParents(kid);
-
-        Assert.assertThat(parents, Matchers.nullValue());
-    }
 
     @Test
-    public void kidProfileWithEmptyPersonsList() {
-        final String appId = "app-1";
-        final String schoolId = "school1-";
-        KidProfile kid = new KidProfile();
-        kid.setAppId(appId);
-        kid.setSchoolId(schoolId);
-        kid.setPersons(Collections.<AuthPerson>emptyList());
-        List<Parent> parents = kidManager.updateParents(kid);
-        Assert.assertThat(parents, Matchers.hasSize(0));
+    public void generatePinForNotExistingTeacher() {
+        Assert.assertThat(teacherManager.generatePin("APP", "SCHOOL", "TEACHER_ID"),
+                Matchers.nullValue());
     }
-
-    @Test
-    public void kidProfileWithOneParent() {
-        final String appId = "app-1";
-        final String schoolId = "school1-";
-        KidProfile kid = new KidProfile();
-        kid.setAppId(appId);
-        kid.setSchoolId(schoolId);
-        List<AuthPerson> persons = new ArrayList<>();
-        AuthPerson person = new AuthPerson();
-        person.setAdult(true);
-        person.setParent(true);
-        person.setFirstName("FNAME");
-        person.setLastName("LNAME");
-        person.setPersonId("CF-PERSON-1");
-        persons.add(person);
-        kid.setPersons(persons);
-
-        Parent parent = new Parent();
-        parent.setAppId(appId);
-        parent.setFirstName("FNAME");
-        parent.setLastName("LNAME");
-        parent.setPersonId("CF-PERSON-1");
-        parent.setUsername("USERNAME");
-
-        List<Parent> parents = kidManager.updateParents(kid);
-        Assert.assertThat(parents, Matchers.hasSize(1));
-        Assert.assertThat(parents, Matchers.contains(parent));
-    }
-
 
 
 }
 
 
-// @Configuration
-class KidManagerTestConfig {
+@Configuration
+class TeacherManagerTestConfig {
 
     private String dbName = "ungiorno-test";
 
@@ -144,8 +94,8 @@ class KidManagerTestConfig {
 
 
     @Bean
-    public KidManager kidManager() {
-        return new KidManager();
+    public TeacherManager teacherManager() {
+        return new TeacherManager();
     }
 
     @Bean
@@ -168,6 +118,12 @@ class KidManagerTestConfig {
             public void updateKidBusData(String appId, String schoolId, List<KidBusData> busData) {
                 // TODO Auto-generated method stub
 
+            }
+
+            @Override
+            public KidProfile updateKid(KidProfile kid) {
+                // TODO Auto-generated method stub
+                return null;
             }
 
             @Override
@@ -247,6 +203,12 @@ class KidManagerTestConfig {
 
             @Override
             public KidConfig saveReturn(KidCalRitiro ritiro) {
+                // TODO Auto-generated method stub
+                return null;
+            }
+
+            @Override
+            public Teacher saveOrUpdateTeacher(String appId, String schoolId, Teacher teacher) {
                 // TODO Auto-generated method stub
                 return null;
             }
@@ -511,6 +473,18 @@ class KidManagerTestConfig {
             }
 
             @Override
+            public List<GroupDTO> getGroupsDataBySchool(String appId, String schoolId) {
+                // TODO Auto-generated method stub
+                return null;
+            }
+
+            @Override
+            public GroupDTO getGroupData(String appId, String schoolId, String groupId) {
+                // TODO Auto-generated method stub
+                return null;
+            }
+
+            @Override
             public List<DiaryKidProfile> getDiaryKidProfilesByAuthId(String appId, String schoolId,
                     String authId, boolean isTeacher) {
                 // TODO Auto-generated method stub
@@ -655,31 +629,8 @@ class KidManagerTestConfig {
                 // TODO Auto-generated method stub
                 return null;
             }
-
-            @Override
-            public KidProfile updateKid(KidProfile kid) {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public GroupDTO getGroupData(String appId, String schoolId, String groupId) {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public List<GroupDTO> getGroupsDataBySchool(String appId, String schoolId) {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public Teacher saveOrUpdateTeacher(String appId, String schoolId, Teacher teacher) {
-                return teacher;
-                // TODO Auto-generated method stub
-
-            }
         };
     }
+
+
 }

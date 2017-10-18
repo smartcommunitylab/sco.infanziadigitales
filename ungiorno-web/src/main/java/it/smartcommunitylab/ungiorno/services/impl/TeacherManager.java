@@ -28,7 +28,7 @@ public class TeacherManager {
                 teacher.getSectionIds().add(sectionId);
             }
 
-            repoManager.saveOrUpdateTeacher(appId, schoolId, teacher);
+            teacher = repoManager.saveOrUpdateTeacher(appId, schoolId, teacher);
 
         }
         return teacher;
@@ -40,7 +40,7 @@ public class TeacherManager {
         if (teacher != null) {
             if (teacher.getSectionIds() != null) {
                 teacher.getSectionIds().remove(sectionId);
-                repoManager.saveOrUpdateTeacher(appId, schoolId, teacher);
+                teacher = repoManager.saveOrUpdateTeacher(appId, schoolId, teacher);
             }
         }
         return teacher;
@@ -52,7 +52,7 @@ public class TeacherManager {
         if (teacher != null) {
             String pin = generatePin();
             teacher.setPin(pin);
-
+            teacher = repoManager.saveOrUpdateTeacher(appId, schoolId, teacher);
         }
 
         return teacher;

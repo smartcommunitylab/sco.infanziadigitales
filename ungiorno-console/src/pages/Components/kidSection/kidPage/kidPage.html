@@ -135,13 +135,13 @@
                                             <ion-thumbnail item-start style="height: 100%; width: auto">
                                                 <img [src]="getActualImage()" style="height: 100%; width: auto" *ngIf='!editFoto'/>
                                                 <image-upload *ngIf='editFoto' [url]=getUploadUrl()
-                                                  [buttonCaption]="'Seleziona l immagine'"
+                                                  [buttonCaption]="'Seleziona dal disco'"
                                                   [dropBoxMessage]="'Trascina la tua immagine qui!'"
                                                   [max]="1"></image-upload>
                                             </ion-thumbnail>
                                             <input #inputFile type='file' style='display: none' (change)='handleChange($event)' accept="image/gif, image/png, image/jpeg, image/bmp, image/webp"
                                             />
-                                            <button ion-button color='green1' (click)='inputFile.click()' *ngIf='editFoto'>Aggiungi immagine</button>
+                                            <!--<button ion-button color='green1' (click)='inputFile.click()' *ngIf='editFoto'>Aggiungi immagine</button>-->
                                         </ion-item>
                                     </ion-card-content>
                                 </ion-card>

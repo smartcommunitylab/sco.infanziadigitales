@@ -255,6 +255,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     var jsonTest={};
     $scope.weekInfo=[];
     $scope.getSchoolProfileNormalConfig=$filter('getSchoolNormalService')(profileService.getSchoolProfile().services);
+    console.log(profileService.getSchoolProfile());
     var fromtime=$scope.getSchoolProfileNormalConfig['fromTime'];
     var ent=moment(fromtime).format('H:m');
     fromtime=ent.replace(/^0+/, '');
@@ -262,7 +263,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     var usc=moment(totime).format('H:m');
     totime=usc.replace(/^0+/, '');
     if(fromtime=='' && totime==''){
-        alert('No school Config');//TODO translate this
+        alert($filter('translate')('missing_school_config'));//TODO translate this
+        fromtime=moment('7:30','H:mm');
+        totime=moment('13:30','H:mm');
     }
 
     $scope.listServicesDb=profileService.getBabyProfile().services.timeSlotServices;
@@ -497,6 +500,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
   }
   //corretto tutte e tre annidate? cosa succede se una salta? ma come faccio a settare il profilo temporaneo senza avere conf, prof????
   $scope.getConfiguration = function () {
+    console.log(profileService.getBabiesProfiles());
     if (profileService.getBabiesProfiles().length == 0) {
       //parto da getBabyProfiles()(appid incluso nel server e qui ottengo schoolId e kidId
       $ionicLoading.show();
@@ -504,6 +508,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
           //in data ho tutti i profili dei kids: memorizzo in locale e ottengo le configurazioni
           //tmp default $scope.kidConfiguration = data[0]; poi dovro' gestire un refresh delle informazioni quando switcho da profilo ad un altro
           //se non settato prendo il primo
+          console.log(profileService.getBabyProfile());
+          console.log(data);
           if (profileService.getBabyProfile() == null) {
             $scope.kidProfile = data[0];
             profileService.setBabiesProfiles(data);
@@ -512,6 +518,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
           } else {
             $scope.kidProfile = profileService.getBabyProfile();
           }
+          console.log(profileService.getBabyProfile());
           //                    $scope.loadConfiguration($scope.kidProfile.schoolId, $scope.kidProfile.kidId);
           $scope.loadConfiguration();
           $rootScope.allowed = true;

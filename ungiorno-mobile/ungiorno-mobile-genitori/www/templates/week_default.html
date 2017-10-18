@@ -28,8 +28,8 @@
                 <div class="delega_day noneditable">
                     &nbsp;<i class="icon ion-android-person iconStyle"></i>&nbsp;
                   <div class="delega_name">
-                      <span class="delegaStyle">{{day.delega_name|getRitiroName:ritiraOptions}}</span>
-                      <span class="delegaStyle">({{day.delega_name|getRitiroType:ritiraOptions}})</span>
+                      <span class="delegaStyle">{{day.delega_name|getRitiroName:ritiraOptions | translat}}</span>
+                      <span class="delegaStyle">({{day.delega_name|getRitiroType:ritiraOptions | translat}})</span>
                   </div>
               </div>
               </td>
@@ -50,7 +50,7 @@
   
        <div ng-show="mode=='edit'" class="week_plan_detail">
           <div class="actions_default_restore">
-            <p class="button_top"><i class="icon ion-loop iconStyleHead" ng-click="restore()"></i> {{'restore' | translate | uppercase}}</p>
+            <p class="button_top"><i class="icon ion-loop iconStyleHead" ng-click="restore()"></i><span style="vertical-align:middle;">{{'restore' | translate | uppercase}}</span></p>
           </div> 
           <table class="week_plan_detail_table">
             <tr ng-repeat="day in days track by $index" ng-click="gotoEditDate($index)" class="nowrap">
@@ -70,8 +70,8 @@
                 <div ng-class="whatClassIsIt($index,'delega')" class="delega_day editable">
                     &nbsp;<i class="icon ion-android-person iconStyle"></i>&nbsp;
                   <div class="delega_name">
-                      <span class="delegaStyle">{{day.delega_name|getRitiroName:ritiraOptions}}</span>
-                      <span class="delegaStyle">({{day.delega_name|getRitiroType:ritiraOptions}})</span>
+                      <span class="delegaStyle">{{day.delega_name|getRitiroName:ritiraOptions | translate}}</span>
+                      <span class="delegaStyle">({{day.delega_name|getRitiroType:ritiraOptions | translate}})</span>
                   </div>
               </div>
               </td>

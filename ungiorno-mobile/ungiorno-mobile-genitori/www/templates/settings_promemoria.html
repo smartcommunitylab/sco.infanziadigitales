@@ -4,7 +4,7 @@
         <ion-nav-back-button>
         </ion-nav-back-button>
         <ion-nav-title>
-            {{'menu_promemoria' | translate  | uppercase}}
+            {{'menu_promemoria' | translate }}
       </ion-nav-title>
     </ion-nav-bar>
  
@@ -23,7 +23,7 @@
                         <ionic-timepicker input-obj="timePickerObject24Hour">
                             <button ng-hide="true"></button>
                             <span>
-                                <standard-time-no-meridian etime="timePickerObject24Hour.inputEpochTime"></standard-time-no-meridian>
+                                <standard-time-no-meridian etime="timePickerObject24Hour.inputEpochTime" ng-class="{'lookedit': isActive('prom_day_summary'),'noneditable2': !isActive('prom_day_summary')}"></standard-time-no-meridian>
                             </span>
                         </ionic-timepicker>
                     </label>
@@ -37,13 +37,14 @@
           </label>
           <div class="prom_param prom">
               <span class="label_prom">{{'at_day'| translate}}:</span>
-              <span  modal-select="" ng-model="currData.prom_week_day" options="selectables" on-select="save_week_day();" modal-title="Select a number">
-                    {{currData.prom_week_day}}
+              <span  modal-select="" ng-model="currData.prom_week_day" options="selectables" on-select="save_week_day();" modal-title="Select a day">
+                    <span ng-class="{'lookedit': isActive('prom_week'),'noneditable2': !isActive('prom_week')}">{{currData.prom_week_day}}</span>
                     <div class="option">
                       {{option}}
                     </div>
                 </span>
           </div>
+          <br/>
           <div class="prom_param prom">
             <span class="label_prom">{{'at_time'| translate}}: </span>
             <div class="space-from-top">
@@ -51,7 +52,7 @@
                         <ionic-timepicker input-obj="timePickerObject24HourWeek">
                             <button ng-hide="true"></button>
                             <span>
-                                <standard-time-no-meridian etime="timePickerObject24HourWeek.inputEpochTime"></standard-time-no-meridian>
+                                <standard-time-no-meridian etime="timePickerObject24HourWeek.inputEpochTime" ng-class="{'lookedit': isActive('prom_week'),'noneditable2': !isActive('prom_week')}"></standard-time-no-meridian>
                             </span>
                         </ionic-timepicker>
                     </label>
@@ -69,7 +70,7 @@
                     <ionic-timepicker input-obj="timePickerObject24HourRitiro">
                         <button ng-hide="true"></button>
                         <span>
-                            <standard-time-no-meridian etime="timePickerObject24HourRitiro.inputEpochTime"></standard-time-no-meridian>
+                            <standard-time-no-meridian etime="timePickerObject24HourRitiro.inputEpochTime" ng-class="{'lookedit': isActive('prom_day_ritiro'),'noneditable2': !isActive('prom_day_ritiro')}"></standard-time-no-meridian>
                         </span>
                     </ionic-timepicker>
                 </label>

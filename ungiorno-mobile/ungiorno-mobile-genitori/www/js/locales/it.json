@@ -118,7 +118,7 @@
   "assenza_popup_toolate_text_1": "Non è più possibile inserire un'assenza per oggi. Modifica permessa entro le ore",
   "assenza_popup_toolate_text_2": ". Si prega di contattare la scuola telefonicamente.",
   "noinfo": "Nessuna informazione",
-  "settings": "Impostazioni di base",
+  "settings": "Impostazioni",
   "cancel": "Annulla",
   "absence": "Inserisci assenza",
   "period": "Periodo",
@@ -226,5 +226,12 @@
   "notification_ritiro_text":"Promemoria ritiro",
   "popup_timepicker_title": "Selezionare l'ora",
   "popup_timepicker_cancel": "Annulla",
-  "popup_timepicker_select": "Ok"
+  "popup_timepicker_select": "Ok",
+  "missing_school_config":"Manca Servizio Scolastico Regolare",
+  "add_reason":"Aggiungi motivazione",
+  "missing_reasons":"Mancano motivazioni",
+  "missing_illness":"Mancano malattie",
+  "Selezziona":"Inserisci l’ora",
+  "choose_time":"o scegli uno degli orari predefiniti",
+  "none":"Nessuno"
 }

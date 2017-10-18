@@ -370,6 +370,7 @@ export class WebService {
   private convertToSchool = function(serverSchoolData : ServerSchoolData) : School {
     let school = new School();
     school.id = serverSchoolData.schoolId;
+    school.appId = serverSchoolData.appId;
     school.email = serverSchoolData.contacts && serverSchoolData.contacts.email.length > 0 ? serverSchoolData.contacts.email[0] : "";
     school.phoneNumbers = serverSchoolData.contacts &&  serverSchoolData.contacts.telephone ? serverSchoolData.contacts.telephone : [];
     school.name = serverSchoolData.name;
@@ -468,6 +469,7 @@ export class WebService {
   private convertToServerSchool = function (school : School) : ServerSchoolData {
     let convertedSchool = new ServerSchoolData();
     convertedSchool.schoolId = school.id;
+    convertedSchool.appId = school.appId;
     convertedSchool.name = school.name;
     convertedSchool.contacts = new SchoolContacts();
     convertedSchool.contacts.telephone = school.phoneNumbers;

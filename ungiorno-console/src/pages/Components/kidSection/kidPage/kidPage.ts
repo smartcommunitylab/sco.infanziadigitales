@@ -6,6 +6,7 @@ import { Group } from './../../../../app/Classes/group';
 import { School } from './../../../../app/Classes/school';
 import { Kid } from './../../../../app/Classes/kid';
 import { WebService } from './../../../../services/WebService';
+import { ConfigService } from './../../../../services/config.service';
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, ParamMap } from "@angular/router";
 import { Location }                 from '@angular/common';
@@ -96,13 +97,16 @@ export class KidPage implements OnInit{
     editD : boolean = false;
 
     isNew : boolean = false;
-
+    apiUrl:string;
     servicesChecked = {};
 
     constructor(
         private webService : WebService,
+        private configService: ConfigService,
         private alertCtrl : AlertController
-        ) { }
+        ) { 
+         this.apiUrl=this.configService.getConfig('apiUrl');
+        }
 
     ngOnInit(): void {    
         this.thisKid = this.selectedKid;
@@ -492,5 +496,13 @@ export class KidPage implements OnInit{
     cancelDClick() {
         if(this.isNewD) {this.isNewD = false;  this.selectedDelega = undefined}
         this.editD = false;
+    }
+    getActualImage() {
+            var image =this.apiUrl + "/consoleweb/" +this.selectedSchool.appId  + "/" + this.selectedSchool.id + "/kid/" + this.thisKid.id + "/picture";
+            return image;
+    }
+    getUploadUrl() {
+            var image =this.apiUrl + "/consoleweb/" +this.selectedSchool.appId  + "/" + this.selectedSchool.id + "/kid/" + this.thisKid.id + "/picture";
+            return image;
     }
 }

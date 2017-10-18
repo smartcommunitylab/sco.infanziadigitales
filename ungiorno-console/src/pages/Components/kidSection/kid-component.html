@@ -53,7 +53,7 @@
         <ion-item *ngIf="filteredKid.length === 0 " text-center class="empty-field ">Nessun bambino presente</ion-item>
         <ion-item *ngFor="let item of filteredKid">
           <ion-thumbnail item-start>
-            <img src="{{item.image}}">
+            <img [src]="getImage(item)">
           </ion-thumbnail>
           <h2>{{item.name}} {{item.surname}}</h2>
           <ion-icon name="eye" item-end color="magenta1" style="margin-right: 30px" (click)='onViewKid(item)'></ion-icon> 

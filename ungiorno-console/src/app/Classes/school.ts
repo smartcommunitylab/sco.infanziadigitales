@@ -6,6 +6,7 @@ import { Group } from "./group";
 
 export class School {
     id: string;
+    appId:string;
     name: string;
     phoneNumbers: string[];
     email: string;

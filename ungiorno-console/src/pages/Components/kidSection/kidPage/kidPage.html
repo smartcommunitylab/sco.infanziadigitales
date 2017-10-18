@@ -126,18 +126,22 @@
                                 <ion-card>
                                     <ion-card-header>
                                         Foto del bambino
-                                        <button class='edit' ion-button color='magenta1' float-end *ngIf='!editFoto' (click)="onFotoEdit()">Modifica</button>
+                                        <button class='edit' ion-button color='magenta1' float-end *ngIf='!editFoto' (click)="onFotoEdit()" [disabled]='isNew'>Modifica</button>
                                         <button class='edit' ion-button color='magenta1' float-end *ngIf='editFoto' (click)="onFotoSave()">Salva</button>
                                         <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='editFoto' (click)="onFotoCancel()">Annulla</button>
                                     </ion-card-header>
                                     <ion-card-content margin-top>
                                         <ion-item style="height:120px">
                                             <ion-thumbnail item-start style="height: 100%; width: auto">
-                                                <img src="{{thisKid.image}}" style="height: 100%; width: auto" />
+                                                <img [src]="getActualImage()" style="height: 100%; width: auto" *ngIf='!editFoto'/>
+                                                <image-upload *ngIf='editFoto' [url]=getUploadUrl()
+                                                  [buttonCaption]="'Seleziona dal disco'"
+                                                  [dropBoxMessage]="'Trascina la tua immagine qui!'"
+                                                  [max]="1"></image-upload>
                                             </ion-thumbnail>
                                             <input #inputFile type='file' style='display: none' (change)='handleChange($event)' accept="image/gif, image/png, image/jpeg, image/bmp, image/webp"
                                             />
-                                            <button ion-button color='green1' (click)='inputFile.click()' *ngIf='editFoto'>Aggiungi immagine</button>
+                                            <!--<button ion-button color='green1' (click)='inputFile.click()' *ngIf='editFoto'>Aggiungi immagine</button>-->
                                         </ion-item>
                                     </ion-card-content>
                                 </ion-card>
@@ -148,7 +152,7 @@
                                 <ion-card>
                                     <ion-card-header>
                                         Allergie
-                                        <button class='edit' ion-button color='magenta1' float-end *ngIf='!editAllergia' (click)="onAllergiaEdit()">Modifica</button>
+                                        <button class='edit' ion-button color='magenta1' float-end *ngIf='!editAllergia' (click)="onAllergiaEdit()" [disabled]='isNew'>Modifica</button>
                                         <button class='edit' ion-button color='magenta1' float-end *ngIf='editAllergia' (click)="onAllergiaSave()">Salva</button>
                                         <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='editAllergia' (click)="onAllergiaCancel()">Annulla</button>
                                     </ion-card-header>
@@ -180,7 +184,7 @@
                                 <ion-card>
                                     <ion-card-header>
                                         Orari attivi
-                                        <button class='edit' ion-button color='magenta1' float-end *ngIf='!editService' (click)="onServiceEdit()">Modifica</button>
+                                        <button class='edit' ion-button color='magenta1' float-end *ngIf='!editService' (click)="onServiceEdit()" [disabled]='isNew'>Modifica</button>
                                         <button class='edit' ion-button color='magenta1' float-end *ngIf='editService' (click)="onServiceSave()">Salva</button>
                                         <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='editService' (click)="onServiceCancel()">Annulla</button>
                                     </ion-card-header>
@@ -233,7 +237,7 @@
                                         <ion-card>
                                             <ion-card-header>
                                                 Informazioni di base
-                                                <button class='edit' ion-button color='magenta1' float-end *ngIf='!editP1Info' (click)="onP1InfoEdit()">Modifica</button>
+                                                <button class='edit' ion-button color='magenta1' float-end *ngIf='!editP1Info' (click)="onP1InfoEdit()" [disabled]='isNew'>Modifica</button>
                                                 <button class='edit' ion-button color='magenta1' float-end *ngIf='editP1Info' (click)="onP1InfoSave()">Salva</button>
                                                 <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='editP1Info' (click)="onP1InfoCancel()">Annulla</button>
                                             </ion-card-header>
@@ -273,7 +277,7 @@
                                         <ion-card>
                                             <ion-card-header>
                                                 Contatti
-                                                <button class='edit' ion-button color='magenta1' float-end *ngIf='!editP1Contatti' (click)="onP1ContattiEdit()">Modifica</button>
+                                                <button class='edit' ion-button color='magenta1' float-end *ngIf='!editP1Contatti' (click)="onP1ContattiEdit()" [disabled]='isNew'>Modifica</button>
                                                 <button class='edit' ion-button color='magenta1' float-end *ngIf='editP1Contatti' (click)="onP1ContattiSave()">Salva</button>
                                                 <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='editP1Contatti' (click)="onP1ContattiCancel()">Annulla</button>
                                             </ion-card-header>
@@ -298,7 +302,7 @@
                                         <ion-card>
                                             <ion-card-header>
                                                 Informazioni di base
-                                                <button class='edit' ion-button color='magenta1' float-end *ngIf='!editP2Info' (click)="onP2InfoEdit()">Modifica</button>
+                                                <button class='edit' ion-button color='magenta1' float-end *ngIf='!editP2Info' (click)="onP2InfoEdit()" [disabled]='isNew'>Modifica</button>
                                                 <button class='edit' ion-button color='magenta1' float-end *ngIf='editP2Info' (click)="onP2InfoSave()">Salva</button>
                                                 <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='editP2Info' (click)="onP2InfoCancel()">Annulla</button>
                                             </ion-card-header>
@@ -340,7 +344,7 @@
                                         <ion-card>
                                             <ion-card-header>
                                                 Contatti
-                                                <button class='edit' ion-button color='magenta1' float-end *ngIf='!editP2Contatti' (click)="onP2ContattiEdit()">Modifica</button>
+                                                <button class='edit' ion-button color='magenta1' float-end *ngIf='!editP2Contatti' (click)="onP2ContattiEdit()" [disabled]='isNew'>Modifica</button>
                                                 <button class='edit' ion-button color='magenta1' float-end *ngIf='editP2Contatti' (click)="onP2ContattiSave()">Salva</button>
                                                 <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='editP2Contatti' (click)="onP2ContattiCancel()">Annulla</button>
                                             </ion-card-header>
@@ -401,7 +405,7 @@
                                                         <ion-card>
                                                             <ion-card-header>
                                                                 Informazioni di base
-                                                                <button class='edit' ion-button color='magenta1' float-end *ngIf='!editDelegaInfo' (click)="onDelegaInfoEdit()">Modifica</button>
+                                                                <button class='edit' ion-button color='magenta1' float-end *ngIf='!editDelegaInfo' (click)="onDelegaInfoEdit()" [disabled]='isNew'>Modifica</button>
                                                                 <button class='edit' ion-button color='magenta1' float-end *ngIf='editDelegaInfo' (click)="onDelegaInfoSave()">Salva</button>
                                                                 <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='editDelegaInfo' (click)="onDelegaInfoCancel()">Annulla</button>
                                                             </ion-card-header>
@@ -455,7 +459,7 @@
                                                         <ion-card>
                                                             <ion-card-header>
                                                                 Contatti
-                                                                <button class='edit' ion-button color='magenta1' float-end *ngIf='!editDelegaContatti' (click)="onDelegaContattiEdit()">Modifica</button>
+                                                                <button class='edit' ion-button color='magenta1' float-end *ngIf='!editDelegaContatti' (click)="onDelegaContattiEdit()" [disabled]='isNew'>Modifica</button>
                                                                 <button class='edit' ion-button color='magenta1' float-end *ngIf='editDelegaContatti' (click)="onDelegaContattiSave()">Salva</button>
                                                                 <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='editDelegaContatti' (click)="onDelegaContattiCancel()">Annulla</button>
                                                             </ion-card-header>
@@ -469,7 +473,7 @@
                                                         <ion-card>
                                                             <ion-card-header>
                                                                 Autorizzazione
-                                                                <button class='edit' ion-button color='magenta1' float-end *ngIf='!editDelegaAutor' (click)="onDelegaAutorEdit()">Modifica</button>
+                                                                <button class='edit' ion-button color='magenta1' float-end *ngIf='!editDelegaAutor' (click)="onDelegaAutorEdit()" [disabled]='isNew'>Modifica</button>
                                                                 <button class='edit' ion-button color='magenta1' float-end *ngIf='editDelegaAutor' (click)="onDelegaAutorSave()">Salva</button>
                                                                 <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='editDelegaAutor' (click)="onDelegaAutorCancel()">Annulla</button>
                                                             </ion-card-header>

@@ -272,6 +272,7 @@ export class WebService {
     convertedTeacher.teacherId = teacher.id;
     convertedTeacher.sectionIds = [];
     convertedTeacher.phones = teacher.phoneNumbers;
+    convertedTeacher.username = teacher.email;
     return convertedTeacher;
   }
 

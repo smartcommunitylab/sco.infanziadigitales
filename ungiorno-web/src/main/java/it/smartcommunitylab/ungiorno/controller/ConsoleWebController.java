@@ -339,8 +339,12 @@ public class ConsoleWebController {
 
     @RequestMapping(method = RequestMethod.PUT,
             value = "/consoleweb/{appId}/{schoolId}/teacher/{teacherId}/pin")
-    public void generatePin(@PathVariable String appId, @PathVariable String schoolId,
+    public Response<Teacher> generatePin(@PathVariable String appId, @PathVariable String schoolId,
             @PathVariable String teacherId) throws IOException {
 
+        Teacher teacher = teacherManager.generatePin(appId, schoolId, teacherId);
+        return new Response<>(teacher);
     }
+
+
 }

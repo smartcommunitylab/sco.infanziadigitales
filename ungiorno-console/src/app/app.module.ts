@@ -28,6 +28,8 @@ import { APP_INITIALIZER } from '@angular/core';
 import { UserService } from '../services/user.service';
 import { LoginPage } from '../pages/login/login';
 import { Ng2OrderModule } from 'ng2-order-pipe';
+import { ImageUploadModule } from "angular2-image-upload";
+
 
 
 export function initConfig(config: ConfigService) {
@@ -59,6 +61,7 @@ export function initConfig(config: ConfigService) {
     IonicModule.forRoot(MyApp),
     HttpModule,
     Ng2OrderModule,
+    ImageUploadModule.forRoot(),
     IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],

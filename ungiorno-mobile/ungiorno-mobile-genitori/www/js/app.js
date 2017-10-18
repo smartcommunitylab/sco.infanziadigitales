@@ -84,6 +84,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     'angularMoment',
     'ionic-timepicker',
     'ionic-modal-select',
+    'ionic-numberpicker',
   'monospaced.elastic'
 ])
 

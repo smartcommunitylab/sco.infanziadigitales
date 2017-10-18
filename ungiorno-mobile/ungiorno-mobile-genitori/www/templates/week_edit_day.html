@@ -27,13 +27,14 @@
                     <td>{{'reason' | translate}}: </td>
                     <td>
                       <div data-tap-disabled="true">
-                          <span  modal-select="" ng-if="currData.motivazione.type!==''" ng-model="currData.motivazione.type" options="listReasons" option-property="typeId" modal-title="{{'reason' | translate}}">
-                              <span class="lookeditable">{{currData.motivazione.type}}</span>
+                          <span  modal-select="" ng-if="reason_text=='remove_reason'" ng-model="currData.motivazione.type" options="listReasons" option-property="typeId" modal-title="{{'reason' | translate}}">
+                              <span class="lookeditable" ng-if="currData.motivazione.type!==''">{{currData.motivazione.type}}</span>
+                              <span class="lookeditable" ng-if="currData.motivazione.type==''">{{'select' |translate}}</span>
                               <div class="option">
                                 {{option.type}}
                               </div>
                           </span>
-                          <span ng-if="currData.motivazione.type==''">{{'missing_reasons' | translate}}</span>
+                          <span ng-if="reason_text=='remove_reason' && listReasons.length==0">{{'missing_reasons' | translate}}</span>
                        <!-- <select ng-model="currData.motivazione.type">
                             <option ng-repeat="option in listReasons" value="{{option.typeId}}" ng-selected="currData.motivazione.type==option.value">{{option.type | translate}}</option>
                         </select>-->
@@ -43,13 +44,14 @@
                   <tr ng-if="currData.motivazione.type=='Malattia'">
                       <td>{{'type_illness' | translate}}: </td>
                       <td>
-                          <span  modal-select="" ng-if="currData.motivazione.subtype!==''" ng-model="currData.motivazione.subtype" options="listProblems" option-property="typeId" modal-title="{{'reason' | translate}}">
-                              <span class="lookeditable">{{currData.motivazione.subtype}}</span>
+                          <span  modal-select="" ng-if="reason_text=='remove_reason'" ng-model="currData.motivazione.subtype" options="listProblems" option-property="typeId" modal-title="{{'reason' | translate}}">
+                              <span class="lookeditable" ng-if="currData.motivazione.subtype!==''">{{currData.motivazione.subtype}}</span>
+                              <span class="lookeditable" ng-if="currData.motivazione.subtype==''">{{'select' |translate}}</span>
                               <div class="option">
                                 {{option.type}}
                               </div>
                           </span>
-                          <span ng-if="currData.motivazione.subtype==''">{{'missing_illness' | translate}}</span>
+                          <span ng-if="reason_text=='remove_reason' && listProblems.length==0">{{'missing_illness' | translate}}</span>
                           <!--
                         <div data-tap-disabled="true">
                           <select ng-model="currData.motivazione.subtype">

@@ -191,6 +191,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     });
   }
   $scope.call = function () {
+    if(profileService.getSchoolProfile().contacts==null || profileService.getSchoolProfile().contacts==undefined ){
+      alert($filter('translate')('missing_phone'));
+      return;
+    }
+    if(profileService.getSchoolProfile().contacts.telephone.length==0 ){
+      alert($filter('translate')('missing_phone'));
+      return;
+    }
     var num = profileService.getSchoolProfile().contacts.telephone[0];
     num = num.replace(/\D/g, '');
     window.open('tel:' + num, '_system');

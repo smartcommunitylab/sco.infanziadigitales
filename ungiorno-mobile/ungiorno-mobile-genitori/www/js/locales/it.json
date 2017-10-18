@@ -193,7 +193,7 @@
   "retire_popup_person_cancel": "Indica chi ritira il bambino",
   "add_motivation": "Aggiungi la motivazione",
   "remove_motivation": "Rimuovi la motivazione",
-  "type_illness": "Tipo di malattia:",
+  "type_illness": "Tipo di malattia",
   "no_messages": "Non sono presenti messaggi",
   "babysetting_active": "Attivo",
   "babysetting_not_active": "Non attivo",
@@ -219,7 +219,7 @@
   "prom_day_ritiro_reason": "per il ritiro di mio/a figlio/a da scuola.",
   "at_time": "Alle ore",
   "at_day": "Il giorno",
-  "time_before":"ore prima dell'orario di uscita",
+  "time_before":"minuti prima dell'orario di uscita",
   "notification_day_summary_title":"Un Giorno a scuola",
   "notification_day_summary_text":"Promemoria giornaliera",
   "notification_week_text":"Promemoria settimanale",
@@ -233,5 +233,8 @@
   "missing_illness":"Mancano malattie",
   "Selezziona":"Inserisci l’ora",
   "choose_time":"o scegli uno degli orari predefiniti",
-  "none":"Nessuno"
+  "none":"Nessuno",
+  "select_day":"Selezionare il giorno",
+  "missing_phone":"Manca numero telefono della scuola",
+  "select":"Selezziona"
 }

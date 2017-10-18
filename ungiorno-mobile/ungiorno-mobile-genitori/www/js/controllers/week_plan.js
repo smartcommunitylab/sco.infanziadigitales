@@ -742,10 +742,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         }
         else {
             $scope.reason_text='remove_reason';
-            $scope.currData.motivazione={
-                type:($scope.listReasons.length >0 ? $scope.listReasons[0].typeId : ''),
-                subtype:($scope.listProblems.length >0 ? $scope.listProblems[0].typeId : '')
-            };
         }
     };
 
@@ -754,6 +750,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             type:'',
             subtype:''
         };
+        if($scope.currData.absence){
+            $scope.reason_text='add_reason'; 
+        }
+        else {
+            $scope.reason_text='remove_reason';
+        }
     };
 
     $scope.setDay = function() {
@@ -1118,34 +1120,28 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         $scope.currData['prom_week_time']=$filter('date')(selectedTime, 'H:mm');
 
         // params for DAILY RITIRO notification
-        tempVal=(new Date()).getHours() * 60 * 60 + (new Date()).getMinutes() * 60;
+        tempVal=30;
         if(localStorage.getItem('prom_ritiro_time') !== null && localStorage.getItem('prom_ritiro_time') !== undefined){
-            temp=localStorage.getItem('prom_ritiro_time').split(':');
-            var selectedTime = new Date();
-            selectedTime.setHours(temp[0]);
-            selectedTime.setMinutes(temp[1]);
-            selectedTime.setSeconds(0);
-            tempVal=(selectedTime).getHours() * 60 * 60 + (selectedTime).getMinutes() * 60;
+            tempVal=localStorage.getItem('prom_ritiro_time');
         }
-        $scope.timePickerObject24HourRitiro = {
-            inputEpochTime: tempVal, //Optional
-            step: 5, //Optional
-            format: 24, //Optional
-            titleLabel: $filter('translate')('popup_timepicker_title'), //Optional
-            closeLabel: $filter('translate')('popup_timepicker_cancel'), //Optional
-            setLabel: $filter('translate')('popup_timepicker_select'), //Optional
-            setButtonType: 'button-norm', //Optional
-            closeButtonType: 'button-norm', //Optional
-            callback: function (val) { //Mandatory
-                timePicker24Callback(val,'day',$scope.timePickerObject24HourRitiro,'prom_ritiro_time');
+        $scope.numberPickerObject = {
+            inputValue: tempVal, //Optional
+            minValue: 0,
+            maxValue: 200,
+            //precision: 3,  //Optional
+            wholeStep: 15,  //Optional
+            format: "WHOLE",  //Optional - "WHOLE" or "DECIMAL"
+            unit: "",  //Optional - "m", "kg", "℃" or whatever you want
+            titleLabel: 'Minuti',  //Optional
+            setLabel: $filter('translate')('popup_timepicker_select'),  //Optional
+            closeLabel: $filter('translate')('popup_timepicker_cancel'),  //Optional
+            setButtonType: 'button-norm',  //Optional
+            closeButtonType: 'button-stable',  //Optional
+            callback: function (val) {    //Mandatory
+                numberPickerCallback(val,'prom_ritiro_time');
             }
         };
-        var val = tempVal;
-        var selectedTime = new Date();
-        selectedTime.setHours(val / 3600);
-        selectedTime.setMinutes((val % 3600) / 60);
-        selectedTime.setSeconds(0);
-        $scope.currData['prom_ritiro_time']=$filter('date')(selectedTime, 'H:mm');
+        $scope.currData['prom_ritiro_time']=tempVal;
     }
     
     function timePicker24Callback(val,type,variable,name) {
@@ -1159,6 +1155,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             selectedTime.setSeconds(0);
             $scope.currData[name] = $filter('date')(selectedTime, 'H:mm');
             localStorage.setItem(name,$filter('date')(selectedTime, 'H:mm')) ;
+            $scope.setNotify();
+        }
+    }
+
+    function numberPickerCallback(val,name) {
+        if (typeof (val) === 'undefined') {
+            console.log('minute not selected');
+        } else {
+            $scope.currData[name] = val;
+            localStorage.setItem(name,val) ;
             $scope.setNotify();
         }
     }
@@ -1255,14 +1261,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             }
             if($scope.currData['prom_day_ritiro']){
                 localStorage.setItem('prom_day_ritiro', true);
-                temp=$scope.currData['prom_ritiro_time'].split(':');
+                temp=parseInt($scope.currData['prom_ritiro_time']);
                 $scope.briefInfo=profileService.getBriefInfo();
                 console.log($scope.briefInfo.ore_uscita);
                 var ore_uscita = $scope.briefInfo.ore_uscita.split(':');
                 var usc=moment().hour(ore_uscita[0]);
                 var usc=usc.minute(ore_uscita[1]);
-                dateFrom = usc.subtract(temp[0],'hours');
-                dateFrom = dateFrom.subtract(temp[1],'minutes');
+                //dateFrom = usc.subtract(temp[0],'hours');
+                dateFrom = usc.subtract(temp,'minutes');
                 var selectedTime = dateFrom.toDate();
                 //console.log(selectedTime);
                 //console.log(dateFrom.format('YYYY-MM-DD HH:mm'));

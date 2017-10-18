@@ -286,8 +286,12 @@ public class ConsoleWebController {
             value = "/consoleweb/{appId}/{schoolId}/kid/{kidId}/picture")
     public Response<Void> updloadKidPicture(@PathVariable String appId,
             @PathVariable String schoolId, @PathVariable String kidId,
-            @RequestParam("profileImage") MultipartFile picture, HttpServletResponse response) {
+            @RequestParam("image") MultipartFile picture, HttpServletResponse response) {
 
+        if (picture == null) {
+            logger.error("No multipart file on field 'image'");
+            return new Response<>("The multipart file is attended on field named image");
+        }
         String pictureFileName;
         try {
             pictureFileName = kidManager.saveKidPicture(kidId, picture);
@@ -297,9 +301,11 @@ public class ConsoleWebController {
         }
         logger.info("Updloaded picture for kid {}", kidId);
         KidProfile kid = kidManager.getKidProfile(appId, schoolId, kidId);
-        kid.setImage(pictureFileName);
-        kidManager.updateKid(kid);
-        logger.info("Update profile of kid {} with image {}", kidId, pictureFileName);
+        if (kid != null) {
+            kid.setImage(pictureFileName);
+            kidManager.updateKid(kid);
+            logger.info("Update profile of kid {} with image {}", kidId, pictureFileName);
+        }
         return new Response<>();
     }
 

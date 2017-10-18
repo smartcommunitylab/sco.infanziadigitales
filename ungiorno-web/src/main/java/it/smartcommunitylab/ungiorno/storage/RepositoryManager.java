@@ -1970,5 +1970,22 @@ public class RepositoryManager implements RepositoryService {
 
     }
 
+		@Override
+		public SchoolProfile getSchoolProfileByName(String appId, String name) {
+			Query query = new Query(new Criteria("appId").is(appId).and("name").is(name));
+			return template.findOne(query, SchoolProfile.class);
+		}
+
+		@Override
+		public KidProfile saveKidProfile(KidProfile kidProfile) {
+			Query query = new Query(new Criteria("appId").is(kidProfile.getAppId())
+					.and("kidId").is(kidProfile.getKidId()));
+			KidProfile kidDb = template.findOne(query, KidProfile.class);
+			if(kidDb == null) {
+				template.save(kidProfile);
+			}
+			return kidProfile;
+		}
+
 
 }

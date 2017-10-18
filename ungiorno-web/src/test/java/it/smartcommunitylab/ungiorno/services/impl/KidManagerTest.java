@@ -14,6 +14,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.ContextConfiguration;
@@ -127,7 +129,8 @@ public class KidManagerTest {
 }
 
 
-// @Configuration
+@Configuration
+@PropertySource("classpath:app.properties")
 class KidManagerTestConfig {
 
     private String dbName = "ungiorno-test";
@@ -681,17 +684,17 @@ class KidManagerTestConfig {
 
             }
 
-						@Override
-						public SchoolProfile getSchoolProfileByName(String appId, String name) {
-							// TODO Auto-generated method stub
-							return null;
-						}
+            @Override
+            public SchoolProfile getSchoolProfileByName(String appId, String name) {
+                // TODO Auto-generated method stub
+                return null;
+            }
 
-						@Override
-						public KidProfile saveKidProfile(KidProfile kidProfile) {
-							// TODO Auto-generated method stub
-							return null;
-						}
+            @Override
+            public KidProfile saveKidProfile(KidProfile kidProfile) {
+                // TODO Auto-generated method stub
+                return null;
+            }
         };
     }
 }

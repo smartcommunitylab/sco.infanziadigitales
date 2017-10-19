@@ -309,7 +309,7 @@ export class WebService {
     let convertedKid = new Kid(serverKidData.kidId, serverKidData.firstName, serverKidData.lastName, serverKidData.gender, serverKidData.birthDate, serverKidData.image, null, null, null, null, null, null, allergies, serverKidData.partecipateToSperimentation, services);
     let parents = serverKidData.persons.filter(person => person.parent);
 
-    if (parents.length == 1) {
+    if (parents.length >= 1) {
       convertedKid.parent1 = this.convertToParent(parents[0]);
     }
     if (parents.length == 2) {

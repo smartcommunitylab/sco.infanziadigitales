@@ -106,11 +106,14 @@ export class Info {
         prompt.present();
     }
 
-    oldTel: string; oldMail: string;
+    oldTel: string[]; oldMail: string;
+
     onContattiEdit() {
         this.editContatti = true;
         if (this.editContatti) {
             this.oldMail = this.selectedSchool.email;
+            this.oldTel = [];
+            this.selectedSchool.phoneNumbers.forEach(x => this.oldTel.push(x));
         }
     }
 
@@ -121,6 +124,8 @@ export class Info {
 
     onContattiCancel() {
         this.selectedSchool.email = this.oldMail;
+        this.selectedSchool.phoneNumbers = [];
+        this.oldTel.forEach(x => this.selectedSchool.phoneNumbers.push(x));
         this.editContatti = false;
     }
 

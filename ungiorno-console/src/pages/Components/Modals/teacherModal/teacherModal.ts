@@ -83,4 +83,23 @@ export class TeacherModal implements OnInit{
     group.teachers.splice(group.teachers.findIndex(x=>x.toLowerCase() == this.copiedTeacher.id.toLowerCase()), 1);
     this.updateArray();
   }
+  generatePin() {
+    //popup di richiesta
+        let alert = this.alertCtrl.create({
+          title: 'Creazione PIN',
+      subTitle: 'Sei sicuro di voler continuare?',
+      buttons: [
+        {
+          text: "Annulla"
+        },
+        {
+          text: 'OK',
+          handler: () => {
+            this.webService.generatePIN(this.selectedSchool.id, this.copiedTeacher);
+          }
+        }
+      ]
+    })
+    alert.present();
+  }
 }

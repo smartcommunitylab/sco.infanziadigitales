@@ -264,7 +264,12 @@ export class WebService {
     ).catch(this.handleError);
   }
 
-  private addKid(schoolId: string, kidProfile: Kid): Promise<Kid> {
+  public generatePIN(schoolId: string,teacher: Teacher): Promise<any> 
+{
+        return this.http.put(`${this.apiUrl}/consoleweb/${this.appId}/${schoolId}/teacher/${teacher.id}/pin`,{}).toPromise().then(
+      response => this.convertToTeacher(response.json().data)
+    ).catch(this.handleError);
+}  private addKid(schoolId: string, kidProfile: Kid): Promise<Kid> {
     let convertedKid: ServerKidData = this.convertToServerKid(kidProfile);
     return this.http.post(`${this.apiUrl}/consoleweb/${this.appId}/${schoolId}/kid`, convertedKid).toPromise().then(
       response => this.convertToKid(response.json().data)
@@ -315,9 +320,8 @@ export class WebService {
     if (parents.length == 2) {
       convertedKid.parent2 = this.convertToParent(parents[1]);
     }
-
-
-    let deleghe = serverKidData.persons.filter(person => !person.parent);
+      convertedKid.bus = serverKidData.services.bus;
+        let deleghe = serverKidData.persons.filter(person => !person.parent);
     if (deleghe.length > 0) {
       deleghe.map(delega => this.convertToDelega(delega)).forEach(convertedDelega => convertedKid.deleghe.push(convertedDelega));
     }
@@ -354,7 +358,9 @@ export class WebService {
     if (kid.deleghe) {
       kid.deleghe.forEach(delega => convertedKid.persons.push(this.convertFromDelegaToAuthPerson(delega)));
     }
-
+    if (kid.bus && kid.bus.enabled) {
+      convertedKid.services.bus = kid.bus;
+    }
     return convertedKid;
   }
 

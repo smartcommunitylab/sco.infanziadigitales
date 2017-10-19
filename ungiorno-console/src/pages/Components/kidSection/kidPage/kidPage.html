@@ -235,19 +235,26 @@
                                         <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='editBus' (click)="onBusCancel()">Annulla</button>
                                     </ion-card-header>
                                     <ion-card-content margin-top>
-                                        <!--<ion-checkbox [(ngModel)]="thisKid.services.bus && thisKid.services.bus.enabled"></ion-checkbox>
-                                        <ion-item>
-                                            <ion-label>Linee Bus</ion-label>
-                                            <ion-select [(ngModel)]="stop">
+                                        <ion-item *ngIf='editBus'>
+                                            <ion-label>Attiva il servizio bus</ion-label>
+                                            <ion-checkbox [(ngModel)]="thisKid.bus.enabled"> Attiva il servizio bus</ion-checkbox>
+                                        </ion-item>
+                                        <label *ngIf='!editBus'>
+                                            <p *ngIf="thisKid.bus && thisKid.bus.enabled" text-center>Il servizio bus e` attivo</p>
+                                            <p *ngIf="!thisKid.bus || !thisKid.bus.enabled"text-center>Il servizio bus non e` attivo</p></label>
+                                       <ion-label *ngIf='thisKid.bus && thisKid.bus.busId  && thisKid.bus.enabled && !editBus'>Linea Bus: {{thisKid.bus.busId}} </ion-label>
+                                        <ion-item *ngIf="thisKid.bus && thisKid.bus.enabled && editBus">
+                                            <ion-label>Linea Bus: </ion-label>
+                                            <ion-select [(ngModel)]="thisKid.bus.busId" *ngIf='editBus'>
                                                 <ion-option *ngFor="let item of selectedSchool.buses" [value]="item.busId">{{item.busId}}</ion-option>
                                             </ion-select>
                                         </ion-item>
-                                        <ion-grid *ngIf="editBus" no-padding no-margin>
+                                        <ion-grid *ngIf="editBus && thisKid.bus && thisKid.bus.enabled" no-padding no-margin>
                                             <ion-row>
                                                 <ion-col col-10>
                                                     <ion-row margin-bottom>
                                                         <ion-col col-2>
-                                                            Nome fermata:
+                                                            Aggiungi una nuova fermata:
                                                         </ion-col>
                                                         <ion-col col-10>
                                                             <input type='text' id='giord' [(ngModel)]="newStop" placeholder="Inserisci nome della fermata" no-padding no-margin>
@@ -258,13 +265,14 @@
                                                 </ion-col>
                                             </ion-row>
                                         </ion-grid>
-                                        <ion-list>
-                                            <ion-item *ngIf="thisKid.services.bus && thisKid.services.bus.stops" *ngFor="let item of thisKid.services.bus.stops">
+                                        <ion-list *ngIf="thisKid.bus && thisKid.bus.stops && thisKid.bus.enabled">
+                                            <ion-item>Fermate:</ion-item>
+                                            <ion-item *ngFor="let item of thisKid.bus.stops">
                                                 {{item.stopId}}
-                                                <ion-icon *ngIf="thisKid.services.bus.stops.length > 0 && editBus" name="close" float-end (click)="removeStop(item)"></ion-icon>
+                                                <ion-icon *ngIf="thisKid.bus.stops.length > 0 && editBus" name="close" float-end (click)="removeStop(item)"></ion-icon>
                                             </ion-item>
-                                            <ion-item *ngIf="(!thisKid.services.bus.stops || thisKid.services.bus|| thisKid.services.bus.stops.length === 0) && !editBus" text-center class="empty-field ">Nessuna fermata inserita</ion-item>
-                                        </ion-list>-->
+                                        </ion-list>
+                                        <ion-item *ngIf="(!thisKid.bus|| !thisKid.bus.stops || thisKid.bus.stops.length === 0) && thisKid.bus.enabled"  class="empty-field ">Nessuna fermata inserita</ion-item>
                                     </ion-card-content>
                                 </ion-card>
                             </ion-col>

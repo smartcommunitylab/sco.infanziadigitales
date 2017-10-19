@@ -96,7 +96,9 @@
                             <ion-item>
                                 <ion-row>
                                     <ion-col col-2>PIN*</ion-col>
-                                    <ion-col col-10><input class="text-generic" name="name" [(ngModel)]="copiedTeacher.pin"></ion-col>
+                                    <!--<ion-col col-10><input class="text-generic" name="name" [(ngModel)]="copiedTeacher.pin"></ion-col>-->
+                                    <ion-col col-10><button class='edit' ion-button color='magenta1' float-center  [disabled]="!copiedTeacher.email" (click)="generatePin()">Genera PIN</button></ion-col>
+
                                 </ion-row>
                                 <!--<ion-label>PIN*</ion-label>
                                 <ion-input name="text" type="text" [(ngModel)]="copiedTeacher.pin"></ion-input>-->

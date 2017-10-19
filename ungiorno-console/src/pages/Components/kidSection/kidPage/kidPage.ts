@@ -4,6 +4,7 @@ import { AlertController } from 'ionic-angular';
 import { Service } from './../../../../app/Classes/service';
 import { Group } from './../../../../app/Classes/group';
 import { School } from './../../../../app/Classes/school';
+import { BusService } from './../../../../app/Classes/busService';
 import { Bus } from './../../../../app/Classes/bus';
 import { Stop } from './../../../../app/Classes/stop';
 import { Kid } from './../../../../app/Classes/kid';
@@ -80,6 +81,20 @@ import 'rxjs/add/operator/switchMap';
         ion-segment-button.segment-activated {
             background-color : #98ba3c;
         }
+ion-select {
+max-width: 100%;
+width: 100%;
+}
+
+.item-select ion-label {
+max-width: 75px;
+min-width: 75px;
+}
+
+#select-option {
+margin-right: auto;
+width: 100%;
+}
     `]
 })
 
@@ -104,8 +119,8 @@ export class KidPage implements OnInit {
     isNew: boolean = false;
     apiUrl: string;
     servicesChecked = {};
-    editBus : boolean =false;
-    newStop:Stop;
+    editBus: boolean = false;
+    newStop: string = "";
     URL = 'https://dev.smartcommunitylab.it/ungiorno/consoleweb/trento/scuola2/kid/a/picture';
 
     // uploader: FileUploader = new FileUploader({ url: this.URL, disableMultipart: false,  authToken: `Bearer ${sessionStorage.getItem('access_token')}` });
@@ -126,6 +141,9 @@ export class KidPage implements OnInit {
         this.editInfo = this.isNew;
 
         this.thisKid.services.forEach(x => this.servicesChecked[x.servizio] = true);
+        if (!this.thisKid.bus) {
+            this.thisKid.bus = new BusService();
+        }
     }
 
     goBack() {
@@ -209,10 +227,10 @@ export class KidPage implements OnInit {
 
     onFotoSave() {
         //upload image
-    //    this.uploader.queue[0].withCredentials = false;
-    //        this.uploader.onBuildItemForm = (item, form) => {
-    //   form.append("image", item);
-    // };
+        //    this.uploader.queue[0].withCredentials = false;
+        //        this.uploader.onBuildItemForm = (item, form) => {
+        //   form.append("image", item);
+        // };
         //this.uploader.uploadItem(this.uploader.queue[0]);
         // this.webService.uploadDocument(this.uploader, this.uploader.queue[0], this.selectedSchool, this.selectedKid)
         this.webService.update(this.selectedSchool);
@@ -527,38 +545,38 @@ export class KidPage implements OnInit {
     //     var image = this.apiUrl + "/consoleweb/" + this.selectedSchool.appId + "/" + this.selectedSchool.id + "/kid/" + this.thisKid.id + "/picture";
     //     return image;
     // }
-     getActualImage() {
-      let headers = new Headers();
-      headers.append("Authorization", "Bearer ${sessionStorage.getItem('access_token')}");
-      return this.http.get( this.apiUrl + "/consoleweb/" + this.selectedSchool.appId + "/" + this.selectedSchool.id + "/kid/" + this.thisKid.id + "/picture", { headers: headers, })
-  }
+    getActualImage() {
+        let headers = new Headers();
+        headers.append("Authorization", "Bearer ${sessionStorage.getItem('access_token')}");
+        return this.http.get(this.apiUrl + "/consoleweb/" + this.selectedSchool.appId + "/" + this.selectedSchool.id + "/kid/" + this.thisKid.id + "/picture", { headers: headers, })
+    }
     getUploadUrl() {
         var image = this.apiUrl + "/consoleweb/" + this.selectedSchool.appId + "/" + this.selectedSchool.id + "/kid/" + this.thisKid.id + "/picture";
         return image;
     }
-      onBusEdit() {
+    onBusEdit() {
         this.editBus = true;
     }
 
     onBusSave() {
         this.editBus = false;
-        this.webService.update(this.selectedSchool);
+        this.webService.add(this.selectedSchool.id, this.thisKid);
     }
 
     onBusCancel() {
         this.editBus = false;
     }
 
-    addBus(bus: string) {
-        if (bus !== undefined && bus.trim() !== '')
-            if (!this.selectedSchool.buses) {
-                this.selectedSchool.buses = [];
-                this.selectedSchool.buses.push(new Bus(bus));
+    addStop(stop: string) {
+        if (stop !== undefined && stop.trim() !== '')
+            if (!this.thisKid.bus) {
+                this.thisKid.bus = new BusService();
+                this.thisKid.bus.stops.push(new Stop(stop));
 
             }
             else {
-                if (this.selectedSchool.buses.findIndex(x => x.busId.toLowerCase() === bus.toLowerCase()) < 0)
-                    this.selectedSchool.buses.push(new Bus(bus));
+                if (this.thisKid.bus.stops.findIndex(x => x.stopId.toLowerCase() === stop.toLowerCase()) < 0)
+                    this.thisKid.bus.stops.push(new Stop(stop));
                 else {
                     let alert = this.alertCtrl.create();
                     alert.setSubTitle('Voce già presente');
@@ -566,10 +584,10 @@ export class KidPage implements OnInit {
                     alert.present();
                 }
             }
-        this.newStop = new Stop("");
+        this.newStop = "";
     }
 
-    removeBus(bus: Bus) {
+    removeStop(stop: Stop) {
         let alert = this.alertCtrl.create({
             subTitle: 'Conferma eliminazione',
             buttons: [
@@ -579,7 +597,7 @@ export class KidPage implements OnInit {
                 {
                     text: 'OK',
                     handler: () => {
-                        this.selectedSchool.buses.splice(this.selectedSchool.buses.findIndex(x => x.busId.toLowerCase() === bus.busId.toLowerCase()), 1);
+                        this.thisKid.bus.stops.splice(this.thisKid.bus.stops.findIndex(x => x.stopId.toLowerCase() === stop.stopId.toLowerCase()), 1);
                     }
                 }
             ]

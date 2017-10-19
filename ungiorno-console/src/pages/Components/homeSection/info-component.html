@@ -156,7 +156,7 @@
                    Bus
                     <button class='edit' ion-button color='magenta1' float-end *ngIf='!editBus' (click)="onBusEdit()">Modifica</button>
                     <button class='edit' ion-button color='magenta1' float-end *ngIf='editBus' (click)="onBusSave()">Salva</button>
-                    <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='editBus' (click)="onBusancel()">Annulla</button>
+                    <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='editBus' (click)="onBusCancel()">Annulla</button>
                 </ion-card-header>
                 <ion-card-content margin-top>
                     <ion-grid *ngIf="editBus" no-padding no-margin>

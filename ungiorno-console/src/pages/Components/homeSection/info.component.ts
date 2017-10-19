@@ -241,7 +241,12 @@ export class Info {
         alert.present();
     }
 
+    oldBuses : Bus[];
     onBusEdit() {
+        this.oldBuses = [];
+        if(this.selectedSchool.buses != undefined) {
+            this.selectedSchool.buses.forEach(bus => this.oldBuses.push(bus));
+        }
         this.editBus = true;
     }
 
@@ -252,6 +257,9 @@ export class Info {
 
     onBusCancel() {
         this.editBus = false;
+        this.selectedSchool.buses = [];
+        this.oldBuses.forEach(bus => this.selectedSchool.buses.push(bus));
+
     }
 
     addBus(bus: string) {

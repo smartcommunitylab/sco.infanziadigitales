@@ -112,7 +112,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.filters', 
               return persons[i].firstName;
           }
       }
-      return '';
+      return 'none';
     }
   })
   .filter('getRitiroType', function() {
@@ -123,7 +123,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.filters', 
               return type;
           }
       }
-      return '';
+      return 'none';
     }
   })
   .filter('getSchoolNormalService', function() {

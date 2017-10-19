@@ -3,11 +3,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.c
 .factory('Config', function ($q, $http, $window, $filter, $rootScope) {
 
   var DEVELOPMENT = true;
+  //var URL = 'http://localhost:8080';
   var URL = 'https://' + (DEVELOPMENT ? 'dev' : 'tn') + '.smartcommunitylab.it';
   //var URL = 'http://192.168.42.60:8080';
   var AAC_URL = 'https://' + (DEVELOPMENT ? 'dev' : 'tn') + '.smartcommunitylab.it/aac';
   var fakeId = '23655';
-  var app = 'ungiorno2';
+  var app = 'ungiorno';
   //var senderId = 453601816446;
   // var appId = 'trento'
   //    var appId = $rootScope.appId;
@@ -45,12 +46,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.c
     getAbsenceLimitMinutes: function () {
       return mapJsonConfig['absenceLimitMinutes']
     },
+    
     setAppId: function (userId) {
       if (userId == this.getFakeId()) {
         $rootScope.appId = 'test';
       } else {
         $rootScope.appId = 'trento';
       }
+      localStorage.setItem('appId',$rootScope.appId);
     },
     getAACURL: function () {
       return AAC_URL;
@@ -97,7 +100,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.c
       return service;
     },
     appId: function () {
-      return $rootScope.appId;
+      return localStorage.getItem('appId');
     },
 
     httpTimout: function () {

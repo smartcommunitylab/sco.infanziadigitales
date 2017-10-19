@@ -37,8 +37,8 @@
               <div class="delega_day noneditable">
                 &nbsp;<i class="icon ion-android-person iconStyle"></i>&nbsp;
                 <div class="delega_name" >
-                    <span class="delegaStyle">{{day.delega_name|getRitiroName:ritiraOptions}}</span>
-                    <span class="delegaStyle">({{day.delega_name|getRitiroType:ritiraOptions}})</span>
+                    <span class="delegaStyle">{{day.delega_name|getRitiroName:ritiraOptions | translate}}</span>
+                    <span class="delegaStyle">({{day.delega_name|getRitiroType:ritiraOptions | translate}})</span>
                 </div>
             </div>
             </td>
@@ -48,7 +48,10 @@
           </tr>
         </table>
         <div class="button_bottom">
-         <div class="button_cancel" ng-click="modifyWeek()">
+         <div class="button_cancel" ng-click="modifyWeek()" ng-if="!disableEdit()">
+            {{'Modifica' | translate | uppercase}} 
+         </div>
+         <div class="button_cancel disabled_mod" ng-if="disableEdit()">
             {{'Modifica' | translate | uppercase}} 
          </div>
         </div>
@@ -85,8 +88,8 @@
               <div ng-class="whatClassIsIt($index,'delega')">
                   &nbsp;<i class="icon ion-android-person iconStyle"></i>&nbsp;
                 <div class="delega_name">
-                    <span class="delegaStyle">{{day.delega_name|getRitiroName:ritiraOptions}}</span>
-                    <span class="delegaStyle">({{day.delega_name|getRitiroType:ritiraOptions}})</span>
+                    <span class="delegaStyle">{{day.delega_name|getRitiroName:ritiraOptions | translate}}</span>
+                    <span class="delegaStyle">({{day.delega_name|getRitiroType:ritiraOptions | translate}})</span>
                 </div>
             </div>
             </td>

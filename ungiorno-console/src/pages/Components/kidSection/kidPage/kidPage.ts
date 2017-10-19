@@ -9,7 +9,10 @@ import { WebService } from './../../../../services/WebService';
 import { ConfigService } from './../../../../services/config.service';
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, ParamMap } from "@angular/router";
-import { Location }                 from '@angular/common';
+import { Location } from '@angular/common';
+import { FileUploader, FileItem } from 'ng2-file-upload';
+import { Http, Headers, BaseRequestOptions, RequestOptions } from '@angular/http';
+
 import 'rxjs/add/operator/switchMap';
 
 @Component({
@@ -78,50 +81,54 @@ import 'rxjs/add/operator/switchMap';
     `]
 })
 
-export class KidPage implements OnInit{ 
-    @Input() selectedKid : Kid;
-    @Input() selectedSchool : School
-    @Input() kidClick : boolean[];
-    @Input() edit:boolean = false;
+export class KidPage implements OnInit {
+    @Input() selectedKid: Kid;
+    @Input() selectedSchool: School
+    @Input() kidClick: boolean[];
+    @Input() edit: boolean = false;
 
-    thisKid : Kid = new Kid('', '', '');
+    thisKid: Kid = new Kid('', '', '');
 
-    selectedKidGroups : Group[];
+    selectedKidGroups: Group[];
 
-    kidSettings:string = 'info';
+    kidSettings: string = 'info';
 
-    newAllergia : string;
+    newAllergia: string;
 
-    selectedDelega : Delega;
-    isNewD : boolean = false;
-    editD : boolean = false;
+    selectedDelega: Delega;
+    isNewD: boolean = false;
+    editD: boolean = false;
 
-    isNew : boolean = false;
-    apiUrl:string;
+    isNew: boolean = false;
+    apiUrl: string;
     servicesChecked = {};
 
-    constructor(
-        private webService : WebService,
-        private configService: ConfigService,
-        private alertCtrl : AlertController
-        ) { 
-         this.apiUrl=this.configService.getConfig('apiUrl');
-        }
+    URL = 'https://dev.smartcommunitylab.it/ungiorno/consoleweb/trento/scuola2/kid/a/picture';
 
-    ngOnInit(): void {    
+    uploader: FileUploader = new FileUploader({ url: this.URL, disableMultipart: false,  authToken: `Bearer ${sessionStorage.getItem('access_token')}` });
+    constructor(
+        private webService: WebService,
+        private configService: ConfigService,
+        private alertCtrl: AlertController,
+        private http: Http
+    ) {
+        this.apiUrl = this.configService.getConfig('apiUrl');
+    }
+
+    ngOnInit(): void {
         this.thisKid = this.selectedKid;
         this.selectedKidGroups = this.selectedSchool.groups.filter(x => x.kids.findIndex(d => d.toLowerCase() === this.selectedKid.id.toLowerCase()) >= 0);
 
-        this.isNew = this.thisKid.id == ''; 
+        this.isNew = this.thisKid.id == '';
         this.editInfo = this.isNew;
 
-        this.thisKid.services.forEach(x=> this.servicesChecked[x.servizio] = true);
+        this.thisKid.services.forEach(x => this.servicesChecked[x.servizio] = true);
     }
 
     goBack() {
-        if(this.edit && this.thisKid.name !== '' && this.thisKid.id !== '' && this.thisKid.surname !== '') {
+        if (this.edit && this.thisKid.name !== '' && this.thisKid.id !== '' && this.thisKid.surname !== '') {
             let alert = this.alertCtrl.create({
-                subTitle: 'Salvare prima di uscire?',            
+                subTitle: 'Salvare prima di uscire?',
             });
             alert.addButton({
                 text: 'No',
@@ -141,8 +148,8 @@ export class KidPage implements OnInit{
         else this.kidClick[0] = false;
     }
 
-    editInfo:boolean;
-    oldInfo:Kid = new Kid('', '', '');
+    editInfo: boolean;
+    oldInfo: Kid = new Kid('', '', '');
     onInfoEdit() {
         this.editInfo = true;
         this.oldInfo.id = this.thisKid.id;
@@ -154,8 +161,8 @@ export class KidPage implements OnInit{
 
     onInfoSave() {
         this.editInfo = false;
-        if(this.isNew) {
-            if(this.selectedSchool.kids.findIndex(x => x.id.toLowerCase() === this.thisKid.id.toLowerCase()) >= 0) {
+        if (this.isNew) {
+            if (this.selectedSchool.kids.findIndex(x => x.id.toLowerCase() === this.thisKid.id.toLowerCase()) >= 0) {
                 let alert = this.alertCtrl.create({
                     subTitle: 'Elemento già presente',
                     buttons: [
@@ -168,13 +175,13 @@ export class KidPage implements OnInit{
             }
             else {
                 this.selectedKid.services.push(this.selectedSchool.servizi.find(x => x.normale));
-                this.selectedSchool.kids.push(this.selectedKid);              
+                this.selectedSchool.kids.push(this.selectedKid);
             }
         }
-        
+
         // FIX for strange issue
         this.thisKid.services = this.thisKid.services.filter(service => service != undefined);
-        this.webService.add(this.selectedSchool.id,this.thisKid);
+        this.webService.add(this.selectedSchool.id, this.thisKid);
 
         // TO IMPROVE
         this.isNew = false;
@@ -190,7 +197,7 @@ export class KidPage implements OnInit{
     }
 
     editFoto: boolean;
-    oldFoto : string;
+    oldFoto: string;
 
     onFotoEdit() {
         this.editFoto = true;
@@ -198,9 +205,25 @@ export class KidPage implements OnInit{
     }
 
     onFotoSave() {
+        //upload image
+    //    this.uploader.queue[0].withCredentials = false;
+    //        this.uploader.onBuildItemForm = (item, form) => {
+    //   form.append("image", item);
+    // };
+        //this.uploader.uploadItem(this.uploader.queue[0]);
+        this.webService.uploadDocument(this.uploader, this.uploader.queue[0], this.selectedSchool, this.selectedKid)
         this.webService.update(this.selectedSchool);
         this.editFoto = false;
         this.saveClick();
+
+        // this.uploader.onCompleteItem = (item, response, status, headers) => {
+        //     if (status == 200) {
+        //         console.log('upload complete for ' + item.file.name);
+
+        //     }
+        // }
+
+
     }
 
     onFotoCancel() {
@@ -209,36 +232,36 @@ export class KidPage implements OnInit{
     }
 
     addImage(e) {
-        
+
     }
 
     handleChange(e) {
         console.log(e.target.value);
     }
 
-    editAllergia : boolean;
-    oldAll:string[];
+    editAllergia: boolean;
+    oldAll: string[];
 
     onAllergiaEdit() {
         this.oldAll = [];
         this.editAllergia = true;
-        this.thisKid.allergie.forEach(x=>this.oldAll.push(x));
+        this.thisKid.allergie.forEach(x => this.oldAll.push(x));
     }
 
     onAllergiaSave() {
         this.editAllergia = false;
-        this.webService.add(this.selectedSchool.id,this.thisKid);
+        this.webService.add(this.selectedSchool.id, this.thisKid);
     }
 
     onAllergiaCancel() {
         this.thisKid.allergie = [];
-        this.oldAll.forEach(x=>this.thisKid.allergie.push(x));
+        this.oldAll.forEach(x => this.thisKid.allergie.push(x));
         this.editAllergia = false;
     }
 
-    addAllergia(all : string) {
-        if(all !== undefined && all !== '') 
-            if(this.thisKid.allergie.findIndex(x=>x.toLowerCase() === all.toLowerCase()) < 0 && all !== '')
+    addAllergia(all: string) {
+        if (all !== undefined && all !== '')
+            if (this.thisKid.allergie.findIndex(x => x.toLowerCase() === all.toLowerCase()) < 0 && all !== '')
                 this.thisKid.allergie.push(all);
             else {
                 let alert = this.alertCtrl.create();
@@ -250,11 +273,11 @@ export class KidPage implements OnInit{
     }
 
     removeAllergia(all: string) {
-        this.thisKid.allergie.splice(this.thisKid.allergie.findIndex(x=>x.toLowerCase() === all.toLowerCase()), 1);
+        this.thisKid.allergie.splice(this.thisKid.allergie.findIndex(x => x.toLowerCase() === all.toLowerCase()), 1);
     }
 
-    editService : boolean;
-    oldService : Service[];
+    editService: boolean;
+    oldService: Service[];
     oldChecked = {};
 
     onServiceEdit() {
@@ -263,7 +286,7 @@ export class KidPage implements OnInit{
 
     onServiceSave() {
         this.editService = false;
-        this.webService.add(this.selectedSchool.id,this.thisKid);
+        this.webService.add(this.selectedSchool.id, this.thisKid);
     }
 
     onServiceCancel() {
@@ -272,9 +295,9 @@ export class KidPage implements OnInit{
 
     changeServices() {
         var x = new Array();
-        for(var i in this.servicesChecked) {
-            if(this.servicesChecked[i]) {
-               x.push(this.selectedSchool.servizi.find(c => c.servizio && c.servizio.toLowerCase() === i.toLowerCase()));
+        for (var i in this.servicesChecked) {
+            if (this.servicesChecked[i]) {
+                x.push(this.selectedSchool.servizi.find(c => c.servizio && c.servizio.toLowerCase() === i.toLowerCase()));
             }
         }
         this.thisKid.services = x
@@ -300,7 +323,7 @@ export class KidPage implements OnInit{
     }
 
     cancelClick() {
-        if(this.isNew) {
+        if (this.isNew) {
             this.edit = false;
             this.goBack();
         }
@@ -310,7 +333,7 @@ export class KidPage implements OnInit{
         }
     }
 
-    editP1Info : boolean;
+    editP1Info: boolean;
     oldParent1: Parent = new Parent('', '', '');
 
     onP1InfoEdit() {
@@ -322,7 +345,7 @@ export class KidPage implements OnInit{
 
     onP1InfoSave() {
         this.editP1Info = false;
-        this.webService.add(this.selectedSchool.id,this.thisKid);
+        this.webService.add(this.selectedSchool.id, this.thisKid);
     }
 
     onP1InfoCancel() {
@@ -332,7 +355,7 @@ export class KidPage implements OnInit{
         this.editP1Info = false;
     }
 
-    editP1Contatti : boolean;
+    editP1Contatti: boolean;
 
     onP1ContattiEdit() {
         this.editP1Contatti = true;
@@ -340,14 +363,14 @@ export class KidPage implements OnInit{
 
     onP1ContattiSave() {
         this.editP1Contatti = false;
-        this.webService.add(this.selectedSchool.id,this.thisKid);
+        this.webService.add(this.selectedSchool.id, this.thisKid);
     }
 
     onP1ContattiCancel() {
         this.editP1Contatti = false;
     }
 
-    editP2Info : boolean;
+    editP2Info: boolean;
     oldParent2: Parent = new Parent('', '', '');
 
     onP2InfoEdit() {
@@ -359,7 +382,7 @@ export class KidPage implements OnInit{
 
     onP2InfoSave() {
         this.editP2Info = false;
-        this.webService.add(this.selectedSchool.id,this.thisKid);
+        this.webService.add(this.selectedSchool.id, this.thisKid);
     }
 
     onP2InfoCancel() {
@@ -369,7 +392,7 @@ export class KidPage implements OnInit{
         this.editP2Info = false;
     }
 
-    editP2Contatti : boolean;
+    editP2Contatti: boolean;
 
     onP2ContattiEdit() {
         this.editP2Contatti = true;
@@ -377,7 +400,7 @@ export class KidPage implements OnInit{
 
     onP2ContattiSave() {
         this.editP2Contatti = false;
-        this.webService.add(this.selectedSchool.id,this.thisKid);
+        this.webService.add(this.selectedSchool.id, this.thisKid);
     }
 
     onP2ContattiCancel() {
@@ -386,9 +409,9 @@ export class KidPage implements OnInit{
 
     addDelega() {
         // if(!this.isNewD) {
-            this.isNewD = true;
-            this.selectedDelega = new Delega('', '' ,'');
-            this.editD = true;
+        this.isNewD = true;
+        this.selectedDelega = new Delega('', '', '');
+        this.editD = true;
         // }
         // else {
         //     //reset field
@@ -401,27 +424,27 @@ export class KidPage implements OnInit{
         this.selectedDelega = delega;
     }
 
-    onDeleteDelega(delega : Delega) {
+    onDeleteDelega(delega: Delega) {
         let alert = this.alertCtrl.create({
-        subTitle: 'Conferma eliminazione',
-        buttons: [
-            {
-            text: "Annulla"
-            },
-            {
-            text: 'OK',
-            handler: () => {
-                this.thisKid.deleghe.splice(this.thisKid.deleghe.findIndex(tmp => tmp.id === delega.id), 1);
-                this.webService.add(this.selectedSchool.id,this.thisKid);
-            }
-            }
-        ]
+            subTitle: 'Conferma eliminazione',
+            buttons: [
+                {
+                    text: "Annulla"
+                },
+                {
+                    text: 'OK',
+                    handler: () => {
+                        this.thisKid.deleghe.splice(this.thisKid.deleghe.findIndex(tmp => tmp.id === delega.id), 1);
+                        this.webService.add(this.selectedSchool.id, this.thisKid);
+                    }
+                }
+            ]
         })
         alert.present();
     }
 
-    editDelegaInfo : boolean;
-    oldDelega : Delega = new Delega('', '', '');
+    editDelegaInfo: boolean;
+    oldDelega: Delega = new Delega('', '', '');
 
     onDelegaInfoEdit() {
         this.editDelegaInfo = true;
@@ -429,9 +452,9 @@ export class KidPage implements OnInit{
 
     onDelegaInfoSave() {
         this.editDelegaInfo = false;
-        if(this.isNewD)
-            if(this.selectedDelega !== undefined && this.selectedDelega.id !== '')
-                if(this.selectedKid.deleghe.findIndex(x => this.selectedDelega.id.toLowerCase() === x.id.toLowerCase()) < 0)
+        if (this.isNewD)
+            if (this.selectedDelega !== undefined && this.selectedDelega.id !== '')
+                if (this.selectedKid.deleghe.findIndex(x => this.selectedDelega.id.toLowerCase() === x.id.toLowerCase()) < 0)
                     this.thisKid.deleghe.push(this.selectedDelega)
                 else {
                     let alert = this.alertCtrl.create({
@@ -444,14 +467,14 @@ export class KidPage implements OnInit{
                     });
                     alert.present();
                 }
-        this.webService.add(this.selectedSchool.id,this.thisKid);
+        this.webService.add(this.selectedSchool.id, this.thisKid);
     }
 
     onDelegaInfoCancel() {
         this.editDelegaInfo = false;
     }
 
-    editDelegaContatti:boolean;
+    editDelegaContatti: boolean;
 
     onDelegaContattiEdit() {
         this.editDelegaContatti = true;
@@ -459,14 +482,14 @@ export class KidPage implements OnInit{
 
     onDelegaContattiSave() {
         this.editDelegaContatti = false;
-        this.webService.add(this.selectedSchool.id,this.thisKid);
+        this.webService.add(this.selectedSchool.id, this.thisKid);
     }
 
     onDelegaContattiCancel() {
         this.editDelegaContatti = false;
     }
 
-    editDelegaAutor : boolean;
+    editDelegaAutor: boolean;
 
     onDelegaAutorEdit() {
         this.editDelegaAutor = true;
@@ -474,7 +497,7 @@ export class KidPage implements OnInit{
 
     onDelegaAutorSave() {
         this.editDelegaAutor = false;
-        this.webService.add(this.selectedSchool.id,this.thisKid);
+        this.webService.add(this.selectedSchool.id, this.thisKid);
     }
 
     onDelegaAutorCancel() {
@@ -494,15 +517,21 @@ export class KidPage implements OnInit{
     }
 
     cancelDClick() {
-        if(this.isNewD) {this.isNewD = false;  this.selectedDelega = undefined}
+        if (this.isNewD) { this.isNewD = false; this.selectedDelega = undefined }
         this.editD = false;
     }
-    getActualImage() {
-            var image =this.apiUrl + "/consoleweb/" +this.selectedSchool.appId  + "/" + this.selectedSchool.id + "/kid/" + this.thisKid.id + "/picture";
-            return image;
-    }
+    // getActualImage() {
+    //     var image = this.apiUrl + "/consoleweb/" + this.selectedSchool.appId + "/" + this.selectedSchool.id + "/kid/" + this.thisKid.id + "/picture";
+    //     return image;
+    // }
+     getActualImage() {
+      let headers = new Headers();
+      headers.append("Authorization", "Bearer ${sessionStorage.getItem('access_token')}");
+      return this.http.get( this.apiUrl + "/consoleweb/" + this.selectedSchool.appId + "/" + this.selectedSchool.id + "/kid/" + this.thisKid.id + "/picture", { headers: headers, })
+  }
     getUploadUrl() {
-            var image =this.apiUrl + "/consoleweb/" +this.selectedSchool.appId  + "/" + this.selectedSchool.id + "/kid/" + this.thisKid.id + "/picture";
-            return image;
+        var image = this.apiUrl + "/consoleweb/" + this.selectedSchool.appId + "/" + this.selectedSchool.id + "/kid/" + this.thisKid.id + "/picture";
+        return image;
     }
+    
 }

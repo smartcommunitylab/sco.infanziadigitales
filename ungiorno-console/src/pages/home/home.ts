@@ -1,4 +1,3 @@
-import { BusModal } from './../Components/Modals/busModal/busModal';
 import { Bus } from './../../app/Classes/bus';
 import { Group } from './../../app/Classes/group';
 import { GroupModal } from './../Components/Modals/groupModal/groupModal';

@@ -1,12 +1,12 @@
 import { Kid } from './kid';
 export class Bus {
+    busId:string;
     name: string;
-    capolinea: string;
-    kids : string[];
+    capacity : number;
 
-    constructor(id:string, capolinea:string, kids?: string[]) {
+    constructor(id:string) {
+        this.busId=id;
         this.name = id;
-        this.capolinea = capolinea;
-        this.kids = kids || [];
+        this.capacity = 0;
     }
 }

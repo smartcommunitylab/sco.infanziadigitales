@@ -149,4 +149,41 @@
             </ion-card>
         </ion-col>
     </ion-row>
+        <ion-row >
+        <ion-col col-10 offset-1>
+            <ion-card>
+                <ion-card-header>
+                   Bus
+                    <button class='edit' ion-button color='magenta1' float-end *ngIf='!editBus' (click)="onBusEdit()">Modifica</button>
+                    <button class='edit' ion-button color='magenta1' float-end *ngIf='editBus' (click)="onBusSave()">Salva</button>
+                    <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='editBus' (click)="onBusancel()">Annulla</button>
+                </ion-card-header>
+                <ion-card-content margin-top>
+                    <ion-grid *ngIf="editBus" no-padding no-margin>
+                        <ion-row>
+                            <ion-col col-10>
+                                <ion-row margin-bottom>
+                                    <ion-col col-2>
+                                        Nome bus:
+                                    </ion-col>
+                                    <ion-col col-10>
+                                        <input type='text' id='giord' [(ngModel)]="newBus" placeholder="Inserisci nome del bus" no-padding no-margin>
+                                    <ion-icon name="add-circle" color="green3" (click)="addBus(newBus)" item-end></ion-icon>
+                                    </ion-col>
+                                </ion-row>
+
+                            </ion-col>
+                        </ion-row>
+                    </ion-grid>
+                    <ion-list>
+                        <ion-item *ngFor="let item of selectedSchool.buses">
+                            {{item.busId}}
+                            <ion-icon *ngIf="selectedSchool.buses.length > 0 && editBus" name="close" float-end (click)="removeBus(item)"></ion-icon>
+                        </ion-item>
+                        <ion-item *ngIf="selectedSchool.buses && selectedSchool.buses.length === 0 && !editBus" text-center class="empty-field ">Nessun bus inserito</ion-item>
+                    </ion-list>
+                </ion-card-content>
+            </ion-card>
+        </ion-col>
+    </ion-row>
 </ion-grid>

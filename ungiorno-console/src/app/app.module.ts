@@ -1,10 +1,10 @@
 import { PopoverPage } from './../pages/Components/Modals/orariModal/popoverOrari';
 import { Insegnanti } from './../pages/Components/teacherSection/teacher.component';
 import { TeacherModal } from './../pages/Components/Modals/teacherModal/teacherModal';
-import { BusModal } from './../pages/Components/Modals/busModal/busModal';
 import { WebService, requestOptionsProvider } from '../services/WebService';
 import { LoginService } from '../services/login.service'
 import { ConfigService } from '../services/config.service'
+import { UrlHelperService } from '../services/urlHelper.service'
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
@@ -15,7 +15,6 @@ import { HomePage } from '../pages/home/home';
 import { HttpModule } from "@angular/http";
 import { GroupModal } from "../pages/Components/Modals/groupModal/groupModal";
 import { Gruppi } from "../pages/Components/gruppiSection/gruppi.component";
-import { Buses } from "../pages/Components/busSection/bus.component";
 import { Bambini } from "../pages/Components/kidSection/kid.component";
 import { Info } from "../pages/Components/homeSection/info.component";
 import { KidPage } from "../pages/Components/kidSection/kidPage/kidPage";
@@ -28,9 +27,8 @@ import { APP_INITIALIZER } from '@angular/core';
 import { UserService } from '../services/user.service';
 import { LoginPage } from '../pages/login/login';
 import { Ng2OrderModule } from 'ng2-order-pipe';
-import { ImageUploadModule } from "angular2-image-upload";
-
-
+import { FileSelectDirective, FileDropDirective, FileUploader } from 'ng2-file-upload/ng2-file-upload';
+import { SecurePipe } from '../services/pipe'
 
 export function initConfig(config: ConfigService) {
   return () => config.load()
@@ -41,11 +39,9 @@ export function initConfig(config: ConfigService) {
     MyApp,
     HomePage,
     GroupModal,
-    BusModal,
     TeacherModal,
     OrariModal,
     Gruppi,
-    Buses,
     Insegnanti,
     Bambini,
     KidPage,
@@ -54,6 +50,8 @@ export function initConfig(config: ConfigService) {
     PopoverPage,
     PopoverTimepicker,
     ListWidget,
+    FileSelectDirective,
+    SecurePipe,
     LoginPage
   ],
   imports: [
@@ -61,7 +59,6 @@ export function initConfig(config: ConfigService) {
     IonicModule.forRoot(MyApp),
     HttpModule,
     Ng2OrderModule,
-    ImageUploadModule.forRoot(),
     IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
@@ -69,11 +66,9 @@ export function initConfig(config: ConfigService) {
     MyApp,
     HomePage,
     GroupModal,
-    BusModal,
     TeacherModal,
     OrariModal,
     Gruppi,
-    Buses,
     Insegnanti,
     Bambini,
     KidPage,
@@ -89,6 +84,7 @@ export function initConfig(config: ConfigService) {
     SplashScreen,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     WebService,
+    UrlHelperService,
     LoginService,
     ConfigService,
     { provide: APP_INITIALIZER, useFactory: initConfig, deps: [ConfigService], multi: true },

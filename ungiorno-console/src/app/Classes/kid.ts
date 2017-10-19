@@ -34,7 +34,7 @@ export class Kid extends Person {
                     this.section = section || false;
                     this.parent1 = parent1 || new Parent('', '', '');
                     this.parent2 = parent2 || new Parent('', '', '');
-                    this.bus = bus || new Bus('', '', []);
+                    this.bus = bus || new Bus('');
                     this.ritiro = ritiro || [];
                     this.deleghe = deleghe || [];
                     this.allergie = allergie || [];

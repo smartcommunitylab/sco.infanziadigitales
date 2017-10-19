@@ -133,11 +133,13 @@
                                     <ion-card-content margin-top>
                                         <ion-item style="height:120px">
                                             <ion-thumbnail item-start style="height: 100%; width: auto">
-                                                <img [src]="getActualImage()" style="height: 100%; width: auto" *ngIf='!editFoto'/>
-                                                <image-upload *ngIf='editFoto' [url]=getUploadUrl()
+                                                <!--<img [src]="getActualImage() | secure" style="height: 100%; width: auto" *ngIf='!editFoto'/>-->
+                                                <img [src]="getActualImage() " style="height: 100%; width: auto" *ngIf='!editFoto' />
+                                                <!--<image-upload *ngIf='editFoto' url="https://dev.smartcommunitylab.it/ungiorno/consoleweb/trento/scuola2/kid/a/picture"
                                                   [buttonCaption]="'Seleziona dal disco'"
                                                   [dropBoxMessage]="'Trascina la tua immagine qui!'"
-                                                  [max]="1"></image-upload>
+                                                  [max]="1"></image-upload>-->
+                                                <input id="uploadInputFile" *ngIf='editFoto' type="file" ng2FileSelect [uploader]="uploader" />
                                             </ion-thumbnail>
                                             <input #inputFile type='file' style='display: none' (change)='handleChange($event)' accept="image/gif, image/png, image/jpeg, image/bmp, image/webp"
                                             />
@@ -218,6 +220,27 @@
                                                 Nessun gruppo o sezione <br /> Creando una sezione o un gruppo e associandolo
                                                 a questa/o bambina/o lo vedrai apparire in questa sezione
                                             </ion-item>
+                                        </ion-list>
+                                    </ion-card-content>
+                                </ion-card>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row>
+                            <ion-col col-sm-12>
+                                <ion-card>
+                                    <ion-card-header>
+                                        Bus
+                                    </ion-card-header>
+                                    <ion-card-content margin-top>
+                                        <ion-checkbox [(ngModel)]="thisKid.services.bus"></ion-checkbox>
+                                        <ion-item>
+                                            <ion-label>Linee Bus</ion-label>
+                                            <ion-select [(ngModel)]="stop">
+                                                <ion-option *ngFor="let item of selectedSchool.buses" [value]="item"></ion-option>
+                                            </ion-select>
+                                        </ion-item>
+                                        <ion-list>
+                                            lista fermate aggiuntive
                                         </ion-list>
                                     </ion-card-content>
                                 </ion-card>

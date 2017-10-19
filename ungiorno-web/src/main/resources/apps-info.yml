@@ -11,9 +11,9 @@ apps:
         schoolId: scuola
         name: scuola1
         address: school1-address
-        accessEmail: sco.infanzia.povo@gmail.com
+        accessEmail: EMAIL_TO_ACCESS_APP_TEACHER
         accounts: 
-          - sco.infanzia.povo@gmail.com
+          - EMAIL_TO_MANAGE_SCHOOL_DATA
         tags: 
           - tag1
           - tag2
@@ -21,9 +21,8 @@ apps:
         schoolId: scuola2
       - 
         schoolId: cogolo
-        accessEmail: mirko.perillo@fbk.eu
         accounts: 
-          - mirko.perillo@fbk.eu
+          - EMAIL_TO_MANAGE_SCHOOL_DATA
   - appId: test
     messagingAppId : ugas.test 
     gcmSenderApiKey : GCM_SENDER_API_KEY

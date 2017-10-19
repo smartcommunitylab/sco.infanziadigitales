@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -167,6 +168,15 @@ public class KidManager {
         return name;
     }
 
+    /**
+     * Retrieve parents from {@link AuthPerson} and convert it in {@link Person}
+     * 
+     * NOTE: use first email setted as username for the Parent
+     * 
+     * @param appId
+     * @param authorizedPersons
+     * @return
+     */
     private List<Parent> retrieveParents(String appId, List<AuthPerson> authorizedPersons) {
         List<Parent> parents = null;
         if (authorizedPersons != null) {
@@ -175,6 +185,9 @@ public class KidManager {
                 if (authorizedPerson.isParent()) {
                     Parent parent = Utils.toObject(authorizedPerson, Parent.class);
                     parent.setAppId(appId);
+                    if (CollectionUtils.isNotEmpty(parent.getEmail())) {
+                        parent.setUsername(parent.getEmail().get(0));
+                    }
                     parents.add(parent);
                 }
             }

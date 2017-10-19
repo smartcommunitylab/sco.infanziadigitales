@@ -59,7 +59,8 @@ public class AppSetup {
                 schoolProfile.setAddress(school.getAddress());
                 schoolProfile.setAccessEmail(school.getAccessEmail());
                 if (storage.getSchoolProfile(cred.getAppId(), school.getSchoolId()) == null) {
-                    logger.info("Creating schoolProfile, appId: %s, schoolId: %s");
+                    logger.info("Creating schoolProfile, appId: {}, schoolId: {}", cred.getAppId(),
+                            school.getSchoolId());
                     storage.storeSchoolProfile(schoolProfile);
                 }
             }

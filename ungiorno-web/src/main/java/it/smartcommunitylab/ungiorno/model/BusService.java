@@ -23,6 +23,7 @@ import java.util.List;
 public class BusService extends SchoolService {
 
     private List<Stop> stops;
+    private String busId;
 
     public BusService() {
         super();
@@ -82,5 +83,13 @@ public class BusService extends SchoolService {
 
     public void setStops(List<Stop> stops) {
         this.stops = stops;
+    }
+
+    public String getBusId() {
+        return busId;
+    }
+
+    public void setBusId(String busId) {
+        this.busId = busId;
     }
 }

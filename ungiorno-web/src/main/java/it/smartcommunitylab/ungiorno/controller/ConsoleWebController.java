@@ -142,6 +142,7 @@ public class ConsoleWebController {
         return new Response<>(profiles);
     }
 
+    // Annotation @CrossOrigin should never be necessary. TEST IT
     @CrossOrigin
     @RequestMapping(method = RequestMethod.POST, value = "/consoleweb/{appId}/{schoolId}/kid")
     public @ResponseBody Response<KidProfile> saveKidProfile(@PathVariable String appId,
@@ -160,6 +161,7 @@ public class ConsoleWebController {
 
         storage.updateChildren(appId, schoolId, kidProfiles);
         kidManager.updateParents(kid);
+        kidManager.updateKidBusData(kid);
         return new Response<>(kid);
     }
 

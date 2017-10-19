@@ -4,13 +4,15 @@ import { AlertController } from 'ionic-angular';
 import { Service } from './../../../../app/Classes/service';
 import { Group } from './../../../../app/Classes/group';
 import { School } from './../../../../app/Classes/school';
+import { Bus } from './../../../../app/Classes/bus';
+import { Stop } from './../../../../app/Classes/stop';
 import { Kid } from './../../../../app/Classes/kid';
 import { WebService } from './../../../../services/WebService';
 import { ConfigService } from './../../../../services/config.service';
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, ParamMap } from "@angular/router";
 import { Location } from '@angular/common';
-import { FileUploader, FileItem } from 'ng2-file-upload';
+// import { FileUploader, FileItem } from 'ng2-file-upload';
 import { Http, Headers, BaseRequestOptions, RequestOptions } from '@angular/http';
 
 import 'rxjs/add/operator/switchMap';
@@ -102,10 +104,11 @@ export class KidPage implements OnInit {
     isNew: boolean = false;
     apiUrl: string;
     servicesChecked = {};
-
+    editBus : boolean =false;
+    newStop:Stop;
     URL = 'https://dev.smartcommunitylab.it/ungiorno/consoleweb/trento/scuola2/kid/a/picture';
 
-    uploader: FileUploader = new FileUploader({ url: this.URL, disableMultipart: false,  authToken: `Bearer ${sessionStorage.getItem('access_token')}` });
+    // uploader: FileUploader = new FileUploader({ url: this.URL, disableMultipart: false,  authToken: `Bearer ${sessionStorage.getItem('access_token')}` });
     constructor(
         private webService: WebService,
         private configService: ConfigService,
@@ -211,7 +214,7 @@ export class KidPage implements OnInit {
     //   form.append("image", item);
     // };
         //this.uploader.uploadItem(this.uploader.queue[0]);
-        this.webService.uploadDocument(this.uploader, this.uploader.queue[0], this.selectedSchool, this.selectedKid)
+        // this.webService.uploadDocument(this.uploader, this.uploader.queue[0], this.selectedSchool, this.selectedKid)
         this.webService.update(this.selectedSchool);
         this.editFoto = false;
         this.saveClick();
@@ -533,5 +536,54 @@ export class KidPage implements OnInit {
         var image = this.apiUrl + "/consoleweb/" + this.selectedSchool.appId + "/" + this.selectedSchool.id + "/kid/" + this.thisKid.id + "/picture";
         return image;
     }
-    
+      onBusEdit() {
+        this.editBus = true;
+    }
+
+    onBusSave() {
+        this.editBus = false;
+        this.webService.update(this.selectedSchool);
+    }
+
+    onBusCancel() {
+        this.editBus = false;
+    }
+
+    addBus(bus: string) {
+        if (bus !== undefined && bus.trim() !== '')
+            if (!this.selectedSchool.buses) {
+                this.selectedSchool.buses = [];
+                this.selectedSchool.buses.push(new Bus(bus));
+
+            }
+            else {
+                if (this.selectedSchool.buses.findIndex(x => x.busId.toLowerCase() === bus.toLowerCase()) < 0)
+                    this.selectedSchool.buses.push(new Bus(bus));
+                else {
+                    let alert = this.alertCtrl.create();
+                    alert.setSubTitle('Voce già presente');
+                    alert.addButton('OK');
+                    alert.present();
+                }
+            }
+        this.newStop = '';
+    }
+
+    removeBus(bus: Bus) {
+        let alert = this.alertCtrl.create({
+            subTitle: 'Conferma eliminazione',
+            buttons: [
+                {
+                    text: "Annulla"
+                },
+                {
+                    text: 'OK',
+                    handler: () => {
+                        this.selectedSchool.buses.splice(this.selectedSchool.buses.findIndex(x => x.busId.toLowerCase() === bus.busId.toLowerCase()), 1);
+                    }
+                }
+            ]
+        })
+        alert.present();
+    }
 }

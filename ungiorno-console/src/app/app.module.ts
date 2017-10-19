@@ -27,7 +27,6 @@ import { APP_INITIALIZER } from '@angular/core';
 import { UserService } from '../services/user.service';
 import { LoginPage } from '../pages/login/login';
 import { Ng2OrderModule } from 'ng2-order-pipe';
-import { FileSelectDirective, FileDropDirective, FileUploader } from 'ng2-file-upload/ng2-file-upload';
 import { SecurePipe } from '../services/pipe'
 
 export function initConfig(config: ConfigService) {
@@ -50,7 +49,6 @@ export function initConfig(config: ConfigService) {
     PopoverPage,
     PopoverTimepicker,
     ListWidget,
-    FileSelectDirective,
     SecurePipe,
     LoginPage
   ],

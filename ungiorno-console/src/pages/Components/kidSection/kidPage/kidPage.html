@@ -139,7 +139,7 @@
                                                   [buttonCaption]="'Seleziona dal disco'"
                                                   [dropBoxMessage]="'Trascina la tua immagine qui!'"
                                                   [max]="1"></image-upload>-->
-                                                <input id="uploadInputFile" *ngIf='editFoto' type="file" ng2FileSelect [uploader]="uploader" />
+                                                <!--<input id="uploadInputFile" *ngIf='editFoto' type="file" ng2FileSelect [uploader]="uploader" />-->
                                             </ion-thumbnail>
                                             <input #inputFile type='file' style='display: none' (change)='handleChange($event)' accept="image/gif, image/png, image/jpeg, image/bmp, image/webp"
                                             />
@@ -230,17 +230,40 @@
                                 <ion-card>
                                     <ion-card-header>
                                         Bus
+                                        <button class='edit' ion-button color='magenta1' float-end *ngIf='!editBus' (click)="onBusEdit()" [disabled]='isNew'>Modifica</button>
+                                        <button class='edit' ion-button color='magenta1' float-end *ngIf='editBus' (click)="onBusSave()">Salva</button>
+                                        <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='editBus' (click)="onBusCancel()">Annulla</button>
                                     </ion-card-header>
                                     <ion-card-content margin-top>
-                                        <ion-checkbox [(ngModel)]="thisKid.services.bus"></ion-checkbox>
+                                        <ion-checkbox [(ngModel)]="thisKid.services.bus.enabled"></ion-checkbox>
                                         <ion-item>
                                             <ion-label>Linee Bus</ion-label>
                                             <ion-select [(ngModel)]="stop">
-                                                <ion-option *ngFor="let item of selectedSchool.buses" [value]="item"></ion-option>
+                                                <ion-option *ngFor="let item of selectedSchool.buses" [value]="item.busId">{{item.busId}}</ion-option>
                                             </ion-select>
                                         </ion-item>
+                                        <ion-grid *ngIf="editBus" no-padding no-margin>
+                                            <ion-row>
+                                                <ion-col col-10>
+                                                    <ion-row margin-bottom>
+                                                        <ion-col col-2>
+                                                            Nome fermata:
+                                                        </ion-col>
+                                                        <ion-col col-10>
+                                                            <input type='text' id='giord' [(ngModel)]="newStop" placeholder="Inserisci nome della fermata" no-padding no-margin>
+                                                            <ion-icon name="add-circle" color="green3" (click)="addStop(newStop)" item-end></ion-icon>
+                                                        </ion-col>
+                                                    </ion-row>
+
+                                                </ion-col>
+                                            </ion-row>
+                                        </ion-grid>
                                         <ion-list>
-                                            lista fermate aggiuntive
+                                            <ion-item *ngFor="let item of thisKid.services.bus.stops">
+                                                {{item.stopId}}
+                                                <ion-icon *ngIf="thisKid.services.bus.stops.length > 0 && editBus" name="close" float-end (click)="removeStop(item)"></ion-icon>
+                                            </ion-item>
+                                            <ion-item *ngIf="thisKid.services.bus.stops && thisKid.services.bus.stops.length === 0 && !editBus" text-center class="empty-field ">Nessuna fermata inserita</ion-item>
                                         </ion-list>
                                     </ion-card-content>
                                 </ion-card>

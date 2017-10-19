@@ -6,12 +6,14 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -25,6 +27,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import eu.trentorise.smartcampus.aac.AACException;
+import eu.trentorise.smartcampus.aac.AACService;
 import it.smartcommunitylab.ungiorno.beans.GroupDTO;
 import it.smartcommunitylab.ungiorno.config.exception.ProfileNotFoundException;
 import it.smartcommunitylab.ungiorno.model.AppInfo;
@@ -54,6 +58,18 @@ public class ConsoleWebController {
     private static final transient Logger logger =
             LoggerFactory.getLogger(ConsoleWebController.class);
 
+  	@Autowired
+  	@Value("${ext.aacURL}")
+  	private String oauthServerUrl;
+  	
+  	@Autowired
+  	@Value("${ext.clientId}")
+  	private String clientId;
+
+  	@Autowired
+  	@Value("${ext.clientSecret}")
+  	private String clientSecret;
+  	
     @Autowired
     private AppSetup appSetup;
 
@@ -68,7 +84,14 @@ public class ConsoleWebController {
 
     @Autowired
     private TeacherManager teacherManager;
+    
+    private AACService aacService = null;
 
+  	@PostConstruct
+  	public void init() {
+  		aacService = new AACService(oauthServerUrl, clientId, clientSecret);
+  	}
+  	
     @RequestMapping(method = RequestMethod.GET, value = "/consoleweb/{appId}/me")
     public Response<List<School>> getMyData(@PathVariable String appId)
             throws ProfileNotFoundException {
@@ -312,9 +335,16 @@ public class ConsoleWebController {
     }
 
     @RequestMapping(method = RequestMethod.GET,
-            value = "/consoleweb/{appId}/{schoolId}/kid/{kidId}/picture")
-    public @ResponseBody HttpEntity<byte[]> downloadKidPicture(@PathVariable String appId,
-            @PathVariable String schoolId, @PathVariable String kidId) throws IOException {
+            value = "/picture/{appId}/{schoolId}/{kidId}/{token}")
+    public @ResponseBody HttpEntity<byte[]> downloadKidPicture(
+    		@PathVariable String appId,
+    		@PathVariable String schoolId, 
+    		@PathVariable String kidId,
+    		@PathVariable String token) throws Exception {
+	  		if(!aacService.isTokenApplicable(token, "profile.basicprofile.me")) {
+	  			throw new AACException("token not valid");
+	  		}
+
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_PNG);
         headers.setContentLength(0);

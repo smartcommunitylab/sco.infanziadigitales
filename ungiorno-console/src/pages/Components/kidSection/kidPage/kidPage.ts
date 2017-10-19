@@ -566,7 +566,7 @@ export class KidPage implements OnInit {
                     alert.present();
                 }
             }
-        // this.newStop = '';
+        this.newStop = new Stop("");
     }
 
     removeBus(bus: Bus) {

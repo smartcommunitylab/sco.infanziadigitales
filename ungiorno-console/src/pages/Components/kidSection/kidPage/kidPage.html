@@ -235,7 +235,7 @@
                                         <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='editBus' (click)="onBusCancel()">Annulla</button>
                                     </ion-card-header>
                                     <ion-card-content margin-top>
-                                        <ion-checkbox [(ngModel)]="thisKid.services.bus.enabled"></ion-checkbox>
+                                        <!--<ion-checkbox [(ngModel)]="thisKid.services.bus && thisKid.services.bus.enabled"></ion-checkbox>
                                         <ion-item>
                                             <ion-label>Linee Bus</ion-label>
                                             <ion-select [(ngModel)]="stop">
@@ -259,12 +259,12 @@
                                             </ion-row>
                                         </ion-grid>
                                         <ion-list>
-                                            <ion-item *ngFor="let item of thisKid.services.bus.stops">
+                                            <ion-item *ngIf="thisKid.services.bus && thisKid.services.bus.stops" *ngFor="let item of thisKid.services.bus.stops">
                                                 {{item.stopId}}
                                                 <ion-icon *ngIf="thisKid.services.bus.stops.length > 0 && editBus" name="close" float-end (click)="removeStop(item)"></ion-icon>
                                             </ion-item>
-                                            <ion-item *ngIf="thisKid.services.bus.stops && thisKid.services.bus.stops.length === 0 && !editBus" text-center class="empty-field ">Nessuna fermata inserita</ion-item>
-                                        </ion-list>
+                                            <ion-item *ngIf="(!thisKid.services.bus.stops || thisKid.services.bus|| thisKid.services.bus.stops.length === 0) && !editBus" text-center class="empty-field ">Nessuna fermata inserita</ion-item>
+                                        </ion-list>-->
                                     </ion-card-content>
                                 </ion-card>
                             </ion-col>

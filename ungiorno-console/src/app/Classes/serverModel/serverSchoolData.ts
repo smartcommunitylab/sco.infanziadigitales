@@ -5,6 +5,7 @@ import { ServerSection } from "./serverSection";
 
 export class ServerSchoolData {
     schoolId : string;
+    appId : string;
     name : string;
     address : string;
     contacts : SchoolContacts;

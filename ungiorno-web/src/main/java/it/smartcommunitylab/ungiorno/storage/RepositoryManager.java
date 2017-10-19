@@ -1919,28 +1919,30 @@ public class RepositoryManager implements RepositoryService {
         SchoolProfile profile = getSchoolProfile(appId, schoolId);
         List<SectionProfile> sections = profile.getSections();
         GroupDTO group = null;
-        for (SectionProfile section : sections) {
-            if (section.getSectionId().equalsIgnoreCase(groupId)) {
-                group = new GroupDTO();
-                group.setId(groupId);
-                group.setName(section.getName());
-                group.setSection(!section.isGroup());
-                List<KidProfile> kidsInGroup =
-                        readKidsForSectionsOrGroups(appId, schoolId, Arrays.asList(groupId));
-                List<String> kidIdsInGroup = new ArrayList<>();
-                for (KidProfile kid : kidsInGroup) {
-                    kidIdsInGroup.add(kid.getKidId());
-                }
-                group.setKidIds(kidIdsInGroup);
-                List<Teacher> teachers = getTeachers(appId, schoolId);
-                List<String> teacherIdsInGroup = new ArrayList<>();
-                for (Teacher teacher : teachers) {
-                    if (teacher.getSectionIds().contains(groupId)) {
-                        teacherIdsInGroup.add(teacher.getTeacherId());
+        if (sections != null) {
+            for (SectionProfile section : sections) {
+                if (section.getSectionId().equalsIgnoreCase(groupId)) {
+                    group = new GroupDTO();
+                    group.setId(groupId);
+                    group.setName(section.getName());
+                    group.setSection(!section.isGroup());
+                    List<KidProfile> kidsInGroup =
+                            readKidsForSectionsOrGroups(appId, schoolId, Arrays.asList(groupId));
+                    List<String> kidIdsInGroup = new ArrayList<>();
+                    for (KidProfile kid : kidsInGroup) {
+                        kidIdsInGroup.add(kid.getKidId());
                     }
-                }
+                    group.setKidIds(kidIdsInGroup);
+                    List<Teacher> teachers = getTeachers(appId, schoolId);
+                    List<String> teacherIdsInGroup = new ArrayList<>();
+                    for (Teacher teacher : teachers) {
+                        if (teacher.getSectionIds().contains(groupId)) {
+                            teacherIdsInGroup.add(teacher.getTeacherId());
+                        }
+                    }
 
-                group.setTeacherIds(teacherIdsInGroup);
+                    group.setTeacherIds(teacherIdsInGroup);
+                }
             }
         }
 
@@ -1951,8 +1953,10 @@ public class RepositoryManager implements RepositoryService {
     public List<GroupDTO> getGroupsDataBySchool(String appId, String schoolId) {
         SchoolProfile school = getSchoolProfile(appId, schoolId);
         List<GroupDTO> groups = new ArrayList<>();
-        for (SectionProfile section : school.getSections()) {
-            groups.add(getGroupData(appId, schoolId, section.getSectionId()));
+        if (school.getSections() != null) {
+            for (SectionProfile section : school.getSections()) {
+                groups.add(getGroupData(appId, schoolId, section.getSectionId()));
+            }
         }
         return groups;
     }
@@ -1965,6 +1969,23 @@ public class RepositoryManager implements RepositoryService {
         return teacher;
 
     }
+
+		@Override
+		public SchoolProfile getSchoolProfileByName(String appId, String name) {
+			Query query = new Query(new Criteria("appId").is(appId).and("name").is(name));
+			return template.findOne(query, SchoolProfile.class);
+		}
+
+		@Override
+		public KidProfile saveKidProfile(KidProfile kidProfile) {
+			Query query = new Query(new Criteria("appId").is(kidProfile.getAppId())
+					.and("kidId").is(kidProfile.getKidId()));
+			KidProfile kidDb = template.findOne(query, KidProfile.class);
+			if(kidDb == null) {
+				template.save(kidProfile);
+			}
+			return kidProfile;
+		}
 
 
 }

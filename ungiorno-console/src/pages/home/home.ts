@@ -21,7 +21,7 @@ import { UserService } from "../../services/user.service";
     }
     .segment-button {
       border-bottom: 4px solid #98ba3c;
-      font-size: 14px;
+      font-size: 18px;
       font-weight: bold;
     }
     .segment-button.segment-activated {
@@ -30,29 +30,37 @@ import { UserService } from "../../services/user.service";
     ion-segment-button.segment-activated {
       background-color : #98ba3c;
     }
+    .segment-md-light .segment-button.activated, .segment-md-light .segment-button.segment-activated {
+  border-color: #f4f4f4;
+  color: #f4f4f4;
+  opacity: 1;
+}
+    .segment-md-light .segment-button {
+    color: black;
+}
   `]
 })
 export class HomePage implements OnInit {
   schools: School[];
 
-  settings:string = "profilo";
+  settings: string = "profilo";
 
-  selectedSchool : School;
-  selectedId : string;
+  selectedSchool: School;
+  selectedId: string;
 
-  constructor(public navCtrl: NavController, private webService : WebService, public alertCtrl: AlertController, public modalCtrl: ModalController, public loginService : LoginService, private userService : UserService) {}
+  constructor(public navCtrl: NavController, private webService: WebService, public alertCtrl: AlertController, public modalCtrl: ModalController, public loginService: LoginService, private userService: UserService) { }
 
   ngOnInit(): void {
     let authorizedSchools = this.userService.getAuthorizedSchools();
-    if(authorizedSchools.length == 0) {
+    if (authorizedSchools.length == 0) {
       console.log('user cannot manage any schools');
-    } 
+    }
     this.schools = this.userService.getAuthorizedSchools();
     this.selectedId = this.userService.getAuthorizedSchools()[0].id;
     this.onSchoolChange(this.selectedId);
   }
 
-  onSchoolChange(selectedId : string) {
+  onSchoolChange(selectedId: string) {
     this.webService.getSchool(selectedId).then(school => {
       this.selectedSchool = school;
       this.webService.getTeachers(selectedId).then(teachers => this.selectedSchool.teachers = teachers);

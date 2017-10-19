@@ -231,10 +231,11 @@
   "add_reason":"Aggiungi motivazione",
   "missing_reasons":"Mancano motivazioni",
   "missing_illness":"Mancano malattie",
-  "Selezziona":"Inserisci l’ora",
+  "insert_time":"Inserisci l’ora",
   "choose_time":"o scegli uno degli orari predefiniti",
   "none":"Nessuno",
   "select_day":"Selezionare il giorno",
   "missing_phone":"Manca numero telefono della scuola",
-  "select":"Selezziona"
+  "select":"Seleziona",
+  "altro":"Altro"
 }

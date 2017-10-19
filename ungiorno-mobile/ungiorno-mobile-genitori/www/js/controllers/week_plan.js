@@ -563,7 +563,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
              template: '<div class="space-from-top">'+
              ''+
                 '<span class="" >'+
-                ' <div class="choose">{{"Selezziona" | translate}} <br/>{{"choose_time" | translate}}</div> '+
+                ' <div class="choose">{{"insert_time" | translate}} <br/>{{"choose_time" | translate}}</div> '+
                 ' </span>'+
                 ' '+
                 '</div>'+
@@ -602,7 +602,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
               //templateUrl: '../../templates/week_entry_out_services.html',
               template: '<div class="space-from-top">'+
               '<span class="" >'+
-              ' <div class="choose">{{"Selezziona" | translate}} <br/>{{"choose_time" | translate}}</div> '+
+              ' <div class="choose">{{"insert_time" | translate}} <br/>{{"choose_time" | translate}}</div> '+
               ' </span>'+
                  '</div>'+
               '<div><ion-list class="padlist" ng-repeat="(key, item) in listServicesPosticipo | groupBy: \'type\'  " >'+
@@ -730,7 +730,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     4:{'name':'friday','label':'friday_reduced'}};
 
     $scope.listReasons=$scope.schoolProf.absenceTypes;
+    $scope.listReasons.push({'value':'','type':$filter('translate')('select')});
+    $scope.listReasons.push({'value':'Altro','type':$filter('translate')('altro')});
+    console.log($scope.listReasons);
     $scope.listProblems=$scope.schoolProf.frequentIllnesses;
+    $scope.listProblems.push({'value':'','type':$filter('translate')('select')});
+    $scope.listProblems.push({'value':'Altro','type':$filter('translate')('altro')});
 
     $scope.add_removeReason = function(){ 
         if($scope.reason_text=='remove_reason'){
@@ -901,7 +906,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
              template: '<div class="space-from-top">'+
              ''+
                 '<span class="" >'+
-                ' <div class="choose">{{"Selezziona" | translate}} <br/>{{"choose_time" | translate}}</div> '+
+                ' <div class="choose">{{"insert_time" | translate}} <br/>{{"choose_time" | translate}}</div> '+
                 ' </span>'+
                 ' '+
                 '</div>'+
@@ -940,7 +945,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
               //templateUrl: '../../templates/week_entry_out_services.html',
               template: '<div class="space-from-top">'+
               '<span class="" >'+
-              ' <div class="choose">{{"Selezziona" | translate}} <br/>{{"choose_time" | translate}}</div> '+
+              ' <div class="choose">{{"insert_time" | translate}} <br/>{{"choose_time" | translate}}</div> '+
               ' </span>'+
                  '</div>'+
               '<div><ion-list class="padlist" ng-repeat="(key, item) in listServicesPosticipo | groupBy: \'type\'  " >'+

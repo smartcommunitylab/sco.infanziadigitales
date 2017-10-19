@@ -87,6 +87,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     'ionic-numberpicker',
   'monospaced.elastic'
 ])
+.directive('select',function(){ //same as "ngSelect"
+return {
+    restrict: 'E',
+    scope: false,
+    link: function (scope, ele) {
+        ele.on('touchmove touchstart',function(e){
+            e.stopPropagation();
+        })
+    }
+}
+})
 
 .run(function ($ionicPlatform, $rootScope, $ionicLoading, $ionicPopup, $filter, $cordovaSplashscreen, $state, $translate, $q, $window, $ionicHistory, $ionicConfig, Config,
   configurationService, profileService, dataServerService, loginService, pushNotificationService, Toast,LoginService) {

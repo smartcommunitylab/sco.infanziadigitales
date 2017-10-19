@@ -48,13 +48,19 @@
               <p>{{'Ritira'| translate}}:</p>
           </td>
           <td>
-                <span  modal-select="" ng-model="currData.delega_name" options="ritiraOptions"  option-property="personId" modal-title="{{'Ritira'| translate}}">
+              <select ng-model="currData.delega_name" ng-disabled="currData.absence">
+                      <option ng-repeat="option in ritiraOptions" value="{{option.personId}}" ng-selected="currData.delega_name==option.personId">
+                          {{option.firstName}} {{option.lastName}}
+                          ({{ option.parent ? 'parent'  : option.relation  | translate}})
+                        </option>
+                  </select>
+                <!--<span  modal-select="" ng-model="currData.delega_name" options="ritiraOptions"  option-property="personId" modal-title="{{'Ritira'| translate}}">
                     <span ng-class="{'editable2': !currData.absence,'noneditable2': currData.absence}">{{currData.delega_name|getRitiroName:ritiraOptions | translate}} ({{currData.delega_name|getRitiroType:ritiraOptions | translate}})</span>
                     <div class="option">
                         {{option.firstName}} {{option.lastName}}
                         ({{ option.parent ? 'parent'  : option.relation  | translate}})
                     </div>
-                </span>
+                </span>-->
           </td>
         </tr>
       </table>

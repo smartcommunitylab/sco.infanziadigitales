@@ -27,37 +27,40 @@
                     <td>{{'reason' | translate}}: </td>
                     <td>
                       <div data-tap-disabled="true">
-                          <span  modal-select="" ng-if="reason_text=='remove_reason'" ng-model="currData.motivazione.type" options="listReasons" option-property="typeId" modal-title="{{'reason' | translate}}">
+                          <select ng-if="reason_text=='remove_reason'" ng-model="currData.motivazione.type">
+                              <option ng-repeat="option in listReasons" value="{{option.typeId}}" ng-selected="currData.motivazione.type==option.value">{{option.type | translate}}</option>
+                          </select>
+                          <!--<span  modal-select="" ng-if="reason_text=='remove_reason'" ng-model="currData.motivazione.type" options="listReasons" option-property="typeId" modal-title="{{'reason' | translate}}" hide-reset="true" cancel-button="{{'popup_timepicker_cancel' | translate}}">
                               <span class="lookeditable" ng-if="currData.motivazione.type!==''">{{currData.motivazione.type}}</span>
                               <span class="lookeditable" ng-if="currData.motivazione.type==''">{{'select' |translate}}</span>
                               <div class="option">
                                 {{option.type}}
                               </div>
-                          </span>
+                          </span>-->
                           <span ng-if="reason_text=='remove_reason' && listReasons.length==0">{{'missing_reasons' | translate}}</span>
-                       <!-- <select ng-model="currData.motivazione.type">
-                            <option ng-repeat="option in listReasons" value="{{option.typeId}}" ng-selected="currData.motivazione.type==option.value">{{option.type | translate}}</option>
-                        </select>-->
+                        
                         </div>
                       </td>
                   </tr>
                   <tr ng-if="currData.motivazione.type=='Malattia'">
                       <td>{{'type_illness' | translate}}: </td>
                       <td>
-                          <span  modal-select="" ng-if="reason_text=='remove_reason'" ng-model="currData.motivazione.subtype" options="listProblems" option-property="typeId" modal-title="{{'reason' | translate}}">
+                          <div data-tap-disabled="true">
+                              <select ng-if="reason_text=='remove_reason'" ng-model="currData.motivazione.subtype">
+                                  <option ng-repeat="option in listProblems" value="{{option.typeId}}" ng-selected="currData.motivazione.subtype==option.value">{{option.type | translate}}</option>
+                              </select>
+                            </div>
+                          
+                          <span ng-if="reason_text=='remove_reason' && listProblems.length==0">{{'missing_illness' | translate}}</span>
+                          <!--
+                        <span  modal-select="" ng-if="reason_text=='remove_reason'" ng-model="currData.motivazione.subtype" options="listProblems" option-property="typeId" modal-title="{{'reason' | translate}}" hide-reset="true" cancel-button="{{'popup_timepicker_cancel' | translate}}">
                               <span class="lookeditable" ng-if="currData.motivazione.subtype!==''">{{currData.motivazione.subtype}}</span>
                               <span class="lookeditable" ng-if="currData.motivazione.subtype==''">{{'select' |translate}}</span>
                               <div class="option">
                                 {{option.type}}
                               </div>
                           </span>
-                          <span ng-if="reason_text=='remove_reason' && listProblems.length==0">{{'missing_illness' | translate}}</span>
-                          <!--
-                        <div data-tap-disabled="true">
-                          <select ng-model="currData.motivazione.subtype">
-                              <option ng-repeat="option in listProblems" value="{{option.typeId}}" ng-selected="currData.motivazione.subtype==option.value">{{option.type | translate}}</option>
-                          </select>
-                        </div>-->
+                        -->
                       </td>
                     </tr>
                 </table>
@@ -96,7 +99,7 @@
           </td>
           <td>
               <div data-tap-disabled="true">
-                  <select ng-model="currData.fermata">
+                  <select ng-model="currData.fermata" ng-disabled="currData.absence">
                     <option ng-repeat="option in fermataOptions" value="{{option.stopId}}" ng-selected="currData.fermata==option.stopId">{{option.address}}</option>
                   </select>
               </div>
@@ -107,21 +110,22 @@
               <p>{{'Ritira'| translate}}:</p>
           </td>
           <td>
-              <span  modal-select="" ng-model="currData.delega_name" options="ritiraOptions"  option-property="personId" modal-title="{{'Ritira'| translate}}">
-                  <span ng-class="{'editable2': !currData.absence,'noneditable2': currData.absence}">{{currData.delega_name|getRitiroName:ritiraOptions | translate}} ({{currData.delega_name|getRitiroType:ritiraOptions | translate}})</span>
-                  <div class="option">
-                      {{option.firstName}} {{option.lastName}}
-                      ({{ option.parent ? 'parent'  : option.relation  | translate}})
-                  </div>
-              </span>
-              <!--<div data-tap-disabled="true">
-                  <select ng-model="currData.delega_name" ng-disabled="currData.absence">
+              <div data-tap-disabled="true">
+                  <select ng-model="currData.delega_name">
                       <option ng-repeat="option in ritiraOptions" value="{{option.personId}}" ng-selected="currData.delega_name==option.personId">
                           {{option.firstName}} {{option.lastName}}
                           ({{ option.parent ? 'parent'  : option.relation  | translate}})
                         </option>
                   </select>
-              </div>-->
+              </div>
+              
+              <!--<span  modal-select="" ng-model="currData.delega_name" options="ritiraOptions"  option-property="personId" modal-title="{{'Ritira'| translate}}">
+                  <span ng-class="{'editable2': !currData.absence,'noneditable2': currData.absence}">{{currData.delega_name|getRitiroName:ritiraOptions | translate}} ({{currData.delega_name|getRitiroType:ritiraOptions | translate}})</span>
+                  <div class="option">
+                      {{option.firstName}} {{option.lastName}}
+                      ({{ option.parent ? 'parent'  : option.relation  | translate}})
+                  </div>
+              </span>-->
           </td>
         </tr>
       </table>

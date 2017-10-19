@@ -1302,14 +1302,13 @@ ul.rating {
 }
 .ion-input-select,
 select {
-  -webkit-appearance: none;
   background-repeat: no-repeat;
   background-color: rgba(0, 0, 0, 0);
   border: thin solid #dddddd;
   font-weight: 300;
   display: inline;
   vertical-align: middle;
-  color: #333;
+  color:#F8A913;
   padding: auto 0;
   overflow: hidden;
   box-sizing: border-box;

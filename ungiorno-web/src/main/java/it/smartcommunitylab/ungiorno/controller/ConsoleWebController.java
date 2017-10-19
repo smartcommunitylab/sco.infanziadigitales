@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
@@ -16,14 +17,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -58,18 +62,18 @@ public class ConsoleWebController {
     private static final transient Logger logger =
             LoggerFactory.getLogger(ConsoleWebController.class);
 
-  	@Autowired
-  	@Value("${ext.aacURL}")
-  	private String oauthServerUrl;
-  	
-  	@Autowired
-  	@Value("${ext.clientId}")
-  	private String clientId;
+    @Autowired
+    @Value("${ext.aacURL}")
+    private String oauthServerUrl;
 
-  	@Autowired
-  	@Value("${ext.clientSecret}")
-  	private String clientSecret;
-  	
+    @Autowired
+    @Value("${ext.clientId}")
+    private String clientId;
+
+    @Autowired
+    @Value("${ext.clientSecret}")
+    private String clientSecret;
+
     @Autowired
     private AppSetup appSetup;
 
@@ -84,14 +88,14 @@ public class ConsoleWebController {
 
     @Autowired
     private TeacherManager teacherManager;
-    
+
     private AACService aacService = null;
 
-  	@PostConstruct
-  	public void init() {
-  		aacService = new AACService(oauthServerUrl, clientId, clientSecret);
-  	}
-  	
+    @PostConstruct
+    public void init() {
+        aacService = new AACService(oauthServerUrl, clientId, clientSecret);
+    }
+
     @RequestMapping(method = RequestMethod.GET, value = "/consoleweb/{appId}/me")
     public Response<List<School>> getMyData(@PathVariable String appId)
             throws ProfileNotFoundException {
@@ -338,14 +342,12 @@ public class ConsoleWebController {
 
     @RequestMapping(method = RequestMethod.GET,
             value = "/picture/{appId}/{schoolId}/{kidId}/{token}")
-    public @ResponseBody HttpEntity<byte[]> downloadKidPicture(
-    		@PathVariable String appId,
-    		@PathVariable String schoolId, 
-    		@PathVariable String kidId,
-    		@PathVariable String token) throws Exception {
-	  		if(!aacService.isTokenApplicable(token, "profile.basicprofile.me")) {
-	  			throw new AACException("token not valid");
-	  		}
+    public @ResponseBody HttpEntity<byte[]> downloadKidPicture(@PathVariable String appId,
+            @PathVariable String schoolId, @PathVariable String kidId, @PathVariable String token)
+            throws Exception {
+        if (!aacService.isTokenApplicable(token, "profile.basicprofile.me")) {
+            throw new AACException("token not valid");
+        }
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_PNG);
@@ -382,6 +384,13 @@ public class ConsoleWebController {
 
         Teacher teacher = teacherManager.generatePin(appId, schoolId, teacherId);
         return new Response<>(teacher);
+    }
+
+    @ExceptionHandler(AACException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseBody
+    public String handleError(HttpServletRequest request, Exception exception) {
+        return "{\"error\":\"" + exception.getMessage() + "\"}";
     }
 
 

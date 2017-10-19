@@ -1302,14 +1302,13 @@ ul.rating {
 }
 .ion-input-select,
 select {
-  -webkit-appearance: none;
   background-repeat: no-repeat;
   background-color: rgba(0, 0, 0, 0);
   border: thin solid #dddddd;
   font-weight: 300;
   display: inline;
   vertical-align: middle;
-  color: #333;
+  color:#F8A913;
   padding: auto 0;
   overflow: hidden;
   box-sizing: border-box;
@@ -2005,9 +2004,10 @@ textarea {
   flex-direction: column;
 }
 .button_top{
-  text-align: center;
+  text-align: left;
   display: flex;
   flex-direction: row;
+  font-family: sans-serif;
 }
 
 .button_bottom{
@@ -2110,8 +2110,11 @@ textarea {
 .editable{
   background-color: #f8ab15;
 }
+.lookedit{
+  color: #f8ab15;
+}
 .editable2{
-  color: black;
+  color: #f8ab15;
 }
 .actions{
   color: #f8ab15;
@@ -2119,8 +2122,8 @@ textarea {
   flex-direction: row;
   margin-top: 10px;
   margin-bottom: 5px;
-  margin-left: 25px;
-  font-size: 10px; 
+  margin-left: 20px;
+  font-size: 15px; 
 }
 .actions_default{
   color: #f8ab15;
@@ -2135,10 +2138,10 @@ textarea {
   color: #f8ab15;
   display: flex;
   flex-direction: row;
-  margin:auto;
   margin-top:10px;
+  margin-left: 20px;
   padding: 3px;
-  font-size: 10px; 
+  font-size: 15px; 
 }
 .actHeader{
   text-align: left;
@@ -2181,34 +2184,34 @@ textarea {
 .dayEdit{
   text-align: left;
   width:90%;
-  padding-left: 20px;
-  margin-top:17px;
+  padding-left: 30px;
+  margin-top:25px;
 }
 .dayEdit_table{
   padding:20px;
   margin-top:15px;
-  width: 130%;
+  width: 100%;
 }
 .dayEdit_table td {
   vertical-align: middle;
   padding-bottom:10px;
   padding-right:10px;
   font-size: 15px;
-  width: 30px;
+  width: 50%;
 }
 .dayEdit_table td {
   font-size: small;
 }
 
 .span_motiv {
-  font-size: 70%;
-  padding-left:50px;
+  font-size: 13px;
+  padding-left:40px;
   color:#F2A816;
 }
 
 .day_checkbox{
   font-size: 15px;
-  color:#f8ab15;
+  color:black;
   display: flex;
   flex-direction: row;
 }
@@ -2240,10 +2243,11 @@ textarea {
   font-size: 20px;
 }
 .iconStyleHead{
-  font-size: 30px;
+  font-size: 35px;
   width:35px;
   height:35px;
   vertical-align: middle;
+  margin-right: 10px;
 }
 .iconStyleHome{
   font-size: 50px;
@@ -2269,8 +2273,9 @@ textarea {
   padding-top: 10px;
 }
 .weekicon{
-  margin-top: 10px;
+  margin-top: 5px;
   margin-right: 5px;
+  font-size: 25px;
 }
 
 /* checkbox styling */
@@ -2283,9 +2288,9 @@ textarea {
   padding-right: 10px;
   padding-bottom: 10px;
   margin-bottom: 5px;
-  padding-top: 3px;
+  /*padding-top: 3px;*/
   cursor: pointer;
-  font-size: 10px;
+  font-size: 15px;
 }
 
   .control input {
@@ -2299,13 +2304,13 @@ textarea {
   left: 0;
   height: 20px;
   width: 20px;
-  background: #F2A816;
-  border: 0px solid #000000;
+  background: white;
+  border: 2px solid #F8AB15;
 }
 
 .control:hover input ~ .control_indicator,
 .control input:focus ~ .control_indicator {
-  background: #F8AB15;
+  background: white;
 }
 
 .control input:checked ~ .control_indicator {
@@ -2330,8 +2335,8 @@ textarea {
   display: block;
 }
 .control-checkbox .control_indicator:after {
-  left: 8px;
-  top: 4px;
+  left: 6px;
+  top: 2px;
   width: 3px;
   height: 8px;
   border: solid #ffffff;
@@ -2340,6 +2345,11 @@ textarea {
 }
 .control-checkbox input:disabled ~ .control_indicator:after {
   border-color: #7b7b7b;
+}
+
+.day_control{
+  font-size: 10px;
+  padding-right: 7px;
 }
 /* checkbox style */
 
@@ -2353,11 +2363,11 @@ textarea {
   flex-direction: column;
 }
 .assenza table{
-  width:70%;
+  width:100%;
   margin-top: 8px;
 }
 .assenza table td{
-  width:70%;
+  width:50%;
   margin-top: 8px;
   padding-bottom:10px;
   font-size: small;
@@ -2415,7 +2425,8 @@ textarea {
   font: -moz-field;
   font: -webkit-small-control;
   margin-top: 5px;
-  padding: 10px 10px;
+  padding: 5px 10px;
+  color:#F8AB15;
 }
 
 .selez{
@@ -2428,4 +2439,17 @@ textarea {
 .selez div{
   margin-top:10px;
   color: white;
+}
+
+.disabled_mod{
+  background-color : #B0B0B0;
+}
+
+.choose{
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 10px;
+}
+
+.sethour{
+  padding-left: 80px;
 }

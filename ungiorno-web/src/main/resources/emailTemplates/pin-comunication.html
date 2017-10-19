@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title th:remove="all">Pin accesso applicazione insegnanti</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </head>
+    <body>
+    <p>Gentile <span th:text="${teacher.teacherFullname}"></span>,
+    	il codice pin per accedere all'applicazione insegnanti è il seguente <span th:text="${teacher.pin}"></span>
+    </p>
+    
+    </body>
+</html>

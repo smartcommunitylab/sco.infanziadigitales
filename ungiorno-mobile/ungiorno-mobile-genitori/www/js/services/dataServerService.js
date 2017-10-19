@@ -410,6 +410,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
         if (!kidId || !schoolId) {
             deferred.reject(data);
         }
+        msg['appId']=Config.appId();
+        msg['schoolId']=schoolId;
         $http({
             method: 'POST',
             url: Config.URL() + '/' + Config.app() + '/chat/' + Config.appId() + '/' + schoolId + '/message/fromparent',

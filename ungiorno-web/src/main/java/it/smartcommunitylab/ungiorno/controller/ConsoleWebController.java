@@ -282,6 +282,8 @@ public class ConsoleWebController {
         return new Response<>(teacherToRemove);
     }
 
+
+
     @RequestMapping(method = RequestMethod.POST,
             value = "/consoleweb/{appId}/{schoolId}/kid/{kidId}/picture")
     public Response<Void> updloadKidPicture(@PathVariable String appId,
@@ -338,10 +340,17 @@ public class ConsoleWebController {
             headers.setContentType(MediaType.IMAGE_JPEG);
         }
         return new HttpEntity<byte[]>(image, headers);
-
-
     }
 
+
+    @RequestMapping(method = RequestMethod.PUT,
+            value = "/consoleweb/{appId}/{schoolId}/teacher/{teacherId}/pin")
+    public Response<Teacher> generatePin(@PathVariable String appId, @PathVariable String schoolId,
+            @PathVariable String teacherId) throws IOException {
+
+        Teacher teacher = teacherManager.generatePin(appId, schoolId, teacherId);
+        return new Response<>(teacher);
+    }
 
 
 }

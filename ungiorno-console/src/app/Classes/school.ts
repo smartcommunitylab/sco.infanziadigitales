@@ -21,6 +21,7 @@ export class School {
     fermate : string[];
     malattia : boolean;
     familiari : boolean;
+    accessEmail: string;
 
     constructor() {
         this.phoneNumbers = [];

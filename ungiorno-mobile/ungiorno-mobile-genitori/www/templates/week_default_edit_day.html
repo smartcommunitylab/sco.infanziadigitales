@@ -9,7 +9,7 @@
       <div class="dayEdit">
           <label class="control control-checkbox">
               <!-- ng-repeat="(key, data) in listServicesDb" ng-if="key!='mensa'" -->
-              {{'bus' | translate | uppercase}}
+              &nbsp;&nbsp;{{'home_bus' | translate }}
                   <input type="checkbox" ng-model="currData['bus']" name="bus"  ng-change="setBusHour()" />
               <div class="control_indicator"></div>
           </label>
@@ -48,14 +48,19 @@
               <p>{{'Ritira'| translate}}:</p>
           </td>
           <td>
-              <div data-tap-disabled="true">
-                  <select ng-model="currData.delega_name">
-                    <option ng-repeat="option in ritiraOptions" value="{{option.personId}}" ng-selected="currData.delega_name==option.personId">
-                      {{option.firstName}} {{option.lastName}}
-                      ({{ option.parent ? 'parent'  : option.relation  | translate}})
-                    </option>
+              <select ng-model="currData.delega_name" ng-disabled="currData.absence">
+                      <option ng-repeat="option in ritiraOptions" value="{{option.personId}}" ng-selected="currData.delega_name==option.personId">
+                          {{option.firstName}} {{option.lastName}}
+                          ({{ option.parent ? 'parent'  : option.relation  | translate}})
+                        </option>
                   </select>
-              </div>
+                <!--<span  modal-select="" ng-model="currData.delega_name" options="ritiraOptions"  option-property="personId" modal-title="{{'Ritira'| translate}}">
+                    <span ng-class="{'editable2': !currData.absence,'noneditable2': currData.absence}">{{currData.delega_name|getRitiroName:ritiraOptions | translate}} ({{currData.delega_name|getRitiroType:ritiraOptions | translate}})</span>
+                    <div class="option">
+                        {{option.firstName}} {{option.lastName}}
+                        ({{ option.parent ? 'parent'  : option.relation  | translate}})
+                    </div>
+                </span>-->
           </td>
         </tr>
       </table>
@@ -63,7 +68,7 @@
       <div class="repeat_str">{{'repeat_days' | translate}}:</div>
       <div class="day_checkbox">
           <label class="control control-checkbox" ng-repeat="dayex in repeatDays">
-              {{dayex['label'] | translate | uppercase}}
+              <span class="day_control">{{dayex['label'] | translate | uppercase}}</span>
                   <input type="checkbox" ng-model="currData[dayex['name']]" name="currData[dayex['name']]" ng-disabled="$index==currDay" ng-checked="$index==currDay" />
               <div class="control_indicator"></div>
           </label>

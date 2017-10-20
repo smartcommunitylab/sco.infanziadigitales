@@ -81,20 +81,21 @@ import 'rxjs/add/operator/switchMap';
         ion-segment-button.segment-activated {
             background-color : #98ba3c;
         }
-ion-select {
-max-width: 100%;
-width: 100%;
-}
+        ion-select {
+        max-width: 100%;
+        width: 100%;
+        }
 
-.item-select ion-label {
-max-width: 75px;
-min-width: 75px;
-}
+        .item-select ion-label {
+        max-width: 75px;
+        min-width: 75px;
+        }
 
-#select-option {
-margin-right: auto;
-width: 100%;
-}
+        #select-option {
+        margin-right: auto;
+        width: 100%;
+    }
+
     `]
 })
 

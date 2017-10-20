@@ -63,7 +63,7 @@ export class Insegnanti implements OnInit {
       case '1':
         this.filteredTeacher.sort((item1, item2) => item2.name.localeCompare(item1.name));
       break;
-    }
+    } 
   }
 
   onFiltroTeacherChange(filtro : string) {
@@ -80,8 +80,9 @@ export class Insegnanti implements OnInit {
     let val = item.target.value;
     if(val && val.trim() !== '') {
       this.filteredTeacher = this.filteredTeacher.filter(x => {
-        var tmp = x.name+x.surname;
-        return (tmp.toLowerCase().indexOf(val.toLowerCase()) >= 0);
+        var tmpN = x.name;
+        var tmpS = x.surname;
+        return (tmpN.toLowerCase().indexOf(val.toLowerCase()) >= 0 || tmpS.toLowerCase().indexOf(val.toLowerCase()) >= 0);
       })
     }
   }

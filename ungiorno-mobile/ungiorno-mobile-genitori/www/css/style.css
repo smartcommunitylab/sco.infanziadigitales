@@ -2056,14 +2056,15 @@ textarea {
   display: flex;
   flex-direction: row;
   margin-top:10px;
-  padding:20px;
+  padding-top:20px;
+  padding-bottom:20px;
 }
 
 .navicon
 {
   font-size: 40px;
-  padding-left: 15px;
-  padding-right: 15px;
+  padding-left: 25px;
+  padding-right: 25px;
 }
 
 .navicon2
@@ -2271,8 +2272,6 @@ textarea {
   width:40%
 }
 .dateStyleHead{
-  padding-left:10px;
-  padding-right:10px;
   padding-top: 10px;
 }
 .weekicon{

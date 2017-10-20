@@ -315,7 +315,7 @@ public class ConsoleWebController {
             value = "/consoleweb/{appId}/{schoolId}/kid/{kidId}/picture")
     public Response<Void> updloadKidPicture(@PathVariable String appId,
             @PathVariable String schoolId, @PathVariable String kidId,
-            @RequestParam("image") MultipartFile picture, HttpServletResponse response) {
+            @RequestParam("file") MultipartFile picture, HttpServletResponse response) {
 
         if (picture == null) {
             logger.error("No multipart file on field 'image'");

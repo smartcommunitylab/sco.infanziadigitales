@@ -323,8 +323,11 @@ private addKid(school: School, kidProfile: Kid): Promise<Kid> {
     if (parents.length == 2) {
       convertedKid.parent2 = this.convertToParent(parents[1]);
     }
+    if(serverKidData.services != undefined){
       convertedKid.bus = serverKidData.services.bus;
-        let deleghe = serverKidData.persons.filter(person => !person.parent);
+    }
+    
+    let deleghe = serverKidData.persons.filter(person => !person.parent);
     if (deleghe.length > 0) {
       deleghe.map(delega => this.convertToDelega(delega)).forEach(convertedDelega => convertedKid.deleghe.push(convertedDelega));
     }

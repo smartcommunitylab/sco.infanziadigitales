@@ -59,8 +59,18 @@ export class HomePage implements OnInit {
     this.selectedId = this.userService.getAuthorizedSchools()[0].id;
     this.selectedAppId = this.userService.getAuthorizedSchools()[0].appId;
     this.onSchoolChange(this.selectedAppId, this.selectedId);
+    
   }
 
+  changeSchool(selectedId : String) {
+    let s : School[] = this.schools.filter(s => s.id === selectedId);
+    console.log(s.length);
+    if(s != undefined) {
+      console.log(JSON.stringify(s));
+      this.onSchoolChange(s[0].appId,s[0].id);
+    }
+
+  }
   onSchoolChange(selectedAppId : string, selectedId: string) {
     this.webService.getSchool(selectedAppId, selectedId).then(school => {
       this.selectedSchool = school;

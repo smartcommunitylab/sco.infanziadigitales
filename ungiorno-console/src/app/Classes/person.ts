@@ -13,6 +13,6 @@ export class Person {
         this.name = name;
         this.surname = surname;
         this.phoneNumbers = phoneNumbers || [];
-        this.emails = emails;
+        this.emails = emails || [];
     }
 }

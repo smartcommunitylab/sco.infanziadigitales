@@ -60,6 +60,14 @@ public interface RepositoryService {
      * @return SchoolProfile object or null if it doesn't exist
      */
     SchoolProfile getSchoolProfile(String appId, String schoolId);
+    
+    /**
+     * @param appId
+     * @param name
+     * @return SchoolProfile object or null if it doesn't exist
+     */
+    SchoolProfile getSchoolProfileByName(String appId, String name);
+    
 
     /**
      * @param appId
@@ -102,6 +110,8 @@ public interface RepositoryService {
     void updateTeachers(String appId, String schoolId, List<Teacher> teachers);
 
     Teacher saveOrUpdateTeacher(String appId, String schoolId, Teacher teacher);
+    
+    KidProfile saveKidProfile(KidProfile kidProfile);
 
     /**
      * @param appId

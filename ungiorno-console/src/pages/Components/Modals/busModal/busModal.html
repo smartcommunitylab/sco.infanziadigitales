@@ -27,15 +27,21 @@
                     <ion-card-content>
                         <ion-list inset>
                             <ion-item>
-                                
-                                <ion-row><ion-col col-2><label class="input-label">Nome*</label></ion-col><ion-col col-10><input class="text-generic" type="text" [(ngModel)]="copiedBus.name"></ion-col></ion-row>
+
+                                <ion-row>
+                                    <ion-col col-2><label class="input-label">Nome*</label></ion-col>
+                                    <ion-col col-10><input class="text-generic" type="text" [(ngModel)]="copiedBus.name"></ion-col>
+                                </ion-row>
                                 <!--<ion-label>Nome*</ion-label>
                                 <ion-input name="name" type="text" [(ngModel)]="copiedBus.name"></ion-input>-->
                             </ion-item>
                         </ion-list>
                         <ion-list inset>
                             <ion-item>
-                                 <ion-row><ion-col col-2><label class="input-label">Capolinea*</label></ion-col><ion-col col-10><input class="text-generic" type="text" [(ngModel)]="copiedBus.capolinea"></ion-col></ion-row>
+                                <ion-row>
+                                    <ion-col col-2><label class="input-label">Capolinea*</label></ion-col>
+                                    <ion-col col-10><input class="text-generic" type="text" [(ngModel)]="copiedBus.capolinea"></ion-col>
+                                </ion-row>
 
                                 <!--<ion-label>Capolinea*</ion-label>
                                 <ion-input name="name" type="text" [(ngModel)]="copiedBus.capolinea"></ion-input>-->
@@ -53,6 +59,8 @@
                     </ion-card-header>
                     <ion-card-content>
                         <ion-list inset>
+                            <ion-item *ngIf="selectedBusKids.length === 0 " text-center class="empty-field ">Nessun alunno presente</ion-item>
+
                             <ion-item *ngFor="let kid of selectedBusKids">
                                 <ion-thumbnail item-start>
                                     <img src={{kid.image}}>

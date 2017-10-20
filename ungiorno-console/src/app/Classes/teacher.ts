@@ -4,6 +4,7 @@ import { Group } from "./group";
 
 export class Teacher extends Person {
     pin: string;
+    email : string;
 
     constructor(id:string, name:string, surname:string, pin:string, phoneNumbers?:string[], email?:string) {
         let emails : string[] = [];
@@ -12,5 +13,6 @@ export class Teacher extends Person {
         }
         super(id, name, surname, phoneNumbers, emails);
         this.pin = pin || "";
+        this.email = email;
     }
 }

@@ -17,8 +17,10 @@
 package it.smartcommunitylab.ungiorno.controller;
 
 import it.smartcommunitylab.ungiorno.diary.model.DiaryKid;
+import it.smartcommunitylab.ungiorno.importer.ImportData;
 import it.smartcommunitylab.ungiorno.importer.ImportError;
 import it.smartcommunitylab.ungiorno.importer.Importer;
+import it.smartcommunitylab.ungiorno.model.KidProfile;
 import it.smartcommunitylab.ungiorno.model.SchoolProfile;
 import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.security.AppDetails;
@@ -33,12 +35,16 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -48,7 +54,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
 public class ConsoleController {
-
+	private static final transient Logger logger = LoggerFactory.getLogger(ConsoleController.class);
+			
 	@Autowired
 	private ServletContext context;
 
@@ -106,6 +113,20 @@ public class ConsoleController {
 			res = new ObjectMapper().writeValueAsString(e);
 		}
 		return res;
+	}
+	
+	@RequestMapping(value = "/import/children/{appId}", method = RequestMethod.POST)
+	public @ResponseBody void uploadChildren(
+			@PathVariable String appId,
+			@RequestParam("file") MultipartFile file,
+			HttpServletRequest request) throws Exception {
+		List<KidProfile> children = ImportData.readChildren(file.getInputStream(), appId, storage);
+		for(KidProfile kid : children) {
+			storage.saveKidProfile(kid);
+			if(logger.isInfoEnabled()) {
+				logger.info(String.format("add kid:%s", kid.getKidId()));
+			}
+		}
 	}
 
 	@RequestMapping(value = "/updateauthorizations", method = RequestMethod.POST)

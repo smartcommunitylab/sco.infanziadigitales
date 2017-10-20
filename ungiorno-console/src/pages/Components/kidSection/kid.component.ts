@@ -8,6 +8,8 @@ import { School } from './../../../app/Classes/school';
 import { Component, Input, OnInit } from '@angular/core';
 import { NavController, AlertController, ModalController } from 'ionic-angular';
 import { Parent } from "../../../app/Classes/parent";
+import {ConfigService} from "./../../../services/config.service"
+
 
 @Component({
   selector: 'bambini',
@@ -27,8 +29,10 @@ export class Bambini implements OnInit {
   kidClick : boolean[] = [false];
 
   edit : boolean;
-
-  constructor(private webService : WebService, public alertCtrl: AlertController) {}
+  private apiUrl;
+  constructor(private webService : WebService, public alertCtrl: AlertController, private configService : ConfigService) {
+    this.apiUrl=this.configService.getConfig('apiUrl');
+  }
 
   ngOnInit(): void {
     this.filteredKid = this.selectedSchool.kids;
@@ -117,6 +121,10 @@ export class Bambini implements OnInit {
       break;
     }
     this.onOrdineChange(this.ordine);
+  }
+  getImage (child) {
+    var image =this.apiUrl + "/consoleweb/" +this.selectedSchool.appId  + "/" + this.selectedSchool.id + "/kid/" + child.id + "/picture";
+    return image;
   }
 
   searchKids(item : any) {

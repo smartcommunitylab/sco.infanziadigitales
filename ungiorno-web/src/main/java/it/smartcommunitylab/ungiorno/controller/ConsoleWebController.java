@@ -1,17 +1,29 @@
 package it.smartcommunitylab.ungiorno.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import it.smartcommunitylab.ungiorno.beans.GroupDTO;
 import it.smartcommunitylab.ungiorno.config.exception.ProfileNotFoundException;
@@ -270,6 +282,75 @@ public class ConsoleWebController {
         return new Response<>(teacherToRemove);
     }
 
+
+
+    @RequestMapping(method = RequestMethod.POST,
+            value = "/consoleweb/{appId}/{schoolId}/kid/{kidId}/picture")
+    public Response<Void> updloadKidPicture(@PathVariable String appId,
+            @PathVariable String schoolId, @PathVariable String kidId,
+            @RequestParam("image") MultipartFile picture, HttpServletResponse response) {
+
+        if (picture == null) {
+            logger.error("No multipart file on field 'image'");
+            return new Response<>("The multipart file is attended on field named image");
+        }
+        String pictureFileName;
+        try {
+            pictureFileName = kidManager.saveKidPicture(kidId, picture);
+        } catch (IOException e) {
+            logger.error("Exception saving kid picture", e);
+            return new Response<>("Internal error saving picture");
+        }
+        logger.info("Updloaded picture for kid {}", kidId);
+        KidProfile kid = kidManager.getKidProfile(appId, schoolId, kidId);
+        if (kid != null) {
+            kid.setImage(pictureFileName);
+            kidManager.updateKid(kid);
+            logger.info("Update profile of kid {} with image {}", kidId, pictureFileName);
+        }
+        return new Response<>();
+    }
+
+    @RequestMapping(method = RequestMethod.GET,
+            value = "/consoleweb/{appId}/{schoolId}/kid/{kidId}/picture")
+    public @ResponseBody HttpEntity<byte[]> downloadKidPicture(@PathVariable String appId,
+            @PathVariable String schoolId, @PathVariable String kidId) throws IOException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_PNG);
+        headers.setContentLength(0);
+
+        String path = kidManager.getKidPicturePath(appId, schoolId, kidId);
+        FileInputStream in = null;
+        try {
+            in = new FileInputStream(new File(path));
+        } catch (FileNotFoundException | NullPointerException e) {
+            path = kidManager.getDefaultKidPicturePath();
+            in = new FileInputStream(new File(path));
+        }
+        byte[] image = IOUtils.toByteArray(in);
+        headers.setContentLength(image.length);
+        String extension = path.substring(path.lastIndexOf("."));
+        if (extension.toLowerCase().equals(".png")) {
+            headers.setContentType(MediaType.IMAGE_PNG);
+        } else if (extension.toLowerCase().equals(".gif")) {
+            headers.setContentType(MediaType.IMAGE_GIF);
+        } else if (extension.toLowerCase().equals(".jpg")) {
+            headers.setContentType(MediaType.IMAGE_JPEG);
+        } else if (extension.toLowerCase().equals(".jpeg")) {
+            headers.setContentType(MediaType.IMAGE_JPEG);
+        }
+        return new HttpEntity<byte[]>(image, headers);
+    }
+
+
+    @RequestMapping(method = RequestMethod.PUT,
+            value = "/consoleweb/{appId}/{schoolId}/teacher/{teacherId}/pin")
+    public Response<Teacher> generatePin(@PathVariable String appId, @PathVariable String schoolId,
+            @PathVariable String teacherId) throws IOException {
+
+        Teacher teacher = teacherManager.generatePin(appId, schoolId, teacherId);
+        return new Response<>(teacher);
+    }
 
 
 }

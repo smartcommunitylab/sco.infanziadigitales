@@ -502,10 +502,10 @@ export class KidPage implements OnInit {
     onDelegaInfoSave() {
         this.editDelegaInfo = false;
         if (this.isNewD)
-            if (this.selectedDelega !== undefined && this.selectedDelega.id !== '')
+            if (this.selectedDelega !== undefined && (this.selectedDelega.id.trim().length > 0 || this.selectedDelega.name.trim().length > 0 || this.selectedDelega.surname.trim().length >0 )) {
                 if (this.selectedKid.deleghe.findIndex(x => this.selectedDelega.id.toLowerCase() === x.id.toLowerCase()) < 0)
                     this.thisKid.deleghe.push(this.selectedDelega)
-                else {
+                else if(this.selectedDelega.id.trim().length > 0){
                     let alert = this.alertCtrl.create({
                         subTitle: 'Identificatore già in uso',
                         buttons: [
@@ -516,6 +516,7 @@ export class KidPage implements OnInit {
                     });
                     alert.present();
                 }
+            }
         this.webService.add(this.selectedSchool, this.thisKid);
     }
 

@@ -499,7 +499,7 @@ export class KidPage implements OnInit {
                     this.thisKid.deleghe.push(this.selectedDelega)
                 else {
                     let alert = this.alertCtrl.create({
-                        subTitle: 'Elemento già presente',
+                        subTitle: 'Identificatore già in uso',
                         buttons: [
                             {
                                 text: 'OK'

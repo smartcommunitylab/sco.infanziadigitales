@@ -471,7 +471,7 @@
                                                                             C.F. (ID):
                                                                         </ion-col>
                                                                         <ion-col col-10>
-                                                                            <p *ngIf='!selectedDelega.id && !editDelegaInfo' class="empty-field">Dato non inserito</p>
+                                                                            <p *ngIf='!selectedDelega.id && !editDelegaInfo' class="empty-field" style="padding-left: 8px;">Dato non inserito</p>
                                                                             <ion-input [(ngModel)]="selectedDelega.id" [disabled]='!editDelegaInfo' no-margin></ion-input>
                                                                         </ion-col>
                                                                     </ion-row>
@@ -480,7 +480,7 @@
                                                                             Nome:
                                                                         </ion-col>
                                                                         <ion-col col-10>
-                                                                            <p *ngIf='!selectedDelega.name && !editDelegaInfo' class="empty-field">Dato non inserito</p>
+                                                                            <p *ngIf='!selectedDelega.name && !editDelegaInfo' class="empty-field" style="padding-left: 8px;">Dato non inserito</p>
                                                                             <ion-input [(ngModel)]="selectedDelega.name" [disabled]='!editDelegaInfo' no-margin></ion-input>
                                                                         </ion-col>
                                                                     </ion-row>
@@ -489,7 +489,7 @@
                                                                             Cognome:
                                                                         </ion-col>
                                                                         <ion-col col-10>
-                                                                            <p *ngIf='!selectedDelega.surname && !editDelegaInfo' class="empty-field">Dato non inserito</p>
+                                                                            <p *ngIf='!selectedDelega.surname && !editDelegaInfo' class="empty-field" style="padding-left: 8px;">Dato non inserito</p>
                                                                             <ion-input [(ngModel)]="selectedDelega.surname" [disabled]='!editDelegaInfo' no-margin></ion-input>
                                                                         </ion-col>
                                                                     </ion-row>
@@ -498,7 +498,7 @@
                                                                             Ruolo
                                                                         </ion-col>
                                                                         <ion-col col-10>
-                                                                            <p *ngIf='!selectedDelega.legame && !editDelegaInfo' class="empty-field">Dato non inserito</p>
+                                                                            <p *ngIf='!selectedDelega.legame && !editDelegaInfo' class="empty-field" style="padding-left: 8px;">Dato non inserito</p>
                                                                             <ion-select [(ngModel)]="selectedDelega.legame" interface='popover' *ngIf="editDelegaInfo">
                                                                                 <ion-option value="Nonno/a">Nonno/a</ion-option>
                                                                                 <ion-option value="Zio/a">Zio/a</ion-option>

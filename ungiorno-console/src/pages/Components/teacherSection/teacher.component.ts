@@ -80,7 +80,7 @@ export class Insegnanti implements OnInit {
     let val = item.target.value;
     if(val && val.trim() !== '') {
       this.filteredTeacher = this.filteredTeacher.filter(x => {
-        var tmp = x.name;
+        var tmp = x.name+x.surname;
         return (tmp.toLowerCase().indexOf(val.toLowerCase()) >= 0);
       })
     }

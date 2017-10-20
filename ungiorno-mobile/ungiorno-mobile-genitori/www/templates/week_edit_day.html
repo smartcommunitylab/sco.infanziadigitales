@@ -28,7 +28,7 @@
                     <td>
                       <div data-tap-disabled="true">
                           <select ng-if="reason_text=='remove_reason'" ng-model="currData.motivazione.type">
-                              <option ng-repeat="option in listReasons" value="{{option.typeId}}" ng-selected="currData.motivazione.type==option.value">{{option.type | translate}}</option>
+                              <option ng-repeat="option in listReasons" value="{{option.typeId}}" ng-selected="currData.motivazione.type==option.typeId">{{option.type | translate}}</option>
                           </select>
                           <!--<span  modal-select="" ng-if="reason_text=='remove_reason'" ng-model="currData.motivazione.type" options="listReasons" option-property="typeId" modal-title="{{'reason' | translate}}" hide-reset="true" cancel-button="{{'popup_timepicker_cancel' | translate}}">
                               <span class="lookeditable" ng-if="currData.motivazione.type!==''">{{currData.motivazione.type}}</span>
@@ -47,7 +47,7 @@
                       <td>
                           <div data-tap-disabled="true">
                               <select ng-if="reason_text=='remove_reason'" ng-model="currData.motivazione.subtype">
-                                  <option ng-repeat="option in listProblems" value="{{option.typeId}}" ng-selected="currData.motivazione.subtype==option.value">{{option.type | translate}}</option>
+                                  <option ng-repeat="option in listProblems" value="{{option.typeId}}" ng-selected="currData.motivazione.subtype==option.typeId">{{option.type | translate}}</option>
                               </select>
                             </div>
                           

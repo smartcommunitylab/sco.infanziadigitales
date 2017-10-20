@@ -2062,6 +2062,8 @@ textarea {
 .navicon
 {
   font-size: 40px;
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
 .navicon2
@@ -2263,13 +2265,14 @@ textarea {
   padding-left: 20px;
   text-align: left;
   margin: 4px 80px 0px 80px!important;
+  white-space: nowrap;
 }
-.busStyle{;
+.busStyle{
   width:40%
 }
 .dateStyleHead{
-  padding-left:30px;
-  padding-right:30px;
+  padding-left:10px;
+  padding-right:10px;
   padding-top: 10px;
 }
 .weekicon{
@@ -2452,4 +2455,9 @@ textarea {
 
 .sethour{
   padding-left: 80px;
+}
+
+.ripristina{
+  padding-top:6px;
+  margin-left:-15px;
 }

@@ -129,13 +129,28 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.getWeekPlan();
 
     $scope.setWeekPlan = function() {
-        if(confirm('Siete sicuri di voler salvare questi dati?')){
-            week_planService.setWeekPlan($scope.days,$scope.kidId,$scope.currWeek).then(function (data) {
-                $scope.mode='';
-                week_planService.setMode($scope.mode);
-            }, function (error) {
-            });
-        }
+        var confirmPopup = $ionicPopup.confirm({
+            title: $filter('translate')('Avviso'),
+            template: 'Questa operazione sovrascriverà i dati attuali. Se sicuro di voler procedere?',
+            buttons: [{ 
+              text: $filter('translate')('cancel'),
+              type: 'button_cancel',
+              scope: null,
+              onTap: function(e) {
+              }
+
+            }, {
+              text: 'OK',
+              type: 'button_save',
+              onTap: function(e) {
+                week_planService.setWeekPlan($scope.days,$scope.kidId,$scope.currWeek).then(function (data) {
+                    $scope.mode='';
+                    week_planService.setMode($scope.mode);
+                }, function (error) {
+                });
+              }              
+            }]
+        });
     };
 
     $scope.whatClassIsIt = function(day,type) {
@@ -207,8 +222,22 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
 
     $scope.load_def_week= function() {
-        if(confirm('Siete sicuri di voler coppiare questi dati?')){
-            week_planService.getDefaultWeekPlan($scope.kidId).then(function (data) {
+        var confirmPopup = $ionicPopup.confirm({
+            title: $filter('translate')('Avviso'),
+            template: 'Questa operazione sovrascriverà i dati attuali. Se sicuro di voler procedere?',
+            buttons: [{ 
+              text: $filter('translate')('cancel'),
+              type: 'button_cancel',
+              scope: null,
+              onTap: function(e) {
+              }
+
+            }, {
+              text: 'OK',
+              type: 'button_save',
+              onTap: function(e) {
+                  console.log('posi');
+                week_planService.getDefaultWeekPlan($scope.kidId).then(function (data) {
                     if(data!=null && data!= undefined && data.length>0){
                         data=$scope.formatInfo(data);
                         $scope.days=data;
@@ -229,16 +258,33 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                         week_planService.setDayData(i,$scope.days[i],'');
                         }
                     }
-            }, function (error) {
-            });
-        }
+                }, function (error) {
+                });
+              }              
+            }]
+        });
     };
 
     $scope.copy_prev_week= function() {
-        if(confirm('Siete sicuri di voler coppiare questi dati?')){
-            var week=$scope.currWeek-1;
-            $scope.getWeekPlanDB(week);
-        }
+        var confirmPopup = $ionicPopup.confirm({
+            title: $filter('translate')('Avviso'),
+            template: 'Questa operazione sovrascriverà i dati attuali. Se sicuro di voler procedere?',
+            buttons: [{ 
+              text: $filter('translate')('cancel'),
+              type: 'button_cancel',
+              scope: null,
+              onTap: function(e) {
+              }
+
+            }, {
+              text: 'OK',
+              type: 'button_save',
+              onTap: function(e) {
+                var week=$scope.currWeek-1;
+                $scope.getWeekPlanDB(week);
+              }              
+            }]
+        });
     };
     $scope.ritiraOptions=profileService.getBabyProfile().persons;
 
@@ -359,15 +405,30 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.getWeekPlan();
 
     $scope.setWeekPlan = function() {
-        //TODO add confirm popup 
-        if(confirm('Siete sicuri di voler salvare questi dati?')){
-        $scope.mode='';
-        week_planService.setModeDefault($scope.mode);
-        week_planService.setDefaultWeekPlan($scope.days,$scope.kidId).then(function (data) {
-            //$scope.getWeekPlan();
-        }, function (error) {
+        var confirmPopup = $ionicPopup.confirm({
+            title: $filter('translate')('Avviso'),
+            template: 'Questa operazione sovrascriverà i dati attuali. Se sicuro di voler procedere?',
+            buttons: [{ 
+              text: $filter('translate')('cancel'),
+              type: 'button_cancel',
+              scope: null,
+              onTap: function(e) {
+              }
+
+            }, {
+              text: 'OK',
+              type: 'button_save',
+              onTap: function(e) {
+                $scope.mode='';
+                week_planService.setModeDefault($scope.mode);
+                week_planService.setDefaultWeekPlan($scope.days,$scope.kidId).then(function (data) {
+                    //$scope.getWeekPlan();
+                }, function (error) {
+                });
+              }              
+            }]
         });
-    }
+        
     };
 
     $scope.whatClassIsIt = function(day,type) {
@@ -405,7 +466,24 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
 
     $scope.restore = function() {
-        $scope.getWeekPlanDB();
+        var confirmPopup = $ionicPopup.confirm({
+            title: $filter('translate')('Avviso'),
+            template: 'Questa operazione sovrascriverà i dati attuali. Se sicuro di voler procedere?',
+            buttons: [{ 
+              text: $filter('translate')('cancel'),
+              type: 'button_cancel',
+              scope: null,
+              onTap: function(e) {
+              }
+
+            }, {
+              text: 'OK',
+              type: 'button_save',
+              onTap: function(e) {
+                $scope.getWeekPlanDB();
+              }              
+            }]
+        });
     };
 
 
@@ -720,6 +798,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         if($scope.currData.delega_name==null || $scope.currData.delega_name==undefined || $scope.currData.delega_name==''){
             $scope.currData.delega_name=$filter('translate')('none');            
         }
+        if($scope.currData.absence){
+            $scope.reason_text='remove_reason';           
+        }
     };
     $scope.getActualData();
 
@@ -730,12 +811,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     4:{'name':'friday','label':'friday_reduced'}};
 
     $scope.listReasons=$scope.schoolProf.absenceTypes;
-    $scope.listReasons.push({'value':'','type':$filter('translate')('select')});
-    $scope.listReasons.push({'value':'Altro','type':$filter('translate')('altro')});
+    $scope.listReasons.push({'typeId':'','type':$filter('translate')('select')});
+    $scope.listReasons.push({'typeId':'Altro','type':$filter('translate')('altro')});
     console.log($scope.listReasons);
     $scope.listProblems=$scope.schoolProf.frequentIllnesses;
-    $scope.listProblems.push({'value':'','type':$filter('translate')('select')});
-    $scope.listProblems.push({'value':'Altro','type':$filter('translate')('altro')});
+    $scope.listProblems.push({'typeId':'','type':$filter('translate')('select')});
+    $scope.listProblems.push({'typeId':'Altro','type':$filter('translate')('altro')});
+    console.log($scope.listProblems);
 
     $scope.add_removeReason = function(){ 
         if($scope.reason_text=='remove_reason'){

@@ -30,7 +30,7 @@
   "babysetting_services": "Servizi:",
   "babysetting_hours": "Orario uscita predefinito",
   "babysetting_hours_entry": "Orario entrata predefinito",
-  "babysetting_who": "Autorizzati al ritiro del bambino:",
+  "babysetting_who": "Delegati al ritiro del bambino/a",
   "babysetting_bus": "Fermate bus:",
   "babysetting_busGo": "Fermata bus andata:",
   "babysetting_busBack": "Fermata bus ritorno:",
@@ -237,5 +237,6 @@
   "select_day":"Selezionare il giorno",
   "missing_phone":"Manca numero telefono della scuola",
   "select":"Seleziona",
-  "altro":"Altro"
+  "altro":"Altro",
+  "Avviso":"Avviso"
 }

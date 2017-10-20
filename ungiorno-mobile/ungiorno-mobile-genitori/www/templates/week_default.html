@@ -50,7 +50,7 @@
   
        <div ng-show="mode=='edit'" class="week_plan_detail">
           <div class="actions_default_restore">
-            <p class="button_top"><i class="icon ion-loop iconStyleHead" ng-click="restore()"></i><span style="vertical-align:middle;">{{'restore' | translate | uppercase}}</span></p>
+            <p class="button_top" ng-click="restore()"><i class="icon ion-loop iconStyleHead"></i><span class="ripristina">{{'restore' | translate | uppercase}}</span></p>
           </div> 
           <table class="week_plan_detail_table">
             <tr ng-repeat="day in days track by $index" ng-click="gotoEditDate($index)" class="nowrap">

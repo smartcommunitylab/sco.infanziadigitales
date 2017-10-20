@@ -54,7 +54,7 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 
 
-export class Info {
+export class Info implements OnInit {
     @Input() selectedSchool: School;
 
     newAssenza: string;
@@ -68,6 +68,7 @@ export class Info {
     isMalattiaEnabled: boolean;
     editBus: boolean = false;
     newBus: string;
+    newSchoolPhone: string;
 
     constructor(private alertCtrl: AlertController, private webService: WebService) { }
 
@@ -107,17 +108,30 @@ export class Info {
     }
 
     oldTel: string[]; oldMail: string;
-
+    ngOnInit(): void {
+        if (this.selectedSchool.phoneNumbers.length > 0) {
+            this.newSchoolPhone = this.selectedSchool.phoneNumbers[0]
+        } else {
+            this.newSchoolPhone = ""
+        }
+        if (this.selectedSchool.malattie.indexOf("Altro") == -1) {
+            this.selectedSchool.malattie.push("Altro");
+        }
+    }
     onContattiEdit() {
         this.editContatti = true;
         if (this.editContatti) {
             this.oldMail = this.selectedSchool.email;
             this.oldTel = [];
+            if (this.selectedSchool.phoneNumbers.length > 0) {
+                this.newSchoolPhone = this.selectedSchool.phoneNumbers[0]
+            } else { this.newSchoolPhone = "" }
             this.selectedSchool.phoneNumbers.forEach(x => this.oldTel.push(x));
         }
     }
 
     onContattiSave() {
+        this.selectedSchool.phoneNumbers[0] = this.newSchoolPhone;
         this.webService.update(this.selectedSchool);
         this.editContatti = false;
     }
@@ -241,10 +255,10 @@ export class Info {
         alert.present();
     }
 
-    oldBuses : Bus[];
+    oldBuses: Bus[];
     onBusEdit() {
         this.oldBuses = [];
-        if(this.selectedSchool.buses != undefined) {
+        if (this.selectedSchool.buses != undefined) {
             this.selectedSchool.buses.forEach(bus => this.oldBuses.push(bus));
         }
         this.editBus = true;

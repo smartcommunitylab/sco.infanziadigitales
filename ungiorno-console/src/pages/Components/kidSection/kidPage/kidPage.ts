@@ -208,7 +208,7 @@ export class KidPage implements OnInit {
 
         // FIX for strange issue
         this.thisKid.services = this.thisKid.services.filter(service => service != undefined);
-        this.webService.add(this.selectedSchool.id, this.thisKid);
+        this.webService.add(this.selectedSchool, this.thisKid);
 
         // TO IMPROVE
         this.isNew = false;
@@ -285,7 +285,7 @@ export class KidPage implements OnInit {
 
     onAllergiaSave() {
         this.editAllergia = false;
-        this.webService.add(this.selectedSchool.id, this.thisKid);
+        this.webService.add(this.selectedSchool, this.thisKid);
     }
 
     onAllergiaCancel() {
@@ -321,7 +321,7 @@ export class KidPage implements OnInit {
 
     onServiceSave() {
         this.editService = false;
-        this.webService.add(this.selectedSchool.id, this.thisKid);
+        this.webService.add(this.selectedSchool, this.thisKid);
     }
 
     onServiceCancel() {
@@ -385,7 +385,7 @@ export class KidPage implements OnInit {
 
     onP1InfoSave() {
         this.editP1Info = false;
-        this.webService.add(this.selectedSchool.id, this.thisKid);
+        this.webService.add(this.selectedSchool, this.thisKid);
     }
 
     onP1InfoCancel() {
@@ -403,7 +403,7 @@ export class KidPage implements OnInit {
 
     onP1ContattiSave() {
         this.editP1Contatti = false;
-        this.webService.add(this.selectedSchool.id, this.thisKid);
+        this.webService.add(this.selectedSchool, this.thisKid);
     }
 
     onP1ContattiCancel() {
@@ -422,7 +422,7 @@ export class KidPage implements OnInit {
 
     onP2InfoSave() {
         this.editP2Info = false;
-        this.webService.add(this.selectedSchool.id, this.thisKid);
+        this.webService.add(this.selectedSchool, this.thisKid);
     }
 
     onP2InfoCancel() {
@@ -440,7 +440,7 @@ export class KidPage implements OnInit {
 
     onP2ContattiSave() {
         this.editP2Contatti = false;
-        this.webService.add(this.selectedSchool.id, this.thisKid);
+        this.webService.add(this.selectedSchool, this.thisKid);
     }
 
     onP2ContattiCancel() {
@@ -475,7 +475,7 @@ export class KidPage implements OnInit {
                     text: 'OK',
                     handler: () => {
                         this.thisKid.deleghe.splice(this.thisKid.deleghe.findIndex(tmp => tmp.id === delega.id), 1);
-                        this.webService.add(this.selectedSchool.id, this.thisKid);
+                        this.webService.add(this.selectedSchool, this.thisKid);
                     }
                 }
             ]
@@ -507,7 +507,7 @@ export class KidPage implements OnInit {
                     });
                     alert.present();
                 }
-        this.webService.add(this.selectedSchool.id, this.thisKid);
+        this.webService.add(this.selectedSchool, this.thisKid);
     }
 
     onDelegaInfoCancel() {
@@ -522,7 +522,7 @@ export class KidPage implements OnInit {
 
     onDelegaContattiSave() {
         this.editDelegaContatti = false;
-        this.webService.add(this.selectedSchool.id, this.thisKid);
+        this.webService.add(this.selectedSchool, this.thisKid);
     }
 
     onDelegaContattiCancel() {
@@ -537,7 +537,7 @@ export class KidPage implements OnInit {
 
     onDelegaAutorSave() {
         this.editDelegaAutor = false;
-        this.webService.add(this.selectedSchool.id, this.thisKid);
+        this.webService.add(this.selectedSchool, this.thisKid);
     }
 
     onDelegaAutorCancel() {
@@ -574,7 +574,7 @@ export class KidPage implements OnInit {
 
     onBusSave() {
         this.editBus = false;
-        this.webService.add(this.selectedSchool.id, this.thisKid);
+        this.webService.add(this.selectedSchool, this.thisKid);
     }
 
     onBusCancel() {

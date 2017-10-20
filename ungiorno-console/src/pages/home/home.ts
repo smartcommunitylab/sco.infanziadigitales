@@ -46,6 +46,7 @@ export class HomePage implements OnInit {
 
   selectedSchool: School;
   selectedId: string;
+  selectedAppId: string;
 
   constructor(public navCtrl: NavController, private webService: WebService, public alertCtrl: AlertController, public modalCtrl: ModalController, public loginService: LoginService, private userService: UserService) { }
 
@@ -56,15 +57,16 @@ export class HomePage implements OnInit {
     }
     this.schools = this.userService.getAuthorizedSchools();
     this.selectedId = this.userService.getAuthorizedSchools()[0].id;
-    this.onSchoolChange(this.selectedId);
+    this.selectedAppId = this.userService.getAuthorizedSchools()[0].appId;
+    this.onSchoolChange(this.selectedAppId, this.selectedId);
   }
 
-  onSchoolChange(selectedId: string) {
-    this.webService.getSchool(selectedId).then(school => {
+  onSchoolChange(selectedAppId : string, selectedId: string) {
+    this.webService.getSchool(selectedAppId, selectedId).then(school => {
       this.selectedSchool = school;
-      this.webService.getTeachers(selectedId).then(teachers => this.selectedSchool.teachers = teachers);
-      this.webService.getKids(selectedId).then(kids => this.selectedSchool.kids = kids);
-      this.webService.getGroups(selectedId).then(groups => this.selectedSchool.groups = groups);
+      this.webService.getTeachers(this.selectedSchool).then(teachers => this.selectedSchool.teachers = teachers);
+      this.webService.getKids(this.selectedSchool).then(kids => this.selectedSchool.kids = kids);
+      this.webService.getGroups(this.selectedSchool).then(groups => this.selectedSchool.groups = groups);
       }
     );
   }

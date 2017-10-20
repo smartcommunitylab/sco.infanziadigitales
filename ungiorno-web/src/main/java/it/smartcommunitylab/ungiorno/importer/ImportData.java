@@ -53,7 +53,21 @@ public class ImportData {
 				//String iscrizioneAlunno = row.getCell(10).getStringCellValue();
 
 				if(logger.isInfoEnabled()) {
-					logger.info("readChild:" + cfAlunno);
+					logger.info("read kid:" + cfAlunno);
+				}
+				
+				SchoolProfile schoolProfile = storage.getSchoolProfileByName(appId, scuolaAlunno);
+				if(schoolProfile == null) {
+					logger.error("School not found:" + scuolaAlunno);
+					continue;
+				}
+				
+				KidProfile kidDb = storage.getKidProfile(appId, schoolProfile.getSchoolId(), cfAlunno);
+				if(kidDb != null) {
+					if(logger.isInfoEnabled()) {
+						logger.info("kid already present:" + cfAlunno);
+					}
+					continue;
 				}
 				
 				KidProfile kid = result.get(cfAlunno);
@@ -66,11 +80,6 @@ public class ImportData {
 					kid.setLastName(cognomeAlunno);
 					kid.setBirthDate(dataAlunno);
 					kid.setGender(getGender(sessoAlunno));
-					SchoolProfile schoolProfile = storage.getSchoolProfileByName(appId, scuolaAlunno);
-					if(schoolProfile == null) {
-						logger.error("School not found:" + scuolaAlunno);
-						continue;
-					}
 					kid.setSchoolId(schoolProfile.getSchoolId());
 					kid.setPersons(new ArrayList<AuthPerson>());
 					result.put(cfAlunno, kid);

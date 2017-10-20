@@ -51,7 +51,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if (window.cordova && window.cordova.plugins.screenorientation) {
-      screen.lockOrientation('landscape');
+      //screen.lockOrientation('landscape');
     }
     if (window.cordova && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
@@ -78,7 +78,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
       //            $ionicHistory.clearCache().then(function () {
       //$ionicHistory.clearCache();
       console.log("user is logged");
-      loginService.login('googlelocal').then(
+      loginService.login('google').then(
 
         function (data) {
           $state.go('app.home');
@@ -105,7 +105,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
 
   // for BlackBerry 10, WP8, iOS
   setTimeout(function () {
-    $cordovaSplashscreen.hide();
+    if (window.$cordovaSplashscreen) $cordovaSplashscreen.hide();
     //navigator.splashscreen.hide();
   }, 3000);
 
@@ -121,9 +121,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
 
 })
 
-.config(function ($stateProvider, $urlRouterProvider, $translateProvider, $ionicConfigProvider) {
+.config(function ($stateProvider, $urlRouterProvider, $translateProvider, $ionicConfigProvider, $httpProvider) {
   $ionicConfigProvider.tabs.position('top');
-
+  var view=ionic.Platform.isWebView();
+  console.log(view);
+  if(!view){
+    $httpProvider.defaults.withCredentials=true;
+  }
   $stateProvider.state('app', {
     url: "/app",
     abstract: true,
@@ -485,7 +489,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
     no_connection_message: 'Nessuna connessione',
     error_pin: 'PIN errato',
     home_number_deliveries: 'Consegne completate: ',
-    home_out_of_deliveries: ' su '
+    home_out_of_deliveries: ' su ',
+    entry_lbl:'E',
+    exit_lbl:'U',
+    invia:'Invia a',
+    missing_school_config:"Manca Servizio Scolastico Regolare",
 
 
   });

@@ -37,7 +37,7 @@
           </div>
         </div>
         <div class="row home-section-space " ng-if="!communicationExpanded " id="wrapper">
-            <div class="col " ng-class="{ 'temp':isNow(item.value)}" ng-repeat="item in listServices | orderBy:item.entry">
+              <div class="col " ng-class="{ 'temp':isNow(item.value)}" ng-repeat="item in listServices | orderBy:item.entry">
                 <div class="sectionPeriod" ng-click="changeSectionPeriod(item.value) ">
                   <svg ng-class="{ 'sectionBabyIndicator-now':isNow(item.value), 'sectionBabyIndicator-notnow':!isNow(item.value)} " id="svg " viewbox="0 0 100 100 ">
                     <circle cx="50 " cy="50 " r="45 " fill="{{colors[item.value]}}" />
@@ -131,16 +131,17 @@
             <img ng-src="{{getChildImage(child)}} ">
             <!--          <div class="name-of-child " ng-if="!child.image || child.image=='' ">{{child.childrenName}}</div>-->
             <!--            <div class="name-of-child ">{{child.childrenName}}</div>-->
-            <div class="name-of-child ">test {{child.childrenName | homeName}}</div>
-            <div class="children-presenza " ng-if="child.active && !communicationExpanded && child.exitTime==null" ng-class="{ 'child-assente':child.exitTime==null, 'child-presente':child.exitTime !=null} ">{{child.presenza}}</div>
-            
-            <div class="children-presenza " ng-if="child.active && !communicationExpanded && child.exitTime!==null" ng-class="{ 'child-assente':child.exitTime==null, 'child-presente-uscita':child.exitTime !=null} ">{{'entry_lbl' | translate}} {{child.oraEntrata}}</div>
-            <div class="children-presenza " ng-if="child.active && !communicationExpanded && child.exitTime!==null" ng-class="{ 'child-assente':child.exitTime==null, 'child-presente-uscita':child.exitTime !=null} ">
-              <span ng-if="!child.bus">{{'exit_lbl' | translate}}</span>
-              <span ng-if="child.bus"><i class="icon ion-android-bus iconStyle"></i></span>
-              {{child.presenza}}
+            <div class="name-of-child ">{{child.childrenName | homeName}}</div>           
+            <div class="present">
+                <div class="children-info" ng-if="child.active && !communicationExpanded && child.exitTime!==null">{{'entry_lbl' | translate}} {{child.oraEntrata}}</div>
+                <div class="children-info child-presente-uscita" ng-if="child.active && !communicationExpanded && child.exitTime!==null">
+                  <div ng-if="!child.busActive">{{'exit_lbl' | translate}} {{child.presenza}}</div>
+                  <div ng-if="child.busActive"><i class="icon ion-android-bus iconStyle"></i> {{child.presenza}}</div>
+                </div>
+                <div class="child-assente" ng-if="child.exitTime==null">{{child.presenza}}</div>
             </div>
-            <div class="children-presenza " ng-if="child.active && !communicationExpanded && child.exitTime!==null" ng-class="{ 'child-assente':child.exitTime==null, 'child-presente-uscita':child.exitTime !=null} ">{{child.presenza}}</div>
+
+            
           </div>
         </div>
 

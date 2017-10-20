@@ -332,8 +332,7 @@ private addKid(school: School, kidProfile: Kid): Promise<Kid> {
       deleghe.map(delega => this.convertToDelega(delega)).forEach(convertedDelega => convertedKid.deleghe.push(convertedDelega));
     }
 
-    convertedKid.section = serverKidData.section != undefined;
-
+    convertedKid.section = serverKidData.section ? serverKidData.section.sectionId : "";
     return convertedKid;
   }
 

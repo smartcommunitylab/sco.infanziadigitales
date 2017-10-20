@@ -4,7 +4,6 @@ import { TeacherModal } from './../pages/Components/Modals/teacherModal/teacherM
 import { WebService, requestOptionsProvider } from '../services/WebService';
 import { LoginService } from '../services/login.service'
 import { ConfigService } from '../services/config.service'
-import { UrlHelperService } from '../services/urlHelper.service'
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
@@ -27,7 +26,7 @@ import { APP_INITIALIZER } from '@angular/core';
 import { UserService } from '../services/user.service';
 import { LoginPage } from '../pages/login/login';
 import { Ng2OrderModule } from 'ng2-order-pipe';
-import { SecurePipe } from '../services/pipe'
+import { FileSelectDirective, FileDropDirective } from 'ng2-file-upload';
 
 export function initConfig(config: ConfigService) {
   return () => config.load()
@@ -49,7 +48,7 @@ export function initConfig(config: ConfigService) {
     PopoverPage,
     PopoverTimepicker,
     ListWidget,
-    SecurePipe,
+    FileSelectDirective,
     LoginPage
   ],
   imports: [
@@ -82,7 +81,6 @@ export function initConfig(config: ConfigService) {
     SplashScreen,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     WebService,
-    UrlHelperService,
     LoginService,
     ConfigService,
     { provide: APP_INITIALIZER, useFactory: initConfig, deps: [ConfigService], multi: true },

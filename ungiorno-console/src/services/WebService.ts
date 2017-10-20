@@ -122,8 +122,29 @@ export class WebService {
       response => this.convertToKid(response.json().data)
     ).catch(this.handleError);
   }
+
+
+  uploadDocumentInPromise(uploader, item,selectedSchool, selectedKid): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+
+        this.uploadDocument(uploader, item, selectedSchool, selectedKid);
+          
+        uploader.onCompleteItem = (item, response, status, headers) => {
+          if (status == 200) {
+            console.log('upload complete for ' + item.file.name);
+            resolve();
+          } else {
+            console.error(response);
+          }
+        }
+    
+    })
+    
+  }
+
+
+
   uploadDocument(uploader: FileUploader, item, selectedSchool: School, selectedKid: Kid): void {
-    // https://dev.smartcommunitylab.it/ungiorno/consoleweb/trento/scuola2/kid/a/picture
     var newUrl = `${this.apiUrl}/consoleweb/${this.appId}/${selectedSchool.id}/kid/${selectedKid.id}/picture`
     console.log(newUrl);
     uploader.setOptions(
@@ -134,18 +155,18 @@ export class WebService {
       }
     );
     item.withCredentials = false;
-
-    uploader.onBuildItemForm = (item, form) => {
-     // form.append("image", item);
-      form.append(item.formData["image"], item);
-    };
+  // uploader.onBuildItemForm = function(fileItem, form){
+  //     // as the uploader goes through the fileItems, and
+  //     // if the fileItem contains the added property, then
+  //     // append the form
+  //     form.append("image", fileItem);
+  //   return {fileItem, form}
+  // };
+    // uploader.onBuildItemForm = (item, form) => {
+    //   form.append("image", item);
+    // };
     uploader.uploadItem(item);
-    uploader.onCompleteItem = (item, response, status, headers) => {
-      if (status == 200) {
-        console.log('upload complete for ' + item.file.name);
 
-      }
-    }
   }
   getTeachers(schoolId: string): Promise<Teacher[]> {
     return this.http.get(`${this.apiUrl}/consoleweb/${this.appId}/${schoolId}/teacher`).toPromise().then(

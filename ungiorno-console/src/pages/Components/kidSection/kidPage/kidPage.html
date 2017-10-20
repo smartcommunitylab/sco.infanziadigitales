@@ -134,7 +134,8 @@
                                         <ion-item style="height:120px">
                                             <ion-thumbnail item-start style="height: 100%; width: auto">
                                                 <!--<img [src]="getActualImage() | secure" style="height: 100%; width: auto" *ngIf='!editFoto'/>-->
-                                                <img [src]="getActualImage() " style="height: 100%; width: auto" *ngIf='!editFoto' />
+                                              <img [src]="getImage(thisKid) " style="height: 100%; width: auto" *ngIf='!editFoto' />
+                                                <input id="uploadInputFile" accept="image/*" type="file" ng2FileSelect [uploader]="uploader" />
                                                 <!--<image-upload *ngIf='editFoto' url="https://dev.smartcommunitylab.it/ungiorno/consoleweb/trento/scuola2/kid/a/picture"
                                                   [buttonCaption]="'Seleziona dal disco'"
                                                   [dropBoxMessage]="'Trascina la tua immagine qui!'"

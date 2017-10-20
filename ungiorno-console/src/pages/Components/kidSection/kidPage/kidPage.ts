@@ -13,7 +13,7 @@ import { ConfigService } from './../../../../services/config.service';
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, ParamMap } from "@angular/router";
 import { Location } from '@angular/common';
-// import { FileUploader, FileItem } from 'ng2-file-upload';
+ import { FileUploader, FileItem } from 'ng2-file-upload';
 import { Http, Headers, BaseRequestOptions, RequestOptions } from '@angular/http';
 
 import 'rxjs/add/operator/switchMap';
@@ -121,9 +121,8 @@ export class KidPage implements OnInit {
     servicesChecked = {};
     editBus: boolean = false;
     newStop: string = "";
-    URL = 'https://dev.smartcommunitylab.it/ungiorno/consoleweb/trento/scuola2/kid/a/picture';
+    uploader: FileUploader = new FileUploader({});
 
-    // uploader: FileUploader = new FileUploader({ url: this.URL, disableMultipart: false,  authToken: `Bearer ${sessionStorage.getItem('access_token')}` });
     constructor(
         private webService: WebService,
         private configService: ConfigService,
@@ -233,6 +232,7 @@ export class KidPage implements OnInit {
         // };
         //this.uploader.uploadItem(this.uploader.queue[0]);
         // this.webService.uploadDocument(this.uploader, this.uploader.queue[0], this.selectedSchool, this.selectedKid)
+         this.webService.uploadDocumentInPromise(this.uploader, this.uploader.queue[0],this.selectedSchool,this.selectedKid);
         this.webService.update(this.selectedSchool);
         this.editFoto = false;
         this.saveClick();
@@ -541,15 +541,10 @@ export class KidPage implements OnInit {
         if (this.isNewD) { this.isNewD = false; this.selectedDelega = undefined }
         this.editD = false;
     }
-    // getActualImage() {
-    //     var image = this.apiUrl + "/consoleweb/" + this.selectedSchool.appId + "/" + this.selectedSchool.id + "/kid/" + this.thisKid.id + "/picture";
-    //     return image;
-    // }
-    getActualImage() {
-        let headers = new Headers();
-        headers.append("Authorization", "Bearer ${sessionStorage.getItem('access_token')}");
-        return this.http.get(this.apiUrl + "/consoleweb/" + this.selectedSchool.appId + "/" + this.selectedSchool.id + "/kid/" + this.thisKid.id + "/picture", { headers: headers, })
-    }
+  getImage (child) {
+    var image =this.apiUrl + "/picture/" +this.selectedSchool.appId  + "/" + this.selectedSchool.id + "/"+child.id + "/"+sessionStorage.getItem('access_token');
+    return image;
+  }
     getUploadUrl() {
         var image = this.apiUrl + "/consoleweb/" + this.selectedSchool.appId + "/" + this.selectedSchool.id + "/kid/" + this.thisKid.id + "/picture";
         return image;

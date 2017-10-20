@@ -74,7 +74,7 @@ export class Bambini implements OnInit {
           handler: () => {
            
             this.selectedSchool.kids.splice(this.selectedSchool.kids.findIndex(tmp => tmp.id === item.id), 1);
-            this.webService.remove(this.selectedSchool.id, item);
+            this.webService.remove(this.selectedSchool, item);
           }
         }
       ]

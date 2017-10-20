@@ -33,7 +33,6 @@ import eu.trentorise.smartcampus.aac.AACException;
 import eu.trentorise.smartcampus.aac.AACService;
 import it.smartcommunitylab.ungiorno.beans.GroupDTO;
 import it.smartcommunitylab.ungiorno.config.exception.ProfileNotFoundException;
-import it.smartcommunitylab.ungiorno.model.AppInfo;
 import it.smartcommunitylab.ungiorno.model.ConsoleWebUser;
 import it.smartcommunitylab.ungiorno.model.KidProfile;
 import it.smartcommunitylab.ungiorno.model.Response;
@@ -92,14 +91,6 @@ public class ConsoleWebController {
     @PostConstruct
     public void init() {
         aacService = new AACService(oauthServerUrl, clientId, clientSecret);
-    }
-
-    @RequestMapping(method = RequestMethod.GET, value = "/consoleweb/{appId}/me")
-    public Response<List<School>> getMyData(@PathVariable String appId)
-            throws ProfileNotFoundException {
-
-        AppInfo appInfo = appSetup.findAppById(appId);
-        return new Response<List<School>>(appInfo.getSchools());
     }
 
 

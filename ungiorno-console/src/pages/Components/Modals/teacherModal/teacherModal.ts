@@ -63,7 +63,7 @@ export class TeacherModal implements OnInit{
 
     if(this.isNew) {
       if(this.selectedSchool.teachers.findIndex(x => x.id.toLowerCase() === this.selectedTeacher.id.toLowerCase()) < 0) {
-        this.webService.add(this.selectedSchool.id, this.copiedTeacher).then(() => this.selectedSchool.teachers.push(this.selectedTeacher));
+        this.webService.add(this.selectedSchool, this.copiedTeacher).then(() => this.selectedSchool.teachers.push(this.selectedTeacher));
       }
       else {
         let alert = this.alertCtrl.create({
@@ -73,7 +73,7 @@ export class TeacherModal implements OnInit{
         alert.present();
       }
     }else {
-      this.webService.add(this.selectedSchool.id, this.copiedTeacher);
+      this.webService.add(this.selectedSchool, this.copiedTeacher);
     }
 
     this.close();
@@ -95,7 +95,7 @@ export class TeacherModal implements OnInit{
         {
           text: 'OK',
           handler: () => {
-            this.webService.generatePIN(this.selectedSchool.id, this.copiedTeacher);
+            this.webService.generatePIN(this.selectedSchool, this.copiedTeacher);
           }
         }
       ]

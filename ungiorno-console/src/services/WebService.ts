@@ -47,7 +47,6 @@ export const requestOptionsProvider = { provide: RequestOptions, useClass: Defau
 
 @Injectable()
 export class WebService {
-  private appId = 'trento';
 
   private headers = new Headers({ 'Content-Type': 'application/json' });
   private apiUrl;
@@ -78,19 +77,10 @@ export class WebService {
   }
 
 
-  getData(): Promise<School[]> {
-    return this.http.get(`${this.apiUrl}/consoleweb/${this.appId}/me`).toPromise().then(x => {
-      let serverSchoolsData = x.json().data;
-      serverSchoolsData.forEach(data => {
-        data.id = data.schoolId;
-      });
-      return serverSchoolsData as School[]
-    })
-  }
 
-  getSchool(id: string): Promise<School> {
+  getSchool(appId: string, id: string): Promise<School> {
     const url = `${this.apiUrl}/${id}`;
-    return this.http.get(`${this.apiUrl}/consoleweb/${this.appId}/${id}/profile`)
+    return this.http.get(`${this.apiUrl}/consoleweb/${appId}/${id}/profile`)
       .toPromise()
       .then(response => {
         let serverSchoolData = response.json().data as ServerSchoolData;
@@ -99,26 +89,26 @@ export class WebService {
       .catch(this.handleError);
   }
 
-  getKid(schoolId: string, kidId: string): Promise<Kid> {
-    return this.getSchool(schoolId).then(tmp => {
-      return tmp.kids.find(x => x.id.toLowerCase() == kidId.toLowerCase());
-    });
-  }
+  // getKid(schoolId: string, kidId: string): Promise<Kid> {
+  //   return this.getSchool(schoolId).then(tmp => {
+  //     return tmp.kids.find(x => x.id.toLowerCase() == kidId.toLowerCase());
+  //   });
+  // }
 
-  getKids(schoolId: string): Promise<Kid[]> {
-    return this.http.get(`${this.apiUrl}/consoleweb/${this.appId}/${schoolId}/kid`).toPromise().then(response => response.json().data.map(serverKid => this.convertToKid(serverKid))).catch(this.handleError);
+  getKids(school: School): Promise<Kid[]> {
+    return this.http.get(`${this.apiUrl}/consoleweb/${school.appId}/${school.id}/kid`).toPromise().then(response => response.json().data.map(serverKid => this.convertToKid(serverKid))).catch(this.handleError);
   }
-  getImageProfileKid(schoolId: string, kidId): Promise<string> {
-    return this.http.get(`${this.apiUrl}/consoleweb/${this.appId}/${schoolId}/kid/${schoolId}/picture`).toPromise().then(response => response).catch(this.handleError);
+  getImageProfileKid(school: School, kidId): Promise<string> {
+    return this.http.get(`${this.apiUrl}/consoleweb/${school.appId}/${school.id}/kid/${school.id}/picture`).toPromise().then(response => response).catch(this.handleError);
   }
   addKidToGroup(school: School, kidId: string, group: Group): Promise<Kid> {
-    return this.http.put(`${this.apiUrl}/consoleweb/${this.appId}/${school.id}/kid/${kidId}/group`, this.convertToServerSection(group)).toPromise().then(
+    return this.http.put(`${this.apiUrl}/consoleweb/${school.appId}/${school.id}/kid/${kidId}/group`, this.convertToServerSection(group)).toPromise().then(
       response => this.convertToKid(response.json().data)
     ).catch(this.handleError);
   }
 
   putKidInSection(school: School, kidId: string, section: Group): Promise<Kid> {
-    return this.http.put(`${this.apiUrl}/consoleweb/${this.appId}/${school.id}/kid/${kidId}/section`, this.convertToServerSection(section)).toPromise().then(
+    return this.http.put(`${this.apiUrl}/consoleweb/${school.appId}/${school.id}/kid/${kidId}/section`, this.convertToServerSection(section)).toPromise().then(
       response => this.convertToKid(response.json().data)
     ).catch(this.handleError);
   }
@@ -145,7 +135,7 @@ export class WebService {
 
 
   uploadDocument(uploader: FileUploader, item, selectedSchool: School, selectedKid: Kid): void {
-    var newUrl = `${this.apiUrl}/consoleweb/${this.appId}/${selectedSchool.id}/kid/${selectedKid.id}/picture`
+    var newUrl = `${this.apiUrl}/consoleweb/${selectedSchool.appId}/${selectedSchool.id}/kid/${selectedKid.id}/picture`
     console.log(newUrl);
     uploader.setOptions(
       {
@@ -158,28 +148,28 @@ export class WebService {
     uploader.uploadItem(item);
 
   }
-  getTeachers(schoolId: string): Promise<Teacher[]> {
-    return this.http.get(`${this.apiUrl}/consoleweb/${this.appId}/${schoolId}/teacher`).toPromise().then(
+  getTeachers(school: School): Promise<Teacher[]> {
+    return this.http.get(`${this.apiUrl}/consoleweb/${school.appId}/${school.id}/teacher`).toPromise().then(
       response => response.json().data.map(serverTeacher => this.convertToTeacher(serverTeacher))
     ).catch(this.handleError);
   }
 
   removeKidFromSection(school: School, kidId: string, sectionId: string): Promise<Kid> {
-    return this.http.delete(`${this.apiUrl}/consoleweb/${this.appId}/${school.id}/kid/${kidId}/section/${sectionId}`).toPromise().then(
+    return this.http.delete(`${this.apiUrl}/consoleweb/${school.appId}/${school.id}/kid/${kidId}/section/${sectionId}`).toPromise().then(
       response => this.convertToKid(response.json().data)
     ).catch(this.handleError);
 
   }
 
   removeKidFromGroup(school: School, kidId: string, groupId: string): Promise<Kid> {
-    return this.http.delete(`${this.apiUrl}/consoleweb/${this.appId}/${school.id}/kid/${kidId}/group/${groupId}`).toPromise().then(
+    return this.http.delete(`${this.apiUrl}/consoleweb/${school.appId}/${school.id}/kid/${kidId}/group/${groupId}`).toPromise().then(
       response => this.convertToKid(response.json().data)
     ).catch(this.handleError);
 
   }
 
   addTeacherToSectionOrGroup(school: School, teacherId: string, groupId: string): Promise<Teacher> {
-    return this.http.put(`${this.apiUrl}/consoleweb/${this.appId}/${school.id}/teacher/${teacherId}/section/${groupId}`, {}).toPromise().then(
+    return this.http.put(`${this.apiUrl}/consoleweb/${school.appId}/${school.id}/teacher/${teacherId}/section/${groupId}`, {}).toPromise().then(
       response => this.convertToTeacher(response.json().data)
     ).catch(this.handleError);
   }
@@ -187,60 +177,60 @@ export class WebService {
 
   removeTeacherToSectionOrGroup(school: School, teacherId: string, groupId: string): Promise<Teacher> {
     console.log(`remove ${school.id} group ${groupId}`)
-    return this.http.delete(`${this.apiUrl}/consoleweb/${this.appId}/${school.id}/teacher/${teacherId}/section/${groupId}`).toPromise().then(
+    return this.http.delete(`${this.apiUrl}/consoleweb/${school.appId}/${school.id}/teacher/${teacherId}/section/${groupId}`).toPromise().then(
       response => this.convertToTeacher(response.json().data)
     ).catch(this.handleError);
   }
 
-  add(schoolId: string, item: any): Promise<any> {
+  add(school: School, item: any): Promise<any> {
     var sch;
-    const url = `${this.apiUrl}/consoleweb/${this.appId}/${schoolId}`;
+    const url = `${this.apiUrl}/consoleweb/${school.appId}/${school.id}`;
     if (item instanceof Teacher) {
-      return this.addTeacher(schoolId, item);
+      return this.addTeacher(school, item);
     }
     else if (item instanceof Bus) {
-      return this.getSchool(schoolId).then(tmp => {
+      return this.getSchool(school.appId,school.id).then(tmp => {
         tmp.buses.push(item);
         return this.http.put(url, JSON.stringify(tmp)).toPromise().then(() => tmp).catch(this.handleError);
       });
     }
     else if (item instanceof Group) {
-      return this.getSchool(schoolId).then(tmp => {
+      return this.getSchool(school.appId, school.id).then(tmp => {
         tmp.groups.push(item);
         return this.http.put(url, JSON.stringify(tmp)).toPromise().then(() => tmp).catch(this.handleError);
       });
     }
     else if (item instanceof Kid) {
-      return this.addKid(schoolId, item);
+      return this.addKid(school, item);
     }
   }
 
-  remove(schoolId: string, item: any): Promise<any> {
-    const url = `${this.apiUrl}/consoleweb/${this.appId}/${schoolId}`;
+  remove(school: School, item: any): Promise<any> {
+    const url = `${this.apiUrl}/consoleweb/${school.appId}/${school.id}`;
     if (item instanceof Group) {
-      return this.getSchool(schoolId).then(tmp => {
+      return this.getSchool(school.appId, school.id).then(tmp => {
         var pos = tmp.groups.findIndex(x => x.name === item.name)
         tmp.groups.splice(pos, 1);
         return this.http.put(url, JSON.stringify(tmp)).toPromise().then(() => tmp).catch(this.handleError);
       });
     }
     else if (item instanceof Bus) {
-      return this.getSchool(schoolId).then(tmp => {
+      return this.getSchool(school.appId, school.id).then(tmp => {
         var pos = tmp.buses.findIndex(x => x.name === item.name)
         tmp.buses.splice(pos, 1);
         return this.http.put(url, JSON.stringify(tmp)).toPromise().then(() => tmp).catch(this.handleError);
       });
     }
     else if (item instanceof Teacher) {
-      return this.removeTeacher(schoolId, item.id);
+      return this.removeTeacher(school, item.id);
     }
     else if (item instanceof Kid) {
-      return this.removeKid(schoolId, item.id);
+      return this.removeKid(school, item.id);
     }
   }
 
   update(school: School) {
-    const url = `${this.apiUrl}/consoleweb/${this.appId}/${school.id}`;
+    const url = `${this.apiUrl}/consoleweb/${school.appId}/${school.id}`;
     let convertedSchool = this.convertToServerSchool(school);
     return this.http
       .put(url, JSON.stringify(convertedSchool))
@@ -249,15 +239,15 @@ export class WebService {
       .catch(this.handleError);
   }
 
-  getGroup = function (schoolId: string, groupId: string): Promise<Group> {
-    const url = `${this.apiUrl}/consoleweb/${this.appId}/${schoolId}/group/${groupId}`;
+  getGroup = function (school: School, groupId: string): Promise<Group> {
+    const url = `${this.apiUrl}/consoleweb/${school.appId}/${school.id}/group/${groupId}`;
     return this.http
       .get(url).toPromise().then(response => response.json().data as Group)
       .catch(this.handleError);
   }
 
-  getGroups = function (schoolId: string): Promise<Group[]> {
-    const url = `${this.apiUrl}/consoleweb/${this.appId}/${schoolId}/group`;
+  getGroups = function (school: School): Promise<Group[]> {
+    const url = `${this.apiUrl}/consoleweb/${school.appId}/${school.id}/group`;
     return this.http
       .get(url).toPromise().then(response => response.json().data as Group[])
       .catch(this.handleError);
@@ -268,33 +258,35 @@ export class WebService {
     return Promise.reject(error.message || error);
   }
 
-  private addTeacher(schoolId: string, teacherProfile: Teacher): Promise<Teacher> {
+  private addTeacher(school: School, teacherProfile: Teacher): Promise<Teacher> {
     let convertedTeacher: ServerTeacherData = this.convertToServerTeacher(teacherProfile);
-    return this.http.post(`${this.apiUrl}/consoleweb/${this.appId}/${schoolId}/teacher`, convertedTeacher).toPromise().then(
+    return this.http.post(`${this.apiUrl}/consoleweb/${school.appId}/${school.id}/teacher`, convertedTeacher).toPromise().then(
       response => this.convertToTeacher(response.json().data)
     ).catch(this.handleError);
   }
 
-  public generatePIN(schoolId: string,teacher: Teacher): Promise<any> 
+  public generatePIN(school: School,teacher: Teacher): Promise<any> 
 {
-        return this.http.put(`${this.apiUrl}/consoleweb/${this.appId}/${schoolId}/teacher/${teacher.id}/pin`,{}).toPromise().then(
+        return this.http.put(`${this.apiUrl}/consoleweb/${school.appId}/${school.id}/teacher/${teacher.id}/pin`,{}).toPromise().then(
       response => this.convertToTeacher(response.json().data)
     ).catch(this.handleError);
-}  private addKid(schoolId: string, kidProfile: Kid): Promise<Kid> {
+}  
+
+private addKid(school: School, kidProfile: Kid): Promise<Kid> {
     let convertedKid: ServerKidData = this.convertToServerKid(kidProfile);
-    return this.http.post(`${this.apiUrl}/consoleweb/${this.appId}/${schoolId}/kid`, convertedKid).toPromise().then(
+    return this.http.post(`${this.apiUrl}/consoleweb/${school.appId}/${school.id}/kid`, convertedKid).toPromise().then(
       response => this.convertToKid(response.json().data)
     ).catch(this.handleError);
   }
 
-  private removeTeacher(schoolId: string, teacherId: string): Promise<Teacher> {
-    return this.http.delete(`${this.apiUrl}/consoleweb/${this.appId}/${schoolId}/teacher/${teacherId}`).toPromise().then(
+  private removeTeacher(school: School, teacherId: string): Promise<Teacher> {
+    return this.http.delete(`${this.apiUrl}/consoleweb/${school.appId}/${school.id}/teacher/${teacherId}`).toPromise().then(
       response => this.convertToTeacher(response.json().data)
     ).catch(this.handleError);
   }
 
-  private removeKid(schoolId: string, kidId: string): Promise<Kid> {
-    return this.http.delete(`${this.apiUrl}/consoleweb/${this.appId}/${schoolId}/kid/${kidId}`).toPromise().then(
+  private removeKid(school: School, kidId: string): Promise<Kid> {
+    return this.http.delete(`${this.apiUrl}/consoleweb/${school.appId}/${school.id}/kid/${kidId}`).toPromise().then(
       response => this.convertToKid(response.json().data)
     ).catch(this.handleError);
   }
@@ -331,8 +323,11 @@ export class WebService {
     if (parents.length == 2) {
       convertedKid.parent2 = this.convertToParent(parents[1]);
     }
+    if(serverKidData.services != undefined){
       convertedKid.bus = serverKidData.services.bus;
-        let deleghe = serverKidData.persons.filter(person => !person.parent);
+    }
+    
+    let deleghe = serverKidData.persons.filter(person => !person.parent);
     if (deleghe.length > 0) {
       deleghe.map(delega => this.convertToDelega(delega)).forEach(convertedDelega => convertedKid.deleghe.push(convertedDelega));
     }

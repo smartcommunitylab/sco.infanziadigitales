@@ -198,6 +198,10 @@
                                         </ion-list>
                                         <ion-list *ngIf="editService">
                                             <div *ngFor="let item of selectedSchool.servizi">
+                                                <ion-item *ngIf="item.normale">
+                                                    <ion-label>{{item.servizio}}</ion-label>
+                                                    <ion-checkbox checked="true" disabled="true"></ion-checkbox>
+                                                </ion-item>
                                                 <ion-item *ngIf="!item.normale">
                                                     <ion-label>{{item.servizio}}</ion-label>
                                                     <ion-checkbox [(ngModel)]="servicesChecked[item.servizio]" (ionChange)="changeServices()"></ion-checkbox>

@@ -70,17 +70,25 @@ import 'rxjs/add/operator/switchMap';
             margin: 0;
             width: 95%;
         }
-        .segment-button {
-            border-bottom: 4px solid #98ba3c;
-            font-size: 14px;
-            font-weight: bold;
-        }
-        .segment-button.segment-activated {
-            border-bottom: 4px solid #98ba3c
-        }
-        ion-segment-button.segment-activated {
-            background-color : #98ba3c;
-        }
+    .segment-button {
+      border-bottom: 4px solid #98ba3c;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .segment-button.segment-activated {
+      border-bottom: 4px solid #98ba3c
+    }
+    ion-segment-button.segment-activated {
+      background-color : #98ba3c;
+    }
+    .segment-md-light .segment-button.activated, .segment-md-light .segment-button.segment-activated {
+  border-color: #f4f4f4;
+  color: #f4f4f4;
+  opacity: 1;
+}
+    .segment-md-light .segment-button {
+    color: black;
+}
         ion-select {
         max-width: 100%;
         width: 100%;

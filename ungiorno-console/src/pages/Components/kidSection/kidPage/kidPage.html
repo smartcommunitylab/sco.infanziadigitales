@@ -230,7 +230,7 @@
                             <ion-col col-sm-12>
                                 <ion-card>
                                     <ion-card-header>
-                                        Bus
+                                        Scuolabus
                                         <button class='edit' ion-button color='magenta1' float-end *ngIf='!editBus' (click)="onBusEdit()" [disabled]='isNew'>Modifica</button>
                                         <button class='edit' ion-button color='magenta1' float-end *ngIf='editBus' (click)="onBusSave()">Salva</button>
                                         <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='editBus' (click)="onBusCancel()">Annulla</button>
@@ -238,14 +238,14 @@
                                     <ion-card-content margin-top>
                                         <ion-item *ngIf='editBus'>
                                             <ion-label>Attiva il servizio bus</ion-label>
-                                            <ion-checkbox [(ngModel)]="thisKid.bus.enabled"> Attiva il servizio bus</ion-checkbox>
+                                            <ion-checkbox [(ngModel)]="thisKid.bus.enabled"> Attiva il servizio scuolabus</ion-checkbox>
                                         </ion-item>
                                         <label *ngIf='!editBus'>
-                                            <p *ngIf="thisKid.bus && thisKid.bus.enabled" text-center>Il servizio bus e` attivo</p>
-                                            <p *ngIf="!thisKid.bus || !thisKid.bus.enabled"text-center>Il servizio bus non e` attivo</p></label>
+                                            <p *ngIf="thisKid.bus && thisKid.bus.enabled" text-center>Il servizio scuolabus e` attivo</p>
+                                            <p *ngIf="!thisKid.bus || !thisKid.bus.enabled"text-center>Il servizio scuolabus non e` attivo</p></label>
                                        <ion-label *ngIf='thisKid.bus && thisKid.bus.busId  && thisKid.bus.enabled && !editBus'>Linea Bus: {{thisKid.bus.busId}} </ion-label>
                                         <ion-item *ngIf="thisKid.bus && thisKid.bus.enabled && editBus">
-                                            <ion-label>Linea Bus: </ion-label>
+                                            <ion-label>Linea scuolabus: </ion-label>
                                             <ion-select [(ngModel)]="thisKid.bus.busId" *ngIf='editBus'>
                                                 <ion-option *ngFor="let item of selectedSchool.buses" [value]="item.busId">{{item.busId}}</ion-option>
                                             </ion-select>

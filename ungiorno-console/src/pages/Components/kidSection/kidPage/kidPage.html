@@ -133,18 +133,14 @@
                                     <ion-card-content margin-top>
                                         <ion-item style="height:120px">
                                             <ion-thumbnail item-start style="height: 100%; width: auto">
-                                                <!--<img [src]="getActualImage() | secure" style="height: 100%; width: auto" *ngIf='!editFoto'/>-->
-                                              <img [src]="getImage(thisKid) " style="height: 100%; width: auto" *ngIf='!editFoto' />
+                                            
+                                              <img [src]="getImage(thisKid) " style="height: 100%; width: auto" *ngIf='!editFoto && !rerender' />
                                                 <input id="uploadInputFile" accept="image/*" type="file" ng2FileSelect [uploader]="uploader" />
-                                                <!--<image-upload *ngIf='editFoto' url="https://dev.smartcommunitylab.it/ungiorno/consoleweb/trento/scuola2/kid/a/picture"
-                                                  [buttonCaption]="'Seleziona dal disco'"
-                                                  [dropBoxMessage]="'Trascina la tua immagine qui!'"
-                                                  [max]="1"></image-upload>-->
-                                                <!--<input id="uploadInputFile" *ngIf='editFoto' type="file" ng2FileSelect [uploader]="uploader" />-->
+                                              
                                             </ion-thumbnail>
                                             <input #inputFile type='file' style='display: none' (change)='handleChange($event)' accept="image/gif, image/png, image/jpeg, image/bmp, image/webp"
                                             />
-                                            <!--<button ion-button color='green1' (click)='inputFile.click()' *ngIf='editFoto'>Aggiungi immagine</button>-->
+                                            
                                         </ion-item>
                                     </ion-card-content>
                                 </ion-card>

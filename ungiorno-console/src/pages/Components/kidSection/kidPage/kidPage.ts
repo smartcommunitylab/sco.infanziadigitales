@@ -10,10 +10,10 @@ import { Stop } from './../../../../app/Classes/stop';
 import { Kid } from './../../../../app/Classes/kid';
 import { WebService } from './../../../../services/WebService';
 import { ConfigService } from './../../../../services/config.service';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, ParamMap } from "@angular/router";
 import { Location } from '@angular/common';
- import { FileUploader, FileItem } from 'ng2-file-upload';
+import { FileUploader, FileItem } from 'ng2-file-upload';
 import { Http, Headers, BaseRequestOptions, RequestOptions } from '@angular/http';
 
 import 'rxjs/add/operator/switchMap';
@@ -122,12 +122,14 @@ export class KidPage implements OnInit {
     editBus: boolean = false;
     newStop: string = "";
     uploader: FileUploader = new FileUploader({});
+    rerender = false;
 
     constructor(
         private webService: WebService,
         private configService: ConfigService,
         private alertCtrl: AlertController,
-        private http: Http
+        private http: Http,
+        private cdRef: ChangeDetectorRef
     ) {
         this.apiUrl = this.configService.getConfig('apiUrl');
     }
@@ -144,7 +146,11 @@ export class KidPage implements OnInit {
             this.thisKid.bus = new BusService();
         }
     }
-
+    doRerender() {
+        this.rerender = true;
+        this.cdRef.detectChanges();
+        this.rerender = false;
+    }
     goBack() {
         if (this.edit && this.thisKid.name !== '' && this.thisKid.id !== '' && this.thisKid.surname !== '') {
             let alert = this.alertCtrl.create({
@@ -232,8 +238,15 @@ export class KidPage implements OnInit {
         // };
         //this.uploader.uploadItem(this.uploader.queue[0]);
         // this.webService.uploadDocument(this.uploader, this.uploader.queue[0], this.selectedSchool, this.selectedKid)
-         this.webService.uploadDocumentInPromise(this.uploader, this.uploader.queue[0],this.selectedSchool,this.selectedKid);
+        this.webService.uploadDocumentInPromise(this.uploader, this.uploader.queue[0], this.selectedSchool, this.selectedKid).then(() => {
+            // this.getImage(this.selectedKid)
+            this.doRerender();
+        },
+            (err) => {
+                console.log(err);
+            });
         this.webService.update(this.selectedSchool);
+        this.doRerender();
         this.editFoto = false;
         this.saveClick();
 
@@ -541,10 +554,10 @@ export class KidPage implements OnInit {
         if (this.isNewD) { this.isNewD = false; this.selectedDelega = undefined }
         this.editD = false;
     }
-  getImage (child) {
-    var image =this.apiUrl + "/picture/" +this.selectedSchool.appId  + "/" + this.selectedSchool.id + "/"+child.id + "/"+sessionStorage.getItem('access_token');
-    return image;
-  }
+    getImage(child) {
+        var image = this.apiUrl + "/picture/" + this.selectedSchool.appId + "/" + this.selectedSchool.id + "/" + child.id + "/" + sessionStorage.getItem('access_token');
+        return image;
+    }
     getUploadUrl() {
         var image = this.apiUrl + "/consoleweb/" + this.selectedSchool.appId + "/" + this.selectedSchool.id + "/kid/" + this.thisKid.id + "/picture";
         return image;

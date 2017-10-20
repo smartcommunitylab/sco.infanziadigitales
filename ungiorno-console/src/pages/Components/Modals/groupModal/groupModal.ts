@@ -255,6 +255,15 @@ export class GroupModal implements OnInit{
         return image;
     }
   removeKid(id : string) {
+            let alert = this.alertCtrl.create({
+            subTitle: 'Conferma eliminazione',
+            buttons: [
+                {
+                    text: "Annulla"
+                },
+                {
+                    text: 'OK',
+                    handler: () => {
     this.copiedGroup.kids.splice(this.copiedGroup.kids.findIndex(x => id === x), 1);
     this.selectedSchool.kids.find(c=> c.id.toLowerCase() === id.toLowerCase()).section = false;
     if(this.removeKidToGroupMap[this.copiedGroup.name] == undefined ) {
@@ -262,14 +271,34 @@ export class GroupModal implements OnInit{
     } 
     this.removeKidToGroupMap[this.copiedGroup.name].push(id)
     this.updateArrays();
+                    }
+                }
+            ]
+        })
+        alert.present();
+
   }
 
   removeTeacher(teacher: Teacher) {
+      let alert = this.alertCtrl.create({
+            subTitle: 'Conferma eliminazione',
+            buttons: [
+                {
+                    text: "Annulla"
+                },
+                {
+                    text: 'OK',
+                    handler: () => {
     this.copiedGroup.teachers.splice(this.copiedGroup.teachers.findIndex(x => teacher.id == x), 1);
     if(this.removeTeacherToGroupMap[this.copiedGroup.name] == undefined ) {
       this.removeTeacherToGroupMap[this.copiedGroup.name] = []
     } 
     this.removeTeacherToGroupMap[this.copiedGroup.name].push(teacher.id)
     this.updateArrays();
-  }
+   }
+                }
+            ]
+        })
+        alert.present();
+}
 }

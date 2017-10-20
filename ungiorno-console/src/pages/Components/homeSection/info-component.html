@@ -40,22 +40,24 @@
                 </ion-card-header>
                 <ion-card-content margin-top>
                     <ion-grid inset>
-                        <!--<list-widget  [items]="selectedSchool.phoneNumbers" [editMode]="editContatti" [label]="'Telefono'"></list-widget>-->
                         <ion-grid no-padding no-margin>
                             <ion-row>
                                 <ion-col col-2>Telefono:</ion-col>
                                 <ion-col col-4>
                                     <ion-input [(ngModel)]="newSchoolPhone" no-margin *ngIf="editContatti"></ion-input>
                                     <ion-label no-margin *ngIf="!editContatti">{{newSchoolPhone}}</ion-label>
+                                    <p *ngIf='!newSchoolPhone && !editContatti' class="empty-field">Dato non inserito</p>
+
                                 </ion-col>
                             </ion-row>
                         </ion-grid>
-                        <ion-row no-padding no-margin>
+                        <ion-row >
                             <ion-col col-2>
                                 Indirizzo email:
                             </ion-col>
                             <ion-col col-4>
                                 <ion-input type="tel" [(ngModel)]="selectedSchool.email" *ngIf='editContatti' no-margin></ion-input>
+                                <ion-label no-margin *ngIf="!editContatti">{{selectedSchool.email}}</ion-label>
                                 <p *ngIf='!selectedSchool.email && !editContatti' class="empty-field">Dato non inserito</p>
                             </ion-col>
                         </ion-row>

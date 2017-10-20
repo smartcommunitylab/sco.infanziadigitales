@@ -26,7 +26,7 @@ import { APP_INITIALIZER } from '@angular/core';
 import { UserService } from '../services/user.service';
 import { LoginPage } from '../pages/login/login';
 import { Ng2OrderModule } from 'ng2-order-pipe';
-import { FileSelectDirective, FileDropDirective } from 'ng2-file-upload';
+import { FileUploadModule } from 'ng2-file-upload';
 
 export function initConfig(config: ConfigService) {
   return () => config.load()
@@ -48,7 +48,6 @@ export function initConfig(config: ConfigService) {
     PopoverPage,
     PopoverTimepicker,
     ListWidget,
-    FileSelectDirective,
     LoginPage
   ],
   imports: [
@@ -56,6 +55,7 @@ export function initConfig(config: ConfigService) {
     IonicModule.forRoot(MyApp),
     HttpModule,
     Ng2OrderModule,
+    FileUploadModule,
     IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],

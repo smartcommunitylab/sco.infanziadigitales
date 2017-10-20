@@ -155,16 +155,6 @@ export class WebService {
       }
     );
     item.withCredentials = false;
-  // uploader.onBuildItemForm = function(fileItem, form){
-  //     // as the uploader goes through the fileItems, and
-  //     // if the fileItem contains the added property, then
-  //     // append the form
-  //     form.append("image", fileItem);
-  //   return {fileItem, form}
-  // };
-    // uploader.onBuildItemForm = (item, form) => {
-    //   form.append("image", item);
-    // };
     uploader.uploadItem(item);
 
   }

@@ -5,6 +5,8 @@ import java.util.Map;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -12,6 +14,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class EmailManager {
+
+    private static final Logger logger = LoggerFactory.getLogger(EmailManager.class);
+
     @Autowired
     private JavaMailSender mailSender;
 
@@ -36,7 +41,12 @@ public class EmailManager {
         message.setText(htmlContent, true);
 
         // Send email
-        mailSender.send(mimeMessage);
+        try {
+            mailSender.send(mimeMessage);
+        } catch (Exception e) {
+            logger.error("Exception sending email", e);
+            throw new MessagingException(e.getMessage());
+        }
 
     }
 }

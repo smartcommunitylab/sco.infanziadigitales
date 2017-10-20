@@ -141,6 +141,7 @@ export class KidPage implements OnInit {
         this.isNew = this.thisKid.id == '';
         this.editInfo = this.isNew;
 
+        this.selectedSchool.servizi.forEach(servizio => this.servicesChecked[servizio.servizio] = false);
         this.thisKid.services.forEach(x => this.servicesChecked[x.servizio] = true);
         if (!this.thisKid.bus) {
             this.thisKid.bus = new BusService();
@@ -328,13 +329,18 @@ export class KidPage implements OnInit {
     }
 
     changeServices() {
+        console.log('change servicesss')
         var x = new Array();
         for (var i in this.servicesChecked) {
             if (this.servicesChecked[i]) {
-                x.push(this.selectedSchool.servizi.find(c => c.servizio && c.servizio.toLowerCase() === i.toLowerCase()));
+                let selectedSevice = this.selectedSchool.servizi.find(c => c.servizio && c.servizio.toLowerCase() === i.toLowerCase());
+                if(selectedSevice != undefined){
+                    x.push(selectedSevice);
+                }
             }
         }
         this.thisKid.services = x
+        console.log(this.thisKid.services)
     }
 
     editClick() {

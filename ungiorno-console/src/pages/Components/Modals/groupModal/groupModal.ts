@@ -221,8 +221,8 @@ export class GroupModal implements OnInit{
     let alert = this.alertCtrl.create();
     alert.setTitle('Aggiungi bambini');
     
-    this.selectedSchool.kids.forEach(element => {
-      if(this.copiedGroup.section && element.section) return
+   
+    this.selectedSchool.kids.forEach(element => {   
       alert.addInput({
         type: 'checkbox',
         label: element.name + ' ' + element.surname,
@@ -243,7 +243,7 @@ export class GroupModal implements OnInit{
           } 
           this.addKidToGroupMap[this.copiedGroup.name].push(element)
 
-          if(this.copiedGroup.section) this.selectedSchool.kids.find(c=> c.id.toLowerCase() === element.toLowerCase()).section = true;
+          if(this.copiedGroup.section) this.selectedSchool.kids.find(c=> c.id.toLowerCase() === element.toLowerCase()).section = this.copiedGroup.name;
           this.updateArrays();
         });
       }
@@ -265,7 +265,7 @@ export class GroupModal implements OnInit{
                     text: 'OK',
                     handler: () => {
     this.copiedGroup.kids.splice(this.copiedGroup.kids.findIndex(x => id === x), 1);
-    this.selectedSchool.kids.find(c=> c.id.toLowerCase() === id.toLowerCase()).section = false;
+    this.selectedSchool.kids.find(c=> c.id.toLowerCase() === id.toLowerCase()).section = "";
     if(this.removeKidToGroupMap[this.copiedGroup.name] == undefined ) {
       this.removeKidToGroupMap[this.copiedGroup.name] = []
     } 

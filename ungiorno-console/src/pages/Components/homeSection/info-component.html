@@ -6,13 +6,13 @@
                     Informazioni di base
                 </ion-card-header>
                 <ion-card-content margin-top>
-                    <ion-grid inset>
+                    <ion-grid no-padding no-margin>
                         <ion-row margin-bottom>
-                            <ion-col col-1>
+                            <ion-col col-2>
                                 Nome:
                             </ion-col>
-                            <ion-col col-11>
-                                <p *ngIf='selectedSchool.name'>{{selectedSchool.name}}</p>
+                            <ion-col col-8>
+                                <ion-label no-margin  *ngIf='selectedSchool.name'>{{selectedSchool.name}}</ion-label>
                                 <p *ngIf='!selectedSchool.name' class="empty-field">Dato non inserito</p>
                             </ion-col>
                         </ion-row>
@@ -39,7 +39,7 @@
                     <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='editContatti' (click)="onContattiCancel()">Annulla</button>
                 </ion-card-header>
                 <ion-card-content margin-top>
-                    <ion-grid inset>
+                    <!--<ion-grid inset>-->
                         <ion-grid no-padding no-margin>
                             <ion-row>
                                 <ion-col col-2>Telefono:</ion-col>
@@ -50,18 +50,19 @@
 
                                 </ion-col>
                             </ion-row>
+                            <ion-row>
+                                <ion-col col-2>
+                                    Indirizzo email:
+                                </ion-col>
+                                <ion-col col-4>
+                                    <ion-input type="tel" [(ngModel)]="selectedSchool.email" *ngIf='editContatti' no-margin></ion-input>
+                                    <ion-label no-margin *ngIf="!editContatti">{{selectedSchool.email}}</ion-label>
+                                    <p *ngIf='!selectedSchool.email && !editContatti' class="empty-field">Dato non inserito</p>
+                                </ion-col>
+                            </ion-row>
                         </ion-grid>
-                        <ion-row >
-                            <ion-col col-2>
-                                Indirizzo email:
-                            </ion-col>
-                            <ion-col col-4>
-                                <ion-input type="tel" [(ngModel)]="selectedSchool.email" *ngIf='editContatti' no-margin></ion-input>
-                                <ion-label no-margin *ngIf="!editContatti">{{selectedSchool.email}}</ion-label>
-                                <p *ngIf='!selectedSchool.email && !editContatti' class="empty-field">Dato non inserito</p>
-                            </ion-col>
-                        </ion-row>
-                    </ion-grid>
+
+                    <!--</ion-grid>-->
                 </ion-card-content>
             </ion-card>
         </ion-col>
@@ -164,7 +165,7 @@
                                         Nome scuolabus:
                                     </ion-col>
                                     <ion-col col-10>
-                                        <input type='text' id='giord' [(ngModel)]="newBus" placeholder="Inserisci nome del scuolabus" no-padding no-margin>
+                                        <input type='text' id='giord' [(ngModel)]="newBus" placeholder="Inserisci nome dello scuolabus" no-padding no-margin>
                                         <ion-icon name="add-circle" color="green3" (click)="addBus(newBus)" item-end></ion-icon>
                                     </ion-col>
                                 </ion-row>

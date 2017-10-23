@@ -59,9 +59,26 @@ export class OrariModal implements OnInit {
     }
 
     close() {
-        this.webService.update(this.selectedSchool);
-        this.navCtrl.pop();
+        let alert = this.alertCtrl.create({
+            subTitle: 'Conferma uscita?',
+            buttons: [
+                {
+                    text: "Annulla"
+                },
+                {
+                    text: 'OK',
+                    handler: () => {
+                        this.webService.update(this.selectedSchool);
+                        this.navCtrl.pop();
+                    }
+                }
+            ]
+        })
+        alert.present();
+
     }
+
+
 
     save() {
         this.copiedOrario.fasce.sort((item1, item2) => item1.start.localeCompare(item2.start));

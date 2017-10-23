@@ -1,6 +1,6 @@
 import { Parent } from './../../../../app/Classes/parent';
 import { Delega } from './../../../../app/Classes/delega';
-import { AlertController } from 'ionic-angular';
+import { AlertController, ToastController } from 'ionic-angular';
 import { Service } from './../../../../app/Classes/service';
 import { Group } from './../../../../app/Classes/group';
 import { School } from './../../../../app/Classes/school';
@@ -132,13 +132,18 @@ export class KidPage implements OnInit {
     newStop: string = "";
     uploader: FileUploader = new FileUploader({});
     rerender = false;
+    BreakEmailException = {};
+    BreakPhoneException = {};
+    toastWrongEmail;
+    toastWrongPhone;
 
     constructor(
         private webService: WebService,
         private configService: ConfigService,
         private alertCtrl: AlertController,
         private http: Http,
-        private cdRef: ChangeDetectorRef
+        private cdRef: ChangeDetectorRef,
+        private toastCtrl: ToastController
     ) {
         this.apiUrl = this.configService.getConfig('apiUrl');
     }
@@ -181,7 +186,23 @@ export class KidPage implements OnInit {
             })
             alert.present();
         }
-        else this.kidClick[0] = false;
+        else {
+            let alert = this.alertCtrl.create({
+                subTitle: 'Conferma uscita?',
+                buttons: [
+                    {
+                        text: "Annulla"
+                    },
+                    {
+                        text: 'OK',
+                        handler: () => {
+                            this.kidClick[0] = false;
+                        }
+                    }
+                ]
+            })
+            alert.present();
+        }
     }
 
     editInfo: boolean;
@@ -239,7 +260,33 @@ export class KidPage implements OnInit {
         this.editFoto = true;
         this.oldFoto = this.thisKid.image;
     }
+    onRemoveProfileKid() {
+        let alert = this.alertCtrl.create({
+            subTitle: 'Conferma rimozione immagine',
+            buttons: [
+                {
+                    text: "Annulla"
+                },
+                {
+                    text: 'OK',
+                    handler: () => {
+                        this.webService.removeKidImage(this.selectedSchool, this.selectedKid).then(() => {
+                            this.doRerender();
+                        },
+                            (err) => {
+                                console.log(err);
+                            });
+                        this.webService.update(this.selectedSchool);
+                        this.doRerender();
+                        this.editFoto = false;
+                        this.saveClick();
+                    }
+                }
+            ]
+        })
+        alert.present();
 
+    }
     onFotoSave() {
         //upload image
         //    this.uploader.queue[0].withCredentials = false;
@@ -343,7 +390,7 @@ export class KidPage implements OnInit {
         for (var i in this.servicesChecked) {
             if (this.servicesChecked[i]) {
                 let selectedSevice = this.selectedSchool.servizi.find(c => c.servizio && c.servizio.toLowerCase() === i.toLowerCase());
-                if(selectedSevice != undefined){
+                if (selectedSevice != undefined) {
                     x.push(selectedSevice);
                 }
             }
@@ -406,13 +453,57 @@ export class KidPage implements OnInit {
 
     editP1Contatti: boolean;
 
+
+    private validatePhone(email) {
+        var re = /^[0-9]{5,10}$/;
+
+        return re.test(email);
+    }
+    private validateEmail(email) {
+        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(email);
+    }
+    checkEmailAndPhones(parent: Parent) {
+        parent.emails.forEach(email => {
+            if (!this.validateEmail(email))
+                throw this.BreakEmailException
+        });
+        parent.phoneNumbers.forEach(phone => {
+            if (!this.validatePhone(phone))
+                throw this.BreakPhoneException
+        });
+    }
     onP1ContattiEdit() {
         this.editP1Contatti = true;
     }
 
     onP1ContattiSave() {
-        this.editP1Contatti = false;
-        this.webService.add(this.selectedSchool, this.thisKid);
+        try {
+            this.checkEmailAndPhones(this.thisKid.parent1)
+            this.editP1Contatti = false;
+            this.webService.add(this.selectedSchool, this.thisKid);
+        } catch (e) {
+            if (e == this.BreakEmailException) {
+                this.toastWrongEmail = this.toastCtrl.create({
+                    message: 'Formato email non valido',
+                    duration: 1000,
+                    position: 'middle',
+                    dismissOnPageChange: true
+                });
+                this.toastWrongEmail.present()
+
+            } else if (e == this.BreakPhoneException) {
+                this.toastWrongPhone = this.toastCtrl.create({
+                    message: 'Formato telefono non valido',
+                    duration: 1000,
+                    position: 'middle',
+                                        dismissOnPageChange: true
+
+                });
+
+                this.toastWrongPhone.present()
+            }
+        }
     }
 
     onP1ContattiCancel() {
@@ -448,8 +539,38 @@ export class KidPage implements OnInit {
     }
 
     onP2ContattiSave() {
-        this.editP2Contatti = false;
-        this.webService.add(this.selectedSchool, this.thisKid);
+        // this.editP2Contatti = false;
+        // if (this.checkEmailAndPhones(this.thisKid.parent1)) {
+        //     this.webService.add(this.selectedSchool, this.thisKid);
+        // } else {
+        //     // Toast
+        // }
+        try {
+            this.checkEmailAndPhones(this.thisKid.parent2)
+            this.editP2Contatti = false;
+            this.webService.add(this.selectedSchool, this.thisKid);
+        } catch (e) {
+            if (e == this.BreakEmailException) {
+                this.toastWrongEmail = this.toastCtrl.create({
+                    message: 'Formato email non valido',
+                    duration: 1000,
+                    position: 'middle',
+                    dismissOnPageChange: true
+                });
+                this.toastWrongEmail.present()
+
+            } else if (e == this.BreakPhoneException) {
+                this.toastWrongPhone = this.toastCtrl.create({
+                    message: 'Formato telefono non valido',
+                    duration: 1000,
+                    position: 'middle',
+                    dismissOnPageChange: true
+                });
+
+                this.toastWrongPhone.present()
+            }
+        }
+
     }
 
     onP2ContattiCancel() {
@@ -502,10 +623,10 @@ export class KidPage implements OnInit {
     onDelegaInfoSave() {
         this.editDelegaInfo = false;
         if (this.isNewD)
-            if (this.selectedDelega !== undefined && this.selectedDelega.name.trim().length > 0 && this.selectedDelega.surname.trim().length >0 && this.selectedDelega.legame.trim().length >0) {
+            if (this.selectedDelega !== undefined && this.selectedDelega.name.trim().length > 0 && this.selectedDelega.surname.trim().length > 0 && this.selectedDelega.legame.trim().length > 0) {
                 if (this.selectedKid.deleghe.findIndex(x => this.selectedDelega.id.toLowerCase() === x.id.toLowerCase()) < 0)
                     this.thisKid.deleghe.push(this.selectedDelega)
-                else if(this.selectedDelega.id.trim().length > 0){
+                else if (this.selectedDelega.id.trim().length > 0) {
                     let alert = this.alertCtrl.create({
                         subTitle: 'Identificatore già in uso',
                         buttons: [

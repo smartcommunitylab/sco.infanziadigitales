@@ -61,7 +61,22 @@ export class GroupModal implements OnInit{
   }
 
   close() {
-    this.navCtrl.pop();
+            let alert = this.alertCtrl.create({
+            subTitle: 'Conferma uscita?',
+            buttons: [
+                {
+                    text: "Annulla"
+                },
+                {
+                    text: 'OK',
+                    handler: () => {
+                        this.navCtrl.pop();
+                    }
+                }
+            ]
+        })
+        alert.present();
+    
   }
 
   save() {

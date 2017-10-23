@@ -8,7 +8,7 @@
                 Dettagli di {{selectedKid.name}} {{selectedKid.surname}}
             </button>
             <button *ngIf="isNew" ion-button color='green1' float-start margin-top (click)='goBack()'><ion-icon name='arrow-round-back' margin-right></ion-icon> 
-                Nuovo bambino
+                Nuovo bambino/a
             </button>
         </ion-col>
         <ion-col col-1>
@@ -25,10 +25,10 @@
                     Informazioni
                 </ion-segment-button>
                 <ion-segment-button value="genitori">
-                    Genitori
+                    Responsabili
                 </ion-segment-button>
                 <ion-segment-button value="autorizza">
-                    Delegati al ritiro
+                    Delegati
                 </ion-segment-button>
             </ion-segment>
         </ion-col>
@@ -125,7 +125,7 @@
                             <ion-col col-sm-12>
                                 <ion-card>
                                     <ion-card-header>
-                                        Foto del bambino
+                                        Foto del bambino/a
                                         <button class='edit' ion-button color='magenta1' float-end *ngIf='!editFoto' (click)="onFotoEdit()" [disabled]='isNew'>Modifica</button>
                                         <button class='edit' ion-button color='magenta1' float-end *ngIf='editFoto' (click)="onFotoSave()">Salva</button>
                                         <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='editFoto' (click)="onFotoCancel()">Annulla</button>
@@ -133,10 +133,10 @@
                                     <ion-card-content margin-top>
                                         <ion-item style="height:120px">
                                             <ion-thumbnail item-start style="height: 100%; width: auto">
-
-                                                <img [src]="getImage(thisKid) " style="height: 100%; width: auto" *ngIf='!editFoto && !rerender' />
+                                                <img [src]="getImage(thisKid)" style="height: 100%; width: auto" *ngIf='!editFoto && !rerender && thisKid.id ' />
+                                                <img src="../../../../assets/images/placeholder.png" style="height: 100%; width: auto" *ngIf='!editFoto && !rerender && !thisKid.id ' />
                                                 <input id="uploadInputFile" accept="image/*" type="file" ng2FileSelect [uploader]="uploader" />
-
+                                                <button class='edit' ion-button color='magenta1'  margin-right ion-button *ngIf='editFoto'  (click)="onRemoveProfileKid()">Rimuovi Immagine</button>
                                             </ion-thumbnail>
                                             <input #inputFile type='file' style='display: none' (change)='handleChange($event)' accept="image/gif, image/png, image/jpeg, image/bmp, image/webp"
                                             />
@@ -330,7 +330,7 @@
                             <ion-col col-12>
                                 <ion-card>
                                     <ion-card-header>
-                                        Genitore 1
+                                        Responsabile 1
                                     </ion-card-header>
                                     <ion-card-content margin-top>
                                         <ion-card>
@@ -384,7 +384,7 @@
                                             </ion-card-header>
                                             <ion-card-content margin-top>
                                                 <ion-grid inset>
-                                                    <list-widget [items]="thisKid.parent1.phoneNumbers" [type]="tel" [editMode]="editP1Contatti" [label]="'Telefono'"></list-widget>
+                                                    <list-widget [items]="thisKid.parent1.phoneNumbers" [type]="'number'" [editMode]="editP1Contatti" [label]="'Telefono'"></list-widget>
                                                     <list-widget [items]="thisKid.parent1.emails" [editMode]="editP1Contatti" [label]="'Email'"></list-widget>
                                                 </ion-grid>
                                             </ion-card-content>
@@ -397,7 +397,7 @@
                             <ion-col col-12>
                                 <ion-card>
                                     <ion-card-header>
-                                        Genitore 2
+                                        Responsabile 2
                                     </ion-card-header>
                                     <ion-card-content margin-top>
                                         <ion-card>
@@ -452,7 +452,7 @@
                                             </ion-card-header>
                                             <ion-card-content margin-top>
                                                 <ion-grid inset>
-                                                    <list-widget [items]="thisKid.parent2.phoneNumbers" [type]="tel" [editMode]="editP2Contatti" [label]="'Telefono'"></list-widget>
+                                                    <list-widget [items]="thisKid.parent2.phoneNumbers" [type]="'number'" [editMode]="editP2Contatti" [label]="'Telefono'"></list-widget>
                                                     <list-widget [items]="thisKid.parent2.emails" [editMode]="editP2Contatti" [label]="'Email'"></list-widget>
                                                 </ion-grid>
                                             </ion-card-content>
@@ -474,7 +474,7 @@
                             <ion-col col-12>
                                 <ion-card>
                                     <ion-card-header>
-                                        Delegati al ritiro
+                                        Delegati 
                                     </ion-card-header>
                                     <ion-card-content>
                                         <ion-list inset>

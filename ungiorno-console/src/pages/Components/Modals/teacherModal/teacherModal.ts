@@ -59,7 +59,22 @@ export class TeacherModal implements OnInit {
   }
 
   close() {
-    this.navCtrl.pop();
+    let alert = this.alertCtrl.create({
+      subTitle: 'Conferma uscita?',
+      buttons: [
+        {
+          text: "Annulla"
+        },
+        {
+          text: 'OK',
+          handler: () => {
+            this.navCtrl.pop();
+          }
+        }
+      ]
+    })
+    alert.present();
+
   }
 
   save() {
@@ -91,7 +106,7 @@ export class TeacherModal implements OnInit {
     //popup di richiesta
     let alert = this.alertCtrl.create({
       title: 'Creazione/ripristino PIN',
-      subTitle: 'Premendo OK un nuovo PIN verrà spedito all’indirizzo email indicato, disabilitando il PIN precedente',
+      subTitle: 'Premendo OK un nuovo PIN verrà spedito all’indirizzo email indicato, disabilitando il PIN precedente.',
       buttons: [
         {
           text: "Annulla"

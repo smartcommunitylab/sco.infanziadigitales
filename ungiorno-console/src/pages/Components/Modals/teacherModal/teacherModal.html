@@ -81,6 +81,11 @@
                                     <ion-col col-10 text-left><button class='edit' ion-button color='magenta1' float-center [disabled]="!copiedTeacher.id || !selectedTeacher.email"
                                             (click)="generatePin()">Genera PIN</button></ion-col>
                                 </ion-row>
+                                <ion-row *ngIf="!copiedTeacher.id">
+                                    <ion-col>
+                                         <label style='color: grey'>Per abilitare la generazione del PIN, è necessario fornire un indirizzo di email valido nella sezione "Contatti", salvare e rientrare.</label>
+                                    </ion-col>
+                                </ion-row>
                             </ion-item>
                         </ion-card-content>
                     </ion-card>
@@ -99,7 +104,7 @@
                                     <ion-icon name="close" float-end (click)="onRemoveGroup(gr)"></ion-icon> -->
                             </ion-item>
                             <ion-item *ngIf="selectedTeacherGroups.length === 0" style='color: grey'>
-                                Nessun gruppo o sezione <br /> Creando una sezione o un gruppo e associandolo a <br /> questa/o
+                                Nessun gruppo o sezione <br /> Creando una sezione o un gruppo e associandolo a  questa/o
                                 insegnante lo vedrai apparire in questa sezione
                             </ion-item>
                         </ion-card-content>

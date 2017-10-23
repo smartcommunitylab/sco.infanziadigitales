@@ -56,28 +56,30 @@ export class HomePage implements OnInit {
       console.log('user cannot manage any schools');
     }
     this.schools = this.userService.getAuthorizedSchools();
-    this.selectedId = this.userService.getAuthorizedSchools()[0].id;
-    this.selectedAppId = this.userService.getAuthorizedSchools()[0].appId;
-    this.onSchoolChange(this.selectedAppId, this.selectedId);
-    
-  }
-
-  changeSchool(selectedId : String) {
-    let s : School[] = this.schools.filter(s => s.id === selectedId);
-    console.log(s.length);
-    if(s != undefined) {
-      console.log(JSON.stringify(s));
-      this.onSchoolChange(s[0].appId,s[0].id);
+    if (this.schools) {
+      this.selectedId = this.userService.getAuthorizedSchools()[0].id;
+      this.selectedAppId = this.userService.getAuthorizedSchools()[0].appId;
+      this.onSchoolChange(this.selectedAppId, this.selectedId);
     }
 
   }
-  onSchoolChange(selectedAppId : string, selectedId: string) {
+
+  changeSchool(selectedId: String) {
+    let s: School[] = this.schools.filter(s => s.id === selectedId);
+    console.log(s.length);
+    if (s != undefined) {
+      console.log(JSON.stringify(s));
+      this.onSchoolChange(s[0].appId, s[0].id);
+    }
+
+  }
+  onSchoolChange(selectedAppId: string, selectedId: string) {
     this.webService.getSchool(selectedAppId, selectedId).then(school => {
       this.selectedSchool = school;
       this.webService.getTeachers(this.selectedSchool).then(teachers => this.selectedSchool.teachers = teachers);
       this.webService.getKids(this.selectedSchool).then(kids => this.selectedSchool.kids = kids);
       this.webService.getGroups(this.selectedSchool).then(groups => this.selectedSchool.groups = groups);
-      }
+    }
     );
   }
 

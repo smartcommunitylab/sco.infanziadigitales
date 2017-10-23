@@ -241,27 +241,41 @@
                                             <ion-checkbox [(ngModel)]="thisKid.bus.enabled"> Attiva il servizio scuolabus</ion-checkbox>
                                         </ion-item>
                                         <div *ngIf='!editBus'>
-                                            <ion-item *ngIf="thisKid.bus && thisKid.bus.enabled" text-center>Il servizio scuolabus e` attivo</ion-item>
-                                            <ion-item *ngIf="!thisKid.bus || !thisKid.bus.enabled" text-center>Il servizio scuolabus non e` attivo</ion-item>
+                                            <ion-item *ngIf="thisKid.bus && thisKid.bus.enabled">Il servizio scuolabus e` attivo</ion-item>
+                                            <ion-item *ngIf="!thisKid.bus || !thisKid.bus.enabled">Il servizio scuolabus non e` attivo</ion-item>
                                         </div>
-                                        <ion-item no-padding *ngIf='thisKid.bus && thisKid.bus.busId  && thisKid.bus.enabled && !editBus'>Linea scuolabus: {{thisKid.bus.busId}} </ion-item>
-                                        <ion-grid *ngIf="thisKid.bus && thisKid.bus.enabled && editBus" no-padding no-margin>
+                                        <ion-grid *ngIf='thisKid.bus && thisKid.bus.busId  && thisKid.bus.enabled && !editBus'>
                                             <ion-row>
-                                                 <ion-col col-10>
+                                                <ion-col col-10>
                                                     <ion-row margin-bottom>
-                                                <ion-col col-4>
-                                                    Linea scuolabus:
+                                                        <ion-col col-4>
+                                                            Linea scuolabus:
+                                                        </ion-col>
+                                                        <ion-col col-8>
+                                                            {{thisKid.bus.busId}}
+                                                        </ion-col>
+                                                    </ion-row>
                                                 </ion-col>
-                                                <ion-col col-8>
-                                                    <ion-select [(ngModel)]="thisKid.bus.busId" *ngIf='editBus'>
-                                                        <ion-option *ngFor="let item of selectedSchool.buses" [value]="item.busId">{{item.busId}}</ion-option>
-                                                    </ion-select>
-                                                </ion-col>
-                                            </ion-row>
-                                                 </ion-col>
                                             </ion-row>
                                         </ion-grid>
-                                        <ion-grid *ngIf="editBus && thisKid.bus && thisKid.bus.enabled" no-padding no-margin>
+                                        <!--<ion-item no-padding *ngIf='thisKid.bus && thisKid.bus.busId  && thisKid.bus.enabled && !editBus'>Linea scuolabus: {{thisKid.bus.busId}} </ion-item>-->
+                                        <ion-grid *ngIf="thisKid.bus && thisKid.bus.enabled && editBus">
+                                            <ion-row>
+                                                <ion-col col-10>
+                                                    <ion-row margin-bottom>
+                                                        <ion-col col-4>
+                                                            Linea scuolabus:
+                                                        </ion-col>
+                                                        <ion-col col-8>
+                                                            <ion-select [(ngModel)]="thisKid.bus.busId" *ngIf='editBus'>
+                                                                <ion-option *ngFor="let item of selectedSchool.buses" [value]="item.busId">{{item.busId}}</ion-option>
+                                                            </ion-select>
+                                                        </ion-col>
+                                                    </ion-row>
+                                                </ion-col>
+                                            </ion-row>
+                                        </ion-grid>
+                                        <ion-grid *ngIf="editBus && thisKid.bus && thisKid.bus.enabled">
                                             <ion-row>
                                                 <ion-col col-10>
                                                     <ion-row margin-bottom>
@@ -277,13 +291,32 @@
                                                 </ion-col>
                                             </ion-row>
                                         </ion-grid>
-                                        <ion-list *ngIf="thisKid.bus && thisKid.bus.stops && thisKid.bus.enabled">
+                                        <ion-grid *ngIf="thisKid.bus && thisKid.bus.stops && thisKid.bus.enabled">
+                                            <ion-row>
+                                                <ion-col col-10>
+                                                    <ion-row margin-bottom>
+                                                        <ion-col col-4>
+                                                            Fermate:
+                                                        </ion-col>
+                                                        <ion-col col-8>
+                                                            <label padding-left *ngIf="(!thisKid.bus|| !thisKid.bus.stops || thisKid.bus.stops.length === 0) && thisKid.bus.enabled"
+                                                                class="empty-field ">Nessuna fermata inserita</label>
+                                                            <div *ngFor="let item of thisKid.bus.stops"><label padding>{{item.stopId}}</label>
+                                                                <ion-icon *ngIf="thisKid.bus.stops.length > 0 && editBus" name="close" paddding (click)="removeStop(item)"></ion-icon>
+                                                            </div>
+                                                        </ion-col>
+                                                    </ion-row>
+
+                                                </ion-col>
+                                            </ion-row>
+                                        </ion-grid>
+                                        <!--<ion-list *ngIf="thisKid.bus && thisKid.bus.stops && thisKid.bus.enabled">
                                             <ion-item no-padding>Fermate:<label padding-left *ngIf="(!thisKid.bus|| !thisKid.bus.stops || thisKid.bus.stops.length === 0) && thisKid.bus.enabled" class="empty-field ">Nessuna fermata inserita</label> </ion-item>
                                             <ion-item  no-padding *ngFor="let item of thisKid.bus.stops">
                                                 {{item.stopId}}
                                                 <ion-icon *ngIf="thisKid.bus.stops.length > 0 && editBus" name="close" float-end (click)="removeStop(item)"></ion-icon>
                                             </ion-item>
-                                        </ion-list>
+                                        </ion-list>-->
                                         <!--<ion-item *ngIf="(!thisKid.bus|| !thisKid.bus.stops || thisKid.bus.stops.length === 0) && thisKid.bus.enabled" class="empty-field ">Nessuna fermata inserita</ion-item>-->
                                     </ion-card-content>
                                 </ion-card>
@@ -315,8 +348,8 @@
                                                         </ion-col>
                                                         <ion-col col-10>
                                                             <p *ngIf='!thisKid.parent1.id && !editP1Info' class="empty-field">Dato non inserito</p>
-
-                                                            <ion-input [(ngModel)]="thisKid.parent1.id" [disabled]='!editP1Info' no-margin></ion-input>
+                                                            <p *ngIf='thisKid.parent1.id && !editP1Info'>{{thisKid.parent1.id}}</p>
+                                                            <ion-input [(ngModel)]="thisKid.parent1.id" *ngIf='editP1Info' no-margin></ion-input>
                                                         </ion-col>
                                                     </ion-row>
                                                     <ion-row margin-bottom>
@@ -325,7 +358,8 @@
                                                         </ion-col>
                                                         <ion-col col-10>
                                                             <p *ngIf='!thisKid.parent1.name && !editP1Info' class="empty-field">Dato non inserito</p>
-                                                            <ion-input [(ngModel)]="thisKid.parent1.name" [disabled]='!editP1Info' no-margin></ion-input>
+                                                            <p *ngIf='thisKid.parent1.name && !editP1Info'>{{thisKid.parent1.name}}</p>
+                                                            <ion-input [(ngModel)]="thisKid.parent1.name" *ngIf='editP1Info' no-margin></ion-input>
                                                         </ion-col>
                                                     </ion-row>
                                                     <ion-row margin-bottom>
@@ -334,7 +368,8 @@
                                                         </ion-col>
                                                         <ion-col col-10>
                                                             <p *ngIf='!thisKid.parent1.surname && !editP1Info' class="empty-field">Dato non inserito</p>
-                                                            <ion-input [(ngModel)]="thisKid.parent1.surname" [disabled]='!editP1Info' no-margin></ion-input>
+                                                            <p *ngIf='thisKid.parent1.surname && !editP1Info'>{{thisKid.parent1.surname}}</p>
+                                                            <ion-input [(ngModel)]="thisKid.parent1.surname" *ngIf='editP1Info' no-margin></ion-input>
                                                         </ion-col>
                                                     </ion-row>
                                                 </ion-grid>
@@ -349,7 +384,7 @@
                                             </ion-card-header>
                                             <ion-card-content margin-top>
                                                 <ion-grid inset>
-                                                    <list-widget [items]="thisKid.parent1.phoneNumbers" [editMode]="editP1Contatti" [label]="'Telefono'"></list-widget>
+                                                    <list-widget [items]="thisKid.parent1.phoneNumbers" [type]="tel" [editMode]="editP1Contatti" [label]="'Telefono'"></list-widget>
                                                     <list-widget [items]="thisKid.parent1.emails" [editMode]="editP1Contatti" [label]="'Email'"></list-widget>
                                                 </ion-grid>
                                             </ion-card-content>
@@ -380,8 +415,8 @@
                                                         </ion-col>
                                                         <ion-col col-10>
                                                             <p *ngIf='!thisKid.parent2.id && !editP2Info' class="empty-field">Dato non inserito</p>
-
-                                                            <ion-input [(ngModel)]="thisKid.parent2.id" [disabled]='!editP2Info' no-margin></ion-input>
+                                                            <p *ngIf='thisKid.parent2.id && !editP2Info'>{{thisKid.parent2.id}}</p>
+                                                            <ion-input [(ngModel)]="thisKid.parent2.id" *ngIf='editP2Info' no-margin></ion-input>
                                                         </ion-col>
                                                     </ion-row>
                                                     <ion-row margin-bottom>
@@ -390,8 +425,9 @@
                                                         </ion-col>
                                                         <ion-col col-10>
                                                             <p *ngIf='!thisKid.parent2.name && !editP2Info' class="empty-field">Dato non inserito</p>
+                                                            <p *ngIf='thisKid.parent2.name && !editP2Info'>{{thisKid.parent2.name}}</p>
 
-                                                            <ion-input [(ngModel)]="thisKid.parent2.name" [disabled]='!editP2Info' no-margin></ion-input>
+                                                            <ion-input [(ngModel)]="thisKid.parent2.name" *ngIf='editP2Info' no-margin></ion-input>
                                                         </ion-col>
                                                     </ion-row>
                                                     <ion-row margin-bottom>
@@ -400,8 +436,8 @@
                                                         </ion-col>
                                                         <ion-col col-10>
                                                             <p *ngIf='!thisKid.parent2.surname && !editP2Info' class="empty-field">Dato non inserito</p>
-
-                                                            <ion-input [(ngModel)]="thisKid.parent2.surname" [disabled]='!editP2Info' no-margin></ion-input>
+                                                            <p *ngIf='thisKid.parent2.surname && !editP2Info'>{{thisKid.parent2.surname}}</p>
+                                                            <ion-input [(ngModel)]="thisKid.parent2.surname" *ngIf='editP2Info' no-margin></ion-input>
                                                         </ion-col>
                                                     </ion-row>
                                                 </ion-grid>
@@ -416,7 +452,7 @@
                                             </ion-card-header>
                                             <ion-card-content margin-top>
                                                 <ion-grid inset>
-                                                    <list-widget [items]="thisKid.parent2.phoneNumbers" [editMode]="editP2Contatti" [label]="'Telefono'"></list-widget>
+                                                    <list-widget [items]="thisKid.parent2.phoneNumbers" [type]="tel" [editMode]="editP2Contatti" [label]="'Telefono'"></list-widget>
                                                     <list-widget [items]="thisKid.parent2.emails" [editMode]="editP2Contatti" [label]="'Email'"></list-widget>
                                                 </ion-grid>
                                             </ion-card-content>

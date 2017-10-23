@@ -23,7 +23,7 @@ public class TeacherManager {
     @Autowired
     private RepositoryService repoManager;
 
-    private static RandomString pinGenerator = new RandomString(6);
+    private static RandomString pinGenerator = new RandomString(4);
 
     @Value("${email.address.from}")
     private String defaultFromEmailAddress;
@@ -71,7 +71,7 @@ public class TeacherManager {
             params.put("teacher", teacher);
             try {
                 emailManager.sendSimpleMail(defaultFromEmailAddress, teacher.getUsername(),
-                        "credenziali di accesso applicazioni genitori UGAS", params,
+                        "UGAS: invio PIN per applicazione insegnanti", params,
                         "emailTemplates/pin-comunication.html");
             } catch (MessagingException e) {
                 logger.error("Exception sending pin comunication to teacher {}", teacherId, e);

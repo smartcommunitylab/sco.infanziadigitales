@@ -46,7 +46,7 @@
                                 <ion-row margin-bottom>
                                     <ion-col col-2>Telefono:</ion-col>
                                     <ion-col col-4>
-                                        <ion-input [(ngModel)]="newSchoolPhone" type="number" no-margin *ngIf="editContatti"></ion-input>
+                                        <ion-input [(ngModel)]="newSchoolPhone" type="tel" no-margin *ngIf="editContatti"></ion-input>
                                         <ion-label no-margin *ngIf="!editContatti">{{newSchoolPhone}}</ion-label>
                                         <p *ngIf='!newSchoolPhone && !editContatti' class="empty-field">Dato non inserito</p>
 

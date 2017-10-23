@@ -188,7 +188,7 @@ export class KidPage implements OnInit {
         }
         else {
             let alert = this.alertCtrl.create({
-                subTitle: 'Conferma uscita?',
+                subTitle: 'Eventuali modifiche verrano perse. Confermi?',
                 buttons: [
                     {
                         text: "Annulla"

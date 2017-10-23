@@ -8,7 +8,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { School } from '../../../../app/Classes/school';
 import { WebService } from '../../../../services/WebService';
 import { Component, OnInit } from '@angular/core';
-import { NavParams, NavController, AlertController, PopoverController, ViewController } from "ionic-angular";
+import { NavParams, NavController, AlertController, PopoverController, ViewController, ToastController } from "ionic-angular";
 
 
 @Component({
@@ -43,7 +43,12 @@ export class OrariModal implements OnInit {
     sovrapp: boolean;
     public datePickerConfig: Object = {
     }
-    constructor(public params: NavParams, public navCtrl: NavController, private webService: WebService, public alertCtrl: AlertController, public popoverCtrl: PopoverController) {
+    constructor(public params: NavParams,
+        public navCtrl: NavController,
+        private webService: WebService,
+        public alertCtrl: AlertController,
+        private toastCtrl: ToastController,
+        public popoverCtrl: PopoverController) {
         this.selectedSchool = this.params.get('school') as School;
         this.selectedOrario = this.params.get('orario') as Service;
         this.isNew = this.params.get('isNew') as boolean;
@@ -60,7 +65,7 @@ export class OrariModal implements OnInit {
 
     close() {
         let alert = this.alertCtrl.create({
-            subTitle: 'Conferma uscita?',
+            subTitle: 'Eventuali modifiche verrano perse. Confermi?',
             buttons: [
                 {
                     text: "Annulla"
@@ -81,23 +86,48 @@ export class OrariModal implements OnInit {
 
 
     save() {
-        this.copiedOrario.fasce.sort((item1, item2) => item1.start.localeCompare(item2.start));
-        Object.assign(this.selectedOrario, this.copiedOrario);
+        let alert = this.alertCtrl.create({
+            subTitle: 'Eventuali modifiche verrano confermate. Confermi?',
+            buttons: [
+                {
+                    text: "Annulla"
+                },
+                {
+                    text: 'OK',
+                    handler: () => {
+                        this.copiedOrario.fasce.sort((item1, item2) => item1.start.localeCompare(item2.start));
+                        Object.assign(this.selectedOrario, this.copiedOrario);
 
-        if (this.isNew) {
-            if (this.selectedSchool.servizi.findIndex(x => x.servizio.toLowerCase() == this.selectedOrario.servizio.toLowerCase()) < 0) {
-                this.selectedSchool.servizi.push(this.selectedOrario);
-                this.webService.update(this.selectedSchool);
-            }
-            else {
-                let alert = this.alertCtrl.create({
-                    subTitle: 'Elemento già presente (conflitto di nomi)',
-                    buttons: ['OK']
-                });
-                alert.present();
-            }
-        }
-        this.close();
+                        if (this.isNew) {
+                            if (this.selectedSchool.servizi.findIndex(x => x.servizio.toLowerCase() == this.selectedOrario.servizio.toLowerCase()) < 0) {
+                                this.selectedSchool.servizi.push(this.selectedOrario);
+                                this.webService.update(this.selectedSchool);
+                                this.navCtrl.pop();
+
+                            }
+                            else {
+                                let toastConflict = this.toastCtrl.create({
+                                    message: 'Elemenast già presente (conflitto di nomi)',
+                                    duration: 3000,
+                                    position: 'middle',
+                                    dismissOnPageChange: true
+
+                                });
+                                toastConflict.present()
+                                // let alertConflict = this.alertCtrl.create({
+                                //     subTitle: 'Elemenast già presente (conflitto di nomi)',
+                                //     buttons: ['OK']
+                                // });
+                                // alertConflict.present();
+                            }
+                        }
+                        this.webService.update(this.selectedSchool);
+                    }
+                }
+            ]
+        })
+        alert.present();
+
     }
 
     addFascia() {

@@ -60,7 +60,7 @@ export class TeacherModal implements OnInit {
 
   close() {
     let alert = this.alertCtrl.create({
-      subTitle: 'Conferma uscita?',
+      subTitle: 'Eventuali modifiche verrano perse. Confermi?',
       buttons: [
         {
           text: "Annulla"
@@ -78,24 +78,47 @@ export class TeacherModal implements OnInit {
   }
 
   save() {
-    Object.assign(this.selectedTeacher, this.copiedTeacher);
+    let alert = this.alertCtrl.create({
+      subTitle: 'Eventuali modifiche verrano confermate. Confermi?',
+      buttons: [
+        {
+          text: "Annulla"
+        },
+        {
+          text: 'OK',
+          handler: () => {
+            Object.assign(this.selectedTeacher, this.copiedTeacher);
 
-    if (this.isNew) {
-      if (this.selectedSchool.teachers.findIndex(x => x.id.toLowerCase() === this.selectedTeacher.id.toLowerCase()) < 0) {
-        this.webService.add(this.selectedSchool, this.copiedTeacher).then(() => this.selectedSchool.teachers.push(this.selectedTeacher));
-      }
-      else {
-        let alert = this.alertCtrl.create({
-          subTitle: 'Elemento già presente (conflitto di C.F)',
-          buttons: ['OK']
-        });
-        alert.present();
-      }
-    } else {
-      this.webService.add(this.selectedSchool, this.copiedTeacher);
-    }
+            if (this.isNew) {
+              if (this.selectedSchool.teachers.findIndex(x => x.id.toLowerCase() === this.selectedTeacher.id.toLowerCase()) < 0) {
+                this.webService.add(this.selectedSchool, this.copiedTeacher).then(() => this.selectedSchool.teachers.push(this.selectedTeacher));
+              }
+              else {
+                let toastConflict = this.toastCtrl.create({
+                  message: 'Elemenast già presente (conflitto di nomi)',
+                  duration: 3000,
+                  position: 'middle',
+                  dismissOnPageChange: true
 
-    this.close();
+                });
+                toastConflict.present()
+                // let alert = this.alertCtrl.create({
+                //   subTitle: 'Elemento già presente (conflitto di C.F)',
+                //   buttons: ['OK']
+                // });
+                // alert.present();
+              }
+            } else {
+              this.webService.add(this.selectedSchool, this.copiedTeacher);
+            }
+            this.navCtrl.pop();
+          }
+        }
+      ]
+    })
+    alert.present();
+
+
   }
 
   onRemoveGroup(group: Group) {

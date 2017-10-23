@@ -47,7 +47,7 @@ export class Orari implements OnInit {
     }
 
     showOrariModal(item: Service, isNew: boolean) {
-        let modal = this.modalCtrl.create(OrariModal, { 'orario': item, 'school': this.selectedSchool, 'isNew': isNew, 'giaNorm': [item.normale] });
+        let modal = this.modalCtrl.create(OrariModal, { 'orario': item, 'school': this.selectedSchool, 'isNew': isNew, 'giaNorm': [item.normale] }, {enableBackdropDismiss: false, showBackdrop: false});
         modal.present();
     }
 

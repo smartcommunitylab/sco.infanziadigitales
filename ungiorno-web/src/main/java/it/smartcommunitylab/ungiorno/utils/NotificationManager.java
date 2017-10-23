@@ -250,6 +250,9 @@ public class NotificationManager {
                             }
                             logger.error("Exception register app in NotificationManager",
                                     e.getMessage());
+                        } catch (Exception e) {
+                            logger.error("Exception register app in NotificationManager",
+                                    e.getMessage());
                         }
                     } while (!ok);
                 }

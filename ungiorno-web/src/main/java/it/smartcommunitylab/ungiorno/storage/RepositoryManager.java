@@ -316,7 +316,9 @@ public class RepositoryManager implements RepositoryService {
     public void updateParents(String appId, String schoolId, List<Parent> parents) {
         for (Parent parent : parents) {
             Query q = appQuery(appId);
-            q.addCriteria(new Criteria("username").is(parent.getUsername()));
+            q.addCriteria(new Criteria("username").is(parent.getUsername()).and("personId")
+                    .is(parent.getPersonId()).and("firstName").is(parent.getFirstName())
+                    .and("lastName").is(parent.getLastName()));
             template.remove(q, Parent.class);
         }
         template.insertAll(parents);

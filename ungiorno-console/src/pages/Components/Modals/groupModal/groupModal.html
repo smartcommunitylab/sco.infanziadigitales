@@ -47,13 +47,19 @@
                         Insegnanti
                     </ion-card-header>
                     <ion-card-content>
+                        <ion-grid>
+                            <ion-row>
+                                <ion-col text-center>
+                                    <button ion-button color="green1" (click)='addTeacher()' margin-top>Aggiungi insegnanti</button>
+                                </ion-col>
+                            </ion-row>
+                        </ion-grid>
                         <ion-list inset>
                             <ion-item *ngIf="selectedGroupTeachers.length === 0 " text-center class="empty-field ">Nessun insegnante presente</ion-item>
                             <ion-item *ngFor="let tea of selectedGroupTeachers">
                                 {{tea.name}} {{tea.surname}}
                                 <ion-icon name="close" float-end (click)="removeTeacher(tea)"></ion-icon>
                             </ion-item>
-                            <button ion-button color="green1" (click)='addTeacher()' margin-top>Aggiungi insegnanti</button>
                         </ion-list>
                     </ion-card-content>
                 </ion-card>
@@ -66,16 +72,22 @@
                         Alunni
                     </ion-card-header>
                     <ion-card-content>
+                        <ion-grid>
+                            <ion-row>
+                                <ion-col text-center>
+                                    <button ion-button color="green1" (click)='addKid()' margin-top>Aggiungi bambini</button>
+                                </ion-col>
+                            </ion-row>
+                        </ion-grid>
                         <ion-list inset>
                             <ion-item *ngIf="selectedGroupKids.length === 0 " text-center class="empty-field ">Nessun alunno presente</ion-item>
                             <ion-item *ngFor="let kid of selectedGroupKids">
                                 <ion-thumbnail item-start>
-                                    <img src={{kid.image}}>
+                                    <img [src]="getImage(kid)">
                                 </ion-thumbnail>
                                 {{kid.name}} {{kid.surname}}
                                 <ion-icon name="close" float-end (click)="removeKid(kid.id)"></ion-icon>
                             </ion-item>
-                            <button ion-button color="green1" (click)='addKid()' margin-top>Aggiungi bambini</button>
                         </ion-list>
                     </ion-card-content>
                 </ion-card>

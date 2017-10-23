@@ -100,3 +100,21 @@ button#undefined.item-cover.item-cover-md.item-cover-default.item-cover-default-
 .empty-field {
     color: gray!important;
 }
+.popover-content {
+    min-width: 400px !important;
+}
+
+ion-picker-cmp   {
+    .picker-toolbar {
+        position: absolute;
+        bottom: 0px;
+        
+    }
+    .picker-wrapper {
+        bottom: calc(50% - 130px);
+    }
+    .picker-toolbar-cancel {
+        position: absolute;
+        left: 0px;
+    }
+}

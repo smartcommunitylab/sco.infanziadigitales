@@ -248,7 +248,11 @@ public class NotificationManager {
                                 Thread.sleep(10000);
                             } catch (InterruptedException e1) {
                             }
-                            logger.error("Exception register app in NotificationManager", e);
+                            logger.error("Exception register app in NotificationManager",
+                                    e.getMessage());
+                        } catch (Exception e) {
+                            logger.error("Exception register app in NotificationManager",
+                                    e.getMessage());
                         }
                     } while (!ok);
                 }

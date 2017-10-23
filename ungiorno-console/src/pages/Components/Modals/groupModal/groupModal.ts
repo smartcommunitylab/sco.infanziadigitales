@@ -6,6 +6,7 @@ import { WebService } from '../../../../services/WebService';
 import { Group } from './../../../../app/Classes/group';
 import { Component, OnInit } from '@angular/core';
 import { NavParams, NavController, AlertController } from "ionic-angular";
+import { ConfigService } from '../../../../services/config.service';
 
 @Component({
   selector: 'group-modal',
@@ -38,8 +39,10 @@ export class GroupModal implements OnInit{
 
   addTeacherToGroupMap = {}
   removeTeacherToGroupMap = {}
+  apiUrl: string;
 
-  constructor(public params: NavParams, public navCtrl:NavController, private webService : WebService, public alertCtrl : AlertController) {
+  constructor(public params: NavParams, public navCtrl:NavController, private webService : WebService, public alertCtrl : AlertController,        private configService: ConfigService,
+) {
     this.selectedSchool = this.params.get('school') as School;
     this.selectedGroup = this.params.get('group') as Group;
     this.isNew = this.params.get('isNew') as boolean;
@@ -49,6 +52,8 @@ export class GroupModal implements OnInit{
     this.selectedGroup.kids.forEach(x => this.copiedGroup.kids.push(x))
     this.copiedGroup.teachers = new Array();
     this.selectedGroup.teachers.forEach(x => this.copiedGroup.teachers.push(x))
+    this.apiUrl = this.configService.getConfig('apiUrl');
+
   }
 
   ngOnInit() {
@@ -216,8 +221,8 @@ export class GroupModal implements OnInit{
     let alert = this.alertCtrl.create();
     alert.setTitle('Aggiungi bambini');
     
-    this.selectedSchool.kids.forEach(element => {
-      if(this.copiedGroup.section && element.section) return
+   
+    this.selectedSchool.kids.forEach(element => {   
       alert.addInput({
         type: 'checkbox',
         label: element.name + ' ' + element.surname,
@@ -238,30 +243,62 @@ export class GroupModal implements OnInit{
           } 
           this.addKidToGroupMap[this.copiedGroup.name].push(element)
 
-          if(this.copiedGroup.section) this.selectedSchool.kids.find(c=> c.id.toLowerCase() === element.toLowerCase()).section = true;
+          if(this.copiedGroup.section) this.selectedSchool.kids.find(c=> c.id.toLowerCase() === element.toLowerCase()).section = this.copiedGroup.name;
           this.updateArrays();
         });
       }
     })
     alert.present();
   }
-
+    getImage(child) {
+        var image = this.apiUrl + "/picture/" + this.selectedSchool.appId + "/" + this.selectedSchool.id + "/" + child.id + "/" + sessionStorage.getItem('access_token');
+        return image;
+    }
   removeKid(id : string) {
+            let alert = this.alertCtrl.create({
+            subTitle: 'Conferma eliminazione',
+            buttons: [
+                {
+                    text: "Annulla"
+                },
+                {
+                    text: 'OK',
+                    handler: () => {
     this.copiedGroup.kids.splice(this.copiedGroup.kids.findIndex(x => id === x), 1);
-    this.selectedSchool.kids.find(c=> c.id.toLowerCase() === id.toLowerCase()).section = false;
+    this.selectedSchool.kids.find(c=> c.id.toLowerCase() === id.toLowerCase()).section = "";
     if(this.removeKidToGroupMap[this.copiedGroup.name] == undefined ) {
       this.removeKidToGroupMap[this.copiedGroup.name] = []
     } 
     this.removeKidToGroupMap[this.copiedGroup.name].push(id)
     this.updateArrays();
+                    }
+                }
+            ]
+        })
+        alert.present();
+
   }
 
   removeTeacher(teacher: Teacher) {
+      let alert = this.alertCtrl.create({
+            subTitle: 'Conferma eliminazione',
+            buttons: [
+                {
+                    text: "Annulla"
+                },
+                {
+                    text: 'OK',
+                    handler: () => {
     this.copiedGroup.teachers.splice(this.copiedGroup.teachers.findIndex(x => teacher.id == x), 1);
     if(this.removeTeacherToGroupMap[this.copiedGroup.name] == undefined ) {
       this.removeTeacherToGroupMap[this.copiedGroup.name] = []
     } 
     this.removeTeacherToGroupMap[this.copiedGroup.name].push(teacher.id)
     this.updateArrays();
-  }
+   }
+                }
+            ]
+        })
+        alert.present();
+}
 }

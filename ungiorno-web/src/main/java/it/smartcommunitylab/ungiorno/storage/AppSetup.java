@@ -2,12 +2,14 @@ package it.smartcommunitylab.ungiorno.storage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
 import it.smartcommunitylab.ungiorno.model.AppInfo;
+import it.smartcommunitylab.ungiorno.model.Contact;
 import it.smartcommunitylab.ungiorno.model.School;
 import it.smartcommunitylab.ungiorno.model.SchoolProfile;
 import it.smartcommunitylab.ungiorno.services.RepositoryService;
@@ -58,8 +61,15 @@ public class AppSetup {
                 schoolProfile.setName(school.getName());
                 schoolProfile.setAddress(school.getAddress());
                 schoolProfile.setAccessEmail(school.getAccessEmail());
+                if (CollectionUtils.isNotEmpty(school.getAccounts())) {
+                    Contact schoolContact = new Contact();
+                    schoolContact
+                            .setEmail(new ArrayList<>(Arrays.asList(school.getAccounts().get(0))));
+                    schoolProfile.setContacts(schoolContact);
+                }
                 if (storage.getSchoolProfile(cred.getAppId(), school.getSchoolId()) == null) {
-                    logger.info("Creating schoolProfile, appId: %s, schoolId: %s");
+                    logger.info("Creating schoolProfile, appId: {}, schoolId: {}", cred.getAppId(),
+                            school.getSchoolId());
                     storage.storeSchoolProfile(schoolProfile);
                 }
             }

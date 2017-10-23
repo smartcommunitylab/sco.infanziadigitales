@@ -1,4 +1,3 @@
-import { BusModal } from './../Components/Modals/busModal/busModal';
 import { Bus } from './../../app/Classes/bus';
 import { Group } from './../../app/Classes/group';
 import { GroupModal } from './../Components/Modals/groupModal/groupModal';
@@ -47,6 +46,7 @@ export class HomePage implements OnInit {
 
   selectedSchool: School;
   selectedId: string;
+  selectedAppId: string;
 
   constructor(public navCtrl: NavController, private webService: WebService, public alertCtrl: AlertController, public modalCtrl: ModalController, public loginService: LoginService, private userService: UserService) { }
 
@@ -56,17 +56,30 @@ export class HomePage implements OnInit {
       console.log('user cannot manage any schools');
     }
     this.schools = this.userService.getAuthorizedSchools();
-    this.selectedId = this.userService.getAuthorizedSchools()[0].id;
-    this.onSchoolChange(this.selectedId);
+    if (this.schools) {
+      this.selectedId = this.userService.getAuthorizedSchools()[0].id;
+      this.selectedAppId = this.userService.getAuthorizedSchools()[0].appId;
+      this.onSchoolChange(this.selectedAppId, this.selectedId);
+    }
+
   }
 
-  onSchoolChange(selectedId: string) {
-    this.webService.getSchool(selectedId).then(school => {
+  changeSchool(selectedId: String) {
+    let s: School[] = this.schools.filter(s => s.id === selectedId);
+    console.log(s.length);
+    if (s != undefined) {
+      console.log(JSON.stringify(s));
+      this.onSchoolChange(s[0].appId, s[0].id);
+    }
+
+  }
+  onSchoolChange(selectedAppId: string, selectedId: string) {
+    this.webService.getSchool(selectedAppId, selectedId).then(school => {
       this.selectedSchool = school;
-      this.webService.getTeachers(selectedId).then(teachers => this.selectedSchool.teachers = teachers);
-      this.webService.getKids(selectedId).then(kids => this.selectedSchool.kids = kids);
-      this.webService.getGroups(selectedId).then(groups => this.selectedSchool.groups = groups);
-      }
+      this.webService.getTeachers(this.selectedSchool).then(teachers => this.selectedSchool.teachers = teachers);
+      this.webService.getKids(this.selectedSchool).then(kids => this.selectedSchool.kids = kids);
+      this.webService.getGroups(this.selectedSchool).then(groups => this.selectedSchool.groups = groups);
+    }
     );
   }
 

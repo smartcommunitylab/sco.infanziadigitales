@@ -8,7 +8,7 @@
             <button ion-button (click)="close()">Annulla</button>
         </ion-buttons>
         <ion-buttons end>
-            <button ion-button (click)="save()" [disabled]='!(copiedTeacher.name && copiedTeacher.surname && copiedTeacher.id && copiedTeacher.pin)'>Salva</button>
+            <button ion-button (click)="save()" [disabled]='!(copiedTeacher.name && copiedTeacher.surname && copiedTeacher.id )'>Salva</button>
         </ion-buttons>
 
     </ion-navbar>
@@ -31,8 +31,6 @@
                                     <ion-col col-2>ID (C.F.)*</ion-col>
                                     <ion-col col-10><input class="text-generic" name="name" type="text" [(ngModel)]="copiedTeacher.id" [disabled]='!isNew'></ion-col>
                                 </ion-row>
-                                <!--<ion-label>ID (C.F.)*</ion-label>
-                                <ion-input name="name" type="text" [(ngModel)]="copiedTeacher.id" [disabled]='!isNew'></ion-input>-->
                             </ion-item>
                             <ion-item>
                                 <ion-row>
@@ -40,8 +38,6 @@
                                     <ion-col col-10><input class="text-generic" name="name" type="text" [(ngModel)]="copiedTeacher.name"
                                             [disabled]='!isNew'></ion-col>
                                 </ion-row>
-                                <!--<ion-label>Nome*</ion-label>
-                                <ion-input name="name" type="text" [(ngModel)]="copiedTeacher.name"></ion-input>-->
                             </ion-item>
                             <ion-item>
                                 <ion-row>
@@ -49,8 +45,6 @@
                                     <ion-col col-10><input class="text-generic" name="name" type="text" [(ngModel)]="copiedTeacher.surname"
                                             [disabled]='!isNew'></ion-col>
                                 </ion-row>
-                                <!--<ion-label>Cognome*</ion-label>
-                                <ion-input name="name" type="text" [(ngModel)]="copiedTeacher.surname"></ion-input>-->
                             </ion-item>
                         </ion-card-content>
                     </ion-card>
@@ -63,23 +57,11 @@
                             Contatti
                         </ion-card-header>
                         <ion-card-content>
-                            <list-widget [items]="copiedTeacher.phoneNumbers" [editMode]="true" [label]="'Telefono'"></list-widget>
-                            <!-- <ion-item class='input-calza'>
-                                <ion-label>Telefono</ion-label>
-                                <ion-input name="tel" type="text" [(ngModel)]="copiedTeacher.telephone"></ion-input>
-                            </ion-item>
-                            <ion-item class='input-calza'>
-                                <ion-label>Cellulare</ion-label>
-                                <ion-input name="tel" type="text" [(ngModel)]="copiedTeacher.cellphone"></ion-input>
-                            </ion-item> -->
                             <ion-item>
                                 <ion-row>
                                     <ion-col col-2>E-Mail</ion-col>
                                     <ion-col col-10><input class="text-generic" name="name" type="text" [(ngModel)]="copiedTeacher.email"></ion-col>
                                 </ion-row>
-
-                                <!--<ion-label>E-Mail</ion-label>
-                                <ion-input name="email" type="text" [(ngModel)]="copiedTeacher.email"></ion-input>-->
                             </ion-item>
                         </ion-card-content>
                     </ion-card>
@@ -95,11 +77,15 @@
 
                             <ion-item>
                                 <ion-row>
-                                    <ion-col col-2>PIN*</ion-col>
-                                    <ion-col col-10><input class="text-generic" name="name" [(ngModel)]="copiedTeacher.pin"></ion-col>
+                                    <ion-col col-2>PIN</ion-col>
+                                    <ion-col col-10 text-left><button class='edit' ion-button color='magenta1' float-center [disabled]="!copiedTeacher.id || !selectedTeacher.email"
+                                            (click)="generatePin()">Genera PIN</button></ion-col>
                                 </ion-row>
-                                <!--<ion-label>PIN*</ion-label>
-                                <ion-input name="text" type="text" [(ngModel)]="copiedTeacher.pin"></ion-input>-->
+                                <ion-row *ngIf="!copiedTeacher.id">
+                                    <ion-col>
+                                         <label style='color: grey'>Per abilitare la generazione del PIN, è necessario fornire un indirizzo di email valido nella sezione "Contatti", salvare e rientrare.</label>
+                                    </ion-col>
+                                </ion-row>
                             </ion-item>
                         </ion-card-content>
                     </ion-card>
@@ -118,7 +104,7 @@
                                     <ion-icon name="close" float-end (click)="onRemoveGroup(gr)"></ion-icon> -->
                             </ion-item>
                             <ion-item *ngIf="selectedTeacherGroups.length === 0" style='color: grey'>
-                                Nessun gruppo o sezione <br /> Creando una sezione o un gruppo e associandolo a <br /> questa/o
+                                Nessun gruppo o sezione <br /> Creando una sezione o un gruppo e associandolo a  questa/o
                                 insegnante lo vedrai apparire in questa sezione
                             </ion-item>
                         </ion-card-content>

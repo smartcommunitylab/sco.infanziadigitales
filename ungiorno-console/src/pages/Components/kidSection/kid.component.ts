@@ -1,4 +1,4 @@
-import { Bus } from './../../../app/Classes/bus';
+import { BusService } from './../../../app/Classes/busService';
 import { ActivatedRoute } from '@angular/router';
 import { ParamMap } from '@angular/router';
 import { Kid } from './../../../app/Classes/kid';
@@ -44,7 +44,7 @@ export class Bambini implements OnInit {
   }
 
   onAddKid() {
-    var k = new Kid('', '', '', '', null, '', false, new Parent('', '', ''), new Parent('', '', ''), new Bus('', '', []), [], [], [], false, []);
+    var k = new Kid('', '', '', '', null, '', '', new Parent('', '', ''), new Parent('', '', ''), new BusService(), [], [], [], false, []);
     this.onEditKid(k);
   }
 
@@ -74,7 +74,7 @@ export class Bambini implements OnInit {
           handler: () => {
            
             this.selectedSchool.kids.splice(this.selectedSchool.kids.findIndex(tmp => tmp.id === item.id), 1);
-            this.webService.remove(this.selectedSchool.id, item);
+            this.webService.remove(this.selectedSchool, item);
           }
         }
       ]
@@ -123,7 +123,7 @@ export class Bambini implements OnInit {
     this.onOrdineChange(this.ordine);
   }
   getImage (child) {
-    var image =this.apiUrl + "/consoleweb/" +this.selectedSchool.appId  + "/" + this.selectedSchool.id + "/kid/" + child.id + "/picture";
+    var image =this.apiUrl + "/picture/" +this.selectedSchool.appId  + "/" + this.selectedSchool.id + "/"+child.id + "/"+sessionStorage.getItem('access_token');
     return image;
   }
 

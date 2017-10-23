@@ -4,30 +4,35 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import eu.trentorise.smartcampus.aac.AACException;
+import eu.trentorise.smartcampus.aac.AACService;
 import it.smartcommunitylab.ungiorno.beans.GroupDTO;
 import it.smartcommunitylab.ungiorno.config.exception.ProfileNotFoundException;
-import it.smartcommunitylab.ungiorno.model.AppInfo;
 import it.smartcommunitylab.ungiorno.model.ConsoleWebUser;
 import it.smartcommunitylab.ungiorno.model.KidProfile;
 import it.smartcommunitylab.ungiorno.model.Response;
@@ -55,6 +60,18 @@ public class ConsoleWebController {
             LoggerFactory.getLogger(ConsoleWebController.class);
 
     @Autowired
+    @Value("${ext.aacURL}")
+    private String oauthServerUrl;
+
+    @Autowired
+    @Value("${ext.clientId}")
+    private String clientId;
+
+    @Autowired
+    @Value("${ext.clientSecret}")
+    private String clientSecret;
+
+    @Autowired
     private AppSetup appSetup;
 
     @Autowired
@@ -69,12 +86,11 @@ public class ConsoleWebController {
     @Autowired
     private TeacherManager teacherManager;
 
-    @RequestMapping(method = RequestMethod.GET, value = "/consoleweb/{appId}/me")
-    public Response<List<School>> getMyData(@PathVariable String appId)
-            throws ProfileNotFoundException {
+    private AACService aacService = null;
 
-        AppInfo appInfo = appSetup.findAppById(appId);
-        return new Response<List<School>>(appInfo.getSchools());
+    @PostConstruct
+    public void init() {
+        aacService = new AACService(oauthServerUrl, clientId, clientSecret);
     }
 
 
@@ -142,6 +158,7 @@ public class ConsoleWebController {
         return new Response<>(profiles);
     }
 
+    // Annotation @CrossOrigin should never be necessary. TEST IT
     @CrossOrigin
     @RequestMapping(method = RequestMethod.POST, value = "/consoleweb/{appId}/{schoolId}/kid")
     public @ResponseBody Response<KidProfile> saveKidProfile(@PathVariable String appId,
@@ -160,6 +177,7 @@ public class ConsoleWebController {
 
         storage.updateChildren(appId, schoolId, kidProfiles);
         kidManager.updateParents(kid);
+        kidManager.updateKidBusData(kid);
         return new Response<>(kid);
     }
 
@@ -288,7 +306,7 @@ public class ConsoleWebController {
             value = "/consoleweb/{appId}/{schoolId}/kid/{kidId}/picture")
     public Response<Void> updloadKidPicture(@PathVariable String appId,
             @PathVariable String schoolId, @PathVariable String kidId,
-            @RequestParam("image") MultipartFile picture, HttpServletResponse response) {
+            @RequestParam("file") MultipartFile picture, HttpServletResponse response) {
 
         if (picture == null) {
             logger.error("No multipart file on field 'image'");
@@ -311,13 +329,22 @@ public class ConsoleWebController {
         return new Response<>();
     }
 
-    @RequestMapping(method = RequestMethod.GET,
+    @RequestMapping(method = RequestMethod.DELETE,
             value = "/consoleweb/{appId}/{schoolId}/kid/{kidId}/picture")
-    public @ResponseBody HttpEntity<byte[]> downloadKidPicture(@PathVariable String appId,
-            @PathVariable String schoolId, @PathVariable String kidId) throws IOException {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.IMAGE_PNG);
-        headers.setContentLength(0);
+    public @ResponseBody Response<KidProfile> resetKidPicture(@PathVariable String appId,
+            @PathVariable String schoolId, @PathVariable String kidId) {
+        KidProfile kid = kidManager.deleteKidPicture(appId, schoolId, kidId);
+        return new Response<>(kid);
+    }
+
+    @RequestMapping(method = RequestMethod.GET,
+            value = "/picture/{appId}/{schoolId}/{kidId}/{token}")
+    public @ResponseBody void downloadKidPicture(@PathVariable String appId,
+            @PathVariable String schoolId, @PathVariable String kidId, @PathVariable String token,
+            HttpServletResponse response) throws Exception {
+        if (!aacService.isTokenApplicable(token, "profile.basicprofile.me")) {
+            throw new AACException("token not valid");
+        }
 
         String path = kidManager.getKidPicturePath(appId, schoolId, kidId);
         FileInputStream in = null;
@@ -327,19 +354,31 @@ public class ConsoleWebController {
             path = kidManager.getDefaultKidPicturePath();
             in = new FileInputStream(new File(path));
         }
-        byte[] image = IOUtils.toByteArray(in);
-        headers.setContentLength(image.length);
         String extension = path.substring(path.lastIndexOf("."));
         if (extension.toLowerCase().equals(".png")) {
-            headers.setContentType(MediaType.IMAGE_PNG);
+            response.setContentType(MediaType.IMAGE_PNG.toString());
         } else if (extension.toLowerCase().equals(".gif")) {
-            headers.setContentType(MediaType.IMAGE_GIF);
+            response.setContentType(MediaType.IMAGE_GIF.toString());
         } else if (extension.toLowerCase().equals(".jpg")) {
-            headers.setContentType(MediaType.IMAGE_JPEG);
+            response.setContentType(MediaType.IMAGE_JPEG.toString());
         } else if (extension.toLowerCase().equals(".jpeg")) {
-            headers.setContentType(MediaType.IMAGE_JPEG);
+            response.setContentType(MediaType.IMAGE_JPEG.toString());
         }
-        return new HttpEntity<byte[]>(image, headers);
+        try {
+            OutputStream o = response.getOutputStream();
+            byte[] buffer = new byte[1024];
+            int c = 0;
+            int length = 0;
+            while ((c = in.read(buffer)) != -1) {
+                o.write(buffer, 0, c);
+                length += c;
+            }
+            response.setContentLength(length);
+        } catch (IOException e) {
+            logger.error("Exception downloading picture for kid {}", kidId);
+        } finally {
+            in.close();
+        }
     }
 
 
@@ -350,6 +389,13 @@ public class ConsoleWebController {
 
         Teacher teacher = teacherManager.generatePin(appId, schoolId, teacherId);
         return new Response<>(teacher);
+    }
+
+    @ExceptionHandler(AACException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseBody
+    public String handleError(HttpServletRequest request, Exception exception) {
+        return "{\"error\":\"" + exception.getMessage() + "\"}";
     }
 
 

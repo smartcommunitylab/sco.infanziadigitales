@@ -1,17 +1,24 @@
 package it.smartcommunitylab.ungiorno.services.impl;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import it.smartcommunitylab.ungiorno.model.AuthPerson;
+import it.smartcommunitylab.ungiorno.model.BusService;
+import it.smartcommunitylab.ungiorno.model.BusService.Stop;
+import it.smartcommunitylab.ungiorno.model.KidBusData;
 import it.smartcommunitylab.ungiorno.model.KidProfile;
 import it.smartcommunitylab.ungiorno.model.Parent;
 import it.smartcommunitylab.ungiorno.model.SectionDef;
@@ -21,6 +28,8 @@ import it.smartcommunitylab.ungiorno.utils.Utils;
 
 @Service
 public class KidManager {
+
+    private static final Logger logger = LoggerFactory.getLogger(KidManager.class);
 
     @Autowired
     @Value("${image.download.dir}")
@@ -40,6 +49,38 @@ public class KidManager {
 
     public KidProfile updateKid(KidProfile kid) {
         return repoManager.updateKid(kid);
+    }
+
+    public List<KidBusData> updateKidBusData(KidProfile kid) {
+        List<KidBusData> kidBusData = new ArrayList<>();
+        if (kid != null && kid.getServices() != null) {
+            kidBusData.addAll(convert(kid.getAppId(), kid.getSchoolId(), kid.getKidId(),
+                    kid.getServices().getBus()));
+            repoManager.updateKidBusData(kid.getAppId(), kid.getSchoolId(), kidBusData);
+        }
+
+        return kidBusData;
+    }
+
+    private List<KidBusData> convert(String appId, String schoolId, String kidId,
+            BusService busService) {
+        List<KidBusData> kidBusData = new ArrayList<>();
+        if (busService != null) {
+            List<Stop> stops = busService.getStops();
+            if (stops != null) {
+                for (Stop stop : stops) {
+                    KidBusData kbd = new KidBusData();
+                    kbd.setBusId(busService.getBusId());
+                    kbd.setStopId(stop.getStopId());
+                    kbd.setAppId(appId);
+                    kbd.setSchoolId(schoolId);
+                    kbd.setKidId(kidId);
+                    kidBusData.add(kbd);
+                }
+            }
+        }
+
+        return kidBusData;
     }
 
     public KidProfile getKidProfile(String appId, String schoolId, String kidId) {
@@ -118,6 +159,24 @@ public class KidManager {
         return kid;
     }
 
+    public KidProfile deleteKidPicture(String appId, String schoolId, String kidId) {
+        KidProfile kid = getKidProfile(appId, schoolId, kidId);
+        if (kid != null) {
+            String pictureFileName = kid.getImage();
+            if (pictureFileName != null) {
+                File pictureFile = new File(imageDownloadDir + "/" + pictureFileName);
+                boolean deleted = pictureFile.delete();
+                if (deleted) {
+                    logger.info("Removed picture for kid {}", kidId);
+                    kid.setImage(null);
+                    updateKid(kid);
+                }
+            }
+        }
+        return kid;
+
+    }
+
     public String saveKidPicture(String kidId, MultipartFile pictureFile) throws IOException {
 
         InputStream is = pictureFile.getInputStream();
@@ -132,6 +191,16 @@ public class KidManager {
         return name;
     }
 
+
+    /**
+     * Retrieve parents from {@link AuthPerson} and convert it in {@link Person}
+     * 
+     * NOTE: use first email setted as username for the Parent
+     * 
+     * @param appId
+     * @param authorizedPersons
+     * @return
+     */
     private List<Parent> retrieveParents(String appId, List<AuthPerson> authorizedPersons) {
         List<Parent> parents = null;
         if (authorizedPersons != null) {
@@ -140,6 +209,9 @@ public class KidManager {
                 if (authorizedPerson.isParent()) {
                     Parent parent = Utils.toObject(authorizedPerson, Parent.class);
                     parent.setAppId(appId);
+                    if (CollectionUtils.isNotEmpty(parent.getEmail())) {
+                        parent.setUsername(parent.getEmail().get(0));
+                    }
                     parents.add(parent);
                 }
             }

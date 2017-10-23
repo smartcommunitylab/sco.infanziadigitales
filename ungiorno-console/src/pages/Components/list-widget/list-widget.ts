@@ -56,7 +56,7 @@ import { Component, OnInit, Input } from '@angular/core';
     @Input() items: string[];
     @Input() editMode: boolean = false;   
     @Input() label: string;
-
+    @Input() type?: string;
    
     newItem : string = "";
     constructor() {}

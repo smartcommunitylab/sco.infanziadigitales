@@ -5,7 +5,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { School } from './../../../../app/Classes/school';
 import { WebService } from '../../../../services/WebService';
 import { Component, OnInit } from '@angular/core';
-import { NavParams, NavController, AlertController } from "ionic-angular";
+import { NavParams, NavController, AlertController, ToastController } from "ionic-angular";
 
 @Component({
   selector: 'teacher-modal',
@@ -20,17 +20,21 @@ import { NavParams, NavController, AlertController } from "ionic-angular";
   ]
 })
 
-export class TeacherModal implements OnInit{ 
-  selectedSchool : School;
+export class TeacherModal implements OnInit {
+  selectedSchool: School;
 
   selectedTeacher: Teacher;
-  copiedTeacher : Teacher = new Teacher('', '' ,'', '');
-  
-  selectedTeacherGroups : Group[];
+  copiedTeacher: Teacher = new Teacher('', '', '', '');
 
-  isNew : boolean;
+  selectedTeacherGroups: Group[];
 
-  constructor(public params: NavParams, public navCtrl:NavController, private webService : WebService, private alertCtrl : AlertController) {
+  isNew: boolean;
+
+  constructor(public params: NavParams,
+    public navCtrl: NavController,
+    private webService: WebService,
+    private alertCtrl: AlertController,
+    private toastCtrl: ToastController) {
     this.selectedSchool = this.params.get('school') as School;
     this.selectedTeacher = this.params.get('teacher') as Teacher;
     this.isNew = this.params.get('isNew') as boolean;
@@ -39,7 +43,7 @@ export class TeacherModal implements OnInit{
   }
 
   ngOnInit(): void {
-    this.updateArray();   
+    this.updateArray();
   }
 
   updateArray() {
@@ -47,7 +51,7 @@ export class TeacherModal implements OnInit{
 
     this.selectedSchool.groups.forEach(group => {
       group.teachers.forEach(teacherId => {
-        if(teacherId.toLowerCase() === this.copiedTeacher.id.toLowerCase()) this.selectedTeacherGroups.push(group);
+        if (teacherId.toLowerCase() === this.copiedTeacher.id.toLowerCase()) this.selectedTeacherGroups.push(group);
       })
     })
 
@@ -61,9 +65,9 @@ export class TeacherModal implements OnInit{
   save() {
     Object.assign(this.selectedTeacher, this.copiedTeacher);
 
-    if(this.isNew) {
-      if(this.selectedSchool.teachers.findIndex(x => x.id.toLowerCase() === this.selectedTeacher.id.toLowerCase()) < 0) {
-        this.webService.add(this.selectedSchool.id, this.copiedTeacher).then(() => this.selectedSchool.teachers.push(this.selectedTeacher));
+    if (this.isNew) {
+      if (this.selectedSchool.teachers.findIndex(x => x.id.toLowerCase() === this.selectedTeacher.id.toLowerCase()) < 0) {
+        this.webService.add(this.selectedSchool, this.copiedTeacher).then(() => this.selectedSchool.teachers.push(this.selectedTeacher));
       }
       else {
         let alert = this.alertCtrl.create({
@@ -72,15 +76,49 @@ export class TeacherModal implements OnInit{
         });
         alert.present();
       }
-    }else {
-      this.webService.add(this.selectedSchool.id, this.copiedTeacher);
+    } else {
+      this.webService.add(this.selectedSchool, this.copiedTeacher);
     }
 
     this.close();
   }
 
-  onRemoveGroup(group : Group) {
-    group.teachers.splice(group.teachers.findIndex(x=>x.toLowerCase() == this.copiedTeacher.id.toLowerCase()), 1);
+  onRemoveGroup(group: Group) {
+    group.teachers.splice(group.teachers.findIndex(x => x.toLowerCase() == this.copiedTeacher.id.toLowerCase()), 1);
     this.updateArray();
+  }
+  generatePin() {
+    //popup di richiesta
+    let alert = this.alertCtrl.create({
+      title: 'Creazione/ripristino PIN',
+      subTitle: 'Premendo OK un nuovo PIN verrà spedito all’indirizzo email indicato, disabilitando il PIN precedente',
+      buttons: [
+        {
+          text: "Annulla"
+        },
+        {
+          text: 'OK',
+          handler: () => {
+            this.webService.generatePIN(this.selectedSchool, this.copiedTeacher).then(() => {
+              var toast = this.toastCtrl.create({
+                message: "L’email è stata spedita con successo",
+                duration: 3000,
+                position: 'middle'
+              });
+              toast.present();
+
+            }, () => {
+              var toast = this.toastCtrl.create({
+                message: 'Purtroppo l’email non è stata inviata',
+                duration: 3000,
+                position: 'middle'
+              });
+              toast.present();
+            });
+          }
+        }
+      ]
+    })
+    alert.present();
   }
 }

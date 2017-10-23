@@ -1,7 +1,6 @@
 import { PopoverPage } from './../pages/Components/Modals/orariModal/popoverOrari';
 import { Insegnanti } from './../pages/Components/teacherSection/teacher.component';
 import { TeacherModal } from './../pages/Components/Modals/teacherModal/teacherModal';
-import { BusModal } from './../pages/Components/Modals/busModal/busModal';
 import { WebService, requestOptionsProvider } from '../services/WebService';
 import { LoginService } from '../services/login.service'
 import { ConfigService } from '../services/config.service'
@@ -15,7 +14,6 @@ import { HomePage } from '../pages/home/home';
 import { HttpModule } from "@angular/http";
 import { GroupModal } from "../pages/Components/Modals/groupModal/groupModal";
 import { Gruppi } from "../pages/Components/gruppiSection/gruppi.component";
-import { Buses } from "../pages/Components/busSection/bus.component";
 import { Bambini } from "../pages/Components/kidSection/kid.component";
 import { Info } from "../pages/Components/homeSection/info.component";
 import { KidPage } from "../pages/Components/kidSection/kidPage/kidPage";
@@ -28,9 +26,7 @@ import { APP_INITIALIZER } from '@angular/core';
 import { UserService } from '../services/user.service';
 import { LoginPage } from '../pages/login/login';
 import { Ng2OrderModule } from 'ng2-order-pipe';
-import { ImageUploadModule } from "angular2-image-upload";
-
-
+import { FileUploadModule } from 'ng2-file-upload';
 
 export function initConfig(config: ConfigService) {
   return () => config.load()
@@ -41,11 +37,9 @@ export function initConfig(config: ConfigService) {
     MyApp,
     HomePage,
     GroupModal,
-    BusModal,
     TeacherModal,
     OrariModal,
     Gruppi,
-    Buses,
     Insegnanti,
     Bambini,
     KidPage,
@@ -61,7 +55,7 @@ export function initConfig(config: ConfigService) {
     IonicModule.forRoot(MyApp),
     HttpModule,
     Ng2OrderModule,
-    ImageUploadModule.forRoot(),
+    FileUploadModule,
     IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
@@ -69,11 +63,9 @@ export function initConfig(config: ConfigService) {
     MyApp,
     HomePage,
     GroupModal,
-    BusModal,
     TeacherModal,
     OrariModal,
     Gruppi,
-    Buses,
     Insegnanti,
     Bambini,
     KidPage,

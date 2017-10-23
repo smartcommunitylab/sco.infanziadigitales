@@ -329,6 +329,14 @@ public class ConsoleWebController {
         return new Response<>();
     }
 
+    @RequestMapping(method = RequestMethod.DELETE,
+            value = "/consoleweb/{appId}/{schoolId}/kid/{kidId}/picture")
+    public @ResponseBody Response<KidProfile> resetKidPicture(@PathVariable String appId,
+            @PathVariable String schoolId, @PathVariable String kidId) {
+        KidProfile kid = kidManager.deleteKidPicture(appId, schoolId, kidId);
+        return new Response<>(kid);
+    }
+
     @RequestMapping(method = RequestMethod.GET,
             value = "/picture/{appId}/{schoolId}/{kidId}/{token}")
     public @ResponseBody void downloadKidPicture(@PathVariable String appId,

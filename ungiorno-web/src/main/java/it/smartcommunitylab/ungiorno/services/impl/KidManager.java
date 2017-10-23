@@ -1,5 +1,6 @@
 package it.smartcommunitylab.ungiorno.services.impl;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -25,6 +28,8 @@ import it.smartcommunitylab.ungiorno.utils.Utils;
 
 @Service
 public class KidManager {
+
+    private static final Logger logger = LoggerFactory.getLogger(KidManager.class);
 
     @Autowired
     @Value("${image.download.dir}")
@@ -154,6 +159,24 @@ public class KidManager {
         return kid;
     }
 
+    public KidProfile deleteKidPicture(String appId, String schoolId, String kidId) {
+        KidProfile kid = getKidProfile(appId, schoolId, kidId);
+        if (kid != null) {
+            String pictureFileName = kid.getImage();
+            if (pictureFileName != null) {
+                File pictureFile = new File(imageDownloadDir + "/" + pictureFileName);
+                boolean deleted = pictureFile.delete();
+                if (deleted) {
+                    logger.info("Removed picture for kid {}", kidId);
+                    kid.setImage(null);
+                    updateKid(kid);
+                }
+            }
+        }
+        return kid;
+
+    }
+
     public String saveKidPicture(String kidId, MultipartFile pictureFile) throws IOException {
 
         InputStream is = pictureFile.getInputStream();
@@ -167,6 +190,7 @@ public class KidManager {
 
         return name;
     }
+
 
     /**
      * Retrieve parents from {@link AuthPerson} and convert it in {@link Person}

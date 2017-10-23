@@ -32,7 +32,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
     'angularMoment',
   'monospaced.elastic'
 ])
-
+.directive('select',function(){ //same as "ngSelect"
+return {
+    restrict: 'E',
+    scope: false,
+    link: function (scope, ele) {
+        ele.on('touchmove touchstart',function(e){
+            e.stopPropagation();
+        })
+    }
+}
+})
 .run(function ($ionicPlatform, $rootScope, $cordovaSplashscreen, $state, $translate, $q, $ionicHistory, $ionicConfig, $ionicLoading, Config,
   babyConfigurationService, profileService, dataServerService, loginService, Toast, $ionicSideMenuDelegate) {
   $ionicLoading.show();
@@ -494,8 +504,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
     exit_lbl:'U',
     invia:'Invia a',
     missing_school_config:"Manca Servizio Scolastico Regolare",
-
-
+    all:'Tutti'
   });
 
   $translateProvider.preferredLanguage("it");

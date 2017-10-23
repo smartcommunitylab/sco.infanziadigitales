@@ -777,8 +777,6 @@ $scope.cnt=0;
       $scope.childrenProfiles['allPeriod'] = [];
     }
     console.log($scope.section);
-    console.log($scope.listServices);
-    console.log(periodOfTheDay);
     $scope.colors=[];
     $scope.colors[periodOfTheDay] = '#98ba3c';
     if ($scope.section != null) {
@@ -791,19 +789,18 @@ $scope.cnt=0;
           var oraEntrata = new Date($scope.section.children[i].entryTime);
           var busActive = $scope.section.children[i].bus.active;
           //$scope.section.children[i].presenza = $filter('translate')('exit_to') + $filter('date')(oraUscita, 'HH:mm');
-          $scope.section.children[i].presenza = $filter('date')(oraUscita, 'HH:mm');
-          $scope.section.children[i].oraEntrata = $filter('date')(oraEntrata, 'HH:mm');
+          $scope.section.children[i].presenza = moment(oraUscita).format('H:mm');
+          $scope.section.children[i].oraEntrata = moment(oraEntrata).format('H:mm');
           $scope.section.children[i].busActive = busActive;
         }
         //retrieve all fascie of Kid active services
         var kidFascieNames=$scope.section.children[i].fascieNames;
-        console.log(kidFascieNames);
         if( kidFascieNames !==null && kidFascieNames!=undefined && kidFascieNames.indexOf(periodOfTheDay) !== -1){
             $scope.childrenProfiles[periodOfTheDay].push($scope.section.children[i]);
         }
         
         //putNotification($scope.section.children[i]):
-        console.log($scope.childrenProfiles[periodOfTheDay]);
+        //console.log($scope.childrenProfiles[periodOfTheDay]);
 
         /*switch (periodOfTheDay) {
         case 'anticipo':
@@ -839,9 +836,7 @@ $scope.cnt=0;
       console.log($scope.listServices);
       console.log($scope.listServices.length);
       for (var i = 0; i < $scope.section.children.length; i++) {
-        console.log('ketu1');
         for(var j=0;j < $scope.listServices.length; j++){
-          console.log('ketu2');
           if($scope.listServices[j]['value']==periodOfTheDay){
             if ($scope.section.children[i][periodOfTheDay].enabled) {
               //aggiungi se iscritto al servizio

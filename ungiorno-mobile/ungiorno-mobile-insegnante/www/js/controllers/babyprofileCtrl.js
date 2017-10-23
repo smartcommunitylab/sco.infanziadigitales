@@ -284,7 +284,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
   }
   $scope.calculateOtherData = function () {
 
-    $scope.babyEnterHour = ($scope.babyInformations.anticipo.active && $scope.babyInformations.anticipo.enabled) ? $scope.schoolProfile.anticipoTiming.fromTime : $scope.schoolProfile.regularTiming.fromTime;
+    console.log($scope.babyInformations);
+    $scope.babyEnterHour = $scope.babyInformations.oraEntrata;//($scope.babyInformations.anticipo.active && $scope.babyInformations.anticipo.enabled) ? $scope.schoolProfile.anticipoTiming.fromTime : $scope.schoolProfile.regularTiming.fromTime;
 
     //used to get if the baby is present
     var now = new Date();

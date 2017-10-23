@@ -25,6 +25,13 @@
           <button class="button button-clear button-dark button-communication-date" ng-class="{'button-disabled':!delivery }" ng-if="communicationType.typeId=='1'" ng-click="openDatePicker() "><span class="label-time-date">{{getDateLabel()}}</span></button>
         </div>
       </ion-list>
+
+      <div class="groups">
+          <span class="communication-kind">{{'invia' | translate}}: </span> 
+          <select ng-model="curData.selectedGroup" class="listgroup">
+              <option ng-repeat="option in listGroup" value="{{option}}" ng-selected="currData==option">{{option | translate}}</option>
+            </select>
+      </div>
       <!--
 Old version
 

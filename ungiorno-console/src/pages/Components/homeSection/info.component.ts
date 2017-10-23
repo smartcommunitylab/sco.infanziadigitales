@@ -117,9 +117,6 @@ export class Info implements OnInit {
         } else {
             this.newSchoolPhone = ""
         }
-        if (this.selectedSchool.malattie.indexOf("Altro") == -1) {
-            this.selectedSchool.malattie.push("Altro");
-        }
     }
     onContattiEdit() {
         this.editContatti = true;

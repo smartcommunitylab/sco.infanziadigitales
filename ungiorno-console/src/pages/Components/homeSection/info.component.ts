@@ -140,10 +140,10 @@ export class Info implements OnInit {
         return re.test(email);
     }
     checkEmailAndPhones(school: School) {
-        if (!this.validateEmail(school.email)) {
+        if (school.email && !this.validateEmail(school.email)) {
             throw this.BreakEmailException
         }
-        if (!this.validatePhone(this.newSchoolPhone)) {
+        if (this.newSchoolPhone && !this.validatePhone(this.newSchoolPhone)) {
             throw this.BreakPhoneException
         }
 
@@ -161,7 +161,7 @@ export class Info implements OnInit {
                     message: 'Formato email non valido',
                     duration: 1000,
                     position: 'middle',
-                                        dismissOnPageChange: true
+                    dismissOnPageChange: true
 
                 });
                 this.toastWrongEmail.present()

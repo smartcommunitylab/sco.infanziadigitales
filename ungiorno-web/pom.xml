@@ -320,7 +320,7 @@
 			</plugin>
 
 		</plugins>
-		<finalName>ungiorno2</finalName>
+		<finalName>ungiorno</finalName>
 	</build>
 
 	<repositories>

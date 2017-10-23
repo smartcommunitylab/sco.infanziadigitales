@@ -2200,10 +2200,10 @@ textarea {
   padding-bottom:10px;
   padding-right:10px;
   font-size: 15px;
-  width: 50%;
+  width: 70%;
 }
 .dayEdit_table td {
-  font-size: small;
+  /*font-size: small;*/
 }
 
 .span_motiv {
@@ -2236,7 +2236,7 @@ textarea {
 }
 .delegaStyle{
   white-space: nowrap; 
-  width: 5em; 
+  width: 7em; 
   overflow: hidden;
   text-overflow: ellipsis; 
 }

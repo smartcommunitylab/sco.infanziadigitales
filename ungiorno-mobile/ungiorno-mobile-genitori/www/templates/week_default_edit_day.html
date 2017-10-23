@@ -19,7 +19,7 @@
               <p>{{'Entrata ore'| translate}}:</p>
           </td>
           <td>
-              <p class="editable2" ng-click="openPopupEntry()">{{currData.entrata}}</p>
+              <p class="editable2" ng-click="openPopupEntry()">{{currData.entrata_display}}</p>
           </td>
         </tr>
         <tr>
@@ -27,7 +27,7 @@
               <p>{{'Uscita ore'| translate}}:</p>
           </td>
           <td>
-              <p class="editable2" ng-click="openPopupOut()" ng-show="!currData.bus">{{currData.uscita}}</p>
+              <p class="editable2" ng-click="openPopupOut()" ng-show="!currData.bus">{{currData.uscita_display}}</p>
               <p class="noneditable2" ng-show="currData.bus">{{currData.uscita}}</p>
           </td>
         </tr>

@@ -80,8 +80,8 @@
               <p>{{'Entrata ore'| translate}}:</p>{{currData.entry}}
           </td>
           <td>
-              <p class="editable2" ng-click="openPopupEntry()" ng-show="!currData.absence">{{currData.entrata}}</p>
-              <p class="noneditable2" ng-show="currData.absence">{{currData.entrata}}</p>
+              <p class="editable2" ng-click="openPopupEntry()" ng-show="!currData.absence">{{currData.entrata_display}}</p>
+              <p class="noneditable2" ng-show="currData.absence">{{currData.entrata_display}}</p>
           </td>
         </tr>
         <tr>
@@ -89,8 +89,8 @@
               <p>{{'Uscita ore'| translate}}:</p>
           </td>
           <td>
-              <p class="editable2" ng-click="openPopupOut()" ng-show="!currData.bus && !currData.absence">{{currData.uscita}}</p>
-              <p class="noneditable2" ng-show="currData.bus || currData.absence">{{currData.uscita}}</p>
+              <p class="editable2" ng-click="openPopupOut()" ng-show="!currData.bus && !currData.absence">{{currData.uscita_display}}</p>
+              <p class="noneditable2" ng-show="currData.bus || currData.absence">{{currData.uscita_display}}</p>
           </td>
         </tr>
         <tr>
@@ -100,7 +100,7 @@
           <td>
               <div data-tap-disabled="true">
                   <select ng-model="currData.fermata" ng-disabled="currData.absence">
-                    <option ng-repeat="option in fermataOptions" value="{{option.stopId}}" ng-selected="currData.fermata==option.stopId">{{option.stopId}}</option>
+                    <option ng-repeat="option in fermataOptions" value="{{option.stopId}}" ng-selected="currData.fermata==option.stopId">{{option.stopId | translate}}</option>
                   </select>
               </div>
           </td>

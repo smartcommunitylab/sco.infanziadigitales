@@ -16,10 +16,10 @@
                   <p class="title">{{day.name| translate | uppercase}}</p>
               </td>
               <td ng-if="!day.assente">
-                  <p class="button-day noneditable">E <span class="val_time">{{day.entrata}}</span></p>
+                  <p class="button-day noneditable">E <span class="val_time">{{day.entrata_display}}</span></p>
               </td>
               <td ng-if="!day.assente">
-                  <p class="button-day noneditable">U <span class="val_time">{{day.uscita}}</span></p>
+                  <p class="button-day noneditable">U <span class="val_time">{{day.uscita_display}}</span></p>
               </td>
               <td ng-if="day.bus && !day.assente">
                   <p class="button-day noneditable"><i class="icon ion-android-bus iconStyle"></i></p>
@@ -58,10 +58,10 @@
                   <p class="title">{{day.name| translate | uppercase}}</p>
               </td>
               <td ng-if="!day.assente">
-                  <p ng-class="whatClassIsIt($index,'')">E <span class="val_time">{{day.entrata}}</span></p>
+                  <p ng-class="whatClassIsIt($index,'')">E <span class="val_time">{{day.entrata_display}}</span></p>
               </td>
               <td ng-if="!day.assente">
-                  <p ng-class="whatClassIsIt($index,'')">U <span class="val_time">{{day.uscita}}</span></p>
+                  <p ng-class="whatClassIsIt($index,'')">U <span class="val_time">{{day.uscita_display}}</span></p>
               </td>
               <td ng-if="day.bus && !day.assente">
                   <p ng-class="whatClassIsIt($index,'')"><i class="icon ion-android-bus iconStyle"></i></p>

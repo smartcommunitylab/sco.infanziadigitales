@@ -259,6 +259,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     var currentDate = moment();
     var week=currentDate.format('w');
     var day=currentDate.format('d')-1;
+    $scope.weekend=false;
+    if(day==5 || day==6){
+      $scope.weekend=true;
+    }
     $scope.ritiraOptions=$scope.kidProfile.persons;
     var jsonTest={};
     $scope.weekInfo=[];
@@ -291,7 +295,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
       if(data!=null && data!= undefined && data.length>0){
         var motiv_type=(data[day]['motivazione']!=undefined && data[day]['motivazione']!=null ? data[day]['motivazione']['type'] : '');
         var motiv_subtype=(data[day]['motivazione']!=undefined && data[day]['motivazione']!=null ? data[day]['motivazione']['subtype'] : '');
-        jsonTest={'ore_entrata':moment(data[day]['entrata']).format('H:mm'),'ore_uscita':moment(data[day]['uscita']).format('H:mm'),'addressBus':'Nome Test',
+        jsonTest={'ore_entrata':data[day]['entrata'],'ore_uscita':data[day]['uscita'],'addressBus':'Nome Test',
         'delegaName':$filter('getRitiroName')(data[day]['delega_name'],$scope.ritiraOptions),'delegaType':$filter('getRitiroType')(data[day]['delega_name'],$scope.ritiraOptions),
         'bus':data[day]['bus'],'absence':data[day]['absence'],
         'motivazione':{type:motiv_type,subtype:motiv_subtype}
@@ -307,7 +311,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             if(data!=null && data!= undefined && data.length>0){
                 var motiv_type=(data[day]['motivazione']!=undefined && data[day]['motivazione']!=null ? data[day]['motivazione']['type'] : '');
                var motiv_subtype=(data[day]['motivazione']!=undefined && data[day]['motivazione']!=null ? data[day]['motivazione']['subtype'] : '');
-               jsonTest={'ore_entrata':moment(data[day]['entrata']).format('H:mm'),'ore_uscita':moment(data[day]['uscita']).format('H:mm'),'addressBus':'Nome Test',
+               jsonTest={'ore_entrata':data[day]['entrata'],'ore_uscita':data[day]['uscita'],'addressBus':'Nome Test',
                'delegaName':$filter('getRitiroName')(data[day]['delega_name'],$scope.ritiraOptions),'delegaType':$filter('getRitiroType')(data[day]['delega_name'],$scope.ritiraOptions),
                'bus':data[day]['bus'],'absence':data[day]['absence'],
                'motivazione':{type:motiv_type,subtype:motiv_subtype}
@@ -323,7 +327,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
               'bus':false,'absence':false,
               'motivazione':{type:'',subtype:''}
             }
-              var dataTemp={"entrata":moment(fromtime).format('H:mm'),"uscita":moment(totime).format('H:mm'),'bus':false,'absence':false,'motivazione':{type:'',subtype:''},"monday":false,"tuesday":false,"wednesday":false,"thursday":false,"friday":false};
+              var dataTemp={"entrata":fromtime,"uscita":totime,'bus':false,'absence':false,'motivazione':{type:'',subtype:''},"monday":false,"tuesday":false,"wednesday":false,"thursday":false,"friday":false};
               $scope.weekInfo=[dataTemp,dataTemp,dataTemp,dataTemp,dataTemp];
               $scope.briefInfo= jsonTest;
               profileService.setBriefInfo($scope.briefInfo);
@@ -344,6 +348,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     console.log($scope.weekInfo);
     var dayData=$scope.weekInfo[day];
     for(var i=0;i<=4;i++){
+      if($scope.weekInfo[i]['uscita']!=null && $scope.weekInfo[i]['uscita']!=undefined)
+          $scope.weekInfo[i]['uscita_display']=moment($scope.weekInfo[i]['uscita']).format('H:mm' );
+      if($scope.weekInfo[i]['entrata']!=null && $scope.weekInfo[i]['entrata']!=undefined)
+         $scope.weekInfo[i]['entrata_display']=moment($scope.weekInfo[i]['entrata']).format('H:mm' );
       week_planService.setDayData(i,$scope.weekInfo[i],'');
     }
     dayData['monday']=false;

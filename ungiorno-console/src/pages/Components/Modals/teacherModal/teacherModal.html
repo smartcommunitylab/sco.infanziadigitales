@@ -81,9 +81,9 @@
                                     <ion-col col-10 text-left><button class='edit' ion-button color='magenta1' float-center [disabled]="!copiedTeacher.id || !selectedTeacher.email"
                                             (click)="generatePin()">Genera PIN</button></ion-col>
                                 </ion-row>
-                                <ion-row *ngIf="!copiedTeacher.id">
+                                <ion-row *ngIf="!selectedTeacher.id">
                                     <ion-col>
-                                         <label style='color: grey'>Per abilitare la generazione del PIN, è necessario fornire un indirizzo di email valido nella sezione "Contatti", salvare e rientrare.</label>
+                                         <ion-item text-wrap style='color: grey'>Per abilitare la generazione del PIN, è necessario fornire un indirizzo di email valido nella sezione "Contatti", salvare e rientrare.</ion-item>
                                     </ion-col>
                                 </ion-row>
                             </ion-item>

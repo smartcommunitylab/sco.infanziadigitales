@@ -144,7 +144,7 @@ export class GroupModal implements OnInit {
               }
               else {
                 let toastConflict = this.toastCtrl.create({
-                  message: 'Elemenast già presente (conflitto di nomi)',
+                  message: 'Elemento già presente (conflitto di nomi)',
                   duration: 3000,
                   position: 'middle',
                   dismissOnPageChange: true

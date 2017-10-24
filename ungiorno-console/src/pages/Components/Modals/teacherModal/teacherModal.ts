@@ -95,7 +95,7 @@ export class TeacherModal implements OnInit {
               }
               else {
                 let toastConflict = this.toastCtrl.create({
-                  message: 'Elemenast già presente (conflitto di nomi)',
+                  message: 'Elemento già presente (conflitto di nomi)',
                   duration: 3000,
                   position: 'middle',
                   dismissOnPageChange: true
@@ -137,7 +137,7 @@ export class TeacherModal implements OnInit {
         {
           text: 'OK',
           handler: () => {
-            this.webService.generatePIN(this.selectedSchool, this.copiedTeacher).then(() => {
+            this.webService.generatePIN(this.selectedSchool, this.selectedTeacher).then(() => {
               var toast = this.toastCtrl.create({
                 message: "L’email è stata spedita con successo",
                 duration: 3000,

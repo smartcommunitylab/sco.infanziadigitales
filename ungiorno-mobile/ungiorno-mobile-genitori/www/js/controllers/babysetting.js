@@ -22,14 +22,25 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
   for(var i=0;i<$scope.listServicesDb.length;i++){
     var type=$scope.listServicesDb[i].name;
     var enabled=$scope.listServicesDb[i].enabled;
-       var tempServ=$scope.listServicesDb[i].timeSlots;
-       for(var j=0;j<tempServ.length;j++){
-           $scope.babyServices.push({
-            text: tempServ[j]['name'],
-            active: enabled
-          });
+    $scope.babyServices.push({
+      text: type,
+      active: enabled
+    });
+       //var tempServ=$scope.listServicesDb[i].timeSlots;
+       //for(var j=0;j<tempServ.length;j++){
+       //    $scope.babyServices.push({
+       //     text: tempServ[j]['name'],
+       //     active: enabled
+       //   });
     }
-}
+    $scope.listDelega=$scope.babyProfile.persons;
+    var parInd=1;
+    for(var i=0;i<$scope.listDelega.length;i++){
+      if($scope.listDelega[i].parent){
+        $scope.listDelega[i].parentIndex=parInd;
+        parInd++;
+      }
+    }
   
   //set hour
   var exitTime = new Date();

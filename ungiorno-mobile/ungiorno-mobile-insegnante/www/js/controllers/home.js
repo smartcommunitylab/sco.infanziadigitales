@@ -334,9 +334,14 @@ $scope.cnt=0;
         $scope.getSchoolProfileNormalConfig=$filter('getSchoolNormalService')($scope.listServicesDb);
         console.log($scope.getSchoolProfileNormalConfig);
         var fromtime=$scope.getSchoolProfileNormalConfig['fromTime'];
-        fromtimeFormatted=moment(fromtime).format('H:mm');
         var totime=$scope.getSchoolProfileNormalConfig['toTime'];
+        if(fromtime=='' && totime==''){
+            alert($filter('translate')('missing_school_config'));
+            fromtime=moment('7:30','H:mm');
+            totime=moment('13:30','H:mm');
+        }
         totimeFormatted=moment(totime).format('H:mm');
+        fromtimeFormatted=moment(fromtime).format('H:mm');
         var temp={'value':'Normale','label':'Normale',
         'entry':fromtimeFormatted,'out':totimeFormatted,
         'type':'Normale'};
@@ -782,19 +787,20 @@ $scope.cnt=0;
         } else {
           var oraUscita = new Date($scope.section.children[i].exitTime);
           var oraEntrata = new Date($scope.section.children[i].entryTime);
-          var bus = new Date($scope.section.children[i].bus);
+          var busActive = $scope.section.children[i].bus.active;
           //$scope.section.children[i].presenza = $filter('translate')('exit_to') + $filter('date')(oraUscita, 'HH:mm');
-          $scope.section.children[i].presenza = $filter('date')(oraUscita, 'HH:mm');
-          $scope.section.children[i].oraEntrata = $filter('date')(oraEntrata, 'HH:mm');
-          $scope.section.children[i].bus = bus;
+          $scope.section.children[i].presenza = moment(oraUscita).format('H:mm');
+          $scope.section.children[i].oraEntrata = moment(oraEntrata).format('H:mm');
+          $scope.section.children[i].busActive = busActive;
         }
-        //putNotification($scope.section.children[i]):
-        for(var i=0;i<$scope.listServices.length;i++){
-          if($scope.listServices[i]['value']==periodOfTheDay){
+        //retrieve all fascie of Kid active services
+        var kidFascieNames=$scope.section.children[i].fascieNames;
+        if( kidFascieNames !==null && kidFascieNames!=undefined && kidFascieNames.indexOf(periodOfTheDay) !== -1){
             $scope.childrenProfiles[periodOfTheDay].push($scope.section.children[i]);
-          }
         }
-       console.log($scope.section.children);
+        
+        //putNotification($scope.section.children[i]):
+        //console.log($scope.childrenProfiles[periodOfTheDay]);
 
         /*switch (periodOfTheDay) {
         case 'anticipo':
@@ -826,10 +832,12 @@ $scope.cnt=0;
     $scope.availableChildren[periodOfTheDay] = 0;
 
     if ($scope.section != null) {
-      console.log($scope.section.children);
+      console.log($scope.section.children.length);
+      console.log($scope.listServices);
+      console.log($scope.listServices.length);
       for (var i = 0; i < $scope.section.children.length; i++) {
-        for(var i=0;i<$scope.listServices.length;i++){
-          if($scope.listServices[i]['value']==periodOfTheDay){
+        for(var j=0;j < $scope.listServices.length; j++){
+          if($scope.listServices[j]['value']==periodOfTheDay){
             if ($scope.section.children[i][periodOfTheDay].enabled) {
               //aggiungi se iscritto al servizio
               $scope.totalChildrenNumber[periodOfTheDay]++;

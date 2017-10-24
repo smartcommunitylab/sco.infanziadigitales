@@ -16,10 +16,10 @@
                   <p class="title">{{day.name| translate | uppercase}}</p>
               </td>
               <td ng-if="!day.assente">
-                  <p class="button-day noneditable">E <span class="val_time">{{day.entrata}}</span></p>
+                  <p class="button-day noneditable">E <span class="val_time">{{day.entrata_display}}</span></p>
               </td>
               <td ng-if="!day.assente">
-                  <p class="button-day noneditable">U <span class="val_time">{{day.uscita}}</span></p>
+                  <p class="button-day noneditable">U <span class="val_time">{{day.uscita_display}}</span></p>
               </td>
               <td ng-if="day.bus && !day.assente">
                   <p class="button-day noneditable"><i class="icon ion-android-bus iconStyle"></i></p>
@@ -50,7 +50,7 @@
   
        <div ng-show="mode=='edit'" class="week_plan_detail">
           <div class="actions_default_restore">
-            <p class="button_top"><i class="icon ion-loop iconStyleHead" ng-click="restore()"></i><span style="vertical-align:middle;">{{'restore' | translate | uppercase}}</span></p>
+            <p class="button_top" ng-click="restore()"><i class="icon ion-loop iconStyleHead"></i><span class="ripristina">{{'restore' | translate | uppercase}}</span></p>
           </div> 
           <table class="week_plan_detail_table">
             <tr ng-repeat="day in days track by $index" ng-click="gotoEditDate($index)" class="nowrap">
@@ -58,10 +58,10 @@
                   <p class="title">{{day.name| translate | uppercase}}</p>
               </td>
               <td ng-if="!day.assente">
-                  <p ng-class="whatClassIsIt($index,'')">E <span class="val_time">{{day.entrata}}</span></p>
+                  <p ng-class="whatClassIsIt($index,'')">E <span class="val_time">{{day.entrata_display}}</span></p>
               </td>
               <td ng-if="!day.assente">
-                  <p ng-class="whatClassIsIt($index,'')">U <span class="val_time">{{day.uscita}}</span></p>
+                  <p ng-class="whatClassIsIt($index,'')">U <span class="val_time">{{day.uscita_display}}</span></p>
               </td>
               <td ng-if="day.bus && !day.assente">
                   <p ng-class="whatClassIsIt($index,'')"><i class="icon ion-android-bus iconStyle"></i></p>

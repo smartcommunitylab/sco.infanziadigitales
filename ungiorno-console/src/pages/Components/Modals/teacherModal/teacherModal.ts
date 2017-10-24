@@ -29,7 +29,8 @@ export class TeacherModal implements OnInit {
   selectedTeacherGroups: Group[];
 
   isNew: boolean;
-
+  toastWrongEmail;
+  BreakEmailException = {};
   constructor(public params: NavParams,
     public navCtrl: NavController,
     private webService: WebService,
@@ -59,30 +60,89 @@ export class TeacherModal implements OnInit {
   }
 
   close() {
-    this.navCtrl.pop();
+    let alert = this.alertCtrl.create({
+      subTitle: 'Eventuali modifiche verrano perse. Confermi?',
+      buttons: [
+        {
+          text: "Annulla"
+        },
+        {
+          text: 'OK',
+          handler: () => {
+            this.navCtrl.pop();
+          }
+        }
+      ]
+    })
+    alert.present();
+
   }
 
+  private validateEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+  }
+
+  checkEmail() {
+    if (this.copiedTeacher.email && !this.validateEmail(this.copiedTeacher.email))
+      throw this.BreakEmailException
+  }
   save() {
-    Object.assign(this.selectedTeacher, this.copiedTeacher);
+    try {
+      this.checkEmail();
 
-    if (this.isNew) {
-      if (this.selectedSchool.teachers.findIndex(x => x.id.toLowerCase() === this.selectedTeacher.id.toLowerCase()) < 0) {
-        this.webService.add(this.selectedSchool, this.copiedTeacher).then(() => this.selectedSchool.teachers.push(this.selectedTeacher));
-      }
-      else {
-        let alert = this.alertCtrl.create({
-          subTitle: 'Elemento già presente (conflitto di C.F)',
-          buttons: ['OK']
+
+      let alert = this.alertCtrl.create({
+        subTitle: 'Eventuali modifiche verrano confermate. Confermi?',
+        buttons: [
+          {
+            text: "Annulla"
+          },
+          {
+            text: 'OK',
+            handler: () => {
+              Object.assign(this.selectedTeacher, this.copiedTeacher);
+
+              if (this.isNew) {
+                if (this.selectedSchool.teachers.findIndex(x => x.id.toLowerCase() === this.selectedTeacher.id.toLowerCase()) < 0) {
+                  this.webService.add(this.selectedSchool, this.copiedTeacher).then(() => this.selectedSchool.teachers.push(this.selectedTeacher));
+                }
+                else {
+                  let toastConflict = this.toastCtrl.create({
+                    message: 'Elemento già presente (conflitto di nomi)',
+                    duration: 3000,
+                    position: 'middle',
+                    dismissOnPageChange: true
+
+                  });
+                  toastConflict.present()
+                  // let alert = this.alertCtrl.create({
+                  //   subTitle: 'Elemento già presente (conflitto di C.F)',
+                  //   buttons: ['OK']
+                  // });
+                  // alert.present();
+                }
+              } else {
+                this.webService.add(this.selectedSchool, this.copiedTeacher);
+              }
+              this.navCtrl.pop();
+            }
+          }
+        ]
+      })
+      alert.present();
+    } catch (e) {
+      if (e == this.BreakEmailException) {
+        this.toastWrongEmail = this.toastCtrl.create({
+          message: 'Formato email non valido',
+          duration: 1000,
+          position: 'middle',
+          dismissOnPageChange: true
         });
-        alert.present();
+        this.toastWrongEmail.present();
       }
-    } else {
-      this.webService.add(this.selectedSchool, this.copiedTeacher);
     }
-
-    this.close();
   }
-
   onRemoveGroup(group: Group) {
     group.teachers.splice(group.teachers.findIndex(x => x.toLowerCase() == this.copiedTeacher.id.toLowerCase()), 1);
     this.updateArray();
@@ -91,7 +151,7 @@ export class TeacherModal implements OnInit {
     //popup di richiesta
     let alert = this.alertCtrl.create({
       title: 'Creazione/ripristino PIN',
-      subTitle: 'Premendo OK un nuovo PIN verrà spedito all’indirizzo email indicato, disabilitando il PIN precedente',
+      subTitle: 'Premendo OK un nuovo PIN verrà spedito all’indirizzo email indicato, disabilitando il PIN precedente.',
       buttons: [
         {
           text: "Annulla"
@@ -99,7 +159,7 @@ export class TeacherModal implements OnInit {
         {
           text: 'OK',
           handler: () => {
-            this.webService.generatePIN(this.selectedSchool, this.copiedTeacher).then(() => {
+            this.webService.generatePIN(this.selectedSchool, this.selectedTeacher).then(() => {
               var toast = this.toastCtrl.create({
                 message: "L’email è stata spedita con successo",
                 duration: 3000,

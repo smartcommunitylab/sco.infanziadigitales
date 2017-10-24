@@ -16,7 +16,7 @@
         <ion-row>
             <ion-col col-2>{{label}}:</ion-col>
             <ion-col col-8>
-                <ion-input [(ngModel)]="newItem" no-margin type="type"></ion-input>
+                <ion-input [(ngModel)]="newItem" no-margin type="{{type}}"></ion-input>
             </ion-col>
             <ion-col col-1>
                 <ion-icon name="add-circle" color="green3" (click)="addItem()" item-end></ion-icon>

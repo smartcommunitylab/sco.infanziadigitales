@@ -30,7 +30,7 @@
 </ion-header>
 
 <ion-content padding margin>
-  <ion-grid *ngIf="selectedSchool">
+  <ion-grid *ngIf="selectedSchool && !rerender">
     <ion-col col-12>
       <div [ngSwitch]="settings">
         <div *ngSwitchCase="'profilo'">

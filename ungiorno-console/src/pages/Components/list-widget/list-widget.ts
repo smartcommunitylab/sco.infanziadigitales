@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { AlertController } from 'ionic-angular';
 
 @Component({
     selector: 'list-widget',
@@ -50,22 +51,22 @@ import { Component, OnInit, Input } from '@angular/core';
         width: 95%;
     }
   `]
-  })
+})
 
-  export class ListWidget {
+export class ListWidget {
     @Input() items: string[];
-    @Input() editMode: boolean = false;   
+    @Input() editMode: boolean = false;
     @Input() label: string;
     @Input() type?: string;
-   
-    newItem : string = "";
-    constructor() {}
+
+    newItem: string = "";
+    constructor(private alertCtrl:AlertController) { }
 
     addItem() {
-        if(this.newItem.trim().length == 0){
+        if (this.newItem.trim().length == 0) {
             return;
         }
-        if(!this.items) {
+        if (!this.items) {
             this.items = [];
         }
         this.items.push(this.newItem);
@@ -73,10 +74,25 @@ import { Component, OnInit, Input } from '@angular/core';
     }
 
     removeItem(item) {
-        this.items && this.items.forEach((i,idx) => {
-            if(i === item) {
-                this.items.splice(idx,1);
-            }
-        });
+        let alert = this.alertCtrl.create({
+            subTitle: 'Conferma eliminazione',
+            buttons: [
+                {
+                    text: "Annulla"
+                },
+                {
+                    text: 'OK',
+                    handler: () => {
+                        this.items && this.items.forEach((i, idx) => {
+                            if (i === item) {
+                                this.items.splice(idx, 1);
+                            }
+                        });
+                    }
+                }
+            ]
+        })
+        alert.present();
+
     }
 }

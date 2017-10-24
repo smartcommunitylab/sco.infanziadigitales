@@ -38,10 +38,10 @@ import it.smartcommunitylab.ungiorno.model.Menu;
 import it.smartcommunitylab.ungiorno.model.Response;
 import it.smartcommunitylab.ungiorno.model.SchoolProfile;
 import it.smartcommunitylab.ungiorno.model.SchoolProfile.SectionProfile;
-import it.smartcommunitylab.ungiorno.services.RepositoryService;
 import it.smartcommunitylab.ungiorno.model.SectionData;
 import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.model.TeacherCalendar;
+import it.smartcommunitylab.ungiorno.services.RepositoryService;
 import it.smartcommunitylab.ungiorno.usage.UsageEntity.UsageActor;
 import it.smartcommunitylab.ungiorno.usage.UsageManager;
 import it.smartcommunitylab.ungiorno.utils.JsonUtil;
@@ -77,8 +77,8 @@ public class SchoolController {
         try {
             SchoolProfile profile = storage.getSchoolProfile(appId, schoolId);
             if (logger.isDebugEnabled()) {
-                logger.debug("getSchoolProfile:" + appId + " - " + schoolId + " - "
-                        + JsonUtil.convertObject(profile));
+                logger.debug("appId: {}, schoolId: {}, schoolProfile: {}", appId, schoolId,
+                        JsonUtil.convertObject(profile));
             }
             return new Response<SchoolProfile>(profile);
         } catch (Exception e) {
@@ -96,9 +96,9 @@ public class SchoolController {
         try {
             String userId = permissions.getUserId();
             SchoolProfile profile = storage.getSchoolProfileForUser(appId, userId);
-            if (logger.isInfoEnabled()) {
-                logger.info("getSchoolProfileForTeacher:" + userId + " - "
-                        + JsonUtil.convertObject(profile));
+            if (logger.isDebugEnabled()) {
+                logger.debug("appId: {}, schoolId: {}, schoolProfile for teacher: {}", appId,
+                        JsonUtil.convertObject(profile));
             }
             return new Response<SchoolProfile>(profile);
         } catch (Exception e) {
@@ -318,8 +318,8 @@ public class SchoolController {
             // logger.info("getSections(sections):" + JsonUtil.convertObject(sections));
             // }
             List<SectionData> list = storage.getSections(appId, schoolId, null, date);
-            if (logger.isInfoEnabled()) {
-                logger.info("getSections(list):" + JsonUtil.convertObject(list));
+            if (logger.isDebugEnabled()) {
+                logger.debug("sections: {}", JsonUtil.convertObject(list));
             }
             return new Response<>(list);
         } catch (Exception e) {

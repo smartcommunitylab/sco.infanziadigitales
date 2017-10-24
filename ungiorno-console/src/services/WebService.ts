@@ -113,23 +113,26 @@ export class WebService {
     ).catch(this.handleError);
   }
 
+  removeKidImage(selectedSchool, selectedKid): Promise<any> {
+    return this.http.delete(`${this.apiUrl}/consoleweb/${selectedSchool.appId}/${selectedSchool.id}/kid/${selectedKid.id}/picture`).toPromise().then(response => response).catch(this.handleError);
 
-  uploadDocumentInPromise(uploader, item,selectedSchool, selectedKid): Promise<any> {
+  }
+  uploadDocumentInPromise(uploader, item, selectedSchool, selectedKid): Promise<any> {
     return new Promise<any>((resolve, reject) => {
 
-        this.uploadDocument(uploader, item, selectedSchool, selectedKid);
-          
-        uploader.onCompleteItem = (item, response, status, headers) => {
-          if (status == 200) {
-            console.log('upload complete for ' + item.file.name);
-            resolve();
-          } else {
-            console.error(response);
-          }
+      this.uploadDocument(uploader, item, selectedSchool, selectedKid);
+
+      uploader.onCompleteItem = (item, response, status, headers) => {
+        if (status == 200) {
+          console.log('upload complete for ' + item.file.name);
+          resolve();
+        } else {
+          console.error(response);
         }
-    
+      }
+
     })
-    
+
   }
 
 
@@ -189,7 +192,7 @@ export class WebService {
       return this.addTeacher(school, item);
     }
     else if (item instanceof Bus) {
-      return this.getSchool(school.appId,school.id).then(tmp => {
+      return this.getSchool(school.appId, school.id).then(tmp => {
         tmp.buses.push(item);
         return this.http.put(url, JSON.stringify(tmp)).toPromise().then(() => tmp).catch(this.handleError);
       });
@@ -265,14 +268,13 @@ export class WebService {
     ).catch(this.handleError);
   }
 
-  public generatePIN(school: School,teacher: Teacher): Promise<any> 
-{
-        return this.http.put(`${this.apiUrl}/consoleweb/${school.appId}/${school.id}/teacher/${teacher.id}/pin`,{}).toPromise().then(
+  public generatePIN(school: School, teacher: Teacher): Promise<any> {
+    return this.http.put(`${this.apiUrl}/consoleweb/${school.appId}/${school.id}/teacher/${teacher.id}/pin`, {}).toPromise().then(
       response => this.convertToTeacher(response.json().data)
     ).catch(this.handleError);
-}  
+  }
 
-private addKid(school: School, kidProfile: Kid): Promise<Kid> {
+  private addKid(school: School, kidProfile: Kid): Promise<Kid> {
     let convertedKid: ServerKidData = this.convertToServerKid(kidProfile);
     return this.http.post(`${this.apiUrl}/consoleweb/${school.appId}/${school.id}/kid`, convertedKid).toPromise().then(
       response => this.convertToKid(response.json().data)
@@ -323,10 +325,10 @@ private addKid(school: School, kidProfile: Kid): Promise<Kid> {
     if (parents.length == 2) {
       convertedKid.parent2 = this.convertToParent(parents[1]);
     }
-    if(serverKidData.services != undefined){
+    if (serverKidData.services != undefined) {
       convertedKid.bus = serverKidData.services.bus;
     }
-    
+
     let deleghe = serverKidData.persons.filter(person => !person.parent);
     if (deleghe.length > 0) {
       deleghe.map(delega => this.convertToDelega(delega)).forEach(convertedDelega => convertedKid.deleghe.push(convertedDelega));

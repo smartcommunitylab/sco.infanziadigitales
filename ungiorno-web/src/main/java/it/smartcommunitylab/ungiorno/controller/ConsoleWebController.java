@@ -140,6 +140,7 @@ public class ConsoleWebController {
         updatedSchoolProfile.setAppId(appId);
         updatedSchoolProfile.setSchoolId(schoolId);
         storage.storeSchoolProfile(updatedSchoolProfile);
+        logger.info("user {} updates schoolProfile {}", permissionsManager.getUserId(), schoolId);
         return new Response<SchoolProfile>(updatedSchoolProfile);
     }
 
@@ -178,6 +179,7 @@ public class ConsoleWebController {
         storage.updateChildren(appId, schoolId, kidProfiles);
         kidManager.updateParents(kid);
         kidManager.updateKidBusData(kid);
+        logger.info("user {} updates kidProfile {}", permissionsManager.getUserId(), kid);
         return new Response<>(kid);
     }
 
@@ -209,6 +211,8 @@ public class ConsoleWebController {
     public @ResponseBody Response<Teacher> addTeacherToSection(@PathVariable String appId,
             @PathVariable String schoolId, @PathVariable String teacherId,
             @PathVariable String sectionId) {
+        logger.info("user {} adds teacher {} to section/group {}", permissionsManager.getUserId(),
+                teacherId, sectionId);
         return new Response<>(
                 teacherManager.addToSectionOrGroup(appId, schoolId, teacherId, sectionId));
     }
@@ -218,6 +222,8 @@ public class ConsoleWebController {
     public @ResponseBody Response<Teacher> removeTeacherFromSection(@PathVariable String appId,
             @PathVariable String schoolId, @PathVariable String teacherId,
             @PathVariable String sectionId) {
+        logger.info("user {} removes teacher {} to section/group {}",
+                permissionsManager.getUserId(), teacherId, sectionId);
         return new Response<>(
                 teacherManager.removeFromSectionOrGroup(appId, schoolId, teacherId, sectionId));
     }
@@ -228,6 +234,8 @@ public class ConsoleWebController {
     public @ResponseBody Response<KidProfile> addToGroup(@PathVariable String appId,
             @PathVariable String schoolId, @PathVariable String kidId,
             @RequestBody SectionDef group) {
+        logger.info("user {} adds kid {} to group {}", permissionsManager.getUserId(), kidId,
+                group.getSectionId());
         return new Response<>(kidManager.addToGroup(appId, schoolId, kidId, group));
     }
 
@@ -237,6 +245,8 @@ public class ConsoleWebController {
     public @ResponseBody Response<KidProfile> deleteFromGroup(@PathVariable String appId,
             @PathVariable String schoolId, @PathVariable String kidId,
             @PathVariable String groupId) {
+        logger.info("user {} removes kid {} from group {}", permissionsManager.getUserId(), kidId,
+                groupId);
         return new Response<>(kidManager.removeFromGroup(appId, schoolId, kidId, groupId));
     }
 
@@ -245,6 +255,8 @@ public class ConsoleWebController {
     public @ResponseBody Response<KidProfile> deleteFromSection(@PathVariable String appId,
             @PathVariable String schoolId, @PathVariable String kidId,
             @PathVariable String sectionId) {
+        logger.info("user {} removes kid {} from section {}", permissionsManager.getUserId(), kidId,
+                sectionId);
         return new Response<>(kidManager.removeFromSection(appId, schoolId, kidId, sectionId));
     }
 
@@ -253,6 +265,8 @@ public class ConsoleWebController {
     public @ResponseBody Response<KidProfile> addToSection(@PathVariable String appId,
             @PathVariable String schoolId, @PathVariable String kidId,
             @RequestBody SectionDef group) {
+        logger.info("user {} adds kid {} to section {}", permissionsManager.getUserId(), kidId,
+                group.getSectionId());
         return new Response<>(kidManager.putInSection(appId, schoolId, kidId, group));
     }
 
@@ -265,6 +279,7 @@ public class ConsoleWebController {
         KidProfile kidToRemove = storage.getKidProfile(appId, schoolId, kidId);
         kidProfiles.remove(kidToRemove);
         storage.updateChildren(appId, schoolId, kidProfiles);
+        logger.info("user {} deletes kid {}", permissionsManager.getUserId(), kidId);
         return new Response<>(kidToRemove);
     }
 
@@ -285,6 +300,7 @@ public class ConsoleWebController {
             teacherProfiles.remove(profileIndex + 1);
         }
         storage.updateTeachers(appId, schoolId, teacherProfiles);
+        logger.info("user {} saves teacher {}", permissionsManager.getUserId(), teacher);
         return new Response<>(teacher);
     }
 
@@ -297,6 +313,7 @@ public class ConsoleWebController {
         Teacher teacherToRemove = storage.getTeacherByTeacherId(teacherId, appId, schoolId);
         teacherProfiles.remove(teacherToRemove);
         storage.updateTeachers(appId, schoolId, teacherProfiles);
+        logger.info("user {} removes teacher {}", permissionsManager.getUserId(), teacherId);
         return new Response<>(teacherToRemove);
     }
 
@@ -326,6 +343,7 @@ public class ConsoleWebController {
             kidManager.updateKid(kid);
             logger.info("Update profile of kid {} with image {}", kidId, pictureFileName);
         }
+        logger.info("user {} uploads a picture for kid {} ", permissionsManager.getUserId(), kidId);
         return new Response<>();
     }
 
@@ -334,6 +352,7 @@ public class ConsoleWebController {
     public @ResponseBody Response<KidProfile> resetKidPicture(@PathVariable String appId,
             @PathVariable String schoolId, @PathVariable String kidId) {
         KidProfile kid = kidManager.deleteKidPicture(appId, schoolId, kidId);
+        logger.info("user {} removes picture for kid {} ", permissionsManager.getUserId(), kidId);
         return new Response<>(kid);
     }
 
@@ -388,6 +407,8 @@ public class ConsoleWebController {
             @PathVariable String teacherId) throws IOException {
 
         Teacher teacher = teacherManager.generatePin(appId, schoolId, teacherId);
+        logger.info("user {} generates a PIN for teacher {} ", permissionsManager.getUserId(),
+                teacherId);
         return new Response<>(teacher);
     }
 

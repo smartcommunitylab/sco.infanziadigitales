@@ -1,5 +1,5 @@
 import { WebService } from './../../../services/WebService';
-import { AlertController } from 'ionic-angular';
+import { AlertController, ToastController } from 'ionic-angular';
 import { School } from './../../../app/Classes/school';
 import { Bus } from './../../../app/Classes/bus';
 import { Component, OnInit, Input } from '@angular/core';
@@ -69,8 +69,11 @@ export class Info implements OnInit {
     editBus: boolean = false;
     newBus: string;
     newSchoolPhone: string;
-
-    constructor(private alertCtrl: AlertController, private webService: WebService) { }
+    BreakEmailException = {};
+    BreakPhoneException = {};
+    toastWrongEmail;
+    toastWrongPhone;
+    constructor(private alertCtrl: AlertController, private webService: WebService, private toastCtrl: ToastController) { }
 
     showPromptOnContattiEdit() {
         let prompt = this.alertCtrl.create({
@@ -114,9 +117,6 @@ export class Info implements OnInit {
         } else {
             this.newSchoolPhone = ""
         }
-        if (this.selectedSchool.malattie.indexOf("Altro") == -1) {
-            this.selectedSchool.malattie.push("Altro");
-        }
     }
     onContattiEdit() {
         this.editContatti = true;
@@ -130,10 +130,56 @@ export class Info implements OnInit {
         }
     }
 
+    private validatePhone(email) {
+        var re = /^[0-9]{5,10}$/;
+
+        return re.test(email);
+    }
+    private validateEmail(email) {
+        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(email);
+    }
+    checkEmailAndPhones(school: School) {
+        if (school.email && !this.validateEmail(school.email)) {
+            throw this.BreakEmailException
+        }
+        if (this.newSchoolPhone && !this.validatePhone(this.newSchoolPhone)) {
+            throw this.BreakPhoneException
+        }
+
+    }
+
     onContattiSave() {
-        this.selectedSchool.phoneNumbers[0] = this.newSchoolPhone;
-        this.webService.update(this.selectedSchool);
-        this.editContatti = false;
+        try {
+            this.checkEmailAndPhones(this.selectedSchool)
+            this.editContatti = false;
+            this.selectedSchool.phoneNumbers[0] = this.newSchoolPhone;
+            this.webService.update(this.selectedSchool);
+        } catch (e) {
+            if (e == this.BreakEmailException) {
+                this.toastWrongEmail = this.toastCtrl.create({
+                    message: 'Formato email non valido',
+                    duration: 1000,
+                    position: 'middle',
+                    dismissOnPageChange: true
+
+                });
+                this.toastWrongEmail.present()
+
+            } else if (e == this.BreakPhoneException) {
+                this.toastWrongPhone = this.toastCtrl.create({
+                    message: 'Formato telefono non valido',
+                    duration: 1000,
+                    position: 'middle',
+                    dismissOnPageChange: true
+                });
+
+                this.toastWrongPhone.present()
+            }
+        }
+        // this.selectedSchool.phoneNumbers[0] = this.newSchoolPhone;
+        // this.webService.update(this.selectedSchool);
+        // this.editContatti = false;
     }
 
     onContattiCancel() {

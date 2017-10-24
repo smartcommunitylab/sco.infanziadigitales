@@ -2,7 +2,7 @@
     <ion-navbar>
         <ion-title>
             {{selectedOrario.servizio}}
-            <span *ngIf="selectedOrario.servizio === ''">Nuovo servizio</span>
+            <span *ngIf="selectedOrario.servizio === ''">Nuovo orario</span>
         </ion-title>
         <ion-buttons start>
             <button ion-button (click)="close()">Annulla</button>
@@ -55,7 +55,11 @@
                                     <ion-col col-5>
                                         <ion-item>
                                             <ion-row>
-                                                <ion-col col-2>Nome</ion-col>
+                                                <ion-col col-2>
+                                                    <label style="line-height:40px">
+                                                        Nome
+                                                    </label>
+                                                </ion-col>
                                                 <ion-col col-10><input maxlength="20" class="text-generic" type="text" [(ngModel)]="fascia.name"
                                                         ng-focus="fascia.name === ''" (ngModelChange)='changeName(fascia.name)'
                                                         (ionBlur)="blurFascia(fascia)"></ion-col>
@@ -63,27 +67,27 @@
                                         </ion-item>
                                     </ion-col>
                                     <ion-col col-3 style="bottom: 0px">
-                                        <ion-item>
+                                        <ion-item style="height:100%">
                                             <ion-label>Da</ion-label>
                                             <ion-datetime displayFormat="HH:mm" pickerFormat="HH:mm" [(ngModel)]="fascia.start"></ion-datetime>
                                         </ion-item>
                                     </ion-col>
                                     <ion-col col-3 style="bottom: 0px">
-                                        <ion-item>
+                                        <ion-item style="height:100%">
                                             <ion-label>A</ion-label>
                                             <ion-datetime displayFormat="HH:mm" pickerFormat="HH:mm" [(ngModel)]="fascia.end"></ion-datetime>
                                         </ion-item>
                                     </ion-col>
                                     <ion-col col-1>
-                                        <button style="padding-left: 3px" ion-item icon-only (click)='removeFascia(fascia)'><ion-icon style="padding-left: 0" name="trash" item-end color="magenta1"></ion-icon></button>
+                                        <button style="padding-left: 3px;height:100%" ion-item icon-only (click)='removeFascia(fascia)'><ion-icon style="padding-left: 0" name="trash" item-end color="magenta1"></ion-icon></button>
                                     </ion-col>
                                 </ion-row>
                             </ion-grid>
                             <ion-grid>
                                 <ion-row text-center>
-                            <ion-col><button ion-button color="green1" (click)='addFascia()' [disabled]='disable' margin-top>Aggiungi Fascia</button>
-                            </ion-col>
-                            </ion-row>
+                                    <ion-col><button ion-button color="green1" (click)='addFascia()' [disabled]='disable' margin-top>Aggiungi Fascia</button>
+                                    </ion-col>
+                                </ion-row>
                             </ion-grid>
                         </ion-list>
                     </ion-card-content>

@@ -667,6 +667,7 @@ export class KidPage implements OnInit {
 
     onDelegaInfoCancel() {
         this.editDelegaInfo = false;
+        this.selectedDelega = null;
     }
 
     editDelegaContatti: boolean;

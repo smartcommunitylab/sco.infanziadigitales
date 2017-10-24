@@ -196,9 +196,26 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
 
     $scope.cancel = function() {
-        $scope.mode='';
-        week_planService.setMode($scope.mode);
-        $scope.getWeekPlanDB($scope.currWeek);
+        var confirmPopup = $ionicPopup.confirm({
+            title: $filter('translate')('Avviso'),
+            template: 'Sei sicuro di voler annullare le informazioni inserite?',
+            buttons: [{ 
+              text: $filter('translate')('cancel'),
+              type: 'button_cancel',
+              scope: null,
+              onTap: function(e) {
+              }
+
+            }, {
+              text: 'OK',
+              type: 'button_save',
+              onTap: function(e) {
+                $scope.mode='';
+                week_planService.setMode($scope.mode);
+                $scope.getWeekPlanDB($scope.currWeek);
+              }              
+            }]
+        });        
     };
 
     $scope.getRetireTimeLimit = function () {
@@ -501,9 +518,27 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     }; 
 
     $scope.cancel = function() {
-        $scope.mode='';
-        week_planService.setModeDefault($scope.mode);
-        $scope.getWeekPlanDB();
+        var confirmPopup = $ionicPopup.confirm({
+            title: $filter('translate')('Avviso'),
+            template: 'Sei sicuro di voler annullare le informazioni inserite?',
+            buttons: [{ 
+              text: $filter('translate')('cancel'),
+              type: 'button_cancel',
+              scope: null,
+              onTap: function(e) {
+              }
+
+            }, {
+              text: 'OK',
+              type: 'button_save',
+              onTap: function(e) {
+                $scope.mode='';
+                week_planService.setModeDefault($scope.mode);
+                $scope.getWeekPlanDB();
+              }              
+            }]
+        });
+        
     };
 
     $scope.gotoEditDate = function(day) {
@@ -653,18 +688,37 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
 
     $scope.cancel = function() {
-        for(var i=0;i<=4;i++){
-            $scope.days[i]=week_planService.getDayDataDefault(i);
-        }
+        var confirmPopup = $ionicPopup.confirm({
+            title: $filter('translate')('Avviso'),
+            template: 'Sei sicuro di voler annullare le informazioni inserite?',
+            buttons: [{ 
+              text: $filter('translate')('cancel'),
+              type: 'button_cancel',
+              scope: null,
+              onTap: function(e) {
+              }
+
+            }, {
+              text: 'OK',
+              type: 'button_save',
+              onTap: function(e) {
+                for(var i=0;i<=4;i++){
+                    $scope.days[i]=week_planService.getDayDataDefault(i);
+                }
+                
+                week_planService.setModeDefault('edit');
+                $state.go('app.default_week_plan');
+              }              
+            }]
+        });
         
-        week_planService.setModeDefault('edit');
-        $state.go('app.default_week_plan');
     };
 
     $scope.getFermataOptions = function(day) {
         if(profileService.getBabyProfile().services.bus && profileService.getBabyProfile().services.bus.stops){
-            $scope.fermataOptions=profileService.getBabyProfile().services.bus.stops;
+            $scope.fermataOptions=angular.copy(profileService.getBabyProfile().services.bus.stops);
         }
+        $scope.fermataOptions.push({'stopId':'none'});
     };
     $scope.getFermataOptions();
 
@@ -744,8 +798,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.getListServices();
     
     $scope.setEntry = function(item) {
-        $scope.currData.entrata=moment(item.entry,'H:mm');
-        $scope.currData.entrata_display=item.entry;
+        $scope.currData.entrata=moment(item.out,'H:mm');
+        $scope.currData.entrata_display=item.out;
         setTimeWidget();
     };
 
@@ -911,9 +965,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
     $scope.getFermataOptions = function(day) {
         if(profileService.getBabyProfile().services.bus && profileService.getBabyProfile().services.bus.stops){
-            $scope.fermataOptions=profileService.getBabyProfile().services.bus.stops;
+            $scope.fermataOptions=angular.copy(profileService.getBabyProfile().services.bus.stops);
         }
-        console.log($scope.fermataOptions);
         $scope.fermataOptions.push({'stopId':'none'});
     };
     $scope.getFermataOptions();
@@ -954,10 +1007,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     3:{'name':'thursday','label':'thursday_reduced'},
     4:{'name':'friday','label':'friday_reduced'}};
 
-    $scope.listReasons=$scope.schoolProf.absenceTypes;
+    $scope.listReasons=angular.copy($scope.schoolProf.absenceTypes);
     $scope.listReasons.push({'typeId':'','type':$filter('translate')('select')});
     console.log($scope.listReasons);
-    $scope.listProblems=$scope.schoolProf.frequentIllnesses;
+    $scope.listProblems=angular.copy($scope.schoolProf.frequentIllnesses);
     $scope.listProblems.push({'typeId':'','type':$filter('translate')('select')});
     console.log($scope.listProblems);
 
@@ -1018,12 +1071,30 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
 
     $scope.cancel = function() {
-        var getIsFromHome=week_planService.getIsFromHome();
-        if(getIsFromHome){
-            $state.go('app.home');
-        }else{
-            $state.go('app.week_plan');
-        }
+        var confirmPopup = $ionicPopup.confirm({
+            title: $filter('translate')('Avviso'),
+            template: 'Sei sicuro di voler annullare le informazioni inserite?',
+            buttons: [{ 
+              text: $filter('translate')('cancel'),
+              type: 'button_cancel',
+              scope: null,
+              onTap: function(e) {
+              }
+
+            }, {
+              text: 'OK',
+              type: 'button_save',
+              onTap: function(e) {
+                var getIsFromHome=week_planService.getIsFromHome();
+                if(getIsFromHome){
+                    $state.go('app.home');
+                }else{
+                    $state.go('app.week_plan');
+                }
+              }              
+            }]
+        });
+        
     };
 
     sortByTimeAscEntry = function (lhs, rhs) {
@@ -1098,8 +1169,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     
     
     $scope.setEntry = function(item) {
-        $scope.currData.entrata=moment(item.entry,'H:mm');
-        $scope.currData.entrata_display=item.entry;
+        $scope.currData.entrata=moment(item.out,'H:mm');
+        $scope.currData.entrata_display=item.out;
         setTimeWidget();
     };
 
@@ -1218,7 +1289,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
 
     function setTimeWidget() {
-        var tempVal=(new Date()).getHours() * 60 * 60 + (new Date()).getMinutes() * 60;
+        var tempVal=(new Date()).getHours() * 60 * 60 ;
         if(localStorage.getItem('prom_day_time') !== null && localStorage.getItem('prom_day_time') !== undefined){
             temp=localStorage.getItem('prom_day_time').split(':');
             var selectedTime = new Date();
@@ -1248,7 +1319,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         $scope.currData['prom_day_time'] = $filter('date')(selectedTime, 'H:mm');
 
         // params for weekly notification
-        tempVal=(new Date()).getHours() * 60 * 60 + (new Date()).getMinutes() * 60;
+        tempVal=(new Date()).getHours() * 60 * 60 ;
         if(localStorage.getItem('prom_week_time') !== null && localStorage.getItem('prom_week_time') !== undefined){
             temp=localStorage.getItem('prom_week_time').split(':');
             var selectedTime = new Date();

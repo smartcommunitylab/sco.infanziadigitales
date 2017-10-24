@@ -120,6 +120,8 @@ export class OrariModal implements OnInit {
                                 // });
                                 // alertConflict.present();
                             }
+                        } else {
+                            this.navCtrl.pop();
                         }
                         this.webService.update(this.selectedSchool);
                     }

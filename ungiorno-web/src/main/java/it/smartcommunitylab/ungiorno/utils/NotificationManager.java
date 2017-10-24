@@ -219,7 +219,7 @@ public class NotificationManager {
 
                     boolean ok = true;
 
-                    do {
+//                    do {
                         try {
                             String appId = cred.getMessagingAppId() + APP_UGAS_PARENT;
                             signature.setAppId(appId);
@@ -244,17 +244,17 @@ public class NotificationManager {
                             ok = true;
                         } catch (CommunicatorConnectorException e) {
 //                            ok = false;
-                            try {
-                                Thread.sleep(10000);
-                            } catch (InterruptedException e1) {
-                            }
+//                            try {
+//                                Thread.sleep(10000);
+//                            } catch (InterruptedException e1) {
+//                            }
                             logger.error("Exception register app in NotificationManager",
                                     e.getMessage());
                         } catch (Exception e) {
                             logger.error("Exception register app in NotificationManager",
                                     e.getMessage());
                         }
-                    } while (!ok);
+//                    } while (!ok);
                 }
 
             }

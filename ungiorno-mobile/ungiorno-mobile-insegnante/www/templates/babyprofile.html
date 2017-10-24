@@ -16,9 +16,9 @@
                 </span>
               </div>
               <div class=" detailItem" ng-if="!babyInformations.active">{{babyProfile.firstName}}{{'baby_not_monitored' | translate}}</div>
-              <div class=" detailItem" ng-if="babyInformations.exitTime !== null">{{'enter_at' | translate}}<b> {{babyEnterHour}}</b></div>
+              <div class=" detailItem" ng-if="babyInformations.exitTime !== null">{{'enter_at' | translate}}<b> {{babyInformations.entryTime | date:'H:mm'}}</b></div>
               <div class=" detailItem" ng-if="checkBusServiceActive() && babyInformations.exitTime !== null">{{'bus_stop_back' | translate}} <b>{{babyBusStopBackName}}</b></div>
-              <div class=" detailItem" ng-if="babyInformations.exitTime !== null && !checkBusServiceActive()">{{'exit_at' | translate}}<b>{{babyInformations.exitTime | date:'HH:mm'}}</b></div>
+              <div class=" detailItem" ng-if="babyInformations.exitTime !== null && !checkBusServiceActive()">{{'exit_at' | translate}}<b>{{babyInformations.exitTime | date:'H:mm'}}</b></div>
               <div class=" detailItem" style="color: #ff0000;" ng-if="babyInformations.personException && babyInformations.exitTime !== null">{{'extra_delegation' | translate}}</div>
               <a href="http://www.google.it" class=" detailItem" ng-if="personWhoRetire.isDelegate && babyInformations.exitTime !== null">{{'view_delegation' | translate}}</a>
             </div>

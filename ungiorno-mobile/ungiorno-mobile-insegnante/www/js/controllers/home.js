@@ -797,6 +797,7 @@ $scope.cnt=0;
         var kidFascieNames=$scope.section.children[i].fascieNames;
         if( kidFascieNames !==null && kidFascieNames!=undefined && kidFascieNames.indexOf(periodOfTheDay) !== -1){
             $scope.childrenProfiles[periodOfTheDay].push($scope.section.children[i]);
+            console.log($scope.section.children[i]);
         }
         
         //putNotification($scope.section.children[i]):
@@ -822,6 +823,8 @@ $scope.cnt=0;
         }*/
         $scope.childrenProfiles['allPeriod'].push($scope.section.children[i]);
       }
+      $scope.childrenProfiles[periodOfTheDay]=$filter('orderBy')($scope.childrenProfiles[periodOfTheDay], 'firstName');
+      $scope.childrenProfiles['allPeriod']=$filter('orderBy')($scope.childrenProfiles['allPeriod'], 'firstName');
     }
   }
   $scope.getNowDate = function () {

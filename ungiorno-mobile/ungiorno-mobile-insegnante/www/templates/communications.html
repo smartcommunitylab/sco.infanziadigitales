@@ -57,13 +57,16 @@ Old version
       <textarea class="input-communication" placeholder="{{'communication_description' | translate}}" ng-model="newCommunication.description" id="description" ng-keydown="expandText('description')">
       </textarea>
       <!--edit mode || new communication mode-->
-      <div class="communication-buttons">
+      <div class="bottom_com">
+        <div class="dt_scad"></div>
+        <div class="communication-buttons">
         <button class="button communication-button cancel" ng-click="discardCommunication()" ng-show="isMode('edit') || isMode('new')">
           {{'communication_annulla' | translate}}
         </button>
         <button class="button communication-button send" ng-click="submitCommunication()" ng-show="isMode('edit') || isMode('new')">
           {{'communication_invia' | translate}}
         </button>
+      </div>
       </div>
     </div>
 

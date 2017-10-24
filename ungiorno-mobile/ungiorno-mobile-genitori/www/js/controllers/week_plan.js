@@ -201,10 +201,42 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         $scope.getWeekPlanDB($scope.currWeek);
     };
 
+    $scope.getRetireTimeLimit = function () {
+        var temp=moment().startOf('day').add(10,'hours');
+        if ($scope.briefInfo.ore_uscita!==null && $scope.briefInfo.ore_uscita!==undefined) {
+          temp= moment($scope.briefInfo.ore_uscita,'HH:mm');
+        } else {
+          temp= moment().startOf('day').add(10,'hours');
+        }
+        return temp;
+      }
+     
+      $scope.isRetireTimeLimitExpired = function () {
+        return moment($scope.modifyBefore).isBefore(moment());
+      }
+
     $scope.gotoEditDate = function(day) {
         var selected = moment().weekday(day).week($scope.currWeek);
-
-        if(selected>=$scope.currentDate){
+        var dayData=$scope.days[day];
+        var usc =dayData['uscita'];
+        var temp=moment().startOf('day').add(10,'hours');
+        if(usc!=null && usc!==undefined){
+            temp=moment(usc,'HH:mm');
+        }
+        if(moment(temp).isBefore(moment()) && day==$scope.currDay ){
+            var myPopup = $ionicPopup.show({
+                title: $filter('translate')('retire_popup_toolate_title'),
+                cssClass: 'expired-popup',
+                template: $filter('translate')('retire_popup_toolate_text') + " " + moment(temp).format('HH:mm') + "<div class\"row\"><a href=\"tel:" + profileService.getSchoolProfile().contacts.telephone[0] + "\" class=\"button button-expired-call\">" + $filter('translate')('home_contatta') + "</a></div>",
+                buttons: [
+                  {
+                    text: $filter('translate')('retire_popup_absent_close'),
+                    type: 'button-positive'
+                    }
+                  ]
+              });
+        }
+        else if(selected>=$scope.currentDate){
           $scope.mode='edit';
           var dayData=$scope.days[day];
           dayData['monday']=false;
@@ -582,6 +614,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         var dateFormat=selected.format('dddd');
         $scope.date=dateFormat;
         $scope.currData=angular.copy(week_planService.getDayDataDefault($scope.currDay));
+        if($scope.currData.fermata=='' || $scope.currData.fermata==null || $scope.currData.fermata==undefined){
+            $scope.currData.fermata='none';
+        }
         if($scope.currData['uscita']!=null && $scope.currData['uscita']!=undefined)
             $scope.currData['uscita_display']=moment($scope.currData['uscita']).format('H:mm' );
         else
@@ -638,6 +673,21 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
     $scope.getRitiroOptions();
 
+    sortByTimeAscEntry = function (lhs, rhs) {
+        var results;
+        results = lhs.entry_val.hours() > rhs.entry_val.hours() ? 1 : lhs.entry_val.hours() < rhs.entry_val.hours() ? -1 : 0;
+        if (results === 0) results = lhs.entry_val.minutes() > rhs.entry_val.minutes() ? 1 : lhs.entry_val.minutes() < rhs.entry_val.minutes() ? -1 : 0;
+        if (results === 0) results = lhs.entry_val.seconds() > rhs.entry_val.seconds() ? 1 : lhs.entry_val.seconds() < rhs.entry_val.seconds() ? -1 : 0;
+        return results;
+      };
+    sortByTimeAscOut = function (lhs, rhs) {
+        var results;
+        results = lhs.out_val.hours() > rhs.out_val.hours() ? 1 : lhs.out_val.hours() < rhs.out_val.hours() ? -1 : 0;
+        if (results === 0) results = lhs.out_val.minutes() > rhs.out_val.minutes() ? 1 : lhs.out_val.minutes() < rhs.out_val.minutes() ? -1 : 0;
+        if (results === 0) results = lhs.out_val.seconds() > rhs.out_val.seconds() ? 1 : lhs.out_val.seconds() < rhs.out_val.seconds() ? -1 : 0;
+        return results;
+      };
+
     $scope.listServicesAnticipo=[];
     $scope.listServicesPosticipo=[];
     $scope.getListServices = function(day) {
@@ -653,9 +703,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         }
         fromtimeFormatted=moment(fromtime).format('H:mm');
         totimeFormatted=moment(totime).format('H:mm');
-        
         var temp={'value':'Normale','label':'Normale',
-        'entry':fromtimeFormatted,'out':totimeFormatted,
+        'entry':fromtimeFormatted,'entry_val':moment(fromtimeFormatted,'H:mm'),'out':totimeFormatted,'out_val':moment(totimeFormatted,'H:mm'),
         'type':'Normale'};
         $scope.listServices.push(temp);
         $scope.listServicesAnticipo.push(temp);
@@ -663,50 +712,37 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         var fr='',fr2='';
         var to='',to2='';
         if($scope.listServicesDb!==null && $scope.listServicesDb!==undefined){
-        for(var i=0;i<$scope.listServicesDb.length;i++){
-            var type=$scope.listServicesDb[i].name;
-            var enabled=$scope.listServicesDb[i].enabled;
-            if(enabled){
-               var tempServ=$scope.listServicesDb[i].timeSlots;
-               for(var j=0;j<tempServ.length;j++){
-                   fr=moment(tempServ[j]['fromTime']).format('H:mm');
-                   to=moment(tempServ[j]['toTime']).format('H:mm');
-                   var temp={'value':tempServ[j]['name'],'label':tempServ[j]['name'],
-                   'entry':fr,'entry_val':moment(fr,'H:mm'),'out':to,'out_val':moment(fr,'H:mm'),
-                   'type':type};
-                   $scope.listServices.push(temp);
-                   if(moment(fr,'H:mm').isBefore(moment(fromtimeFormatted,'H:mm'))){
-                    $scope.listServicesAnticipo.push(temp);
-                   }
-                   if(moment(to,'H:mm').isAfter(moment(totimeFormatted,'H:mm'))){
-                    $scope.listServicesPosticipo.push(temp);
-                   }
-                   //console.log(to);console.log(totimeFormatted);
-                   //console.log(moment(to,'H:mm').isAfter(moment(totimeFormatted,'H:mm')));
-                   //console.log($scope.listServicesPosticipo);
-               }
+            for(var i=0;i<$scope.listServicesDb.length;i++){
+                var type=$scope.listServicesDb[i].name;
+                var enabled=$scope.listServicesDb[i].enabled;
+                if(enabled){
+                var tempServ=$scope.listServicesDb[i].timeSlots;
+                for(var j=0;j<tempServ.length;j++){
+                    fr=moment(tempServ[j]['fromTime']).format('H:mm');
+                    to=moment(tempServ[j]['toTime']).format('H:mm');
+                    var temp={'value':tempServ[j]['name'],'label':tempServ[j]['name'],
+                    'entry':fr,'entry_val':moment(fr,'H:mm'),'out':to,'out_val':moment(fr,'H:mm'),
+                    'type':type};
+                    $scope.listServices.push(temp);
+                    if(moment(to,'H:mm').isBefore(moment('12:00','H:mm'))){
+                        $scope.listServicesAnticipo.push(temp);
+                    }
+                    if(moment(to,'H:mm').isAfter(moment('12:00','H:mm'))){
+                        $scope.listServicesPosticipo.push(temp);
+                    }
+                    //console.log(to);console.log(totimeFormatted);
+                    //console.log(moment(to,'H:mm').isAfter(moment(totimeFormatted,'H:mm')));
+                    //console.log($scope.listServicesPosticipo);
+                }
+                }
             }
+            console.log($scope.listServicesAnticipo);
+            $scope.listServicesAnticipo.sort(sortByTimeAscOut);
+            $scope.listServicesPosticipo.sort(sortByTimeAscOut);
         }
-    }
     };
     $scope.getListServices();
-     sortByTimeAscEntry = function (lhs, rhs) {
-        var results;
-        results = lhs.entry_val.hours() > rhs.entry_val.hours() ? 1 : lhs.entry_val.hours() < rhs.entry_val.hours() ? -1 : 0;
-        if (results === 0) results = lhs.entry_val.minutes() > rhs.entry_val.minutes() ? 1 : lhs.entry_val.minutes() < rhs.entry_val.minutes() ? -1 : 0;
-        if (results === 0) results = lhs.entry_val.seconds() > rhs.entry_val.seconds() ? 1 : lhs.entry_val.seconds() < rhs.entry_val.seconds() ? -1 : 0;
-        return results;
-      };
-    sortByTimeAscOut = function (lhs, rhs) {
-        var results;
-        results = lhs.out_val.hours() > rhs.out_val.hours() ? 1 : lhs.out_val.hours() < rhs.out_val.hours() ? -1 : 0;
-        if (results === 0) results = lhs.out_val.minutes() > rhs.out_val.minutes() ? 1 : lhs.out_val.minutes() < rhs.out_val.minutes() ? -1 : 0;
-        if (results === 0) results = lhs.out_val.seconds() > rhs.out_val.seconds() ? 1 : lhs.out_val.seconds() < rhs.out_val.seconds() ? -1 : 0;
-        return results;
-      };
     
-    $scope.listServicesAnticipo=$filter('orderBy')($scope.listServicesAnticipo, 'entry_val');//$scope.listServicesAnticipo.sort(sortByTimeAscEntry);
-    $scope.listServicesPosticipo=$filter('orderBy')($scope.listServicesPosticipo, 'out_val');//$scope.listServicesPosticipo.sort(sortByTimeAscOut);
     $scope.setEntry = function(item) {
         $scope.currData.entrata=moment(item.entry,'H:mm');
         $scope.currData.entrata_display=item.entry;
@@ -736,9 +772,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 ' '+
                 '</div>'+
                   ''+
-                  '<div><ion-list class="padlist" ng-repeat="(key, item) in listServicesAnticipo | groupBy: \'type\'   " >'+
-                  '<ion-radio ng-repeat="itemValue in item" ng-click="setEntry(itemValue)">'
-                  +'<span style="float:left;">{{itemValue.value}}</span> <span style="float:right;color: #f8ab15;">{{itemValue.entry}}</span></ion-radio>'+
+                  '<div><ion-list class="padlist" >'+
+                  '<ion-radio ng-repeat="itemValue in listServicesAnticipo" ng-click="setEntry(itemValue)">'
+                  +'<span style="float:left;">{{itemValue.value}}</span> <span style="float:right;color: #f8ab15;">{{itemValue.out}}</span></ion-radio>'+
               '</ion-list>'+
           '</ion-list></div>'+
           '<label class="plan-item-time">'+
@@ -773,8 +809,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
               ' <div class="choose">{{"insert_time" | translate}} <br/>{{"choose_time" | translate}}</div> '+
               ' </span>'+
                  '</div>'+
-              '<div><ion-list class="padlist" ng-repeat="(key, item) in listServicesPosticipo | groupBy: \'type\'  " >'+
-              '<ion-radio ng-repeat="itemValue in item" ng-click="setOut(itemValue)">'
+              '<div><ion-list class="padlist" >'+
+              '<ion-radio ng-repeat="itemValue in listServicesPosticipo" ng-click="setOut(itemValue)">'
               +'<span style="float:left;">{{itemValue.value}}</span> <span style="float:right;color: #f8ab15;">{{itemValue.out}}</span></ion-radio>'+
           '</ion-list>'+
       '</ion-list>'+
@@ -897,7 +933,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         if($scope.currData.absence){
             $scope.reason_text='remove_reason';           
         }
-        console.log($scope.currData.fermata);
         if($scope.currData.fermata=='' || $scope.currData.fermata==null || $scope.currData.fermata==undefined){
             $scope.currData.fermata='none';
         }
@@ -991,6 +1026,21 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         }
     };
 
+    sortByTimeAscEntry = function (lhs, rhs) {
+        var results;
+        results = lhs.entry_val.hours() > rhs.entry_val.hours() ? 1 : lhs.entry_val.hours() < rhs.entry_val.hours() ? -1 : 0;
+        if (results === 0) results = lhs.entry_val.minutes() > rhs.entry_val.minutes() ? 1 : lhs.entry_val.minutes() < rhs.entry_val.minutes() ? -1 : 0;
+        if (results === 0) results = lhs.entry_val.seconds() > rhs.entry_val.seconds() ? 1 : lhs.entry_val.seconds() < rhs.entry_val.seconds() ? -1 : 0;
+        return results;
+      };
+    sortByTimeAscOut = function (lhs, rhs) {
+        var results;
+        results = lhs.out_val.hours() > rhs.out_val.hours() ? 1 : lhs.out_val.hours() < rhs.out_val.hours() ? -1 : 0;
+        if (results === 0) results = lhs.out_val.minutes() > rhs.out_val.minutes() ? 1 : lhs.out_val.minutes() < rhs.out_val.minutes() ? -1 : 0;
+        if (results === 0) results = lhs.out_val.seconds() > rhs.out_val.seconds() ? 1 : lhs.out_val.seconds() < rhs.out_val.seconds() ? -1 : 0;
+        return results;
+      };
+
     $scope.listServicesAnticipo=[];
     $scope.listServicesPosticipo=[];
     $scope.getListServices = function(day) {
@@ -1007,7 +1057,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         fromtimeFormatted=moment(fromtime).format('H:mm');
         totimeFormatted=moment(totime).format('H:mm');
         var temp={'value':'Normale','label':'Normale',
-        'entry':fromtimeFormatted,'out':totimeFormatted,
+        'entry':fromtimeFormatted,'entry_val':moment(fromtimeFormatted,'H:mm'),'out':totimeFormatted,'out_val':moment(totimeFormatted,'H:mm'),
         'type':'Normale'};
         $scope.listServices.push(temp);
         $scope.listServicesAnticipo.push(temp);
@@ -1027,10 +1077,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                     'entry':fr,'entry_val':moment(fr,'H:mm'),'out':to,'out_val':moment(fr,'H:mm'),
                     'type':type};
                     $scope.listServices.push(temp);
-                    if(moment(fr,'H:mm').isBefore(moment(fromtimeFormatted,'H:mm'))){
+                    if(moment(to,'H:mm').isBefore(moment('12:00','H:mm'))){
                         $scope.listServicesAnticipo.push(temp);
                     }
-                    if(moment(to,'H:mm').isAfter(moment(totimeFormatted,'H:mm'))){
+                    if(moment(to,'H:mm').isAfter(moment('12:00','H:mm'))){
                         $scope.listServicesPosticipo.push(temp);
                     }
                     //console.log(to);console.log(totimeFormatted);
@@ -1039,28 +1089,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 }
                 }
             }
+            console.log($scope.listServicesAnticipo);
+            $scope.listServicesAnticipo.sort(sortByTimeAscOut);
+            $scope.listServicesPosticipo.sort(sortByTimeAscOut);
         }
     };
     $scope.getListServices();
-    sortByTimeAscEntry = function (lhs, rhs) {
-        var results;
-        results = lhs.entry_val.hours() > rhs.entry_val.hours() ? 1 : lhs.entry_val.hours() < rhs.entry_val.hours() ? -1 : 0;
-        if (results === 0) results = lhs.entry_val.minutes() > rhs.entry_val.minutes() ? 1 : lhs.entry_val.minutes() < rhs.entry_val.minutes() ? -1 : 0;
-        if (results === 0) results = lhs.entry_val.seconds() > rhs.entry_val.seconds() ? 1 : lhs.entry_val.seconds() < rhs.entry_val.seconds() ? -1 : 0;
-        return results;
-      };
-    sortByTimeAscOut = function (lhs, rhs) {
-        var results;
-        results = lhs.out_val.hours() > rhs.out_val.hours() ? 1 : lhs.out_val.hours() < rhs.out_val.hours() ? -1 : 0;
-        if (results === 0) results = lhs.out_val.minutes() > rhs.out_val.minutes() ? 1 : lhs.out_val.minutes() < rhs.out_val.minutes() ? -1 : 0;
-        if (results === 0) results = lhs.out_val.seconds() > rhs.out_val.seconds() ? 1 : lhs.out_val.seconds() < rhs.out_val.seconds() ? -1 : 0;
-        return results;
-      };
     
-    //$scope.listServicesAnticipo=$filter('orderBy')($scope.listServicesAnticipo, 'entry_val');//$scope.listServicesAnticipo.sort(sortByTimeAscEntry);
-    //$scope.listServicesPosticipo=$filter('orderBy')($scope.listServicesPosticipo, 'out_val');//$scope.listServicesPosticipo.sort(sortByTimeAscOut);
-    $scope.listServicesAnticipo=$filter('orderBy')($scope.listServicesAnticipo, 'entry_val');//$scope.listServicesAnticipo.sort(sortByTimeAscEntry);
-    $scope.listServicesPosticipo=$filter('orderBy')($scope.listServicesPosticipo, 'out_val');//$scope.listServicesPosticipo.sort(sortByTimeAscOut);
     
     $scope.setEntry = function(item) {
         $scope.currData.entrata=moment(item.entry,'H:mm');
@@ -1091,9 +1126,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 ' '+
                 '</div>'+
                   ''+
-                  '<div><ion-list class="padlist" ng-repeat="(key, item) in listServicesAnticipo | groupBy: \'type\'   " >'+
-                  '<ion-radio ng-repeat="itemValue in item" ng-click="setEntry(itemValue)">'
-                  +'<span style="float:left;">{{itemValue.value}}</span> <span style="float:right;color: #f8ab15;">{{itemValue.entry}}</span></ion-radio>'+
+                  '<div><ion-list class="padlist" >'+
+                  '<ion-radio ng-repeat="itemValue in listServicesAnticipo" ng-click="setEntry(itemValue)">'
+                  +'<span style="float:left;">{{itemValue.value}}</span> <span style="float:right;color: #f8ab15;">{{itemValue.out}}</span></ion-radio>'+
               '</ion-list>'+
           '</ion-list></div>'+
           '<label class="plan-item-time">'+
@@ -1128,8 +1163,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
               ' <div class="choose">{{"insert_time" | translate}} <br/>{{"choose_time" | translate}}</div> '+
               ' </span>'+
                  '</div>'+
-              '<div><ion-list class="padlist" ng-repeat="(key, item) in listServicesPosticipo | groupBy: \'type\'  " >'+
-              '<ion-radio ng-repeat="itemValue in item" ng-click="setOut(itemValue)">'
+              '<div><ion-list class="padlist">'+
+              '<ion-radio ng-repeat="itemValue in listServicesPosticipo" ng-click="setOut(itemValue)">'
               +'<span style="float:left;">{{itemValue.value}}</span> <span style="float:right;color: #f8ab15;">{{itemValue.out}}</span></ion-radio>'+
           '</ion-list>'+
       '</ion-list>'+

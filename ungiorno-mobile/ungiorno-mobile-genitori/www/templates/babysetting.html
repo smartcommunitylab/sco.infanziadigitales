@@ -39,9 +39,10 @@
           <label class="item item-input setting setting-line">{{getTimeLabel()}}</label>
         </div>
         
-        <div class="input-description-padding">{{'babysetting_who' | translate}}</div>
+        <div class="input-description-padding">{{'babysetting_who' | translate}}:</div>
         <ul class="home-info-content my-list home-comm">
-          <li class="huge row" ng-repeat="person in babyProfile.persons"><span class="col">{{person.firstName}} &nbsp;{{person.lastName}} &nbsp;&nbsp;({{ person.parent ? 'parent'  : person.relation  | translate}})</span></li>
+          <li class="huge row" ng-repeat="person in listDelega" ng-if="person.parent"><span class="col">{{person.firstName}} &nbsp;{{person.lastName}} &nbsp;&nbsp;({{ 'parent_delega' | translate}} &nbsp;{{person.parentIndex}})</span></li>
+          <li class="huge row" ng-repeat="person in listDelega" ng-if="!person.parent"><span class="col">{{person.firstName}} &nbsp;{{person.lastName}} &nbsp;&nbsp;({{ person.relation  | translate}})</span></li>
         </ul>
       </div>
 

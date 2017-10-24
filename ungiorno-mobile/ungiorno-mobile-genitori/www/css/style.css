@@ -2056,12 +2056,15 @@ textarea {
   display: flex;
   flex-direction: row;
   margin-top:10px;
-  padding:20px;
+  padding-top:20px;
+  padding-bottom:20px;
 }
 
 .navicon
 {
   font-size: 40px;
+  padding-left: 25px;
+  padding-right: 25px;
 }
 
 .navicon2
@@ -2197,10 +2200,10 @@ textarea {
   padding-bottom:10px;
   padding-right:10px;
   font-size: 15px;
-  width: 50%;
+  width: 70%;
 }
 .dayEdit_table td {
-  font-size: small;
+  /*font-size: small;*/
 }
 
 .span_motiv {
@@ -2233,7 +2236,7 @@ textarea {
 }
 .delegaStyle{
   white-space: nowrap; 
-  width: 5em; 
+  width: 7em; 
   overflow: hidden;
   text-overflow: ellipsis; 
 }
@@ -2263,13 +2266,12 @@ textarea {
   padding-left: 20px;
   text-align: left;
   margin: 4px 80px 0px 80px!important;
+  white-space: nowrap;
 }
-.busStyle{;
+.busStyle{
   width:40%
 }
 .dateStyleHead{
-  padding-left:30px;
-  padding-right:30px;
   padding-top: 10px;
 }
 .weekicon{
@@ -2452,4 +2454,9 @@ textarea {
 
 .sethour{
   padding-left: 80px;
+}
+
+.ripristina{
+  padding-top:6px;
+  margin-left:-15px;
 }

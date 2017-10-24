@@ -259,17 +259,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     var currentDate = moment();
     var week=currentDate.format('w');
     var day=currentDate.format('d')-1;
+    $scope.weekend=false;
+    if(day==5 || day==6){
+      $scope.weekend=true;
+    }
     $scope.ritiraOptions=$scope.kidProfile.persons;
     var jsonTest={};
     $scope.weekInfo=[];
     $scope.getSchoolProfileNormalConfig=$filter('getSchoolNormalService')(profileService.getSchoolProfile().services);
     console.log(profileService.getSchoolProfile());
     var fromtime=$scope.getSchoolProfileNormalConfig['fromTime'];
-    var ent=moment(fromtime).format('H:m');
-    fromtime=ent.replace(/^0+/, '');
     var totime=$scope.getSchoolProfileNormalConfig['toTime'];
-    var usc=moment(totime).format('H:m');
-    totime=usc.replace(/^0+/, '');
     if(fromtime=='' && totime==''){
         alert($filter('translate')('missing_school_config'));//TODO translate this
         fromtime=moment('7:30','H:mm');
@@ -284,14 +284,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             if(enabled && type=='Anticipo'){
                var tempServ=$scope.listServicesDb[i].timeSlots;
                fromtime=tempServ[0]['fromTime'];
-               var ent=moment(fromtime).format('H:m');
-               fromtime=ent;//fromtime.replace(/^0+/, '');
             }
             if(enabled && type=='Posticipo'){
                 var tempServ=$scope.listServicesDb[i].timeSlots;
-                totime=tempServ[0]['toTime'];
-                var usc=moment(totime).format('H:m');
-                totime=usc;//totime.replace(/^0+/, '');
+                totime=tempServ[tempServ.length-1]['toTime'];
             }
     }
     }
@@ -299,12 +295,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
       if(data!=null && data!= undefined && data.length>0){
         var motiv_type=(data[day]['motivazione']!=undefined && data[day]['motivazione']!=null ? data[day]['motivazione']['type'] : '');
         var motiv_subtype=(data[day]['motivazione']!=undefined && data[day]['motivazione']!=null ? data[day]['motivazione']['subtype'] : '');
-        jsonTest={'ore_entrata':data[day]['entrata'].replace(/^0+/, ''),'ore_uscita':data[day]['uscita'].replace(/^0+/, ''),'addressBus':'Nome Test',
+        jsonTest={'ore_entrata':data[day]['entrata'],'ore_uscita':data[day]['uscita'],'addressBus':'Nome Test',
         'delegaName':$filter('getRitiroName')(data[day]['delega_name'],$scope.ritiraOptions),'delegaType':$filter('getRitiroType')(data[day]['delega_name'],$scope.ritiraOptions),
         'bus':data[day]['bus'],'absence':data[day]['absence'],
         'motivazione':{type:motiv_type,subtype:motiv_subtype}
       };
         $scope.weekInfo=data;
+        jsonTest['ore_entrata']=moment(jsonTest['ore_entrata']).format('H:mm');
+        jsonTest['ore_uscita']=moment(jsonTest['ore_uscita']).format('H:mm');
         $scope.briefInfo= jsonTest;
         profileService.setBriefInfo($scope.briefInfo);
       }
@@ -313,21 +311,24 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             if(data!=null && data!= undefined && data.length>0){
                 var motiv_type=(data[day]['motivazione']!=undefined && data[day]['motivazione']!=null ? data[day]['motivazione']['type'] : '');
                var motiv_subtype=(data[day]['motivazione']!=undefined && data[day]['motivazione']!=null ? data[day]['motivazione']['subtype'] : '');
-               jsonTest={'ore_entrata':data[day]['entrata'].replace(/^0+/, ''),'ore_uscita':data[day]['uscita'].replace(/^0+/, ''),'addressBus':'Nome Test',
+               jsonTest={'ore_entrata':data[day]['entrata'],'ore_uscita':data[day]['uscita'],'addressBus':'Nome Test',
                'delegaName':$filter('getRitiroName')(data[day]['delega_name'],$scope.ritiraOptions),'delegaType':$filter('getRitiroType')(data[day]['delega_name'],$scope.ritiraOptions),
                'bus':data[day]['bus'],'absence':data[day]['absence'],
                'motivazione':{type:motiv_type,subtype:motiv_subtype}
              };
              $scope.weekInfo=data;
+             jsonTest['ore_entrata']=moment(jsonTest['ore_entrata']).format('H:mm');
+             jsonTest['ore_uscita']=moment(jsonTest['ore_uscita']).format('H:mm');
              $scope.briefInfo= jsonTest;
              profileService.setBriefInfo($scope.briefInfo);
             }else{
-              jsonTest={'ore_entrata':fromtime,'ore_uscita':totime,'addressBus':'Nome Test',
+              jsonTest={'ore_entrata':moment(fromtime).format('H:mm'),'ore_uscita':moment(totime).format('H:mm'),'addressBus':'Nome Test',
               'delegaName':'','delegaType':'',
               'bus':false,'absence':false,
               'motivazione':{type:'',subtype:''}
             }
-              $scope.weekInfo=data;
+              var dataTemp={"entrata":fromtime,"uscita":totime,'bus':false,'absence':false,'motivazione':{type:'',subtype:''},"monday":false,"tuesday":false,"wednesday":false,"thursday":false,"friday":false};
+              $scope.weekInfo=[dataTemp,dataTemp,dataTemp,dataTemp,dataTemp];
               $scope.briefInfo= jsonTest;
               profileService.setBriefInfo($scope.briefInfo);
           }}, function (error) {
@@ -344,8 +345,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     var selected = moment().weekday(day).week($scope.currWeek);
 
     $scope.mode='edit';
+    console.log($scope.weekInfo);
     var dayData=$scope.weekInfo[day];
     for(var i=0;i<=4;i++){
+      if($scope.weekInfo[i]['uscita']!=null && $scope.weekInfo[i]['uscita']!=undefined)
+          $scope.weekInfo[i]['uscita_display']=moment($scope.weekInfo[i]['uscita']).format('H:mm' );
+      if($scope.weekInfo[i]['entrata']!=null && $scope.weekInfo[i]['entrata']!=undefined)
+         $scope.weekInfo[i]['entrata_display']=moment($scope.weekInfo[i]['entrata']).format('H:mm' );
       week_planService.setDayData(i,$scope.weekInfo[i],'');
     }
     dayData['monday']=false;

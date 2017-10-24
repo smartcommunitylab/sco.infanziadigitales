@@ -49,7 +49,8 @@ public class KidProfile extends SchoolObject {
     }
 
     public static class DayDefault {
-        private String name, entrata, uscita, delega_name;
+        private String name, delega_name, fermata;
+        private Long entrata, uscita;
         private boolean bus;
         private boolean absence;
         private Motivazione motivazione;
@@ -62,19 +63,19 @@ public class KidProfile extends SchoolObject {
             this.name = name;
         }
 
-        public String getEntrata() {
+        public Long getEntrata() {
             return entrata;
         }
 
-        public void setEntrata(String entrata) {
+        public void setEntrata(Long entrata) {
             this.entrata = entrata;
         }
 
-        public String getUscita() {
+        public Long getUscita() {
             return uscita;
         }
 
-        public void setUscita(String uscita) {
+        public void setUscita(Long uscita) {
             this.uscita = uscita;
         }
 
@@ -84,6 +85,14 @@ public class KidProfile extends SchoolObject {
 
         public void setDelega_name(String delega_name) {
             this.delega_name = delega_name;
+        }
+
+        public String geFermata() {
+            return fermata;
+        }
+
+        public void setFermata(String fermata1) {
+            this.fermata = fermata1;
         }
 
         public boolean getBus() {

@@ -39,13 +39,16 @@
           </label>
           <div class="prom_param prom">
               <span class="label_prom">{{'at_day'| translate}}:</span>
-              <span ng-if="isActive('prom_week')" modal-select="" ng-model="currData.prom_week_day" options="selectables" on-select="save_week_day();" modal-title="{{'select_day' | translate}}" hide-reset="true" cancel-button="{{'popup_timepicker_cancel' | translate}}">
+               <select ng-if="isActive('prom_week')" ng-model="currData.prom_week_day" ng-change="save_week_day();">
+                    <option ng-repeat="option in selectables" value="{{option}}" ng-selected="currData.prom_week_day==option" class="">{{option | translate}}</option>
+                </select>
+                <!--<span ng-if="isActive('prom_week')" modal-select="" ng-model="currData.prom_week_day" options="selectables" on-select="save_week_day();" modal-title="{{'select_day' | translate}}" hide-reset="true" cancel-button="{{'popup_timepicker_cancel' | translate}}">
                     <span ng-class="{'lookedit': isActive('prom_week'),'noneditable2': !isActive('prom_week')}">{{currData.prom_week_day}}</span>
                     <div class="option">
                       {{option}}
                     </div>
-                </span>
-                <span ng-if="!isActive('prom_week')" class="noneditable2">{{currData.prom_week_day}}</span>
+                </span>-->
+                <span ng-if="!isActive('prom_week')" class="noneditable2">{{currData.prom_week_day | translate}}</span>
           </div>
           <br/>
           <div class="prom_param prom">

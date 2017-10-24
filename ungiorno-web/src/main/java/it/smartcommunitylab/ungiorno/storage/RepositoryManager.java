@@ -34,6 +34,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.bson.types.ObjectId;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,6 +77,7 @@ import it.smartcommunitylab.ungiorno.model.KidCalRitiro;
 import it.smartcommunitylab.ungiorno.model.KidConfig;
 import it.smartcommunitylab.ungiorno.model.KidProfile;
 import it.smartcommunitylab.ungiorno.model.KidProfile.DayDefault;
+import it.smartcommunitylab.ungiorno.model.KidServices;
 import it.smartcommunitylab.ungiorno.model.KidWeeks;
 import it.smartcommunitylab.ungiorno.model.LoginData;
 import it.smartcommunitylab.ungiorno.model.Menu;
@@ -88,6 +90,7 @@ import it.smartcommunitylab.ungiorno.model.SectionData.ServiceProfile;
 import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.model.TeacherCalendar;
 import it.smartcommunitylab.ungiorno.model.TimeSlotSchoolService;
+import it.smartcommunitylab.ungiorno.model.TimeSlotSchoolService.ServiceTimeSlot;
 import it.smartcommunitylab.ungiorno.services.RepositoryService;
 import it.smartcommunitylab.ungiorno.usage.UsageEntity;
 import it.smartcommunitylab.ungiorno.usage.UsageEntity.UsageAction;
@@ -1081,6 +1084,11 @@ public class RepositoryManager implements RepositoryService {
     public List<SectionData> getSections(String appId, String schoolId, Collection<String> sections,
             long date) {
         SchoolProfile profile = getSchoolProfile(appId, schoolId);
+        Date today = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(today);
+        int weeknr = cal.get(Calendar.WEEK_OF_YEAR);
+        int daynr = cal.get(Calendar.DAY_OF_WEEK) - 1;
         Map<String, SectionData> map = new HashMap<String, SectionData>();
         for (SectionProfile p : profile.getSections()) {
             if (sections != null && !sections.isEmpty() && !sections.contains(p.getSectionId()))
@@ -1096,69 +1104,133 @@ public class RepositoryManager implements RepositoryService {
         }
 
         List<KidProfile> kids = readKidsForSections(appId, schoolId, sections);
+        Set<TimeSlotSchoolService> schoolProfileServices = profile.getServices();
+        TimeSlotSchoolService regularService = new TimeSlotSchoolService("test", true);
+        for (TimeSlotSchoolService ts : schoolProfileServices) {
+            if (ts.isRegular()) {
+                regularService = ts;
+                break;
+            }
+        }
         Map<String, KidCalAssenza> assenzeMap = readAssenze(appId, schoolId, date);
         Map<String, KidCalRitiro> ritiriMap = readRitiri(appId, schoolId, date);
         Map<String, KidCalFermata> stopsMap = readFermate(appId, schoolId, date);
         Map<String, KidConfig> configMap = readConfigurations(appId, schoolId);
 
+
         for (KidProfile kp : kids) {
             KidConfig conf = configMap.get(kp.getKidId());
+            KidServices kidServices = kp.getServices();
+            List<String> allKidFascie = new ArrayList<String>();
+            List<TimeSlotSchoolService.ServiceTimeSlot> allFascie =
+                    new ArrayList<TimeSlotSchoolService.ServiceTimeSlot>();
+            if (kidServices.getTimeSlotServices() != null) {
+                for (TimeSlotSchoolService ts : kidServices.getTimeSlotServices()) {
+                    if (ts.isEnabled()) {
+                        for (TimeSlotSchoolService.ServiceTimeSlot fasc : ts.getTimeSlots()) {
+                            allKidFascie.add(fasc.getName());
+                            allFascie.add(fasc);
+                        }
+                    }
+                }
+            }
+            List<DayDefault> defaultWeek = kp.getWeekDef();
+            KidWeeks kidWeekConfig = readKidWeeks(appId, schoolId, kp.getKidId(), weeknr);
+            DayDefault todayConfig = null;
+
+            // get the configuration from the regular school service
+            todayConfig = new DayDefault();
+            todayConfig.setAbsence(false);
+            ServiceTimeSlot ts = regularService.getTimeSlots().get(0);
+            todayConfig.setEntrata(ts.getFromTime().getMillis());
+            todayConfig.setUscita(ts.getToTime().getMillis());
+            todayConfig.setBus(false);
+
+
+            // get Day info from KidWeeks if there is an exception configuration
+            if (kidWeekConfig != null) {
+                List<DayDefault> days = kidWeekConfig.getDays();
+                todayConfig = days.get(daynr);
+            } else if (defaultWeek != null) {
+                // get DayInfo from WeekDefault of the kid if there is any default
+                // configuration for kid
+                todayConfig = defaultWeek.get(daynr);
+            } else if (kidServices != null && allFascie.size() > 0) {
+                // get the configuration from the services of kid
+                todayConfig.setAbsence(false);
+                sortFascieEntry(allFascie); // sort fascie and get the min value to define the entry
+                                            // time
+                if (allFascie.get(0).getFromTime()
+                        .isBefore(regularService.getTimeSlots().get(0).getFromTime())) {
+                    todayConfig.setEntrata(allFascie.get(0).getFromTime().getMillis());
+                }
+                sortFascieExit(allFascie); // sort fascie and get the max value to define the exit
+                                           // time
+                if (allFascie.get(allFascie.size() - 1).getFromTime()
+                        .isAfter(regularService.getTimeSlots().get(0).getFromTime())) {
+                    todayConfig.setUscita(
+                            allFascie.get(allFascie.size() - 1).getFromTime().getMillis());
+                }
+                todayConfig.setBus(kidServices.getBus().isEnabled());
+            }
 
             SectionData.KidProfile skp = new SectionData.KidProfile();
             skp.setKidId(kp.getKidId());
             skp.setChildrenName(kp.getFullName());
             skp.setImage(kp.getImage());
             skp.setActive(kp.isActive());
+            skp.setBus(new ServiceProfile(todayConfig.getBus(), todayConfig.getBus()));
+            skp.setfascieNames(allKidFascie);
+            skp.setfascieList(allFascie);
 
-            // merge service state from config and from profile
-            skp.setAnticipo(new ServiceProfile(kp.getServices().getAnticipo().isEnabled(),
-                    conf != null ? conf.anticipoActive() : true));
-            skp.setPosticipo(new ServiceProfile(kp.getServices().getPosticipo().isEnabled(),
-                    conf != null ? conf.posticipoActive() : true));
-            skp.setMensa(new ServiceProfile(kp.getServices().getMensa().isEnabled(),
-                    conf != null ? conf.mensaActive() : true));
-            skp.setBus(new ServiceProfile(kp.getServices().getBus().isEnabled(),
-                    conf != null ? conf.busActive() : true));
-
+            // merge service state from kidProfile Serivces or from schoolProfile
+            skp.setServices(kp.getServices());
+            /*
+             * skp.setAnticipo(new ServiceProfile(kp.getServices().getAnticipo().isEnabled(), conf
+             * != null ? conf.anticipoActive() : true)); skp.setPosticipo(new
+             * ServiceProfile(kp.getServices().getPosticipo().isEnabled(), conf != null ?
+             * conf.posticipoActive() : true)); skp.setMensa(new
+             * ServiceProfile(kp.getServices().getMensa().isEnabled(), conf != null ?
+             * conf.mensaActive() : true)); skp.setBus(new
+             * ServiceProfile(kp.getServices().getBus().isEnabled(), conf != null ? conf.busActive()
+             * : true));
+             */
             // if absent, set exit time to null
-            if (assenzeMap.containsKey(kp.getKidId())) {
-                KidCalAssenza a = assenzeMap.get(kp.getKidId());
+            if (todayConfig.getAbsence()) {
                 skp.setExitTime(null);
-                skp.setNote(a.getNote());
-                if (a.getReason() != null) {
-                    skp.setAbsenceType(a.getReason().getType());
-                    skp.setAbsenceSubtype(a.getReason().getSubtype());
+                skp.setEntryTime(null);
+                if (todayConfig.getMotivazione() != null) {
+                    skp.setAbsenceType(todayConfig.getMotivazione().getType());
+                    skp.setAbsenceSubtype(todayConfig.getMotivazione().getSubtype());
                 }
-            } else if (ritiriMap.containsKey(kp.getKidId())) {
-                KidCalRitiro r = ritiriMap.get(kp.getKidId());
-                skp.setExitTime(r.getDate());
             } else {
-                skp.setExitTime(computeTime(date, conf, kp, profile));
+                skp.setExitTime(todayConfig.getUscita());
+                skp.setEntryTime(todayConfig.getEntrata());
             }
+            /*
+             * if (assenzeMap.containsKey(kp.getKidId())) { KidCalAssenza a =
+             * assenzeMap.get(kp.getKidId()); skp.setExitTime(null); skp.setNote(a.getNote()); if
+             * (a.getReason() != null) { skp.setAbsenceType(a.getReason().getType());
+             * skp.setAbsenceSubtype(a.getReason().getSubtype()); } } else if
+             * (ritiriMap.containsKey(kp.getKidId())) { KidCalRitiro r =
+             * ritiriMap.get(kp.getKidId()); skp.setExitTime(r.getDate()); } else {
+             * skp.setExitTime(computeTime(date, conf, kp, profile)); }
+             */
 
             // read from ritiro object
-            String personId = null;
-            if (ritiriMap.containsKey(kp.getKidId())) {
-                KidCalRitiro r = ritiriMap.get(kp.getKidId());
-                skp.setPersonException(r.isExceptional());
-                skp.setNote(r.getNote());
-                personId = r.getPersonId();
-            }
-            // if no explicit return, read stop from stop object, otherwise from
-            // config, otherwise
-            // from profile
-            else if (skp.getBus().isActive()) {
-                if (stopsMap.containsKey(kp.getKidId())) {
-                    KidCalFermata fermata = stopsMap.get(kp.getKidId());
-                    skp.setNote(fermata.getNote());
-                    skp.setStopId(fermata.getStopId());
-                    skp.setStopException(true);
-                    personId = fermata.getPersonId();
-                } else {
-                    skp.setStopId(conf != null ? conf.getServices().getBus().getDefaultIdBack()
-                            : kp.getServices().getBus().getStops().get(0).getStopId());
-                }
-            }
+            String personId = todayConfig.getDelega_name();
+            /*
+             * if (ritiriMap.containsKey(kp.getKidId())) { KidCalRitiro r =
+             * ritiriMap.get(kp.getKidId()); skp.setPersonException(r.isExceptional());
+             * skp.setNote(r.getNote()); personId = r.getPersonId(); } // if no explicit return,
+             * read stop from stop object, otherwise from // config, otherwise // from profile else
+             * if (skp.getBus().isActive()) { if (stopsMap.containsKey(kp.getKidId())) {
+             * KidCalFermata fermata = stopsMap.get(kp.getKidId()); skp.setNote(fermata.getNote());
+             * skp.setStopId(fermata.getStopId()); skp.setStopException(true); personId =
+             * fermata.getPersonId(); } else { skp.setStopId(conf != null ?
+             * conf.getServices().getBus().getDefaultIdBack() :
+             * kp.getServices().getBus().getStops().get(0).getStopId()); } }
+             */
 
             if (personId == null) {
                 personId = conf != null ? conf.getDefaultPerson() : findDefaultPerson(kp);
@@ -1178,6 +1250,48 @@ public class RepositoryManager implements RepositoryService {
         }
 
         return new ArrayList<SectionData>(map.values());
+    }
+
+    private KidWeeks readKidWeeks(String appId, String schoolId, String kidId, int weeknr) {
+        Query q = schoolQuery(appId, schoolId);
+        q.addCriteria(new Criteria("kidId").is(kidId).and("weeknr").is(weeknr));
+        KidWeeks kidWeek = template.findOne(q, KidWeeks.class);
+
+        return kidWeek;
+    }
+
+    public void sortFascieEntry(List<TimeSlotSchoolService.ServiceTimeSlot> allFascie) {
+        if ((allFascie != null) && (allFascie.size() > 0)) {
+            // order notes inside
+            Comparator<TimeSlotSchoolService.ServiceTimeSlot> comparator =
+                    new Comparator<TimeSlotSchoolService.ServiceTimeSlot>() {
+                        @Override
+                        public int compare(TimeSlotSchoolService.ServiceTimeSlot o1,
+                                TimeSlotSchoolService.ServiceTimeSlot o2) {
+                            DateTime date1 = new DateTime(o1.getFromTime());
+                            DateTime date2 = new DateTime(o2.getFromTime());
+                            return date2.compareTo(date1);
+                        }
+                    };
+            Collections.sort(allFascie, comparator);
+        }
+    }
+
+    public void sortFascieExit(List<TimeSlotSchoolService.ServiceTimeSlot> allFascie) {
+        if ((allFascie != null) && (allFascie.size() > 0)) {
+            // order notes inside
+            Comparator<TimeSlotSchoolService.ServiceTimeSlot> comparator =
+                    new Comparator<TimeSlotSchoolService.ServiceTimeSlot>() {
+                        @Override
+                        public int compare(TimeSlotSchoolService.ServiceTimeSlot o1,
+                                TimeSlotSchoolService.ServiceTimeSlot o2) {
+                            DateTime date1 = new DateTime(o1.getToTime());
+                            DateTime date2 = new DateTime(o2.getToTime());
+                            return date2.compareTo(date1);
+                        }
+                    };
+            Collections.sort(allFascie, comparator);
+        }
     }
 
     private Map<String, KidConfig> readConfigurations(String appId, String schoolId) {

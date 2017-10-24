@@ -73,6 +73,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
     }
   };
   setDateWidget();
+  $scope.curData={'selectedGroup':'all'};
+  $scope.listGroup=['all'];
   $scope.communicationTypes = [
     {
       typeId: "0",
@@ -235,6 +237,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
     var deferred = $q.defer();
     profileService.authenticatheWithPIN(profileService.getSchoolProfile().schoolId, PIN).then(function (user) {
       $scope.teacher = user;
+      for(var count=0;count<$scope.teacher.sectionIds.length;count++){
+        $scope.listGroup.push($scope.teacher.sectionIds[count]);
+      }
       deferred.resolve(user);
     }, function (error) {
       if (error) {
@@ -554,7 +559,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
         id: $scope.teacher.teacherId,
         name: $scope.teacher.teacherName,
         surname: $scope.teacher.teacherSurname
-      }
+      };
+      tmp.group = $scope.curData.selectedGroup;
       communicationService.addCommunication(profileService.getSchoolProfile().schoolId, tmp).then(function (data) {
         requestSuccess(data);
       }, function (data) {

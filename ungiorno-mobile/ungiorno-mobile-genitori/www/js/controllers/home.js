@@ -400,7 +400,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 "appId": Config.appId(),
                 "schoolId": schoolId,
                 "kidId": kidId,
-                "services": $scope.kidProfile.services.timeSlotServices,
+                "services": $scope.kidProfile.services,
                   //{"anticipo": {
                   //  "active": $scope.kidProfile.services.anticipo.enabled
                   //},

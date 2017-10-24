@@ -6,6 +6,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
   $scope.babyConfiguration = configurationService.getBabyConfiguration();
   console.log($scope.babyConfiguration);
   $scope.babyProfile = profileService.getBabyProfile();
+  console.log('fillim');
+  console.log(profileService.getBabyProfile());
   $scope.babyServices = [];
   $scope.busEnabled = false;
   $scope.busStops = [];
@@ -14,11 +16,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
   }
 
   if ($scope.babyConfiguration.services && $scope.babyConfiguration.services.bus) {
-    $scope.busEnabled = $scope.babyConfiguration.services.bus.active;
+    $scope.busEnabled = $scope.babyConfiguration.services.bus.enabled;
   }
-
   var temp;
-  $scope.listServicesDb=$scope.babyConfiguration.services;
+  $scope.listServicesDb=$scope.babyConfiguration.services.timeSlotServices;
+  
   for(var i=0;i<$scope.listServicesDb.length;i++){
     var type=$scope.listServicesDb[i].name;
     var enabled=$scope.listServicesDb[i].enabled;

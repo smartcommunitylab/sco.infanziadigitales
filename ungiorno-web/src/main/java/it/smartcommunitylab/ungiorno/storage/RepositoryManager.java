@@ -529,6 +529,23 @@ public class RepositoryManager implements RepositoryService {
 
     /**
      * @param appId
+     * @param schoolId
+     * @param sectionId
+     * @return
+     */
+    @Override
+    public List<KidProfile> getKidsBySection(String appId, String schoolId, String sectionId) {
+        Query q = appQuery(appId);
+        q.addCriteria(new Criteria("schoolId").is(schoolId));
+        q.addCriteria(new Criteria().orOperator(Criteria.where("section.sectionId").is(sectionId),
+                Criteria.where("groups.sectionId").is(sectionId)));
+        List<KidProfile> p = template.find(q, KidProfile.class);
+
+        return p;
+    }
+
+    /**
+     * @param appId
      * @param username
      * @return
      */
@@ -1166,10 +1183,10 @@ public class RepositoryManager implements RepositoryService {
                 }
                 sortFascieExit(allFascie); // sort fascie and get the max value to define the exit
                                            // time
-                if (allFascie.get(allFascie.size() - 1).getFromTime()
-                        .isAfter(regularService.getTimeSlots().get(0).getFromTime())) {
-                    todayConfig.setUscita(
-                            allFascie.get(allFascie.size() - 1).getFromTime().getMillis());
+                if (allFascie.get(allFascie.size() - 1).getToTime()
+                        .isAfter(regularService.getTimeSlots().get(0).getToTime())) {
+                    todayConfig
+                            .setUscita(allFascie.get(allFascie.size() - 1).getToTime().getMillis());
                 }
                 todayConfig.setBus(kidServices.getBus().isEnabled());
             }

@@ -243,7 +243,7 @@ public class NotificationManager {
 
                             ok = true;
                         } catch (CommunicatorConnectorException e) {
-                            ok = false;
+//                            ok = false;
                             try {
                                 Thread.sleep(10000);
                             } catch (InterruptedException e1) {

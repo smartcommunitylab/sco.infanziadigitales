@@ -1,26 +1,29 @@
-This is a starter template for [Ionic](http://ionicframework.com/docs/) projects.
+## Prerequisites
+* node v6 or higher with npm
+* Install ionic CLI
 
-## How to use this template
-
-*This template does not work on its own*. The shared files for each starter are found in the [ionic2-app-base repo](https://github.com/ionic-team/ionic2-app-base).
-
-To use this template, either create a new ionic project using the ionic node.js utility, or copy the files from this repository into the [Starter App Base](https://github.com/ionic-team/ionic2-app-base).
-
-### With the Ionic CLI:
-
-Take the name after `ionic2-starter-`, and that is the name of the template to be used when using the `ionic start` command below:
-
-```bash
+```bash 
 $ sudo npm install -g ionic cordova
-$ ionic start myBlank blank
 ```
 
-Then, to run it, cd into `myBlank` and run:
+## Configuration
+1. Go to src/assets/conf
+2. Modify env.json
+```
+{
+    "env": "prod"
+}
+```
+3. Copy config.default.json to config.prod.json
+4. Modify config.prod.json with correct environment values
+
+## Build for production
+
+To product the production ready artifact run the command
 
 ```bash
-$ ionic cordova platform add ios
-$ ionic cordova run ios
+$ ionic cordova build browser --prod --release
 ```
 
-Substitute ios for android if not on a Mac.
+`www` folder will contain resulting final artifact
 

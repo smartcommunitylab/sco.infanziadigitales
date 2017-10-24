@@ -217,44 +217,32 @@ public class NotificationManager {
                     map.put("GCM_SENDER_ID", cred.getGcmSenderId());
                     signature.setPublicKey(map);
 
-                    boolean ok = true;
+                    try {
+	                    String appId = cred.getMessagingAppId() + APP_UGAS_PARENT;
+	                    signature.setAppId(appId);
+	                    communicator.registerApp(signature, appId, token);
+                    } catch (Exception e) {
+                        logger.error("Exception register app in NotificationManager",
+                                e.getMessage());
+                    }
 
-//                    do {
-                        try {
-                            String appId = cred.getMessagingAppId() + APP_UGAS_PARENT;
-                            signature.setAppId(appId);
-                            communicator.registerApp(signature, appId, token);
-                            appId = cred.getMessagingAppId() + APP_UGAS_DIARY;
-                            signature.setAppId(appId);
-                            communicator.registerApp(signature, appId, token);
-
-                            if (cred.getSchools() != null) {
-                                for (School school : cred.getSchools()) {
-                                    appId = channelName(cred.getMessagingAppId(),
-                                            school.getSchoolId(), APP_UGAS_COMMS);
-                                    signature.setAppId(appId);
-                                    communicator.registerApp(signature, appId, token);
-                                    appId = channelName(cred.getMessagingAppId(),
-                                            school.getSchoolId(), APP_UGAS_TEACHER);
-                                    signature.setAppId(appId);
-                                    communicator.registerApp(signature, appId, token);
-                                }
+                    if (cred.getSchools() != null) {
+                        for (School school : cred.getSchools()) {
+                            try {
+                                String appId = channelName(cred.getMessagingAppId(),
+                                        school.getSchoolId(), APP_UGAS_COMMS);
+                                signature.setAppId(appId);
+                                communicator.registerApp(signature, appId, token);
+                                appId = channelName(cred.getMessagingAppId(),
+                                        school.getSchoolId(), APP_UGAS_TEACHER);
+                                signature.setAppId(appId);
+                                communicator.registerApp(signature, appId, token);
+                            } catch (Exception e) {
+                              logger.error("Exception register school in NotificationManager: "+school.getSchoolId(),
+                                      e.getMessage());
                             }
-
-                            ok = true;
-                        } catch (CommunicatorConnectorException e) {
-//                            ok = false;
-//                            try {
-//                                Thread.sleep(10000);
-//                            } catch (InterruptedException e1) {
-//                            }
-                            logger.error("Exception register app in NotificationManager",
-                                    e.getMessage());
-                        } catch (Exception e) {
-                            logger.error("Exception register app in NotificationManager",
-                                    e.getMessage());
                         }
-//                    } while (!ok);
+                    }
                 }
 
             }

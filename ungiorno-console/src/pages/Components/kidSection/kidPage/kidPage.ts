@@ -364,7 +364,21 @@ export class KidPage implements OnInit {
     }
 
     removeAllergia(all: string) {
-        this.thisKid.allergie.splice(this.thisKid.allergie.findIndex(x => x.toLowerCase() === all.toLowerCase()), 1);
+        let alert = this.alertCtrl.create({
+            subTitle: 'Conferma eliminazione',
+            buttons: [
+                {
+                    text: "Annulla"
+                },
+                {
+                    text: 'OK',
+                    handler: () => {
+                        this.thisKid.allergie.splice(this.thisKid.allergie.findIndex(x => x.toLowerCase() === all.toLowerCase()), 1);
+                    }
+                }
+            ]
+        })
+        alert.present();
     }
 
     editService: boolean;

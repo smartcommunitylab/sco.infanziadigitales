@@ -29,7 +29,8 @@ export class TeacherModal implements OnInit {
   selectedTeacherGroups: Group[];
 
   isNew: boolean;
-
+  toastWrongEmail;
+  BreakEmailException = {};
   constructor(public params: NavParams,
     public navCtrl: NavController,
     private webService: WebService,
@@ -77,50 +78,71 @@ export class TeacherModal implements OnInit {
 
   }
 
-  save() {
-    let alert = this.alertCtrl.create({
-      subTitle: 'Eventuali modifiche verrano confermate. Confermi?',
-      buttons: [
-        {
-          text: "Annulla"
-        },
-        {
-          text: 'OK',
-          handler: () => {
-            Object.assign(this.selectedTeacher, this.copiedTeacher);
-
-            if (this.isNew) {
-              if (this.selectedSchool.teachers.findIndex(x => x.id.toLowerCase() === this.selectedTeacher.id.toLowerCase()) < 0) {
-                this.webService.add(this.selectedSchool, this.copiedTeacher).then(() => this.selectedSchool.teachers.push(this.selectedTeacher));
-              }
-              else {
-                let toastConflict = this.toastCtrl.create({
-                  message: 'Elemento già presente (conflitto di nomi)',
-                  duration: 3000,
-                  position: 'middle',
-                  dismissOnPageChange: true
-
-                });
-                toastConflict.present()
-                // let alert = this.alertCtrl.create({
-                //   subTitle: 'Elemento già presente (conflitto di C.F)',
-                //   buttons: ['OK']
-                // });
-                // alert.present();
-              }
-            } else {
-              this.webService.add(this.selectedSchool, this.copiedTeacher);
-            }
-            this.navCtrl.pop();
-          }
-        }
-      ]
-    })
-    alert.present();
-
-
+  private validateEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
   }
 
+  checkEmail() {
+    if (!this.validateEmail(this.copiedTeacher.email))
+      throw this.BreakEmailException
+  }
+  save() {
+    try {
+      this.checkEmail();
+
+
+      let alert = this.alertCtrl.create({
+        subTitle: 'Eventuali modifiche verrano confermate. Confermi?',
+        buttons: [
+          {
+            text: "Annulla"
+          },
+          {
+            text: 'OK',
+            handler: () => {
+              Object.assign(this.selectedTeacher, this.copiedTeacher);
+
+              if (this.isNew) {
+                if (this.selectedSchool.teachers.findIndex(x => x.id.toLowerCase() === this.selectedTeacher.id.toLowerCase()) < 0) {
+                  this.webService.add(this.selectedSchool, this.copiedTeacher).then(() => this.selectedSchool.teachers.push(this.selectedTeacher));
+                }
+                else {
+                  let toastConflict = this.toastCtrl.create({
+                    message: 'Elemento già presente (conflitto di nomi)',
+                    duration: 3000,
+                    position: 'middle',
+                    dismissOnPageChange: true
+
+                  });
+                  toastConflict.present()
+                  // let alert = this.alertCtrl.create({
+                  //   subTitle: 'Elemento già presente (conflitto di C.F)',
+                  //   buttons: ['OK']
+                  // });
+                  // alert.present();
+                }
+              } else {
+                this.webService.add(this.selectedSchool, this.copiedTeacher);
+              }
+              this.navCtrl.pop();
+            }
+          }
+        ]
+      })
+      alert.present();
+    } catch (e) {
+      if (e == this.BreakEmailException) {
+        this.toastWrongEmail = this.toastCtrl.create({
+          message: 'Formato email non valido',
+          duration: 1000,
+          position: 'middle',
+          dismissOnPageChange: true
+        });
+        this.toastWrongEmail.present();
+      }
+    }
+  }
   onRemoveGroup(group: Group) {
     group.teachers.splice(group.teachers.findIndex(x => x.toLowerCase() == this.copiedTeacher.id.toLowerCase()), 1);
     this.updateArray();

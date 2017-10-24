@@ -489,6 +489,8 @@ export class KidPage implements OnInit {
     }
     onP1ContattiEdit() {
         this.editP1Contatti = true;
+        this.oldParent1.emails = this.thisKid.parent1.emails.slice();
+        this.oldParent1.phoneNumbers = this.thisKid.parent1.phoneNumbers.slice();
     }
 
     onP1ContattiSave() {
@@ -522,6 +524,8 @@ export class KidPage implements OnInit {
 
     onP1ContattiCancel() {
         this.editP1Contatti = false;
+        this.thisKid.parent1.emails = this.oldParent1.emails.slice();
+        this.thisKid.parent1.phoneNumbers = this.oldParent1.phoneNumbers.slice();
     }
 
     editP2Info: boolean;
@@ -550,6 +554,8 @@ export class KidPage implements OnInit {
 
     onP2ContattiEdit() {
         this.editP2Contatti = true;
+        this.oldParent2.emails = this.thisKid.parent2.emails.slice();
+        this.oldParent2.phoneNumbers = this.thisKid.parent2.phoneNumbers.slice();
     }
 
     onP2ContattiSave() {
@@ -589,6 +595,8 @@ export class KidPage implements OnInit {
 
     onP2ContattiCancel() {
         this.editP2Contatti = false;
+        this.thisKid.parent2.emails = this.oldParent2.emails.slice();
+        this.thisKid.parent2.phoneNumbers = this.oldParent2.phoneNumbers.slice();
     }
 
     addDelega() {

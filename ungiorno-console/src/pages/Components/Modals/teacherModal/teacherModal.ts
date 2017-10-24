@@ -84,7 +84,7 @@ export class TeacherModal implements OnInit {
   }
 
   checkEmail() {
-    if (!this.validateEmail(this.copiedTeacher.email))
+    if (this.copiedTeacher.email && !this.validateEmail(this.copiedTeacher.email))
       throw this.BreakEmailException
   }
   save() {

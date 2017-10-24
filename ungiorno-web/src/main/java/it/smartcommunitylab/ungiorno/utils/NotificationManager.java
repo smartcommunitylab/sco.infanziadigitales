@@ -27,6 +27,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
@@ -85,7 +87,7 @@ public class NotificationManager {
     @PostConstruct
     public void init() throws Exception {
         communicator = new CommunicatorConnector(communicatorURL);
-        registerApps();
+        // registerApps();
     }
 
 
@@ -119,8 +121,30 @@ public class NotificationManager {
 
         String appName = channelName(appSetup.getAppsMap().get(appId).getMessagingAppId(), schoolId,
                 APP_UGAS_COMMS);
-        communicator.sendAppNotification(n, appName, Collections.<String>emptyList(),
-                permissions.getAppToken());
+        String groupId = message.getGroupId();
+        if (groupId != null) {
+            Query q = new Query(new Criteria("appId").is(appId).and("schoolId").is(schoolId));
+            q.addCriteria(new Criteria("section.sectionId").is(groupId));
+            q.fields().include("kidId");
+            List<KidProfile> kids = storage.getKidsBySection(appId, schoolId, groupId);
+            List<String> parentIds = new ArrayList<String>();
+            for (KidProfile kid : kids) {
+                for (AuthPerson p : kid.getPersons()) {
+                    if (p.isParent()) {
+                        LoginData loginData =
+                                storage.getTokenDataByPersonId(p.getPersonId(), appId);
+                        if (loginData != null) {
+                            parentIds.add(loginData.getUserAACId());
+                        }
+                    }
+                }
+            }
+            communicator.sendAppNotification(n, appName, parentIds, permissions.getAppToken());
+
+        } else {
+            communicator.sendAppNotification(n, appName, Collections.<String>emptyList(),
+                    permissions.getAppToken());
+        }
     }
 
     public void notifyMessageStatusByParent(String appId, String schoolId, String kidId,

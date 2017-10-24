@@ -189,6 +189,14 @@ public interface RepositoryService {
 
     /**
      * @param appId
+     * @param schoolId
+     * @param sectionId
+     * @return
+     */
+    List<KidProfile> getKidsBySection(String appId, String schoolId, String sectionId);
+
+    /**
+     * @param appId
      * @param username
      * @return
      */

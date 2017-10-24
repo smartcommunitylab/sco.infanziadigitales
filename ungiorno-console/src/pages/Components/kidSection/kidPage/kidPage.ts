@@ -497,7 +497,7 @@ export class KidPage implements OnInit {
                     message: 'Formato telefono non valido',
                     duration: 1000,
                     position: 'middle',
-                                        dismissOnPageChange: true
+                    dismissOnPageChange: true
 
                 });
 
@@ -624,9 +624,11 @@ export class KidPage implements OnInit {
         this.editDelegaInfo = false;
         if (this.isNewD)
             if (this.selectedDelega !== undefined && this.selectedDelega.name.trim().length > 0 && this.selectedDelega.surname.trim().length > 0 && this.selectedDelega.legame.trim().length > 0) {
-                if (this.selectedKid.deleghe.findIndex(x => this.selectedDelega.id.toLowerCase() === x.id.toLowerCase()) < 0)
+                if (this.selectedKid.deleghe.findIndex(x => this.selectedDelega.name.toLowerCase() === x.name.toLowerCase()) < 0 && this.selectedKid.deleghe.findIndex(x => this.selectedDelega.surname.toLowerCase() === x.surname.toLowerCase()) < 0) {
                     this.thisKid.deleghe.push(this.selectedDelega)
-                else if (this.selectedDelega.id.trim().length > 0) {
+                    this.selectedDelega = null;
+                }
+                else {
                     let alert = this.alertCtrl.create({
                         subTitle: 'Identificatore già in uso',
                         buttons: [

@@ -134,9 +134,10 @@
                                         <ion-item style="height:120px">
                                             <ion-thumbnail item-start style="height: 100%; width: auto">
                                                 <img [src]="getImage(thisKid)" style="height: 100%; width: auto" *ngIf='!editFoto && !rerender && thisKid.id ' />
-                                                <img src="../../../../assets/images/placeholder.png" style="height: 100%; width: auto" *ngIf='!editFoto && !rerender && !thisKid.id ' />
+                                                <img src="../../../../assets/images/placeholder.png" style="height: 100%; width: auto" *ngIf='!editFoto && !rerender && !thisKid.id '
+                                                />
                                                 <input id="uploadInputFile" accept="image/*" type="file" ng2FileSelect [uploader]="uploader" />
-                                                <button class='edit' ion-button color='magenta1'  margin-right ion-button *ngIf='editFoto'  (click)="onRemoveProfileKid()">Rimuovi Immagine</button>
+                                                <button class='edit' ion-button color='magenta1' margin-right ion-button *ngIf='editFoto' (click)="onRemoveProfileKid()">Rimuovi Immagine</button>
                                             </ion-thumbnail>
                                             <input #inputFile type='file' style='display: none' (change)='handleChange($event)' accept="image/gif, image/png, image/jpeg, image/bmp, image/webp"
                                             />
@@ -474,7 +475,7 @@
                             <ion-col col-12>
                                 <ion-card>
                                     <ion-card-header>
-                                        Delegati 
+                                        Delegati
                                     </ion-card-header>
                                     <ion-card-content>
                                         <ion-list inset>
@@ -504,18 +505,20 @@
                                         <ion-grid>
                                             <ion-row>
                                                 <ion-col col-12>
+                                                    <p style="color: #ccc; margin-left: 25px;">
+                                                        <ion-icon name="help-circle"></ion-icon> Tutti i campi contrassegnati dal simbolo * sono obbligatori</p>
                                                     <ion-card>
                                                         <ion-card-header>
                                                             Informazioni di base
                                                             <button class='edit' ion-button color='magenta1' float-end *ngIf='!editDelegaInfo' (click)="onDelegaInfoEdit()" [disabled]='isNew'>Modifica</button>
-                                                            <button class='edit' ion-button color='magenta1' float-end *ngIf='editDelegaInfo' (click)="onDelegaInfoSave()">Salva</button>
+                                                            <button class='edit' ion-button color='magenta1' float-end *ngIf='editDelegaInfo' (click)="onDelegaInfoSave()" [disabled]='!(selectedDelega.name && selectedDelega.surname && selectedDelega.legame )'>Salva</button>
                                                             <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='editDelegaInfo' (click)="onDelegaInfoCancel()">Annulla</button>
                                                         </ion-card-header>
                                                         <ion-card-content margin-top>
                                                             <ion-grid inset>
                                                                 <ion-row margin-bottom>
                                                                     <ion-col col-2>
-                                                                        Nome:
+                                                                        Nome*:
                                                                     </ion-col>
                                                                     <ion-col col-10>
                                                                         <p *ngIf='!selectedDelega.name && !editDelegaInfo' class="empty-field" style="padding-left: 8px;">Dato non inserito</p>
@@ -524,7 +527,7 @@
                                                                 </ion-row>
                                                                 <ion-row margin-bottom>
                                                                     <ion-col col-2>
-                                                                        Cognome:
+                                                                        Cognome*:
                                                                     </ion-col>
                                                                     <ion-col col-10>
                                                                         <p *ngIf='!selectedDelega.surname && !editDelegaInfo' class="empty-field" style="padding-left: 8px;">Dato non inserito</p>
@@ -533,7 +536,7 @@
                                                                 </ion-row>
                                                                 <ion-row>
                                                                     <ion-col col-2>
-                                                                        Relazione
+                                                                        Relazione*
                                                                     </ion-col>
                                                                     <ion-col col-10>
                                                                         <p *ngIf='!selectedDelega.legame && !editDelegaInfo' class="empty-field" style="padding-left: 8px;">Dato non inserito</p>

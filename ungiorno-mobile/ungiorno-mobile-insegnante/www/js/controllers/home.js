@@ -349,7 +349,7 @@ $scope.cnt=0;
         for(var i=0;i<$scope.listServicesDb.length;i++){
           var type=$scope.listServicesDb[i].name;
           var enabled=$scope.listServicesDb[i].enabled;
-          if(enabled){
+          if(true){
              var tempServ=$scope.listServicesDb[i].timeSlots;
              for(var j=0;j<tempServ.length;j++){
                  fr=moment(tempServ[j]['fromTime']).format('H:mm');

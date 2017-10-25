@@ -1191,12 +1191,14 @@ public class RepositoryManager implements RepositoryService {
                     todayConfig
                             .setUscita(allFascie.get(allFascie.size() - 1).getToTime().getMillis());
                 }
-                todayConfig.setBus(kidServices.getBus().isEnabled());
+                if (kidServices.getBus() != null) {
+                    todayConfig.setBus(kidServices.getBus().isEnabled());
+                }
             }
 
             SectionData.KidProfile skp = new SectionData.KidProfile();
             skp.setKidId(kp.getKidId());
-            skp.setChildrenName(kp.getFullName());
+            skp.setChildrenName(kp.getFirstName() + " " + kp.getLastName());
             skp.setImage(kp.getImage());
             skp.setActive(kp.isActive());
             skp.setBus(new ServiceProfile(todayConfig.getBus(), todayConfig.getBus()));

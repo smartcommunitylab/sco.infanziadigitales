@@ -1268,7 +1268,9 @@ public class RepositoryManager implements RepositoryService {
             } else {
                 skp.setCalNotes(false);
             }
-            map.get(kp.getSection().getSectionId()).getChildren().add(skp);
+            if (kp.getSection() != null && kp.getSection().getSectionId() != null) {
+                map.get(kp.getSection().getSectionId()).getChildren().add(skp);
+            }
         }
 
         return new ArrayList<SectionData>(map.values());

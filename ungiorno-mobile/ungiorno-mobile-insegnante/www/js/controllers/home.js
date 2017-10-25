@@ -823,8 +823,8 @@ $scope.cnt=0;
         }*/
         $scope.childrenProfiles['allPeriod'].push($scope.section.children[i]);
       }
-      $scope.childrenProfiles[periodOfTheDay]=$filter('orderBy')($scope.childrenProfiles[periodOfTheDay], 'firstName');
-      $scope.childrenProfiles['allPeriod']=$filter('orderBy')($scope.childrenProfiles['allPeriod'], 'firstName');
+      $scope.childrenProfiles[periodOfTheDay]=$filter('orderBy')($scope.childrenProfiles[periodOfTheDay], 'childrenName');
+      $scope.childrenProfiles['allPeriod']=$filter('orderBy')($scope.childrenProfiles['allPeriod'], 'childrenName');
     }
   }
   $scope.getNowDate = function () {

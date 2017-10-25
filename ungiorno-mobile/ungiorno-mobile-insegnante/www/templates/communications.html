@@ -58,7 +58,13 @@ Old version
       </textarea>
       <!--edit mode || new communication mode-->
       <div class="bottom_com">
-        <div class="dt_scad"></div>
+        <div class="dt_scad">
+            <span >{{'com_dt' | translate}}: 
+              &nbsp;&nbsp;&nbsp;<button class="button-clear button-dark button-communication-date"  ng-click="openDatePickerScad() "><span class="label-time-date">{{getDateLabelScad()}}</span></button>
+            </span>
+            <br/>
+            <span id="delcom">{{'com_del' | translate}}:</span>
+        </div>
         <div class="communication-buttons">
         <button class="button communication-button cancel" ng-click="discardCommunication()" ng-show="isMode('edit') || isMode('new')">
           {{'communication_annulla' | translate}}

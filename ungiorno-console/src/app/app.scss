@@ -38,10 +38,10 @@
 }
 
 .modal-wrapper {
-    left: 360px;
+    left: 100px;
     top: 80px;
     position: absolute;
-    width: calc(100% - 720px);
+    width: calc(100% - 200px);
     height: calc(100% - 160px);
   }
 
@@ -94,7 +94,7 @@ button#undefined.item-cover.item-cover-md.item-cover-default.item-cover-default-
     margin-left: 8px;
     margin-top: 8px;
     margin-bottom: 8px;
-    width: 50%;
+    width: 80%;
 }
 
 .empty-field {

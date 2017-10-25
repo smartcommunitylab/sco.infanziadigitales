@@ -695,6 +695,13 @@ class KidManagerTestConfig {
                 // TODO Auto-generated method stub
                 return null;
             }
+
+            @Override
+            public List<KidProfile> getKidsBySection(String appId, String schoolId,
+                    String sectionId) {
+                // TODO Auto-generated method stub
+                return null;
+            }
         };
     }
 }

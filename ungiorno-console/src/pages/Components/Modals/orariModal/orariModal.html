@@ -52,7 +52,7 @@
                             <ion-item *ngIf="copiedOrario.fasce.length === 0 " text-center class="empty-field ">Nessuna fascia oraria presente</ion-item>
                             <ion-grid *ngFor="let fascia of copiedOrario.fasce; let i = index">
                                 <ion-row>
-                                    <ion-col col-5>
+                                    <ion-col col-6>
                                         <ion-item>
                                             <ion-row>
                                                 <ion-col col-2>
@@ -66,19 +66,19 @@
                                             </ion-row>
                                         </ion-item>
                                     </ion-col>
-                                    <ion-col col-3 style="bottom: 0px">
-                                        <ion-item style="height:100%">
+                                    <ion-col col-2 style="bottom: 0px">
+                                        <ion-item style="height:100%" text-right>
                                             <ion-label>Da</ion-label>
-                                            <ion-datetime displayFormat="HH:mm" pickerFormat="HH:mm" [(ngModel)]="fascia.start"></ion-datetime>
+                                            <ion-datetime cancelText="Annulla" doneText="Fatto" displayFormat="HH:mm" pickerFormat="HH:mm" [(ngModel)]="fascia.start"></ion-datetime>
                                         </ion-item>
                                     </ion-col>
-                                    <ion-col col-3 style="bottom: 0px">
-                                        <ion-item style="height:100%">
+                                    <ion-col col-2 style="bottom: 0px">
+                                        <ion-item style="height:100%" text-right>
                                             <ion-label>A</ion-label>
-                                            <ion-datetime displayFormat="HH:mm" pickerFormat="HH:mm" [(ngModel)]="fascia.end"></ion-datetime>
+                                            <ion-datetime cancelText="Annulla" doneText="Fatto" displayFormat="HH:mm" pickerFormat="HH:mm" [(ngModel)]="fascia.end"></ion-datetime>
                                         </ion-item>
                                     </ion-col>
-                                    <ion-col col-1>
+                                    <ion-col col-2>
                                         <button style="padding-left: 3px;height:100%" ion-item icon-only (click)='removeFascia(fascia)'><ion-icon style="padding-left: 0" name="trash" item-end color="magenta1"></ion-icon></button>
                                     </ion-col>
                                 </ion-row>

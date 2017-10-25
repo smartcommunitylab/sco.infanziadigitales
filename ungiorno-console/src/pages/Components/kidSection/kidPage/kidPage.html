@@ -103,13 +103,14 @@
                                                 </ion-col>
                                                 <ion-col col-10>
                                                     <p *ngIf='!thisKid.nascitaStr && !editInfo' class="empty-field">Dato non inserito</p>
-                                                    <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="thisKid.nascitaStr" *ngIf='editInfo' no-margin></ion-datetime>
+                                                    <ion-datetime cancelText="Annulla" doneText="Fatto" displayFormat="DD/MM/YYYY" [(ngModel)]="thisKid.nascitaStr" *ngIf='editInfo' no-margin></ion-datetime>
                                                     <span *ngIf="!editInfo" style="padding-left: 8px;">{{thisKid.nascitaStr | date: 'dd/MM/yyyy'}}</span>
                                                 </ion-col>
                                             </ion-row>
                                             <ion-row margin-bottom>
                                                 <ion-col col-12>
                                                     <span *ngIf='thisKid.sperimentazione && !editInfo'>Partecipa alla sperimentazione</span>
+                                                    <span *ngIf='!thisKid.sperimentazione && !editInfo'>Non partecipa alla sperimentazione</span>
                                                     <ion-item *ngIf='editInfo'>
                                                         <ion-label>Partecipa alla sperimentazione</ion-label>
                                                         <ion-checkbox [(ngModel)]="thisKid.sperimentazione"></ion-checkbox>

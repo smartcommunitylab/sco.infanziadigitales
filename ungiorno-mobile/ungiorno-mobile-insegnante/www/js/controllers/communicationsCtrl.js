@@ -11,6 +11,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
   var currentMode = MODE_NORMAL_LIST;
   $scope.datepickerObject = {};
   $scope.datepickerObject.inputDate = new Date();
+  $scope.datepickerObjectScad = {};
+  var today=new Date();
+  var addDays = new Date();
+  addDays.setDate(today.getDate()+5);
+  $scope.datepickerObjectScad.inputDate = addDays;//today.setDate(today.getDate() + 5)
   //  $scope.$on('$ionicView.beforeEnter', function () {
   //    $ionicLoading.show();
   //  });
@@ -72,7 +77,39 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
       }
     }
   };
+
+  function setDateWidgetScad() {
+    $scope.datepickerObjectPopupScad = {
+      inputDate: $scope.datepickerObjectScad.inputDate,
+      closeLabel: $filter('translate')('close'),
+      setLabel: $filter('translate')('popup_datepicker_set'),
+      todayLabel: $filter('translate')('popup_datepicker_today'),
+      mondayFirst: true,
+      templateType: 'popup',
+      showTodayButton: true,
+      closeOnSelect: false,
+      monthList: monthList,
+      callback: function (val) {
+        datePickerCallbackPopupScad(val);
+      }
+    };
+
+  }
+  var datePickerCallbackPopupScad = function (val) {
+    if (typeof (val) === 'undefined') {
+      console.log('No date selected');
+    } else {
+      $scope.datepickerObjectPopupScad.inputDate = val;
+      $scope.dateTimestamp = val;
+      if ($scope.isMode(MODE_NEW)) {
+        $scope.newCommunication.dateToCheck = $scope.datepickerObjectPopupScad.inputDate;
+      } else {
+        $scope.editedCommunication.dateToCheck = $scope.datepickerObjectPopupScad.inputDate;
+      }
+    }
+  };
   setDateWidget();
+  setDateWidgetScad();
   $scope.curData={'selectedGroup':'all'};
   $scope.listGroup=['all'];
   $scope.communicationTypes = [
@@ -120,6 +157,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
         ionicDatePicker.openDatePicker($scope.datepickerObjectPopup);
       }
     }
+
+    $scope.getDateLabelScad = function () {
+      var day = moment($scope.datepickerObjectPopupScad.inputDate);
+      var result = day.format('DD/MM/YYYY');
+      return result;
+    }
+    $scope.openDatePickerScad = function () {
+          setDateWidgetScad();
+          ionicDatePicker.openDatePicker($scope.datepickerObjectPopupScad);
+      }
+      
     //setTeachers();
   $ionicLoading.show();
   dataServerService.getCommunications(profileService.getSchoolProfile().schoolId).then(function (data) {

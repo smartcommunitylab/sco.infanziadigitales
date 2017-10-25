@@ -27,8 +27,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
@@ -123,9 +121,6 @@ public class NotificationManager {
                 APP_UGAS_COMMS);
         String groupId = message.getGroupId();
         if (groupId != null) {
-            Query q = new Query(new Criteria("appId").is(appId).and("schoolId").is(schoolId));
-            q.addCriteria(new Criteria("section.sectionId").is(groupId));
-            q.fields().include("kidId");
             List<KidProfile> kids = storage.getKidsBySection(appId, schoolId, groupId);
             List<String> parentIds = new ArrayList<String>();
             for (KidProfile kid : kids) {
@@ -242,9 +237,9 @@ public class NotificationManager {
                     signature.setPublicKey(map);
 
                     try {
-	                    String appId = cred.getMessagingAppId() + APP_UGAS_PARENT;
-	                    signature.setAppId(appId);
-	                    communicator.registerApp(signature, appId, token);
+                        String appId = cred.getMessagingAppId() + APP_UGAS_PARENT;
+                        signature.setAppId(appId);
+                        communicator.registerApp(signature, appId, token);
                     } catch (Exception e) {
                         logger.error("Exception register app in NotificationManager",
                                 e.getMessage());
@@ -257,13 +252,13 @@ public class NotificationManager {
                                         school.getSchoolId(), APP_UGAS_COMMS);
                                 signature.setAppId(appId);
                                 communicator.registerApp(signature, appId, token);
-                                appId = channelName(cred.getMessagingAppId(),
-                                        school.getSchoolId(), APP_UGAS_TEACHER);
+                                appId = channelName(cred.getMessagingAppId(), school.getSchoolId(),
+                                        APP_UGAS_TEACHER);
                                 signature.setAppId(appId);
                                 communicator.registerApp(signature, appId, token);
                             } catch (Exception e) {
-                              logger.error("Exception register school in NotificationManager: "+school.getSchoolId(),
-                                      e.getMessage());
+                                logger.error("Exception register school in NotificationManager: "
+                                        + school.getSchoolId(), e.getMessage());
                             }
                         }
                     }

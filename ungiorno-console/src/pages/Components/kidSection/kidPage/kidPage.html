@@ -110,6 +110,7 @@
                                             <ion-row margin-bottom>
                                                 <ion-col col-12>
                                                     <span *ngIf='thisKid.sperimentazione && !editInfo'>Partecipa alla sperimentazione</span>
+                                                    <span *ngIf='!thisKid.sperimentazione && !editInfo'>Non partecipa alla sperimentazione</span>
                                                     <ion-item *ngIf='editInfo'>
                                                         <ion-label>Partecipa alla sperimentazione</ion-label>
                                                         <ion-checkbox [(ngModel)]="thisKid.sperimentazione"></ion-checkbox>

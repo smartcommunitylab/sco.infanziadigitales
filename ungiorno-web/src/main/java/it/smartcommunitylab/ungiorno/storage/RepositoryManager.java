@@ -537,8 +537,11 @@ public class RepositoryManager implements RepositoryService {
     public List<KidProfile> getKidsBySection(String appId, String schoolId, String sectionId) {
         Query q = appQuery(appId);
         q.addCriteria(new Criteria("schoolId").is(schoolId));
-        q.addCriteria(new Criteria().orOperator(Criteria.where("section.sectionId").is(sectionId),
-                Criteria.where("groups.sectionId").is(sectionId)));
+        if (sectionId != "all") {
+            q.addCriteria(
+                    new Criteria().orOperator(Criteria.where("section.sectionId").is(sectionId),
+                            Criteria.where("groups.sectionId").is(sectionId)));
+        }
         List<KidProfile> p = template.find(q, KidProfile.class);
 
         return p;
@@ -1129,14 +1132,14 @@ public class RepositoryManager implements RepositoryService {
                 break;
             }
         }
-        Map<String, KidCalAssenza> assenzeMap = readAssenze(appId, schoolId, date);
-        Map<String, KidCalRitiro> ritiriMap = readRitiri(appId, schoolId, date);
-        Map<String, KidCalFermata> stopsMap = readFermate(appId, schoolId, date);
-        Map<String, KidConfig> configMap = readConfigurations(appId, schoolId);
+        // Map<String, KidCalAssenza> assenzeMap = readAssenze(appId, schoolId, date);
+        // Map<String, KidCalRitiro> ritiriMap = readRitiri(appId, schoolId, date);
+        // Map<String, KidCalFermata> stopsMap = readFermate(appId, schoolId, date);
+        // Map<String, KidConfig> configMap = readConfigurations(appId, schoolId);
 
 
         for (KidProfile kp : kids) {
-            KidConfig conf = configMap.get(kp.getKidId());
+            // KidConfig conf = configMap.get(kp.getKidId());
             KidServices kidServices = kp.getServices();
             List<String> allKidFascie = new ArrayList<String>();
             List<TimeSlotSchoolService.ServiceTimeSlot> allFascie =
@@ -1188,12 +1191,14 @@ public class RepositoryManager implements RepositoryService {
                     todayConfig
                             .setUscita(allFascie.get(allFascie.size() - 1).getToTime().getMillis());
                 }
-                todayConfig.setBus(kidServices.getBus().isEnabled());
+                if (kidServices.getBus() != null) {
+                    todayConfig.setBus(kidServices.getBus().isEnabled());
+                }
             }
 
             SectionData.KidProfile skp = new SectionData.KidProfile();
             skp.setKidId(kp.getKidId());
-            skp.setChildrenName(kp.getFullName());
+            skp.setChildrenName(kp.getFirstName() + " " + kp.getLastName());
             skp.setImage(kp.getImage());
             skp.setActive(kp.isActive());
             skp.setBus(new ServiceProfile(todayConfig.getBus(), todayConfig.getBus()));
@@ -1250,11 +1255,11 @@ public class RepositoryManager implements RepositoryService {
              */
 
             if (personId == null) {
-                personId = conf != null ? conf.getDefaultPerson() : findDefaultPerson(kp);
+                personId = findDefaultPerson(kp);
             }
 
             skp.setPersonId(personId);
-            skp.setPersonName(getPerson(personId, conf, kp).getFullName());
+            // skp.setPersonName(getPerson(personId, conf, kp).getFullName());
 
             // set if extist some KidCalNote
             List<KidCalNote> list = getKidCalNotes(appId, schoolId, skp.getKidId(), date);

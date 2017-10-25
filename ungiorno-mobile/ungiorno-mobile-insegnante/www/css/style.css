@@ -2154,6 +2154,7 @@ ion-content .scroll {
 #communications .label-time-date {
   border-bottom: 2px solid lightgray;
   padding-bottom: 3px;
+  color:black;
 }
 
 #communications .communication-radio {
@@ -2174,9 +2175,14 @@ ion-content .scroll {
 */
 }
 
-#communications .communication-buttons {
-  float: right;
-  margin-top: 16px;
+#communications .bottom_com .communication-buttons {  
+  display: flex;
+  justify-content: flex-end;
+  clear: both;
+  margin: auto;
+  width: 50%;
+  margin-right: 0px;
+  margin-top: 25px;
 }
 
 #communications .communication-scadenza {
@@ -2575,4 +2581,13 @@ background-repeat: no-repeat;
 .bottom_com{
   display: flex;
   flex-direction: row;
+}
+
+#communications .bottom_com .dt_scad{
+  float: left;
+  margin-top: 25px;
+}
+
+#delcom{
+  font-size: 10px;
 }

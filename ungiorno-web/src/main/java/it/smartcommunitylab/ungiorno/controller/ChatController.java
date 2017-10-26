@@ -141,25 +141,28 @@ public class ChatController {
     @RequestMapping(method = RequestMethod.POST,
             value = "/chat/{appId}/{schoolId}/message/fromteacher")
     public @ResponseBody ChatMessage sendMessageToParent(@PathVariable String appId,
-            @PathVariable String schoolId, @RequestBody String json) throws Exception {
+            @PathVariable String schoolId, @RequestBody ChatMessage data) throws Exception {
         ChatMessage result = null;
-        ChatMessage message = new ChatMessage();
-        JsonNode rootNode = Utils.readJsonFromString(json);
-        String kidId = rootNode.get("kidId").asText();
-        String teacherId = rootNode.get("teacherId").asText();
-        String text = rootNode.get("text").asText();
-        message.setAppId(appId);
-        message.setSchoolId(schoolId);
-        message.setCreationDate(System.currentTimeMillis());
-        message.setKidId(kidId);
-        message.setTeacherId(teacherId);
-        message.setText(text);
-        message.setSender(ChatMessage.SENT_BY_TEACHER);
-        message.setAuthor(storage.getTeacherAsAuthor(appId, schoolId, teacherId));
-        result = storage.saveChatMessage(message);
+        // ChatMessage message = new ChatMessage();
+        // JsonNode rootNode = Utils.readJsonFromString(json);
+        // String kidId = rootNode.get("kidId").asText();
+        // String teacherId = rootNode.get("teacherId").asText();
+        // String text = rootNode.get("text").asText();
+        String kidId = data.getKidId();
+        String text = data.getText();
+        String teacherId = data.getTeacherId();
+        data.setAppId(appId);
+        data.setSchoolId(schoolId);
+        data.setCreationDate(System.currentTimeMillis());
+        data.setKidId(kidId);
+        data.setTeacherId(teacherId);
+        data.setText(text);
+        data.setSender(ChatMessage.SENT_BY_TEACHER);
+        data.setAuthor(storage.getTeacherAsAuthor(appId, schoolId, teacherId));
+        result = storage.saveChatMessage(data);
 
         notificationManager.sendDirectMessageToParents(appId, schoolId, kidId, teacherId,
-                message.getAuthor(), text, result.getMessageId());
+                data.getAuthor(), text, result.getMessageId());
 
         if (logger.isInfoEnabled()) {
             logger.info(String.format("sendMessageToParent[%s]: %s - %s - %s", appId, schoolId,

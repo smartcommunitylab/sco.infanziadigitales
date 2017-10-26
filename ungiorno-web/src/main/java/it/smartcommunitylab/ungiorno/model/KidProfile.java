@@ -50,11 +50,12 @@ public class KidProfile extends SchoolObject {
     }
 
     public static class DayDefault {
-        private String name, delega_name, fermata;
+        private String name, delega_name;
         private DateTime entrata, uscita;
         private boolean bus;
         private boolean absence;
         private Motivazione motivazione;
+        private String fermata;
 
         public String getName() {
             return name;
@@ -62,6 +63,14 @@ public class KidProfile extends SchoolObject {
 
         public void setName(String name) {
             this.name = name;
+        }
+
+        public String getFermata() {
+            return fermata;
+        }
+
+        public void setFermata(String fermata) {
+            this.fermata = fermata;
         }
 
         public DateTime getEntrata() {
@@ -88,13 +97,7 @@ public class KidProfile extends SchoolObject {
             this.delega_name = delega_name;
         }
 
-        public String geFermata() {
-            return fermata;
-        }
 
-        public void setFermata(String fermata1) {
-            this.fermata = fermata1;
-        }
 
         public boolean getBus() {
             return bus;

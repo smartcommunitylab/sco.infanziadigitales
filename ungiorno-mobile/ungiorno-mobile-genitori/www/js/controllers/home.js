@@ -393,12 +393,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
   }
 
   $scope.getRetireTimeLimit = function () {
-    var temp=moment().startOf('day').add(10,'hours');
-    if ($scope.briefInfo.ore_uscita!==null && $scope.briefInfo.ore_uscita!==undefined) {
-      temp= moment($scope.briefInfo.ore_uscita,'HH:mm');
-    } else {
-      temp= moment().startOf('day').add(10,'hours');
-    }
+    var temp=moment('17:00','HH:mm');//it should be 09:10
+    //if ($scope.briefInfo.ore_uscita!==null && $scope.briefInfo.ore_uscita!==undefined) {
+    //  temp= moment($scope.briefInfo.ore_uscita,'HH:mm');
+    //}
     return temp;
   }
  

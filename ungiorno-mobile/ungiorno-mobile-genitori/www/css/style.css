@@ -2199,12 +2199,11 @@ textarea {
   vertical-align: middle;
   padding-bottom:10px;
   padding-right:10px;
+  padding-top:10px;
   font-size: 15px;
   width: 70%;
 }
-.dayEdit_table td {
-  /*font-size: small;*/
-}
+
 
 .span_motiv {
   font-size: 13px;

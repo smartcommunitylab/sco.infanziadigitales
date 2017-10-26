@@ -308,14 +308,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
   //return deferred.promise;
   // }
   $scope.refreshHome = function () {
-    $scope.checkConnection().then(function () {
+    //$scope.checkConnection().then(function () {
       $scope.initialize();
       $scope.noConnection = false;
     }, function (err) {
       //Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
-      $scope.showNoConnection();
-      $scope.noConnection = true;
-    });
+    //  $scope.showNoConnection();
+    //  $scope.noConnection = true;
+    //});
   }
   $scope.initialize = function () {
     //    $ionicLoading.show({
@@ -573,7 +573,7 @@ $scope.cnt=0;
     //    });
     //  };
   $scope.detailOrCommunication = function (child) {
-    $scope.checkConnection().then(function () {
+    //$scope.checkConnection().then(function () {
 
       //se modalita' communication, modifico lista consegne e poi confermo
       //altrimenti openDetail(index)
@@ -586,10 +586,10 @@ $scope.cnt=0;
       } else {
         Toast.show($filter('translate')('child_not_partecipate'), 'short', 'bottom');
       }
-    }, function (err) {
-      $scope.showNoConnection();
+   // }, function (err) {
+    //  $scope.showNoConnection();
 
-    })
+   // })
   }
   $scope.communicationDone = function (childId) {
     //se sono in modalita' communication e id contenuto nella lista attuale return true
@@ -602,10 +602,10 @@ $scope.cnt=0;
   $scope.getChildrenByCurrentSection = function () {
     //get children info
     $scope.childrenProfiles = [];
-    $scope.getChildrenNumber('anticipo');
-    $scope.getChildrenNumber('posticipo');
-    $scope.getChildrenNumber('mensa');
-
+    for(var j=0;j < $scope.listServices.length; j++){
+      fasciaName=$scope.listServices[j]['value'];
+      $scope.getChildrenNumber(fasciaName);
+    }
     $scope.getChildrenProfilesByPeriod($rootScope.selectedPeriod);
 
     $scope.numberOfChildren = $scope.section.children.length;
@@ -839,54 +839,18 @@ $scope.cnt=0;
     $scope.availableChildren[periodOfTheDay] = 0;
 
     if ($scope.section != null) {
-      console.log($scope.section.children.length);
       console.log($scope.listServices);
-      console.log($scope.listServices.length);
+      console.log($scope.section.children);
+      console.log(periodOfTheDay);
       for (var i = 0; i < $scope.section.children.length; i++) {
-        for(var j=0;j < $scope.listServices.length; j++){
-          if($scope.listServices[j]['value']==periodOfTheDay){
-            if ($scope.section.children[i][periodOfTheDay].enabled) {
-              //aggiungi se iscritto al servizio
-              $scope.totalChildrenNumber[periodOfTheDay]++;
-            }
-            if ($scope.section.children[i].exitTime != null && $scope.section.children[i][periodOfTheDay].enabled) {
-              //aggiungi se iscritto ad anticipo e non assente
-              $scope.availableChildren[periodOfTheDay]++;
-            }
-          }
-        }
-        /*switch (periodOfTheDay) {
-        case 'anticipo':
-          if ($scope.section.children[i][periodOfTheDay].enabled) {
-            //aggiungi se iscritto al servizio
-            $scope.totalChildrenNumber[periodOfTheDay]++;
-          }
-          if ($scope.section.children[i].exitTime != null && $scope.section.children[i][periodOfTheDay].enabled) {
-            //aggiungi se iscritto ad anticipo e non assente
-            $scope.availableChildren[periodOfTheDay]++;
-          }
-          break;
-        case 'mensa':
-          //totale di bambini iscritti a scuola
+        console.log($scope.section.children[i]);
+        var kidFascieNames=$scope.section.children[i].fascieNames;
+        if( kidFascieNames !==null && kidFascieNames!=undefined && kidFascieNames.indexOf(periodOfTheDay) !== -1){
           $scope.totalChildrenNumber[periodOfTheDay]++;
-          if ($scope.section.children[i].exitTime != null) {
-            //aggiungi se iscritto e non assente
-            $scope.availableChildren[periodOfTheDay]++;
-          }
-          break;
-        case 'posticipo':
-          if ($scope.section.children[i][periodOfTheDay].enabled) {
-            //totalNumber++;
-            $scope.totalChildrenNumber[periodOfTheDay]++;
-          }
-          if ($scope.section.children[i].exitTime != null && $scope.section.children[i].exitTime > $scope.datePosticipo.getTime() && $scope.section.children[i][periodOfTheDay].enabled) {
-            //totalNumber++;
-            $scope.availableChildren[periodOfTheDay]++;
-          }
-          break;
-        }*/
-
-
+        }
+        if (kidFascieNames !==null && kidFascieNames!=undefined && kidFascieNames.indexOf(periodOfTheDay) !== -1 &&$scope.section.children[i].exitTime != null) {
+          $scope.availableChildren[periodOfTheDay]++;
+        }
       }
     }
   }

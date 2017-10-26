@@ -19,6 +19,7 @@ import java.util.List;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.joda.time.DateTime;
 
 import it.smartcommunitylab.ungiorno.diary.model.DiaryTeacher;
 
@@ -50,7 +51,7 @@ public class KidProfile extends SchoolObject {
 
     public static class DayDefault {
         private String name, delega_name, fermata;
-        private Long entrata, uscita;
+        private DateTime entrata, uscita;
         private boolean bus;
         private boolean absence;
         private Motivazione motivazione;
@@ -63,19 +64,19 @@ public class KidProfile extends SchoolObject {
             this.name = name;
         }
 
-        public Long getEntrata() {
+        public DateTime getEntrata() {
             return entrata;
         }
 
-        public void setEntrata(Long entrata) {
+        public void setEntrata(DateTime entrata) {
             this.entrata = entrata;
         }
 
-        public Long getUscita() {
+        public DateTime getUscita() {
             return uscita;
         }
 
-        public void setUscita(Long uscita) {
+        public void setUscita(DateTime uscita) {
             this.uscita = uscita;
         }
 

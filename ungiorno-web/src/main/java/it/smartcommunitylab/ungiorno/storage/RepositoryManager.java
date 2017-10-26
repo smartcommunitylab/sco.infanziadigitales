@@ -1162,8 +1162,8 @@ public class RepositoryManager implements RepositoryService {
             todayConfig = new DayDefault();
             todayConfig.setAbsence(false);
             ServiceTimeSlot ts = regularService.getTimeSlots().get(0);
-            todayConfig.setEntrata(ts.getFromTime().getMillis());
-            todayConfig.setUscita(ts.getToTime().getMillis());
+            todayConfig.setEntrata(ts.getFromTime());
+            todayConfig.setUscita(ts.getToTime());
             todayConfig.setBus(false);
 
 
@@ -1182,14 +1182,13 @@ public class RepositoryManager implements RepositoryService {
                                             // time
                 if (allFascie.get(0).getFromTime()
                         .isBefore(regularService.getTimeSlots().get(0).getFromTime())) {
-                    todayConfig.setEntrata(allFascie.get(0).getFromTime().getMillis());
+                    todayConfig.setEntrata(allFascie.get(0).getFromTime());
                 }
                 sortFascieExit(allFascie); // sort fascie and get the max value to define the exit
                                            // time
                 if (allFascie.get(allFascie.size() - 1).getToTime()
                         .isAfter(regularService.getTimeSlots().get(0).getToTime())) {
-                    todayConfig
-                            .setUscita(allFascie.get(allFascie.size() - 1).getToTime().getMillis());
+                    todayConfig.setUscita(allFascie.get(allFascie.size() - 1).getToTime());
                 }
                 if (kidServices.getBus() != null) {
                     todayConfig.setBus(kidServices.getBus().isEnabled());

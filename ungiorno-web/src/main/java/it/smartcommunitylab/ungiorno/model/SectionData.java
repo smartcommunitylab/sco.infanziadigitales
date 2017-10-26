@@ -15,6 +15,8 @@ package it.smartcommunitylab.ungiorno.model;
 
 import java.util.List;
 
+import org.joda.time.DateTime;
+
 /**
  * @author raman
  *
@@ -55,8 +57,8 @@ public class SectionData extends SchoolObject {
         private String kidId, childrenName, image;
         private ServiceProfile anticipo, posticipo, mensa, bus;
         private KidServices services;
-        private Long exitTime;
-        private Long entryTime;
+        private DateTime exitTime;
+        private DateTime entryTime;
         private List<String> fascieNames;
         private List<TimeSlotSchoolService.ServiceTimeSlot> fascieList;
 
@@ -120,19 +122,19 @@ public class SectionData extends SchoolObject {
             this.mensa = mensa;
         }
 
-        public Long getExitTime() {
+        public DateTime getExitTime() {
             return exitTime;
         }
 
-        public void setExitTime(Long exitTime) {
+        public void setExitTime(DateTime exitTime) {
             this.exitTime = exitTime;
         }
 
-        public Long getEntryTime() {
+        public DateTime getEntryTime() {
             return entryTime;
         }
 
-        public void setEntryTime(Long entryTime1) {
+        public void setEntryTime(DateTime entryTime1) {
             this.entryTime = entryTime1;
         }
 

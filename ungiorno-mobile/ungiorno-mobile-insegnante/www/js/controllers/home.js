@@ -280,11 +280,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
   
   var getPeriodToNow = function () {
     var period='';
-    var now =moment().format('H:mm');
+    var now =moment();
     for(var i=0;i<$scope.listServices.length;i++){
       $scope.currService=$scope.listServices[i];
-      if(moment(now,'H:mm').isAfter($scope.currService.entry_val)  && moment(now,'H:mm').isBefore($scope.currService.out_val)){
+      beforeTime=$scope.currService.entry_val;
+      afterTime=$scope.currService.out_val;
+      if(moment(now,'H:mm').isBetween(beforeTime, afterTime)){
         period= $scope.currService.value;
+        console.log(period);
+        break;
       }
     }
     return period;
@@ -923,12 +927,7 @@ $scope.cnt=0;
   $scope.changeSectionPeriod = function (period) {
     $rootScope.selectedPeriod = period;
     $scope.getChildrenProfilesByPeriod(period);
-    //$scope.changeHorizzontalLineStyle(period);
-    $('#wrapper div').click(function() {
-      $('.temp').removeClass('temp');
-      $(this).addClass('temp');
-    });
-    
+    //$scope.changeHorizzontalLineStyle(period);    
   }
 
   $scope.getChildImage = function (child) {

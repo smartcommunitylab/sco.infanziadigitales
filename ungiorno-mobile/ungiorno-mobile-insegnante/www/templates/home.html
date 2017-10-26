@@ -39,7 +39,7 @@
         <div class="row home-section-space " ng-if="!communicationExpanded " id="wrapper">
             <!--<ion-scroll direction="x" class="item wide-item">Item 1 Item 1 Item 1 Item 1 Item 1,  Item 1 Item 1 Item 1 Item 1 Item 1,  Item 1 Item 1 Item 1 Item 1 Item 1,  Item 1 Item 1 Item 1 Item 1 Item 1,  Item 1 Item 1 Item 1 Item 1 Item 1,  Item 1 Item 1 Item 1 Item 1 Item 1,  Item 1 Item 1 Item 1 Item 1 Item 1,  Item 1 Item 1 Item 1 Item 1 Item 1,  Item 1 Item 1 Item 1 Item 1 Item 1,   
               </ion-scroll> -->
-              <div class="col " ng-class="{ 'temp':isNow(item.value)}" ng-repeat="item in listServices | orderBy:item.entry">
+              <div class="col " ng-class="{ 'temp':selectedPeriod == item.value}" ng-repeat="item in listServices | orderBy:item.entry">
                 <div class="sectionPeriod" ng-click="changeSectionPeriod(item.value) ">
                   <svg ng-class="{ 'sectionBabyIndicator-now':isNow(item.value), 'sectionBabyIndicator-notnow':!isNow(item.value)} " id="svg " viewbox="0 0 100 100 ">
                     <circle cx="50 " cy="50 " r="45 " fill="{{colors[item.value]}}" />

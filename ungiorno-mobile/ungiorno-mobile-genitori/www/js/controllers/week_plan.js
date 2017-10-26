@@ -236,10 +236,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         var selected = moment().weekday(day).week($scope.currWeek);
         var dayData=$scope.days[day];
         var usc =dayData['uscita'];
-        var temp=moment().startOf('day').add(10,'hours');
-        if(usc!=null && usc!==undefined){
-            temp=moment(usc,'HH:mm');
-        }
+        var temp=moment('17:00','HH:mm');// it should be 09:10
         if(moment(temp).isBefore(moment()) && day==$scope.currDay ){
             var myPopup = $ionicPopup.show({
                 title: $filter('translate')('retire_popup_toolate_title'),

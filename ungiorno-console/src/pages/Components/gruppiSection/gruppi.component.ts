@@ -61,8 +61,10 @@ export class Gruppi implements OnInit {
 
   onDeleteGroup(item : Group) {
     let alert = this.alertCtrl.create({
-      subTitle: 'Conferma eliminazione',
-      buttons: [
+            title: 'Conferma eliminazione',
+            subTitle:'Attenzione: i bambini di questa sezione dovranno essere associati ad un’altra sezione',
+            cssClass:'alertWarningCss',
+            buttons: [
         {
           text: "Annulla"
         },

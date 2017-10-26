@@ -344,7 +344,9 @@ export class Info implements OnInit {
 
     removeBus(bus: Bus) {
         let alert = this.alertCtrl.create({
-            subTitle: 'Conferma eliminazione',
+            title: 'Conferma eliminazione',
+            subTitle:'Attenzione: ricordarsi di aggiornare le informazioni dei bambini associati a questa linea.',
+            cssClass:'alertWarningCss',
             buttons: [
                 {
                     text: "Annulla"

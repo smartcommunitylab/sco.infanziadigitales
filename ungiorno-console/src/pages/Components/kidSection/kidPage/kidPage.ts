@@ -136,7 +136,7 @@ export class KidPage implements OnInit {
     BreakPhoneException = {};
     toastWrongEmail;
     toastWrongPhone;
-
+    orarioNormale="";
     constructor(
         private webService: WebService,
         private configService: ConfigService,
@@ -155,7 +155,13 @@ export class KidPage implements OnInit {
         this.isNew = this.thisKid.id == '';
         this.editInfo = this.isNew;
 
-        this.selectedSchool.servizi.forEach(servizio => this.servicesChecked[servizio.servizio] = false);
+        this.selectedSchool.servizi.forEach(servizio =>{
+            this.servicesChecked[servizio.servizio] = false
+            if (servizio.normale)
+            {
+                this.orarioNormale=servizio.servizio;
+            }
+        });
         this.thisKid.services.forEach(x => this.servicesChecked[x.servizio] = true);
         if (!this.thisKid.bus) {
             this.thisKid.bus = new BusService();

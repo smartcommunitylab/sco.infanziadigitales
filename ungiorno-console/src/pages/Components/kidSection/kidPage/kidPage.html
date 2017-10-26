@@ -103,7 +103,8 @@
                                                 </ion-col>
                                                 <ion-col col-10>
                                                     <p *ngIf='!thisKid.nascitaStr && !editInfo' class="empty-field">Dato non inserito</p>
-                                                    <ion-datetime cancelText="Annulla" doneText="Fatto" displayFormat="DD/MM/YYYY" [(ngModel)]="thisKid.nascitaStr" *ngIf='editInfo' no-margin></ion-datetime>
+                                                    <ion-datetime cancelText="Annulla" doneText="Fatto" displayFormat="DD/MM/YYYY" [(ngModel)]="thisKid.nascitaStr" *ngIf='editInfo'
+                                                        no-margin></ion-datetime>
                                                     <span *ngIf="!editInfo" style="padding-left: 8px;">{{thisKid.nascitaStr | date: 'dd/MM/yyyy'}}</span>
                                                 </ion-col>
                                             </ion-row>
@@ -191,6 +192,9 @@
                                     </ion-card-header>
                                     <ion-card-content margin-top>
                                         <ion-list *ngIf="!editService">
+                                            <ion-item *ngIf="orarioNormale">
+                                                    {{orarioNormale}}
+                                            </ion-item>
                                             <ion-item *ngFor="let item of thisKid.services">{{item.servizio}}</ion-item>
                                             <ion-item *ngIf="thisKid.services.length === 0" text-center>Nessun orario extra</ion-item>
                                         </ion-list>
@@ -502,7 +506,6 @@
                                             </ion-fab>
                                             {{selectedDelega.name}} {{selectedDelega.surname}}
                                         </ion-card-header>
-                                        <!--<ion-card-content>-->
                                         <ion-grid>
                                             <ion-row>
                                                 <ion-col col-12>
@@ -553,53 +556,11 @@
                                                             </ion-grid>
                                                         </ion-card-content>
                                                     </ion-card>
-                                                    <!--<ion-card>
-                                                            <ion-card-header>
-                                                                Contatti
-                                                                <button class='edit' ion-button color='magenta1' float-end *ngIf='!editDelegaContatti' (click)="onDelegaContattiEdit()" [disabled]='isNew'>Modifica</button>
-                                                                <button class='edit' ion-button color='magenta1' float-end *ngIf='editDelegaContatti' (click)="onDelegaContattiSave()">Salva</button>
-                                                                <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='editDelegaContatti' (click)="onDelegaContattiCancel()">Annulla</button>
-                                                            </ion-card-header>
-                                                            <ion-card-content margin-top>
-                                                                <ion-grid inset>
-                                                                    <list-widget [items]="selectedDelega.phoneNumbers" [editMode]="editDelegaContatti" [label]="'Telefono'"></list-widget>
-                                                                    <list-widget [items]="selectedDelega.emails" [editMode]="editDelegaContatti" [label]="'Email'"></list-widget>
-                                                                </ion-grid>
-                                                            </ion-card-content>
-                                                        </ion-card>
-                                                        <ion-card>
-                                                            <ion-card-header>
-                                                                Autorizzazione
-                                                                <button class='edit' ion-button color='magenta1' float-end *ngIf='!editDelegaAutor' (click)="onDelegaAutorEdit()" [disabled]='isNew'>Modifica</button>
-                                                                <button class='edit' ion-button color='magenta1' float-end *ngIf='editDelegaAutor' (click)="onDelegaAutorSave()">Salva</button>
-                                                                <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='editDelegaAutor' (click)="onDelegaAutorCancel()">Annulla</button>
-                                                            </ion-card-header>
-                                                            <ion-card-content margin-top>
-                                                                <ion-grid inset>
-                                                                    <ion-row margin-bottom>
-                                                                        <ion-col col-2>
-                                                                            Scadenza autorizzazione:
-                                                                        </ion-col>
-                                                                        <ion-col col-10>
-                                                                            <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="selectedDelega.scadenzaStr" [disabled]='!editDelegaAutor' no-margin></ion-datetime>
-                                                                        </ion-col>
-                                                                    </ion-row>
-                                                                    <ion-row margin-bottom>
-                                                                        <ion-col col-12>
-                                                                            <span *ngIf='selectedDelega.maggiorenne && !editDelegaAutor'>La persona dichiara di essere maggiorenne</span>
-                                                                            <ion-item *ngIf='editDelegaAutor'>
-                                                                                <ion-label>Dichiara di essere maggiorenne</ion-label>
-                                                                                <ion-checkbox [(ngModel)]="selectedDelega.maggiorenne"></ion-checkbox>
-                                                                            </ion-item>
-                                                                        </ion-col>
-                                                                    </ion-row>
-                                                                </ion-grid>
-                                                            </ion-card-content>
-                                                        </ion-card>-->
+
                                                 </ion-col>
                                             </ion-row>
                                         </ion-grid>
-                                        <!--</ion-card-content>-->
+
                                     </ion-card>
                                 </div>
                             </ion-col>

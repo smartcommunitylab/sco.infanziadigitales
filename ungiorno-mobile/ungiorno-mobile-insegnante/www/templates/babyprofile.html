@@ -92,7 +92,8 @@
                       <div class="row" ng-if="$index%2==0">
                         <div class="col">
 
-                          <div class="babyprofile-other-name"><i class="icon ion-record bullet-other-people"></i>{{otherPeople[$index].fullName}}</div>
+                          <div class="babyprofile-other-name" ng-if="otherPeople[$index].fullName== null"><i class="icon ion-record bullet-other-people"></i>{{otherPeople[$index].firstName}}  {{otherPeople[$index].lastName}}</div>
+                          <div class="babyprofile-other-name" ng-if="otherPeople[$index].fullName!= null"><i class="icon ion-record bullet-other-people"></i>{{otherPeople[$index].fullName}}</div>
 
                         </div>
                         <div class="col" ng-if="otherPeople.length> ($index + 2)">

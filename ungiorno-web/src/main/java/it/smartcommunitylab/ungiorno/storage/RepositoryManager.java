@@ -35,6 +35,7 @@ import java.util.regex.Pattern;
 
 import org.bson.types.ObjectId;
 import org.joda.time.DateTime;
+import org.joda.time.LocalTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -1108,7 +1109,7 @@ public class RepositoryManager implements RepositoryService {
         Calendar cal = Calendar.getInstance();
         cal.setTime(today);
         int weeknr = cal.get(Calendar.WEEK_OF_YEAR);
-        int daynr = cal.get(Calendar.DAY_OF_WEEK) - 1;
+        int daynr = cal.get(Calendar.DAY_OF_WEEK) - 2;
         Map<String, SectionData> map = new HashMap<String, SectionData>();
         for (SectionProfile p : profile.getSections()) {
             if (sections != null && !sections.isEmpty() && !sections.contains(p.getSectionId()))
@@ -1170,24 +1171,29 @@ public class RepositoryManager implements RepositoryService {
             // get Day info from KidWeeks if there is an exception configuration
             if (kidWeekConfig != null) {
                 List<DayDefault> days = kidWeekConfig.getDays();
-                todayConfig = days.get(daynr);
+                todayConfig = (days.get(daynr) != null ? days.get(daynr) : todayConfig);
             } else if (defaultWeek != null) {
                 // get DayInfo from WeekDefault of the kid if there is any default
                 // configuration for kid
-                todayConfig = defaultWeek.get(daynr);
-            } else if (kidServices != null && allFascie.size() > 0) {
+                todayConfig =
+                        (defaultWeek.get(daynr) != null ? defaultWeek.get(daynr) : todayConfig);
+            } else if (kidServices.getTimeSlotServices() != null && allFascie.size() > 0) {
                 // get the configuration from the services of kid
+                allFascie.add(regularService.getTimeSlots().get(0));
                 todayConfig.setAbsence(false);
-                sortFascieEntry(allFascie); // sort fascie and get the min value to define the entry
-                                            // time
-                if (allFascie.get(0).getFromTime()
-                        .isBefore(regularService.getTimeSlots().get(0).getFromTime())) {
-                    todayConfig.setEntrata(allFascie.get(0).getFromTime());
+                sortFascieEntry(allFascie);
+                DateTime minSlotDate = allFascie.get(0).getFromTime();
+                LocalTime minhour = minSlotDate.toLocalTime();
+                if (minhour
+                        .isBefore(regularService.getTimeSlots().get(0).getToTime().toLocalTime())) {
+                    todayConfig.setEntrata(allFascie.get(0).getToTime());
                 }
-                sortFascieExit(allFascie); // sort fascie and get the max value to define the exit
-                                           // time
-                if (allFascie.get(allFascie.size() - 1).getToTime()
-                        .isAfter(regularService.getTimeSlots().get(0).getToTime())) {
+
+                sortFascieExit(allFascie);
+                DateTime maxSlotDate = allFascie.get(allFascie.size() - 1).getToTime();
+                LocalTime maxhour = maxSlotDate.toLocalTime();
+                if (maxhour
+                        .isAfter(regularService.getTimeSlots().get(0).getToTime().toLocalTime())) {
                     todayConfig.setUscita(allFascie.get(allFascie.size() - 1).getToTime());
                 }
                 if (kidServices.getBus() != null) {
@@ -1285,15 +1291,14 @@ public class RepositoryManager implements RepositoryService {
 
     public void sortFascieEntry(List<TimeSlotSchoolService.ServiceTimeSlot> allFascie) {
         if ((allFascie != null) && (allFascie.size() > 0)) {
-            // order notes inside
             Comparator<TimeSlotSchoolService.ServiceTimeSlot> comparator =
                     new Comparator<TimeSlotSchoolService.ServiceTimeSlot>() {
                         @Override
                         public int compare(TimeSlotSchoolService.ServiceTimeSlot o1,
                                 TimeSlotSchoolService.ServiceTimeSlot o2) {
-                            DateTime date1 = new DateTime(o1.getFromTime());
-                            DateTime date2 = new DateTime(o2.getFromTime());
-                            return date2.compareTo(date1);
+                            LocalTime date1 = o1.getFromTime().toLocalTime();
+                            LocalTime date2 = o2.getFromTime().toLocalTime();
+                            return date1.compareTo(date2);
                         }
                     };
             Collections.sort(allFascie, comparator);
@@ -1302,15 +1307,14 @@ public class RepositoryManager implements RepositoryService {
 
     public void sortFascieExit(List<TimeSlotSchoolService.ServiceTimeSlot> allFascie) {
         if ((allFascie != null) && (allFascie.size() > 0)) {
-            // order notes inside
             Comparator<TimeSlotSchoolService.ServiceTimeSlot> comparator =
                     new Comparator<TimeSlotSchoolService.ServiceTimeSlot>() {
                         @Override
                         public int compare(TimeSlotSchoolService.ServiceTimeSlot o1,
                                 TimeSlotSchoolService.ServiceTimeSlot o2) {
-                            DateTime date1 = new DateTime(o1.getToTime());
-                            DateTime date2 = new DateTime(o2.getToTime());
-                            return date2.compareTo(date1);
+                            LocalTime date1 = o1.getToTime().toLocalTime();
+                            LocalTime date2 = o2.getToTime().toLocalTime();
+                            return date1.compareTo(date2);
                         }
                     };
             Collections.sort(allFascie, comparator);

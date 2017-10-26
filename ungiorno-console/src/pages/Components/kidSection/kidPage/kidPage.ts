@@ -136,7 +136,7 @@ export class KidPage implements OnInit {
     BreakPhoneException = {};
     toastWrongEmail;
     toastWrongPhone;
-    orarioNormale="";
+    orarioNormale = "";
     constructor(
         private webService: WebService,
         private configService: ConfigService,
@@ -155,11 +155,10 @@ export class KidPage implements OnInit {
         this.isNew = this.thisKid.id == '';
         this.editInfo = this.isNew;
 
-        this.selectedSchool.servizi.forEach(servizio =>{
+        this.selectedSchool.servizi.forEach(servizio => {
             this.servicesChecked[servizio.servizio] = false
-            if (servizio.normale)
-            {
-                this.orarioNormale=servizio.servizio;
+            if (servizio.normale) {
+                this.orarioNormale = servizio.servizio;
             }
         });
         this.thisKid.services.forEach(x => this.servicesChecked[x.servizio] = true);
@@ -647,12 +646,16 @@ export class KidPage implements OnInit {
     onDelegaInfoEdit() {
         this.editDelegaInfo = true;
     }
-
+    private findWord(array, word,field) {
+        return -1 < array.map(function(item) {
+             return item[field].toLowerCase();
+             }).indexOf(word.toLowerCase());
+    }
     onDelegaInfoSave() {
         this.editDelegaInfo = false;
         if (this.isNewD)
             if (this.selectedDelega !== undefined && this.selectedDelega.name.trim().length > 0 && this.selectedDelega.surname.trim().length > 0 && this.selectedDelega.legame.trim().length > 0) {
-                if (this.selectedKid.deleghe.findIndex(x => this.selectedDelega.name.toLowerCase() === x.name.toLowerCase()) < 0 && this.selectedKid.deleghe.findIndex(x => this.selectedDelega.surname.toLowerCase() === x.surname.toLowerCase()) < 0) {
+                if (!this.findWord(this.thisKid.deleghe, this.selectedDelega.name,'name') || !this.findWord(this.thisKid.deleghe, this.selectedDelega.surname,'surname')){
                     this.thisKid.deleghe.push(this.selectedDelega)
                     this.selectedDelega = null;
                 }

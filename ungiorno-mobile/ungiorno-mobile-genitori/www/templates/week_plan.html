@@ -30,9 +30,6 @@
             <td ng-if="!day.absence">
                 <p class="button-day noneditable">U <span class="val_time">{{day.uscita_display}}</span></p>
             </td>
-            <td ng-if="day.bus && !day.absence">
-                <p class="button-day noneditable"><i class="icon ion-android-bus iconStyle"></i></p>
-            </td>
             <td ng-if="!day.absence" class="day-name">
               <div class="delega_day noneditable">
                 &nbsp;<i class="icon ion-android-person iconStyle"></i>&nbsp;
@@ -41,6 +38,9 @@
                     <span class="delegaStyle">({{day.delega_name|getRitiroType:ritiraOptions | translate}})</span>
                 </div>
             </div>
+            </td>
+            <td ng-if="day.bus && !day.absence">
+                <p class="button-day noneditable"><i class="icon ion-android-bus iconStyle"></i></p>
             </td>
             <td ng-if="day.absence" colspan="2">
                <p  class="button-day noneditable">{{'home_absent' | translate | uppercase}}: {{day.motivazione.type}}</p>
@@ -81,9 +81,6 @@
             <td ng-if="!day.absence">
                 <p ng-class="whatClassIsIt($index,'')">U <span class="val_time">{{day.uscita_display}}</span></p>
             </td>
-            <td ng-if="day.bus && !day.absence">
-                <p ng-class="whatClassIsIt($index,'')"><i class="icon ion-android-bus iconStyle"></i></p>
-            </td>
             <td ng-if="!day.absence" class="day-name">
               <div ng-class="whatClassIsIt($index,'delega')">
                   &nbsp;<i class="icon ion-android-person iconStyle"></i>&nbsp;
@@ -92,6 +89,9 @@
                     <span class="delegaStyle">({{day.delega_name|getRitiroType:ritiraOptions | translate}})</span>
                 </div>
             </div>
+            </td>
+            <td ng-if="day.bus && !day.absence">
+                <p ng-class="whatClassIsIt($index,'')"><i class="icon ion-android-bus iconStyle"></i></p>
             </td>
             <td ng-if="day.absence" colspan="2">
                <p  ng-class="whatClassIsIt($index,'')">{{'home_absent' | translate | uppercase}}: {{day.motivazione.type}}</p>

@@ -296,7 +296,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
       if(data!=null && data!= undefined && data.length>0){
         var motiv_type=(data[day]['motivazione']!=undefined && data[day]['motivazione']!=null ? data[day]['motivazione']['type'] : '');
         var motiv_subtype=(data[day]['motivazione']!=undefined && data[day]['motivazione']!=null ? data[day]['motivazione']['subtype'] : '');
-        jsonTest={'ore_entrata':data[day]['entrata'],'ore_uscita':data[day]['uscita'],'addressBus':'Nome Test',
+        jsonTest={'ore_entrata':data[day]['entrata'],'ore_uscita':data[day]['uscita'],'addressBus':data[day]['fermata'],
         'delegaName':$filter('getRitiroName')(data[day]['delega_name'],$scope.ritiraOptions),'delegaType':$filter('getRitiroType')(data[day]['delega_name'],$scope.ritiraOptions),
         'bus':data[day]['bus'],'absence':data[day]['absence'],
         'motivazione':{type:motiv_type,subtype:motiv_subtype}
@@ -313,7 +313,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             if(data!=null && data!= undefined && data.length>0){
                 var motiv_type=(data[day]['motivazione']!=undefined && data[day]['motivazione']!=null ? data[day]['motivazione']['type'] : '');
                var motiv_subtype=(data[day]['motivazione']!=undefined && data[day]['motivazione']!=null ? data[day]['motivazione']['subtype'] : '');
-               jsonTest={'ore_entrata':data[day]['entrata'],'ore_uscita':data[day]['uscita'],'addressBus':'Nome Test',
+               jsonTest={'ore_entrata':data[day]['entrata'],'ore_uscita':data[day]['uscita'],'addressBus':data[day]['fermata'],
                'delegaName':$filter('getRitiroName')(data[day]['delega_name'],$scope.ritiraOptions),'delegaType':$filter('getRitiroType')(data[day]['delega_name'],$scope.ritiraOptions),
                'bus':data[day]['bus'],'absence':data[day]['absence'],
                'motivazione':{type:motiv_type,subtype:motiv_subtype}
@@ -325,7 +325,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
              profileService.setBriefInfo($scope.briefInfo);
              $scope.modifyBefore=$scope.getRetireTimeLimit();
             }else{
-              jsonTest={'ore_entrata':moment(fromtime).format('H:mm'),'ore_uscita':moment(totime).format('H:mm'),'addressBus':'Nome Test',
+              jsonTest={'ore_entrata':moment(fromtime).format('H:mm'),'ore_uscita':moment(totime).format('H:mm'),'addressBus':'',
               'delegaName':'','delegaType':'',
               'bus':false,'absence':false,
               'motivazione':{type:'',subtype:''}

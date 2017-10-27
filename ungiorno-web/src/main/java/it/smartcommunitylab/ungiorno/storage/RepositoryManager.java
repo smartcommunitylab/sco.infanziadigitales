@@ -893,7 +893,11 @@ public class RepositoryManager implements RepositoryService {
      */
     @Override
     public List<Communication> getCommunications(String appId, String schoolId) {
-        return template.find(schoolQuery(appId, schoolId), Communication.class);
+        Long today = new Date().getTime();
+        Query q = schoolQuery(appId, schoolId);
+        q.addCriteria(new Criteria().orOperator(new Criteria("scadenzaDate").gte(today),
+                new Criteria("scadenzaDate").is(null)));
+        return template.find(q, Communication.class);
     }
 
     /**

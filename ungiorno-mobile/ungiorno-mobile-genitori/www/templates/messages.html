@@ -64,9 +64,8 @@
 
   <ion-footer-bar id="txtfooter" class="input-chat-footer" keyboard-attach class="bar-stable item-input input-chat">
 
-    <!--    <textarea class="input-chat-footer" placeholder="{{'input_chat_placeholder' | translate}}" ng-model="new_message" id="txtnotes" ng-focus="inputUp()" ng-blur="inputDown()" ng-keyup="startTyping()" ng-keydown="expandText()"></textarea>-->
     <div class="input-chat-footer bar-stable item-input input-chat">
-      <textarea class="input-chat-footer" placeholder="{{'input_chat_placeholder' | translate}}" ng-model="new_message" id="txtnotes" ng-focus="inputUp()" ng-blur="inputDown()" ng-keyup="startTyping()" msd-elastic>
+      <textarea class="input-chat-footer" placeholder="{{'input_chat_placeholder' | translate}}" ng-model="new_message" id="txtnotes" ng-focus="inputUp()" ng-blur="inputDown()" ng-keyup="startTyping()">
       </textarea>
       <div class="send-button-container" id="buttonsend">
         <button class="button button-chat-send icon ion-android-send" ng-click="sendMessage(new_message)">

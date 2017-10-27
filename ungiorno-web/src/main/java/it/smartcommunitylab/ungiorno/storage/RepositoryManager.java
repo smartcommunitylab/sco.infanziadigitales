@@ -893,7 +893,11 @@ public class RepositoryManager implements RepositoryService {
      */
     @Override
     public List<Communication> getCommunications(String appId, String schoolId) {
-        return template.find(schoolQuery(appId, schoolId), Communication.class);
+        Long today = new Date().getTime();
+        Query q = schoolQuery(appId, schoolId);
+        q.addCriteria(new Criteria().orOperator(new Criteria("scadenzaDate").gte(today),
+                new Criteria("scadenzaDate").is(null)));
+        return template.find(q, Communication.class);
     }
 
     /**
@@ -1234,6 +1238,9 @@ public class RepositoryManager implements RepositoryService {
                 skp.setExitTime(todayConfig.getUscita());
                 skp.setEntryTime(todayConfig.getEntrata());
             }
+            if (todayConfig.getFermata() != null) {
+                skp.setStopId(todayConfig.getFermata());
+            }
             /*
              * if (assenzeMap.containsKey(kp.getKidId())) { KidCalAssenza a =
              * assenzeMap.get(kp.getKidId()); skp.setExitTime(null); skp.setNote(a.getNote()); if
@@ -1264,7 +1271,11 @@ public class RepositoryManager implements RepositoryService {
             }
 
             skp.setPersonId(personId);
-            // skp.setPersonName(getPerson(personId, conf, kp).getFullName());
+            for (AuthPerson ap : kp.getPersons()) {
+                if (ap.getPersonId().equals(personId))
+                    skp.setPersonName(ap.getFullName());
+            }
+
 
             // set if extist some KidCalNote
             List<KidCalNote> list = getKidCalNotes(appId, schoolId, skp.getKidId(), date);

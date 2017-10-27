@@ -504,7 +504,10 @@ return {
     exit_lbl:'U',
     invia:'Invia a',
     missing_school_config:"Manca Servizio Scolastico Regolare",
-    all:'Tutti'
+    all:'Tutti',
+    com_dt:'Imposta scadenza comunicazione',
+    com_del:'La comunicazione verrà eliminata nel giorno indicato',
+    auth_person:"Responsabile di ritiro"
   });
 
   $translateProvider.preferredLanguage("it");

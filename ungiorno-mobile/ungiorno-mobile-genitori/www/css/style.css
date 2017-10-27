@@ -1747,7 +1747,7 @@ $dark: #444 !default;
 }
 #chat .input-chat button {
   padding: 0 0 0 0;
-  min-height: 50px;
+  min-height: 45px;
   min-width: 65px;
   margin-left: 5px;
 }
@@ -1761,6 +1761,7 @@ $dark: #444 !default;
 }
 #chat .teacher-label {
   color: #F8A913!important;
+  font-size: small;
 }
 #chat .parent-label {
   color: #189BA9;
@@ -1844,14 +1845,17 @@ $dark: #444 !default;
 }
 #chat .input-chat-footer {
   /*  background-color: #F6F6F6;*/
-
-  line-height: 30px;
+  min-height:40px;
   font-size: 18px;
   width: 100%;
   /*  padding-left: 4px;*/
 }
+#chat .input-chat-footer textarea {
+  padding-left: 10px;
+  padding-top: 12px;
+}
 #chat .input-chat-footer.bar-stable.item-input.input-chat {
-  border-top: 1px solid #878787
+  background-color: white;
 }
 #chat .input-chat-footer::-webkit-input-placeholder {
   color: gray!important;
@@ -1892,7 +1896,6 @@ textarea {
 }
 #chat .send-button-container {
   padding: 4px;
-  background-color: #f6f6f6;
 }
 #chat .bar-footer {
   height: 60px;

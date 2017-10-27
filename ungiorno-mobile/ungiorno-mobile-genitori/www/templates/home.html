@@ -18,28 +18,64 @@
       </div>
       <div class="brief_info" ng-if="!briefInfo.absence && !weekend" ng-click="gotoEditDate();">
         <div class="currentDate"><i class="icon ion-android-calendar iconStyleHome1"></i> {{date | date:'EEEE, d MMMM yyyy' | capitalize}}</div>
-        <div class="button-norm-brief" >&nbsp;&nbsp;Entrata Ore  &nbsp;&nbsp; {{briefInfo.ore_entrata}}</div>
-        <div class="button-norm-brief" >&nbsp;&nbsp;Uscita Ore  &nbsp;&nbsp; {{briefInfo.ore_uscita}}</div>
+        <button class="button-norm-brief">
+          <div class="row">
+            <div class="col col-50">Entrata Ore</div>
+            <div class="col col-50">{{briefInfo.ore_entrata}}</div> 
+          </div>
+        </button>
+        <button class="button-norm-brief">
+          <div class="row">
+            <div class="col col-50">Uscita Ore</div> <div class="col col-50">{{briefInfo.ore_uscita}}</div> 
+          </div>
+      </button>
         <div class="br_in" ng-if="briefInfo.bus">
-            <i class="icon ion-android-bus iconStyleHome"></i> {{briefInfo.addressBus}}</div>
+          <div class="row">
+            <div class="col col-50">
+              <i class="icon ion-android-bus iconStyleHome"></i>
+            </div>
+            <div class="col col-50">{{briefInfo.addressBus}}</div>
+          </div>
+        </div>
+
         <div class="br_in">
-            <i class="icon ion-android-person iconStyleHome"></i> {{briefInfo.delegaName}} ({{briefInfo.delegaType}})</div>
+          <div class="row">
+            <div class="col col-50">
+              <i class="icon ion-android-person iconStyleHome"></i>
+            </div>
+            <div class="col col-50">{{briefInfo.delegaName}} ({{briefInfo.delegaType}})</div>
+          </div>
+        </div>
       </div>
       <div class="brief_info" ng-if="briefInfo.absence && !weekend" ng-click="gotoEditDate();">
         <div class="currentDate"><i class="icon ion-android-calendar iconStyleHome1"></i> {{date | date:'EEEE, d MMMM yyyy' | capitalize}}</div>
-        <div class="button-norm-brief">Assente  &nbsp;&nbsp; {{briefInfo.motivazione.type}}</div>
+        <button class="button-norm-brief">Assente  &nbsp;&nbsp; {{briefInfo.motivazione.type}}</button>
       </div>
       <div class="brief_info" ng-if="weekend" ng-click="gotoEditDate();">
-          <div class="currentDate"><i class="icon ion-android-calendar iconStyleHome1"></i> {{date | date:'EEEE, d MMMM yyyy' | capitalize}}</div>
-          <div class="button-norm-brief" >&nbsp;&nbsp;{{'none_entry' | translate}} &nbsp;&nbsp; </div>
-          <div class="button-norm-brief" >&nbsp;&nbsp;{{'none_exit' | translate}} &nbsp;&nbsp; </div>
-          <div class="br_in">
-              <i class="icon ion-android-person iconStyleHome"></i>{{'none' | translate}}</div>
+        <div class="currentDate"><i class="icon ion-android-calendar iconStyleHome1"></i> {{date | date:'EEEE, d MMMM yyyy' | capitalize}}</div>
+        <button class="button-norm-brief">
+                      <div class="row">
+            <div class="col">{{'none_entry' | translate}} </div> 
+                      </div>
+                      </button>
+        <button class="button-norm-brief">  
+          <div class="row">
+            <div class="col">{{'none_exit' | translate}} 
+              </div>
+              </div> </button>
+        <div class="br_in">
+          <div class="row">
+            <div class="col col-50">
+              <i class="icon ion-android-person iconStyleHome"></i></div>
+            <div class="col col-50">
+              {{'none' | translate}}</div>
+          </div>
         </div>
-      <hr class="hrstyle"/>
-      <div ng-repeat="element in elements track by $index" class="list" ng-if="!noConnection || isContact(element)">
-        <div class="card" ng-class="elements[$index].class">
-          <a class=" button-block item-thumbnail-left" ng-click="execute(elements[$index])" ng-disabled="elements[$index].disabled">
+      </div>
+        <hr class="hrstyle" />
+        <div ng-repeat="element in elements track by $index" class="list" ng-if="!noConnection || isContact(element)">
+          <div class="card" ng-class="elements[$index].class">
+            <a class=" button-block item-thumbnail-left" ng-click="execute(elements[$index])" ng-disabled="elements[$index].disabled">
             <img ng-src="{{element.img}}">
             <div class="row">
               <div class="col">
@@ -49,8 +85,8 @@
               </div>
             </div>
           </a>
+          </div>
         </div>
-      </div>
     </ion-scroll>
   </ion-content>
 </ion-view>

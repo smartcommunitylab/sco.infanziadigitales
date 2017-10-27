@@ -285,16 +285,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
   $scope.calculateOtherData = function () {
 
     console.log($scope.babyInformations);
-    $scope.babyEnterHour = $scope.babyInformations.oraEntrata;//($scope.babyInformations.anticipo.active && $scope.babyInformations.anticipo.enabled) ? $scope.schoolProfile.anticipoTiming.fromTime : $scope.schoolProfile.regularTiming.fromTime;
-
+    $scope.babyEnterHour = $scope.babyInformations.oraEntrata;
     //used to get if the baby is present
-    var now = new Date();
+    var now = moment('HH:mm');
     if ($scope.babyInformations.exitTime == null) {
       $scope.babyStatus = $filter('translate')('absent');
     } else {
-      var exitDayWithHour = new Date($scope.babyInformations.exitTime); //TODO: make a decision on server, timestamp in seconds or milliseconds?!?
-
-      $scope.babyStatus = now > exitDayWithHour ? $filter('translate')('exit') : $filter('translate')('present');
+      console.log($scope.babyInformations.exitTime);
+      var exitDayWithHour = moment($scope.babyInformations.exitTime).format('H:mm'); 
+      console.log(now.isAfter(moment(exitDayWithHour,'HH:mm')));
+      console.log(now);console.log(exitDayWithHour);
+      $scope.babyStatus = now.isAfter(moment(exitDayWithHour,'HH:mm')) ? $filter('translate')('exit') : $filter('translate')('present');
     }
 
     if ($scope.checkBusServiceActive()) {

@@ -1761,6 +1761,7 @@ $dark: #444 !default;
 }
 #chat .teacher-label {
   color: #F8A913!important;
+  font-size: small;
 }
 #chat .parent-label {
   color: #189BA9;

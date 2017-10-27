@@ -360,6 +360,7 @@ $scope.cnt=0;
                  to=moment(tempServ[j]['toTime']).format('H:mm');
                  var temp={'value':tempServ[j]['name'],'entry':fr,'entry_val':moment(fr,'H:mm'),'out':to,'out_val':moment(to,'H:mm'),'type':type};
                  $scope.listServices.push(temp);
+                 $scope.colors[temp['value']] = 'white';
                  if(moment(fr,'H:mm').isBefore(moment(fromtimeFormatted,'H:mm'))){
                   $scope.listServicesAnticipo.push(temp);
                  }
@@ -781,8 +782,11 @@ $scope.cnt=0;
       $scope.childrenProfiles['allPeriod'] = [];
     }
     console.log($scope.section);
-    $scope.colors=[];
+    for(var i=0;i<$scope.listServices.length;i++){
+      $scope.colors[$scope.listServices[i]['value']] = 'white';
+    }
     $scope.colors[periodOfTheDay] = '#98ba3c';
+    console.log($scope.colors);
     if ($scope.section != null) {
       for (var i = 0; i < $scope.section.children.length; i++) {
         //create string child[selectedPeriod].presenza

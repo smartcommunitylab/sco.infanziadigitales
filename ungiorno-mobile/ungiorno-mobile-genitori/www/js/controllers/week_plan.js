@@ -888,7 +888,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         var totime=$scope.getSchoolProfileNormalConfig['toTime'];
         if(totime=='') totime=moment('14:00','H:mm');
         totimeFormatted=moment(totime).format('H:mm');
-        $scope.currData.uscita=totimeFormatted;
+        totimeOrig=moment(totimeFormatted,'H:mm');
+        $scope.currData.uscita=totimeOrig;
+        $scope.currData.uscita_display=totimeFormatted;
     }
 
 })
@@ -1259,7 +1261,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         var totime=$scope.getSchoolProfileNormalConfig['toTime'];
         if(totime=='') totime=moment('14:00','H:mm');
         totimeFormatted=moment(totime).format('H:mm');
-        $scope.currData.uscita=totimeFormatted;
+        totimeOrig=moment(totimeFormatted,'H:mm');
+        $scope.currData.uscita=totimeOrig;
+        $scope.currData.uscita_display=totimeFormatted;
     }
 
 })

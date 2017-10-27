@@ -2067,7 +2067,7 @@ textarea {
   display: flex;
   flex-direction: row;
   margin-top:10px;
-  padding-top:20px;
+  /*padding-top:20px;*/
   padding-bottom:20px;
 }
 
@@ -2120,6 +2120,10 @@ textarea {
   border: 0;
   margin-left:2px;
   padding: 2px;
+  height: 100%;
+}
+.col-offset-20 {
+  margin-left: 20%;
 }
 .editable{
   background-color: #f8ab15;
@@ -2166,6 +2170,9 @@ textarea {
 .noneditable2{
   color: lightgray;
 }
+.noneditable3 {
+  background-color: gray;
+}
 
 .readonly{
   background-color: #B0B0B0;
@@ -2174,26 +2181,31 @@ textarea {
 .button-day {
   color: #ffffff;
   border: 0;
-  margin:4px;
-  padding: 2px;
+  /*margin:4px;*/
+  padding: 6px;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 
 .day-name {
   padding-right:5px;
+  padding-top: 25px;
 }
 .week_plan_detail_table{
   text-align: center;
   width:100%;
-  padding: 10px;
-  margin-top:17px;
+  /*padding: 10px;
+  margin-top:17px;*/
 }
 .week_plan_detail_table td{
   vertical-align: middle;
   padding-bottom:10px;
   padding-top:10px;
   font-size: 90%;
+}
+
+.week_plan_detail_table .row{
+  padding: 0px!important;
 }
 .dayEdit{
   text-align: left;
@@ -2232,27 +2244,31 @@ textarea {
   font-weight: bold;
 }
 .delega_name{
-  font-size: 10px;
+  font-size: 14px;
   display: flex;
   flex-direction: column;
-  line-height: 10px;
+  line-height: 30px;
   text-align: center;
   padding-right:0px;
   margin-right:0px;
   text-overflow: ellipsis;
+  width: 100%;
 }
 .nowrap{
   white-space: nowrap;
 }
 .delegaStyle{
   white-space: nowrap; 
-  width: 7em; 
-  overflow: hidden;
+  /*width: 7em; */
+  /*overflow: hidden;*/
   text-overflow: ellipsis; 
 }
+.iconStyleWeek {
+  margin: 4px;
+}
 .iconStyle{
-  width:10px;
-  height:15px;
+  /*width:10px;*/
+  /*height:15px;*/
   font-size: 20px;
 }
 .iconStyleHead{

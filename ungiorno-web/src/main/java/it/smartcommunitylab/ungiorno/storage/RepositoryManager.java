@@ -1234,6 +1234,9 @@ public class RepositoryManager implements RepositoryService {
                 skp.setExitTime(todayConfig.getUscita());
                 skp.setEntryTime(todayConfig.getEntrata());
             }
+            if (todayConfig.getFermata() != null) {
+                skp.setStopId(todayConfig.getFermata());
+            }
             /*
              * if (assenzeMap.containsKey(kp.getKidId())) { KidCalAssenza a =
              * assenzeMap.get(kp.getKidId()); skp.setExitTime(null); skp.setNote(a.getNote()); if
@@ -1264,7 +1267,11 @@ public class RepositoryManager implements RepositoryService {
             }
 
             skp.setPersonId(personId);
-            // skp.setPersonName(getPerson(personId, conf, kp).getFullName());
+            for (AuthPerson ap : kp.getPersons()) {
+                if (ap.getPersonId().equals(personId))
+                    skp.setPersonName(ap.getFullName());
+            }
+
 
             // set if extist some KidCalNote
             List<KidCalNote> list = getKidCalNotes(appId, schoolId, skp.getKidId(), date);

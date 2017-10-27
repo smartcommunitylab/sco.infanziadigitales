@@ -29,7 +29,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
   //    $scope.newMessage.text = ' ';
   //  }
   $scope.checkBusServiceActive = function () {
-    return $scope.babyInformations.bus.active && $scope.babyInformations.bus.enabled && $scope.babyInformations.stopId != null;
+    return $scope.babyInformations.bus.enabled && $scope.babyInformations.stopId != null;
   }
   var getBusStopAddressByID = function (busStopID) {
     for (var i = 0; i < $scope.babyProfile.services.bus.stops.length; i++) {
@@ -299,8 +299,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
     }
 
     if ($scope.checkBusServiceActive()) {
-      //$scope.babyBusStopBackName = getBusStopAddressByID($scope.babyInformations.stopId);
-      //tmp because stops have no data for address
       $scope.babyBusStopBackName = $scope.babyInformations.stopId;
     }
     for (var i = 0; i < $scope.babyProfile.persons.length; i++) {

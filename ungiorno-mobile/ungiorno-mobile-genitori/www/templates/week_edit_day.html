@@ -99,7 +99,7 @@
           </td>
           <td>
               <div data-tap-disabled="true">
-                  <select ng-model="currData.fermata" ng-disabled="currData.absence">
+                  <select ng-model="currData.fermata" ng-disabled="currData.absence || !currData.bus">
                     <option ng-repeat="option in fermataOptions" value="{{option.stopId}}" ng-selected="currData.fermata==option.stopId">{{option.stopId | translate}}</option>
                   </select>
               </div>

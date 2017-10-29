@@ -139,4 +139,24 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.filters', 
     }
       return retArr;
     }
+  })
+  .filter('getSchoolNormalFascie', function() {
+    return function(services) {
+    var retArr=[];
+    if(services!==undefined){
+      for(var i=0;i<services.length;i++){
+          if(services[i].regular==true && services[i]['timeSlots']!==null && services[i]['timeSlots'].length>0){
+            var tempServ=services[i].timeSlots;
+            for(var j=0;j<tempServ.length;j++){
+                fr=moment(tempServ[j]['fromTime']).format('H:mm');
+                to=moment(tempServ[j]['toTime']).format('H:mm');
+                var temp={'value':tempServ[j]['name'],'label':tempServ[j]['name'],
+                'entry':fr,'entry_val':moment(fr,'H:mm'),'out':to,'out_val':moment(to,'H:mm')};
+                retArr.push(temp);
+            }
+          }
+      }
+    }
+      return retArr;
+    }
   });

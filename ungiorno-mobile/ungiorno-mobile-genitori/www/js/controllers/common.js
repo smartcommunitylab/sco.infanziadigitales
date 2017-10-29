@@ -52,7 +52,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
   };
 })
 
-.controller('AppCtrl', function ($scope, $rootScope, $cordovaDevice, $ionicModal, $ionicHistory, $timeout, $filter, $ionicPopover, $state, $ionicSideMenuDelegate, Toast, Config, profileService, week_planService, $ionicPopup) {
+.controller('AppCtrl', function ($scope, $rootScope, $cordovaDevice, $ionicModal, $ionicHistory, $timeout, $filter, $ionicPopover, $state, $ionicSideMenuDelegate, Toast, Config, profileService, week_planService, $ionicPopup,dataServerService,LoginService) {
   $scope.profilesOpen = false;
   $scope.expandProfiles = false;
 
@@ -168,9 +168,9 @@ $scope.logout = function () {
 
 
   $scope.getProfiles = function () {
-    $scope.babyselected = profileService.getBabyProfile();
-    $scope.babies = profileService.getBabiesProfiles();
-  }
+        $scope.babyselected = profileService.getBabyProfile();
+        $scope.babies = profileService.getBabiesProfiles();
+  }  
   $scope.isToday = function (date) {
     var inputDate = new Date(date);
     inputDate.setHours(0, 0, 0, 0);
@@ -282,6 +282,9 @@ $scope.logout = function () {
     });
   }
   $scope.getProfileImage = function (kid) {
+    var token=LoginService.localStorage.getTokenInfo();
+    console.log(token);
+    //var image = Config.URL() + "/" + Config.app() + "/picture/" + Config.appId() + "/" + kid.schoolId + "/" + kid.kidId + "/"+token;
     var image = Config.URL() + "/" + Config.app() + "/student/" + Config.appId() + "/" + kid.schoolId + "/" + kid.kidId + "/false/images";
     return image;
   }

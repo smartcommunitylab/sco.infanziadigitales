@@ -4,7 +4,7 @@
 
 angular.module('smartcommunitylab.services.login', [])
 
-.factory('LoginService', function ($rootScope, $q, $http, $window) {
+.factory('LoginService', function ($rootScope, $q, $http, $window,Config) {
 	var service = {};
 
 	var libConfigOK;
@@ -799,7 +799,7 @@ angular.module('smartcommunitylab.services.login', [])
 					);
 					break;
 				case service.PROVIDER.INTERNAL:
-					$http.get(settings.aacUrl + AAC.REVOKE_URI + user.tokenInfo.access_token, {
+					$http.get(Config.getAACURL() + AAC.REVOKE_URI + user.tokenInfo.access_token, {
 						headers: {
 							'Authorization': 'Bearer ' + user.tokenInfo.access_token
 						}
@@ -807,7 +807,7 @@ angular.module('smartcommunitylab.services.login', [])
 						function (response) {
 							resetUser();
 							console.log('[LOGIN] ' + service.PROVIDER.INTERNAL + ' logout successfully (token revoked)');
-							if (settings.loginType == service.LOGIN_TYPE.COOKIE) {
+							if (settings.loginType == service.LOGIN_TYPE.COOKIE && $window.cookies) {
 								$window.cookies.clear(function () {
 									console.log('[LOGIN] Cookies cleared!');
 								});

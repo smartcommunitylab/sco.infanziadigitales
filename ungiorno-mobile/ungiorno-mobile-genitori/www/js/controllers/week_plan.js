@@ -22,9 +22,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         fromtime=moment('7:30','H:mm');
         totime=moment('13:30','H:mm');
     }
-
-    $scope.listServicesDb=profileService.getBabyProfile().services.timeSlotServices;
-    if($scope.listServicesDb!=undefined){
+    if(profileService.getBabyProfile().services!==null && profileService.getBabyProfile().services.timeSlotServices!==null){
+        $scope.listServicesDb=profileService.getBabyProfile().services.timeSlotServices;
     for(var i=0;i<$scope.listServicesDb.length;i++){
             var type=$scope.listServicesDb[i].name;
             var enabled=$scope.listServicesDb[i].enabled;
@@ -365,8 +364,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         totime=moment('13:30','H:mm');
     }
 
+    if(profileService.getBabyProfile().services!==null && profileService.getBabyProfile().services.timeSlotServices!==null){
     $scope.listServicesDb=profileService.getBabyProfile().services.timeSlotServices;
-    if($scope.listServicesDb!=undefined){
     for(var i=0;i<$scope.listServicesDb.length;i++){
             var type=$scope.listServicesDb[i].name;
             var enabled=$scope.listServicesDb[i].enabled;
@@ -712,7 +711,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
 
     $scope.getFermataOptions = function(day) {
-        if(profileService.getBabyProfile().services.bus && profileService.getBabyProfile().services.bus.stops){
+        if(profileService.getBabyProfile().services && profileService.getBabyProfile().services.bus && profileService.getBabyProfile().services.bus.stops){
             $scope.fermataOptions=angular.copy(profileService.getBabyProfile().services.bus.stops);
         }
         $scope.fermataOptions.push({'stopId':'none'});
@@ -742,7 +741,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.listServicesAnticipo=[];
     $scope.listServicesPosticipo=[];
     $scope.getListServices = function(day) {
-        $scope.listServicesDb=profileService.getBabyProfile().services.timeSlotServices;
 
         $scope.getSchoolProfileNormalConfig=$filter('getSchoolNormalService')(profileService.getSchoolProfile().services);
         console.log($scope.getSchoolProfileNormalConfig);
@@ -762,7 +760,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         $scope.listServicesPosticipo.push(temp);
         var fr='',fr2='';
         var to='',to2='';
-        if($scope.listServicesDb!==null && $scope.listServicesDb!==undefined){
+        if(profileService.getBabyProfile().services!==null && profileService.getBabyProfile().services.timeSlotServices!==null){
+            $scope.listServicesDb=profileService.getBabyProfile().services.timeSlotServices;
             for(var i=0;i<$scope.listServicesDb.length;i++){
                 var type=$scope.listServicesDb[i].name;
                 var enabled=$scope.listServicesDb[i].enabled;
@@ -884,8 +883,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     }
 
     $scope.setBusHour= function() {
-        $scope.getSchoolProfileNormalConfig=$filter('getSchoolNormalService')(profileService.getSchoolProfile().services);
-        var totime=$scope.getSchoolProfileNormalConfig['toTime'];
+        $scope.getSchoolNormalFascie=$filter('getSchoolNormalFascie')(profileService.getSchoolProfile().services);
+        $scope.getSchoolNormalFascie.sort(sortByTimeAscOut);
+        var totime='';
+        var length1 =$scope.getSchoolNormalFascie.length;
+        if(length1>0) totime=$scope.getSchoolNormalFascie[length1-1]['out_val'];
         if(totime=='') totime=moment('14:00','H:mm');
         totimeFormatted=moment(totime).format('H:mm');
         totimeOrig=moment(totimeFormatted,'H:mm');
@@ -963,7 +965,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     }
 
     $scope.getFermataOptions = function(day) {
-        if(profileService.getBabyProfile().services.bus && profileService.getBabyProfile().services.bus.stops){
+        if(profileService.getBabyProfile().services && profileService.getBabyProfile().services.bus && profileService.getBabyProfile().services.bus.stops){
             $scope.fermataOptions=angular.copy(profileService.getBabyProfile().services.bus.stops);
         }
         $scope.fermataOptions.push({'stopId':'none'});
@@ -1114,7 +1116,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.listServicesAnticipo=[];
     $scope.listServicesPosticipo=[];
     $scope.getListServices = function(day) {
-        $scope.listServicesDb=profileService.getBabyProfile().services.timeSlotServices;
 
         $scope.getSchoolProfileNormalConfig=$filter('getSchoolNormalService')(profileService.getSchoolProfile().services);
         console.log($scope.getSchoolProfileNormalConfig);
@@ -1134,7 +1135,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         $scope.listServicesPosticipo.push(temp);
         var fr='',fr2='';
         var to='',to2='';
-        if($scope.listServicesDb!==null && $scope.listServicesDb!==undefined){
+        if(profileService.getBabyProfile().services!==null && profileService.getBabyProfile().services.timeSlotServices!==null){
+            $scope.listServicesDb=profileService.getBabyProfile().services.timeSlotServices;
             for(var i=0;i<$scope.listServicesDb.length;i++){
                 var type=$scope.listServicesDb[i].name;
                 var enabled=$scope.listServicesDb[i].enabled;
@@ -1257,8 +1259,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     }
     
     $scope.setBusHour= function() {
-        $scope.getSchoolProfileNormalConfig=$filter('getSchoolNormalService')(profileService.getSchoolProfile().services);
-        var totime=$scope.getSchoolProfileNormalConfig['toTime'];
+        $scope.getSchoolNormalFascie=$filter('getSchoolNormalFascie')(profileService.getSchoolProfile().services);
+        $scope.getSchoolNormalFascie.sort(sortByTimeAscOut);
+        var totime='';
+        var length1 =$scope.getSchoolNormalFascie.length;
+        if(length1>0) totime=$scope.getSchoolNormalFascie[length1-1]['out_val'];
         if(totime=='') totime=moment('14:00','H:mm');
         totimeFormatted=moment(totime).format('H:mm');
         totimeOrig=moment(totimeFormatted,'H:mm');

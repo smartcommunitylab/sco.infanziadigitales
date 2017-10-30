@@ -17,6 +17,8 @@ package it.smartcommunitylab.ungiorno.controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -62,6 +64,7 @@ import it.smartcommunitylab.ungiorno.model.SchoolObject;
 import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.services.PermissionsService;
 import it.smartcommunitylab.ungiorno.services.RepositoryService;
+import it.smartcommunitylab.ungiorno.services.impl.KidManager;
 import it.smartcommunitylab.ungiorno.usage.UsageManager;
 import it.smartcommunitylab.ungiorno.utils.JsonUtil;
 
@@ -82,6 +85,9 @@ public class KidController {
 
     @Autowired
     private UsageManager usageManager;
+
+    @Autowired
+    private KidManager kidManager;
 
     @RequestMapping(method = RequestMethod.GET,
             value = "/student/{appId}/{schoolId}/{kidId}/calendar")
@@ -416,6 +422,8 @@ public class KidController {
         }
     }
 
+
+
     @RequestMapping(value = "/student/{appId}/{schoolId}/{kidId}/{isTeacher}/images",
             method = RequestMethod.GET)
     public @ResponseBody HttpEntity<byte[]> downloadImage(@PathVariable String appId,
@@ -455,6 +463,48 @@ public class KidController {
             headers.setContentType(MediaType.IMAGE_JPEG);
         }
         return new HttpEntity<byte[]>(image, headers);
+    }
+
+    @RequestMapping(value = "/student/{appId}/{schoolId}/{kidId}/{isTeacher}/imagesnew",
+            method = RequestMethod.GET)
+    public @ResponseBody void downloadImageNew(@PathVariable String appId,
+            @PathVariable String schoolId, @PathVariable String kidId,
+            @PathVariable Boolean isTeacher, HttpServletRequest request,
+            HttpServletResponse response) throws Exception {
+
+        String path = kidManager.getKidPicturePath(appId, schoolId, kidId);
+        FileInputStream in = null;
+        try {
+            in = new FileInputStream(new File(path));
+        } catch (FileNotFoundException | NullPointerException e) {
+            path = kidManager.getDefaultKidPicturePath();
+            in = new FileInputStream(new File(path));
+        }
+        String extension = path.substring(path.lastIndexOf("."));
+        if (extension.toLowerCase().equals(".png")) {
+            response.setContentType(MediaType.IMAGE_PNG.toString());
+        } else if (extension.toLowerCase().equals(".gif")) {
+            response.setContentType(MediaType.IMAGE_GIF.toString());
+        } else if (extension.toLowerCase().equals(".jpg")) {
+            response.setContentType(MediaType.IMAGE_JPEG.toString());
+        } else if (extension.toLowerCase().equals(".jpeg")) {
+            response.setContentType(MediaType.IMAGE_JPEG.toString());
+        }
+        try {
+            OutputStream o = response.getOutputStream();
+            byte[] buffer = new byte[1024];
+            int c = 0;
+            int length = 0;
+            while ((c = in.read(buffer)) != -1) {
+                o.write(buffer, 0, c);
+                length += c;
+            }
+            response.setContentLength(length);
+        } catch (IOException e) {
+            logger.error("Exception downloading picture for kid {}", kidId);
+        } finally {
+            in.close();
+        }
     }
 
     @RequestMapping(method = RequestMethod.GET,

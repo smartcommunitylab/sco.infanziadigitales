@@ -34,6 +34,7 @@ export class LoginService  {
   logout(): Promise<boolean> {
     // TODO: revoke token and return true
     sessionStorage.clear();
+    this.serverLogout();
     return Promise.resolve(true);
   }
 

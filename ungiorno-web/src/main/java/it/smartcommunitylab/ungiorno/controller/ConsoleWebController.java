@@ -172,7 +172,9 @@ public class ConsoleWebController {
             kidProfiles.add(kid);
         } else {
             int profileIndex = kidProfiles.indexOf(selectedKidProfile);
-            kidProfiles.remove(profileIndex);
+            KidProfile removed = kidProfiles.remove(profileIndex);
+            // maintain images if set server side
+            kid.setImage(removed.getImage());
             kidProfiles.add(profileIndex, kid);
         }
 

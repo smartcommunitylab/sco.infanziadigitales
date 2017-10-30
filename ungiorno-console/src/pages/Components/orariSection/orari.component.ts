@@ -60,7 +60,9 @@ export class Orari implements OnInit {
     }
     onDeleteOrario(item: Service) {
         let alert = this.alertCtrl.create({
-            subTitle: 'Conferma eliminazione',
+            title: 'Conferma eliminazione',
+            subTitle:'Attenzione: aggiornare anche le informazioni dei bambini associati a questo orario.',
+            cssClass:'alertWarningCss',
             buttons: [
                 {
                     text: "Annulla"

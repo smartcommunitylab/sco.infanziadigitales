@@ -62,7 +62,7 @@ rerender = false;
       console.log('user cannot manage any schools');
     }
     this.schools = this.userService.getAuthorizedSchools();
-    if (this.schools) {
+    if (this.schools && this.userService.getAuthorizedSchools()[0]) {
       this.selectedId = this.userService.getAuthorizedSchools()[0].id;
       this.selectedAppId = this.userService.getAuthorizedSchools()[0].appId;
       this.onSchoolChange(this.selectedAppId, this.selectedId);
@@ -105,6 +105,6 @@ rerender = false;
 
   logout() {
     this.loginService.logout();
-    window.location.reload();
+   // window.location.reload();
   }
 }

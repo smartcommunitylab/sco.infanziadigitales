@@ -8,7 +8,7 @@ import { School } from './../../../app/Classes/school';
 import { Component, Input, OnInit } from '@angular/core';
 import { NavController, AlertController, ModalController } from 'ionic-angular';
 import { Parent } from "../../../app/Classes/parent";
-import {ConfigService} from "./../../../services/config.service"
+import { ConfigService } from "./../../../services/config.service"
 
 
 @Component({
@@ -17,26 +17,27 @@ import {ConfigService} from "./../../../services/config.service"
 })
 
 export class Bambini implements OnInit {
-  @Input() selectedSchool: School; 
+  @Input() selectedSchool: School;
 
-  selectedKid : Kid;
+  selectedKid: Kid;
 
   ordine: string = '0';
-  filtro : string = '0';
+  filtro: string = '0';
 
-  filteredKid : Kid[];
+  filteredKid: Kid[];
 
-  kidClick : boolean[] = [false];
-
-  edit : boolean;
+  kidClick: boolean[] = [false];
+  schoolSections: Group[];
+  edit: boolean;
   private apiUrl;
-  constructor(private webService : WebService, public alertCtrl: AlertController, private configService : ConfigService) {
-    this.apiUrl=this.configService.getConfig('apiUrl');
+  constructor(private webService: WebService, public alertCtrl: AlertController, private configService: ConfigService) {
+    this.apiUrl = this.configService.getConfig('apiUrl');
   }
 
   ngOnInit(): void {
     this.filteredKid = this.selectedSchool.kids;
     this.onFiltroKidChange(this.filtro);
+    this.schoolSections = this.selectedSchool.groups.filter(group => group.section)
   }
 
   handlerInputChange(e) {
@@ -48,21 +49,21 @@ export class Bambini implements OnInit {
     this.onEditKid(k);
   }
 
-  onViewKid(kid : Kid) {
+  onViewKid(kid: Kid) {
     this.selectedKid = kid;
     this.edit = false;
     this.kidClick[0] = true;
-   
+
   }
 
-  onEditKid(kid : Kid) {
+  onEditKid(kid: Kid) {
     this.selectedKid = kid;
     this.edit = true;
-    this.kidClick[0]= true;
-  
+    this.kidClick[0] = true;
+
   }
 
-  onDeleteKid(item : Kid) {
+  onDeleteKid(item: Kid) {
     let alert = this.alertCtrl.create({
       subTitle: 'Conferma eliminazione',
       buttons: [
@@ -72,7 +73,7 @@ export class Bambini implements OnInit {
         {
           text: 'OK',
           handler: () => {
-           
+
             this.selectedSchool.kids.splice(this.selectedSchool.kids.findIndex(tmp => tmp.id === item.id), 1);
             this.webService.remove(this.selectedSchool, item);
           }
@@ -82,55 +83,59 @@ export class Bambini implements OnInit {
     alert.present();
   }
 
-  onOrdineChange(ordine : string) {
-    switch(ordine) {
+  onOrdineChange(ordine: string) {
+    switch (ordine) {
       case '0':
         this.filteredKid.sort((item1, item2) => item1.name.localeCompare(item2.name));
-      break;
+        break;
       case '1':
         this.filteredKid.sort((item1, item2) => item2.name.localeCompare(item1.name));
-      break;
+        break;
       case '2':
         this.filteredKid.sort((item1, item2) => item1.surname.localeCompare(item2.surname));
-      break;
+        break;
       case '3':
         this.filteredKid.sort((item1, item2) => item2.surname.localeCompare(item1.surname));
-      break;
+        break;
     }
   }
 
-  onFiltroKidChange(filtro : string) {
-    switch(filtro) {
+  onFiltroKidChange(filtro: string) {
+    switch (filtro) {
       case '0':
         this.filteredKid = this.selectedSchool.kids;
-      break;
+        break;
       case '1':
-        this.filteredKid = this.selectedSchool.kids.filter(x=> x.gender === "Maschio");
-      break;
+        this.filteredKid = this.selectedSchool.kids.filter(x => x.gender === "Maschio");
+        break;
       case '2':
-        this.filteredKid = this.selectedSchool.kids.filter(x=> x.gender === "Femmina");;
-      break;
+        this.filteredKid = this.selectedSchool.kids.filter(x => x.gender === "Femmina");;
+        break;
       case '3':
-        this.filteredKid = this.selectedSchool.kids.filter(x=> x.gender === "Altro");;
-      break;
+        this.filteredKid = this.selectedSchool.kids.filter(x => x.gender === "Altro");;
+        break;
       case '4':
-        this.filteredKid = this.selectedSchool.kids.filter(x=> x.section);
-      break;
+        this.filteredKid = this.selectedSchool.kids.filter(x => x.section);
+        break;
       case '5':
-        this.filteredKid = this.selectedSchool.kids.filter(x=> !x.section);
-      break;
+        this.filteredKid = this.selectedSchool.kids.filter(x => !x.section);
+        break;
+      default:
+        // if filtro is a class fil
+        this.filteredKid = this.selectedSchool.kids.filter(x => filtro == x.section);
+
     }
     this.onOrdineChange(this.ordine);
   }
-  getImage (child) {
-    var image =this.apiUrl + "/picture/" +this.selectedSchool.appId  + "/" + this.selectedSchool.id + "/"+child.id + "/"+sessionStorage.getItem('access_token');
+  getImage(child) {
+    var image = this.apiUrl + "/picture/" + this.selectedSchool.appId + "/" + this.selectedSchool.id + "/" + child.id + "/" + sessionStorage.getItem('access_token');
     return image;
   }
 
-  searchKids(item : any) {
+  searchKids(item: any) {
     this.filteredKid = this.selectedSchool.kids;
     let val = item.target.value;
-    if(val && val.trim() !== '') {
+    if (val && val.trim() !== '') {
       this.filteredKid = this.filteredKid.filter(x => {
         var tmpN = x.name;
         var tmpS = x.surname;

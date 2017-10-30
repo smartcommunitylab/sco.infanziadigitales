@@ -136,7 +136,7 @@ export class KidPage implements OnInit {
     BreakPhoneException = {};
     toastWrongEmail;
     toastWrongPhone;
-
+    orarioNormale = "";
     constructor(
         private webService: WebService,
         private configService: ConfigService,
@@ -155,7 +155,12 @@ export class KidPage implements OnInit {
         this.isNew = this.thisKid.id == '';
         this.editInfo = this.isNew;
 
-        this.selectedSchool.servizi.forEach(servizio => this.servicesChecked[servizio.servizio] = false);
+        this.selectedSchool.servizi.forEach(servizio => {
+            this.servicesChecked[servizio.servizio] = false
+            if (servizio.normale) {
+                this.orarioNormale = servizio.servizio;
+            }
+        });
         this.thisKid.services.forEach(x => this.servicesChecked[x.servizio] = true);
         if (!this.thisKid.bus) {
             this.thisKid.bus = new BusService();
@@ -641,16 +646,27 @@ export class KidPage implements OnInit {
     onDelegaInfoEdit() {
         this.editDelegaInfo = true;
     }
+    private findWord(array, word, field) {
+        return -1 < array.map(function (item) {
+            return item[field].toLowerCase();
+        }).indexOf(word.toLowerCase());
+    }
+    private findDelega(array, delega) {
+        var already=false;
+        array.forEach(element => {
+            if (element.name == delega.name &&  element.surname == delega.surname &&  element.legame == delega.legame)
+            {
+                already=true;
+            }
 
+        });
+        return already;
+    }
     onDelegaInfoSave() {
         this.editDelegaInfo = false;
         if (this.isNewD)
             if (this.selectedDelega !== undefined && this.selectedDelega.name.trim().length > 0 && this.selectedDelega.surname.trim().length > 0 && this.selectedDelega.legame.trim().length > 0) {
-                if (this.selectedKid.deleghe.findIndex(x => this.selectedDelega.name.toLowerCase() === x.name.toLowerCase()) < 0 && this.selectedKid.deleghe.findIndex(x => this.selectedDelega.surname.toLowerCase() === x.surname.toLowerCase()) < 0) {
-                    this.thisKid.deleghe.push(this.selectedDelega)
-                    this.selectedDelega = null;
-                }
-                else {
+                if (this.findDelega(this.thisKid.deleghe,this.selectedDelega)){
                     let alert = this.alertCtrl.create({
                         subTitle: 'Identificatore già in uso',
                         buttons: [
@@ -660,7 +676,11 @@ export class KidPage implements OnInit {
                         ]
                     });
                     alert.present();
+                } else {
+                    this.thisKid.deleghe.push(this.selectedDelega)
+                    this.selectedDelega = null;
                 }
+
             }
         this.webService.add(this.selectedSchool, this.thisKid);
     }

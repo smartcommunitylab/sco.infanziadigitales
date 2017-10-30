@@ -243,5 +243,6 @@
   "parent_delega":"Responsabile",
   "none_entry":"Entrata non prevista",
   "none_exit":"Uscita non prevista",
-  "set_time":"Imposta ora"
+  "set_time":"Imposta ora",
+  "none_f":"Non specificata"
 }

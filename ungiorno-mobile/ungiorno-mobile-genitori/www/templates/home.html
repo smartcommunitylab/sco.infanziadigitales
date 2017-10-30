@@ -16,7 +16,7 @@
         <div class="no-connection" ng-show="noConnection" ng-bind-html="noConnectionMessage"></div>
         <button ng-show="noConnection" class="button home-reload" ng-click="refresh()"> ricarica pagina</button>
       </div>
-      <div class="brief_info" ng-if="!briefInfo.absence && !weekend" ng-click="gotoEditDate();">
+      <div class="brief_info" ng-if="!briefInfo.absence && !weekend && !noConnection" ng-click="gotoEditDate();">
         <div class="currentDate"><i class="icon ion-android-calendar iconStyleHome1"></i> {{date | date:'EEEE, d MMMM yyyy' | capitalize}}</div>
         <div class="button-norm-brief" >&nbsp;&nbsp;Entrata Ore  &nbsp;&nbsp; {{briefInfo.ore_entrata}}</div>
         <div class="button-norm-brief" >&nbsp;&nbsp;Uscita Ore  &nbsp;&nbsp; {{briefInfo.ore_uscita}}</div>
@@ -25,11 +25,11 @@
         <div class="br_in">
             <i class="icon ion-android-person iconStyleHome"></i> {{briefInfo.delegaName}} ({{briefInfo.delegaType}})</div>
       </div>
-      <div class="brief_info" ng-if="briefInfo.absence && !weekend" ng-click="gotoEditDate();">
+      <div class="brief_info" ng-if="briefInfo.absence && !weekend && !noConnection" ng-click="gotoEditDate();">
         <div class="currentDate"><i class="icon ion-android-calendar iconStyleHome1"></i> {{date | date:'EEEE, d MMMM yyyy' | capitalize}}</div>
         <div class="button-norm-brief">Assente  &nbsp;&nbsp; {{briefInfo.motivazione.type}}</div>
       </div>
-      <div class="brief_info" ng-if="weekend" ng-click="gotoEditDate();">
+      <div class="brief_info" ng-if="weekend && !noConnection" ng-click="gotoEditDate();">
           <div class="currentDate"><i class="icon ion-android-calendar iconStyleHome1"></i> {{date | date:'EEEE, d MMMM yyyy' | capitalize}}</div>
           <div class="button-norm-brief" >&nbsp;&nbsp;{{'none_entry' | translate}} &nbsp;&nbsp; </div>
           <div class="button-norm-brief" >&nbsp;&nbsp;{{'none_exit' | translate}} &nbsp;&nbsp; </div>

@@ -97,11 +97,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                         }
                     }
                     else{
-                        var jsonTest=[{'name':'monday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':'NameTest'},
-                        {'name':'tuesday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':'NameTest'},
-                        {'name':'wednesday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':'NameTest'},
-                        {'name':'thursday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':'NameTest'},
-                        {'name':'friday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':'NameTest'}];
+                        var jsonTest=[{'name':'monday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':''},
+                        {'name':'tuesday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':''},
+                        {'name':'wednesday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':''},
+                        {'name':'thursday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':''},
+                        {'name':'friday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':''}];
                         jsonTest=$scope.formatInfo(jsonTest);
                         $scope.days=jsonTest;
                         for(var i=0;i<=4;i++){
@@ -294,11 +294,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                         }
                     }
                     else{
-                        var jsonTest=[{'name':'monday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':'NameTest'},
-                        {'name':'tuesday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':'NameTest'},
-                        {'name':'wednesday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':'NameTest'},
-                        {'name':'thursday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':'NameTest'},
-                        {'name':'friday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':'NameTest'}];
+                        var jsonTest=[{'name':'monday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':''},
+                        {'name':'tuesday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':''},
+                        {'name':'wednesday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':''},
+                        {'name':'thursday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':''},
+                        {'name':'friday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':''}];
                         jsonTest=$scope.formatInfo(jsonTest);
                         $scope.days=jsonTest;
                         for(var i=0;i<=4;i++){
@@ -444,11 +444,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 }
             }
             else{
-                var jsonTest=[{'name':'monday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':'NameTest'},
-                {'name':'tuesday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':'NameTest'},
-                {'name':'wednesday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':'NameTest'},
-                {'name':'thursday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':'NameTest'},
-                {'name':'friday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':'NameTest'}];
+                var jsonTest=[{'name':'monday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':''},
+                {'name':'tuesday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':''},
+                {'name':'wednesday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':''},
+                {'name':'thursday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':''},
+                {'name':'friday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':''}];
                 jsonTest=$scope.formatInfo(jsonTest);
                 $scope.days=jsonTest;
                 for(var i=0;i<=4;i++){
@@ -646,7 +646,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         $scope.date=dateFormat;
         $scope.currData=angular.copy(week_planService.getDayDataDefault($scope.currDay));
         if($scope.currData.fermata=='' || $scope.currData.fermata==null || $scope.currData.fermata==undefined){
-            $scope.currData.fermata='none';
+            $scope.currData.fermata='none_f';
+        }
+        if($scope.currData.delega_name==null || $scope.currData.delega_name==undefined || $scope.currData.delega_name==''){
+            $scope.currData.delega_name='none';            
         }
         if($scope.currData['uscita']!=null && $scope.currData['uscita']!=undefined)
             $scope.currData['uscita_display']=moment($scope.currData['uscita']).format('H:mm' );
@@ -711,15 +714,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
 
     $scope.getFermataOptions = function(day) {
+        $scope.fermataOptions.push({'stopId':'none_f'});
         if(profileService.getBabyProfile().services && profileService.getBabyProfile().services.bus && profileService.getBabyProfile().services.bus.stops){
-            $scope.fermataOptions=angular.copy(profileService.getBabyProfile().services.bus.stops);
+            $scope.fermataOptions = $scope.fermataOptions.concat(angular.copy(profileService.getBabyProfile().services.bus.stops));
         }
-        $scope.fermataOptions.push({'stopId':'none'});
     };
     $scope.getFermataOptions();
 
     $scope.getRitiroOptions = function(day) {
-        $scope.ritiraOptions=profileService.getBabyProfile().persons;
+        $scope.ritiraOptions.push({'personId':'none','firstName':'none','relation':'none'});
+        $scope.ritiraOptions=$scope.ritiraOptions.concat(angular.copy(profileService.getBabyProfile().persons));
     };
     $scope.getRitiroOptions();
 
@@ -907,6 +911,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.ritiraOptions=[];
     $scope.listServices=[];
     $scope.reason_text='add_reason';
+    $scope.tempCurrData={};
     
     $scope.getDateString = function () {
         $scope.date = week_planService.getSelectedDateInfo();
@@ -965,15 +970,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     }
 
     $scope.getFermataOptions = function(day) {
+        $scope.fermataOptions.push({'stopId':'none_f'});
         if(profileService.getBabyProfile().services && profileService.getBabyProfile().services.bus && profileService.getBabyProfile().services.bus.stops){
-            $scope.fermataOptions=angular.copy(profileService.getBabyProfile().services.bus.stops);
+            $scope.fermataOptions = $scope.fermataOptions.concat(angular.copy(profileService.getBabyProfile().services.bus.stops));
         }
-        $scope.fermataOptions.push({'stopId':'none'});
     };
     $scope.getFermataOptions();
 
     $scope.getRitiroOptions = function(day) {
-        $scope.ritiraOptions=profileService.getBabyProfile().persons;
+        $scope.ritiraOptions.push({'personId':'none','firstName':'none','relation':'none'});
+        $scope.ritiraOptions=$scope.ritiraOptions.concat(angular.copy(profileService.getBabyProfile().persons));
     };
     $scope.getRitiroOptions();
     
@@ -982,23 +988,24 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         $scope.currDay=week_planService.getActualDay();
         $scope.currData=angular.copy(week_planService.getDayData($scope.currDay));
         if($scope.currData.delega_name==null || $scope.currData.delega_name==undefined || $scope.currData.delega_name==''){
-            $scope.currData.delega_name=$filter('translate')('none');            
+            $scope.currData.delega_name='none';            
         }
-        if($scope.currData.absence){
+        if($scope.currData.absence && $scope.currData.motivazione!=null && $scope.currData.motivazione.type!=null && $scope.currData.motivazione.type!=''){
             $scope.reason_text='remove_reason';           
         }
         if($scope.currData.fermata=='' || $scope.currData.fermata==null || $scope.currData.fermata==undefined){
-            $scope.currData.fermata='none';
+            $scope.currData.fermata='none_f';
         }
         if($scope.currData['uscita']!=null && $scope.currData['uscita']!=undefined)
             $scope.currData['uscita_display']=moment($scope.currData['uscita']).format('H:mm' );
         else
-            $scope.currData['uscita_display']=$filter('translate')('none');
+            $scope.currData['uscita_display']=$filter('translate')('none_f');
         if($scope.currData['entrata']!=null && $scope.currData['entrata']!=undefined)
             $scope.currData['entrata_display']=moment($scope.currData['entrata']).format('H:mm' );
         else
-            $scope.currData['entrata_display']=$filter('translate')('none');
+            $scope.currData['entrata_display']=$filter('translate')('none_f');
         setTimeWidget();
+        $scope.tempCurrData=angular.copy($scope.currData);
     };
     $scope.getActualData();
 
@@ -1008,12 +1015,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     3:{'name':'thursday','label':'thursday_reduced'},
     4:{'name':'friday','label':'friday_reduced'}};
 
-    $scope.listReasons=angular.copy($scope.schoolProf.absenceTypes);
-    $scope.listReasons.push({'typeId':'','type':$filter('translate')('select')});
-    console.log($scope.listReasons);
-    $scope.listProblems=angular.copy($scope.schoolProf.frequentIllnesses);
-    $scope.listProblems.push({'typeId':'','type':$filter('translate')('select')});
-    console.log($scope.listProblems);
+    $scope.listReasons=[{'typeId':'','type':$filter('translate')('none_f')}];
+    $scope.listReasonsTemp=angular.copy($scope.schoolProf.absenceTypes);
+    $scope.listReasonsTemp=$filter('orderBy')($scope.listReasonsTemp, 'type');
+    $scope.listReasons=$scope.listReasons.concat(angular.copy($scope.listReasonsTemp));
+    
+    $scope.listProblems=[{'typeId':'','type':$filter('translate')('none')}];
+    $scope.listProblemsTemp=angular.copy($scope.schoolProf.frequentIllnesses);
+    $scope.listProblemsTemp=$filter('orderBy')($scope.listProblemsTemp, 'type');
+    $scope.listProblems=$scope.listProblems.concat(angular.copy($scope.listProblemsTemp));
 
     $scope.add_removeReason = function(){ 
         if($scope.reason_text=='remove_reason'){
@@ -1035,9 +1045,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         };
         if($scope.currData.absence){
             $scope.reason_text='add_reason'; 
+            $scope.tempCurrData=angular.copy($scope.currData);
+            $scope.currData.bus=false;
+            $scope.currData.entrata=null;
+            $scope.currData.uscita=null;
+            $scope.currData.fermata=null;
+            $scope.currData.delega_name=null;
         }
         else {
             $scope.reason_text='remove_reason';
+            $scope.tempCurrData.absence=false;
+            $scope.currData=angular.copy($scope.tempCurrData);
         }
     };
 

@@ -52,7 +52,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
   };
 })
 
-.controller('AppCtrl', function ($scope, $rootScope, $cordovaDevice, $ionicModal, $ionicHistory, $timeout, $filter, $ionicPopover, $state, $ionicSideMenuDelegate, Toast, Config, profileService, week_planService, $ionicPopup) {
+.controller('AppCtrl', function ($scope, $rootScope, $cordovaDevice, $ionicModal, $ionicHistory, $timeout, $filter, $ionicPopover, $state, $ionicSideMenuDelegate, Toast, Config, profileService, week_planService, $ionicPopup,dataServerService,LoginService) {
   $scope.profilesOpen = false;
   $scope.expandProfiles = false;
 
@@ -168,9 +168,9 @@ $scope.logout = function () {
 
 
   $scope.getProfiles = function () {
-    $scope.babyselected = profileService.getBabyProfile();
-    $scope.babies = profileService.getBabiesProfiles();
-  }
+        $scope.babyselected = profileService.getBabyProfile();
+        $scope.babies = profileService.getBabiesProfiles();
+  }  
   $scope.isToday = function (date) {
     var inputDate = new Date(date);
     inputDate.setHours(0, 0, 0, 0);
@@ -282,7 +282,14 @@ $scope.logout = function () {
     });
   }
   $scope.getProfileImage = function (kid) {
-    var image = Config.URL() + "/" + Config.app() + "/student/" + Config.appId() + "/" + kid.schoolId + "/" + kid.kidId + "/false/images";
+    var token=LoginService.localStorage.getUser();
+    //console.log(token);
+    //console.log(LoginService.localStorage);
+    //console.log(LoginService);
+    //https://dev.smartcommunitylab.it/ungiorno/picture/trento/scuola/GNT/0374f7f6-4d9d-492b-83a1-7aeccc6ccc17
+    //var image = Config.URL() + "/" + Config.app() + "/picture/" + Config.appId() + "/" + kid.schoolId + "/" + kid.kidId + "/0374f7f6-4d9d-492b-83a1-7aeccc6ccc17";
+    var image = Config.URL() + "/" + Config.app() + "/student/" + Config.appId() + "/" + kid.schoolId + "/" + kid.kidId + "/false/imagesnew";
+    console.log(image);
     return image;
   }
 

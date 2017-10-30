@@ -19,7 +19,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.busEnabled = $scope.babyConfiguration.services.bus.enabled;
   }
   var temp;
-  $scope.listServicesDb=$scope.babyConfiguration.services.timeSlotServices;
+  $scope.listServicesDb=[];
+  if ($scope.babyConfiguration.services && $scope.babyConfiguration.services.timeSlotServices) {
+    $scope.listServicesDb=$scope.babyConfiguration.services.timeSlotServices;
+  }
   
   for(var i=0;i<$scope.listServicesDb.length;i++){
     var type=$scope.listServicesDb[i].name;
@@ -61,7 +64,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
   };
 
   //if bus set stop
-  if($scope.babyProfile.services.bus!==null && $scope.babyProfile.services.bus!==undefined){
+  if($scope.babyProfile.services!==null && $scope.babyProfile.services.bus!==null){
     for (var i = 0; i < $scope.babyProfile.services.bus.stops.length; i++) {
       $scope.busStops.push({
         id: $scope.babyProfile.services.bus.stops[i].stopId,

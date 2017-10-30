@@ -42,7 +42,7 @@
           </td>
           <td>
               <div data-tap-disabled="true">
-                  <select ng-model="currData.fermata">
+                  <select ng-model="currData.fermata" ng-disabled="!currData.bus" >
                     <option ng-repeat="option in fermataOptions" value="{{option.stopId}}" ng-selected="currData.fermata==option.stopId">{{option.stopId | translate}}</option>
                   </select>
               </div>
@@ -54,10 +54,10 @@
           </td>
           <td>
               <select ng-model="currData.delega_name" ng-disabled="currData.absence">
-                      <option ng-repeat="option in ritiraOptions" value="{{option.personId}}" ng-selected="currData.delega_name==option.personId">
-                          {{option.firstName}} {{option.lastName}}
-                          ({{ option.parent ? 'parent'  : option.relation  | translate}})
-                        </option>
+                    <option ng-repeat="option in ritiraOptions" value="{{option.personId}}" ng-selected="currData.delega_name==option.personId">
+                            {{option.firstName | translate}} {{option.lastName | translate}}
+                            ({{ option.parent ? 'parent'  : option.relation  | translate}})
+                          </option>
                   </select>
                 <!--<span  modal-select="" ng-model="currData.delega_name" options="ritiraOptions"  option-property="personId" modal-title="{{'Ritira'| translate}}">
                     <span ng-class="{'editable2': !currData.absence,'noneditable2': currData.absence}">{{currData.delega_name|getRitiroName:ritiraOptions | translate}} ({{currData.delega_name|getRitiroType:ritiraOptions | translate}})</span>

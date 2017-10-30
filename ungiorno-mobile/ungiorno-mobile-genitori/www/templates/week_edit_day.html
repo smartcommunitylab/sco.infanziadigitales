@@ -77,11 +77,11 @@
       <table class="dayEdit_table" >
         <tr>
           <td>
-              <p>{{'Entrata ore'| translate}}:</p>{{currData.entry}}
+              <p>{{'Entrata ore'| translate}}:</p>
           </td>
           <td>
               <p class="editable2" ng-click="openPopupEntry()" ng-show="!currData.absence">{{currData.entrata_display}}</p>
-              <p class="noneditable2" ng-show="currData.absence">{{currData.entrata_display}}</p>
+              <p class="noneditable2" ng-show="currData.absence">{{'none_f' | translate}}</p>
           </td>
         </tr>
         <tr>
@@ -90,7 +90,8 @@
           </td>
           <td>
               <p class="editable2" ng-click="openPopupOut()" ng-show="!currData.bus && !currData.absence">{{currData.uscita_display}}</p>
-              <p class="noneditable2" ng-show="currData.bus || currData.absence">{{currData.uscita_display}}</p>
+              <p class="noneditable2" ng-show="currData.absence">{{'none_f' | translate}}</p>
+              <p class="noneditable2" ng-show="currData.bus && !currData.absence">{{currData.uscita_display}}</p>
           </td>
         </tr>
         <tr>
@@ -99,9 +100,10 @@
           </td>
           <td>
               <div data-tap-disabled="true">
-                  <select ng-model="currData.fermata" ng-disabled="currData.absence">
+                  <select ng-show="!currData.absence" ng-model="currData.fermata" ng-disabled="currData.absence || !currData.bus">
                     <option ng-repeat="option in fermataOptions" value="{{option.stopId}}" ng-selected="currData.fermata==option.stopId">{{option.stopId | translate}}</option>
                   </select>
+                  <span class="noneditable2" ng-show="currData.absence">{{'none_f' | translate}}</span>
               </div>
           </td>
         </tr>
@@ -111,12 +113,17 @@
           </td>
           <td>
               <div data-tap-disabled="true">
-                  <select ng-model="currData.delega_name">
-                      <option ng-repeat="option in ritiraOptions" value="{{option.personId}}" ng-selected="currData.delega_name==option.personId">
-                          {{option.firstName}} {{option.lastName}}
+                  <select ng-show="!currData.absence" ng-model="currData.delega_name">
+                      <option ng-repeat="option in ritiraOptions" value="{{option.personId}}" ng-if="option.personId=='none'" ng-selected="currData.delega_name==option.personId">
+                          {{option.firstName | translate}} {{option.lastName | translate}}
+                        </option>
+                      <option ng-repeat="option in ritiraOptions" value="{{option.personId}}" ng-if="option.personId!='none'" ng-selected="currData.delega_name==option.personId">
+                          {{option.firstName | translate}} {{option.lastName | translate}}
                           ({{ option.parent ? 'parent'  : option.relation  | translate}})
                         </option>
+                        
                   </select>
+                  <span class="noneditable2" ng-show="currData.absence">{{'none' | translate}}</span>
               </div>
               
               <!--<span  modal-select="" ng-model="currData.delega_name" options="ritiraOptions"  option-property="personId" modal-title="{{'Ritira'| translate}}">

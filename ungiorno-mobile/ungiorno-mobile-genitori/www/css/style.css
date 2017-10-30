@@ -1722,8 +1722,7 @@ $dark: #444 !default;
 .close-modal {
   font-size: 24px;
   padding-left: 16px;
-  padding-top: 4px;
-  line-height: 40px;
+  line-height: 35px;
   padding-right: 16px;
   margin-bottom: 4px;
   text-align: center;
@@ -1747,7 +1746,7 @@ $dark: #444 !default;
 }
 #chat .input-chat button {
   padding: 0 0 0 0;
-  min-height: 45px;
+  min-height: 53px;
   min-width: 65px;
   margin-left: 5px;
 }
@@ -1852,7 +1851,7 @@ $dark: #444 !default;
 }
 #chat .input-chat-footer textarea {
   padding-left: 10px;
-  padding-top: 12px;
+  padding-top: 16px;
 }
 #chat .input-chat-footer.bar-stable.item-input.input-chat {
   background-color: white;
@@ -2204,7 +2203,7 @@ textarea {
   padding-right:10px;
   padding-top:10px;
   font-size: 15px;
-  width: 70%;
+  width: 50%;
 }
 
 

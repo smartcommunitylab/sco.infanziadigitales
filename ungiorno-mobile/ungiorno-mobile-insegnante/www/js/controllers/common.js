@@ -297,7 +297,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
     }
   $scope.checkConnection = function () {
     var deferred = $q.defer();
-    if (window.Connection) {
+    if (navigator.connection) {
       if (navigator.connection.type == Connection.NONE) {
         deferred.reject();
       } else {

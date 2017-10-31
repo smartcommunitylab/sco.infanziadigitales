@@ -358,7 +358,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
              $scope.modifyBefore=$scope.getRetireTimeLimit();
             }else{
               jsonTest={'ore_entrata':moment(fromtime).format('H:mm'),'ore_uscita':moment(totime).format('H:mm'),'addressBus':'',
-              'delegaName':'','delegaType':'',
+              'delegaName':'none','delegaType':'none',
               'bus':false,'absence':false,
               'motivazione':{type:'',subtype:''}
             }
@@ -497,7 +497,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             
           }, function (error) {
             console.log("ERROR -> " + error);
-            Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+            //Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
             $scope.noConnection = true;
             buildHome();
             $ionicLoading.hide();
@@ -506,7 +506,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
           });
         }, function (error) {
           console.log("ERROR -> " + error);
-          Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+          //Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
           $scope.noConnection = true;
           buildHome();
           $ionicLoading.hide();
@@ -518,7 +518,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
     }, function (error) {
       console.log("ERROR -> " + error);
-      Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+      //Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
       $scope.noConnection = true;
       buildHome();
       $ionicLoading.hide();

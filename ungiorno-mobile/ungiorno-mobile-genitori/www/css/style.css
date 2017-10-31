@@ -208,7 +208,8 @@ input[type=time] {
   color: #000000;
 }
 .form-container {
-  padding: 16px;
+  padding: 2px;
+  padding-top: 16px;
 }
 .padlist .item {
   border: 0px;
@@ -1746,7 +1747,7 @@ $dark: #444 !default;
 }
 #chat .input-chat button {
   padding: 0 0 0 0;
-  min-height: 53px;
+  min-height: 51px;
   min-width: 65px;
   margin-left: 5px;
 }
@@ -2263,6 +2264,11 @@ textarea {
   vertical-align: middle;
   color: #f8ab15;
 }
+.iconPhone{
+  font-size: 20px;
+  color: #009AA8;
+  padding-right: 5px;
+}
 .br_in{
   padding-left: 20px;
   text-align: left;
@@ -2460,4 +2466,33 @@ textarea {
 .ripristina{
   padding-top:6px;
   margin-left:-15px;
+}
+.listService{
+  float:right;
+  color:black;
+}
+
+.responsible{
+  background-color:azure;
+  color:#009688;
+}
+.responsible2{
+  background-color: bisque;
+}
+
+.lookeditableInfo{
+  -moz-appearance: textfield;
+  -webkit-appearance: textfield;
+  background-color: white;
+  background-color: -moz-field;
+  border-color: #ddd;
+  border-width: 1px;
+  border-style: solid;
+  font: -moz-field;
+  font: -webkit-small-control;
+  padding: 5px 10px;
+  float: right;
+}
+.delega_value{
+  padding-left: 4px;
 }

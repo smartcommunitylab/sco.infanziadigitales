@@ -10,54 +10,60 @@
   <ion-content has-header="true" class="page-padding" scrollbar-y="true">
     <div class="form-container">
       <div>
-        <div class="input-description-padding setting-services-list">{{'babysetting_services' | translate}}</div>
-        <!--
-        <div class="home-info-content my-list home-comm">
-          <ion-checkbox ng-repeat="(key, data) in babyConfiguration.services" ng-model="data.active" checked onclick="return false;" onkeydown="return false;" ng-if="key!='mensa'">{{ key }}</ion-checkbox>
-        </div>
--->
-        <ul class="home-info-content my-list home-comm">
-          <li class="huge row" ng-repeat="service in babyServices">
-            <span class="col">{{ service.text |capitalize }}</span> 
-            <span class="col" ng-if="service.active">{{'babysetting_active' | translate| uppercase}}</span>
-            <span class="col" ng-if="!service.active">{{'babysetting_not_active' | translate | uppercase}}</span>
-          </li>
-
-        </ul>
-        <!--
-        <ul class="home-info-content my-list home-comm">
-          <li ng-repeat="(key, data) in babyConfiguration.services" ng-model="data.active" checked onclick="return false;" ng-if="key!='mensa'"><i class="icon ion-record"></i>{{ key|capitalize }} <span ng-if="data.active">{{'babysetting_active' | translate}}</span><span ng-if="!data.active">{{'babysetting_not_active' | translate}}</span>
-          </li>
-        </ul>
--->
-
-        <div class="input-description-padding row">{{'babysetting_hours_entry' | translate}}:
-            <label class="item item-input setting setting-line">{{getTimeLabelEntry()}}</label>
-        </div>
-
-        <div class="input-description-padding row">{{'babysetting_hours' | translate}}:
-          <label class="item item-input setting setting-line">{{getTimeLabel()}}</label>
-        </div>
         
-        <div class="input-description-padding">{{'babysetting_who' | translate}}:</div>
-        <ul class="home-info-content my-list home-comm">
-          <li class="huge row" ng-repeat="person in listDelega" ng-if="person.parent"><span class="col">{{person.firstName}} &nbsp;{{person.lastName}} &nbsp;&nbsp;({{ 'parent_delega' | translate}} &nbsp;{{person.parentIndex}})</span></li>
-          <li class="huge row" ng-repeat="person in listDelega" ng-if="!person.parent"><span class="col">{{person.firstName}} &nbsp;{{person.lastName}} &nbsp;&nbsp;({{ person.relation  | translate}})</span></li>
-        </ul>
+        <div class = "list">
+        <div class="item responsible">{{'babysetting_services' | translate}}</div>
+            <div class = "item" ng-repeat="service in babyServices">
+                <span>{{ getStringService(service.text) | capitalize }}</span> 
+                <span ng-if="service.active" class="listService"><b>{{'babysetting_active' | translate| uppercase}}</b></span>
+                <span ng-if="!service.active" class="listService"><b>{{'babysetting_not_active' | translate | uppercase}}</b></span>
+            </div>
+            <div class = "item" >
+                <span>{{ 'bus_service' | translate |capitalize }}</span> 
+                <span ng-if="busEnabled" class="listService"><b>{{'babysetting_active' | translate| uppercase}}</b></span>
+                <span ng-if="!busEnabled" class="listService"><b>{{'babysetting_not_active' | translate | uppercase}}</b></span>
+            </div>
+        </div>
+       
+        <div class = "list">
+          <div class="item responsible">{{'babysetting_hours_entry' | translate}}:<span class="listService"><b>{{getTimeLabelEntry()}}</b></span> </div>
+          </div>
+
+        <div class = "list">
+          <div class="item responsible">{{'babysetting_hours' | translate}}:<span class="listService"><b>{{getTimeLabel()}}</b></span></div>
+          </div>
+          
+        <div class = "list">
+          <div class="item responsible">{{'babysetting_who' | translate}}:</div>
+          <div class = "item" ng-repeat="person in listDelega" >
+              <div class = "item responsible2" ng-if="person.parent">
+                <b>{{person.firstName}} {{person.lastName}}</b><span class="delega_value">({{ 'parent_delega' | translate}} {{person.parentIndex}})</span></div>
+                <div class = "item" ng-if="person.phone.length>0" ><span ng-repeat="phone in person.phone"><i class="icon ion-android-call iconPhone"></i>{{phone}}</span></div>
+              
+              <div class = "item responsible2" ng-if="!person.parent"><b>{{person.firstName}} {{person.lastName}}</b><span class="delega_value">({{ person.relation  | translate}})</span></div>
+          </div>
+        </div>
+
+        <div class = "list">
+          <div class="item responsible">{{'allergies' | translate}}:</div>
+              <div class = "item" ng-repeat="allergy in listAllergies">{{allergy.name}}</div>
+        </div>
+
+        <div class = "list">
+          <div class="item responsible">{{'sections_groups' | translate}}:</div>
+              <div class = "item" ng-if="section!=null">{{section.sectionId}}</div>
+              <div class = "item" ng-repeat="group in groups">{{group.sectionId}}</div>
+        </div>
+<!--ng-show="busEnabled"-->
+      <div class = "list">
+          <div class="item responsible">{{'babysetting_bus' | translate}}</div>
+          <div class = "item" ng-if="busEnabled && selectedBusBack">{{selectedBusBack.name}}</div>
+          <div class = "item" ng-if="busEnabled && !selectedBusBack">{{'non_specificate' | translate}}</div>
+          <div class = "item" ng-if="!busEnabled && !selectedBusBack">{{'non_previste' | translate}}</div>
       </div>
 
-      <!--      <div ng-show="busEnabled">-->
-      <div ng-show="busEnabled">
-        <div class="input-description-padding">{{'babysetting_bus' | translate}}</div>
-        <ul class="home-info-content my-list home-comm" ng-if="selectedBusBack">
-          <li class="huge row">
-            <span class="col">{{selectedBusBack.name}}</span>
-          </li>
-        </ul>
-        <ul class="home-info-content my-list home-comm" ng-if="!selectedBusBack">
-          Nessuna fermata
-        </ul>
-      </div>
     </div>
+
+  </div>
   </ion-content>
 </ion-view>

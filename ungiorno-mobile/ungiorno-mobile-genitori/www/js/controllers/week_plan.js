@@ -6,6 +6,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.currentDate = moment();
     var currW=week_planService.getCurrentWeek();
     $scope.currWeek = (currW != '') ? currW : $scope.currentDate.format('w');
+    $scope.currYear = $scope.currentDate.format('YYYY');
     $scope.currDay = dated.getDay()-1;//0 ,1 ...6
     $scope.kidId=profileService.getBabyProfile().kidId;
     $scope.appId=profileService.getBabyProfile().appId;
@@ -39,13 +40,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             }
     }
     }
-    console.log($scope.listServicesDb);
     
     week_planService.setGlobalParam($scope.appId,$scope.schoolId);
     var jsonTest=[];
 
-    $scope.getDateString = function () {
-        var currentDate = moment().week($scope.currWeek);
+    $scope.getDateString = function (next) {
+        var currentDate = next.week($scope.currWeek);
         var weekStart = currentDate.clone().startOf('week');
         var weekEnd = currentDate.clone().endOf('week');
         var sDate=moment(weekStart).format("D");
@@ -171,9 +171,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
     
     $scope.prev_week = function() {
-        //days.push(moment(weekStart).add(i, 'days').format("MMMM Do,dddd"));
-        var prev = moment().day("Monday").week($scope.currWeek);
+        var prev = $scope.currentDate.day("Monday").week($scope.currWeek);
         prev.subtract(1, "weeks");
+        $scope.currentDate=prev;
         $scope.currWeek=prev.format('w');
         $scope.getDateString(prev);
         week_planService.setCurrentWeek($scope.currWeek);
@@ -181,8 +181,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
     
     $scope.next_week = function() {
-        var next = moment().day("Monday").week($scope.currWeek);
+        var next = $scope.currentDate.day("Monday").week($scope.currWeek);
         next.add(1, 'weeks');
+        $scope.currentDate=next;
         $scope.currWeek=next.format('w');
         $scope.getDateString(next);
         week_planService.setCurrentWeek($scope.currWeek);
@@ -1300,6 +1301,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.currData['prom_day_ritiro']=(localStorage.getItem('prom_day_ritiro') =='true' ? true : false);
     $scope.currData['prom_week_day']=(localStorage.getItem('prom_week_day') !== null && localStorage.getItem('prom_week_day') !== undefined ? localStorage.getItem('prom_week_day') : $scope.selectables[0]);
     $scope.kidId=profileService.getBabyProfile().kidId;
+    $scope.kidFirstName=profileService.getBabyProfile().firstName;
+    $scope.kidLastName=profileService.getBabyProfile().lastName;
     $scope.schoolId=profileService.getBabyProfile().schoolId;
     $scope.hourTimestamp = null;
     $scope.timePickerObject24Hour={};
@@ -1380,7 +1383,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         $scope.numberPickerObject = {
             inputValue: tempVal, //Optional
             minValue: 0,
-            maxValue: 200,
+            maxValue: 600,
             //precision: 3,  //Optional
             wholeStep: 15,  //Optional
             format: "WHOLE",  //Optional - "WHOLE" or "DECIMAL"
@@ -1459,7 +1462,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     var ritiro ={
         id: idNotification++,
         title: $filter('translate')('notification_day_summary_title'),
-        text: $filter('translate')('notification_ritiro_text'),
+        text: $filter('translate')('notification_ritiro_text')+" "+$scope.kidFirstName+" "+$scope.kidLastName,
         icon: 'res://notification.png',
         //autoCancel: false,
         autoClear: false,

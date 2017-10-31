@@ -1,7 +1,8 @@
 <ion-view id="home">
 
   <ion-nav-title ng-init="getDateString()">
-    {{'brief_txt' | translate}} {{kidname}}
+    <span ng-if="!noConnection">{{'brief_txt' | translate}} {{kidname}}</span>
+    <span ng-if="noConnection">{{'no_conn_title' | translate}}</span>
   </ion-nav-title>
   <!--
 <ion-nav-buttons side="right">
@@ -21,9 +22,9 @@
         <div class="button-norm-brief" >&nbsp;&nbsp;Entrata Ore  &nbsp;&nbsp; {{briefInfo.ore_entrata}}</div>
         <div class="button-norm-brief" >&nbsp;&nbsp;Uscita Ore  &nbsp;&nbsp; {{briefInfo.ore_uscita}}</div>
         <div class="br_in" ng-if="briefInfo.bus">
-            <i class="icon ion-android-bus iconStyleHome"></i> {{briefInfo.addressBus}}</div>
+            <i class="icon ion-android-bus iconStyleHome"></i>&nbsp;&nbsp;{{briefInfo.addressBus}}</div>
         <div class="br_in">
-            <i class="icon ion-android-person iconStyleHome"></i> {{briefInfo.delegaName}} ({{briefInfo.delegaType}})</div>
+            <i class="icon ion-android-person iconStyleHome"></i>&nbsp;&nbsp;{{briefInfo.delegaName | translate}} <span ng-if="briefInfo.delegaType!='' && briefInfo.delegaType!='none' && briefInfo.delegaType!=null">({{briefInfo.delegaType | translate}})</span></div>
       </div>
       <div class="brief_info" ng-if="briefInfo.absence && !weekend && !noConnection" ng-click="gotoEditDate();">
         <div class="currentDate"><i class="icon ion-android-calendar iconStyleHome1"></i> {{date | date:'EEEE, d MMMM yyyy' | capitalize}}</div>

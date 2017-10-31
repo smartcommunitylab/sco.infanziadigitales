@@ -34,10 +34,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.loginSe
         if ((provider == 'googlelocal') && !!token) {
           authUrl += '?token=' + encodeURIComponent(token);
         }
-
         //Open the OAuth consent page in the InAppBrowser
         if (!authWindow) {
-          authWindow = window.open(authUrl, '_blank', 'location=no,toolbar=no');
+          authWindow=cordova.InAppBrowser.open(authUrl,'_self');
+          //authWindow = window.open(authUrl, '_blank', 'location=no,toolbar=no');
           processThat = !!authWindow;
         }
 
@@ -68,7 +68,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.loginSe
         if (ionic.Platform.isWebView()) {
           if (processThat) {
             authWindow.addEventListener('loadstart', function (e) {
-              //console.log(e);
               var url = e.url;
               processURL(url, deferred, authWindow);
             });
@@ -88,6 +87,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.loginSe
     if (provider == 'googlelocal') {
       window.plugins.googleplus.login({
           'scopes': 'profile email',
+           'webClientId': '453601816446-sff20g4la1mq62joo05indc34umiu9rh.apps.googleusercontent.com',
           'offline': true
         },
         function (obj) {

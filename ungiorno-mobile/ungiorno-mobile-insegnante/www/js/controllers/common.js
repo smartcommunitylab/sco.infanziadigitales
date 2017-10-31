@@ -308,6 +308,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
     return deferred.promise;
   }
   $scope.goto = function (state) {
+    $state.go(state);
     $scope.checkConnection().then(function () {
       $state.go(state);
     }, function (err) {

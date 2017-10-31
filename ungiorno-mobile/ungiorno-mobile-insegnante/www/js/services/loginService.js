@@ -36,7 +36,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.loginSe
         }
         //Open the OAuth consent page in the InAppBrowser
         if (!authWindow) {
-          authWindow=cordova.InAppBrowser.open(authUrl,'_self');
+          authWindow=cordova.InAppBrowser.open(authUrl,'_self', 'location=no,toolbar=no');
           //authWindow = window.open(authUrl, '_blank', 'location=no,toolbar=no');
           processThat = !!authWindow;
         }
@@ -92,7 +92,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.loginSe
         },
         function (obj) {
           var token = obj.oauthToken;
-          if (!token) token = obj.accessToken;
+          if (!token) token = obj.idToken;
           authapi.authorize(token).then(
             function (data) {
               Config.setAppId(data.userId);

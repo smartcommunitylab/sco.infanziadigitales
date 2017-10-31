@@ -20,6 +20,7 @@
     <preference name="android-minSdkVersion" value="16" />
     <preference name="android-targetSdkVersion" value="20" />
     <preference name="fullscreen" value="false" />
+    <preference name="Orientation" value="landscape" />
     <feature name="StatusBar">
         <param name="ios-package" onload="true" value="CDVStatusBar" />
     </feature>
@@ -45,14 +46,23 @@
     </platform>
     <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
     <preference name="SplashShowOnlyFirstTime" value="false" />
-    <engine name="android" spec="~6.3.0" />
-    <plugin name="cordova-plugin-screen-orientation" spec="git+https://github.com/apache/cordova-plugin-screen-orientation.git" />
-    <plugin name="cordova-plugin-x-toast" spec="git+https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin.git" />
-    <plugin name="cordova-plugin-whitelist" spec="git+https://github.com/apache/cordova-plugin-whitelist.git" />
-    <plugin name="cordova-plugin-googleplus" spec="git+https://github.com/EddyVerbruggen/cordova-plugin-googleplus.git">
+    <plugin name="cordova-plugin-googleplus" spec="^5.1.1">
         <variable name="REVERSED_CLIENT_ID" value="453601816446-v51tf7pkgeoql2sn8thc4ueeg9sca4ij.apps.googleusercontent.com" />
     </plugin>
-    <plugin name="cordova-plugin-splashscreen" spec="git+https://github.com/apache/cordova-plugin-splashscreen.git" />
+    <plugin name="cordova-plugin-whitelist" spec="^1.3.2" />
+    <plugin name="cordova-plugin-x-toast" spec="^2.6.0" />
     <plugin name="de.appplant.cordova.plugin.local-notification" spec="^0.8.5" />
-    <plugin name="cordova-plugin-inappbrowser" spec="^1.7.1" />
+    <plugin name="ionic-plugin-keyboard" spec="^2.2.1" />
+    <plugin name="phonegap-plugin-push" spec="^1.10.5">
+        <variable name="SENDER_ID" value="453601816446" />
+    </plugin>
+    <plugin name="phonegap-plugin-push" spec="^1.10.5">
+        <variable name="SENDER_ID" value="453601816446" />
+    </plugin>
+    <plugin name="cordova-plugin-console" spec="~1.0.5" />
+    <plugin name="cordova-plugin-inappbrowser" spec="~1.6.1" />
+    <plugin name="cordova-plugin-screen-orientation" spec="~2.0.1" />
+    <plugin name="cordova-plugin-splashscreen" spec="~4.0.1" />
+    <plugin name="cordova-plugin-statusbar" spec="~2.2.1" />
+    <engine name="android" spec="~6.3.0" />
 </widget>

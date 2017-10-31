@@ -1,0 +1,8 @@
+{
+  "name": "it.smartcommunitylab.infanziadigitales.diario.parents",
+  "app_id": "",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic1"
+}

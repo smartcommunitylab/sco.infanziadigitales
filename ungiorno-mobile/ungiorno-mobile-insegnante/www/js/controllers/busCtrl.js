@@ -109,7 +109,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.bus'
 
     $scope.getChildImage = function (child) {
 
-        var image = Config.URL() + "/" + Config.app() + "/student/" + Config.appId() + "/" + profileService.getSchoolProfile().schoolId + "/" + child.kidId + "/true/images";
+        var image = Config.URL() + "/" + Config.app() + "/student/" + Config.appId() + "/" + profileService.getSchoolProfile().schoolId + "/" + child.kidId + "/true/imagesnew";
         return image;
     }
 

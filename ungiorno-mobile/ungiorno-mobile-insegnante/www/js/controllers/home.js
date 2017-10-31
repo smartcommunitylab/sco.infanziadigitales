@@ -899,7 +899,7 @@ $scope.cnt=0;
   }
 
   $scope.getChildImage = function (child) {
-    var image = Config.URL() + "/" + Config.app() + "/student/" + Config.appId() + "/" + $scope.schoolProfile.schoolId + "/" + child.kidId + "/true/images";
+    var image = Config.URL() + "/" + Config.app() + "/student/" + Config.appId() + "/" + $scope.schoolProfile.schoolId + "/" + child.kidId + "/true/imagesnew";
     return image;
   }
 

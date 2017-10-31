@@ -538,7 +538,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
   }
   $scope.getProfileImage = function () {
     if ($scope.babyProfile) {
-      var image = Config.URL() + "/" + Config.app() + "/student/" + Config.appId() + "/" + $scope.schoolProfile.schoolId + "/" + $scope.babyProfile.kidId + "/true/images";
+      var image = Config.URL() + "/" + Config.app() + "/student/" + Config.appId() + "/" + $scope.schoolProfile.schoolId + "/" + $scope.babyProfile.kidId + "/true/imagesnew";
       return image;
     } else return "";
   }

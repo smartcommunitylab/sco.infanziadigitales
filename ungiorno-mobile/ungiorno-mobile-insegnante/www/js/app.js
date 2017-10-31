@@ -88,7 +88,7 @@ return {
       //            $ionicHistory.clearCache().then(function () {
       //$ionicHistory.clearCache();
       console.log("user is logged");
-      loginService.login('google').then(
+      loginService.login('googlelocal').then(
 
         function (data) {
           $state.go('app.home');

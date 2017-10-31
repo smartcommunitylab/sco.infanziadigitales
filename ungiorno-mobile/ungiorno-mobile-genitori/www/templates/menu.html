@@ -33,28 +33,28 @@
           <h2>{{kp.firstName}} {{kp.lastName}}</h2>
         </ion-item>
 
-        <ion-item nav-clear menu-close class="item item-icon-left" ng-click="gotoSetting({{babyselected.id}})" ng-if="userIsLogged">
+        <ion-item  menu-close class="item item-icon-left" ng-click="gotoSetting({{babyselected.id}})" ng-if="userIsLogged">
           <i class="icon voice-menu  inf_digaccount"></i>{{'menu_impostazioni' | translate}}
         </ion-item>
-        <ion-item nav-clear menu-close class="item item-icon-left" ng-click="goToWeekPlan()" ng-if="userIsLogged">
+        <ion-item  menu-close class="item item-icon-left" ng-click="goToWeekPlan()" ng-if="userIsLogged">
           <i class="icon voice-menu  ion-clipboard"></i>{{'menu_week_plan' | translate}}
         </ion-item>
-        <ion-item nav-clear menu-close class="item item-icon-left" ng-click="gotoPromemoria({{babyselected.id}})" ng-if="userIsLogged">
+        <ion-item  menu-close class="item item-icon-left" ng-click="gotoPromemoria({{babyselected.id}})" ng-if="userIsLogged">
             <i class="icon voice-menu  inf_digsettings"></i>{{'menu_promemoria' | translate}}
           </ion-item>
-        <ion-item nav-clear menu-close class="item item-icon-left" ng-click="login()" ng-if="!userIsLogged">
+        <ion-item  menu-close class="item item-icon-left" ng-click="login()" ng-if="!userIsLogged">
           <i class="icon voice-menu  inf_digaccount"></i>{{'menu_enter' | translate}}
         </ion-item>
-        <ion-item nav-clear menu-close onclick="window.open('mailto:ugas-help@smartcommunitylab.it?subject=UGAS: segnalazione problema','_system'); return false;" class="menu-last item-icon-left">
+        <ion-item  menu-close onclick="window.open('mailto:ugas-help@smartcommunitylab.it?subject=UGAS: segnalazione problema','_system'); return false;" class="menu-last item-icon-left">
           <i class="icon ion-alert-circled"></i>{{'menu_issue' | translate}}
         </ion-item>
-        <ion-item nav-clear menu-close class="item item-icon-left" ng-click="logout()" ng-if="userIsLogged">
+        <ion-item  menu-close class="item item-icon-left" ng-click="logout()" ng-if="userIsLogged">
           <i class="icon voice-menu  ion-log-out"></i>{{'menu_exit' | translate}}
         </ion-item>
-        <ion-item nav-clear menu-close onclick="window.open('http://www.smartcommunitylab.it/ugas-privacy/', '_system'); return false;" class="menu-last item-icon-left">
+        <ion-item  menu-close onclick="window.open('http://www.smartcommunitylab.it/ugas-privacy/', '_system'); return false;" class="menu-last item-icon-left">
           <i class="icon ion-android-list"></i>{{'menu_privacy' | translate}}
         </ion-item>
-        <ion-item nav-clear menu-close ng-click="openCredits()" class="menu-last item-icon-left">
+        <ion-item  menu-close ng-click="openCredits()" class="menu-last item-icon-left">
           <i class="icon ion-information-circled"></i>{{'menu_credits' | translate}}
         </ion-item>
       </ion-list>

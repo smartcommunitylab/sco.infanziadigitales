@@ -47,6 +47,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
       }
     }
   
+    $scope.listAllergies=$scope.babyProfile.allergies;
+    $scope.section=$scope.babyProfile.section;
+    $scope.groups=$scope.babyProfile.groups;
+    
   //set hour
   var exitTime = new Date();
   $scope.briefInfo=profileService.getBriefInfo();
@@ -63,8 +67,25 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     value: $scope.babyConfiguration.defaultPerson
   };
 
+  $scope.getStringService = function (string) {
+    var existsStrPrim=string.indexOf('Prim');
+    var existsStrSec=string.indexOf('Sec');
+    var existsStrTer=string.indexOf('Ter');
+    var text=string;
+    if(existsStrPrim!==-1){
+      text='1^ ora prolungamento';
+    }
+    else if(existsStrSec!==-1){
+      text='2^ ora prolungamento';
+    }
+    else if(existsStrTer!==-1){
+      text='3^ ora prolungamento';
+    }
+    return text;
+  }
+
   //if bus set stop
-  if($scope.babyProfile.services!==null && $scope.babyProfile.services.bus!==null){
+  if($scope.babyProfile.services!==null && $scope.babyProfile.services.bus!==null && $scope.babyProfile.services.bus.stops!==null){
     for (var i = 0; i < $scope.babyProfile.services.bus.stops.length; i++) {
       $scope.busStops.push({
         id: $scope.babyProfile.services.bus.stops[i].stopId,

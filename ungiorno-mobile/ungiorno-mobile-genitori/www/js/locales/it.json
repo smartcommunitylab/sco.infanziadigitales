@@ -31,7 +31,7 @@
   "babysetting_hours": "Orario uscita predefinito",
   "babysetting_hours_entry": "Orario entrata predefinito",
   "babysetting_who": "Delegati al ritiro del bambino/a",
-  "babysetting_bus": "Fermate bus:",
+  "babysetting_bus": "Fermate scuolabus:",
   "babysetting_busGo": "Fermata bus andata:",
   "babysetting_busBack": "Fermata bus ritorno:",
   "retire": "Ritiro del bambino",
@@ -220,8 +220,8 @@
   "at_time": "Alle ore",
   "at_day": "Il giorno",
   "time_before":"minuti prima dell'orario di uscita",
-  "notification_day_summary_title":"Un Giorno a scuola",
-  "notification_day_summary_text":"Promemoria giornaliera",
+  "notification_day_summary_title":"Un Giorno A Scuola",
+  "notification_day_summary_text":"Promemoria giornaliero",
   "notification_week_text":"Promemoria settimanale",
   "notification_ritiro_text":"Promemoria ritiro",
   "popup_timepicker_title": "Selezionare l'ora",
@@ -244,5 +244,12 @@
   "none_entry":"Entrata non prevista",
   "none_exit":"Uscita non prevista",
   "set_time":"Imposta ora",
-  "none_f":"Non specificata"
+  "none_f":"Non specificata",
+  "no_conn_title":"UGAS - Genitori",
+  "allergies":"Allergie",
+  "sections_groups":"Sezioni e gruppi",
+  "sezione":"Sezione",
+  "bus_service":"Scuolabus",
+  "non_previste":"Non previste",
+  "non_specificate":"Non specificate"
 }

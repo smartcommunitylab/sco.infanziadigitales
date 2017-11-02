@@ -121,6 +121,7 @@ public class SchoolController {
             comm.setSchoolId(schoolId);
             Communication old =
                     storage.getCommunicationById(appId, schoolId, comm.getCommunicationId());
+            if (comm.getScadenzaDate() != null && comm.getScadenzaDate() == 0) comm.setScadenzaDate(null);
             Communication result = storage.saveCommunication(comm);
 
             if (old == null || !old.getDescription().equals(comm.getDescription())

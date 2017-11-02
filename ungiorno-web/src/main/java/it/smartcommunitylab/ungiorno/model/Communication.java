@@ -26,7 +26,7 @@ public class Communication extends SchoolObject {
     private List<String> children;
     private boolean doCheck;
     private String groupId;
-    private long scadenzaDate;
+    private Long scadenzaDate;
 
     private Author author;
 
@@ -54,11 +54,11 @@ public class Communication extends SchoolObject {
         this.creationDate = creationDate;
     }
 
-    public long getScadenzaDate() {
+    public Long getScadenzaDate() {
         return scadenzaDate;
     }
 
-    public void setScadenzaDate(long scadenzaDate) {
+    public void setScadenzaDate(Long scadenzaDate) {
         this.scadenzaDate = scadenzaDate;
     }
 

@@ -896,7 +896,7 @@ public class RepositoryManager implements RepositoryService {
         Long today = new Date().getTime();
         Query q = schoolQuery(appId, schoolId);
         q.addCriteria(new Criteria().orOperator(new Criteria("scadenzaDate").gte(today),
-                new Criteria("scadenzaDate").is(null)));
+                new Criteria("scadenzaDate").is(null), new Criteria("scadenzaDate").is(0)));
         return template.find(q, Communication.class);
     }
 

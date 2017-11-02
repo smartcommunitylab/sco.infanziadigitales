@@ -297,6 +297,8 @@ public class ConsoleWebController {
         if (selectedTeacherProfile == null) {
             teacherProfiles.add(teacher);
         } else {
+        	// keep old pin
+        	teacher.setPin(selectedTeacherProfile.getPin());
             int profileIndex = teacherProfiles.indexOf(selectedTeacherProfile);
             teacherProfiles.add(profileIndex, teacher);
             teacherProfiles.remove(profileIndex + 1);

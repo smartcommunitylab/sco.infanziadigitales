@@ -1149,9 +1149,15 @@ public class RepositoryManager implements RepositoryService {
             List<String> allKidFascie = new ArrayList<String>();
             List<TimeSlotSchoolService.ServiceTimeSlot> allFascie =
                     new ArrayList<TimeSlotSchoolService.ServiceTimeSlot>();
+            // add regular slots by default
+            for (TimeSlotSchoolService.ServiceTimeSlot fasc : regularService.getTimeSlots()) {
+                allKidFascie.add(fasc.getName());
+                allFascie.add(fasc);
+            }
             if (kidServices.getTimeSlotServices() != null) {
                 for (TimeSlotSchoolService ts : kidServices.getTimeSlotServices()) {
-                    if (ts.isEnabled()) {
+                	// handle ignore disabled and regular slots
+                    if (ts.isEnabled() && !ts.isRegular()) {
                         for (TimeSlotSchoolService.ServiceTimeSlot fasc : ts.getTimeSlots()) {
                             allKidFascie.add(fasc.getName());
                             allFascie.add(fasc);
@@ -1405,6 +1411,7 @@ public class RepositoryManager implements RepositoryService {
      * @return
      */
     private String findDefaultPerson(KidProfile kp) {
+    	if (kp == null || kp.getPersons() == null || kp.getPersons().isEmpty()) return null;
         return kp.getPersons().get(0).getPersonId();
     }
 

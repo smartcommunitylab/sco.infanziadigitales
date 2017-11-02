@@ -499,7 +499,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.dataSer
     return deferred.promise;
   }
 
-  dataServerService.getSections = function (schoolId) {
+  dataServerService.getSections = function (schoolId, onlySections) {
     var deferred = $q.defer();
 
     $http({
@@ -514,7 +514,21 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.dataSer
       timeout: Config.httpTimout()
     }).
     success(function (data, status, headers, config) {
-      deferred.resolve(data.data);
+      if (onlySections) {
+        dataServerService.getSchoolProfile(schoolId).then(function(profile) {
+          var map = {};
+          profile.sections.forEach(function(s) {
+            map[s.sectionId] = s.group;
+          });
+          deferred.resolve(data.data.filter(function(s) {
+            return !map[s.sectionId];
+          }));        
+        },function(err) {
+          deferred.reject(err);
+        });
+      } else {
+        deferred.resolve(data.data);        
+      }
     }).
     error(function (data, status, headers, config) {
       console.log(data + status + headers + config);

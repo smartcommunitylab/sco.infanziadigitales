@@ -5,15 +5,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     var dated = new Date();
     $scope.currentDate = moment();
     var currW=week_planService.getCurrentWeek();
+    var currY=week_planService.getCurrentYear();
     $scope.currWeek = (currW != '') ? currW : $scope.currentDate.format('w');
-    $scope.currYear = $scope.currentDate.format('YYYY');
+    $scope.currYear = (currY != '') ? currY : $scope.currentDate.format('YYYY');
+    $scope.currentDate.week($scope.currWeek).year($scope.currYear);
     $scope.currDay = dated.getDay()-1;//0 ,1 ...6
     $scope.kidId=profileService.getBabyProfile().kidId;
     $scope.appId=profileService.getBabyProfile().appId;
     $scope.schoolId=profileService.getBabyProfile().schoolId;
     $scope.getSchoolProfileNormalConfig=$filter('getSchoolNormalService')(profileService.getSchoolProfile().services);
-    console.log(profileService.getSchoolProfile());
-    console.log($scope.getSchoolProfileNormalConfig);
     var fromtime=$scope.getSchoolProfileNormalConfig['fromTime'];
     //fromtime=moment(fromtime).format('H:mm');
     var totime=$scope.getSchoolProfileNormalConfig['toTime'];
@@ -45,7 +45,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     var jsonTest=[];
 
     $scope.getDateString = function (next) {
-        var currentDate = next.week($scope.currWeek);
+        var currentDate = next;
         var weekStart = currentDate.clone().startOf('week');
         var weekEnd = currentDate.clone().endOf('week');
         var sDate=moment(weekStart).format("D");
@@ -56,8 +56,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     }
 
     $scope.isActive =  function(day) {
-        var selected = moment().weekday(day).week($scope.currWeek).format("M D YYYY");
-        var format=$scope.currentDate.format("M D YYYY");
+        var selected = $scope.currentDate.weekday(day).week($scope.currWeek).format("M D YYYY");
+        var format=moment().format("M D YYYY");
         return (selected==format ? true : false);
     };
 
@@ -67,7 +67,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
     $scope.formatInfo = function(info){ 
         for(var i=0;i<=4;i++){
-            console.log(info[i]);
             if(info[i]['uscita']!=null && info[i]['uscita']!=undefined)
                 info[i]['uscita_display']=moment(info[i]['uscita']).format('H:mm' );
             if(info[i]['entrata']!=null && info[i]['entrata']!=undefined)
@@ -154,15 +153,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
 
     $scope.whatClassIsIt = function(day,type) {
-        var selected = moment().weekday(day).week($scope.currWeek);
+        var selected = moment($scope.currentDate.clone().weekday(day).week($scope.currWeek).year($scope.currYear).format('M D YYYY'));
+        var actualDate=moment(moment().format('M D YYYY'));
         var ret;
-        if(selected>$scope.currentDate && type==''){
+        if((selected.isAfter(actualDate) || selected.isSame(actualDate)) && type==''){
             ret= 'button-day editable';
-        }else if(selected<$scope.currentDate && type==''){
+        }else if(selected.isBefore(actualDate) && type==''){
             ret= 'button-day readonly';
-        }else if(selected>$scope.currentDate && type=='delega'){
+        }else if((selected.isAfter(actualDate) || selected.isSame(actualDate)) && type=='delega'){
             ret= 'delega_day editable';
-        }else if(selected<$scope.currentDate && type=='delega'){
+        }else if(selected.isBefore(actualDate) && type=='delega'){
             ret= 'delega_day readonly';
         }else{
             ret= 'button-day editable';
@@ -171,22 +171,26 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
     
     $scope.prev_week = function() {
-        var prev = $scope.currentDate.day("Monday").week($scope.currWeek);
+        var prev = $scope.currentDate;
         prev.subtract(1, "weeks");
-        $scope.currentDate=prev;
-        $scope.currWeek=prev.format('w');
-        $scope.getDateString(prev);
+        $scope.currentDate=moment(prev,'M D YYYY');
+        $scope.currWeek=$scope.currentDate.format('w');
+        $scope.currYear=$scope.currentDate.format('YYYY');
         week_planService.setCurrentWeek($scope.currWeek);
+        week_planService.setCurrentYear($scope.currYear);
+        $scope.getDateString(angular.copy($scope.currentDate));
         $scope.getWeekPlan();
     };
     
     $scope.next_week = function() {
-        var next = $scope.currentDate.day("Monday").week($scope.currWeek);
+        var next = $scope.currentDate;
         next.add(1, 'weeks');
-        $scope.currentDate=next;
-        $scope.currWeek=next.format('w');
-        $scope.getDateString(next);
+        $scope.currentDate=moment(next,'M D YYYY');
+        $scope.currWeek=$scope.currentDate.format('w');
+        $scope.currYear=$scope.currentDate.format('YYYY');
         week_planService.setCurrentWeek($scope.currWeek);
+        week_planService.setCurrentYear($scope.currYear);
+        $scope.getDateString(angular.copy($scope.currentDate));
         $scope.getWeekPlan();
     };
     
@@ -233,11 +237,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
       }
 
     $scope.gotoEditDate = function(day) {
-        var selected = moment().weekday(day).week($scope.currWeek);
+        var selected = moment($scope.currentDate.clone().weekday(day).week($scope.currWeek).year($scope.currYear).format('M D YYYY'));
+        var actualDate=moment(moment().format('M D YYYY'));
         var dayData=$scope.days[day];
         var usc =dayData['uscita'];
         var temp=moment('17:00','HH:mm');// it should be 09:10
-        if(moment(temp).isBefore(moment()) && day==$scope.currDay ){
+        if(moment(temp).isBefore(moment()) && day==$scope.currDay && selected.isSame(actualDate)){
             var myPopup = $ionicPopup.show({
                 title: $filter('translate')('retire_popup_toolate_title'),
                 cssClass: 'expired-popup',
@@ -250,7 +255,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                   ]
               });
         }
-        else if(selected>=$scope.currentDate){
+        else if(selected.isAfter(actualDate) || selected.isSame(actualDate)){
           $scope.mode='edit';
           var dayData=$scope.days[day];
           dayData['monday']=false;
@@ -260,6 +265,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
           dayData['friday']=false;
           var dateFormat=selected.format('dddd D MMMM');
           week_planService.setCurrentWeek($scope.currWeek);
+          week_planService.setCurrentYear($scope.currYear);
           week_planService.setSelectedDateInfo(dateFormat);
           week_planService.fromHome(false);
           week_planService.setDayData(day,dayData,$scope.mode);
@@ -338,7 +344,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
     $scope.disableEdit = function() {
         var actWeek=moment();
-        var selWeek = moment().day(5).week($scope.currWeek);
+        var selWeek = moment().day(5).week($scope.currWeek).year($scope.currYear);
         if(selWeek.isBefore(actWeek)){
             return true;
         }

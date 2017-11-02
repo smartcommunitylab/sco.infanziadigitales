@@ -251,5 +251,7 @@
   "sezione":"Sezione",
   "bus_service":"Scuolabus",
   "non_previste":"Non previste",
-  "non_specificate":"Non specificate"
+  "non_specificate":"Non specificate",
+  "no_feature_weekend":"Operazione non consentita sabato e domenica",
+  "send_msg":"Invia un messaggio"
 }

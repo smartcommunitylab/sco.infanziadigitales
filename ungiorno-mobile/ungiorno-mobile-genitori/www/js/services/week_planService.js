@@ -10,6 +10,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.w
   var modeDefault = '';
   var dateFormat='';
   var currWeek='';
+  var currYear='';
   var fromHome=false;
 
   var appId='';
@@ -71,6 +72,13 @@ week_planService.getSelectedDateInfo= function () {
 };
 week_planService.getCurrentWeek= function () {
     return currWeek;
+  };
+
+  week_planService.setCurrentYear= function (currYearActual) {
+    currYear=currYearActual;
+};
+week_planService.getCurrentYear= function () {
+    return currYear;
   };
 
   week_planService.fromHome= function (fromHome1) {

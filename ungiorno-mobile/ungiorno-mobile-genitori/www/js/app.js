@@ -102,6 +102,10 @@ return {
 .run(function ($ionicPlatform, $rootScope, $ionicLoading, $ionicPopup, $filter, $cordovaSplashscreen, $state, $translate, $q, $window, $ionicHistory, $ionicConfig, Config,
   configurationService, profileService, dataServerService, loginService, pushNotificationService, Toast,LoginService) {
 
+  $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+    console.log(fromState.name +' -> '+toState.name);
+  });
+
   $rootScope.getUserId = function () {
     return localStorage.userId;
   };

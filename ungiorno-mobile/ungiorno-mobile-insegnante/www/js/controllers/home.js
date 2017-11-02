@@ -393,7 +393,7 @@ $scope.cnt=0;
 
         //loginService.getTeacherName($scope.schoolProfile.schoolId);
 
-        dataServerService.getSections($scope.schoolProfile.schoolId).then(function (data) {
+        dataServerService.getSections($scope.schoolProfile.schoolId, true).then(function (data) {
           if (data != null) {
             //order by sectionName
             $scope.sections = $filter('orderBy')(data, 'sectionName');

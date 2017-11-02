@@ -373,17 +373,23 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
   }, function (error) {
   });
   }
-
+  $scope.gotoChat=function() {
+    $state.go('app.messages');
+    $scope.TempPrevent.close();
+  }
   $scope.gotoEditDate = function() {
     var temp=$scope.isRetireTimeLimitExpired();
     if($scope.weekend){
+      Toast.show($filter('translate')('no_feature_weekend'), 'short', 'bottom');
         return;
     }
     else if (temp) {
-        var myPopup = $ionicPopup.show({
+        $scope.TempPrevent = $ionicPopup.show({
           title: $filter('translate')('retire_popup_toolate_title'),
           cssClass: 'expired-popup',
-          template: $filter('translate')('retire_popup_toolate_text') + " " + moment($scope.modifyBefore).format('HH:mm') + "<div class\"row\"><a href=\"tel:" + profileService.getSchoolProfile().contacts.telephone[0] + "\" class=\"button button-expired-call\">" + $filter('translate')('home_contatta') + "</a></div>",
+          scope:$scope,
+          template: $filter('translate')('retire_popup_toolate_text') + " " + moment($scope.modifyBefore).format('HH:mm') + "<div class\"row\"><a href=\"tel:" + profileService.getSchoolProfile().contacts.telephone[0] + "\" class=\"button button-expired-call\">" + $filter('translate')('home_contatta') + "</a></div>"
+          + "<div class\"row\"><span ng-click=\"gotoChat();\"  class=\"button button-expired-call\">" + $filter('translate')('send_msg') + "</span></div>",
           buttons: [
             {
               text: $filter('translate')('retire_popup_absent_close'),
@@ -617,7 +623,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         },
         function (error) {
           console.log("ERROR -> " + error);
-          Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+          $scope.noConnection = true;
+          //Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
           $ionicLoading.hide();
           if (error == 406) {
             $rootScope.allowed = false;

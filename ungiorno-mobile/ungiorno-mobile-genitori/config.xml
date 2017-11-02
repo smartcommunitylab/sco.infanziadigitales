@@ -96,4 +96,5 @@
         <variable name="SENDER_ID" value="453601816446" />
     </plugin>
     <engine name="ios" spec="~4.3.1" />
+    <plugin name="cordova-plugin-inappbrowser" spec="^1.7.1" />
 </widget>

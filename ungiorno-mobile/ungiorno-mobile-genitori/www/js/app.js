@@ -289,6 +289,15 @@ return {
                   historyRoot: true
                 });
 
+              },
+              function (error) {
+                console.log("ERROR -> " + error);
+                //Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+                $ionicLoading.hide();
+                if (error == 406) {
+                  $rootScope.allowed = false;
+                }
+                $state.go('app.home');// go to home in order to see the message 'Ricarica Pagina'
               })
 //        //
 //        if (localStorage.provider == 'internal') {

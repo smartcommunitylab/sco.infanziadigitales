@@ -2502,3 +2502,7 @@ textarea {
   font-size: 30px;
   padding-top: 9px;
 }
+.serviceName{
+  padding: 5px;
+  padding-right:30px;
+}

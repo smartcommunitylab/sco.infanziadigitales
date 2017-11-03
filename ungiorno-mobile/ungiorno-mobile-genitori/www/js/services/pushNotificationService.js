@@ -186,8 +186,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.n
     console.log("registration");
     var arrayOfSchools = [];
 
+    var platform = '';
+    if (ionic.Platform.isIOS()) platform = '.ios';
+    else if (ionic.Platform.isAndroid()) platform = '.android';
+    
     for (var i = 0; i < schooldIds.length; i++) {
-      arrayOfSchools.push(Config.getMessagingAppId() + ".comms." + schooldIds[i]);
+      arrayOfSchools.push(Config.getMessagingAppId() + ".comms." + schooldIds[i]+platform);
     }
     var push = PushNotification.init({
       android: {
@@ -198,6 +202,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.n
         alert: "true",
         badge: "true",
         sound: "true",
+        gcmSandbox: true,
         senderID: Config.getSenderID(),
         topics: arrayOfSchools
       },

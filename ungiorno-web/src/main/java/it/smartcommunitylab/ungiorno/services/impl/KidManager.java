@@ -93,10 +93,10 @@ public class KidManager {
 
     public String getKidPicturePath(String appId, String schoolId, String kidId) {
         KidProfile kid = getKidProfile(appId, schoolId, kidId);
-        if (kid != null && kid.getImage() != null) {
+        if (kid != null && kid.getImage() != null && kid.isPartecipateToSperimentation()) {
             return imageDownloadDir + "/" + kid.getImage();
         } else {
-            return null;
+            return getDefaultKidPicturePath();
         }
     }
 

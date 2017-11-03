@@ -156,7 +156,7 @@ a.item-content {
 .popup-head {
   border-bottom-width: 1px;
   border-bottom-style: solid;
-  border-bottom-color: #009aa8;
+  background-color: white;
 }
 .popup-head .popup-title {
   color: #009aa8;
@@ -1982,6 +1982,10 @@ textarea {
 }
 .expired-popup .popup-body {
   text-align: justify;
+  background-color: white;
+}
+.expired-popup .popup-buttons {
+  background-color: white;
 }
 
 /*
@@ -1992,9 +1996,12 @@ textarea {
   background-color: #009AA8;
   color: #ffffff;
   border: 0;
-  margin: 4px 80px 0px 80px!important;
+  margin: 4px auto 0px auto!important;
   padding-top:3px;
   padding-bottom: 5px;
+  padding-left:25px;
+  padding-right:25px;
+  min-width: 160px;
 }
 
 .hrstyle {
@@ -2009,6 +2016,12 @@ textarea {
   text-align: center;
   display: flex;
   flex-direction: column;
+}
+.briefDelega{
+  width:100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
 }
 .button_top{
   text-align: left;
@@ -2276,10 +2289,13 @@ textarea {
   padding-right: 5px;
 }
 .br_in{
-  padding-left: 20px;
-  text-align: left;
-  margin: 4px 80px 0px 80px!important;
+  text-align: center;
+  margin: 4px auto 0px auto !important;
   white-space: nowrap;
+  min-width: 150px;
+  width:150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .busStyle{
   width:40%
@@ -2510,3 +2526,57 @@ textarea {
   padding: 5px;
   padding-right:30px;
 }
+
+/*  custom radio styling */
+[type="radio"]:checked,
+[type="radio"]:not(:checked) {
+    position: absolute;
+    left: -9999px;
+}
+[type="radio"]:checked + label,
+[type="radio"]:not(:checked) + label
+{
+    position: relative;
+    padding-left: 38px;
+    margin-top: 8px;
+    cursor: pointer;
+    line-height: 20px;
+    display: inline-block;
+}
+[type="radio"]:checked + label:before,
+[type="radio"]:not(:checked) + label:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 18px;
+    height: 18px;
+    border: 1px solid black;
+    border-radius: 100%;
+    background: #fff;
+}
+[type="radio"]:checked + label:after,
+[type="radio"]:not(:checked) + label:after {
+    content: '';
+    width: 12px;
+    height: 12px;
+    background: #F8AB15;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    border-radius: 100%;
+    -webkit-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+}
+[type="radio"]:not(:checked) + label:after {
+    opacity: 0;
+    -webkit-transform: scale(0);
+    transform: scale(0);
+}
+[type="radio"]:checked + label:after {
+    opacity: 1;
+    -webkit-transform: scale(1);
+    transform: scale(1);
+}
+
+/*  end custom radio styling */

@@ -15,7 +15,7 @@
           <label class="control control-checkbox">
               <!-- ng-repeat="(key, data) in listServicesDb" ng-if="key!='mensa'" -->
               &nbsp;&nbsp;{{'home_bus' | translate }}
-                  <input type="checkbox" ng-model="currData['bus']" name="bus"  ng-change="setBusHour()" />
+                  <input type="checkbox" ng-model="currData['bus']" name="bus"  ng-change="setBusHour()" ng-disabled="!busEnabled"/>
               <div class="control_indicator"></div>
           </label>
       <table class="dayEdit_table" >
@@ -54,7 +54,10 @@
           </td>
           <td>
               <select ng-model="currData.delega_name" ng-disabled="currData.absence">
-                    <option ng-repeat="option in ritiraOptions" value="{{option.personId}}" ng-selected="currData.delega_name==option.personId">
+                    <option ng-repeat="option in ritiraOptions" value="{{option.personId}}" ng-if="option.personId=='none'" ng-selected="currData.delega_name==option.personId">
+                            {{option.firstName | translate}} {{option.lastName | translate}}
+                          </option>
+                        <option ng-repeat="option in ritiraOptions" value="{{option.personId}}" ng-if="option.personId!='none'" ng-selected="currData.delega_name==option.personId">
                             {{option.firstName | translate}} {{option.lastName | translate}}
                             ({{ option.parent ? 'parent'  : option.relation  | translate}})
                           </option>

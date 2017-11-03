@@ -367,6 +367,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
       }
       console.log(fromtime);
       console.log(totime);
+      var infoInitial={'fromTime':fromtime,'toTime':totime};
+      profileService.setInfoInitial(infoInitial);
   };
   $scope.getListServices();
     

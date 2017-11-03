@@ -25,8 +25,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.listServicesDb=$scope.babyConfiguration.services.timeSlotServices;
   }
   $scope.listServicesSchool=profileService.getSchoolProfile().services;
-  console.log($scope.listServicesSchool);
-  console.log($scope.listServicesDb);
+  $scope.listServicesSchool=$filter('orderBy')($scope.listServicesSchool, 'name');
     
   for(var i=0;i<$scope.listServicesDb.length;i++){
     var type=$scope.listServicesDb[i].name;
@@ -50,17 +49,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.section=$scope.babyProfile.section;
     $scope.groups=$scope.babyProfile.groups;
     
-  //set hour
-  var exitTime = new Date();
-  $scope.briefInfo=profileService.getBriefInfo();
-  var ore_uscita=$scope.briefInfo['ore_uscita'].split(':');
-  var ore_entrata=$scope.briefInfo['ore_entrata'].split(':');
-  exitTime.setHours(ore_uscita[0], ore_uscita[1], 0, 0);
-  $scope.time.value = exitTime;
-  var entryTime = new Date();
-  entryTime.setHours(ore_entrata[0], ore_entrata[1], 0, 0);
-  $scope.entrytime = entryTime;
-
   //set who get child
   $scope.retireDefault = {
     value: $scope.babyConfiguration.defaultPerson
@@ -151,6 +139,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
       console.log("SENDING ERROR -> " + error);
     });
   }
+
+  $scope.briefInfo=profileService.getInfoInitial();
+  var ore_uscita=$scope.briefInfo['toTime'];
+  var ore_entrata=$scope.briefInfo['fromTime'];
+  $scope.time.value = ore_uscita;
+  $scope.entrytime = ore_entrata;
 
   $scope.getTimeLabel = function () {
     var day = moment($scope.time.value);

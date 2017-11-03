@@ -38,14 +38,14 @@
             <ul class="home-info-content my-list home-comm">
               <li class="huge row" ng-repeat="person in listDelega" ng-if="person.parent">
                 <span class="col">
-                  {{person.firstName}} &nbsp;{{person.lastName}} &nbsp;&nbsp;({{ 'parent_delega' | translate}} &nbsp;{{person.parentIndex}})
+                  {{person.firstName}} {{person.lastName}} ({{ 'parent_delega' | translate}} {{person.parentIndex}})
                   <br/>
                   <div class = "" ng-if="person.phone.length>0" >
                     <span ng-repeat="phone in person.phone"><i class="icon ion-android-call iconPhone"></i>{{phone}}<br/></span>
                   </div>
                 </span>
               </li>
-              <li class="huge row" ng-repeat="person in listDelega" ng-if="!person.parent"><span class="col">{{person.firstName}} &nbsp;{{person.lastName}} &nbsp;&nbsp;({{ person.relation  | translate}})</span></li>
+              <li class="huge row" ng-repeat="person in listDelega" ng-if="!person.parent"><span class="col">{{person.firstName}} {{person.lastName}} ({{ person.relation  | translate}})</span></li>
             </ul>
 
             <div class="input-description-padding">{{'allergies' | translate}}:</div>

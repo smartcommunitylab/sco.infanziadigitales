@@ -1238,6 +1238,7 @@ public class RepositoryManager implements RepositoryService {
             skp.setBus(new ServiceProfile(todayConfig.getBus(), todayConfig.getBus()));
             skp.setfascieNames(allKidFascie);
             skp.setfascieList(allFascie);
+            skp.setPartecipateToSperimentation(kp.isPartecipateToSperimentation());
 
             // merge service state from kidProfile Serivces or from schoolProfile
             skp.setServices(kp.getServices());

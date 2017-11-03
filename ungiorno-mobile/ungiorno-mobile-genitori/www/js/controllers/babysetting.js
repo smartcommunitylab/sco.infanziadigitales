@@ -9,6 +9,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
   console.log('fillim');
   console.log(profileService.getBabyProfile());
   $scope.babyServices = [];
+  $scope.babyActiveServices = {};
   $scope.busEnabled = false;
   $scope.busStops = [];
   $scope.time = {
@@ -23,18 +24,19 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
   if ($scope.babyConfiguration.services && $scope.babyConfiguration.services.timeSlotServices) {
     $scope.listServicesDb=$scope.babyConfiguration.services.timeSlotServices;
   }
-  
+  $scope.listServicesSchool=profileService.getSchoolProfile().services;
+  console.log($scope.listServicesSchool);
+  console.log($scope.listServicesDb);
+    
   for(var i=0;i<$scope.listServicesDb.length;i++){
-      var type=$scope.listServicesDb[i].name;
-      var enabled=$scope.listServicesDb[i].enabled;
-      var regular=$scope.listServicesDb[i].regular;
-      if(!regular){
-        $scope.babyServices.push({
-          text: type,
-          active: enabled
-        });
-      }
+    var type=$scope.listServicesDb[i].name;
+    var enabled=$scope.listServicesDb[i].enabled;
+    var regular=$scope.listServicesDb[i].regular;
+    if(!regular){
+      $scope.babyActiveServices[type]={'active': enabled};
     }
+  }
+
     $scope.listDelega=$scope.babyProfile.persons;
     var parInd=1;
     for(var i=0;i<$scope.listDelega.length;i++){

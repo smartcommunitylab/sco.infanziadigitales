@@ -296,6 +296,28 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         return moment($scope.modifyBefore).isBefore(moment());
       }
 
+      $scope.gotoChat=function() {
+        $state.go('app.messages');
+        $scope.TempPrevent.close();
+      }
+
+      $scope.callSchool = function () {
+        if(profileService.getSchoolProfile().contacts==null || profileService.getSchoolProfile().contacts==undefined ){
+          alert($filter('translate')('missing_phone'));
+          return;
+        }
+        if(profileService.getSchoolProfile().contacts.telephone.length==0 ){
+          alert($filter('translate')('missing_phone'));
+          return;
+        }
+        var num = profileService.getSchoolProfile().contacts.telephone[0];
+        num = num.replace(/\D/g, '');
+        window.open('tel:' + num, '_system');
+        if ($scope.TempPrevent) {
+          $scope.TempPrevent.close();
+        }
+      }
+
     $scope.gotoEditDate = function(day) {
         var selected = moment($scope.currentDate.clone().weekday(day).week($scope.currWeek).year($scope.currYear).format('M D YYYY'));
         var actualDate=moment(moment().format('M D YYYY'));
@@ -303,10 +325,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         var usc =dayData['uscita'];
         var temp=moment('17:00','HH:mm');// it should be 09:10
         if(moment(temp).isBefore(moment()) && day==$scope.currDay && selected.isSame(actualDate)){
-            var myPopup = $ionicPopup.show({
+            $scope.TempPrevent = $ionicPopup.show({
                 title: $filter('translate')('retire_popup_toolate_title'),
                 cssClass: 'expired-popup',
-                template: $filter('translate')('retire_popup_toolate_text') + " " + moment(temp).format('HH:mm') + "<div class\"row\"><a href=\"tel:" + profileService.getSchoolProfile().contacts.telephone[0] + "\" class=\"button button-expired-call\">" + $filter('translate')('home_contatta') + "</a></div>",
+                scope:$scope,
+                template: $filter('translate')('retire_popup_toolate_text') + " " + moment(temp).format('HH:mm') + "<div class\"row\"><span ng-click=\"callSchool();\"  class=\"button button-expired-call\">" + $filter('translate')('home_contatta') + "</span></div>"
+                + "<div class\"row\"><span ng-click=\"gotoChat();\"  class=\"button button-expired-call\">" + $filter('translate')('send_msg') + "</span></div>",
                 buttons: [
                   {
                     text: $filter('translate')('retire_popup_absent_close'),
@@ -434,6 +458,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         totime=moment('13:30','H:mm');
         fromtimeFormatted=moment(fromtime).format('H:mm');
         totimeFormatted=moment(totime).format('H:mm');
+    }
+    $scope.babyProfile=profileService.getBabyProfile();
+    $scope.busEnabled=false;
+    $scope.busDefaultStop='';
+    if ($scope.babyProfile.services && $scope.babyProfile.services.bus) {
+        $scope.busEnabled = $scope.babyProfile.services.bus.enabled;
+        if($scope.babyProfile.services.bus.stops && $scope.babyProfile.services.bus.stops.length>0){
+            $scope.busDefaultStop=$scope.babyProfile.services.bus.stops[0].stopId;
+        }
     }
 
     $scope.getListServices = function() {
@@ -679,6 +712,19 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
 
     $scope.restore = function() {
+        var totimeOrig=totime;
+        //bus precedence for exit time by default
+        if($scope.busEnabled){
+            $scope.getSchoolNormalFascie=$filter('getSchoolNormalFascie')(profileService.getSchoolProfile().services);
+            $scope.getSchoolNormalFascie.sort(sortByTimeAscOut);
+            var length1 =$scope.getSchoolNormalFascie.length;
+            if(length1>0) totimeOrig=$scope.getSchoolNormalFascie[length1-1]['out_val'];
+            if(totimeOrig=='') totimeOrig=moment('14:00','H:mm');
+            totimeFormatted=moment(totimeOrig).format('H:mm');
+            totimeOrig=moment(totimeOrig,'H:mm');
+            $scope.babyProfile.services.bus.stops
+        }
+
         var confirmPopup = $ionicPopup.confirm({
             title: $filter('translate')('Avviso'),
             template: 'Questa operazione sovrascriverà i dati attuali. Si vuole procedere ugualmente?',
@@ -693,11 +739,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
               text: 'OK',
               type: 'button_save',
               onTap: function(e) {
-                var jsonTest=[{'name':'monday_reduced','entrata':fromtime,'uscita':totime,'bus':false,'delega_name':''},
-                {'name':'tuesday_reduced','entrata':fromtime,'uscita':totime,'bus':false,'delega_name':''},
-                {'name':'wednesday_reduced','entrata':fromtime,'uscita':totime,'bus':false,'delega_name':''},
-                {'name':'thursday_reduced','entrata':fromtime,'uscita':totime,'bus':false,'delega_name':''},
-                {'name':'friday_reduced','entrata':fromtime,'uscita':totime,'bus':false,'delega_name':''}];
+                var jsonTest=[{'name':'monday_reduced','entrata':fromtime,'uscita':totimeOrig,'bus':$scope.busEnabled,'fermata':$scope.busDefaultStop,'delega_name':''},
+                {'name':'tuesday_reduced','entrata':fromtime,'uscita':totimeOrig,'bus':$scope.busEnabled,'fermata':$scope.busDefaultStop,'delega_name':''},
+                {'name':'wednesday_reduced','entrata':fromtime,'uscita':totimeOrig,'bus':$scope.busEnabled,'fermata':$scope.busDefaultStop,'delega_name':''},
+                {'name':'thursday_reduced','entrata':fromtime,'uscita':totimeOrig,'bus':$scope.busEnabled,'fermata':$scope.busDefaultStop,'delega_name':''},
+                {'name':'friday_reduced','entrata':fromtime,'uscita':totimeOrig,'bus':$scope.busEnabled,'fermata':$scope.busDefaultStop,'delega_name':''}];
                 jsonTest=$scope.formatInfo(jsonTest);
                 $scope.days=jsonTest;
                 for(var i=0;i<=4;i++){
@@ -1626,7 +1672,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         id: idNotification++,
         title: $filter('translate')('notification_day_summary_title'),
         text: $filter('translate')('notification_day_summary_text'),
-        icon: 'res://notification.png',
+        icon: 'res://icon.png',
         autoClear: false,
         every:  1 * 60 * 24, //1 day
         at :new Date(),
@@ -1638,7 +1684,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         id: idNotification++,
         title: $filter('translate')('notification_day_summary_title'),
         text: $filter('translate')('notification_week_text'),
-        icon: 'res://notification.png',
+        icon: 'res://icon.png',
         //autoCancel: false,
         autoClear: false,
         every: 1 * 60 * 24 * 7,  // 1 week.
@@ -1651,7 +1697,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         id: idNotification++,
         title: $filter('translate')('notification_day_summary_title'),
         text: $filter('translate')('notification_ritiro_text')+" "+$scope.kidFirstName+" "+$scope.kidLastName,
-        icon: 'res://notification.png',
+        icon: 'res://icon.png',
         //autoCancel: false,
         autoClear: false,
         every:  1 * 60 * 24, //1 day

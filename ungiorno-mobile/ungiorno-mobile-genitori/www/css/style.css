@@ -1713,6 +1713,10 @@ $dark: #444 !default;
 .my-list li.small:before {
   font-size: 10px;
 }
+.my-list li .serviceName{
+width:200px;
+}
+
 .studente {
   text-align: center;
   width: 100%;

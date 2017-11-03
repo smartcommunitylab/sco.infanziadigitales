@@ -423,6 +423,23 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $state.go('app.messages');
     $scope.TempPrevent.close();
   }
+  $scope.callSchool = function () {
+    if(profileService.getSchoolProfile().contacts==null || profileService.getSchoolProfile().contacts==undefined ){
+      alert($filter('translate')('missing_phone'));
+      return;
+    }
+    if(profileService.getSchoolProfile().contacts.telephone.length==0 ){
+      alert($filter('translate')('missing_phone'));
+      return;
+    }
+    var num = profileService.getSchoolProfile().contacts.telephone[0];
+    num = num.replace(/\D/g, '');
+    window.open('tel:' + num, '_system');
+    if ($scope.TempPrevent) {
+      $scope.TempPrevent.close();
+    }
+  }
+
   $scope.gotoEditDate = function() {
     var temp=$scope.isRetireTimeLimitExpired();
     if($scope.weekend){
@@ -434,7 +451,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
           title: $filter('translate')('retire_popup_toolate_title'),
           cssClass: 'expired-popup',
           scope:$scope,
-          template: $filter('translate')('retire_popup_toolate_text') + " " + moment($scope.modifyBefore).format('HH:mm') + "<div class\"row\"><a href=\"tel:" + profileService.getSchoolProfile().contacts.telephone[0] + "\" class=\"button button-expired-call\">" + $filter('translate')('home_contatta') + "</a></div>"
+          template: $filter('translate')('retire_popup_toolate_text') + " " + moment($scope.modifyBefore).format('HH:mm') + "<div class\"row\"><span ng-click=\"callSchool();\"  class=\"button button-expired-call\">" + $filter('translate')('home_contatta') + "</span></div>"
           + "<div class\"row\"><span ng-click=\"gotoChat();\"  class=\"button button-expired-call\">" + $filter('translate')('send_msg') + "</span></div>",
           buttons: [
             {

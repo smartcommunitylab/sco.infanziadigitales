@@ -267,15 +267,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.ritiraOptions=$scope.kidProfile.persons;
     var jsonTest={};
     $scope.weekInfo=[];
-    $scope.getSchoolProfileNormalConfig=$filter('getSchoolNormalService')(profileService.getSchoolProfile().services);
-    console.log(profileService.getSchoolProfile());
-    var fromtime=$scope.getSchoolProfileNormalConfig['fromTime'];
-    var totime=$scope.getSchoolProfileNormalConfig['toTime'];
-    if(fromtime=='' && totime==''){
-        alert($filter('translate')('missing_school_config'));//TODO translate this
-        fromtime=moment('7:30','H:mm');
-        totime=moment('13:30','H:mm');
-    }
 
     sortByTimeAscEntry = function (lhs, rhs) {
       var results;
@@ -292,37 +283,92 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
       return results;
     };
 
-    $scope.listServices=[];
+    // provide default config for entry/exit if the school doesn't have services/fascie
+    $scope.getSchoolProfileNormalConfig=$filter('getSchoolNormalService')(profileService.getSchoolProfile().services);
+    console.log($scope.getSchoolProfileNormalConfig);
+    var fromtime=$scope.getSchoolProfileNormalConfig['fromTime'];
+    var totime=$scope.getSchoolProfileNormalConfig['toTime'];
+    if(fromtime=='' && totime==''){
+        alert($filter('translate')('missing_school_config'));
+        fromtime=moment('7:30','H:mm');
+        totime=moment('13:30','H:mm');
+    }
     $scope.listServicesAnticipo=[];
     $scope.listServicesPosticipo=[];
-    if(profileService.getBabyProfile().services!==null && profileService.getBabyProfile().services.timeSlotServices!==null){
-      $scope.listServicesDb=profileService.getBabyProfile().services.timeSlotServices;
-      for(var i=0;i<$scope.listServicesDb.length;i++){
-          var type=$scope.listServicesDb[i].name;
-          var enabled=$scope.listServicesDb[i].enabled;
-          if(enabled){
-          var tempServ=$scope.listServicesDb[i].timeSlots;
-          for(var j=0;j<tempServ.length;j++){
-              fr=moment(tempServ[j]['fromTime']).format('H:mm');
-              to=moment(tempServ[j]['toTime']).format('H:mm');
-              var temp={'value':tempServ[j]['name'],'label':tempServ[j]['name'],
-              'entry':fr,'entry_val':moment(fr,'H:mm'),'out':to,'out_val':moment(to,'H:mm'),
-              'type':type};
-              $scope.listServices.push(temp);
-              if(moment(to,'H:mm').isBefore(moment('12:00','H:mm'))){
-                  $scope.listServicesAnticipo.push(temp);
+    $scope.listServices=[];
+    
+    $scope.getListServices = function() {
+      var fr='',fr2='';
+      var to='',to2='';
+      var serviz=[];
+      if(profileService.getBabyProfile().services!==null && profileService.getBabyProfile().services.timeSlotServices!==null){
+          var allFascieNorm=$filter('getSchoolNormalSlots')(profileService.getSchoolProfile().services);
+          $scope.listServicesDb=profileService.getBabyProfile().services.timeSlotServices;
+          $scope.listServicesDb=$scope.listServicesDb.concat(allFascieNorm);
+          console.log($scope.listServicesDb);
+          for(var i=0;i<$scope.listServicesDb.length;i++){
+              var type=$scope.listServicesDb[i].name;
+              var enabled=$scope.listServicesDb[i].enabled;
+              var regular=$scope.listServicesDb[i].regular;
+              if((enabled || regular) && serviz.indexOf(type)===-1){
+              var tempServ=$scope.listServicesDb[i].timeSlots;
+              for(var j=0;j<tempServ.length;j++){
+                  fr=moment(tempServ[j]['fromTime']).format('H:mm');
+                  to=moment(tempServ[j]['toTime']).format('H:mm');
+                  var temp={'value':tempServ[j]['name'],'label':tempServ[j]['name'],
+                  'entry':fr,'entry_val':moment(fr,'H:mm'),'out':to,'out_val':moment(to,'H:mm'),
+                  'type':type};
+                  $scope.listServices.push(temp);
+                  if(moment(to,'H:mm').isBefore(moment('12:00','H:mm'))){
+                      $scope.listServicesAnticipo.push(temp);
+                  }
+                  if(moment(to,'H:mm').isAfter(moment('12:00','H:mm'))){
+                      $scope.listServicesPosticipo.push(temp);
+                  }
               }
-              if(moment(to,'H:mm').isAfter(moment('12:00','H:mm'))){
-                  $scope.listServicesPosticipo.push(temp);
+              serviz.push(type);
               }
-          }
           }
       }
-      $scope.listServicesAnticipo.sort(sortByTimeAscOut);
-      fromtime=$scope.listServicesAnticipo[0]['entry_val'];
-      $scope.listServicesPosticipo.sort(sortByTimeAscOut);
-      totime=$scope.listServicesPosticipo[$scope.listServicesPosticipo.length-1]['out_val'];
-  }
+      else{
+          var allFascieNorm=$filter('getSchoolNormalSlots')(profileService.getSchoolProfile().services);
+          $scope.listServicesDb=allFascieNorm;
+          console.log($scope.listServicesDb);
+          for(var i=0;i<$scope.listServicesDb.length;i++){
+              var type=$scope.listServicesDb[i].name;
+              var enabled=$scope.listServicesDb[i].enabled;
+              var regular=$scope.listServicesDb[i].regular;
+              if(enabled || regular){
+              var tempServ=$scope.listServicesDb[i].timeSlots;
+              for(var j=0;j<tempServ.length;j++){
+                  fr=moment(tempServ[j]['fromTime']).format('H:mm');
+                  to=moment(tempServ[j]['toTime']).format('H:mm');
+                  var temp={'value':tempServ[j]['name'],'label':tempServ[j]['name'],
+                  'entry':fr,'entry_val':moment(fr,'H:mm'),'out':to,'out_val':moment(to,'H:mm'),
+                  'type':type};
+                  $scope.listServices.push(temp);
+                  if(moment(to,'H:mm').isBefore(moment('12:00','H:mm'))){
+                      $scope.listServicesAnticipo.push(temp);
+                  }
+                  if(moment(to,'H:mm').isAfter(moment('12:00','H:mm'))){
+                      $scope.listServicesPosticipo.push(temp);
+                  }
+              }
+              }
+          }
+      }
+      if($scope.listServicesAnticipo.length>0){
+          $scope.listServicesAnticipo.sort(sortByTimeAscOut);
+          fromtime=$scope.listServicesAnticipo[0]['out_val'];
+      }
+      if($scope.listServicesPosticipo.length>0){
+          $scope.listServicesPosticipo.sort(sortByTimeAscOut);
+          totime=$scope.listServicesPosticipo[$scope.listServicesPosticipo.length-1]['out_val'];
+      }
+      console.log(fromtime);
+      console.log(totime);
+  };
+  $scope.getListServices();
     
     week_planService.getWeekPlan(week,kidId).then(function (data) {
       if(data!=null && data!= undefined && data.length>0 && !$scope.weekend){
@@ -377,6 +423,23 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $state.go('app.messages');
     $scope.TempPrevent.close();
   }
+  $scope.callSchool = function () {
+    if(profileService.getSchoolProfile().contacts==null || profileService.getSchoolProfile().contacts==undefined ){
+      alert($filter('translate')('missing_phone'));
+      return;
+    }
+    if(profileService.getSchoolProfile().contacts.telephone.length==0 ){
+      alert($filter('translate')('missing_phone'));
+      return;
+    }
+    var num = profileService.getSchoolProfile().contacts.telephone[0];
+    num = num.replace(/\D/g, '');
+    window.open('tel:' + num, '_system');
+    if ($scope.TempPrevent) {
+      $scope.TempPrevent.close();
+    }
+  }
+
   $scope.gotoEditDate = function() {
     var temp=$scope.isRetireTimeLimitExpired();
     if($scope.weekend){
@@ -388,7 +451,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
           title: $filter('translate')('retire_popup_toolate_title'),
           cssClass: 'expired-popup',
           scope:$scope,
-          template: $filter('translate')('retire_popup_toolate_text') + " " + moment($scope.modifyBefore).format('HH:mm') + "<div class\"row\"><a href=\"tel:" + profileService.getSchoolProfile().contacts.telephone[0] + "\" class=\"button button-expired-call\">" + $filter('translate')('home_contatta') + "</a></div>"
+          template: $filter('translate')('retire_popup_toolate_text') + " " + moment($scope.modifyBefore).format('HH:mm') + "<div class\"row\"><span ng-click=\"callSchool();\"  class=\"button button-expired-call\">" + $filter('translate')('home_contatta') + "</span></div>"
           + "<div class\"row\"><span ng-click=\"gotoChat();\"  class=\"button button-expired-call\">" + $filter('translate')('send_msg') + "</span></div>",
           buttons: [
             {

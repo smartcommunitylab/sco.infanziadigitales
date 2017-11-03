@@ -1713,6 +1713,10 @@ $dark: #444 !default;
 .my-list li.small:before {
   font-size: 10px;
 }
+.my-list li .serviceName{
+width:200px;
+}
+
 .studente {
   text-align: center;
   width: 100%;
@@ -2501,4 +2505,8 @@ textarea {
 .send_butt::before{
   font-size: 30px;
   padding-top: 9px;
+}
+.serviceName{
+  padding: 5px;
+  padding-right:30px;
 }

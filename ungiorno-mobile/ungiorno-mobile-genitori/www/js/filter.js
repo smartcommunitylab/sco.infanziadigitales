@@ -108,7 +108,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.filters', 
 .filter('getRitiroName', function() {
     return function(input, persons) {
       for(var i=0;i<persons.length;i++){
-          if(persons[i].personId==input){
+          if(persons[i].personId==input && persons[i].personId!=''){
               return persons[i].firstName;
           }
       }
@@ -154,6 +154,19 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.filters', 
                 'entry':fr,'entry_val':moment(fr,'H:mm'),'out':to,'out_val':moment(to,'H:mm')};
                 retArr.push(temp);
             }
+          }
+      }
+    }
+      return retArr;
+    }
+  })
+  .filter('getSchoolNormalSlots', function() {
+    return function(services) {
+    var retArr=[];
+    if(services!==undefined){
+      for(var i=0;i<services.length;i++){
+          if(services[i].regular==true && services[i]['timeSlots']!==null && services[i]['timeSlots'].length>0){
+                retArr.push(services[i]);
           }
       }
     }

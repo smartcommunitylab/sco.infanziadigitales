@@ -13,33 +13,93 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.kidId=profileService.getBabyProfile().kidId;
     $scope.appId=profileService.getBabyProfile().appId;
     $scope.schoolId=profileService.getBabyProfile().schoolId;
+    $scope.listServicesAnticipo=[];
+    $scope.listServicesPosticipo=[];
+    $scope.listServices=[];
+    // provide default config for entry/exit if the school doesn't have services/fascie
     $scope.getSchoolProfileNormalConfig=$filter('getSchoolNormalService')(profileService.getSchoolProfile().services);
+    console.log($scope.getSchoolProfileNormalConfig);
     var fromtime=$scope.getSchoolProfileNormalConfig['fromTime'];
-    //fromtime=moment(fromtime).format('H:mm');
     var totime=$scope.getSchoolProfileNormalConfig['toTime'];
-    //totime=moment(totime).format('H:mm');
     if(fromtime=='' && totime==''){
         alert($filter('translate')('missing_school_config'));
         fromtime=moment('7:30','H:mm');
         totime=moment('13:30','H:mm');
+        fromtimeFormatted=moment(fromtime).format('H:mm');
+        totimeFormatted=moment(totime).format('H:mm');
     }
-    if(profileService.getBabyProfile().services!==null && profileService.getBabyProfile().services.timeSlotServices!==null){
-        $scope.listServicesDb=profileService.getBabyProfile().services.timeSlotServices;
-    for(var i=0;i<$scope.listServicesDb.length;i++){
-            var type=$scope.listServicesDb[i].name;
-            var enabled=$scope.listServicesDb[i].enabled;
-            if(enabled && type=='Anticipo'){
-               var tempServ=$scope.listServicesDb[i].timeSlots;
-               fromtime=tempServ[0]['fromTime'];
-               //fromtime=moment(fromtime).format('H:m');
-            }
-            if(enabled && type=='Posticipo'){
+
+    $scope.getListServices = function() {
+        var fr='',fr2='';
+        var to='',to2='';
+        var serviz=[];
+        if(profileService.getBabyProfile().services!==null && profileService.getBabyProfile().services.timeSlotServices!==null){
+            var allFascieNorm=$filter('getSchoolNormalSlots')(profileService.getSchoolProfile().services);
+            $scope.listServicesDb=profileService.getBabyProfile().services.timeSlotServices;
+            $scope.listServicesDb=$scope.listServicesDb.concat(allFascieNorm);
+            console.log($scope.listServicesDb);
+            for(var i=0;i<$scope.listServicesDb.length;i++){
+                var type=$scope.listServicesDb[i].name;
+                var enabled=$scope.listServicesDb[i].enabled;
+                var regular=$scope.listServicesDb[i].regular;
+                if((enabled || regular) && serviz.indexOf(type)===-1){
                 var tempServ=$scope.listServicesDb[i].timeSlots;
-                totime=tempServ[tempServ.length-1]['toTime'];
-                //totime=moment(totime).format('H:m');
+                for(var j=0;j<tempServ.length;j++){
+                    fr=moment(tempServ[j]['fromTime']).format('H:mm');
+                    to=moment(tempServ[j]['toTime']).format('H:mm');
+                    var temp={'value':tempServ[j]['name'],'label':tempServ[j]['name'],
+                    'entry':fr,'entry_val':moment(fr,'H:mm'),'out':to,'out_val':moment(to,'H:mm'),
+                    'type':type};
+                    $scope.listServices.push(temp);
+                    if(moment(to,'H:mm').isBefore(moment('12:00','H:mm'))){
+                        $scope.listServicesAnticipo.push(temp);
+                    }
+                    if(moment(to,'H:mm').isAfter(moment('12:00','H:mm'))){
+                        $scope.listServicesPosticipo.push(temp);
+                    }
+                }
+                serviz.push(type);
+                }
             }
-    }
-    }
+        }
+        else{
+            var allFascieNorm=$filter('getSchoolNormalSlots')(profileService.getSchoolProfile().services);
+            $scope.listServicesDb=allFascieNorm;
+            console.log($scope.listServicesDb);
+            for(var i=0;i<$scope.listServicesDb.length;i++){
+                var type=$scope.listServicesDb[i].name;
+                var enabled=$scope.listServicesDb[i].enabled;
+                var regular=$scope.listServicesDb[i].regular;
+                if(enabled || regular){
+                var tempServ=$scope.listServicesDb[i].timeSlots;
+                for(var j=0;j<tempServ.length;j++){
+                    fr=moment(tempServ[j]['fromTime']).format('H:mm');
+                    to=moment(tempServ[j]['toTime']).format('H:mm');
+                    var temp={'value':tempServ[j]['name'],'label':tempServ[j]['name'],
+                    'entry':fr,'entry_val':moment(fr,'H:mm'),'out':to,'out_val':moment(to,'H:mm'),
+                    'type':type};
+                    $scope.listServices.push(temp);
+                    if(moment(to,'H:mm').isBefore(moment('12:00','H:mm'))){
+                        $scope.listServicesAnticipo.push(temp);
+                    }
+                    if(moment(to,'H:mm').isAfter(moment('12:00','H:mm'))){
+                        $scope.listServicesPosticipo.push(temp);
+                    }
+                }
+                }
+            }
+        }
+        if($scope.listServicesAnticipo.length>0){
+            $scope.listServicesAnticipo.sort(sortByTimeAscOut);
+            fromtime=$scope.listServicesAnticipo[0]['out_val'];
+        }
+        if($scope.listServicesPosticipo.length>0){
+            $scope.listServicesPosticipo.sort(sortByTimeAscOut);
+            totime=$scope.listServicesPosticipo[$scope.listServicesPosticipo.length-1]['out_val'];
+        }
+        
+    };
+    $scope.getListServices();
     
     week_planService.setGlobalParam($scope.appId,$scope.schoolId);
     var jsonTest=[];
@@ -96,11 +156,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                         }
                     }
                     else{
-                        var jsonTest=[{'name':'monday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':''},
-                        {'name':'tuesday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':''},
-                        {'name':'wednesday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':''},
-                        {'name':'thursday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':''},
-                        {'name':'friday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':''}];
+                        var jsonTest=[{'name':'monday_reduced','entrata':fromtime,'uscita':totime,'bus':false,'delega_name':''},
+                        {'name':'tuesday_reduced','entrata':fromtime,'uscita':totime,'bus':false,'delega_name':''},
+                        {'name':'wednesday_reduced','entrata':fromtime,'uscita':totime,'bus':false,'delega_name':''},
+                        {'name':'thursday_reduced','entrata':fromtime,'uscita':totime,'bus':false,'delega_name':''},
+                        {'name':'friday_reduced','entrata':fromtime,'uscita':totime,'bus':false,'delega_name':''}];
                         jsonTest=$scope.formatInfo(jsonTest);
                         $scope.days=jsonTest;
                         for(var i=0;i<=4;i++){
@@ -236,6 +296,28 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         return moment($scope.modifyBefore).isBefore(moment());
       }
 
+      $scope.gotoChat=function() {
+        $state.go('app.messages');
+        $scope.TempPrevent.close();
+      }
+
+      $scope.callSchool = function () {
+        if(profileService.getSchoolProfile().contacts==null || profileService.getSchoolProfile().contacts==undefined ){
+          alert($filter('translate')('missing_phone'));
+          return;
+        }
+        if(profileService.getSchoolProfile().contacts.telephone.length==0 ){
+          alert($filter('translate')('missing_phone'));
+          return;
+        }
+        var num = profileService.getSchoolProfile().contacts.telephone[0];
+        num = num.replace(/\D/g, '');
+        window.open('tel:' + num, '_system');
+        if ($scope.TempPrevent) {
+          $scope.TempPrevent.close();
+        }
+      }
+
     $scope.gotoEditDate = function(day) {
         var selected = moment($scope.currentDate.clone().weekday(day).week($scope.currWeek).year($scope.currYear).format('M D YYYY'));
         var actualDate=moment(moment().format('M D YYYY'));
@@ -243,10 +325,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         var usc =dayData['uscita'];
         var temp=moment('17:00','HH:mm');// it should be 09:10
         if(moment(temp).isBefore(moment()) && day==$scope.currDay && selected.isSame(actualDate)){
-            var myPopup = $ionicPopup.show({
+            $scope.TempPrevent = $ionicPopup.show({
                 title: $filter('translate')('retire_popup_toolate_title'),
                 cssClass: 'expired-popup',
-                template: $filter('translate')('retire_popup_toolate_text') + " " + moment(temp).format('HH:mm') + "<div class\"row\"><a href=\"tel:" + profileService.getSchoolProfile().contacts.telephone[0] + "\" class=\"button button-expired-call\">" + $filter('translate')('home_contatta') + "</a></div>",
+                scope:$scope,
+                template: $filter('translate')('retire_popup_toolate_text') + " " + moment(temp).format('HH:mm') + "<div class\"row\"><span ng-click=\"callSchool();\"  class=\"button button-expired-call\">" + $filter('translate')('home_contatta') + "</span></div>"
+                + "<div class\"row\"><span ng-click=\"gotoChat();\"  class=\"button button-expired-call\">" + $filter('translate')('send_msg') + "</span></div>",
                 buttons: [
                   {
                     text: $filter('translate')('retire_popup_absent_close'),
@@ -301,11 +385,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                         }
                     }
                     else{
-                        var jsonTest=[{'name':'monday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':''},
-                        {'name':'tuesday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':''},
-                        {'name':'wednesday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':''},
-                        {'name':'thursday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':''},
-                        {'name':'friday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':''}];
+                        var jsonTest=[{'name':'monday_reduced','entrata':fromtime,'uscita':totime,'bus':false,'delega_name':''},
+                        {'name':'tuesday_reduced','entrata':fromtime,'uscita':totime,'bus':false,'delega_name':''},
+                        {'name':'wednesday_reduced','entrata':fromtime,'uscita':totime,'bus':false,'delega_name':''},
+                        {'name':'thursday_reduced','entrata':fromtime,'uscita':totime,'bus':false,'delega_name':''},
+                        {'name':'friday_reduced','entrata':fromtime,'uscita':totime,'bus':false,'delega_name':''}];
                         jsonTest=$scope.formatInfo(jsonTest);
                         $scope.days=jsonTest;
                         for(var i=0;i<=4;i++){
@@ -360,34 +444,102 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.kidId=profileService.getBabyProfile().kidId;
     $scope.appId=profileService.getBabyProfile().appId;
     $scope.schoolId=profileService.getBabyProfile().schoolId;
+    $scope.listServicesAnticipo=[];
+    $scope.listServicesPosticipo=[];
+    $scope.listServices=[];
+    // provide default config for entry/exit if the school doesn't have services/fascie
     $scope.getSchoolProfileNormalConfig=$filter('getSchoolNormalService')(profileService.getSchoolProfile().services);
+    console.log($scope.getSchoolProfileNormalConfig);
     var fromtime=$scope.getSchoolProfileNormalConfig['fromTime'];
-    //fromtime=moment(fromtime).format('H:m');
     var totime=$scope.getSchoolProfileNormalConfig['toTime'];
-    //totime=moment(totime).format('H:m');
     if(fromtime=='' && totime==''){
         alert($filter('translate')('missing_school_config'));
         fromtime=moment('7:30','H:mm');
         totime=moment('13:30','H:mm');
+        fromtimeFormatted=moment(fromtime).format('H:mm');
+        totimeFormatted=moment(totime).format('H:mm');
+    }
+    $scope.babyProfile=profileService.getBabyProfile();
+    $scope.busEnabled=false;
+    $scope.busDefaultStop='';
+    if ($scope.babyProfile.services && $scope.babyProfile.services.bus) {
+        $scope.busEnabled = $scope.babyProfile.services.bus.enabled;
+        if($scope.babyProfile.services.bus.stops && $scope.babyProfile.services.bus.stops.length>0){
+            $scope.busDefaultStop=$scope.babyProfile.services.bus.stops[0].stopId;
+        }
     }
 
-    if(profileService.getBabyProfile().services!==null && profileService.getBabyProfile().services.timeSlotServices!==null){
-    $scope.listServicesDb=profileService.getBabyProfile().services.timeSlotServices;
-    for(var i=0;i<$scope.listServicesDb.length;i++){
-            var type=$scope.listServicesDb[i].name;
-            var enabled=$scope.listServicesDb[i].enabled;
-            if(enabled && type=='Anticipo'){
-               var tempServ=$scope.listServicesDb[i].timeSlots;
-               fromtime=tempServ[0]['fromTime'];
-               //fromtime=moment(fromtime).format('H:m');
-            }
-            if(enabled && type=='Posticipo'){
+    $scope.getListServices = function() {
+        var fr='',fr2='';
+        var to='',to2='';
+        var serviz=[];
+        if(profileService.getBabyProfile().services!==null && profileService.getBabyProfile().services.timeSlotServices!==null){
+            var allFascieNorm=$filter('getSchoolNormalSlots')(profileService.getSchoolProfile().services);
+            $scope.listServicesDb=profileService.getBabyProfile().services.timeSlotServices;
+            $scope.listServicesDb=$scope.listServicesDb.concat(allFascieNorm);
+            console.log($scope.listServicesDb);
+            for(var i=0;i<$scope.listServicesDb.length;i++){
+                var type=$scope.listServicesDb[i].name;
+                var enabled=$scope.listServicesDb[i].enabled;
+                var regular=$scope.listServicesDb[i].regular;
+                if((enabled || regular) && serviz.indexOf(type)===-1){
                 var tempServ=$scope.listServicesDb[i].timeSlots;
-                totime=tempServ[tempServ.length-1]['toTime'];
-                //totime=moment(totime).format('H:m');
+                for(var j=0;j<tempServ.length;j++){
+                    fr=moment(tempServ[j]['fromTime']).format('H:mm');
+                    to=moment(tempServ[j]['toTime']).format('H:mm');
+                    var temp={'value':tempServ[j]['name'],'label':tempServ[j]['name'],
+                    'entry':fr,'entry_val':moment(fr,'H:mm'),'out':to,'out_val':moment(to,'H:mm'),
+                    'type':type};
+                    $scope.listServices.push(temp);
+                    if(moment(to,'H:mm').isBefore(moment('12:00','H:mm'))){
+                        $scope.listServicesAnticipo.push(temp);
+                    }
+                    if(moment(to,'H:mm').isAfter(moment('12:00','H:mm'))){
+                        $scope.listServicesPosticipo.push(temp);
+                    }
+                }
+                serviz.push(type);
+                }
             }
-    }
-    }
+        }
+        else{
+            var allFascieNorm=$filter('getSchoolNormalSlots')(profileService.getSchoolProfile().services);
+            $scope.listServicesDb=allFascieNorm;
+            console.log($scope.listServicesDb);
+            for(var i=0;i<$scope.listServicesDb.length;i++){
+                var type=$scope.listServicesDb[i].name;
+                var enabled=$scope.listServicesDb[i].enabled;
+                var regular=$scope.listServicesDb[i].regular;
+                if(enabled || regular){
+                var tempServ=$scope.listServicesDb[i].timeSlots;
+                for(var j=0;j<tempServ.length;j++){
+                    fr=moment(tempServ[j]['fromTime']).format('H:mm');
+                    to=moment(tempServ[j]['toTime']).format('H:mm');
+                    var temp={'value':tempServ[j]['name'],'label':tempServ[j]['name'],
+                    'entry':fr,'entry_val':moment(fr,'H:mm'),'out':to,'out_val':moment(to,'H:mm'),
+                    'type':type};
+                    $scope.listServices.push(temp);
+                    if(moment(to,'H:mm').isBefore(moment('12:00','H:mm'))){
+                        $scope.listServicesAnticipo.push(temp);
+                    }
+                    if(moment(to,'H:mm').isAfter(moment('12:00','H:mm'))){
+                        $scope.listServicesPosticipo.push(temp);
+                    }
+                }
+                }
+            }
+        }
+        if($scope.listServicesAnticipo.length>0){
+            $scope.listServicesAnticipo.sort(sortByTimeAscOut);
+            fromtime=$scope.listServicesAnticipo[0]['out_val'];
+        }
+        if($scope.listServicesPosticipo.length>0){
+            $scope.listServicesPosticipo.sort(sortByTimeAscOut);
+            totime=$scope.listServicesPosticipo[$scope.listServicesPosticipo.length-1]['out_val'];
+        }
+        
+    };
+    $scope.getListServices();
     week_planService.setGlobalParam($scope.appId,$scope.schoolId);
     $scope.editView=false;
     $scope.ritiraOptions=[];
@@ -451,11 +603,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 }
             }
             else{
-                var jsonTest=[{'name':'monday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':''},
-                {'name':'tuesday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':''},
-                {'name':'wednesday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':''},
-                {'name':'thursday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':''},
-                {'name':'friday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':''}];
+                var jsonTest=[{'name':'monday_reduced','entrata':fromtime,'uscita':totime,'bus':false,'delega_name':''},
+                {'name':'tuesday_reduced','entrata':fromtime,'uscita':totime,'bus':false,'delega_name':''},
+                {'name':'wednesday_reduced','entrata':fromtime,'uscita':totime,'bus':false,'delega_name':''},
+                {'name':'thursday_reduced','entrata':fromtime,'uscita':totime,'bus':false,'delega_name':''},
+                {'name':'friday_reduced','entrata':fromtime,'uscita':totime,'bus':false,'delega_name':''}];
                 jsonTest=$scope.formatInfo(jsonTest);
                 $scope.days=jsonTest;
                 for(var i=0;i<=4;i++){
@@ -560,6 +712,19 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
 
     $scope.restore = function() {
+        var totimeOrig=totime;
+        //bus precedence for exit time by default
+        if($scope.busEnabled){
+            $scope.getSchoolNormalFascie=$filter('getSchoolNormalFascie')(profileService.getSchoolProfile().services);
+            $scope.getSchoolNormalFascie.sort(sortByTimeAscOut);
+            var length1 =$scope.getSchoolNormalFascie.length;
+            if(length1>0) totimeOrig=$scope.getSchoolNormalFascie[length1-1]['out_val'];
+            if(totimeOrig=='') totimeOrig=moment('14:00','H:mm');
+            totimeFormatted=moment(totimeOrig).format('H:mm');
+            totimeOrig=moment(totimeOrig,'H:mm');
+            $scope.babyProfile.services.bus.stops
+        }
+
         var confirmPopup = $ionicPopup.confirm({
             title: $filter('translate')('Avviso'),
             template: 'Questa operazione sovrascriverà i dati attuali. Si vuole procedere ugualmente?',
@@ -574,7 +739,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
               text: 'OK',
               type: 'button_save',
               onTap: function(e) {
-                $scope.getWeekPlanDB();
+                var jsonTest=[{'name':'monday_reduced','entrata':fromtime,'uscita':totimeOrig,'bus':$scope.busEnabled,'fermata':$scope.busDefaultStop,'delega_name':''},
+                {'name':'tuesday_reduced','entrata':fromtime,'uscita':totimeOrig,'bus':$scope.busEnabled,'fermata':$scope.busDefaultStop,'delega_name':''},
+                {'name':'wednesday_reduced','entrata':fromtime,'uscita':totimeOrig,'bus':$scope.busEnabled,'fermata':$scope.busDefaultStop,'delega_name':''},
+                {'name':'thursday_reduced','entrata':fromtime,'uscita':totimeOrig,'bus':$scope.busEnabled,'fermata':$scope.busDefaultStop,'delega_name':''},
+                {'name':'friday_reduced','entrata':fromtime,'uscita':totimeOrig,'bus':$scope.busEnabled,'fermata':$scope.busDefaultStop,'delega_name':''}];
+                jsonTest=$scope.formatInfo(jsonTest);
+                $scope.days=jsonTest;
+                for(var i=0;i<=4;i++){
+                   week_planService.setDayDataDefault(i,$scope.days[i],'');
+                }
               }              
             }]
         });
@@ -749,59 +923,86 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         return results;
       };
 
-    $scope.listServicesAnticipo=[];
-    $scope.listServicesPosticipo=[];
-    $scope.getListServices = function(day) {
-
-        $scope.getSchoolProfileNormalConfig=$filter('getSchoolNormalService')(profileService.getSchoolProfile().services);
-        console.log($scope.getSchoolProfileNormalConfig);
-        var fromtime=$scope.getSchoolProfileNormalConfig['fromTime'];
-        var totime=$scope.getSchoolProfileNormalConfig['toTime'];
-        if(fromtime=='' && totime==''){
-            fromtime=moment('7:30','H:mm');
-            totime=moment('13:30','H:mm');
-        }
-        fromtimeFormatted=moment(fromtime).format('H:mm');
-        totimeFormatted=moment(totime).format('H:mm');
-        var temp={'value':'Normale','label':'Normale',
-        'entry':fromtimeFormatted,'entry_val':moment(fromtimeFormatted,'H:mm'),'out':totimeFormatted,'out_val':moment(totimeFormatted,'H:mm'),
-        'type':'Normale'};
-        $scope.listServices.push(temp);
-        $scope.listServicesAnticipo.push(temp);
-        $scope.listServicesPosticipo.push(temp);
-        var fr='',fr2='';
-        var to='',to2='';
-        if(profileService.getBabyProfile().services!==null && profileService.getBabyProfile().services.timeSlotServices!==null){
-            $scope.listServicesDb=profileService.getBabyProfile().services.timeSlotServices;
-            for(var i=0;i<$scope.listServicesDb.length;i++){
-                var type=$scope.listServicesDb[i].name;
-                var enabled=$scope.listServicesDb[i].enabled;
-                if(enabled){
-                var tempServ=$scope.listServicesDb[i].timeSlots;
-                for(var j=0;j<tempServ.length;j++){
-                    fr=moment(tempServ[j]['fromTime']).format('H:mm');
-                    to=moment(tempServ[j]['toTime']).format('H:mm');
-                    var temp={'value':tempServ[j]['name'],'label':tempServ[j]['name'],
-                    'entry':fr,'entry_val':moment(fr,'H:mm'),'out':to,'out_val':moment(fr,'H:mm'),
-                    'type':type};
-                    $scope.listServices.push(temp);
-                    if(moment(to,'H:mm').isBefore(moment('12:00','H:mm'))){
-                        $scope.listServicesAnticipo.push(temp);
-                    }
-                    if(moment(to,'H:mm').isAfter(moment('12:00','H:mm'))){
-                        $scope.listServicesPosticipo.push(temp);
-                    }
-                    //console.log(to);console.log(totimeFormatted);
-                    //console.log(moment(to,'H:mm').isAfter(moment(totimeFormatted,'H:mm')));
-                    //console.log($scope.listServicesPosticipo);
-                }
-                }
-            }
-            console.log($scope.listServicesAnticipo);
-            $scope.listServicesAnticipo.sort(sortByTimeAscOut);
-            $scope.listServicesPosticipo.sort(sortByTimeAscOut);
-        }
-    };
+      $scope.listServicesAnticipo=[];
+      $scope.listServicesPosticipo=[];
+  
+      $scope.getListServices = function(day) {
+          // provide default config for entry/exit if the school doesn't have services/fascie
+          $scope.getSchoolProfileNormalConfig=$filter('getSchoolNormalService')(profileService.getSchoolProfile().services);
+          console.log($scope.getSchoolProfileNormalConfig);
+          var fromtime=$scope.getSchoolProfileNormalConfig['fromTime'];
+          var totime=$scope.getSchoolProfileNormalConfig['toTime'];
+          if(fromtime=='' && totime==''){
+              fromtime=moment('7:30','H:mm');
+              totime=moment('13:30','H:mm');
+              fromtimeFormatted=moment(fromtime).format('H:mm');
+              totimeFormatted=moment(totime).format('H:mm');
+          }
+  
+          var fr='',fr2='';
+          var to='',to2='';
+          var serviz=[];
+          if(profileService.getBabyProfile().services!==null && profileService.getBabyProfile().services.timeSlotServices!==null){
+              var allFascieNorm=$filter('getSchoolNormalSlots')(profileService.getSchoolProfile().services);
+              $scope.listServicesDb=profileService.getBabyProfile().services.timeSlotServices;
+              $scope.listServicesDb=$scope.listServicesDb.concat(allFascieNorm);
+              console.log($scope.listServicesDb);
+              for(var i=0;i<$scope.listServicesDb.length;i++){
+                  var type=$scope.listServicesDb[i].name;
+                  var enabled=$scope.listServicesDb[i].enabled;
+                  var regular=$scope.listServicesDb[i].regular;
+                  if((enabled || regular) && serviz.indexOf(type)===-1){
+                  var tempServ=$scope.listServicesDb[i].timeSlots;
+                  for(var j=0;j<tempServ.length;j++){
+                      fr=moment(tempServ[j]['fromTime']).format('H:mm');
+                      to=moment(tempServ[j]['toTime']).format('H:mm');
+                      var temp={'value':tempServ[j]['name'],'label':tempServ[j]['name'],
+                      'entry':fr,'entry_val':moment(fr,'H:mm'),'out':to,'out_val':moment(to,'H:mm'),
+                      'type':type};
+                      $scope.listServices.push(temp);
+                      if(moment(to,'H:mm').isBefore(moment('12:00','H:mm'))){
+                          $scope.listServicesAnticipo.push(temp);
+                      }
+                      if(moment(to,'H:mm').isAfter(moment('12:00','H:mm'))){
+                          $scope.listServicesPosticipo.push(temp);
+                      }
+                  }
+                  serviz.push(type);
+                  }
+              }
+              $scope.listServicesAnticipo.sort(sortByTimeAscOut);
+              $scope.listServicesPosticipo.sort(sortByTimeAscOut);
+          }
+          else{
+              var allFascieNorm=$filter('getSchoolNormalSlots')(profileService.getSchoolProfile().services);
+              $scope.listServicesDb=allFascieNorm;
+              console.log($scope.listServicesDb);
+              for(var i=0;i<$scope.listServicesDb.length;i++){
+                  var type=$scope.listServicesDb[i].name;
+                  var enabled=$scope.listServicesDb[i].enabled;
+                  var regular=$scope.listServicesDb[i].regular;
+                  if(enabled || regular){
+                  var tempServ=$scope.listServicesDb[i].timeSlots;
+                  for(var j=0;j<tempServ.length;j++){
+                      fr=moment(tempServ[j]['fromTime']).format('H:mm');
+                      to=moment(tempServ[j]['toTime']).format('H:mm');
+                      var temp={'value':tempServ[j]['name'],'label':tempServ[j]['name'],
+                      'entry':fr,'entry_val':moment(fr,'H:mm'),'out':to,'out_val':moment(to,'H:mm'),
+                      'type':type};
+                      $scope.listServices.push(temp);
+                      if(moment(to,'H:mm').isBefore(moment('12:00','H:mm'))){
+                          $scope.listServicesAnticipo.push(temp);
+                      }
+                      if(moment(to,'H:mm').isAfter(moment('12:00','H:mm'))){
+                          $scope.listServicesPosticipo.push(temp);
+                      }
+                  }
+                  }
+              }
+              $scope.listServicesAnticipo.sort(sortByTimeAscOut);
+              $scope.listServicesPosticipo.sort(sortByTimeAscOut);
+          }
+      };
     $scope.getListServices();
     
     $scope.setEntry = function(item) {
@@ -1140,8 +1341,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
     $scope.listServicesAnticipo=[];
     $scope.listServicesPosticipo=[];
-    $scope.getListServices = function(day) {
 
+    $scope.getListServices = function(day) {
+        // provide default config for entry/exit if the school doesn't have services/fascie
         $scope.getSchoolProfileNormalConfig=$filter('getSchoolNormalService')(profileService.getSchoolProfile().services);
         console.log($scope.getSchoolProfileNormalConfig);
         var fromtime=$scope.getSchoolProfileNormalConfig['fromTime'];
@@ -1149,29 +1351,29 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         if(fromtime=='' && totime==''){
             fromtime=moment('7:30','H:mm');
             totime=moment('13:30','H:mm');
+            fromtimeFormatted=moment(fromtime).format('H:mm');
+            totimeFormatted=moment(totime).format('H:mm');
         }
-        fromtimeFormatted=moment(fromtime).format('H:mm');
-        totimeFormatted=moment(totime).format('H:mm');
-        var temp={'value':'Normale','label':'Normale',
-        'entry':fromtimeFormatted,'entry_val':moment(fromtimeFormatted,'H:mm'),'out':totimeFormatted,'out_val':moment(totimeFormatted,'H:mm'),
-        'type':'Normale'};
-        $scope.listServices.push(temp);
-        $scope.listServicesAnticipo.push(temp);
-        $scope.listServicesPosticipo.push(temp);
+
         var fr='',fr2='';
         var to='',to2='';
+        var serviz=[];
         if(profileService.getBabyProfile().services!==null && profileService.getBabyProfile().services.timeSlotServices!==null){
+            var allFascieNorm=$filter('getSchoolNormalSlots')(profileService.getSchoolProfile().services);
             $scope.listServicesDb=profileService.getBabyProfile().services.timeSlotServices;
+            $scope.listServicesDb=$scope.listServicesDb.concat(allFascieNorm);
+            console.log($scope.listServicesDb);
             for(var i=0;i<$scope.listServicesDb.length;i++){
                 var type=$scope.listServicesDb[i].name;
                 var enabled=$scope.listServicesDb[i].enabled;
-                if(enabled){
+                var regular=$scope.listServicesDb[i].regular;
+                if((enabled || regular) && serviz.indexOf(type)===-1){
                 var tempServ=$scope.listServicesDb[i].timeSlots;
                 for(var j=0;j<tempServ.length;j++){
                     fr=moment(tempServ[j]['fromTime']).format('H:mm');
                     to=moment(tempServ[j]['toTime']).format('H:mm');
                     var temp={'value':tempServ[j]['name'],'label':tempServ[j]['name'],
-                    'entry':fr,'entry_val':moment(fr,'H:mm'),'out':to,'out_val':moment(fr,'H:mm'),
+                    'entry':fr,'entry_val':moment(fr,'H:mm'),'out':to,'out_val':moment(to,'H:mm'),
                     'type':type};
                     $scope.listServices.push(temp);
                     if(moment(to,'H:mm').isBefore(moment('12:00','H:mm'))){
@@ -1180,13 +1382,39 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                     if(moment(to,'H:mm').isAfter(moment('12:00','H:mm'))){
                         $scope.listServicesPosticipo.push(temp);
                     }
-                    //console.log(to);console.log(totimeFormatted);
-                    //console.log(moment(to,'H:mm').isAfter(moment(totimeFormatted,'H:mm')));
-                    //console.log($scope.listServicesPosticipo);
+                }
+                serviz.push(type);
+                }
+            }
+            $scope.listServicesAnticipo.sort(sortByTimeAscOut);
+            $scope.listServicesPosticipo.sort(sortByTimeAscOut);
+        }
+        else{
+            var allFascieNorm=$filter('getSchoolNormalSlots')(profileService.getSchoolProfile().services);
+            $scope.listServicesDb=allFascieNorm;
+            console.log($scope.listServicesDb);
+            for(var i=0;i<$scope.listServicesDb.length;i++){
+                var type=$scope.listServicesDb[i].name;
+                var enabled=$scope.listServicesDb[i].enabled;
+                var regular=$scope.listServicesDb[i].regular;
+                if(enabled || regular){
+                var tempServ=$scope.listServicesDb[i].timeSlots;
+                for(var j=0;j<tempServ.length;j++){
+                    fr=moment(tempServ[j]['fromTime']).format('H:mm');
+                    to=moment(tempServ[j]['toTime']).format('H:mm');
+                    var temp={'value':tempServ[j]['name'],'label':tempServ[j]['name'],
+                    'entry':fr,'entry_val':moment(fr,'H:mm'),'out':to,'out_val':moment(to,'H:mm'),
+                    'type':type};
+                    $scope.listServices.push(temp);
+                    if(moment(to,'H:mm').isBefore(moment('12:00','H:mm'))){
+                        $scope.listServicesAnticipo.push(temp);
+                    }
+                    if(moment(to,'H:mm').isAfter(moment('12:00','H:mm'))){
+                        $scope.listServicesPosticipo.push(temp);
+                    }
                 }
                 }
             }
-            console.log($scope.listServicesAnticipo);
             $scope.listServicesAnticipo.sort(sortByTimeAscOut);
             $scope.listServicesPosticipo.sort(sortByTimeAscOut);
         }
@@ -1444,7 +1672,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         id: idNotification++,
         title: $filter('translate')('notification_day_summary_title'),
         text: $filter('translate')('notification_day_summary_text'),
-        icon: 'res://notification.png',
+        icon: 'res://icon.png',
         autoClear: false,
         every:  1 * 60 * 24, //1 day
         at :new Date(),
@@ -1456,7 +1684,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         id: idNotification++,
         title: $filter('translate')('notification_day_summary_title'),
         text: $filter('translate')('notification_week_text'),
-        icon: 'res://notification.png',
+        icon: 'res://icon.png',
         //autoCancel: false,
         autoClear: false,
         every: 1 * 60 * 24 * 7,  // 1 week.
@@ -1469,7 +1697,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         id: idNotification++,
         title: $filter('translate')('notification_day_summary_title'),
         text: $filter('translate')('notification_ritiro_text')+" "+$scope.kidFirstName+" "+$scope.kidLastName,
-        icon: 'res://notification.png',
+        icon: 'res://icon.png',
         //autoCancel: false,
         autoClear: false,
         every:  1 * 60 * 24, //1 day

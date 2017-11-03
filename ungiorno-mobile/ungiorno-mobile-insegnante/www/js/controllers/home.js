@@ -574,6 +574,10 @@ $scope.cnt=0;
     //    });
     //  };
   $scope.detailOrCommunication = function (child) {
+    if (!child.partecipateToSperimentation) {
+      Toast.show($filter('translate')('child_not_partecipate'), 'short', 'bottom');
+      return;
+    }  
     //$scope.checkConnection().then(function () {
 
       //se modalita' communication, modifico lista consegne e poi confermo

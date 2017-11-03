@@ -175,6 +175,10 @@ public class ConsoleWebController {
             KidProfile removed = kidProfiles.remove(profileIndex);
             // maintain images if set server side
             kid.setImage(removed.getImage());
+            // maintain groups and section, they are not managed by kid update
+            kid.setSection(selectedKidProfile.getSection());
+            kid.setGroups(selectedKidProfile.getGroups());
+            
             kidProfiles.add(profileIndex, kid);
         }
 

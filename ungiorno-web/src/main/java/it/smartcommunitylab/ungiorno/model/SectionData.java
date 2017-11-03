@@ -64,7 +64,7 @@ public class SectionData extends SchoolObject {
 
         private String personId;
         private String personName;
-        private boolean personException, stopException;
+        private boolean personException, stopException, partecipateToSperimentation;
         private String note;
         private String stopId;
         private String absenceType;
@@ -74,7 +74,15 @@ public class SectionData extends SchoolObject {
 
         private boolean active = true;
 
-        public String getKidId() {
+        public boolean isPartecipateToSperimentation() {
+			return partecipateToSperimentation;
+		}
+
+		public void setPartecipateToSperimentation(boolean partecipateToSperimentation) {
+			this.partecipateToSperimentation = partecipateToSperimentation;
+		}
+
+		public String getKidId() {
             return kidId;
         }
 

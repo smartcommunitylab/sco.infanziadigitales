@@ -201,7 +201,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
   });
   $scope.sendMail = function () {
     $scope.checkConnection().then(function () {
-        window.open('mailto:infdig-help@smartcommunitylab.it', '_system');
+        window.open('mailto:ugas-help@smartcommunitylab.it', '_system');
         return false;
       },
       function (err) {

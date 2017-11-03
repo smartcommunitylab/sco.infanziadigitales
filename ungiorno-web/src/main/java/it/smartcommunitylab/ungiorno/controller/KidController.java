@@ -440,7 +440,7 @@ public class KidController {
          * HttpEntity<byte[]>(new byte[0], headers); }
          */
         KidProfile profile = storage.getKidProfile(appId, schoolId, kidId);
-        String name = profile.getImage();
+        String name = profile.isPartecipateToSperimentation() ? profile.getImage() : "placeholder_child.png";
         String path = imageDownloadDir + "/" + name;
         FileInputStream in = null;
         try {

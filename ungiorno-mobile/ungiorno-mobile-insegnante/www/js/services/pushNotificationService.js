@@ -191,7 +191,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.pushNot
     pushNotificationService.register = function (schoolId) {
         console.log("registration");
         var schoolIdArray = [];
-        schoolIdArray.push(Config.getMessagingAppId() + ".teacher." + schoolId);
+
+        var platform = '';
+        if (ionic.Platform.isIOS()) platform = '.ios';
+        else if (ionic.Platform.isAndroid()) platform = '.android';
+    
+        schoolIdArray.push(Config.getMessagingAppId() + ".teacher." + schoolId + platform);
 
         //        for (var i = 0; i < schooldIds.length; i++) {
         //            arrayOfSchools.push(Config.getMessagingAppId() + ".comms." + schooldIds[i]);

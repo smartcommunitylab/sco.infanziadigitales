@@ -20,6 +20,7 @@ import java.util.List;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.joda.time.DateTime;
+import org.springframework.util.StringUtils;
 
 import it.smartcommunitylab.ungiorno.diary.model.DiaryTeacher;
 
@@ -171,7 +172,8 @@ public class KidProfile extends SchoolObject {
     }
 
     public String getFullName() {
-        return fullName;
+    	if (StringUtils.hasText(fullName)) return fullName;
+        return firstName + " "+lastName;
     }
 
     public void setFullName(String fullName) {

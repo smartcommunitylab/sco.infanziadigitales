@@ -27,6 +27,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -88,6 +89,7 @@ import it.smartcommunitylab.ungiorno.model.SchoolProfile.BusProfile;
 import it.smartcommunitylab.ungiorno.model.SchoolProfile.SectionProfile;
 import it.smartcommunitylab.ungiorno.model.SectionData;
 import it.smartcommunitylab.ungiorno.model.SectionData.ServiceProfile;
+import it.smartcommunitylab.ungiorno.model.SectionDef;
 import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.model.TeacherCalendar;
 import it.smartcommunitylab.ungiorno.model.TimeSlotSchoolService;
@@ -896,7 +898,7 @@ public class RepositoryManager implements RepositoryService {
         Long today = new Date().getTime();
         Query q = schoolQuery(appId, schoolId);
         q.addCriteria(new Criteria().orOperator(new Criteria("scadenzaDate").gte(today),
-                new Criteria("scadenzaDate").is(null), new Criteria("scadenzaDate").is(0)));
+                new Criteria("scadenzaDate").is(null)));
         return template.find(q, Communication.class);
     }
 
@@ -908,8 +910,25 @@ public class RepositoryManager implements RepositoryService {
      */
     @Override
     public List<Communication> getKidCommunications(String appId, String schoolId, String kidId) {
+        Long today = new Date().getTime();
+        
+        KidProfile profile = getKidProfile(appId, schoolId, kidId);
+        if (profile == null) return Collections.emptyList();
+        
+        List<String> groups = new LinkedList<>();
+        if (profile.getSection() != null) groups.add(profile.getSection().getSectionId());
+        if (profile.getGroups() != null) 
+        	for (SectionDef s: profile.getGroups())
+        		groups.add(s.getSectionId());
+        
         Query q = schoolQuery(appId, schoolId);
-        q.addCriteria(new Criteria("children").is(kidId));
+//        q.addCriteria(new Criteria("children").is(kidId));
+        q.addCriteria(new Criteria().orOperator(
+        	Criteria.where("scadenzaDate").is(null).and("groupId").is(null),
+        	Criteria.where("scadenzaDate").gte(today).and("groupId").is(null),
+        	Criteria.where("scadenzaDate").is(null).and("groupId").in(groups),
+        	Criteria.where("scadenzaDate").gte(today).and("groupId").in(groups)
+        ));
         return template.find(q, Communication.class);
     }
 

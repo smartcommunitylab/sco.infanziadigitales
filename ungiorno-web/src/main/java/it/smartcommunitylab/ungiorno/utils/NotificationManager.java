@@ -134,8 +134,9 @@ public class NotificationManager {
                     }
                 }
             }
-            communicator.sendAppNotification(n, appName, parentIds, permissions.getAppToken());
-
+            if (parentIds.size() > 0) {
+                communicator.sendAppNotification(n, appName, parentIds, permissions.getAppToken());            	
+            }
         } else {
             communicator.sendAppNotification(n, appName, Collections.<String>emptyList(),
                     permissions.getAppToken());

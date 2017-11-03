@@ -32,6 +32,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.getListServices = function() {
         var fr='',fr2='';
         var to='',to2='';
+        var serviz=[];
         if(profileService.getBabyProfile().services!==null && profileService.getBabyProfile().services.timeSlotServices!==null){
             var allFascieNorm=$filter('getSchoolNormalSlots')(profileService.getSchoolProfile().services);
             $scope.listServicesDb=profileService.getBabyProfile().services.timeSlotServices;
@@ -41,7 +42,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 var type=$scope.listServicesDb[i].name;
                 var enabled=$scope.listServicesDb[i].enabled;
                 var regular=$scope.listServicesDb[i].regular;
-                if(enabled || regular){
+                if((enabled || regular) && serviz.indexOf(type)===-1){
                 var tempServ=$scope.listServicesDb[i].timeSlots;
                 for(var j=0;j<tempServ.length;j++){
                     fr=moment(tempServ[j]['fromTime']).format('H:mm');
@@ -57,6 +58,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                         $scope.listServicesPosticipo.push(temp);
                     }
                 }
+                serviz.push(type);
                 }
             }
         }
@@ -154,11 +156,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                         }
                     }
                     else{
-                        var jsonTest=[{'name':'monday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':''},
-                        {'name':'tuesday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':''},
-                        {'name':'wednesday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':''},
-                        {'name':'thursday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':''},
-                        {'name':'friday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':''}];
+                        var jsonTest=[{'name':'monday_reduced','entrata':fromtime,'uscita':totime,'bus':false,'delega_name':''},
+                        {'name':'tuesday_reduced','entrata':fromtime,'uscita':totime,'bus':false,'delega_name':''},
+                        {'name':'wednesday_reduced','entrata':fromtime,'uscita':totime,'bus':false,'delega_name':''},
+                        {'name':'thursday_reduced','entrata':fromtime,'uscita':totime,'bus':false,'delega_name':''},
+                        {'name':'friday_reduced','entrata':fromtime,'uscita':totime,'bus':false,'delega_name':''}];
                         jsonTest=$scope.formatInfo(jsonTest);
                         $scope.days=jsonTest;
                         for(var i=0;i<=4;i++){
@@ -359,11 +361,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                         }
                     }
                     else{
-                        var jsonTest=[{'name':'monday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':''},
-                        {'name':'tuesday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':''},
-                        {'name':'wednesday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':''},
-                        {'name':'thursday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':''},
-                        {'name':'friday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':''}];
+                        var jsonTest=[{'name':'monday_reduced','entrata':fromtime,'uscita':totime,'bus':false,'delega_name':''},
+                        {'name':'tuesday_reduced','entrata':fromtime,'uscita':totime,'bus':false,'delega_name':''},
+                        {'name':'wednesday_reduced','entrata':fromtime,'uscita':totime,'bus':false,'delega_name':''},
+                        {'name':'thursday_reduced','entrata':fromtime,'uscita':totime,'bus':false,'delega_name':''},
+                        {'name':'friday_reduced','entrata':fromtime,'uscita':totime,'bus':false,'delega_name':''}];
                         jsonTest=$scope.formatInfo(jsonTest);
                         $scope.days=jsonTest;
                         for(var i=0;i<=4;i++){
@@ -437,6 +439,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.getListServices = function() {
         var fr='',fr2='';
         var to='',to2='';
+        var serviz=[];
         if(profileService.getBabyProfile().services!==null && profileService.getBabyProfile().services.timeSlotServices!==null){
             var allFascieNorm=$filter('getSchoolNormalSlots')(profileService.getSchoolProfile().services);
             $scope.listServicesDb=profileService.getBabyProfile().services.timeSlotServices;
@@ -446,7 +449,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 var type=$scope.listServicesDb[i].name;
                 var enabled=$scope.listServicesDb[i].enabled;
                 var regular=$scope.listServicesDb[i].regular;
-                if(enabled || regular){
+                if((enabled || regular) && serviz.indexOf(type)===-1){
                 var tempServ=$scope.listServicesDb[i].timeSlots;
                 for(var j=0;j<tempServ.length;j++){
                     fr=moment(tempServ[j]['fromTime']).format('H:mm');
@@ -462,6 +465,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                         $scope.listServicesPosticipo.push(temp);
                     }
                 }
+                serviz.push(type);
                 }
             }
         }
@@ -566,11 +570,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 }
             }
             else{
-                var jsonTest=[{'name':'monday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':''},
-                {'name':'tuesday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':''},
-                {'name':'wednesday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':''},
-                {'name':'thursday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':''},
-                {'name':'friday_reduced','entrata':fromtime,'uscita':totime,'service_bus':true,'delega_name':''}];
+                var jsonTest=[{'name':'monday_reduced','entrata':fromtime,'uscita':totime,'bus':false,'delega_name':''},
+                {'name':'tuesday_reduced','entrata':fromtime,'uscita':totime,'bus':false,'delega_name':''},
+                {'name':'wednesday_reduced','entrata':fromtime,'uscita':totime,'bus':false,'delega_name':''},
+                {'name':'thursday_reduced','entrata':fromtime,'uscita':totime,'bus':false,'delega_name':''},
+                {'name':'friday_reduced','entrata':fromtime,'uscita':totime,'bus':false,'delega_name':''}];
                 jsonTest=$scope.formatInfo(jsonTest);
                 $scope.days=jsonTest;
                 for(var i=0;i<=4;i++){
@@ -689,7 +693,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
               text: 'OK',
               type: 'button_save',
               onTap: function(e) {
-                $scope.getWeekPlanDB();
+                var jsonTest=[{'name':'monday_reduced','entrata':fromtime,'uscita':totime,'bus':false,'delega_name':''},
+                {'name':'tuesday_reduced','entrata':fromtime,'uscita':totime,'bus':false,'delega_name':''},
+                {'name':'wednesday_reduced','entrata':fromtime,'uscita':totime,'bus':false,'delega_name':''},
+                {'name':'thursday_reduced','entrata':fromtime,'uscita':totime,'bus':false,'delega_name':''},
+                {'name':'friday_reduced','entrata':fromtime,'uscita':totime,'bus':false,'delega_name':''}];
+                jsonTest=$scope.formatInfo(jsonTest);
+                $scope.days=jsonTest;
+                for(var i=0;i<=4;i++){
+                   week_planService.setDayDataDefault(i,$scope.days[i],'');
+                }
               }              
             }]
         });
@@ -882,6 +895,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
   
           var fr='',fr2='';
           var to='',to2='';
+          var serviz=[];
           if(profileService.getBabyProfile().services!==null && profileService.getBabyProfile().services.timeSlotServices!==null){
               var allFascieNorm=$filter('getSchoolNormalSlots')(profileService.getSchoolProfile().services);
               $scope.listServicesDb=profileService.getBabyProfile().services.timeSlotServices;
@@ -891,7 +905,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                   var type=$scope.listServicesDb[i].name;
                   var enabled=$scope.listServicesDb[i].enabled;
                   var regular=$scope.listServicesDb[i].regular;
-                  if(enabled || regular){
+                  if((enabled || regular) && serviz.indexOf(type)===-1){
                   var tempServ=$scope.listServicesDb[i].timeSlots;
                   for(var j=0;j<tempServ.length;j++){
                       fr=moment(tempServ[j]['fromTime']).format('H:mm');
@@ -907,6 +921,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                           $scope.listServicesPosticipo.push(temp);
                       }
                   }
+                  serviz.push(type);
                   }
               }
               $scope.listServicesAnticipo.sort(sortByTimeAscOut);
@@ -1296,6 +1311,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
         var fr='',fr2='';
         var to='',to2='';
+        var serviz=[];
         if(profileService.getBabyProfile().services!==null && profileService.getBabyProfile().services.timeSlotServices!==null){
             var allFascieNorm=$filter('getSchoolNormalSlots')(profileService.getSchoolProfile().services);
             $scope.listServicesDb=profileService.getBabyProfile().services.timeSlotServices;
@@ -1305,7 +1321,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 var type=$scope.listServicesDb[i].name;
                 var enabled=$scope.listServicesDb[i].enabled;
                 var regular=$scope.listServicesDb[i].regular;
-                if(enabled || regular){
+                if((enabled || regular) && serviz.indexOf(type)===-1){
                 var tempServ=$scope.listServicesDb[i].timeSlots;
                 for(var j=0;j<tempServ.length;j++){
                     fr=moment(tempServ[j]['fromTime']).format('H:mm');
@@ -1321,6 +1337,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                         $scope.listServicesPosticipo.push(temp);
                     }
                 }
+                serviz.push(type);
                 }
             }
             $scope.listServicesAnticipo.sort(sortByTimeAscOut);

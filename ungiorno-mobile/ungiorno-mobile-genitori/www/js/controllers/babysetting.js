@@ -25,18 +25,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
   }
   
   for(var i=0;i<$scope.listServicesDb.length;i++){
-    var type=$scope.listServicesDb[i].name;
-    var enabled=$scope.listServicesDb[i].enabled;
-    $scope.babyServices.push({
-      text: type,
-      active: enabled
-    });
-       //var tempServ=$scope.listServicesDb[i].timeSlots;
-       //for(var j=0;j<tempServ.length;j++){
-       //    $scope.babyServices.push({
-       //     text: tempServ[j]['name'],
-       //     active: enabled
-       //   });
+      var type=$scope.listServicesDb[i].name;
+      var enabled=$scope.listServicesDb[i].enabled;
+      var regular=$scope.listServicesDb[i].regular;
+      if(!regular){
+        $scope.babyServices.push({
+          text: type,
+          active: enabled
+        });
+      }
     }
     $scope.listDelega=$scope.babyProfile.persons;
     var parInd=1;

@@ -300,6 +300,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.getListServices = function() {
       var fr='',fr2='';
       var to='',to2='';
+      var serviz=[];
       if(profileService.getBabyProfile().services!==null && profileService.getBabyProfile().services.timeSlotServices!==null){
           var allFascieNorm=$filter('getSchoolNormalSlots')(profileService.getSchoolProfile().services);
           $scope.listServicesDb=profileService.getBabyProfile().services.timeSlotServices;
@@ -309,7 +310,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
               var type=$scope.listServicesDb[i].name;
               var enabled=$scope.listServicesDb[i].enabled;
               var regular=$scope.listServicesDb[i].regular;
-              if(enabled || regular){
+              if((enabled || regular) && serviz.indexOf(type)===-1){
               var tempServ=$scope.listServicesDb[i].timeSlots;
               for(var j=0;j<tempServ.length;j++){
                   fr=moment(tempServ[j]['fromTime']).format('H:mm');
@@ -325,6 +326,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                       $scope.listServicesPosticipo.push(temp);
                   }
               }
+              serviz.push(type);
               }
           }
       }

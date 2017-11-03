@@ -24,7 +24,12 @@
         <div class="br_in" ng-if="briefInfo.bus">
             <i class="icon ion-android-bus iconStyleHome"></i>{{briefInfo.addressBus | translate}}</div>
         <div class="br_in">
-            <i class="icon ion-android-person iconStyleHome"></i>{{briefInfo.delegaName | translate}} <span ng-if="briefInfo.delegaType!='' && briefInfo.delegaType!='none' && briefInfo.delegaType!=null">({{briefInfo.delegaType | translate}})</span></div>
+            <i class="icon ion-android-person iconStyleHome"></i>
+            <span class="briefDelega">
+              {{briefInfo.delegaName | translate}} sdfsdfsdfsdfsdfsdfsdfdsfdsfsdfsdfsdfds
+              <span ng-if="briefInfo.delegaType!='' && briefInfo.delegaType!='none' && briefInfo.delegaType!=null">({{briefInfo.delegaType | translate}})</span>
+            </span>
+        </div>
       </div>
       <div class="brief_info" ng-if="briefInfo.absence && !weekend && !noConnection" ng-click="gotoEditDate();">
         <div class="currentDate"><i class="icon ion-android-calendar iconStyleHome1"></i> {{date | date:'EEEE, d MMMM yyyy' | capitalize}}</div>

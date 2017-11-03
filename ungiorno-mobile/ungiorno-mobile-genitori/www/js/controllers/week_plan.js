@@ -18,7 +18,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.listServices=[];
     // provide default config for entry/exit if the school doesn't have services/fascie
     $scope.getSchoolProfileNormalConfig=$filter('getSchoolNormalService')(profileService.getSchoolProfile().services);
-    console.log($scope.getSchoolProfileNormalConfig);
     var fromtime=$scope.getSchoolProfileNormalConfig['fromTime'];
     var totime=$scope.getSchoolProfileNormalConfig['toTime'];
     if(fromtime=='' && totime==''){
@@ -37,7 +36,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             var allFascieNorm=$filter('getSchoolNormalSlots')(profileService.getSchoolProfile().services);
             $scope.listServicesDb=profileService.getBabyProfile().services.timeSlotServices;
             $scope.listServicesDb=$scope.listServicesDb.concat(allFascieNorm);
-            console.log($scope.listServicesDb);
             for(var i=0;i<$scope.listServicesDb.length;i++){
                 var type=$scope.listServicesDb[i].name;
                 var enabled=$scope.listServicesDb[i].enabled;
@@ -65,7 +63,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         else{
             var allFascieNorm=$filter('getSchoolNormalSlots')(profileService.getSchoolProfile().services);
             $scope.listServicesDb=allFascieNorm;
-            console.log($scope.listServicesDb);
             for(var i=0;i<$scope.listServicesDb.length;i++){
                 var type=$scope.listServicesDb[i].name;
                 var enabled=$scope.listServicesDb[i].enabled;
@@ -374,7 +371,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
               text: 'OK',
               type: 'button_save',
               onTap: function(e) {
-                  console.log('posi');
                 week_planService.getDefaultWeekPlan($scope.kidId).then(function (data) {
                     if(data!=null && data!= undefined && data.length>0){
                         data=$scope.formatInfo(data);
@@ -449,7 +445,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.listServices=[];
     // provide default config for entry/exit if the school doesn't have services/fascie
     $scope.getSchoolProfileNormalConfig=$filter('getSchoolNormalService')(profileService.getSchoolProfile().services);
-    console.log($scope.getSchoolProfileNormalConfig);
     var fromtime=$scope.getSchoolProfileNormalConfig['fromTime'];
     var totime=$scope.getSchoolProfileNormalConfig['toTime'];
     if(fromtime=='' && totime==''){
@@ -477,7 +472,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             var allFascieNorm=$filter('getSchoolNormalSlots')(profileService.getSchoolProfile().services);
             $scope.listServicesDb=profileService.getBabyProfile().services.timeSlotServices;
             $scope.listServicesDb=$scope.listServicesDb.concat(allFascieNorm);
-            console.log($scope.listServicesDb);
             for(var i=0;i<$scope.listServicesDb.length;i++){
                 var type=$scope.listServicesDb[i].name;
                 var enabled=$scope.listServicesDb[i].enabled;
@@ -505,7 +499,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         else{
             var allFascieNorm=$filter('getSchoolNormalSlots')(profileService.getSchoolProfile().services);
             $scope.listServicesDb=allFascieNorm;
-            console.log($scope.listServicesDb);
             for(var i=0;i<$scope.listServicesDb.length;i++){
                 var type=$scope.listServicesDb[i].name;
                 var enabled=$scope.listServicesDb[i].enabled;
@@ -572,7 +565,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
     $scope.formatInfoToServer = function(info){ 
         for(var i=0;i<=4;i++){
-            console.log(info[i]);
             if(info[i]['uscita']!=null && info[i]['uscita']!=undefined)
                 info[i]['uscita']=moment(info[i]['uscita'],'H:mm')
             if(info[i]['entrata']!=null && info[i]['entrata']!=undefined)
@@ -583,7 +575,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
     $scope.formatInfoToServer = function(info){ 
         for(var i=0;i<=4;i++){
-            console.log(info[i]);
             if(info[i]['uscita']!=null && info[i]['uscita']!=undefined)
                 info[i]['uscita']=moment(info[i]['uscita'],'H:mm')
             if(info[i]['entrata']!=null && info[i]['entrata']!=undefined)
@@ -766,7 +757,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.ritiraOptions=[];
     $scope.listServices=[];
     var t=week_planService.getDayDataDefault($scope.currDay);
-    
+    $scope.babyProfile=profileService.getBabyProfile();
+    $scope.busEnabled=false;
+    $scope.busDefaultStop='';
+    if ($scope.babyProfile.services && $scope.babyProfile.services.bus) {
+        $scope.busEnabled = $scope.babyProfile.services.bus.enabled;
+    }
+
     function setTimeWidget() {
         var tempVal=(new Date()).getHours() * 60 * 60 + (new Date()).getMinutes() * 60;
         if($scope.currData.uscita !== null && $scope.currData.uscita !== undefined){
@@ -780,8 +777,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             titleLabel: $filter('translate')('popup_timepicker_title'), //Optional
             closeLabel: $filter('translate')('popup_timepicker_cancel'), //Optional
             setLabel: $filter('translate')('popup_timepicker_select'), //Optional
-            setButtonType: 'button-popup', //Optional
-            closeButtonType: 'button-popup', //Optional
+            setButtonType: 'button_save', //Optional
+            closeButtonType: 'button_cancel', //Optional
             callback: function (val) { //Mandatory
                 timePicker24Callback(val,$scope.timePickerObject24Hour,'uscita');
             }
@@ -798,8 +795,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             titleLabel: $filter('translate')('popup_timepicker_title'), //Optional
             closeLabel: $filter('translate')('popup_timepicker_cancel'), //Optional
             setLabel: $filter('translate')('popup_timepicker_select'), //Optional
-            setButtonType: 'button-popup', //Optional
-            closeButtonType: 'button-popup', //Optional
+            setButtonType: 'button_save', //Optional
+            closeButtonType: 'button_cancel', //Optional
             callback: function (val) { //Mandatory
                 timePicker24Callback(val,$scope.timePickerObject24HourEntrata,'entrata');
             }
@@ -808,7 +805,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
     function timePicker24Callback(val,variable,name) {
         if (typeof (val) === 'undefined') {
-            console.log('Time not selected');
         } else {
             variable.inputEpochTime = val;
             var selectedTime = new Date();
@@ -929,7 +925,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
       $scope.getListServices = function(day) {
           // provide default config for entry/exit if the school doesn't have services/fascie
           $scope.getSchoolProfileNormalConfig=$filter('getSchoolNormalService')(profileService.getSchoolProfile().services);
-          console.log($scope.getSchoolProfileNormalConfig);
           var fromtime=$scope.getSchoolProfileNormalConfig['fromTime'];
           var totime=$scope.getSchoolProfileNormalConfig['toTime'];
           if(fromtime=='' && totime==''){
@@ -946,7 +941,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
               var allFascieNorm=$filter('getSchoolNormalSlots')(profileService.getSchoolProfile().services);
               $scope.listServicesDb=profileService.getBabyProfile().services.timeSlotServices;
               $scope.listServicesDb=$scope.listServicesDb.concat(allFascieNorm);
-              console.log($scope.listServicesDb);
               for(var i=0;i<$scope.listServicesDb.length;i++){
                   var type=$scope.listServicesDb[i].name;
                   var enabled=$scope.listServicesDb[i].enabled;
@@ -976,7 +970,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
           else{
               var allFascieNorm=$filter('getSchoolNormalSlots')(profileService.getSchoolProfile().services);
               $scope.listServicesDb=allFascieNorm;
-              console.log($scope.listServicesDb);
               for(var i=0;i<$scope.listServicesDb.length;i++){
                   var type=$scope.listServicesDb[i].name;
                   var enabled=$scope.listServicesDb[i].enabled;
@@ -1008,92 +1001,77 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.setEntry = function(item) {
         $scope.currData.entrata=moment(item.out,'H:mm');
         $scope.currData.entrata_display=item.out;
+        $scope.manual_time=false;
         setTimeWidget();
     };
 
     $scope.setOut = function(item) {
         $scope.currData.uscita=moment(item.out,'H:mm');
         $scope.currData.uscita_display=item.out;
+        $scope.manual_time=false;
         setTimeWidget();
     };
 
     $scope.openPopupEntry= function() {
-        console.log($scope.listServicesAnticipo);
-        console.log($scope.listServicesPosticipo);
-        console.log($scope.listServices);
-        if (true) {//test
+      $scope.tempData=$scope.currData.entrata;
             var myPopup = $ionicPopup.show({
               scope: $scope,
               title: $filter('translate')('orario_entrata'),
+              templateUrl: 'templates/week_popup_entry.html',
               cssClass: 'expired-popup',
-             template: '<div class="space-from-top">'+
-             ''+
-                '<span class="" >'+
-                ' <div class="choose">{{"insert_time" | translate}} <br/>{{"choose_time" | translate}}</div> '+
-                ' </span>'+
-                ' '+
-                '</div>'+
-                  ''+
-                  '<div><ion-list class="padlist" >'+
-                  '<ion-radio ng-repeat="itemValue in listServicesAnticipo" ng-click="setEntry(itemValue)">'
-                  +'<span style="float:left;">{{itemValue.value}}</span> <span style="float:right;color: #f8ab15;">{{itemValue.out}}</span></ion-radio>'+
-              '</ion-list>'+
-          '</ion-list></div>'+
-          '<label class="plan-item-time">'+
-          ' <ionic-timepicker input-obj="timePickerObject24HourEntrata">'+
-          '<button ng-hide="true"></button>'+
-          '<span class="bar selez sethour" >'+
-          ' <standard-time-no-meridian etime="timePickerObject24HourEntrata.inputEpochTime" class="lookeditable"></standard-time-no-meridian>'+
-          ' </span>'+
-          ' </ionic-timepicker>'+
-          '</label>'+
-          '</div>'+
-            '' ,
               buttons: [
                 {
-                  text: $filter('translate')('retire_popup_absent_close'),
-                  type: 'button-positive'
-                              }
-                          ]
+                  text: $filter('translate')('cancel'),
+                  type: 'button_cancel',
+                  onTap: function(e) {
+                    $scope.currData.entrata=$scope.tempData;
+                    $scope.currData.entrata_display=$scope.currData.entrata.format('H:mm');
+                    $scope.manual_time=false;
+                  }
+                },
+                {
+                text: $filter('translate')('Salva'),
+                type: 'button_save',
+                onTap: function(e) {
+                    $scope.manual_time=false;
+                  }
+                }
+            ]
             });
-          }
     }
 
     $scope.openPopupOut= function() {
-        if (true) {//test
-            var myPopup = $ionicPopup.show({
-              scope: $scope,
-              title: $filter('translate')('orario_uscita'),
-              cssClass: 'expired-popup',
-              //templateUrl: '../../templates/week_entry_out_services.html',
-              template: '<div class="space-from-top">'+
-              '<span class="" >'+
-              ' <div class="choose">{{"insert_time" | translate}} <br/>{{"choose_time" | translate}}</div> '+
-              ' </span>'+
-                 '</div>'+
-              '<div><ion-list class="padlist" >'+
-              '<ion-radio ng-repeat="itemValue in listServicesPosticipo" ng-click="setOut(itemValue)">'
-              +'<span style="float:left;">{{itemValue.value}}</span> <span style="float:right;color: #f8ab15;">{{itemValue.out}}</span></ion-radio>'+
-          '</ion-list>'+
-      '</ion-list>'+
-      '<label class="plan-item-time">'+
-      ' <ionic-timepicker input-obj="timePickerObject24Hour">'+
-      '<button ng-hide="true"></button>'+
-      '<span class="bar selez sethour" >'+
-      ' <standard-time-no-meridian etime="timePickerObject24Hour.inputEpochTime" class="lookeditable"></standard-time-no-meridian>'+
-      ' </span>'+
-      ' </ionic-timepicker>'+
-      '</label></div' ,
-              buttons: [
-                {
-                  text: $filter('translate')('retire_popup_absent_close'),
-                  type: 'button-positive'
-                              }
-                          ]
-            });
-          }
-    }
+        $scope.tempData=$scope.currData.uscita;
+              var myPopup = $ionicPopup.show({
+                scope: $scope,
+                title: $filter('translate')('orario_uscita'),
+                templateUrl: 'templates/week_popup_exit.html',
+                cssClass: 'expired-popup',
+                buttons: [
+                  {
+                    text: $filter('translate')('cancel'),
+                    type: 'button_cancel',
+                    onTap: function(e) {
+                      $scope.currData.uscita=$scope.tempData;
+                      $scope.currData.uscita_display=$scope.currData.uscita.format('H:mm');
+                      $scope.manual_time=false;
+                    }
+                  },
+                  {
+                  text: $filter('translate')('Salva'),
+                  type: 'button_save',
+                  onTap: function(e) {
+                      $scope.manual_time=false;
+                    }
+                  }
+              ]
+              });
+      }
 
+    $scope.manual_time=false;
+    $scope.showManualTime = function(){
+        $scope.manual_time=true;
+    }
     $scope.setBusHour= function() {
         $scope.getSchoolNormalFascie=$filter('getSchoolNormalFascie')(profileService.getSchoolProfile().services);
         $scope.getSchoolNormalFascie.sort(sortByTimeAscOut);
@@ -1120,6 +1098,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.listServices=[];
     $scope.reason_text='add_reason';
     $scope.tempCurrData={};
+    $scope.babyProfile=profileService.getBabyProfile();
+    $scope.busEnabled=false;
+    $scope.busDefaultStop='';
+    if ($scope.babyProfile.services && $scope.babyProfile.services.bus) {
+        $scope.busEnabled = $scope.babyProfile.services.bus.enabled;
+    }
     
     $scope.getDateString = function () {
         $scope.date = week_planService.getSelectedDateInfo();
@@ -1137,8 +1121,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             titleLabel: $filter('translate')('popup_timepicker_title'), //Optional
             closeLabel: $filter('translate')('popup_timepicker_cancel'), //Optional
             setLabel: $filter('translate')('popup_timepicker_select'), //Optional
-            setButtonType: 'button-popup', //Optional
-            closeButtonType: 'button-popup', //Optional
+            setButtonType: 'button_save', //Optional
+            closeButtonType: 'button_cancel', //Optional
             callback: function (val) { //Mandatory
                 timePicker24Callback(val,$scope.timePickerObject24Hour,'uscita');
             }
@@ -1155,8 +1139,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             titleLabel: $filter('translate')('popup_timepicker_title'), //Optional
             closeLabel: $filter('translate')('popup_timepicker_cancel'), //Optional
             setLabel: $filter('translate')('popup_timepicker_select'), //Optional
-            setButtonType: 'button-popup', //Optional
-            closeButtonType: 'button-popup', //Optional
+            setButtonType: 'button_save', //Optional
+            closeButtonType: 'button_cancel', //Optional
             callback: function (val) { //Mandatory
                 timePicker24Callback(val,$scope.timePickerObject24HourEntrata,'entrata');
             }
@@ -1165,7 +1149,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
     function timePicker24Callback(val,variable,name) {
         if (typeof (val) === 'undefined') {
-            console.log('Time not selected');
         } else {
             variable.inputEpochTime = val;
             var selectedTime = new Date();
@@ -1192,9 +1175,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.getRitiroOptions();
     
     $scope.getActualData = function() {
-        console.log(week_planService.getDayData($scope.currDay));
         $scope.currDay=week_planService.getActualDay();
         $scope.currData=angular.copy(week_planService.getDayData($scope.currDay));
+        console.log($scope.babyProfile);
+        console.log($scope.currData);
         if($scope.currData.delega_name==null || $scope.currData.delega_name==undefined || $scope.currData.delega_name==''){
             $scope.currData.delega_name='none';            
         }
@@ -1345,7 +1329,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.getListServices = function(day) {
         // provide default config for entry/exit if the school doesn't have services/fascie
         $scope.getSchoolProfileNormalConfig=$filter('getSchoolNormalService')(profileService.getSchoolProfile().services);
-        console.log($scope.getSchoolProfileNormalConfig);
         var fromtime=$scope.getSchoolProfileNormalConfig['fromTime'];
         var totime=$scope.getSchoolProfileNormalConfig['toTime'];
         if(fromtime=='' && totime==''){
@@ -1362,7 +1345,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             var allFascieNorm=$filter('getSchoolNormalSlots')(profileService.getSchoolProfile().services);
             $scope.listServicesDb=profileService.getBabyProfile().services.timeSlotServices;
             $scope.listServicesDb=$scope.listServicesDb.concat(allFascieNorm);
-            console.log($scope.listServicesDb);
             for(var i=0;i<$scope.listServicesDb.length;i++){
                 var type=$scope.listServicesDb[i].name;
                 var enabled=$scope.listServicesDb[i].enabled;
@@ -1392,7 +1374,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         else{
             var allFascieNorm=$filter('getSchoolNormalSlots')(profileService.getSchoolProfile().services);
             $scope.listServicesDb=allFascieNorm;
-            console.log($scope.listServicesDb);
             for(var i=0;i<$scope.listServicesDb.length;i++){
                 var type=$scope.listServicesDb[i].name;
                 var enabled=$scope.listServicesDb[i].enabled;
@@ -1425,90 +1406,76 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     $scope.setEntry = function(item) {
         $scope.currData.entrata=moment(item.out,'H:mm');
         $scope.currData.entrata_display=item.out;
+        $scope.manual_time=false;
         setTimeWidget();
     };
 
     $scope.setOut = function(item) {
         $scope.currData.uscita=moment(item.out,'H:mm');
         $scope.currData.uscita_display=item.out;
+        $scope.manual_time=false;
         setTimeWidget();
     };
 
     $scope.openPopupEntry= function() {
-        console.log($scope.listServicesAnticipo);
-        console.log($scope.listServicesPosticipo);
-        console.log($scope.listServices);
-        if (true) {//test
+      $scope.tempData=$scope.currData.entrata;
             var myPopup = $ionicPopup.show({
               scope: $scope,
               title: $filter('translate')('orario_entrata'),
+              templateUrl: 'templates/week_popup_entry.html',
               cssClass: 'expired-popup',
-             template: '<div class="space-from-top">'+
-             ''+
-                '<span class="" >'+
-                ' <div class="choose">{{"insert_time" | translate}} <br/>{{"choose_time" | translate}}</div> '+
-                ' </span>'+
-                ' '+
-                '</div>'+
-                  ''+
-                  '<div><ion-list class="padlist" >'+
-                  '<ion-radio ng-repeat="itemValue in listServicesAnticipo" ng-click="setEntry(itemValue)">'
-                  +'<span style="float:left;">{{itemValue.value}}</span> <span style="float:right;color: #f8ab15;">{{itemValue.out}}</span></ion-radio>'+
-              '</ion-list>'+
-          '</ion-list></div>'+
-          '<label class="plan-item-time">'+
-          ' <ionic-timepicker input-obj="timePickerObject24HourEntrata">'+
-          '<button ng-hide="true"></button>'+
-          '<span class="bar selez sethour" >'+
-          ' <standard-time-no-meridian etime="timePickerObject24HourEntrata.inputEpochTime" class="lookeditable"></standard-time-no-meridian>'+
-          ' </span>'+
-          ' </ionic-timepicker>'+
-          '</label>'+
-          '</div>'+
-            '' ,
               buttons: [
                 {
-                  text: $filter('translate')('retire_popup_absent_close'),
-                  type: 'button-positive'
-                              }
-                          ]
+                  text: $filter('translate')('cancel'),
+                  type: 'button_cancel',
+                  onTap: function(e) {
+                    $scope.currData.entrata=$scope.tempData;
+                    $scope.currData.entrata_display=$scope.currData.entrata.format('H:mm');
+                    $scope.manual_time=false;
+                  }
+                },
+                {
+                text: $filter('translate')('Salva'),
+                type: 'button_save',
+                onTap: function(e) {
+                    $scope.manual_time=false;
+                  }
+                }
+            ]
             });
-          }
     }
 
     $scope.openPopupOut= function() {
-        if (true) {//test
-            var myPopup = $ionicPopup.show({
-              scope: $scope,
-              title: $filter('translate')('orario_uscita'),
-              cssClass: 'expired-popup',
-              //templateUrl: '../../templates/week_entry_out_services.html',
-              template: '<div class="space-from-top">'+
-              '<span class="" >'+
-              ' <div class="choose">{{"insert_time" | translate}} <br/>{{"choose_time" | translate}}</div> '+
-              ' </span>'+
-                 '</div>'+
-              '<div><ion-list class="padlist">'+
-              '<ion-radio ng-repeat="itemValue in listServicesPosticipo" ng-click="setOut(itemValue)">'
-              +'<span style="float:left;">{{itemValue.value}}</span> <span style="float:right;color: #f8ab15;">{{itemValue.out}}</span></ion-radio>'+
-          '</ion-list>'+
-      '</ion-list>'+
-      '<label class="plan-item-time">'+
-      ' <ionic-timepicker input-obj="timePickerObject24Hour">'+
-      '<button ng-hide="true"></button>'+
-      '<span class="bar selez sethour" >'+
-      ' <standard-time-no-meridian etime="timePickerObject24Hour.inputEpochTime" class="lookeditable"></standard-time-no-meridian>'+
-      ' </span>'+
-      ' </ionic-timepicker>'+
-      '</label></div' ,
-              buttons: [
-                {
-                  text: $filter('translate')('retire_popup_absent_close'),
-                  type: 'button-positive'
-                              }
-                          ]
-            });
-          }
+        $scope.tempData=$scope.currData.uscita;
+              var myPopup = $ionicPopup.show({
+                scope: $scope,
+                title: $filter('translate')('orario_uscita'),
+                templateUrl: 'templates/week_popup_exit.html',
+                cssClass: 'expired-popup',
+                buttons: [
+                  {
+                    text: $filter('translate')('cancel'),
+                    type: 'button_cancel',
+                    onTap: function(e) {
+                      $scope.currData.uscita=$scope.tempData;
+                      $scope.currData.uscita_display=$scope.currData.uscita.format('H:mm');
+                      $scope.manual_time=false;
+                    }
+                  },
+                  {
+                  text: $filter('translate')('Salva'),
+                  type: 'button_save',
+                  onTap: function(e) {
+                      $scope.manual_time=false;
+                    }
+                  }
+              ]
+              });
+      }
+
+    $scope.manual_time=false;
+    $scope.showManualTime = function(){
+        $scope.manual_time=true;
     }
     
     $scope.setBusHour= function() {
@@ -1636,7 +1603,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     
     function timePicker24Callback(val,type,variable,name) {
         if (typeof (val) === 'undefined') {
-            console.log('Time not selected');
         } else {
             variable.inputEpochTime = val;
             var selectedTime = new Date();
@@ -1651,7 +1617,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
     function numberPickerCallback(val,name) {
         if (typeof (val) === 'undefined') {
-            console.log('minute not selected');
         } else {
             $scope.currData[name] = val;
             localStorage.setItem(name,val) ;
@@ -1713,7 +1678,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             cordova.plugins.notification.local.clearAll(function () {
                 cordova.plugins.notification.local.cancelAll(function () {
             
-        console.log($scope.currData);
         localStorage.setItem('prom_day_summary', false);
         localStorage.setItem('prom_week', false);
         localStorage.setItem('prom_day_ritiro', false);
@@ -1725,8 +1689,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 selectedTime.setHours(temp[0]);
                 selectedTime.setMinutes(temp[1]);
                 selectedTime.setSeconds(0);
-                console.log(selectedTime.getHours());
-                console.log(selectedTime.getMinutes());
+                //console.log(selectedTime.getHours());
+                //console.log(selectedTime.getMinutes());
                 day_summ.at=selectedTime;
                 notific.push(day_summ);
             }
@@ -1772,7 +1736,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                  $state.go("app.home");
             });
             cordova.plugins.notification.local.getAll(function (notifications) {
-                    console.log(notifications);
             });
         });
         });

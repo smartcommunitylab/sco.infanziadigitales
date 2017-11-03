@@ -1,0 +1,23 @@
+<div>
+  <div ng-repeat="itemValue in listServicesPosticipo">
+    <div style="display: flex; flex-direction: row;">
+            <input type="radio" id="{{$index}}" name="radio-group" value="itemValue.out" ng-click="setOut(itemValue)">
+            <label for="{{$index}}">{{itemValue.value}} ore {{itemValue.out}}</label>
+      </div>
+    </div>
+    <div>
+    <div style="display: flex; flex-direction: row;">
+        <input type="radio" id="imposta" name="radio-group" ng-click="showManualTime()">
+        <label for="imposta">Imposta ora:</label>
+        <label class="plan-item-time" ng-show="manual_time">
+            <ionic-timepicker input-obj="timePickerObject24Hour">
+                <button ng-hide="true"></button>
+                <span class="">
+                      <standard-time-no-meridian etime="timePickerObject24Hour.inputEpochTime" class="lookeditable"></standard-time-no-meridian>
+                </span>
+            </ionic-timepicker>
+        </label>
+   </div>
+  </div>
+</div>
+

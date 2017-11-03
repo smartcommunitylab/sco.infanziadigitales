@@ -71,7 +71,7 @@
         <label class="control control-checkbox">
             <!-- ng-repeat="(key, data) in listServicesDb" ng-if="key!='mensa'" -->
             &nbsp;&nbsp;{{'home_bus' | translate}}
-                <input type="checkbox" ng-model="currData['bus']" name="bus"  ng-change="setBusHour()" ng-disabled="currData.absence" />
+                <input type="checkbox" ng-model="currData['bus']" name="bus"  ng-change="setBusHour()" ng-disabled="currData.absence || !busEnabled" />
             <div class="control_indicator"></div>
         </label>
       <table class="dayEdit_table" >

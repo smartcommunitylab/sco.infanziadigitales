@@ -1108,9 +1108,10 @@ select {
   /*    height: 100%!important;
     */
 }
-
 #babyprofile .input-chat-footer {
-  background-color: #F6F6F6;
+  background-color: #eeeeee;
+  height: 60px;
+  padding: 12px 6px;
   font-size: 20px;
   line-height: 20px;
 }
@@ -1161,6 +1162,16 @@ select {
 #babyprofile .chat-user>span {
   width: 100%;
 }
+#babyprofile .chat-user div {
+  background-color: #fff;
+  padding-left: 10px;
+}
+#babyprofile .chat-user button {
+  border: 0;
+  min-height: 34px;
+  line-height: 100%;
+  border-radius: 0;
+}
 
 #babyprofile input[type=text],
 textarea {
@@ -1169,13 +1180,8 @@ textarea {
 }
 
 #babyprofile .chat-write {
-  background-color: #eeeeee;
-}
-
-#babyprofile .input-chat-footer {
-  background-color: #eeeeee;
-  height: 60px;
-  padding: 6px 6px;
+  background-color: #fff;
+  padding: 5px 0px;
 }
 
 #babyprofile .button-chat-exit {
@@ -1187,6 +1193,10 @@ textarea {
 #babyprofile .button-chat-send {
   color: white;
   background-color: #bd3e4d;
+  border: 0;
+  border-radius: 0;
+  margin-left: 8px;
+  min-width: 50px;
 }
 
 #babyprofile .button-chat-unlock {

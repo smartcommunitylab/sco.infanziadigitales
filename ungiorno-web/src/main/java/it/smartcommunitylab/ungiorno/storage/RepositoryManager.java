@@ -1159,6 +1159,7 @@ public class RepositoryManager implements RepositoryService {
                 break;
             }
         }
+        sortFascie(regularService.getTimeSlots());
         
         // extract kid service mappings
         for (KidProfile kp : kids) {
@@ -1217,14 +1218,14 @@ public class RepositoryManager implements RepositoryService {
                     DateTime minSlotDate = allFascie.get(0).getFromTime();
                     LocalTime minhour = minSlotDate.toLocalTime();
                     if (minhour
-                            .isBefore(regularService.getTimeSlots().get(0).getToTime().toLocalTime())) {
-                        todayConfig.setEntrata(allFascie.get(0).getToTime());
+                            .isBefore(todayConfig.getEntrata().toLocalTime())) {
+                        todayConfig.setEntrata(minSlotDate);
                     }
                     DateTime maxSlotDate = allFascie.get(allFascie.size() - 1).getToTime();
                     LocalTime maxhour = maxSlotDate.toLocalTime();
                     if (maxhour
-                            .isAfter(regularService.getTimeSlots().get(0).getToTime().toLocalTime())) {
-                        todayConfig.setUscita(allFascie.get(allFascie.size() - 1).getToTime());
+                            .isAfter(todayConfig.getUscita().toLocalTime())) {
+                        todayConfig.setUscita(maxSlotDate);
                     }
             	}
             }	

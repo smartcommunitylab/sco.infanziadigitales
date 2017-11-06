@@ -517,6 +517,22 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.dataSer
       if (onlySections) {
         dataServerService.getSchoolProfile(schoolId).then(function(profile) {
           var map = {};
+          data.data.forEach(function(s) {
+            s.children.forEach(function(kid) {
+              kid.slotPresent = [];
+              if (kid.exitTime != null) {
+                var presStart = moment(kid.entryTime).format('HH:mm');
+                var presEnd = moment(kid.exitTime).format('HH:mm');
+                kid.fascieList.forEach(function(slot) {
+                  var slotStart = moment(slot.fromTime).format('HH:mm');
+                  var slotEnd = moment(slot.toTime).format('HH:mm');
+                  if (presStart < slotEnd && presEnd > slotStart) {
+                    kid.slotPresent.push(slot.name);              
+                  }
+                });
+              }
+            });
+          });
           profile.sections.forEach(function(s) {
             map[s.sectionId] = s.group;
           });

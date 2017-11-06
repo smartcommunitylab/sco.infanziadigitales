@@ -2047,6 +2047,9 @@ ion-content .scroll {
   border: solid 2px darkgray;
 }
 
+#home .children-container .present {
+  min-height: 20px;
+}
 #home .children-home {
   position: relative;
   margin-top: 20px;

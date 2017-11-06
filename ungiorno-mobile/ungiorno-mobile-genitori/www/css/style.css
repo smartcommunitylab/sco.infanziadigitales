@@ -2075,7 +2075,7 @@ textarea {
   text-align: center;
   display: flex;
   flex-direction: row;
-  margin-top:10px;
+  /* margin-top:10px; */
   padding-top:20px;
   padding-bottom:20px;
 }
@@ -2183,7 +2183,7 @@ textarea {
 .button-day {
   color: #ffffff;
   border: 0;
-  margin:4px;
+  margin:0 4px;
   padding: 2px;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -2192,7 +2192,7 @@ textarea {
 .day-name {
   padding-right:5px;
 }
-.week_plan_detail_table{
+/* .week_plan_detail_table{
   text-align: center;
   width:100%;
   padding: 10px;
@@ -2203,7 +2203,38 @@ textarea {
   padding-bottom:10px;
   padding-top:10px;
   font-size: 90%;
+} */
+.week_plan_detail_table {
+  padding: 0 !important;
 }
+.week_plan_detail_table .button-day {
+  color: #fff;
+}
+.week_plan_detail_table  ion-item {
+  border: 0;
+  border-bottom: 1px solid #80D0E6;
+  padding: 12px 0 4px 0;
+  margin: 0;
+}
+.week_plan_detail_table  ion-item.absence {
+  padding-bottom: 12px !important;
+}
+
+.week_plan_detail_table  ion-item .row, .week_plan_detail_table  ion-item .col {
+  padding: 0;
+}
+.week_plan_detail_table .delega {
+  padding-top: 10px !important;
+  text-align: left;
+  font-size: 14px; 
+}
+.noneditable.outline {
+  background-color: #fff !important; 
+  color: #80D0E6;
+  border: 1px solid #80D0E6;
+}
+
+
 .dayEdit{
   text-align: left;
   width:90%;

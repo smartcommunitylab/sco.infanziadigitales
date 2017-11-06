@@ -4,14 +4,13 @@
         <ion-nav-back-button>
         </ion-nav-back-button>
         <ion-nav-buttons side="right">
-          <i class="icon voice-menu  inf_digsettings weekicon" ng-click="goToDefaultWeekPlan()"></i>
+          <button class="button icon button-clear inf_digsettings" ng-click="goToDefaultWeekPlan()"></button>
+          <!-- <i class="icon voice-menu  inf_digsettings weekicon" ng-click="goToDefaultWeekPlan()"></i> -->
       </ion-nav-buttons>
         
     </ion-nav-bar>
 
   <ion-content has-header="true" ng-init="getDateString(currentDate)">
-    <ion-scroll scrollbar-y="true">
-
       <!-- Readonly DetailView of Week-->
       <div ng-show="mode==''" class="week_plan_detail">
         <div class="active_cal_buttons">
@@ -19,6 +18,37 @@
            <div class="dateStyleHead navicon2">{{date}}</div>
            <i class="icon ion-arrow-right-b navicon" ng-click="next_week()"></i>
         </div> 
+
+        <ion-list class="week_plan_detail_table">
+          <ion-item ng-repeat="day in days track by $index"  ng-class="{'current-day': isActive($index), 'absence': day.absence}">
+            <div class="row row-center">
+              <div class="col col-20"><p class="title">{{day.name| translate | uppercase}}</p></div>
+              <div class="col">
+                <div class="row">
+                  <div class="col" ng-if="!day.absence">
+                    <p class="button-day noneditable">E <span class="val_time">{{day.entrata_display}}</span></p>
+                  </div>  
+                  <div class="col" ng-if="!day.absence">
+                    <p class="button-day noneditable">U <span class="val_time">{{day.uscita_display}}</span></p>
+                  </div>
+                  <div class="col col-80" ng-if="day.absence">
+                      <p  class="button-day noneditable">{{'home_absent' | translate | uppercase}} {{day.motivazione.type ? ': '+ day.motivazione.type : ''}}</p>                  
+                  </div>
+                  <div class="col col-20">
+                      <p class="button-day noneditable"  ng-if="day.bus && !day.absence"><i class="icon ion-android-bus iconStyle"></i></p>
+                  </div>
+                </div> 
+                <div class="row delega" ng-if="!day.absence">
+                  <div class="col">
+                      <i class="icon ion-android-person iconStyle"></i>
+                      <span class="delegaStyle">{{day.delega_name|getRitiroName:ritiraOptions | translate}}</span>
+                  </div>  
+                </div> 
+              </div> 
+            </div>     
+          </ion-item>  
+        </ion-list>  
+      <!--  
         <table class="week_plan_detail_table"  cellpadding="10">
           <tr ng-repeat="day in days track by $index"  ng-class="{'current-day': isActive($index)}" >
             <td class="day-name">
@@ -35,7 +65,6 @@
                 &nbsp;<i class="icon ion-android-person iconStyle"></i>&nbsp;
                 <div class="delega_name" >
                     <span class="delegaStyle">{{day.delega_name|getRitiroName:ritiraOptions | translate}}</span>
-                    <!--<span class="delegaStyle">({{day.delega_name|getRitiroType:ritiraOptions | translate}})</span> -->
                 </div>
             </div>
             </td>
@@ -47,6 +76,8 @@
             </td>
           </tr>
         </table>
+      -->
+          
         <div class="button_bottom">
          <div class="button_cancel" ng-click="modifyWeek()" ng-if="!disableEdit()">
             {{'Modifica' | translate | uppercase}} 
@@ -70,6 +101,36 @@
             <div class="dateStyleHead">{{date}}</div>
             <i class="icon ion-arrow-right-b navicon"></i>
         </div> 
+        <ion-list class="week_plan_detail_table edit">
+            <ion-item ng-repeat="day in days track by $index"  ng-class="{'current-day': isActive($index), 'absence': day.absence}"  ng-click="gotoEditDate($index)">
+              <div class="row row-center">
+                <div class="col col-20"><p class="title">{{day.name| translate | uppercase}}</p></div>
+                <div class="col">
+                  <div class="row">
+                    <div class="col" ng-if="!day.absence">
+                      <p ng-class="whatClassIsIt($index,'')">E <span class="val_time">{{day.entrata_display}}</span></p>
+                    </div>  
+                    <div class="col" ng-if="!day.absence">
+                      <p ng-class="whatClassIsIt($index,'')">U <span class="val_time">{{day.uscita_display}}</span></p>
+                    </div>
+                    <div class="col col-80" ng-if="day.absence">
+                        <p  ng-class="whatClassIsIt($index,'')">{{'home_absent' | translate | uppercase}} {{day.motivazione.type ? ': '+ day.motivazione.type : ''}}</p>                  
+                    </div>
+                    <div class="col col-20">
+                        <p ng-class="whatClassIsIt($index,'')"  ng-if="day.bus && !day.absence"><i class="icon ion-android-bus iconStyle"></i></p>
+                    </div>
+                  </div> 
+                  <div class="row delega" ng-if="!day.absence">
+                    <div class="col">
+                        <i class="icon ion-android-person iconStyle"></i>
+                        <span class="delegaStyle">{{day.delega_name|getRitiroName:ritiraOptions | translate}}</span>
+                    </div>  
+                  </div> 
+                </div> 
+              </div>     
+            </ion-item>  
+          </ion-list> 
+        <!--
         <table class="week_plan_detail_table">
           <tr ng-repeat="day in days track by $index"  ng-class="{'current-day': isActive($index)}"  ng-click="gotoEditDate($index)">
             <td class="day-name">
@@ -86,7 +147,6 @@
                   &nbsp;<i class="icon ion-android-person iconStyle"></i>&nbsp;
                 <div class="delega_name">
                     <span class="delegaStyle">{{day.delega_name|getRitiroName:ritiraOptions | translate}}</span>
-                    <!--<span class="delegaStyle">({{day.delega_name|getRitiroType:ritiraOptions | translate}})</span>-->
                 </div>
             </div>
             </td>
@@ -98,6 +158,7 @@
             </td>
           </tr>
         </table>
+      -->
       <div class="button_bottom">
         <div class="button_cancel" ng-click="cancel()">
            {{'cancel' | translate | uppercase}}
@@ -108,6 +169,5 @@
       </div>
     </div>
 
-    </ion-scroll>
   </ion-content>
 </ion-view>

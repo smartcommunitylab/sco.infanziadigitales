@@ -107,7 +107,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         var weekEnd = currentDate.clone().endOf('week');
         var sDate=moment(weekStart).format("D");
         var eDate=moment(weekEnd).format("D");
-        var month=moment(weekEnd).format("MMMM");
+        var month=moment(weekEnd).format("MMM");
         var year=moment(weekEnd).format("YYYY");
         $scope.date = sDate+' - '+eDate+' '+month+' '+year;
     }
@@ -123,7 +123,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
 
     $scope.formatInfo = function(info){ 
+        var days = ['monday_reduced','tuesday_reduced', 'wednesday_reduced', 'thursday_reduced', 'friday_reduced'];
         for(var i=0;i<=4;i++){
+            info[i].name = days[i];
             if(info[i]['uscita']!=null && info[i]['uscita']!=undefined)
                 info[i]['uscita_display']=moment(info[i]['uscita']).format('H:mm' );
             if(info[i]['entrata']!=null && info[i]['entrata']!=undefined)
@@ -316,12 +318,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
       }
 
     $scope.gotoEditDate = function(day) {
-        var selected = moment($scope.currentDate.clone().weekday(day).week($scope.currWeek).year($scope.currYear).format('M D YYYY'));
-        var actualDate=moment(moment().format('M D YYYY'));
-        var dayData=$scope.days[day];
-        var usc =dayData['uscita'];
-        var temp=moment('17:00','HH:mm');// it should be 09:10
-        if(moment(temp).isBefore(moment()) && day==$scope.currDay && selected.isSame(actualDate)){
+        var selected = $scope.currentDate.clone().weekday(day).week($scope.currWeek).year($scope.currYear).startOf('day');//moment($scope.currentDate.clone().weekday(day).week($scope.currWeek).year($scope.currYear).format('M D YYYY'));
+        var actualDate = moment().startOf('day');//moment(moment().format('M D YYYY'));
+        var dayData = $scope.days[day];
+        var usc = dayData['uscita'];
+        var temp = moment('17:00','HH:mm');// it should be 09:10
+        if(temp.isBefore(moment()) && day == $scope.currDay && selected.isSame(actualDate)){
             $scope.TempPrevent = $ionicPopup.show({
                 title: $filter('translate')('retire_popup_toolate_title'),
                 cssClass: 'expired-popup',
@@ -336,7 +338,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                   ]
               });
         }
-        else if(selected.isAfter(actualDate) || selected.isSame(actualDate)){
+        else if(!selected.isBefore(actualDate)){
           $scope.mode='edit';
           var dayData=$scope.days[day];
           dayData['monday']=false;
@@ -555,7 +557,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
 
     $scope.formatInfo = function(info){ 
+        var days = ['monday_reduced','tuesday_reduced', 'wednesday_reduced', 'thursday_reduced', 'friday_reduced'];
         for(var i=0;i<=4;i++){
+            info[i].name = days[i];
             if(info[i]['uscita']!=null && info[i]['uscita']!=undefined)
                 info[i]['uscita_display']=moment(info[i]['uscita']).format('H:mm' );
             if(info[i]['entrata']!=null && info[i]['entrata']!=undefined)

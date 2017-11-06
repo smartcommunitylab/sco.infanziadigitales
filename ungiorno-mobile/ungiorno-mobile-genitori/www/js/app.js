@@ -360,6 +360,7 @@ return {
 
 .config(function ($stateProvider, $urlRouterProvider, $translateProvider, $ionicConfigProvider,$httpProvider) {
   $ionicConfigProvider.backButton.text('').previousTitleText(false);
+  $ionicConfigProvider.views.swipeBackEnabled(false);
 
   var view=ionic.Platform.isWebView();
   console.log(view);

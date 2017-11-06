@@ -2,7 +2,7 @@
   <div ng-repeat="itemValue in listServicesAnticipo">
     <div style="display: flex; flex-direction: row;">
             <input type="radio" id="{{$index}}" name="radio-group" value="itemValue.out" ng-click="setEntry(itemValue)">
-            <label for="{{$index}}">{{itemValue.value}} ore {{itemValue.out}}</label>
+            <label for="{{$index}}">{{itemValue.out}} ({{itemValue.value}})</label>
       </div>
     </div>
     <div>
@@ -17,6 +17,15 @@
                 </span>
             </ionic-timepicker>
         </label>
+
+        <label ng-show="!manual_time">
+            <ionic-timepicker input-obj="timePickerObject24HourEntrata">
+                <span class="">
+                      <standard-time-no-meridian etime="timePickerObject24HourEntrata.inputEpochTime" class="lookeditable"></standard-time-no-meridian>
+                </span>
+            </ionic-timepicker>
+        </label>
+
    </div>
   </div>
 </div>

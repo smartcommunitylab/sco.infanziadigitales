@@ -2455,7 +2455,7 @@ textarea {
   box-shadow: 1px 1px 1px 0 lightgray inset;  
   font: -moz-field;
   font: -webkit-small-control;
-  margin-top: 5px;
+  margin-top: 15px;
   padding: 5px 10px;
   color:#F8AB15;
 }
@@ -2538,7 +2538,9 @@ textarea {
 {
     position: relative;
     padding-left: 38px;
-    margin-top: 8px;
+    padding-right:5px;
+    margin-top: 18px;
+    margin-bottom: 10px;
     cursor: pointer;
     line-height: 20px;
     display: inline-block;

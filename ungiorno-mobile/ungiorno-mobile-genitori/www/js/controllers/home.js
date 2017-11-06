@@ -293,6 +293,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         fromtime=moment('7:30','H:mm');
         totime=moment('13:30','H:mm');
     }
+    $scope.babyProfile=profileService.getBabyProfile();
+    $scope.busEnabled=false;
+    if ($scope.babyProfile.services && $scope.babyProfile.services.bus) {
+        $scope.busEnabled = $scope.babyProfile.services.bus.enabled;
+    }
     $scope.listServicesAnticipo=[];
     $scope.listServicesPosticipo=[];
     $scope.listServices=[];
@@ -365,8 +370,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
           $scope.listServicesPosticipo.sort(sortByTimeAscOut);
           totime=$scope.listServicesPosticipo[$scope.listServicesPosticipo.length-1]['out_val'];
       }
-      console.log(fromtime);
-      console.log(totime);
+      //bus precedence for exit time by default
+      console.log($scope.busEnabled);
+      if($scope.busEnabled){
+        $scope.getSchoolNormalFascie=$filter('getSchoolNormalFascie')(profileService.getSchoolProfile().services);
+        $scope.getSchoolNormalFascie.sort(sortByTimeAscOut);
+        var length1 =$scope.getSchoolNormalFascie.length;
+        if(length1>0) totime=$scope.getSchoolNormalFascie[length1-1]['out_val'];
+        if(totime=='') totime=moment('14:00','H:mm');
+        totimeFormatted=moment(totime).format('H:mm');
+        totime=moment(totime,'H:mm');
+    }
       var infoInitial={'fromTime':fromtime,'toTime':totime};
       profileService.setInfoInitial(infoInitial);
   };

@@ -713,7 +713,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             if(totimeOrig=='') totimeOrig=moment('14:00','H:mm');
             totimeFormatted=moment(totimeOrig).format('H:mm');
             totimeOrig=moment(totimeOrig,'H:mm');
-            $scope.babyProfile.services.bus.stops
         }
 
         var confirmPopup = $ionicPopup.confirm({
@@ -1025,7 +1024,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                   type: 'button_cancel',
                   onTap: function(e) {
                     $scope.currData.entrata=$scope.tempData;
-                    $scope.currData.entrata_display=$scope.currData.entrata.format('H:mm');
+                    $scope.currData.entrata_display=moment($scope.currData.entrata).format('H:mm');
                     $scope.manual_time=false;
                   }
                 },
@@ -1053,7 +1052,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                     type: 'button_cancel',
                     onTap: function(e) {
                       $scope.currData.uscita=$scope.tempData;
-                      $scope.currData.uscita_display=$scope.currData.uscita.format('H:mm');
+                      $scope.currData.uscita_display=moment($scope.currData.uscita).format('H:mm');
                       $scope.manual_time=false;
                     }
                   },
@@ -1430,7 +1429,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                   type: 'button_cancel',
                   onTap: function(e) {
                     $scope.currData.entrata=$scope.tempData;
-                    $scope.currData.entrata_display=$scope.currData.entrata.format('H:mm');
+                    $scope.currData.entrata_display=moment($scope.currData.entrata).format('H:mm');
                     $scope.manual_time=false;
                   }
                 },
@@ -1458,7 +1457,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                     type: 'button_cancel',
                     onTap: function(e) {
                       $scope.currData.uscita=$scope.tempData;
-                      $scope.currData.uscita_display=$scope.currData.uscita.format('H:mm');
+                      $scope.currData.uscita_display=moment($scope.currData.uscita).format('H:mm');
                       $scope.manual_time=false;
                     }
                   },

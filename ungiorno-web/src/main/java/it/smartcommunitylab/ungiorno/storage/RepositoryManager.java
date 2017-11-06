@@ -1159,7 +1159,7 @@ public class RepositoryManager implements RepositoryService {
                 break;
             }
         }
-        sortFascie(regularService.getTimeSlots());
+//        sortFascie(regularService.getTimeSlots());
         
         // extract kid service mappings
         for (KidProfile kp : kids) {
@@ -1175,7 +1175,7 @@ public class RepositoryManager implements RepositoryService {
             }
             
             // read other services. Ignore for non-participating kids
-            if (kp.isPartecipateToSperimentation() && kidServices.getTimeSlotServices() != null) {
+            if (kp.isPartecipateToSperimentation() && kidServices != null && kidServices.getTimeSlotServices() != null) {
                 for (TimeSlotSchoolService ts : kidServices.getTimeSlotServices()) {
                 	// handle ignore disabled and regular slots
                     if (ts.isEnabled() && !ts.isRegular()) {
@@ -1209,10 +1209,10 @@ public class RepositoryManager implements RepositoryService {
                 // baseline for exit: regular service time end
                 todayConfig.setUscita(regularService.getTimeSlots().get(regularService.getTimeSlots().size() - 1).getToTime());
                 // baseline for bus: service is enabled
-                if (kidServices.getBus() != null) {
+                if (kidServices != null && kidServices.getBus() != null) {
                     todayConfig.setBus(kidServices.getBus().isEnabled());
                 }
-            	if (kidServices.getTimeSlotServices() != null && allFascie.size() > 0) {
+            	if (kidServices != null && kidServices.getTimeSlotServices() != null && allFascie.size() > 0) {
                     // get the configuration from the services of kid
                     sortFascie(allFascie);
                     DateTime minSlotDate = allFascie.get(0).getFromTime();

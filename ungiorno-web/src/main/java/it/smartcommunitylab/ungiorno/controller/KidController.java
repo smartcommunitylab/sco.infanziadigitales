@@ -472,7 +472,7 @@ public class KidController {
             @PathVariable Boolean isTeacher, HttpServletRequest request,
             HttpServletResponse response) throws Exception {
 
-        String path = kidManager.getKidPicturePath(appId, schoolId, kidId);
+        String path = kidManager.getKidPicturePath(appId, schoolId, kidId, true);
         FileInputStream in = null;
         try {
             in = new FileInputStream(new File(path));

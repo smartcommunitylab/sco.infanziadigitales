@@ -373,7 +373,7 @@ public class ConsoleWebController {
             throw new AACException("token not valid");
         }
 
-        String path = kidManager.getKidPicturePath(appId, schoolId, kidId);
+        String path = kidManager.getKidPicturePath(appId, schoolId, kidId, false);
         FileInputStream in = null;
         try {
             in = new FileInputStream(new File(path));

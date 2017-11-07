@@ -274,6 +274,17 @@ week_planService.getIsFromHome= function () {
         
                 return deferred.promise;
         }
+        var formatInfo = function (info) {
+            var days = ['monday_reduced','tuesday_reduced', 'wednesday_reduced', 'thursday_reduced', 'friday_reduced'];
+            for (var i = 0; i <= 4; i++) {
+                info[i].name = days[i];
+                if (info[i]['uscita'] != null && info[i]['uscita'] != undefined)
+                    info[i]['uscita_display'] = moment(info[i]['uscita']).format('H:mm');
+                if (info[i]['entrata'] != null && info[i]['entrata'] != undefined)
+                    info[i]['entrata_display'] = moment(info[i]['entrata']).format('H:mm');
+            }
+            return info;
+        };
     week_planService.setNotification = function (scope) {
         var selectables = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
         var date = new Date();
@@ -313,7 +324,7 @@ week_planService.getIsFromHome= function () {
             icon: 'res://icon.png',
             //autoCancel: false,
             autoClear: false,
-            every: 1 * 60 * 24, //1 day
+            every: 1 * 60 * 24 * 7, //1 day
             at: new Date(),
             data: {
                 'type': 'ritiro'
@@ -334,7 +345,7 @@ week_planService.getIsFromHome= function () {
                         var promWeekTime="09:00";
                         var promWeekDay="monday"
                         var promRitiroTime=30;
-                        if (scope.currData && scope.currData['prom_day_summary'])
+                        if (scope.currData && scope.currData['prom_day_summary']!="undefined")
                             { 
                             promDay=scope.currData['prom_day_summary'];
                             promDayTime=scope.currData['prom_day_time'];
@@ -342,7 +353,7 @@ week_planService.getIsFromHome= function () {
                            promDay= JSON.parse(localStorage.getItem('prom_day_summary'));
                             promWeekTime=localStorage.getItem('prom_day_time');
                         }
-                        if (scope.currData && scope.currData['prom_week']){
+                        if (scope.currData && scope.currData['prom_week']!="undefined"){
                             promWeek=scope.currData['prom_week'];
                             promWeekTime=scope.currData['prom_week_time'];
                             promWeekDay=scope.currData['prom_week_day'];
@@ -352,7 +363,7 @@ week_planService.getIsFromHome= function () {
                             promWeekDay=localStorage.getItem('prom_week_day');
                             promWeekTime=localStorage.getItem('prom_week_time');
                             }
-                        if (scope.currData && scope.currData['prom_day_ritiro']){
+                        if (scope.currData && scope.currData['prom_day_ritiro']!="undefined"){
                             promRitiro=scope.currData['prom_day_ritiro'];
                             promRitiroTime=scope.currData['prom_ritiro_time'];
                         }
@@ -423,84 +434,54 @@ week_planService.getIsFromHome= function () {
                             var weekNr = moment().format('w');
                             var k=0;
                             // while (k<babiesProfiles.length-1){
-                            var promises = [];
-
-for (var k = 0; k < babiesProfiles.length; k ++) {
-    promises.push(week_planService.getDefaultWeekPlan(babiesProfiles[k].kidId));
-}
-
-$q.all(promises).then(function(results) {
-    var promises2 = [];
-   for (var k = 0; k < babiesProfiles.length; k ++) {
-       promises2.push(week_planService.getWeekPlan(weekNr, babiesProfiles[k].kidId));
-   
-  }
-  $q.all(promises2).then(function(results2) {
-                                    //       for (var i = 0; i < data.length; i++) {
-                                    //     //usa defaults
-                                    //     var orauscita = new Date(scope.totime);
-                                    //     if (dataDefault && dataDefault[i].uscita) {
-                                    //         orauscita = new Date(dataDefault[i].uscita);
-                                    //     }
-                                    //     if (data[i].uscita) {
-                                    //         orauscita = new Date(data[i].uscita);
-                                    //     }
-                                    //     var selectedTime = new Date(orauscita.getTime() - promRitiroTime * 60000);
-                                    //     var dailyRitiro = Object.assign({}, ritiro);
-                                    //     dailyRitiro.id = id;
-                                    //     id++;
-                                    //     dailyRitiro.at = new Date(selectedTime.getTime());
-                                    //     dailyRitiro.text= $filter('translate')('notification_ritiro_text') + " " + babiesProfiles[k].firstName + " " + babiesProfiles[i].lastName;
-                                    //     var currentDay = dailyRitiro.at.getDay();
-                                    //     var distance = (i+1 + 7 - currentDay) % 7;
-                                    //     dailyRitiro.at.setDate(dailyRitiro.at.getDate() + distance);
-                                    //     notific.push(dailyRitiro);
-                                    // }
+                            week_planService.getDefaultWeekPlan(babiesProfiles[k].kidId).then(function (dataDefault) {
+                                week_planService.getWeekPlan(weekNr, babiesProfiles[k].kidId).then(function (data) {
+                                    //here I have the entire week plan
+                                    if (!data && !dataDefault){
+                                      var jsonTest = [{ 'name': 'monday_reduced', 'entrata': scope.fromtime, 'uscita': scope.totime, 'bus': false, 'delega_name': '' },
+                                                    { 'name': 'tuesday_reduced', 'entrata': scope.fromtime, 'uscita': scope.totime, 'bus': false, 'delega_name': '' },
+                                                    { 'name': 'wednesday_reduced', 'entrata': scope.fromtime, 'uscita': scope.totime, 'bus': false, 'delega_name': '' },
+                                                    { 'name': 'thursday_reduced', 'entrata': scope.fromtime, 'uscita': scope.totime, 'bus': false, 'delega_name': '' },
+                                                    { 'name': 'friday_reduced', 'entrata': scope.fromtime, 'uscita': scope.totime, 'bus': false, 'delega_name': '' }];
+                                    jsonTest = formatInfo(jsonTest);
+                                    data = jsonTest;
+                                    }
+                                    for (var i = 0; i < data.length; i++) {
+                                        //usa defaults
+                                        var orauscita = new Date(scope.totime);
+                                        if (dataDefault && dataDefault[i].uscita) {
+                                            orauscita = new Date(dataDefault[i].uscita);
+                                        }
+                                        if (data[i].uscita) {
+                                            orauscita = new Date(data[i].uscita);
+                                        }
+                                        var selectedTime = new Date(orauscita.getTime() - promRitiroTime * 60000);
+                                        var dailyRitiro = Object.assign({}, ritiro);
+                                        dailyRitiro.id = id;
+                                        id++;
+                                        dailyRitiro.at = new Date(selectedTime.getTime());
+                                        dailyRitiro.text= $filter('translate')('notification_ritiro_text') + " " + babiesProfiles[k].firstName + " " + babiesProfiles[k].lastName;
+                                        var currentDay = dailyRitiro.at.getDay();
+                                        var distance = (i+1 + 7 - currentDay) % 7;
+                                        dailyRitiro.at.setDate(dailyRitiro.at.getDate() + distance);
+                                        notific.push(dailyRitiro);
+                                    }
+                                    k++;
                                     
                                     //if I'm here I have to schedule here
                                     cordova.plugins.notification.local.schedule(notific);
                                     cordova.plugins.notification.local.on("click", function (notification) {
                                         $state.go("app.home");
                                     });
-  })
-
-});
-                            // week_planService.getDefaultWeekPlan(babiesProfiles[k].kidId).then(function (dataDefault) {
-                            //     week_planService.getWeekPlan(weekNr, babiesProfiles[k].kidId).then(function (data) {
-                            //         //here I have the entire week plan
-                            //         for (var i = 0; i < data.length; i++) {
-                            //             //usa defaults
-                            //             var orauscita = new Date(scope.totime);
-                            //             if (dataDefault && dataDefault[i].uscita) {
-                            //                 orauscita = new Date(dataDefault[i].uscita);
-                            //             }
-                            //             if (data[i].uscita) {
-                            //                 orauscita = new Date(data[i].uscita);
-                            //             }
-                            //             var selectedTime = new Date(orauscita.getTime() - promRitiroTime * 60000);
-                            //             var dailyRitiro = Object.assign({}, ritiro);
-                            //             dailyRitiro.id = id;
-                            //             id++;
-                            //             dailyRitiro.at = new Date(selectedTime.getTime());
-                            //             dailyRitiro.text= $filter('translate')('notification_ritiro_text') + " " + babiesProfiles[k].firstName + " " + babiesProfiles[i].lastName;
-                            //             var currentDay = dailyRitiro.at.getDay();
-                            //             var distance = (i+1 + 7 - currentDay) % 7;
-                            //             dailyRitiro.at.setDate(dailyRitiro.at.getDate() + distance);
-                            //             notific.push(dailyRitiro);
-                            //         }
-                                    
-                            //         //if I'm here I have to schedule here
-                            //         cordova.plugins.notification.local.schedule(notific);
-                            //         cordova.plugins.notification.local.on("click", function (notification) {
-                            //             $state.go("app.home");
-                            //         });
-                            //     }, function (err) {
-                            //         netErr = true;
-                            //     });
-                            // }, function (err) {
-                            //     netErr = true;
-                            // })
-                            // }
+                                }, function (err) {
+                                    netErr = true;
+                                    k++;
+                                });
+                            }, function (err) {
+                                netErr = true;
+                                 k++;
+                            })
+                            
                        } else {
                           localStorage.setItem('prom_day_ritiro', false);
 

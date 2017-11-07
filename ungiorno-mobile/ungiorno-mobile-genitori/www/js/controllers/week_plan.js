@@ -127,7 +127,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         };
 
         $scope.formatInfo = function (info) {
-            var days = ['monday_reduced','tuesday_reduced', 'wednesday_reduced', 'thursday_reduced', 'friday_reduced'];
+            var days = ['monday_reduced', 'tuesday_reduced', 'wednesday_reduced', 'thursday_reduced', 'friday_reduced'];
             for (var i = 0; i <= 4; i++) {
                 info[i].name = days[i];
                 if (info[i]['uscita'] != null && info[i]['uscita'] != undefined)
@@ -208,6 +208,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                         week_planService.setWeekPlan($scope.days, $scope.kidId, $scope.currWeek).then(function (data) {
                             $scope.mode = '';
                             week_planService.setMode($scope.mode);
+                            week_planService.setNotification($scope);
+
                         }, function (error) {
                         });
                     }
@@ -567,7 +569,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         };
 
         $scope.formatInfo = function (info) {
-            var days = ['monday_reduced','tuesday_reduced', 'wednesday_reduced', 'thursday_reduced', 'friday_reduced'];
+            var days = ['monday_reduced', 'tuesday_reduced', 'wednesday_reduced', 'thursday_reduced', 'friday_reduced'];
             for (var i = 0; i <= 4; i++) {
                 info[i].name = days[i];
                 if (info[i]['uscita'] != null && info[i]['uscita'] != undefined)
@@ -656,6 +658,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                         week_planService.setDefaultWeekPlan($scope.days, $scope.kidId).then(function (data) {
                             //$scope.getWeekPlan();
                             week_planService.setModeDefault($scope.mode);
+
                         }, function (error) {
                         });
                     }
@@ -1032,9 +1035,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             setTimeWidget();
         };
 
-        $scope.validateEntryExit = function(){
+        $scope.validateEntryExit = function () {
             return moment($scope.currData.entrata).isBefore(moment($scope.currData.uscita));
-        }  
+        }
         $scope.openPopupEntry = function () {
             $scope.tempData = $scope.currData.entrata;
             var myPopup = $ionicPopup.show({
@@ -1456,7 +1459,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             setTimeWidget();
         };
 
-        $scope.validateEntryExit = function(){
+        $scope.validateEntryExit = function () {
             return moment($scope.currData.entrata).isBefore(moment($scope.currData.uscita));
         }
         $scope.openPopupEntry = function () {
@@ -1762,6 +1765,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         };
         $scope.getListServices();
         $scope.setNotify = function () {
-            week_planService.setNotification($scope,profileService.getBabyProfile());
+            week_planService.setNotification($scope, profileService.getBabyProfile());
         }
     })

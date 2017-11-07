@@ -37,13 +37,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.w
   week_planService.getDayData = function (day) {
        return weekData[day];
   };
-  week_planService.getWeekDataDefault = function () {
-    return weekDefaultDataDefault;
-};
-
-  week_planService.getWeekData = function () {
-       return weekData;
-  };
   week_planService.getDayDataDefault = function (day) {
     return weekDefaultDataDefault[day];
 };

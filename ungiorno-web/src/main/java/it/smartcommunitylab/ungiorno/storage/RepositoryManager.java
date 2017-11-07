@@ -1133,7 +1133,8 @@ public class RepositoryManager implements RepositoryService {
         cal.setTime(today);
         int weeknr = cal.get(Calendar.WEEK_OF_YEAR);
         int daynr = cal.get(Calendar.DAY_OF_WEEK) - 2;
-        Map<String, SectionData> map = new HashMap<String, SectionData>();
+        // all school secton data
+        Map<String, SectionData> map = new HashMap<String, SectionData>();       
         for (SectionProfile p : profile.getSections()) {
             if (sections != null && !sections.isEmpty() && !sections.contains(p.getSectionId()))
                 continue;
@@ -1146,9 +1147,11 @@ public class RepositoryManager implements RepositoryService {
             sd.setChildren(new ArrayList<SectionData.KidProfile>());
             map.put(p.getSectionId(), sd);
         }
-
+        // kid profiles
         List<KidProfile> kids = readKidsForSections(appId, schoolId, sections);
+        // school services
         Set<TimeSlotSchoolService> schoolProfileServices = profile.getServices();
+        // 'normal' service
         TimeSlotSchoolService regularService = new TimeSlotSchoolService("test", true);
         for (TimeSlotSchoolService ts : schoolProfileServices) {
             if (ts.isRegular()) {
@@ -1156,14 +1159,11 @@ public class RepositoryManager implements RepositoryService {
                 break;
             }
         }
-        // Map<String, KidCalAssenza> assenzeMap = readAssenze(appId, schoolId, date);
-        // Map<String, KidCalRitiro> ritiriMap = readRitiri(appId, schoolId, date);
-        // Map<String, KidCalFermata> stopsMap = readFermate(appId, schoolId, date);
-        // Map<String, KidConfig> configMap = readConfigurations(appId, schoolId);
-
-
+//        sortFascie(regularService.getTimeSlots());
+        
+        // extract kid service mappings
         for (KidProfile kp : kids) {
-            // KidConfig conf = configMap.get(kp.getKidId());
+
             KidServices kidServices = kp.getServices();
             List<String> allKidFascie = new ArrayList<String>();
             List<TimeSlotSchoolService.ServiceTimeSlot> allFascie =
@@ -1173,7 +1173,9 @@ public class RepositoryManager implements RepositoryService {
                 allKidFascie.add(fasc.getName());
                 allFascie.add(fasc);
             }
-            if (kidServices.getTimeSlotServices() != null) {
+            
+            // read other services. Ignore for non-participating kids
+            if (kp.isPartecipateToSperimentation() && kidServices != null && kidServices.getTimeSlotServices() != null) {
                 for (TimeSlotSchoolService ts : kidServices.getTimeSlotServices()) {
                 	// handle ignore disabled and regular slots
                     if (ts.isEnabled() && !ts.isRegular()) {
@@ -1184,51 +1186,49 @@ public class RepositoryManager implements RepositoryService {
                     }
                 }
             }
+            // default week
             List<DayDefault> defaultWeek = kp.getWeekDef();
+            // current week
             KidWeeks kidWeekConfig = readKidWeeks(appId, schoolId, kp.getKidId(), weeknr);
             DayDefault todayConfig = null;
 
-            // get the configuration from the regular school service
-            todayConfig = new DayDefault();
-            todayConfig.setAbsence(false);
-            ServiceTimeSlot ts = regularService.getTimeSlots().get(0);
-            todayConfig.setEntrata(ts.getFromTime());
-            todayConfig.setUscita(ts.getToTime());
-            todayConfig.setBus(false);
-
-
-            // get Day info from KidWeeks if there is an exception configuration
-            if (kidWeekConfig != null) {
+            // get Day info from KidWeeks if there is a configuration for this week
+            if (kp.isPartecipateToSperimentation() && kidWeekConfig != null) {
                 List<DayDefault> days = kidWeekConfig.getDays();
                 todayConfig = (days.get(daynr) != null ? days.get(daynr) : todayConfig);
-            } else if (defaultWeek != null) {
-                // get DayInfo from WeekDefault of the kid if there is any default
-                // configuration for kid
-                todayConfig =
-                        (defaultWeek.get(daynr) != null ? defaultWeek.get(daynr) : todayConfig);
-            } else if (kidServices.getTimeSlotServices() != null && allFascie.size() > 0) {
-                // get the configuration from the services of kid
-                allFascie.add(regularService.getTimeSlots().get(0));
+            // get DayInfo from WeekDefault if defined    
+            } else if (kp.isPartecipateToSperimentation() && defaultWeek != null) {
+                todayConfig = (defaultWeek.get(daynr) != null ? defaultWeek.get(daynr) : todayConfig);
+            // construct data from kid profile    
+            } else {
+                // get the configuration from the regular school service
+                todayConfig = new DayDefault();
                 todayConfig.setAbsence(false);
-                sortFascieEntry(allFascie);
-                DateTime minSlotDate = allFascie.get(0).getFromTime();
-                LocalTime minhour = minSlotDate.toLocalTime();
-                if (minhour
-                        .isBefore(regularService.getTimeSlots().get(0).getToTime().toLocalTime())) {
-                    todayConfig.setEntrata(allFascie.get(0).getToTime());
-                }
-
-                sortFascieExit(allFascie);
-                DateTime maxSlotDate = allFascie.get(allFascie.size() - 1).getToTime();
-                LocalTime maxhour = maxSlotDate.toLocalTime();
-                if (maxhour
-                        .isAfter(regularService.getTimeSlots().get(0).getToTime().toLocalTime())) {
-                    todayConfig.setUscita(allFascie.get(allFascie.size() - 1).getToTime());
-                }
-                if (kidServices.getBus() != null) {
+                // baseline for entrance: regular service time start
+                todayConfig.setEntrata(regularService.getTimeSlots().get(0).getFromTime());
+                // baseline for exit: regular service time end
+                todayConfig.setUscita(regularService.getTimeSlots().get(regularService.getTimeSlots().size() - 1).getToTime());
+                // baseline for bus: service is enabled
+                if (kidServices != null && kidServices.getBus() != null) {
                     todayConfig.setBus(kidServices.getBus().isEnabled());
                 }
-            }
+            	if (kidServices != null && kidServices.getTimeSlotServices() != null && allFascie.size() > 0) {
+                    // get the configuration from the services of kid
+                    sortFascie(allFascie);
+                    DateTime minSlotDate = allFascie.get(0).getFromTime();
+                    LocalTime minhour = minSlotDate.toLocalTime();
+                    if (minhour
+                            .isBefore(todayConfig.getEntrata().toLocalTime())) {
+                        todayConfig.setEntrata(minSlotDate);
+                    }
+                    DateTime maxSlotDate = allFascie.get(allFascie.size() - 1).getToTime();
+                    LocalTime maxhour = maxSlotDate.toLocalTime();
+                    if (maxhour
+                            .isAfter(todayConfig.getUscita().toLocalTime())) {
+                        todayConfig.setUscita(maxSlotDate);
+                    }
+            	}
+            }	
 
             SectionData.KidProfile skp = new SectionData.KidProfile();
             skp.setKidId(kp.getKidId());
@@ -1326,7 +1326,12 @@ public class RepositoryManager implements RepositoryService {
         return kidWeek;
     }
 
-    public void sortFascieEntry(List<TimeSlotSchoolService.ServiceTimeSlot> allFascie) {
+    /**
+     * Sort time slots. Assume no overlapping possible so the order is a total order both
+     * for entrance time and exist time
+     * @param allFascie
+     */
+    public void sortFascie(List<TimeSlotSchoolService.ServiceTimeSlot> allFascie) {
         if ((allFascie != null) && (allFascie.size() > 0)) {
             Comparator<TimeSlotSchoolService.ServiceTimeSlot> comparator =
                     new Comparator<TimeSlotSchoolService.ServiceTimeSlot>() {
@@ -1335,22 +1340,6 @@ public class RepositoryManager implements RepositoryService {
                                 TimeSlotSchoolService.ServiceTimeSlot o2) {
                             LocalTime date1 = o1.getFromTime().toLocalTime();
                             LocalTime date2 = o2.getFromTime().toLocalTime();
-                            return date1.compareTo(date2);
-                        }
-                    };
-            Collections.sort(allFascie, comparator);
-        }
-    }
-
-    public void sortFascieExit(List<TimeSlotSchoolService.ServiceTimeSlot> allFascie) {
-        if ((allFascie != null) && (allFascie.size() > 0)) {
-            Comparator<TimeSlotSchoolService.ServiceTimeSlot> comparator =
-                    new Comparator<TimeSlotSchoolService.ServiceTimeSlot>() {
-                        @Override
-                        public int compare(TimeSlotSchoolService.ServiceTimeSlot o1,
-                                TimeSlotSchoolService.ServiceTimeSlot o2) {
-                            LocalTime date1 = o1.getToTime().toLocalTime();
-                            LocalTime date2 = o2.getToTime().toLocalTime();
                             return date1.compareTo(date2);
                         }
                     };

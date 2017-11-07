@@ -10,7 +10,6 @@
 
  
   <ion-content has-header="true">
-    <ion-scroll scrollbar-y="true">
       <div class="dayEdit">
           <div class="assenza">
               <div class="reason">
@@ -19,7 +18,7 @@
                       <input type="checkbox" ng-model="currData.absence" name="absence" ng-click="setAbsent();" />
                     <div class="control_indicator"></div>
                  </label>
-                 <span class="span_motiv" ng-click="add_removeReason()" ng-show="currData.absence"><b>{{reason_text | translate | uppercase}}</b></span>
+                 <span class="span_motiv" ng-click="add_removeReason()" ng-if="currData.absence"><b>{{reason_text | translate | uppercase}}</b></span>
               </div>
               <div ng-if="currData.absence && reason_text=='remove_reason'" class="assenza">
                 <table>
@@ -74,14 +73,15 @@
                 <input type="checkbox" ng-model="currData['bus']" name="bus"  ng-change="setBusHour()" ng-disabled="currData.absence || !busEnabled" />
             <div class="control_indicator"></div>
         </label>
+
       <table class="dayEdit_table" >
         <tr>
           <td>
               <p>{{'Entrata ore'| translate}}:</p>
           </td>
           <td>
-              <p class="editable2" ng-click="openPopupEntry()" ng-show="!currData.absence">{{currData.entrata_display}}</p>
-              <p class="noneditable2" ng-show="currData.absence">{{'none_f' | translate}}</p>
+              <span class="editable2" ng-click="openPopupEntry()" ng-if="!currData.absence">{{currData.entrata_display}}</span>
+              <span class="noneditable2" ng-if="currData.absence">{{'none_f' | translate}}</span>
           </td>
         </tr>
         <tr>
@@ -89,9 +89,9 @@
               <p>{{'Uscita ore'| translate}}:</p>
           </td>
           <td>
-              <p class="editable2" ng-click="openPopupOut()" ng-show="!currData.bus && !currData.absence">{{currData.uscita_display}}</p>
-              <p class="noneditable2" ng-show="currData.absence">{{'none_f' | translate}}</p>
-              <p class="noneditable2" ng-show="currData.bus && !currData.absence">{{currData.uscita_display}}</p>
+              <span class="editable2" ng-click="openPopupOut()" ng-if="!currData.bus && !currData.absence">{{currData.uscita_display}}</span>
+              <span class="noneditable2" ng-if="currData.absence">{{'none_f' | translate}}</span>
+              <span class="noneditable2" ng-if="currData.bus && !currData.absence">{{currData.uscita_display}}</span>
           </td>
         </tr>
         <tr>
@@ -99,11 +99,11 @@
               <p>{{'Fermata'| translate}}:</p>
           </td>
           <td>
-              <div data-tap-disabled="true">
-                  <select ng-show="!currData.absence" ng-model="currData.fermata" ng-disabled="currData.absence || !currData.bus">
+              <div data-tap-disabled="true" ng-class="{'select-div':!currData.absence && currData.bus}">
+                  <select ng-if="!currData.absence && currData.bus" ng-model="currData.fermata">
                     <option ng-repeat="option in fermataOptions" value="{{option.stopId}}" ng-selected="currData.fermata==option.stopId">{{option.stopId | translate}}</option>
                   </select>
-                  <span class="noneditable2" ng-show="currData.absence">{{'none_f' | translate}}</span>
+                  <span class="noneditable2" ng-if="currData.absence || !currData.bus">{{'none_f' | translate}}</span>
               </div>
           </td>
         </tr>
@@ -112,8 +112,8 @@
               <p>{{'Ritira'| translate}}:</p>
           </td>
           <td>
-              <div data-tap-disabled="true">
-                  <select ng-show="!currData.absence" ng-model="currData.delega_name">
+              <div data-tap-disabled="true" ng-class="{'select-div':!currData.absence}">
+                  <select ng-if="!currData.absence" ng-model="currData.delega_name">
                       <option ng-repeat="option in ritiraOptions" value="{{option.personId}}" ng-if="option.personId=='none'" ng-selected="currData.delega_name==option.personId">
                           {{option.firstName | translate}} {{option.lastName | translate}}
                         </option>
@@ -123,19 +123,12 @@
                         </option>
                         
                   </select>
-                  <span class="noneditable2" ng-show="currData.absence">{{'none' | translate}}</span>
-              </div>
-              
-              <!--<span  modal-select="" ng-model="currData.delega_name" options="ritiraOptions"  option-property="personId" modal-title="{{'Ritira'| translate}}">
-                  <span ng-class="{'editable2': !currData.absence,'noneditable2': currData.absence}">{{currData.delega_name|getRitiroName:ritiraOptions | translate}} ({{currData.delega_name|getRitiroType:ritiraOptions | translate}})</span>
-                  <div class="option">
-                      {{option.firstName}} {{option.lastName}}
-                      ({{ option.parent ? 'parent'  : option.relation  | translate}})
-                  </div>
-              </span>-->
+                  <span class="noneditable2" ng-if="currData.absence">{{'none' | translate}}</span>
+              </div>              
           </td>
         </tr>
       </table>
+    
       <hr class="hrstyle"/>
       <div class="repeat_str">{{'repeat_days' | translate}}:</div>
       <div class="day_checkbox">
@@ -156,7 +149,6 @@
       </div>
 
     </div>
-    </ion-scroll>
   </ion-content>
 </ion-view>
 <!-- 

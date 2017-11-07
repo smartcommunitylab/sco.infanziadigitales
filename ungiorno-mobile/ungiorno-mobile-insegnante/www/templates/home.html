@@ -136,7 +136,7 @@
             <!--          <div class="name-of-child " ng-if="!child.image || child.image=='' ">{{child.childrenName}}</div>-->
             <!--            <div class="name-of-child ">{{child.childrenName}}</div>-->
             <div class="name-of-child ">{{child.childrenName | homeName}}</div>           
-            <div class="present">
+            <div class="present" ng-if="child.partecipateToSperimentation">
                 <div class="children-info child-presente" ng-if="child.active && !communicationExpanded && child.exitTime!==null">{{'entry_lbl' | translate}} {{child.oraEntrata}}</div>
                 <div class="children-info child-presente-uscita" ng-if="child.active && !communicationExpanded && child.exitTime!==null">
                   <div ng-if="!child.busActive">{{'exit_lbl' | translate}} {{child.presenza}}</div>
@@ -145,7 +145,7 @@
                 </div>
                 <div class="child-assente" ng-if="child.exitTime==null">{{child.presenza}}</div>
             </div>
-
+            <div class="present" ng-if="!child.partecipateToSperimentation">&nbsp;</div>
             
           </div>
         </div>

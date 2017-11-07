@@ -91,9 +91,9 @@ public class KidManager {
         return imageDownloadDir + "/" + PLACEHOLDER_KID_PICTURE;
     }
 
-    public String getKidPicturePath(String appId, String schoolId, String kidId) {
+    public String getKidPicturePath(String appId, String schoolId, String kidId, boolean checkParticipation) {
         KidProfile kid = getKidProfile(appId, schoolId, kidId);
-        if (kid != null && kid.getImage() != null && kid.isPartecipateToSperimentation()) {
+        if (kid != null && kid.getImage() != null && (!checkParticipation || kid.isPartecipateToSperimentation())) {
             return imageDownloadDir + "/" + kid.getImage();
         } else {
             return getDefaultKidPicturePath();

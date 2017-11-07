@@ -794,8 +794,12 @@ $scope.cnt=0;
     if ($scope.section != null) {
       for (var i = 0; i < $scope.section.children.length; i++) {
         //create string child[selectedPeriod].presenza
+        // IF ABSENT, SHOW WITH "ABSENT" MESSAGE
         if ($scope.section.children[i].exitTime == null) {
           $scope.section.children[i].presenza = $filter('translate')('absent');
+        // IF PRESENT BUT NOT FOR THIS SLOT, HIDE IT
+        } else if ($scope.section.children[i].slotPresent.indexOf(periodOfTheDay) < 0) {
+          continue;  
         } else {
           var oraUscita = new Date($scope.section.children[i].exitTime);
           var oraEntrata = new Date($scope.section.children[i].entryTime);
@@ -847,17 +851,17 @@ $scope.cnt=0;
     $scope.availableChildren[periodOfTheDay] = 0;
 
     if ($scope.section != null) {
-      console.log($scope.listServices);
-      console.log($scope.section.children);
-      console.log(periodOfTheDay);
       for (var i = 0; i < $scope.section.children.length; i++) {
-        console.log($scope.section.children[i]);
-        var kidFascieNames=$scope.section.children[i].fascieNames;
-        if( kidFascieNames !==null && kidFascieNames!=undefined && kidFascieNames.indexOf(periodOfTheDay) !== -1){
+        var kid = $scope.section.children[i];
+        console.log();
+        var kidFascieNames = kid.fascieNames;
+        var idx = kidFascieNames !==null && kidFascieNames!=undefined ? kidFascieNames.indexOf(periodOfTheDay) : -1;
+        if(idx !== -1){
           $scope.totalChildrenNumber[periodOfTheDay]++;
-        }
-        if (kidFascieNames !==null && kidFascieNames!=undefined && kidFascieNames.indexOf(periodOfTheDay) !== -1 &&$scope.section.children[i].exitTime != null) {
-          $scope.availableChildren[periodOfTheDay]++;
+          // add to present only if kid is present and his presence overlaps with the slot
+          if (kid.slotPresent.indexOf(periodOfTheDay)>=0) {
+              $scope.availableChildren[periodOfTheDay]++;              
+          }
         }
       }
     }

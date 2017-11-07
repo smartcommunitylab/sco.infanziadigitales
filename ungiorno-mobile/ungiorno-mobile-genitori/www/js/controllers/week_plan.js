@@ -291,6 +291,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 temp = moment().startOf('day').add(10, 'hours');
             }
             return temp;
+
         }
 
         $scope.isRetireTimeLimitExpired = function () {
@@ -336,6 +337,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                         {
                             text: $filter('translate')('retire_popup_absent_close'),
                             type: 'button-positive'
+
                         }
                     ]
                 });
@@ -776,6 +778,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             if ($scope.currData.uscita !== null && $scope.currData.uscita !== undefined) {
                 var selectedTime = moment($scope.currData.uscita).toDate();
                 tempVal = (selectedTime).getHours() * 60 * 60 + (selectedTime).getMinutes() * 60;
+
             }
             $scope.timePickerObject24Hour = {
                 inputEpochTime: tempVal, //Optional
@@ -1772,6 +1775,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
 
         $scope.setNotify = function () {
+            //set notify daily, weekly and based on kid profile
             var netErr = false;
             if (window.plugin && cordova && cordova.plugins && cordova.plugins.notification) {
                 cordova.plugins.notification.local.clearAll(function () {
@@ -1816,12 +1820,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                             next.hour(parseInt(temp[0]));
                             next.minute(parseInt(temp[1]));
                             next.day($scope.selectables.indexOf($scope.currData['prom_week_day']) + 1);
-
-                            // next.set({
-                            //     'hour': parseInt(temp[0]),
-                            //     'minute': parseInt(temp[1]),
-                            //     'day': tempDay
-                            // });
                             var selectedTime = next.toDate();
                             // start from next week if it is in the past
                             if (selectedTime <= now) {
@@ -1848,12 +1846,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                                         }
                                         if (data[i].uscita) {
                                             orauscita = new Date(data[i].uscita);
-                                            //var ore_uscita = data[i].uscita_display.split(':');
-                                            // var usc = moment().hour(ore_uscita[0]);
-                                            // var usc = usc.minute(ore_uscita[1]);
-
                                         }
-                                        // dateFrom = new Date(orauscita.getTime() - $scope.currData['prom_ritiro_time'] * 60000)
                                         var selectedTime = new Date(orauscita.getTime() - $scope.currData['prom_ritiro_time'] * 60000);
                                         var dailyRitiro = Object.assign({}, ritiro);
                                         dailyRitiro.id = id;
@@ -1876,21 +1869,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                                 netErr = true;
                             })
 
-                            // temp = parseInt($scope.currData['prom_ritiro_time']);
-                            // $scope.briefInfo = profileService.getBriefInfo();
-                            // var ore_uscita = $scope.briefInfo.ore_uscita.split(':');
-                            // var usc = moment().hour(ore_uscita[0]);
-                            // var usc = usc.minute(ore_uscita[1]);
-                            // dateFrom = usc.subtract(temp, 'minutes');
-                            // var selectedTime = dateFrom.toDate();
-                            // if (selectedTime <= now) {
-                            //     selectedTime.setDate(selectedTime.getDate() + 1);
-                            // }
-                            // ritiro.id=id;
-                            // id++;
-                            // ritiro.at = selectedTime;
-                            // notific.push(ritiro);
-                        }
+                       }
 
                         console.log(notific);
                         if (!$scope.currData['prom_day_ritiro'] || netErr) {

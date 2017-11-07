@@ -253,5 +253,6 @@
   "non_previste":"Non previste",
   "non_specificate":"Non specificate",
   "no_feature_weekend":"Operazione non consentita sabato e domenica",
-  "send_msg":"Invia un messaggio"
+  "send_msg":"Invia un messaggio",
+  "ora_invalida": "Gli orari di entrata e uscita sono incompatibili."
 }

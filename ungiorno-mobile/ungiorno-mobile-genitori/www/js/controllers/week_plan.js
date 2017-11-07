@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.week_plan', [])
 
-    .controller('WeekPlanCtrl', function ($scope, moment, dataServerService, week_planService, profileService, $ionicModal, $filter, $ionicPopup, $state) {
+    .controller('WeekPlanCtrl', function ($scope, moment, dataServerService, week_planService, profileService, $ionicModal, $filter, $ionicPopup, $state, Toast) {
         $scope.days = [];
         var dated = new Date();
         $scope.currentDate = moment();
@@ -111,7 +111,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             var weekEnd = currentDate.clone().endOf('week');
             var sDate = moment(weekStart).format("D");
             var eDate = moment(weekEnd).format("D");
-            var month = moment(weekEnd).format("MMMM");
+            var month = moment(weekEnd).format("MMM");
             var year = moment(weekEnd).format("YYYY");
             $scope.date = sDate + ' - ' + eDate + ' ' + month + ' ' + year;
         }
@@ -127,7 +127,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         };
 
         $scope.formatInfo = function (info) {
+            var days = ['monday_reduced','tuesday_reduced', 'wednesday_reduced', 'thursday_reduced', 'friday_reduced'];
             for (var i = 0; i <= 4; i++) {
+                info[i].name = days[i];
                 if (info[i]['uscita'] != null && info[i]['uscita'] != undefined)
                     info[i]['uscita_display'] = moment(info[i]['uscita']).format('H:mm');
                 if (info[i]['entrata'] != null && info[i]['entrata'] != undefined)
@@ -214,8 +216,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         };
 
         $scope.whatClassIsIt = function (day, type) {
-            var selected = moment($scope.currentDate.clone().weekday(day).week($scope.currWeek).year($scope.currYear).format('M D YYYY'));
-            var actualDate = moment(moment().format('M D YYYY'));
+            var selected = $scope.currentDate.clone().weekday(day).week($scope.currWeek).year($scope.currYear).startOf('day');
+            var actualDate = moment().startOf('day');
             var ret;
             if ((selected.isAfter(actualDate) || selected.isSame(actualDate)) && type == '') {
                 ret = 'button-day editable';
@@ -321,8 +323,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         }
 
         $scope.gotoEditDate = function (day) {
-            var selected = moment($scope.currentDate.clone().weekday(day).week($scope.currWeek).year($scope.currYear).format('M D YYYY'));
-            var actualDate = moment(moment().format('M D YYYY'));
+            var selected = $scope.currentDate.clone().weekday(day).week($scope.currWeek).year($scope.currYear).startOf('day');//var selected = moment($scope.currentDate.clone().weekday(day).week($scope.currWeek).year($scope.currYear).format('M D YYYY'));
+            var actualDate = moment().startOf('day');//var actualDate = moment(moment().format('M D YYYY'));
             var dayData = $scope.days[day];
             var usc = dayData['uscita'];
             var temp = moment('17:00', 'HH:mm');// it should be 09:10
@@ -342,7 +344,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                     ]
                 });
             }
-            else if (selected.isAfter(actualDate) || selected.isSame(actualDate)) {
+            else if (!selected.isBefore(actualDate)) {
                 $scope.mode = 'edit';
                 var dayData = $scope.days[day];
                 dayData['monday'] = false;
@@ -438,7 +440,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         };
 
     })
-    .controller('DefaultWeekPlanCtrl', function ($scope, moment, dataServerService, week_planService, profileService, $ionicModal, $filter, $ionicPopup, $state) {
+    .controller('DefaultWeekPlanCtrl', function ($scope, moment, dataServerService, week_planService, profileService, $ionicModal, $filter, $ionicPopup, $state, Toast) {
         $scope.days = [];
         var dated = new Date();
         $scope.currWeek = (0 | dated.getDate() / 7) + 1;
@@ -565,7 +567,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         };
 
         $scope.formatInfo = function (info) {
+            var days = ['monday_reduced','tuesday_reduced', 'wednesday_reduced', 'thursday_reduced', 'friday_reduced'];
             for (var i = 0; i <= 4; i++) {
+                info[i].name = days[i];
                 if (info[i]['uscita'] != null && info[i]['uscita'] != undefined)
                     info[i]['uscita_display'] = moment(info[i]['uscita']).format('H:mm');
                 if (info[i]['entrata'] != null && info[i]['entrata'] != undefined)
@@ -756,7 +760,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
 
     })
-    .controller('WeekDefaultEditDayCtrl', function ($scope, moment, dataServerService, week_planService, profileService, $ionicModal, $filter, $ionicPopup, $state) {
+    .controller('WeekDefaultEditDayCtrl', function ($scope, moment, dataServerService, week_planService, profileService, $ionicModal, $filter, $ionicPopup, $state, Toast) {
         $scope.days = {};
         var dated = new Date();
         $scope.currDay = 0;
@@ -1028,6 +1032,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             setTimeWidget();
         };
 
+        $scope.validateEntryExit = function(){
+            return moment($scope.currData.entrata).isBefore(moment($scope.currData.uscita));
+        }  
         $scope.openPopupEntry = function () {
             $scope.tempData = $scope.currData.entrata;
             var myPopup = $ionicPopup.show({
@@ -1049,6 +1056,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                         text: $filter('translate')('Salva'),
                         type: 'button_save',
                         onTap: function (e) {
+                            if (!$scope.validateEntryExit()) {
+                                Toast.show($filter('translate')('ora_invalida'), 'short', 'bottom');
+                                e.preventDefault();
+                                return false;
+                            }
                             $scope.manual_time = false;
                         }
                     }
@@ -1077,6 +1089,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                         text: $filter('translate')('Salva'),
                         type: 'button_save',
                         onTap: function (e) {
+                            if (!$scope.validateEntryExit()) {
+                                Toast.show($filter('translate')('ora_invalida'), 'short', 'bottom');
+                                e.preventDefault();
+                                return false;
+                            }
                             $scope.manual_time = false;
                         }
                     }
@@ -1102,7 +1119,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         }
 
     })
-    .controller('WeekEditDayCtrl', function ($scope, moment, dataServerService, week_planService, profileService, $ionicModal, $filter, $ionicPopup, $state) {
+    .controller('WeekEditDayCtrl', function ($scope, moment, dataServerService, week_planService, profileService, $ionicModal, $filter, $ionicPopup, $state, Toast) {
         $scope.days = [];
         var dated = new Date();
         $scope.currDay = 0;
@@ -1439,6 +1456,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             setTimeWidget();
         };
 
+        $scope.validateEntryExit = function(){
+            return moment($scope.currData.entrata).isBefore(moment($scope.currData.uscita));
+        }
         $scope.openPopupEntry = function () {
             $scope.tempData = $scope.currData.entrata;
             var myPopup = $ionicPopup.show({
@@ -1460,6 +1480,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                         text: $filter('translate')('Salva'),
                         type: 'button_save',
                         onTap: function (e) {
+                            if (!$scope.validateEntryExit()) {
+                                Toast.show($filter('translate')('ora_invalida'), 'short', 'bottom');
+                                e.preventDefault();
+                                return false;
+                            }
                             $scope.manual_time = false;
                         }
                     }
@@ -1488,6 +1513,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                         text: $filter('translate')('Salva'),
                         type: 'button_save',
                         onTap: function (e) {
+                            if (!$scope.validateEntryExit()) {
+                                Toast.show($filter('translate')('ora_invalida'), 'short', 'bottom');
+                                e.preventDefault();
+                                return false;
+                            }
                             $scope.manual_time = false;
                         }
                     }
@@ -1514,7 +1544,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         }
 
     })
+<<<<<<< HEAD
     .controller('Promemoria', function ($scope, week_planService, moment, dataServerService, profileService, $ionicModal, $filter, $ionicPopup, $state, $cordovaLocalNotification) {
+=======
+    .controller('Promemoria', function ($scope, moment, dataServerService, profileService, $ionicModal, $filter, $ionicPopup, $state, $cordovaLocalNotification, week_planService, Toast) {
+>>>>>>> c6a1909dc10fe03a2f858d4d5339ad1805d98ddb
         $scope.days = {};
         $scope.currDay = 0;
         $scope.currData = {};

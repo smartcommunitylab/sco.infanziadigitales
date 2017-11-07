@@ -36,6 +36,7 @@ import java.util.regex.Pattern;
 
 import org.bson.types.ObjectId;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +49,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
@@ -93,7 +95,6 @@ import it.smartcommunitylab.ungiorno.model.SectionDef;
 import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.model.TeacherCalendar;
 import it.smartcommunitylab.ungiorno.model.TimeSlotSchoolService;
-import it.smartcommunitylab.ungiorno.model.TimeSlotSchoolService.ServiceTimeSlot;
 import it.smartcommunitylab.ungiorno.services.RepositoryService;
 import it.smartcommunitylab.ungiorno.usage.UsageEntity;
 import it.smartcommunitylab.ungiorno.usage.UsageEntity.UsageAction;
@@ -246,6 +247,14 @@ public class RepositoryManager implements RepositoryService {
      */
     @Override
     public void updateChildren(String appId, String schoolId, List<KidProfile> children) {
+    	for (KidProfile kp : children) {
+    		for (AuthPerson p : kp.getPersons()) {
+    			if (StringUtils.isEmpty(p.getPersonId()) && !p.isParent()) {
+    				p.setPersonId(ObjectId.get().toString());
+    			}
+    		}
+    	}
+    	
         template.remove(schoolQuery(appId, schoolId), KidProfile.class);
         template.insertAll(children);
 
@@ -1310,6 +1319,11 @@ public class RepositoryManager implements RepositoryService {
             } else {
                 skp.setCalNotes(false);
             }
+            
+            // normalize times:
+            if (skp.getEntryTime() != null) skp.setEntryTime(skp.getEntryTime().withDate(LocalDate.now()));
+            if (skp.getExitTime() != null) skp.setExitTime(skp.getExitTime().withDate(LocalDate.now()));
+            
             if (kp.getSection() != null && kp.getSection().getSectionId() != null) {
                 map.get(kp.getSection().getSectionId()).getChildren().add(skp);
             }

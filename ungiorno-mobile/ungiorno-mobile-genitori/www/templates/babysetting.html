@@ -14,14 +14,14 @@
           <div class="input-description-padding setting-services-list">{{'babysetting_services' | translate}}</div>
           <ul class="home-info-content my-list home-comm">
               <li class="huge row" ng-repeat="service in listServicesSchool" ng-if="!service.regular">
-                <span class=" serviceName">{{ getStringService(service.name) |capitalize }}</span> 
-                <span class="col listService" ng-if="babyActiveServices[service.name] &&  babyActiveServices[service.name]['active']">{{'babysetting_active' | translate| uppercase}}</span>
-                <span class="col listService" ng-if="!babyActiveServices[service.name]  || !babyActiveServices[service.name]['active']">{{'babysetting_not_active' | translate | uppercase}}</span>
+                <span class="col col-67 serviceName">{{ getStringService(service.name) |capitalize }}</span> 
+                <span class="listService" ng-if="babyActiveServices[service.name] &&  babyActiveServices[service.name]['active']">{{'babysetting_active' | translate| uppercase}}</span>
+                <span class="listService" ng-if="!babyActiveServices[service.name]  || !babyActiveServices[service.name]['active']">{{'babysetting_not_active' | translate | uppercase}}</span>
               </li>
               <li class="huge row">
-                  <span class=" serviceName">{{ 'bus_service' | translate |capitalize }}</span> 
-                  <span ng-if="busEnabled" class="col listService">{{'babysetting_active' | translate| uppercase}}</span>
-                  <span ng-if="!busEnabled" class="col listService">{{'babysetting_not_active' | translate | uppercase}}</span>
+                  <span class="col col-67 serviceName">{{ 'bus_service' | translate |capitalize }}</span> 
+                  <span ng-if="busEnabled" class="istService">{{'babysetting_active' | translate| uppercase}}</span>
+                  <span ng-if="!busEnabled" class="listService">{{'babysetting_not_active' | translate | uppercase}}</span>
                 </li>
     
             </ul>

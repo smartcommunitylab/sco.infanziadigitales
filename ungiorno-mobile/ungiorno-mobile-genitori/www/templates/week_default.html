@@ -32,7 +32,8 @@
                         <div class="col">
                             <i class="icon ion-android-person iconStyle"></i>
                             <span class="delegaStyle">{{day.delega_name|getRitiroName:ritiraOptions | translate}}</span>
-                        </div>  
+                            <span class="delegaStyle" ng-if="day.delega_name && day.delega_name != 'none'">({{day.delega_name|getRitiroType:ritiraOptions | translate}})</span>  
+                          </div>  
                       </div> 
                     </div> 
                   </div>     
@@ -104,7 +105,8 @@
                       <div class="col">
                           <i class="icon ion-android-person iconStyle"></i>
                           <span class="delegaStyle">{{day.delega_name|getRitiroName:ritiraOptions | translate}}</span>
-                      </div>  
+                          <span class="delegaStyle" ng-if="day.delega_name && day.delega_name != 'none'">({{day.delega_name|getRitiroType:ritiraOptions | translate}})</span>  
+                        </div>  
                     </div> 
                   </div> 
                 </div>     

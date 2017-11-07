@@ -10,7 +10,6 @@
  
  
   <ion-content has-header="true">
-    <ion-scroll scrollbar-y="true">
       <div class="dayEdit">
           <label class="control control-checkbox">
               <!-- ng-repeat="(key, data) in listServicesDb" ng-if="key!='mensa'" -->
@@ -24,7 +23,7 @@
               <p>{{'Entrata ore'| translate}}:</p>
           </td>
           <td>
-              <p class="editable2" ng-click="openPopupEntry()">{{currData.entrata_display}}</p>
+              <span class="editable2" ng-click="openPopupEntry()">{{currData.entrata_display}}</span>
           </td>
         </tr>
         <tr>
@@ -32,8 +31,8 @@
               <p>{{'Uscita ore'| translate}}:</p>
           </td>
           <td>
-              <p class="editable2" ng-click="openPopupOut()" ng-show="!currData.bus">{{currData.uscita_display}}</p>
-              <p class="noneditable2" ng-show="currData.bus">{{currData.uscita_display}}</p>
+              <span class="editable2" ng-click="openPopupOut()" ng-if="!currData.bus">{{currData.uscita_display}}</span>
+              <span class="noneditable2" ng-if="currData.bus">{{currData.uscita_display}}</span>
           </td>
         </tr>
         <tr>
@@ -41,11 +40,12 @@
               <p>{{'Fermata'| translate}}:</p>
           </td>
           <td>
-              <div data-tap-disabled="true">
-                  <select ng-model="currData.fermata" ng-disabled="!currData.bus" >
+              <div data-tap-disabled="true"  ng-class="{'select-div':currData.bus}">
+                  <select ng-model="currData.fermata" ng-if="currData.bus" >
                     <option ng-repeat="option in fermataOptions" value="{{option.stopId}}" ng-selected="currData.fermata==option.stopId">{{option.stopId | translate}}</option>
                   </select>
-              </div>
+                  <span class="noneditable2" ng-if="!currData.bus">{{'none_f' | translate}}</span>
+                </div>
           </td>
         </tr>
         <tr>
@@ -53,7 +53,8 @@
               <p>{{'Ritira'| translate}}:</p>
           </td>
           <td>
-              <select ng-model="currData.delega_name" ng-disabled="currData.absence">
+                <div data-tap-disabled="true" class="select-div">
+                <select ng-model="currData.delega_name">
                     <option ng-repeat="option in ritiraOptions" value="{{option.personId}}" ng-if="option.personId=='none'" ng-selected="currData.delega_name==option.personId">
                             {{option.firstName | translate}} {{option.lastName | translate}}
                           </option>
@@ -62,13 +63,7 @@
                             ({{ option.parent ? 'parent'  : option.relation  | translate}})
                           </option>
                   </select>
-                <!--<span  modal-select="" ng-model="currData.delega_name" options="ritiraOptions"  option-property="personId" modal-title="{{'Ritira'| translate}}">
-                    <span ng-class="{'editable2': !currData.absence,'noneditable2': currData.absence}">{{currData.delega_name|getRitiroName:ritiraOptions | translate}} ({{currData.delega_name|getRitiroType:ritiraOptions | translate}})</span>
-                    <div class="option">
-                        {{option.firstName}} {{option.lastName}}
-                        ({{ option.parent ? 'parent'  : option.relation  | translate}})
-                    </div>
-                </span>-->
+                </div>  
           </td>
         </tr>
       </table>
@@ -92,7 +87,6 @@
       </div>
 
     </div>
-    </ion-scroll>
   </ion-content>
 </ion-view>
 <!-- 

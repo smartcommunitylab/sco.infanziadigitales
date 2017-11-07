@@ -1544,11 +1544,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         }
 
     })
-<<<<<<< HEAD
-    .controller('Promemoria', function ($scope, week_planService, moment, dataServerService, profileService, $ionicModal, $filter, $ionicPopup, $state, $cordovaLocalNotification) {
-=======
+
     .controller('Promemoria', function ($scope, moment, dataServerService, profileService, $ionicModal, $filter, $ionicPopup, $state, $cordovaLocalNotification, week_planService, Toast) {
->>>>>>> c6a1909dc10fe03a2f858d4d5339ad1805d98ddb
         $scope.days = {};
         $scope.currDay = 0;
         $scope.currData = {};

@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.week_plan',  [])
 
-.controller('WeekPlanCtrl', function ($scope, moment, dataServerService, week_planService, profileService , $ionicModal, $filter, $ionicPopup,$state) {
+.controller('WeekPlanCtrl', function ($scope, moment, dataServerService, week_planService, profileService , $ionicModal, $filter, $ionicPopup,$state, Toast) {
     $scope.days=[];
     var dated = new Date();
     $scope.currentDate = moment();
@@ -434,7 +434,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
 
 })
-.controller('DefaultWeekPlanCtrl', function ($scope, moment, dataServerService, week_planService, profileService , $ionicModal, $filter, $ionicPopup,$state) {
+.controller('DefaultWeekPlanCtrl', function ($scope, moment, dataServerService, week_planService, profileService , $ionicModal, $filter, $ionicPopup,$state, Toast) {
     $scope.days=[];
     var dated = new Date();
     $scope.currWeek = (0 | dated.getDate() / 7)+1;
@@ -750,7 +750,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
 
 })
-.controller('WeekDefaultEditDayCtrl', function ($scope, moment, dataServerService, week_planService, profileService , $ionicModal, $filter, $ionicPopup,$state) {
+.controller('WeekDefaultEditDayCtrl', function ($scope, moment, dataServerService, week_planService, profileService , $ionicModal, $filter, $ionicPopup,$state, Toast) {
     $scope.days={};
     var dated = new Date();
     $scope.currDay = 0;
@@ -1015,6 +1015,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         setTimeWidget();
     };
 
+    $scope.validateEntryExit = function(){
+        return moment($scope.currData.entrata).isBefore(moment($scope.currData.uscita));
+    }  
+
     $scope.openPopupEntry= function() {
       $scope.tempData=$scope.currData.entrata;
             var myPopup = $ionicPopup.show({
@@ -1036,6 +1040,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 text: $filter('translate')('Salva'),
                 type: 'button_save',
                 onTap: function(e) {
+                    if (!$scope.validateEntryExit()) {
+                        Toast.show($filter('translate')('ora_invalida'), 'short', 'bottom');
+                        e.preventDefault();
+                        return false;
+                    }
                     $scope.manual_time=false;
                   }
                 }
@@ -1064,9 +1073,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                   text: $filter('translate')('Salva'),
                   type: 'button_save',
                   onTap: function(e) {
-                      $scope.manual_time=false;
+                    if (!$scope.validateEntryExit()) {
+                        Toast.show($filter('translate')('ora_invalida'), 'short', 'bottom');
+                        e.preventDefault();
+                        return false;
                     }
+                    $scope.manual_time=false;
                   }
+                }
               ]
               });
       }
@@ -1089,7 +1103,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     }
 
 })
-.controller('WeekEditDayCtrl', function ($scope, moment, dataServerService, week_planService, profileService , $ionicModal, $filter, $ionicPopup,$state) {
+.controller('WeekEditDayCtrl', function ($scope, moment, dataServerService, week_planService, profileService , $ionicModal, $filter, $ionicPopup,$state, Toast) {
     $scope.days=[];
     var dated = new Date();
     $scope.currDay = 0;
@@ -1419,6 +1433,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         $scope.manual_time=false;
         setTimeWidget();
     };
+    $scope.validateEntryExit = function(){
+        return moment($scope.currData.entrata).format('HH:mm') < moment($scope.currData.uscita).format('HH:mm');
+    }  
 
     $scope.openPopupEntry= function() {
       $scope.tempData=$scope.currData.entrata;
@@ -1441,6 +1458,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 text: $filter('translate')('Salva'),
                 type: 'button_save',
                 onTap: function(e) {
+                    if (!$scope.validateEntryExit()) {
+                        Toast.show($filter('translate')('ora_invalida'), 'short', 'bottom');
+                        e.preventDefault();
+                        return false;
+                    }
                     $scope.manual_time=false;
                   }
                 }
@@ -1469,6 +1491,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                   text: $filter('translate')('Salva'),
                   type: 'button_save',
                   onTap: function(e) {
+                    if (!$scope.validateEntryExit()) {
+                        Toast.show($filter('translate')('ora_invalida'), 'short', 'bottom');
+                        e.preventDefault();
+                        return false;
+                    }
                       $scope.manual_time=false;
                     }
                   }
@@ -1495,7 +1522,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     }
 
 })
-.controller('Promemoria', function ($scope, moment, dataServerService, profileService , $ionicModal ,$filter, $ionicPopup,$state,$cordovaLocalNotification,week_planService) {
+.controller('Promemoria', function ($scope, moment, dataServerService, profileService , $ionicModal ,$filter, $ionicPopup,$state,$cordovaLocalNotification,week_planService, Toast) {
     $scope.days={};
     $scope.currDay = 0;
     $scope.currData = {};

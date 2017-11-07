@@ -439,7 +439,7 @@ return {
     absence_type: 'Motivazione: ',
     not_allowed_popup_title: 'Errore',
     not_allowed_signin: 'Utente non autorizzato',
-    child_not_partecipate: 'Il bambino non partecipa alla sperimentazione',
+    child_not_partecipate: 'Il bambino non partecipa al servizio UGAS',
     home_scadenze: "Seleziona i bambini che hanno effettuato la consegna",
     data_updated: "Dati aggiornati",
     function_disabled: 'Funzione disabilitata',

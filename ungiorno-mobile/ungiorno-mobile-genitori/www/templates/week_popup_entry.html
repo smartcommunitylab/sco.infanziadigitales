@@ -1,7 +1,7 @@
 <div>
   <div ng-repeat="itemValue in listServicesAnticipo">
-    <div style="display: flex; flex-direction: row;">
-            <input type="radio" id="{{$index}}" name="radio-group" value="itemValue.out" ng-click="setEntry(itemValue)">
+    <div style="display: flex; flex-direction: row;"  ng-click="setEntry(itemValue)">
+            <input type="radio" id="{{$index}}" name="radio-group" value="itemValue.out">
             <label for="{{$index}}">{{itemValue.out}} ({{itemValue.value}})</label>
       </div>
     </div>
@@ -9,19 +9,11 @@
     <div style="display: flex; flex-direction: row;">
         <input type="radio" id="imposta" name="radio-group" ng-click="showManualTime()">
         <label for="imposta">Imposta ora:</label>
-        <label class="plan-item-time" ng-show="manual_time">
+        <label class="plan-item-time" ng-class="{'lookeditable': manual_time, looknoneditable: !manual_time}">
             <ionic-timepicker input-obj="timePickerObject24HourEntrata">
-                <button ng-hide="true"></button>
+                <button ng-if="manual_time" ng-hide="true"></button>
                 <span class="">
-                      <standard-time-no-meridian etime="timePickerObject24HourEntrata.inputEpochTime" class="lookeditable"></standard-time-no-meridian>
-                </span>
-            </ionic-timepicker>
-        </label>
-
-        <label ng-show="!manual_time">
-            <ionic-timepicker input-obj="timePickerObject24HourEntrata">
-                <span class="">
-                      <standard-time-no-meridian etime="timePickerObject24HourEntrata.inputEpochTime" class="lookeditable"></standard-time-no-meridian>
+                      <standard-time-no-meridian etime="timePickerObject24HourEntrata.inputEpochTime" ></standard-time-no-meridian>
                 </span>
             </ionic-timepicker>
         </label>

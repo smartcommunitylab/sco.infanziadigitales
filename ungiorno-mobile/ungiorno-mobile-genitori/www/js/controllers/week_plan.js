@@ -212,8 +212,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     };
 
     $scope.whatClassIsIt = function(day,type) {
-        var selected = moment($scope.currentDate.clone().weekday(day).week($scope.currWeek).year($scope.currYear).format('M D YYYY'));
-        var actualDate=moment(moment().format('M D YYYY'));
+        var selected = $scope.currentDate.clone().weekday(day).week($scope.currWeek).year($scope.currYear).startOf('day');
+        var actualDate = moment().startOf('day');
         var ret;
         if((selected.isAfter(actualDate) || selected.isSame(actualDate)) && type==''){
             ret= 'button-day editable';

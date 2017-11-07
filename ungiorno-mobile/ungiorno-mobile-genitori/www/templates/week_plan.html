@@ -21,6 +21,7 @@
 
         <ion-list class="week_plan_detail_table">
           <ion-item ng-repeat="day in days track by $index"  ng-class="{'current-day': isActive($index), 'absence': day.absence}">
+            <div class="day-wrapper">
             <div class="row row-center">
               <div class="col col-20"><p class="title">{{day.name| translate | uppercase}}</p></div>
               <div class="col">
@@ -46,6 +47,7 @@
                 </div> 
               </div> 
             </div>     
+            </div>
           </ion-item>  
         </ion-list>  
       <!--  
@@ -103,6 +105,7 @@
         </div> 
         <ion-list class="week_plan_detail_table edit">
             <ion-item ng-repeat="day in days track by $index"  ng-class="{'current-day': isActive($index), 'absence': day.absence}"  ng-click="gotoEditDate($index)">
+              <div class="day-wrapper">
               <div class="row row-center">
                 <div class="col col-20"><p class="title">{{day.name| translate | uppercase}}</p></div>
                 <div class="col">
@@ -127,6 +130,7 @@
                     </div>  
                   </div> 
                 </div> 
+              </div>
               </div>     
             </ion-item>  
           </ion-list> 

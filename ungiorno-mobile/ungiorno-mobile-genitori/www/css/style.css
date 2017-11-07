@@ -1,5 +1,10 @@
 /* Empty. Add your own CSS if you like */
 
+/** strange fix, should work without */
+.modal-backdrop {
+  min-height: 100vh !important;
+}
+
 .overflow-scroll {
   overflow-y: auto;
 }
@@ -2060,10 +2065,6 @@ textarea {
   margin-bottom:20px;
 }
 
-.current-day {
-  background-color: #80D0E6;
-}
-
 .currentDate{
   margin-bottom:14px;
   color:  #F8A913;
@@ -2207,22 +2208,39 @@ textarea {
 .week_plan_detail_table {
   padding: 0 !important;
 }
+.week_plan_detail_table .list {
+  border-top: 1px solid #80D0E6;
+  padding: 0;  
+}
 .week_plan_detail_table .button-day {
   color: #fff;
 }
 .week_plan_detail_table  ion-item {
   border: 0;
   border-bottom: 1px solid #80D0E6;
-  padding: 12px 0 4px 0;
+  padding: 4px 0;
   margin: 0;
 }
-.week_plan_detail_table  ion-item.absence {
-  padding-bottom: 12px !important;
+.week_plan_detail_table  ion-item .day-wrapper {
+  padding: 8px 0 0 0;
 }
 
+.week_plan_detail_table  ion-item.absence .day-wrapper {
+  padding-bottom: 8px !important;
+}
+
+.week_plan_detail_table  ion-item.absence .day-wrapper > .row {
+  margin: 9px 0;
+}
 .week_plan_detail_table  ion-item .row, .week_plan_detail_table  ion-item .col {
   padding: 0;
 }
+.current-day .day-wrapper {
+  background-color: #80D0E6;
+}
+
+
+
 .week_plan_detail_table .delega {
   padding-top: 10px !important;
   text-align: left;

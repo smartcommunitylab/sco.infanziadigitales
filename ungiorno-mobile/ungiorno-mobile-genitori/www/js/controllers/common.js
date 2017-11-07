@@ -78,9 +78,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
   $scope.openCredits = function () {
     $scope.creditsModal.show();
   }
-$scope.logout = function () {
-  $rootScope.logout();
-}
+  $scope.logout = function () {
+    $rootScope.logout();
+  }
   $scope.getExpirationDateFormatted = function () {
     var expirationDateString = Config.getExpirationDate();
     var pattern = /(\d{2})-(\d{2})-(\d{4})/;

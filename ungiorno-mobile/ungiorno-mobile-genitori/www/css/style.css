@@ -4,6 +4,9 @@
 .modal-backdrop {
   min-height: 100vh !important;
 }
+.backdrop.visible.active {
+  min-height: 100vh  !important;
+}
 
 .overflow-scroll {
   overflow-y: auto;

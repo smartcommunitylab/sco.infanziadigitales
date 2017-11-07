@@ -1514,7 +1514,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         }
 
     })
-    .controller('Promemoria', function ($scope, moment, dataServerService, profileService, $ionicModal, $filter, $ionicPopup, $state, $cordovaLocalNotification, week_planService) {
+    .controller('Promemoria', function ($scope, week_planService, moment, dataServerService, profileService, $ionicModal, $filter, $ionicPopup, $state, $cordovaLocalNotification) {
         $scope.days = {};
         $scope.currDay = 0;
         $scope.currData = {};
@@ -1524,8 +1524,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         $scope.currData['prom_day_ritiro'] = (localStorage.getItem('prom_day_ritiro') == 'true' ? true : false);
         $scope.currData['prom_week_day'] = (localStorage.getItem('prom_week_day') !== null && localStorage.getItem('prom_week_day') !== undefined ? localStorage.getItem('prom_week_day') : $scope.selectables[0]);
         $scope.getSchoolProfileNormalConfig = $filter('getSchoolNormalService')(profileService.getSchoolProfile().services);
-        var fromtime = $scope.getSchoolProfileNormalConfig['fromTime'];
-        var totime = $scope.getSchoolProfileNormalConfig['toTime'];
+        $scope.fromtime = $scope.getSchoolProfileNormalConfig['fromTime'];
+        $scope.totime = $scope.getSchoolProfileNormalConfig['toTime'];
         $scope.kidId = profileService.getBabyProfile().kidId;
         $scope.kidFirstName = profileService.getBabyProfile().firstName;
         $scope.kidLastName = profileService.getBabyProfile().lastName;
@@ -1721,167 +1721,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             }
             if ($scope.listServicesAnticipo.length > 0) {
                 $scope.listServicesAnticipo.sort(sortByTimeAscOut);
-                fromtime = $scope.listServicesAnticipo[0]['out_val'];
+                $scope.fromtime = $scope.listServicesAnticipo[0]['out_val'];
             }
             if ($scope.listServicesPosticipo.length > 0) {
                 $scope.listServicesPosticipo.sort(sortByTimeAscOut);
-                totime = $scope.listServicesPosticipo[$scope.listServicesPosticipo.length - 1]['out_val'];
+                $scope.totime = $scope.listServicesPosticipo[$scope.listServicesPosticipo.length - 1]['out_val'];
             }
 
         };
         $scope.getListServices();
-        var date = new Date();
-        var idNotification = 7;
-        var notifArray = [];
-        var now = new Date().getTime();
-        var day_summ = {
-            id: idNotification++,
-            title: $filter('translate')('notification_day_summary_title'),
-            text: $filter('translate')('notification_day_summary_text'),
-            icon: 'res://icon.png',
-            autoClear: false,
-            every: 1 * 60 * 24 * 7, //1 day
-            at: new Date(),
-            data: {
-                'type': 'day_summary'
-            }
-        };
-        var week = {
-            id: idNotification++,
-            title: $filter('translate')('notification_day_summary_title'),
-            text: $filter('translate')('notification_week_text'),
-            icon: 'res://icon.png',
-            //autoCancel: false,
-            autoClear: false,
-            every: 1 * 60 * 24 * 7,  // 1 week.
-            at: new Date(),
-            data: {
-                'type': 'week'
-            }
-        };
-        var ritiro = {
-            id: idNotification++,
-            title: $filter('translate')('notification_day_summary_title'),
-            text: $filter('translate')('notification_ritiro_text') + " " + $scope.kidFirstName + " " + $scope.kidLastName,
-            icon: 'res://icon.png',
-            //autoCancel: false,
-            autoClear: false,
-            every: 1 * 60 * 24, //1 day
-            at: new Date(),
-            data: {
-                'type': 'ritiro'
-            }
-        };
-
-
         $scope.setNotify = function () {
-            //set notify daily, weekly and based on kid profile
-            var netErr = false;
-            if (window.plugin && cordova && cordova.plugins && cordova.plugins.notification) {
-                cordova.plugins.notification.local.clearAll(function () {
-                    cordova.plugins.notification.local.cancelAll(function () {
-
-                        localStorage.setItem('prom_day_summary', false);
-                        localStorage.setItem('prom_week', false);
-                        localStorage.setItem('prom_day_ritiro', false);
-                        var notific = [];
-                        var id = 7;
-                        if ($scope.currData['prom_day_summary']) {
-                            localStorage.setItem('prom_day_summary', true);
-                            temp = $scope.currData['prom_day_time'].split(':');
-                            var date = moment(); // use a clone
-                            var now = moment().toDate();
-                            var days = 7;
-                            while (days > 0) {
-                                var selectedTime = new Date(date.valueOf());
-                                selectedTime.setHours(temp[0]);
-                                selectedTime.setMinutes(temp[1]);
-                                selectedTime.setSeconds(0);
-                                if (selectedTime <= now) {
-                                    selectedTime.setDate(selectedTime.getDate() + 7);
-                                }
-                                var daily = Object.assign({}, day_summ);
-                                daily.id = id;
-                                id++;
-                                daily.at = new Date(selectedTime.getTime());
-                                if (date.isoWeekday() !== 6 && date.isoWeekday() !== 7) {
-                                    notific.push(daily);
-                                }
-                                date = date.add(1, 'days');
-                                days -= 1;
-                            }
-                        }
-                        if ($scope.currData['prom_week']) {
-                            localStorage.setItem('prom_week', true);
-                            temp = $scope.currData['prom_week_time'].split(':');
-                            var tempDay = $scope.currData['prom_week_day'];
-                            var next = moment();
-                            var now = moment().toDate();
-                            next.hour(parseInt(temp[0]));
-                            next.minute(parseInt(temp[1]));
-                            next.day($scope.selectables.indexOf($scope.currData['prom_week_day']) + 1);
-                            var selectedTime = next.toDate();
-                            // start from next week if it is in the past
-                            if (selectedTime <= now) {
-                                selectedTime.setDate(selectedTime.getDate() + 7);
-                            }
-                            week.id = id;
-                            id++;
-                            week.at = selectedTime;
-                            notific.push(week);
-                        }
-                        if ($scope.currData['prom_day_ritiro']) {
-                            //I have to set the entire week based on the planned week
-                            var now = moment().toDate();
-                            localStorage.setItem('prom_day_ritiro', true);
-                            var weekNr = moment().format('w');
-                            week_planService.getDefaultWeekPlan($scope.kidId).then(function (dataDefault) {
-                                week_planService.getWeekPlan(weekNr, $scope.kidId).then(function (data) {
-                                    //here I have the entire week plan
-                                    for (var i = 0; i < data.length; i++) {
-                                        //usa defaults
-                                        var orauscita = new Date(totime);
-                                        if (dataDefault && dataDefault[i].uscita) {
-                                            orauscita = new Date(dataDefault[i].uscita);
-                                        }
-                                        if (data[i].uscita) {
-                                            orauscita = new Date(data[i].uscita);
-                                        }
-                                        var selectedTime = new Date(orauscita.getTime() - $scope.currData['prom_ritiro_time'] * 60000);
-                                        var dailyRitiro = Object.assign({}, ritiro);
-                                        dailyRitiro.id = id;
-                                        id++;
-                                        dailyRitiro.at = new Date(selectedTime.getTime());
-                                        var currentDay = dailyRitiro.at.getDay();
-                                        var distance = (i+1 + 7 - currentDay) % 7;
-                                        dailyRitiro.at.setDate(dailyRitiro.at.getDate() + distance);
-                                        notific.push(dailyRitiro);
-                                    }
-                                    //if I'm here I have to schedule here
-                                    cordova.plugins.notification.local.schedule(notific);
-                                    cordova.plugins.notification.local.on("click", function (notification) {
-                                        $state.go("app.home");
-                                    });
-                                }, function (err) {
-                                    netErr = true;
-                                });
-                            }, function (err) {
-                                netErr = true;
-                            })
-
-                       }
-
-                        console.log(notific);
-                        if (!$scope.currData['prom_day_ritiro'] || netErr) {
-                            cordova.plugins.notification.local.schedule(notific);
-                            cordova.plugins.notification.local.on("click", function (notification) {
-                                $state.go("app.home");
-                            });
-                            cordova.plugins.notification.local.getAll(function (notifications) {
-                            });
-                        }
-                    });
-                });
-            }
+            week_planService.setNotification($scope,profileService.getBabyProfile());
         }
     })

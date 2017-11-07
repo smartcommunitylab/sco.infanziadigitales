@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.week_planService', [])
 
-.factory('week_planService', function ($http, $q, Config) {
+.factory('week_planService', function ($http, $q, $filter, profileService, Config) {
   var week_planService = {};
   var weekData = []
   var actualDayNr = 0;
@@ -274,6 +274,249 @@ week_planService.getIsFromHome= function () {
         
                 return deferred.promise;
         }
-  
+    week_planService.setNotification = function (scope) {
+        var selectables = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+        var date = new Date();
+        var idNotification = 7;
+        var notifArray = [];
+        var babiesProfiles = profileService.getBabiesProfiles();
+        var now = new Date().getTime();
+        var day_summ = {
+            id: idNotification++,
+            title: $filter('translate')('notification_day_summary_title'),
+            text: $filter('translate')('notification_day_summary_text'),
+            icon: 'res://icon.png',
+            autoClear: false,
+            every: 1 * 60 * 24 * 7, //1 day
+            at: new Date(),
+            data: {
+                'type': 'day_summary'
+            }
+        };
+        var week = {
+            id: idNotification++,
+            title: $filter('translate')('notification_day_summary_title'),
+            text: $filter('translate')('notification_week_text'),
+            icon: 'res://icon.png',
+            //autoCancel: false,
+            autoClear: false,
+            every: 1 * 60 * 24 * 7,  // 1 week.
+            at: new Date(),
+            data: {
+                'type': 'week'
+            }
+        };
+        var ritiro = {
+            id: idNotification++,
+            title: $filter('translate')('notification_day_summary_title'),
+            // text: $filter('translate')('notification_ritiro_text') + " " + kid.firstName + " " + kid.lastName,
+            icon: 'res://icon.png',
+            //autoCancel: false,
+            autoClear: false,
+            every: 1 * 60 * 24, //1 day
+            at: new Date(),
+            data: {
+                'type': 'ritiro'
+            }
+        };
+
+        var netErr = false;
+            if (window.plugin && cordova && cordova.plugins && cordova.plugins.notification) {
+                cordova.plugins.notification.local.clearAll(function () {
+                    cordova.plugins.notification.local.cancelAll(function () {
+                        // localStorage.setItem('prom_day_summary', false);
+                        // localStorage.setItem('prom_week', false);
+                        // localStorage.setItem('prom_day_ritiro', false);
+                        var promDay=false
+                        var promWeek=false
+                        var promRitiro=false
+                        var promDayTime="09:00";
+                        var promWeekTime="09:00";
+                        var promWeekDay="monday"
+                        var promRitiroTime=30;
+                        if (scope.currData && scope.currData['prom_day_summary'])
+                            { 
+                            promDay=scope.currData['prom_day_summary'];
+                            promDayTime=scope.currData['prom_day_time'];
+                        } else {
+                           promDay= JSON.parse(localStorage.getItem('prom_day_summary'));
+                            promWeekTime=localStorage.getItem('prom_day_time');
+                        }
+                        if (scope.currData && scope.currData['prom_week']){
+                            promWeek=scope.currData['prom_week'];
+                            promWeekTime=scope.currData['prom_week_time'];
+                            promWeekDay=scope.currData['prom_week_day'];
+                        }
+                         else {
+                            promWeek=JSON.parse(localStorage.getItem('prom_week'));
+                            promWeekDay=localStorage.getItem('prom_week_day');
+                            promWeekTime=localStorage.getItem('prom_week_time');
+                            }
+                        if (scope.currData && scope.currData['prom_day_ritiro']){
+                            promRitiro=scope.currData['prom_day_ritiro'];
+                            promRitiroTime=scope.currData['prom_ritiro_time'];
+                        }
+                        else {
+                            promRitiro=JSON.parse(localStorage.getItem('prom_day_ritiro'));
+                            promRitiroTime=localStorage.getItem('prom_ritiro_time');
+                            }
+
+                        var notific = [];
+                        var id = 7;
+                        if (promDay) {
+                            localStorage.setItem('prom_day_summary', true);
+                            localStorage.setItem('prom_day_time',promDayTime);
+                            temp = promDayTime.split(':');
+                            var date = moment(); // use a clone
+                            var now = moment().toDate();
+                            var days = 7;
+                            while (days > 0) {
+                                var selectedTime = new Date(date.valueOf());
+                                selectedTime.setHours(temp[0]);
+                                selectedTime.setMinutes(temp[1]);
+                                selectedTime.setSeconds(0);
+                                if (selectedTime <= now) {
+                                    selectedTime.setDate(selectedTime.getDate() + 7);
+                                }
+                                var daily = Object.assign({}, day_summ);
+                                daily.id = id;
+                                id++;
+                                daily.at = new Date(selectedTime.getTime());
+                                if (date.isoWeekday() !== 6 && date.isoWeekday() !== 7) {
+                                    notific.push(daily);
+                                }
+                                date = date.add(1, 'days');
+                                days -= 1;
+                            }
+                        } else {
+                                                        localStorage.setItem('prom_day_summary', false);
+
+                        }
+                        if (promWeek) {
+                            localStorage.setItem('prom_week', true);
+                            localStorage.setItem('prom_week_time', promWeekTime);
+                            localStorage.setItem('prom_week_day', promWeekDay);
+                            temp = promWeekTime.split(':');
+                            var tempDay = promWeekDay;
+                            var next = moment();
+                            var now = moment().toDate();
+                            next.hour(parseInt(temp[0]));
+                            next.minute(parseInt(temp[1]));
+                            next.day(selectables.indexOf(promWeekDay) + 1);
+                            var selectedTime = next.toDate();
+                            // start from next week if it is in the past
+                            if (selectedTime <= now) {
+                                selectedTime.setDate(selectedTime.getDate() + 7);
+                            }
+                            week.id = id;
+                            id++;
+                            week.at = selectedTime;
+                            notific.push(week);
+                        } else {
+                         localStorage.setItem('prom_week', false);
+
+                        }
+                        if (promRitiro) {
+                            //I have to set the entire week based on the planned week
+                            var now = moment().toDate();
+                            localStorage.setItem('prom_day_ritiro', true);
+                            var weekNr = moment().format('w');
+                            var k=0;
+                            // while (k<babiesProfiles.length-1){
+                            var promises = [];
+
+for (var k = 0; k < babiesProfiles.length; k ++) {
+    promises.push(week_planService.getDefaultWeekPlan(babiesProfiles[k].kidId));
+}
+
+$q.all(promises).then(function(results) {
+    var promises2 = [];
+   for (var k = 0; k < babiesProfiles.length; k ++) {
+       promises2.push(week_planService.getWeekPlan(weekNr, babiesProfiles[k].kidId));
+   
+  }
+  $q.all(promises2).then(function(results2) {
+                                    //       for (var i = 0; i < data.length; i++) {
+                                    //     //usa defaults
+                                    //     var orauscita = new Date(scope.totime);
+                                    //     if (dataDefault && dataDefault[i].uscita) {
+                                    //         orauscita = new Date(dataDefault[i].uscita);
+                                    //     }
+                                    //     if (data[i].uscita) {
+                                    //         orauscita = new Date(data[i].uscita);
+                                    //     }
+                                    //     var selectedTime = new Date(orauscita.getTime() - promRitiroTime * 60000);
+                                    //     var dailyRitiro = Object.assign({}, ritiro);
+                                    //     dailyRitiro.id = id;
+                                    //     id++;
+                                    //     dailyRitiro.at = new Date(selectedTime.getTime());
+                                    //     dailyRitiro.text= $filter('translate')('notification_ritiro_text') + " " + babiesProfiles[k].firstName + " " + babiesProfiles[i].lastName;
+                                    //     var currentDay = dailyRitiro.at.getDay();
+                                    //     var distance = (i+1 + 7 - currentDay) % 7;
+                                    //     dailyRitiro.at.setDate(dailyRitiro.at.getDate() + distance);
+                                    //     notific.push(dailyRitiro);
+                                    // }
+                                    
+                                    //if I'm here I have to schedule here
+                                    cordova.plugins.notification.local.schedule(notific);
+                                    cordova.plugins.notification.local.on("click", function (notification) {
+                                        $state.go("app.home");
+                                    });
+  })
+
+});
+                            // week_planService.getDefaultWeekPlan(babiesProfiles[k].kidId).then(function (dataDefault) {
+                            //     week_planService.getWeekPlan(weekNr, babiesProfiles[k].kidId).then(function (data) {
+                            //         //here I have the entire week plan
+                            //         for (var i = 0; i < data.length; i++) {
+                            //             //usa defaults
+                            //             var orauscita = new Date(scope.totime);
+                            //             if (dataDefault && dataDefault[i].uscita) {
+                            //                 orauscita = new Date(dataDefault[i].uscita);
+                            //             }
+                            //             if (data[i].uscita) {
+                            //                 orauscita = new Date(data[i].uscita);
+                            //             }
+                            //             var selectedTime = new Date(orauscita.getTime() - promRitiroTime * 60000);
+                            //             var dailyRitiro = Object.assign({}, ritiro);
+                            //             dailyRitiro.id = id;
+                            //             id++;
+                            //             dailyRitiro.at = new Date(selectedTime.getTime());
+                            //             dailyRitiro.text= $filter('translate')('notification_ritiro_text') + " " + babiesProfiles[k].firstName + " " + babiesProfiles[i].lastName;
+                            //             var currentDay = dailyRitiro.at.getDay();
+                            //             var distance = (i+1 + 7 - currentDay) % 7;
+                            //             dailyRitiro.at.setDate(dailyRitiro.at.getDate() + distance);
+                            //             notific.push(dailyRitiro);
+                            //         }
+                                    
+                            //         //if I'm here I have to schedule here
+                            //         cordova.plugins.notification.local.schedule(notific);
+                            //         cordova.plugins.notification.local.on("click", function (notification) {
+                            //             $state.go("app.home");
+                            //         });
+                            //     }, function (err) {
+                            //         netErr = true;
+                            //     });
+                            // }, function (err) {
+                            //     netErr = true;
+                            // })
+                            // }
+                       } else {
+                          localStorage.setItem('prom_day_ritiro', false);
+
+                       }
+                        console.log(notific);
+                        if (!promRitiro || netErr) {
+                            cordova.plugins.notification.local.schedule(notific);
+                            cordova.plugins.notification.local.on("click", function (notification) {
+                                $state.go("app.home");
+                            });
+                            cordova.plugins.notification.local.getAll(function (notifications) {
+                            });
+                        }
+                    });
+                });
+            }
+    }
   return week_planService;
 })

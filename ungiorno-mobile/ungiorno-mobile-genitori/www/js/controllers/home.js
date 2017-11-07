@@ -385,7 +385,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
       profileService.setInfoInitial(infoInitial);
   };
   $scope.getListServices();
-    
+ 
     week_planService.getWeekPlan(week,kidId).then(function (data) {
       if(data!=null && data!= undefined && data.length>0 && !$scope.weekend){
         var motiv_type=(data[day]['motivazione']!=undefined && data[day]['motivazione']!=null ? data[day]['motivazione']['type'] : '');
@@ -529,6 +529,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     var deferred = $q.defer();
     $ionicLoading.show();
     $scope.kidProfile = profileService.getBabyProfile();
+      week_planService.setNotification($scope,$scope.kidProfile);
     var schoolId = $scope.kidProfile.schoolId;
     var kidId = $scope.kidProfile.kidId;
     dataServerService.getBabyConfigurationById(schoolId, kidId).then(function (data) {

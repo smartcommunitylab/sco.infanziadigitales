@@ -210,10 +210,10 @@
   "menu_promemoria": "Impostazioni",
   "prom_day_summary_first": "Desidero ricevere un ",
   "prom_day_summary_what": "promemoria giornaliero",
-  "prom_day_summary_reason": "per l'invio delle informazioni sulla presenza di mio/a figlio/a a scuola.",
+  "prom_day_summary_reason": "(da lun a ven) per l'invio delle informazioni sulla presenza di mio/a figlio/a a scuola.",
   "prom_week_first": "Desidero ricevere un ",
   "prom_week_what": "promemoria settimanale",
-  "prom_week_reason": "per la planificazione della presenza di mio/a figlio/a a scuola.",
+  "prom_week_reason": "per la pianificazione della presenza di mio/a figlio/a a scuola.",
   "prom_day_ritiro_first": "Desidero ricevere un ",
   "prom_day_ritiro_what": "promemoria giornaliero",
   "prom_day_ritiro_reason": "per il ritiro di mio/a figlio/a da scuola.",
@@ -253,5 +253,6 @@
   "non_previste":"Non previste",
   "non_specificate":"Non specificate",
   "no_feature_weekend":"Operazione non consentita sabato e domenica",
-  "send_msg":"Invia un messaggio"
+  "send_msg":"Invia un messaggio",
+  "ora_invalida": "Gli orari di entrata e uscita sono incompatibili."
 }

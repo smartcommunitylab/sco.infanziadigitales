@@ -12,7 +12,7 @@
       <div class="promemoria">
           <label class="control control-checkbox promcheck">
                   <span class="prom">{{'prom_day_summary_first' | translate}} <b>{{'prom_day_summary_what' | translate}}</b> {{'prom_day_summary_reason' | translate}}</span>
-                  <input type="checkbox" ng-model="currData['prom_day_summary']"/>
+                  <input type="checkbox" ng-model="currData['prom_day_summary']" ng-click="setNotify()"/>
               <div class="control_indicator"></div>
           </label>
           <div class="prom_param prom">
@@ -33,7 +33,7 @@
           <br/>
           <label class="control control-checkbox promcheck">
                   <span class="prom">{{'prom_week_first' | translate}} <b>{{'prom_week_what' | translate}}</b> {{'prom_week_reason' | translate}}</span>
-                  <input type="checkbox" ng-model="currData['prom_week']"/>
+                  <input type="checkbox" ng-model="currData['prom_week']" ng-click="setNotify()"/>
               <div class="control_indicator"></div>
           </label>
           <div class="prom_param prom">
@@ -41,12 +41,6 @@
                <select ng-if="isActive('prom_week')" ng-model="currData.prom_week_day" ng-change="save_week_day();">
                     <option ng-repeat="option in selectables" value="{{option}}" ng-selected="currData.prom_week_day==option" class="">{{option | translate}}</option>
                 </select>
-                <!--<span ng-if="isActive('prom_week')" modal-select="" ng-model="currData.prom_week_day" options="selectables" on-select="save_week_day();" modal-title="{{'select_day' | translate}}" hide-reset="true" cancel-button="{{'popup_timepicker_cancel' | translate}}">
-                    <span ng-class="{'lookedit': isActive('prom_week'),'noneditable2': !isActive('prom_week')}">{{currData.prom_week_day}}</span>
-                    <div class="option">
-                      {{option}}
-                    </div>
-                </span>-->
                 <span ng-if="!isActive('prom_week')" class="noneditable2">{{currData.prom_week_day | translate}}</span>
           </div>
           <br/>
@@ -64,11 +58,10 @@
                     </label>
                 </div>
         </div>
-
         <br/>
           <label class="control control-checkbox promcheck">
             <span class="prom">{{'prom_day_ritiro_first' | translate}} <b>{{'prom_day_ritiro_what' | translate}}</b> {{'prom_day_ritiro_reason' | translate}}</span>
-            <input type="checkbox" ng-model="currData['prom_day_ritiro']"/>
+            <input type="checkbox" ng-model="currData['prom_day_ritiro']" ng-click="setNotify()"/>
         <div class="control_indicator"></div>
          </label>
          <div class="prom_param prom">

@@ -1036,7 +1036,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         };
 
         $scope.validateEntryExit = function () {
-            return moment($scope.currData.entrata).isBefore(moment($scope.currData.uscita));
+            if (!$scope.currData.entrata || !$scope.currData.uscita) return true;            
+            return moment($scope.currData.entrata).format('HH:mm') < moment($scope.currData.uscita).format('HH:mm');
         }
         $scope.openPopupEntry = function () {
             $scope.tempData = $scope.currData.entrata;
@@ -1460,7 +1461,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         };
 
         $scope.validateEntryExit = function () {
-            return moment($scope.currData.entrata).isBefore(moment($scope.currData.uscita));
+            if (!$scope.currData.entrata || !$scope.currData.uscita) return true;            
+            return moment($scope.currData.entrata).format('HH:mm') < moment($scope.currData.uscita).format('HH:mm');
         }
         $scope.openPopupEntry = function () {
             $scope.tempData = $scope.currData.entrata;

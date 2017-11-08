@@ -139,6 +139,8 @@ public class NotificationManager {
             }
             if (parentIds.size() > 0) {
             	logger.info("Sending group ("+groupId+") communication to "+parentIds);
+                // replace channel with direct parent communication
+            	appName = appSetup.getAppsMap().get(appId).getMessagingAppId() + APP_UGAS_PARENT;
                 communicator.sendAppNotification(n, appName, new LinkedList<>(parentIds), permissions.getAppToken());            	
             }
         } else {

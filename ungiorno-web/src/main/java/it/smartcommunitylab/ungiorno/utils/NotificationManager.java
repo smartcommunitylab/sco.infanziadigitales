@@ -135,6 +135,7 @@ public class NotificationManager {
                 }
             }
             if (parentIds.size() > 0) {
+            	logger.info("Sending group ("+groupId+") commuinication to "+parentIds);
                 communicator.sendAppNotification(n, appName, parentIds, permissions.getAppToken());            	
             }
         } else {

@@ -46,7 +46,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.c
     return return_var;
   }
   communicationsService.setComunicationsUpdated = function (communications) {
-    localStorage.setItem(LAST_COMMUNICATION_UPDATE, communications[communications.length - 1].creationDate);
+    var last = 0;
+    communications.forEach(function(c) {
+      last = Math.max(last, c.creationDate);
+    });
+    localStorage.setItem(LAST_COMMUNICATION_UPDATE, last);
   }
   return communicationsService;
 })

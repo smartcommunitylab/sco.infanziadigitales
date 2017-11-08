@@ -223,7 +223,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.n
       //send received to server
       if (notification && notification.additionalData && notification.additionalData["content.type"] == "chat") {
         //check if contained in localStorage
-        if (!isChatMessageReceived(notification.additionalData["content.messageId"], notification.additionalData["content.kidId"]) && !notification.additionalData["coldstart"] && !(notification.additionalData["content.kidId"] == profileService.getBabyProfile().kidId && $state.is("app.messages"))) {
+        if ( !isChatMessageReceived(notification.additionalData["content.messageId"], notification.additionalData["content.kidId"]) 
+          && !notification.additionalData["coldstart"] 
+          && !(notification.additionalData["content.kidId"] == profileService.getBabyProfile().kidId 
+          && $state.is("app.messages"))) 
+          {
           messagesService.receivedMessage(notification.additionalData["content.schoolId"], notification.additionalData["content.kidId"], notification.additionalData["content.messageId"]);
           chatMessageReceived(notification.additionalData["content.messageId"], notification.additionalData["content.kidId"]);
           if (!isBackground()) {
@@ -256,9 +260,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.n
             }
 
           }, function (error) {
-
+            console.error('Error switching profile from background: ', error);
           });
-
         }
       } else if (notification && notification.additionalData && notification.additionalData["content.type"] == "communication") {
         //check if contained in localStorage

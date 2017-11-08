@@ -2658,6 +2658,7 @@ textarea {
   margin: 0px 32px;
   border: 1px solid #FFAD00;
   box-shadow: 1px 1px 1px #FFAD00;
+  padding-bottom: 4px;
 }
 .currentDate{
   margin-bottom:14px;

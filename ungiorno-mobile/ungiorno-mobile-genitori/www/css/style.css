@@ -1742,7 +1742,7 @@ $dark: #444 !default;
 .my-list li {
   position: relative;
   padding-left: 15px;
-  margin-left: 15px;
+  margin-left: 0px;
   line-height: 16px;
 }
 .my-list li:before {
@@ -1760,7 +1760,7 @@ $dark: #444 !default;
   font-size: 10px;
 }
 .my-list li .serviceName{
-width:200px;
+/* width:200px; */
 }
 
 .studente {
@@ -2038,18 +2038,6 @@ textarea {
 
 */
 
-.button-norm-brief {
-  background-color: #009AA8;
-  color: #ffffff;
-  border: 0;
-  margin: 4px auto 0px auto!important;
-  padding-top:3px;
-  padding-bottom: 5px;
-  padding-left:25px;
-  padding-right:25px;
-  min-width: 160px;
-}
-
 .hrstyle {
   border: 0;
   height: 1px;
@@ -2106,11 +2094,6 @@ textarea {
   margin-bottom:20px;
 }
 
-.currentDate{
-  margin-bottom:14px;
-  color:  #F8A913;
-  font-size: 20px;
-}
 .active_cal_buttons {
   color : #F8A913;
   margin: auto;
@@ -2231,6 +2214,7 @@ textarea {
   padding: 2px;
   white-space: nowrap;
   text-overflow: ellipsis;
+  max-height: 24px;
 }
 
 .day-name {
@@ -2298,8 +2282,8 @@ textarea {
 
 .dayEdit{
   text-align: left;
-  width:90%;
-  padding-left: 30px;
+  width:100%;
+  padding: 0 20px;
   margin-top:25px;
 }
 .dayEdit_table{
@@ -2310,12 +2294,14 @@ textarea {
 .dayEdit_table td {
   vertical-align: middle;
   padding-bottom:10px;
-  padding-right:10px;
   padding-top:10px;
   font-size: 15px;
-  width: 50%;
+  /* width: 50%; */
+  white-space: nowrap;
 }
-
+.dayEdit_table td:first-child {
+  padding-right:10px;  
+}
 
 .span_motiv {
   font-size: 13px;
@@ -2364,30 +2350,10 @@ textarea {
   vertical-align: middle;
   margin-right: 10px;
 }
-.iconStyleHome{
-  font-size: 50px;
-  vertical-align: middle;
-  color: #009AA8;
-  padding-right: 10px;
-}
-.iconStyleHome1{
-  font-size: 40px;
-  vertical-align: middle;
-  color: #f8ab15;
-}
 .iconPhone{
   font-size: 20px;
   color: #009AA8;
   padding-right: 5px;
-}
-.br_in{
-  text-align: center;
-  margin: 4px auto 0px auto !important;
-  white-space: nowrap;
-  min-width: 150px;
-  width:150px;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 .busStyle{
   width:40%
@@ -2685,4 +2651,46 @@ textarea {
   padding: 0;
   font-size: 15px;
   color: #000;
+
+}
+
+.brief_info_container {
+  margin: 0px 32px;
+  border: 1px solid #FFAD00;
+  box-shadow: 1px 1px 1px #FFAD00;
+}
+.currentDate{
+  margin-bottom:14px;
+  color:  #F8A913;
+  font-size: 16px;
+  font-weight: 500;
+}
+.iconStyleHome1{
+  font-size: 35px;
+  vertical-align: middle;
+  color: #f8ab15;
+}
+.br_in{
+  text-align: center;
+  margin: 4px auto 0px auto !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.iconStyleHome{
+  font-size: 40px;
+  vertical-align: middle;
+  color: #009AA8;
+  padding-right: 10px;
+}
+.button-norm-brief {
+  background-color: #009AA8;
+  color: #ffffff;
+  border: 0;
+  margin: 4px auto 0px auto!important;
+  padding-top:3px;
+  padding-bottom: 5px;
+  padding-left:16px;
+  padding-right:16px;
+  min-width: 200px;
 }

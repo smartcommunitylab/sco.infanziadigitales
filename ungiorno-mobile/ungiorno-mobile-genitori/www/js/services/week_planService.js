@@ -335,9 +335,6 @@ week_planService.getIsFromHome= function () {
             if (window.plugin && cordova && cordova.plugins && cordova.plugins.notification) {
                 cordova.plugins.notification.local.clearAll(function () {
                     cordova.plugins.notification.local.cancelAll(function () {
-                        // localStorage.setItem('prom_day_summary', false);
-                        // localStorage.setItem('prom_week', false);
-                        // localStorage.setItem('prom_day_ritiro', false);
                         var promDay=false
                         var promWeek=false
                         var promRitiro=false
@@ -351,7 +348,7 @@ week_planService.getIsFromHome= function () {
                             promDayTime=scope.currData['prom_day_time'];
                         } else {
                            promDay= JSON.parse(localStorage.getItem('prom_day_summary'));
-                            promWeekTime=localStorage.getItem('prom_day_time');
+                            promDayTime=localStorage.getItem('prom_day_time');
                         }
                         if (scope.currData && scope.currData['prom_week']!="undefined"){
                             promWeek=scope.currData['prom_week'];
@@ -400,8 +397,7 @@ week_planService.getIsFromHome= function () {
                                 days -= 1;
                             }
                         } else {
-                                                        localStorage.setItem('prom_day_summary', false);
-
+                           localStorage.setItem('prom_day_summary', false);
                         }
                         if (promWeek) {
                             localStorage.setItem('prom_week', true);
@@ -431,11 +427,15 @@ week_planService.getIsFromHome= function () {
                             //I have to set the entire week based on the planned week
                             var now = moment().toDate();
                             localStorage.setItem('prom_day_ritiro', true);
+                            localStorage.setItem('prom_ritiro_time',promRitiroTime);
                             var weekNr = moment().format('w');
-                            var k=0;
-                            // while (k<babiesProfiles.length-1){
-                            week_planService.getDefaultWeekPlan(babiesProfiles[k].kidId).then(function (dataDefault) {
-                                week_planService.getWeekPlan(weekNr, babiesProfiles[k].kidId).then(function (data) {
+                            var promisefunction = [];
+                            for (var k=0;k<babiesProfiles.length;k++)
+                            {
+                                const babyProfile=Object.assign({}, babiesProfiles[k]);
+                                week_planService.getDefaultWeekPlan(babyProfile.kidId).then(
+                                    function (dataDefault) {
+                                            promisefunction.push(week_planService.getWeekPlan(weekNr, babyProfile.kidId).then(function(data){
                                     //here I have the entire week plan
                                     if (!data && !dataDefault){
                                       var jsonTest = [{ 'name': 'monday_reduced', 'entrata': scope.fromtime, 'uscita': scope.totime, 'bus': false, 'delega_name': '' },
@@ -456,32 +456,33 @@ week_planService.getIsFromHome= function () {
                                             orauscita = new Date(data[i].uscita);
                                         }
                                         var selectedTime = new Date(orauscita.getTime() - promRitiroTime * 60000);
+                                        var now = new Date();
                                         var dailyRitiro = Object.assign({}, ritiro);
                                         dailyRitiro.id = id;
                                         id++;
+
                                         dailyRitiro.at = new Date(selectedTime.getTime());
-                                        dailyRitiro.text= $filter('translate')('notification_ritiro_text') + " " + babiesProfiles[k].firstName + " " + babiesProfiles[k].lastName;
+                                        dailyRitiro.text= $filter('translate')('notification_ritiro_text') + " " + babyProfile.firstName + " " + babyProfile.lastName;
                                         var currentDay = dailyRitiro.at.getDay();
                                         var distance = (i+1 + 7 - currentDay) % 7;
                                         dailyRitiro.at.setDate(dailyRitiro.at.getDate() + distance);
+                                        if (dailyRitiro.at <= now || (data[i].absence && moment(dailyRitiro.at).isoWeek()==moment(now).isoWeek())) {
+                                            dailyRitiro.at.setDate(dailyRitiro.at.getDate() + 7);
+                                        }
                                         notific.push(dailyRitiro);
+                                        
                                     }
-                                    k++;
-                                    
-                                    //if I'm here I have to schedule here
-                                    cordova.plugins.notification.local.schedule(notific);
-                                    cordova.plugins.notification.local.on("click", function (notification) {
-                                        $state.go("app.home");
-                                    });
-                                }, function (err) {
-                                    netErr = true;
-                                    k++;
-                                });
-                            }, function (err) {
-                                netErr = true;
-                                 k++;
-                            })
-                            
+                                        }))
+                                   if (promisefunction.length ==babiesProfiles.length){
+                                        $q.all(promisefunction).then(function (values) {
+                                            cordova.plugins.notification.local.schedule(notific);
+                                            cordova.plugins.notification.local.on("click", function (notification) {
+                                                $state.go("app.home");
+                                            });
+                                        })
+                                    }
+                                })}
+
                        } else {
                           localStorage.setItem('prom_day_ritiro', false);
 

@@ -18,14 +18,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         $scope.listServices = [];
         // provide default config for entry/exit if the school doesn't have services/fascie
         $scope.getSchoolProfileNormalConfig = $filter('getSchoolNormalService')(profileService.getSchoolProfile().services);
-        var fromtime = $scope.getSchoolProfileNormalConfig['fromTime'];
-        var totime = $scope.getSchoolProfileNormalConfig['toTime'];
-        if (fromtime == '' && totime == '') {
+        $scope.fromtime = $scope.getSchoolProfileNormalConfig['fromTime'];
+        $scope.totime = $scope.getSchoolProfileNormalConfig['toTime'];
+        if ($scope.fromtime == '' && $scope.totime == '') {
             alert($filter('translate')('missing_school_config'));
-            fromtime = moment('7:30', 'H:mm');
-            totime = moment('13:30', 'H:mm');
-            fromtimeFormatted = moment(fromtime).format('H:mm');
-            totimeFormatted = moment(totime).format('H:mm');
+            $scope.fromtime = moment('7:30', 'H:mm');
+            $scope.totime = moment('13:30', 'H:mm');
+            fromtimeFormatted = moment($scope.fromtime).format('H:mm');
+            totimeFormatted = moment($scope.totime).format('H:mm');
         }
 
         $scope.getListServices = function () {
@@ -92,11 +92,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             }
             if ($scope.listServicesAnticipo.length > 0) {
                 $scope.listServicesAnticipo.sort(sortByTimeAscOut);
-                fromtime = $scope.listServicesAnticipo[0]['out_val'];
+                $scope.fromtime = $scope.listServicesAnticipo[0]['out_val'];
             }
             if ($scope.listServicesPosticipo.length > 0) {
                 $scope.listServicesPosticipo.sort(sortByTimeAscOut);
-                totime = $scope.listServicesPosticipo[$scope.listServicesPosticipo.length - 1]['out_val'];
+                $scope.totime = $scope.listServicesPosticipo[$scope.listServicesPosticipo.length - 1]['out_val'];
             }
 
         };

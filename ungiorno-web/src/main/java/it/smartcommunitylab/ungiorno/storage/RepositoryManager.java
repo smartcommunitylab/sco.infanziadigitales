@@ -908,6 +908,7 @@ public class RepositoryManager implements RepositoryService {
         Query q = schoolQuery(appId, schoolId);
         q.addCriteria(new Criteria().orOperator(new Criteria("scadenzaDate").gte(today),
                 new Criteria("scadenzaDate").is(null)));
+        q.with(new Sort(Direction.DESC, "creationDate"));
         return template.find(q, Communication.class);
     }
 
@@ -938,6 +939,7 @@ public class RepositoryManager implements RepositoryService {
         	Criteria.where("scadenzaDate").is(null).and("groupId").in(groups),
         	Criteria.where("scadenzaDate").gte(today).and("groupId").in(groups)
         ));
+        q.with(new Sort(Direction.DESC, "creationDate"));
         return template.find(q, Communication.class);
     }
 

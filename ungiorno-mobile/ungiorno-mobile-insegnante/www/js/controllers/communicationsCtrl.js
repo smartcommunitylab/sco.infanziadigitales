@@ -132,7 +132,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
     $scope.popover = popover;
   });
   var sortCommunications = function () {
-    $scope.communications = $filter('orderBy')($scope.communications, '-creation');
+    $scope.communications = $filter('orderBy')($scope.communications, '-creationDate');
   }
 
   var setTeachers = function () {
@@ -248,16 +248,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
         communicationId: tmp.communicationId,
         author: tmp.author,
         schoolId: tmp.schoolId,
-        dateToCheck: new Date(tmp.dateToCheck),
+        dateToCheck: tmp.dateToCheck != null ? new Date(tmp.dateToCheck) : null,
         creationDate: new Date(),
         description: tmp.description,
         doCheck: tmp.doCheck,
         groupId:tmp.groupId,
-        scadenzaDate:new Date(tmp.scadenzaDate)
+        scadenzaDate: tmp.scadenzaDate != null ? new Date(tmp.scadenzaDate) : null
           //children: []
       };
-      $scope.datepickerObjectScad.inputDate =new Date(tmp.scadenzaDate)
-      $scope.datepickerObjectPopupScad.inputDate=new Date(tmp.scadenzaDate);
+      $scope.datepickerObjectScad.inputDate = tmp.scadenzaDate != null ? new Date(tmp.scadenzaDate) : addDays;
+      $scope.datepickerObjectPopupScad.inputDate = new Date($scope.datepickerObjectScad.inputDate);
       currentMode = MODE_EDIT;
       selectedCommunicationIndex = index;
 
@@ -377,7 +377,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
 
   var createNewComm = function () {
     $scope.newCommunication = {
-      dateToCheck: new Date(),
+      dateToCheck: null,
       creationDate: new Date(),
       description: "",
       doCheck: false,
@@ -441,9 +441,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
     //se gia' authenticato crea, altrimenti autentica
     if ($rootScope.userAuth) {
       $scope.newCommunication = {
-        dateToCheck: new Date(),
+        dateToCheck: null,
         creationDate: new Date(),
-        scadenzaDate:new Date(),
+        scadenzaDate: null,
         description: "",
         doCheck: false,
         author: {},
@@ -652,9 +652,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
         return;
       }
       if ($scope.isMode(MODE_EDIT)) {
-        var tmp = JSON.parse(JSON.stringify($scope.editedCommunication));
+        var tmp = angular.copy($scope.editedCommunication);//JSON.parse(JSON.stringify($scope.editedCommunication));
       } else {
-        var tmp = JSON.parse(JSON.stringify($scope.newCommunication));
+        var tmp = angular.copy($scope.newCommunication);//JSON.parse(JSON.stringify($scope.newCommunication));
       }
       tmp.creationDate = new Date(tmp.creationDate).getTime();
       if (tmp.creation) {
@@ -668,7 +668,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
         surname: $scope.teacher.teacherSurname
       };
       tmp.groupId = $scope.curData.selectedGroup;
-      tmp.scadenzaDate=new Date(tmp.scadenzaDate).getTime();
+      tmp.scadenzaDate = new Date(tmp.scadenzaDate).getTime();
       if (tmp.groupId === 'all') tmp.groupId = null;
       communicationService.addCommunication(profileService.getSchoolProfile().schoolId, tmp).then(function (data) {
         requestSuccess(data);

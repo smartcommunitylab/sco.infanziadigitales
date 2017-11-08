@@ -109,12 +109,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
 
         return deferred.promise;
     }
-    dataServerService.getCommunications = function (schoolId) {
+    dataServerService.getCommunications = function (schoolId, kidId) {
         var deferred = $q.defer();
 
         $http({
             method: 'GET',
-            url: Config.URL() + '/' + Config.app() + '/school/' + Config.appId() + '/' + schoolId + '/communications',
+            url: Config.URL() + '/' + Config.app() + '/student/' + Config.appId() + '/' + schoolId + '/' + kidId + '/communications',
             headers: {
                 'Accept': 'application/json'
             },

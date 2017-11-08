@@ -15,8 +15,11 @@ package it.smartcommunitylab.ungiorno.utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.TreeMap;
@@ -122,7 +125,7 @@ public class NotificationManager {
         String groupId = message.getGroupId();
         if (groupId != null) {
             List<KidProfile> kids = storage.getKidsBySection(appId, schoolId, groupId);
-            List<String> parentIds = new ArrayList<String>();
+            Set<String> parentIds = new HashSet<>();
             for (KidProfile kid : kids) {
                 for (AuthPerson p : kid.getPersons()) {
                     if (p.isParent()) {
@@ -135,7 +138,10 @@ public class NotificationManager {
                 }
             }
             if (parentIds.size() > 0) {
-                communicator.sendAppNotification(n, appName, parentIds, permissions.getAppToken());            	
+            	logger.info("Sending group ("+groupId+") communication to "+parentIds);
+                // replace channel with direct parent communication
+            	appName = appSetup.getAppsMap().get(appId).getMessagingAppId() + APP_UGAS_PARENT;
+                communicator.sendAppNotification(n, appName, new LinkedList<>(parentIds), permissions.getAppToken());            	
             }
         } else {
             communicator.sendAppNotification(n, appName, Collections.<String>emptyList(),

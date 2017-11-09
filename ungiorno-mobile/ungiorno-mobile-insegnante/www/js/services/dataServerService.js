@@ -310,6 +310,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.dataSer
       timeout: Config.httpTimout()
     }).
     success(function (data, status, headers, config) {
+      if (data.data) data.data.forEach(function(c) {
+        if (c.dateToCheck == 0) c.dateToCheck = null;
+      });
       deferred.resolve(data.data);
     }).
     error(function (data, status, headers, config) {

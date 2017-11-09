@@ -187,6 +187,7 @@
     "no_messages": "Non sono presenti messaggi",
     "babysetting_active": "Attivo",
     "babysetting_not_active": "Non attivo",
+    "babysetting_no_allergies":"Nessuna allergia segnalata",
     "modifica": "Edit",
     "load_default_week": "Load default week",
     "copy_previous_week": "Copy previous week",

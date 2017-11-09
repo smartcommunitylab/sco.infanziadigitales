@@ -193,6 +193,7 @@
   "no_messages": "Non sono presenti messaggi",
   "babysetting_active": "Attivo",
   "babysetting_not_active": "Non attivo",
+  "babysetting_no_allergies":"Nessuna allergia segnalata",
   "modifica": "Modifica",
   "menu_week_plan": "Piano Settimanale",
   "menu_default_week_plan": "Settimana default",

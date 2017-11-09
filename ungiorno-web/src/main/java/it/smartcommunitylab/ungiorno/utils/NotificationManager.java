@@ -206,8 +206,7 @@ public class NotificationManager {
         }
 
         Notification n = prepareMessage(message, content);
-        n.setTitle(
-                storage.getKidProfile(appId, schoolId, kidId).getFullName() + ": nuovo messaggio");
+        n.setTitle("Messaggio per " + storage.getKidProfile(appId, schoolId, kidId).getFirstName());
 
         String appName = channelName(appSetup.getAppsMap().get(appId).getMessagingAppId(), schoolId,
                 APP_UGAS_TEACHER);

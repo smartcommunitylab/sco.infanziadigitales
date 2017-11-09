@@ -2494,6 +2494,8 @@ textarea {
 }
 .label_prom{
   padding-right: 14px;
+  white-space: nowrap;
+  min-width:30%; 
 }
 
 .item-select {

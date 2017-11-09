@@ -201,7 +201,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
   });
   $scope.sendMail = function () {
     $scope.checkConnection().then(function () {
-        window.open('mailto:ugas-help@smartcommunitylab.it', '_system');
+        window.open('mailto:ugas-help@smartcommunitylab.it?subject=UGAS Insegnanti: segnalazione problema','_system');
         return false;
       },
       function (err) {

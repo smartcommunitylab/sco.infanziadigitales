@@ -1286,7 +1286,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             else {
                 $scope.reason_text = 'remove_reason';
                 $scope.tempCurrData.absence = false;
+                //load in tempCurrData entrata ore, uscita and the others
+                $scope.tempCurrData.uscita=$scope.totime;
+                $scope.tempCurrData.uscita_display=$scope.totime.format("H:mm");
+                $scope.tempCurrData.entrata=$scope.fromtime;
+                $scope.tempCurrData.entrata_display=$scope.fromtime.format("H:mm");
+                //set persona and fermata with bus
                 $scope.currData = angular.copy($scope.tempCurrData);
+             
             }
         };
 
@@ -1439,9 +1446,33 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                         }
                     }
                 }
-                $scope.listServicesAnticipo.sort(sortByTimeAscOut);
-                $scope.listServicesPosticipo.sort(sortByTimeAscOut);
+                
+                  
+                // $scope.listServicesAnticipo.sort(sortByTimeAscOut);
+                // $scope.listServicesPosticipo.sort(sortByTimeAscOut);
             }
+             if ($scope.listServicesAnticipo.length > 0) {
+                        $scope.listServicesAnticipo.sort(sortByTimeAscOut);
+                        $scope.fromtime = $scope.listServicesAnticipo[0]['out_val'];
+                }
+                if ($scope.listServicesPosticipo.length > 0) {
+                    $scope.listServicesPosticipo.sort(sortByTimeAscOut);
+                    $scope.totime = $scope.listServicesPosticipo[$scope.listServicesPosticipo.length - 1]['out_val'];
+                }
+                //bus precedence for exit time by default
+                console.log($scope.busEnabled);
+                if ($scope.busEnabled) {
+                    $scope.getSchoolNormalFascie = $filter('getSchoolNormalFascie')(profileService.getSchoolProfile().services);
+                    $scope.getSchoolNormalFascie.sort(sortByTimeAscOut);
+                    var length1 = $scope.getSchoolNormalFascie.length;
+                    if (length1 > 0) 
+                        {$scope.totime = $scope.getSchoolNormalFascie[length1 - 1]['out_val'];}
+                    if ($scope.totime == '') 
+                    {$scope.totime = moment('14:00', 'H:mm');}
+                    totimeFormatted = moment($scope.totime).format('H:mm');
+                    $scope.totime = moment($scope.totime, 'H:mm');
+                    }
+                    var infoInitial = { 'fromTime': $scope.fromtime, 'toTime': $scope.totime };
         };
         $scope.getListServices();
 

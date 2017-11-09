@@ -115,7 +115,7 @@ public class NotificationManager {
 
         Notification n = prepareMessage(message.getDescription(), content);
         if (isUpdate) {
-            n.setTitle("Communicazione modificata");
+            n.setTitle("Comunicazione modificata");
         } else {
             n.setTitle("Nuova comunicazione");
         }
@@ -186,8 +186,7 @@ public class NotificationManager {
         content.put("messageId", messageId);
 
         Notification n = prepareMessage(message, content);
-        n.setTitle(
-                storage.getKidProfile(appId, schoolId, kidId).getFullName() + ": nuovo messaggio");
+        n.setTitle("Messaggio per "+ kid.getFirstName());
 
         String appName = appSetup.getAppsMap().get(appId).getMessagingAppId() + APP_UGAS_PARENT;
         communicator.sendAppNotification(n, appName, userIds, permissions.getAppToken());

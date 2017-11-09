@@ -346,7 +346,8 @@ export class WebService {
     convertedKid.persons = [];
     convertedKid.partecipateToSperimentation = kid.sperimentazione;
     convertedKid.gender = kid.gender;
-    convertedKid.birthDate = new Date(Date.parse(kid.nascitaStr));
+    moment.locale('it');
+    convertedKid.birthDate = moment(kid.nascitaStr).toDate();
     convertedKid.services.timeSlotServices = kid.services.map(service => {
       let serverService: ServerServiceData = this.convertToServerService(service);
       serverService.enabled = true; // if a service if present in this array, it MUST be a enabled service for the kid

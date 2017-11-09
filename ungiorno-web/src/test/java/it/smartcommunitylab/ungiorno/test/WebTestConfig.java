@@ -20,7 +20,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
@@ -43,7 +42,7 @@ import it.smartcommunitylab.ungiorno.utils.NotificationManager;
 import it.smartcommunitylab.ungiorno.utils.PermissionsManager;
 
 
-@Configuration
+// @Configuration
 // exclusion of NotificationManager because it refers to a permissionsManager instance
 @ComponentScan(
         basePackages = {"it.smartcommunitylab.ungiorno.storage",

@@ -8,7 +8,7 @@
     <ion-content has-header="true" ng-init="getDateString()">
   
         <!-- Readonly DetailView of Week-->
-        <div ng-show="mode==''" class="week_plan_detail">
+        <div ng-show="mode==''" class="week_plan_detail margin-top-10">
             <ion-list class="week_plan_detail_table">
                 <ion-item ng-repeat="day in days track by $index"  ng-class="{'absence': day.absence}">
                   <div class="row row-center">

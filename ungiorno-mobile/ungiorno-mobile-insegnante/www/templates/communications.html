@@ -11,11 +11,8 @@
 
   <ion-content has-header="true">
     <div class="communication card card-bord" ng-if="isMode('new')">
-      <!--      <div class="row">-->
       <span class=" communication-name"> {{teacher.teacherFullname}} </span>
       <span class=" communication-title"> {{ 'communication_new' | translate}} </span>
-      <!--      </div>-->
-      <!--      <div><a class="communication-kind"> {{ 'communication_kind' | translate}} </a></div>-->
       <div class="communication-kind"><a> {{ 'communication_kind' | translate}} </a></div>
       <ion-list class="padlist">
         <div ng-repeat="communicationType in communicationTypes" class="communication-radio">
@@ -32,31 +29,9 @@
               <option ng-repeat="option in listGroup" value="{{option}}" ng-selected="currData==option">{{option | translate}}</option>
             </select>
       </div>
-      <!--
-Old version
 
-      <div class="item-input chat-teacher-input auto-height">
-        <div class="row chat-chose">
-          <div class="input-label-teacher">
-            {{'note_teacher_label'|translate}}
-          </div>
-          <div class="note-teacher" ng-click="popover.show($event)">
-            <div class="input-label">
-              <span> {{teacher.teacherFullname}} </span></div>
-            <button class="button button-icon button-teacher-list ion-arrow-down-b"></button>
-          </div>
-        </div>
-      </div>
--->
-
-      <!--
-            <label>
-                <input type="text" id="description" placeholder="{{'description' | translate}}" ng-model="newCommunication.description">
-            </label>
--->
       <textarea class="input-communication" placeholder="{{'communication_description' | translate}}" ng-model="newCommunication.description" id="description" ng-keydown="expandText('description')">
       </textarea>
-      <!--edit mode || new communication mode-->
       <div class="bottom_com">
         <div class="dt_scad">
             <span >{{'com_dt' | translate}}: 
@@ -76,7 +51,7 @@ Old version
       </div>
     </div>
 
-    <div class="communication card " ng-class="{'card-bord':(isCommunicationSelected($index) && isMode('edit'))}" ng-repeat="communication in communications | orderBy: '-creation' track by $index ">
+    <div class="communication card " ng-class="{'card-bord':(isCommunicationSelected($index) && isMode('edit'))}" ng-repeat="communication in communications track by $index ">
 
       <div id="communication-datepicker-{{$index}}"></div>
 

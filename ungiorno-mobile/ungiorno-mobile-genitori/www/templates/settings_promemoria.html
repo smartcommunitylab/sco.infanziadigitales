@@ -22,10 +22,10 @@
                         <ionic-timepicker input-obj="timePickerObject24Hour" ng-if="isActive('prom_day_summary')">
                             <button ng-hide="true"></button>
                             <span>
-                                <standard-time-no-meridian etime="timePickerObject24Hour.inputEpochTime" ng-class="{'lookedit': isActive('prom_day_summary'),'noneditable2': !isActive('prom_day_summary')}"></standard-time-no-meridian>
+                                <standard-time-no-meridian etime="timePickerObject24Hour.inputEpochTime" ng-class="{'editable2': isActive('prom_day_summary'),'noneditable2': !isActive('prom_day_summary')}"></standard-time-no-meridian>
                             </span>
                         </ionic-timepicker>
-                        <standard-time-no-meridian ng-if="!isActive('prom_day_summary')" etime="timePickerObject24Hour.inputEpochTime" ng-class="{'lookedit': isActive('prom_day_summary'),'noneditable2': !isActive('prom_day_summary')}"></standard-time-no-meridian>
+                        <standard-time-no-meridian ng-if="!isActive('prom_day_summary')" etime="timePickerObject24Hour.inputEpochTime" ng-class="{'editable2': isActive('prom_day_summary'),'noneditable2': !isActive('prom_day_summary')}"></standard-time-no-meridian>
                     </label>
                 </div>
           </div>
@@ -51,10 +51,10 @@
                         <ionic-timepicker input-obj="timePickerObject24HourWeek" ng-if="isActive('prom_week')">
                             <button ng-hide="true"></button>
                             <span>
-                                <standard-time-no-meridian etime="timePickerObject24HourWeek.inputEpochTime" ng-class="{'lookedit': isActive('prom_week'),'noneditable2': !isActive('prom_week')}"></standard-time-no-meridian>
+                                <standard-time-no-meridian etime="timePickerObject24HourWeek.inputEpochTime" ng-class="{'editable2': isActive('prom_week'),'noneditable2': !isActive('prom_week')}"></standard-time-no-meridian>
                             </span>
                         </ionic-timepicker>
-                        <standard-time-no-meridian ng-if="!isActive('prom_week')" etime="timePickerObject24HourWeek.inputEpochTime" ng-class="{'lookedit': isActive('prom_week'),'noneditable2': !isActive('prom_week')}"></standard-time-no-meridian>
+                        <standard-time-no-meridian ng-if="!isActive('prom_week')" etime="timePickerObject24HourWeek.inputEpochTime" ng-class="{'editable2': isActive('prom_week'),'noneditable2': !isActive('prom_week')}"></standard-time-no-meridian>
                     </label>
                 </div>
         </div>
@@ -68,7 +68,7 @@
             <div class="space-from-top">
                 <div class="">
                         <ionic-numberpicker input-obj="numberPickerObject" ng-if="isActive('prom_day_ritiro')">
-                            <span ng-class="{'lookedit': isActive('prom_day_ritiro'),'noneditable2': !isActive('prom_day_ritiro')}">{{currData['prom_ritiro_time']}}</span>
+                            <span ng-class="{'editable2': isActive('prom_day_ritiro'),'noneditable2': !isActive('prom_day_ritiro')}">{{currData['prom_ritiro_time']}}</span>
                         </ionic-numberpicker>
                         <span ng-if="!isActive('prom_day_ritiro')" class="noneditable2">{{currData.prom_ritiro_time}}</span>
                     </div>

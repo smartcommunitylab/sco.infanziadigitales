@@ -7,18 +7,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
   var MODE_NORMAL_LIST = "normal";
   var MODE_EDIT = "edit";
   var MODE_NEW = "new";
-  // $scope.editedCommunication
+
   var currentMode = MODE_NORMAL_LIST;
-  $scope.datepickerObject = {};
-  $scope.datepickerObject.inputDate = new Date();
-  $scope.datepickerObjectScad = {};
-  var today=new Date();
-  var addDays = new Date();
-  addDays.setDate(today.getDate()+5);
-  $scope.datepickerObjectScad.inputDate = addDays;//today.setDate(today.getDate() + 5)
-  //  $scope.$on('$ionicView.beforeEnter', function () {
-  //    $ionicLoading.show();
-  //  });
+
   $scope.data = {
     userPIN: ""
   }
@@ -47,9 +38,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
     ];
 
 
-  function setDateWidget() {
-    $scope.datepickerObjectPopup = {
-      inputDate: $scope.datepickerObject.inputDate,
+  function setDateWidget(indate, popup, field) {
+    $scope[popup] = {
+      inputDate: indate,
       closeLabel: $filter('translate')('close'),
       setLabel: $filter('translate')('popup_datepicker_set'),
       todayLabel: $filter('translate')('popup_datepicker_today'),
@@ -58,96 +49,53 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
       showTodayButton: true,
       closeOnSelect: false,
       monthList: monthList,
-      callback: function (val) {
-        datePickerCallbackPopup(val);
-      }
+      callback: function(val) {
+        if (typeof (val) === 'undefined') {
+          console.log('No date selected');
+        } else {
+          $scope[popup].inputDate = val;
+          $scope.dateTimestamp = val;
+          if ($scope.isMode(MODE_NEW)) {
+            $scope.newCommunication[field] = $scope[popup].inputDate;
+          } else {
+            $scope.editedCommunication[field] = $scope[popup].inputDate;
+          }
+        }
+          }
     };
-
   }
-  var datePickerCallbackPopup = function (val) {
-    if (typeof (val) === 'undefined') {
-      console.log('No date selected');
-    } else {
-      $scope.datepickerObjectPopup.inputDate = val;
-      $scope.dateTimestamp = val;
-      if ($scope.isMode(MODE_NEW)) {
-        $scope.newCommunication.dateToCheck = $scope.datepickerObjectPopup.inputDate;
-      } else {
-        $scope.editedCommunication.dateToCheck = $scope.datepickerObjectPopup.inputDate;
-      }
-    }
-  };
+  // init date widget for check date
+  setDateWidget(moment().toDate(), 'datepickerObjectPopup', 'dateToCheck');
+  // init date widged for 'scadenza'
+  setDateWidget(moment().add(5,'days').toDate(), 'datepickerObjectPopupScad', 'scadenzaDate');
 
-  function setDateWidgetScad() {
-    $scope.datepickerObjectPopupScad = {
-      inputDate: $scope.datepickerObjectScad.inputDate,
-      closeLabel: $filter('translate')('close'),
-      setLabel: $filter('translate')('popup_datepicker_set'),
-      todayLabel: $filter('translate')('popup_datepicker_today'),
-      mondayFirst: true,
-      templateType: 'popup',
-      showTodayButton: true,
-      closeOnSelect: false,
-      monthList: monthList,
-      callback: function (val) {
-        datePickerCallbackPopupScad(val);
-      }
-    };
-
-  }
-  var datePickerCallbackPopupScad = function (val) {
-    if (typeof (val) === 'undefined') {
-      console.log('No date selected');
-    } else {
-      $scope.datepickerObjectPopupScad.inputDate = val;
-      $scope.dateTimestamp = val;
-      if ($scope.isMode(MODE_NEW)) {
-        $scope.newCommunication.scadenzaDate = $scope.datepickerObjectPopupScad.inputDate;
-      } else {
-        $scope.editedCommunication.scadenzaDate = $scope.datepickerObjectPopupScad.inputDate;
-      }
-    }
-  };
-  setDateWidget();
-  setDateWidgetScad();
-  $scope.curData={'selectedGroup':'all'};
+  // init group value
+  $scope.curData = { 'selectedGroup': 'all' };
   $scope.listGroup = ['all'].concat(profileService.getSchoolProfile().sections.map(function(s) {return s.sectionId}));
   
-  // $scope.listGroup=['all'];
+  // communication types
   $scope.communicationTypes = [
     {
       typeId: "0",
       name: $filter('translate')('communication_type_without_parents'),
       checked: false
-        }, {
+    }, {
       typeId: "1",
       name: $filter('translate')('communication_type_parents'),
       checked: true
-        }
-    ];
+    }
+  ];
+
+  // current teacher
+  $scope.teacher = profileService.getTeacher();
+  
   $scope.delivery = false;
-  $ionicPopover.fromTemplateUrl('templates/popover.html', {
-    scope: $scope,
-  }).then(function (popover) {
-    $scope.popover = popover;
-  });
+
   var sortCommunications = function () {
-    $scope.communications = $filter('orderBy')($scope.communications, '-creation');
+    $scope.communications = $filter('orderBy')($scope.communications, '-creationDate');
   }
 
-  var setTeachers = function () {
-    //    $scope.teacher = {};
-    //    $scope.teachers = teachersService.getTeachers();
-    //    if ($scope.teachers) {
-    //      $scope.teacher = $scope.teachers[0];
-    //    }
-    $scope.teacher = profileService.getTeacher();
-  }
-  setTeachers();
-  $scope.changeTeacher = function (teacher) {
-    $scope.popover.hide();
-    $scope.teacher = teacher;
-  }
+  
   $scope.getDateLabel = function () {
     var day = moment($scope.datepickerObjectPopup.inputDate);
     var result = day.format('DD/MM/YYYY');
@@ -155,29 +103,27 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
   }
   $scope.openDatePicker = function () {
       if ($scope.delivery) {
-        setDateWidget();
+        // setDateWidget();
         ionicDatePicker.openDatePicker($scope.datepickerObjectPopup);
       }
-    }
+  }
 
-    $scope.getDateLabelScad = function () {
-      var day = moment($scope.datepickerObjectPopupScad.inputDate);
-      var result = day.format('DD/MM/YYYY');
-      return result;
-    }
-    $scope.openDatePickerScad = function () {
-          setDateWidgetScad();
-          ionicDatePicker.openDatePicker($scope.datepickerObjectPopupScad);
-      }
+  $scope.getDateLabelScad = function () {
+    var day = moment($scope.datepickerObjectPopupScad.inputDate);
+    var result = day.format('DD/MM/YYYY');
+    return result;
+  }
+  $scope.openDatePickerScad = function () {
+        // setDateWidgetScad();
+        ionicDatePicker.openDatePicker($scope.datepickerObjectPopupScad);
+  }
       
-    //setTeachers();
   $ionicLoading.show();
   dataServerService.getCommunications(profileService.getSchoolProfile().schoolId).then(function (data) {
     $scope.communications = data;
     if ($scope.communications) {
       for (var i = 0; i < $scope.communications.length; i++) {
         $scope.communications[i].dateToCheck = new Date($scope.communications[i].dateToCheck);
-        $scope.communications[i].creation = $scope.communications[i].creationDate;
         $scope.communications[i].creationDate = $scope.communications[i].creationDate;
       }
       sortCommunications();
@@ -188,6 +134,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
     $scope.communications = [];
     $ionicLoading.hide();
   });
+
   $scope.initMod = function (communication) {
     for (var i = 0; i < $scope.teachers.length; i++) {
       if ($scope.teachers[i].teacherId == communication.author.id) {
@@ -212,83 +159,60 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
   }
 
   $scope.editCommunicationMode = function (index) {
-    //se gia' authenticato crea, altrimenti autentica
-    //    if ($rootScope.userAuth) {
-    //      $scope.newCommunication = {
-    //        dateToCheck: new Date(),
-    //        creationDate: new Date(),
-    //        description: "",
-    //        doCheck: false,
-    //        author: {},
-    //        children: []
-    //      };
-    //      currentMode = MODE_NEW;
-    //    } else {
-    //      $scope.unlock().then(function () {
-    //        $scope.newCommunication = {
-    //          dateToCheck: new Date(),
-    //          creationDate: new Date(),
-    //          description: "",
-    //          doCheck: false,
-    //          author: {},
-    //          children: []
-    //        };
-    //        currentMode = MODE_NEW;
-    //      });
-    //    }
     if ($scope.isMode('edit') || $scope.isMode('new')) {
       Toast.show($filter('translate')('communication_function_not_possible'), 'short', 'bottom');
       return;
     }
     if ($rootScope.userAuth) {
       var tmp = $scope.communications[index];
-      $scope.editedCommunication = {
-        appId: tmp.appId,
-        children: tmp.children,
-        communicationId: tmp.communicationId,
-        author: tmp.author,
-        schoolId: tmp.schoolId,
-        dateToCheck: new Date(tmp.dateToCheck),
-        creationDate: new Date(),
-        description: tmp.description,
-        doCheck: tmp.doCheck,
-        groupId:tmp.groupId,
-        scadenzaDate:new Date(tmp.scadenzaDate)
-          //children: []
-      };
-      $scope.datepickerObjectScad.inputDate =new Date(tmp.scadenzaDate)
-      $scope.datepickerObjectPopupScad.inputDate=new Date(tmp.scadenzaDate);
-      currentMode = MODE_EDIT;
-      selectedCommunicationIndex = index;
+      modifyComm(tmp, index);
 
-      $scope.delivery = $scope.editedCommunication.doCheck;
+
+      // $scope.editedCommunication = {
+      //   appId: tmp.appId,
+      //   children: tmp.children,
+      //   communicationId: tmp.communicationId,
+      //   author: tmp.author,
+      //   schoolId: tmp.schoolId,
+      //   dateToCheck: tmp.dateToCheck != null ? new Date(tmp.dateToCheck) : null,
+      //   creationDate: new Date(),
+      //   description: tmp.description,
+      //   doCheck: tmp.doCheck,
+      //   groupId:tmp.groupId,
+      //   scadenzaDate: tmp.scadenzaDate != null ? new Date(tmp.scadenzaDate) : null
+      //     //children: []
+      // };
+      // $scope.datepickerObjectScad.inputDate = tmp.scadenzaDate != null ? new Date(tmp.scadenzaDate) : addDays;
+      // $scope.datepickerObjectPopupScad.inputDate = new Date($scope.datepickerObjectScad.inputDate);
+      // currentMode = MODE_EDIT;
+      // selectedCommunicationIndex = index;
+
+      // $scope.delivery = $scope.editedCommunication.doCheck;
 
       if (document.getElementById("communication-datepicker-" + index)) {
-        document.getElementById("communication-datepicker-" + index).innerHTML = "      <span class=\" communication-name\"> {{teacher.teacherFullname}} </span> <span class=\"communication-title\"> {{ 'communication_edit' | translate}} </span>            <div class=\"communication-kind\"> {{ 'communication_kind' | translate}} </div><ion-list class=\"padlist\"><div ng-repeat=\"communicationType in communicationTypes\" class=\"communication-radio\">                    <ion-radio class=\"communication-radio\" ng-class=\"communication-radio\" ng-value=\"communicationType.checked\" ng-change=\"selectType(communicationType)\" ng-checked=\"communicationType.checked\" ng-model=\"editedCommunication.doCheck\">                        {{communicationType.name}}                    </ion-radio>                    <button class=\"button button-clear button-dark button-communication-date\" ng-class=\"{'button-disabled':!delivery }\" ng-if=\"communicationType.typeId=='1'\" ng-click=\"openDatePicker() \"><span class=\"label-time-date\">{{getDateLabel()}}</span></button>                </div></ion-list>  "
-        +"<div class=\"groups\">"
-        +"<span class=\"communication-kind\">{{'invia' | translate}}: </span> "
-        +"<select ng-model=\"curData.selectedGroup\" class=\"listgroup\">"
-        +"    <option ng-repeat=\"option in listGroup\" value=\"{{option}}\" ng-selected=\"editedCommunication.groupId==option\">{{option | translate}}</option>"
-        +"  </select>"
-        +"</div>"
-        +"<div class=\"row\">                <div class=\"col\">               <textarea ng-init=\"expandText('editdescription')\" class = \"input-communication\" placeholder=\"{{'communication_description' | translate}}\" ng-model=\"editedCommunication.description\" id=\"editdescription\" ng-keydown=\"expandText('editdescription')\">      </textarea>           </div>    </div> "
-        +"<div class=\"bottom_com\">"
-        +"<div class=\"dt_scad\">"
-        +"    <span >{{'com_dt' | translate}}: "
-        +"      &nbsp;&nbsp;&nbsp;<button class=\"button-clear button-dark button-communication-date\"  ng-click=\"openDatePickerScad() \"><span class=\"label-time-date\">{{getDateLabelScad()}}</span></button>"
-        +"    </span>"
-        +"    <br/>"
-        +"    <span id=\"delcom\">{{'com_del' | translate}}:</span>"
-        +"</div>"
-        +" <div class=\"communication-buttons\">                <button class=\"button communication-button cancel\" ng-click=\"discardCommunication()\" ng-show=\"isMode('edit') || isMode('new')\">                    {{'communication_annulla' | translate}}                </button>                <button class=\"button communication-button send\" ng-click=\"submitCommunication()\" ng-show=\"isMode('edit') || isMode('new')\">                    {{'communication_modifica' | translate}}                </button>            </div>         </div> </div>";
-        $compile(document.getElementById('communication-datepicker-' + index))($scope);
+        // document.getElementById("communication-datepicker-" + index).innerHTML = "      <span class=\" communication-name\"> {{teacher.teacherFullname}} </span> <span class=\"communication-title\"> {{ 'communication_edit' | translate}} </span>            <div class=\"communication-kind\"> {{ 'communication_kind' | translate}} </div><ion-list class=\"padlist\"><div ng-repeat=\"communicationType in communicationTypes\" class=\"communication-radio\">                    <ion-radio class=\"communication-radio\" ng-class=\"communication-radio\" ng-value=\"communicationType.checked\" ng-change=\"selectType(communicationType)\" ng-checked=\"communicationType.checked\" ng-model=\"editedCommunication.doCheck\">                        {{communicationType.name}}                    </ion-radio>                    <button class=\"button button-clear button-dark button-communication-date\" ng-class=\"{'button-disabled':!delivery }\" ng-if=\"communicationType.typeId=='1'\" ng-click=\"openDatePicker() \"><span class=\"label-time-date\">{{getDateLabel()}}</span></button>                </div></ion-list>  "
+        // +"<div class=\"groups\">"
+        // +"<span class=\"communication-kind\">{{'invia' | translate}}: </span> "
+        // +"<select ng-model=\"curData.selectedGroup\" class=\"listgroup\">"
+        // +"    <option ng-repeat=\"option in listGroup\" value=\"{{option}}\" ng-selected=\"editedCommunication.groupId==option\">{{option | translate}}</option>"
+        // +"  </select>"
+        // +"</div>"
+        // +"<div class=\"row\">                <div class=\"col\">               <textarea ng-init=\"expandText('editdescription')\" class = \"input-communication\" placeholder=\"{{'communication_description' | translate}}\" ng-model=\"editedCommunication.description\" id=\"editdescription\" ng-keydown=\"expandText('editdescription')\">      </textarea>           </div>    </div> "
+        // +"<div class=\"bottom_com\">"
+        // +"<div class=\"dt_scad\">"
+        // +"    <span >{{'com_dt' | translate}}: "
+        // +"      &nbsp;&nbsp;&nbsp;<button class=\"button-clear button-dark button-communication-date\"  ng-click=\"openDatePickerScad() \"><span class=\"label-time-date\">{{getDateLabelScad()}}</span></button>"
+        // +"    </span>"
+        // +"    <br/>"
+        // +"    <span id=\"delcom\">{{'com_del' | translate}}:</span>"
+        // +"</div>"
+        // +" <div class=\"communication-buttons\">                <button class=\"button communication-button cancel\" ng-click=\"discardCommunication()\" ng-show=\"isMode('edit') || isMode('new')\">                    {{'communication_annulla' | translate}}                </button>                <button class=\"button communication-button send\" ng-click=\"submitCommunication()\" ng-show=\"isMode('edit') || isMode('new')\">                    {{'communication_modifica' | translate}}                </button>            </div>         </div> </div>";
+        // $compile(document.getElementById('communication-datepicker-' + index))($scope);
         var communication = document.getElementById("communication-datepicker-" + index);
         $scope.communicationPosition = communication.getBoundingClientRect();
       }
     } else {
-      $scope.unlock('edit', $scope.communications[index], index).then(function () {
-
-      })
+      $scope.unlock('edit', $scope.communications[index], index);
     }
   }
 
@@ -303,6 +227,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
   $scope.controlDateToCheck = function (index) {
     return $scope.communications[index].doCheck;
   }
+
   var userAutent = function (PIN) {
     var deferred = $q.defer();
     profileService.authenticatheWithPIN(profileService.getSchoolProfile().schoolId, PIN).then(function (user) {
@@ -321,6 +246,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
     });
     return deferred.promise;
   };
+  
   $scope.exit = function () {
     //exit  from profile and from mode
     $scope.discardCommunication();
@@ -337,16 +263,18 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
       communicationId: communication.communicationId,
       author: communication.author,
       schoolId: communication.schoolId,
-      dateToCheck: new Date(communication.dateToCheck),
+      dateToCheck: communication.dateToCheck != null ? new Date(communication.dateToCheck) : null,
       creationDate: new Date(),
       description: communication.description,
       doCheck: communication.doCheck,
       groupId:communication.groupId,
-      scadenzaDate:new Date(communication.scadenzaDate),
+      scadenzaDate: communication.scadenzaDate != null ? new Date(communication.scadenzaDate) : $scope.datepickerObjectPopupScad.inputDate,
       children: []
     };
-    $scope.datepickerObjectScad.inputDate =new Date(communication.scadenzaDate)
-    $scope.datepickerObjectPopupScad.inputDate=new Date(communication.scadenzaDate);
+    $scope.datepickerObjectPopupScad.inputDate = $scope.editedCommunication.scadenzaDate;
+    if ($scope.editedCommunication.dateToCheck != null) {
+      $scope.datepickerObjectPopup.inputDate = $scope.editedCommunication.dateToCheck;
+    }
     currentMode = MODE_EDIT;
     selectedCommunicationIndex = index;
 
@@ -377,15 +305,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
 
   var createNewComm = function () {
     $scope.newCommunication = {
-      dateToCheck: new Date(),
+      dateToCheck: $scope.datepickerObjectPopup.inputDate,
       creationDate: new Date(),
       description: "",
       doCheck: false,
       author: {},
+      scadenzaDate: $scope.datepickerObjectPopupScad.inputDate,
       children: []
     };
     currentMode = MODE_NEW;
   }
+
   $scope.unlock = function (action, communication, index) {
     var deferred = $q.defer();
     $scope.noAuthenicate = false;
@@ -424,8 +354,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
                 } else {
                   $scope.noAuthenicate = false;
                 }
-                //Toast.show($filter('translate')('user_not_auth'), 'short', 'bottom');
-
               });
             $scope.data.userPIN = "";
           }
@@ -440,20 +368,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
   $scope.createCommunicationMode = function () {
     //se gia' authenticato crea, altrimenti autentica
     if ($rootScope.userAuth) {
-      $scope.newCommunication = {
-        dateToCheck: new Date(),
-        creationDate: new Date(),
-        scadenzaDate:new Date(),
-        description: "",
-        doCheck: false,
-        author: {},
-        children: []
-      };
-      currentMode = MODE_NEW;
+      createNewComm();
     } else {
-      $scope.unlock('new').then(function () {
-
-      });
+      $scope.unlock('new');
     }
   }
 
@@ -652,15 +569,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
         return;
       }
       if ($scope.isMode(MODE_EDIT)) {
-        var tmp = JSON.parse(JSON.stringify($scope.editedCommunication));
+        var tmp = angular.copy($scope.editedCommunication);//JSON.parse(JSON.stringify($scope.editedCommunication));
       } else {
-        var tmp = JSON.parse(JSON.stringify($scope.newCommunication));
+        var tmp = angular.copy($scope.newCommunication);//JSON.parse(JSON.stringify($scope.newCommunication));
       }
       tmp.creationDate = new Date(tmp.creationDate).getTime();
-      if (tmp.creation) {
-        delete tmp['creation'];
-      }
-      tmp.dateToCheck = new Date(tmp.dateToCheck).getTime();
+
+      tmp.dateToCheck = tmp.doCheck ? new Date(tmp.dateToCheck).getTime() : null;
       tmp.author = {
         fullname: $scope.teacher.teacherFullname,
         id: $scope.teacher.teacherId,
@@ -668,8 +583,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
         surname: $scope.teacher.teacherSurname
       };
       tmp.groupId = $scope.curData.selectedGroup;
-      tmp.scadenzaDate=new Date(tmp.scadenzaDate).getTime();
+      tmp.scadenzaDate = new Date(tmp.scadenzaDate).getTime();
       if (tmp.groupId === 'all') tmp.groupId = null;
+
       communicationService.addCommunication(profileService.getSchoolProfile().schoolId, tmp).then(function (data) {
         requestSuccess(data);
       }, function (data) {
@@ -679,10 +595,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
         requestFail();
       });
     }
-
-  }
-
-  $scope.rende = function (index) {
 
   }
 

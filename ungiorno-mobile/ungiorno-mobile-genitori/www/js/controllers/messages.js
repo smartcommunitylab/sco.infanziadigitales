@@ -3,6 +3,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 .controller('MessagesCtrl', function ($scope, $rootScope, $filter, messagesService, Toast, profileService, $interval, $ionicScrollDelegate, $ionicLoading, $ionicScrollDelegate, Config) {
 
   $scope.babyProfile = profileService.getBabyProfile();
+  $scope.messages_title = $filter('translate')('messages_title')+' per '+ $scope.babyProfile.firstName
   var IS_PARENT = 'parent';
   var IS_TEACHER = 'teacher';
   $scope.all = 10;

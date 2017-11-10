@@ -1095,7 +1095,10 @@ select {
   position: relative!important;
   height: 71vh;
 }
-
+#babyprofile #info-box {
+  position: relative!important;
+  /*height: 90vh;*/
+}
 #babyprofile .box-ion-spinner {
   text-align: center;
 }

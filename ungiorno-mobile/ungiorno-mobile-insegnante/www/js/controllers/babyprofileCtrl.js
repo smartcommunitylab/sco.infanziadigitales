@@ -48,6 +48,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
     }
     return parents;
   }
+    var getAllergies = function (babyProfile) {
+    allergies = [];
+    for (var i = 0; i < babyProfile.allergies.length; i++) 
+
+        allergies.push(babyProfile.allergies[i])
+    
+    return allergies;
+  }
   var getOtherPeople = function (babyProfile) {
     otherPeople = [];
     for (var i = 0; i < babyProfile.persons.length; i++) {
@@ -250,6 +258,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
         $scope.babyProfile = data;
         $scope.parents = getParents(data);
         $scope.otherPeople = getOtherPeople(data);
+        $scope.allergies =getAllergies(data);
         $scope.babyProfileLoaded = true;
         if ($scope.babyInformations.absenceSubtype != '') {
           for (var i = 0; i < $scope.schoolProfile.frequentIllnesses.length; i++) {

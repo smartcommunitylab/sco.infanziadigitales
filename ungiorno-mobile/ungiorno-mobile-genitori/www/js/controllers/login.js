@@ -3,8 +3,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 .controller('LoginCtrl', function ($scope, $rootScope, $state, $filter, $ionicPopup, $ionicHistory, $ionicLoading, Config, loginService, LoginService,dataServerService, pushNotificationService) {
     var loginStarted = false;
     $scope.user = {
-        email: 'sco.infanzia.demo.genit1@gmail.com',
-        password: 'sc0d3m01nf4nz1ag3n1t1'
+        email: '',
+        password: ''
     };
 
 

@@ -202,7 +202,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.n
         alert: "true",
         badge: "true",
         sound: "true",
-        gcmSandbox: true,
         senderID: Config.getSenderID(),
         topics: arrayOfSchools
       },

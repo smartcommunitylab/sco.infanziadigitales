@@ -521,7 +521,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     }
 
     $scope.getRetireTimeLimit = function () {
-      var temp = moment('17:00', 'HH:mm');//it should be 09:10
+      var temp = moment('09:20', 'HH:mm');//it should be 09:10
       //if ($scope.briefInfo.ore_uscita!==null && $scope.briefInfo.ore_uscita!==undefined) {
       //  temp= moment($scope.briefInfo.ore_uscita,'HH:mm');
       //}

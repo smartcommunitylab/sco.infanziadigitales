@@ -838,6 +838,35 @@ public class RepositoryManager implements RepositoryService {
         q.addCriteria(new Criteria("kidId").is(kidId));
         KidProfile kid = template.findOne(q, KidProfile.class);
         List<KidProfile.DayDefault> weekDefault = kid.getWeekDef();
+        
+        if (weekDefault == null) {
+            SchoolProfile profile = getSchoolProfile(appId, schoolId);
+            Date today = new Date();
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(today);
+            // school services
+            Set<TimeSlotSchoolService> schoolProfileServices = profile.getServices();
+            // 'normal' service
+            TimeSlotSchoolService regularService = null;
+            for (TimeSlotSchoolService ts : schoolProfileServices) {
+                if (ts.isRegular()) {
+                    regularService = ts;
+                    break;
+                }
+            }
+            
+            if (regularService != null) {
+            	weekDefault = new LinkedList<>();
+            	for (int i = 0; i < 5; i++) {
+            		KidProfile.DayDefault conf = new KidProfile.DayDefault();
+            		conf.setEntrata(regularService.getTimeSlots().get(0).getFromTime());
+            		conf.setUscita(regularService.getTimeSlots().get(regularService.getTimeSlots().size() - 1).getToTime());
+            		weekDefault.add(conf);
+            	}
+            	saveWeekDefault(appId, schoolId, kidId, weekDefault);
+            }
+        }
+        
         return weekDefault;
     }
 

@@ -112,6 +112,9 @@ public class NotificationManager {
         content.put("schoolId", schoolId);
         content.put("communicationId", message.getCommunicationId());
         content.put("dateToCheck", message.getDateToCheck());
+        if (message.getGroupId() != null) {
+        	content.put("groupId", message.getGroupId());
+        }
 
         Notification n = prepareMessage(message.getDescription(), content);
         if (isUpdate) {

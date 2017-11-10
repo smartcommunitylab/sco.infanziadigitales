@@ -2034,6 +2034,12 @@ textarea {
   background-color: white;
 }
 
+.popup-buttons {
+  /*width: 50%;*/
+}
+.popup-buttons .button {
+  /*width: 50%;*/
+}
 /*
 
 */
@@ -2072,7 +2078,7 @@ textarea {
  
 .button_save{
   text-align: center;
-  margin:auto;
+  /*margin:auto;*/
   width:40%;
   background-color: #f8ab15;
   color: #ffffff;
@@ -2084,7 +2090,7 @@ textarea {
 
 .button_cancel{
   text-align: center;
-  margin:auto;
+  /*margin:auto;*/
   width:40%;
   background-color: #5FC3DF;
   color: #ffffff;
@@ -2490,6 +2496,14 @@ textarea {
 }
 .day_popup .popup-head {
   padding: 0px;
+}
+.popup .item {
+  padding: 6px 13px 6px 13px;
+  border-width: 0px;
+}
+
+.popup .item label {
+  width:100%;
 }
 .promcheck{
   padding-left: 40px;

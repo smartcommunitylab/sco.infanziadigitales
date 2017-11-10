@@ -1600,9 +1600,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         $scope.currData['prom_week'] = (localStorage.getItem('prom_week') == 'true' ? true : false);
         $scope.currData['prom_day_ritiro'] = (localStorage.getItem('prom_day_ritiro') == 'true' ? true : false);
         $scope.currData['prom_week_day'] = (localStorage.getItem('prom_week_day') !== null && localStorage.getItem('prom_week_day') !== undefined ? localStorage.getItem('prom_week_day') : $scope.selectables[0]);
-        $scope.data = {
-            dayChoiche: $scope.currData['prom_week_day']
-        };
+        // $scope.data = {
+        //     dayChoiche: $scope.currData['prom_week_day']
+        // };
         $scope.getSchoolProfileNormalConfig = $filter('getSchoolNormalService')(profileService.getSchoolProfile().services);
         $scope.fromtime = $scope.getSchoolProfileNormalConfig['fromTime'];
         $scope.totime = $scope.getSchoolProfileNormalConfig['toTime'];
@@ -1615,26 +1615,26 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
 
 
-        $scope.openDayChooser = function() {
-            $ionicPopup.show({
-                 templateUrl: 'templates/days_popup.html',
-                                 cssClass: 'day_popup',
+//         $scope.openDayChooser = function() {
+//             $ionicPopup.show({
+//                  templateUrl: 'templates/days_popup.html',
+//                                  cssClass: 'day_popup',
 
-                //  title: 'Seleziona il giorno',
-                scope: $scope,
-                buttons: [
-                {
-                     text: 'Annulla' },
-                 {
-        text: '<b>OK</b>',
-        type: 'button-positive',
-        onTap: function(e) {
-          $scope.save_week_day();
-        }
-      }
-    ]
-  });
-}
+//                 //  title: 'Seleziona il giorno',
+//                 scope: $scope,
+//                 buttons: [
+//                 {
+//                      text: 'Annulla' },
+//                  {
+//         text: '<b>OK</b>',
+//         type: 'button-positive',
+//         onTap: function(e) {
+//           $scope.save_week_day();
+//         }
+//       }
+//     ]
+//   });
+// }
         $scope.isActive = function (type) {
             if ($scope.currData[type]) {
                 return true;
@@ -1752,7 +1752,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         setTimeWidget();
 
         $scope.save_week_day = function () {
-            $scope.currData['prom_week_day'] = $scope.data.dayChoiche;
+            // $scope.currData['prom_week_day'] = $scope.data.dayChoiche;
             localStorage.setItem('prom_week_day', $scope.currData['prom_week_day']);
             $scope.setNotify();
         }

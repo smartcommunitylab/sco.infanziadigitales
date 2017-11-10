@@ -38,10 +38,10 @@
           </label>
           <div class="prom_param prom">
               <span class="label_prom">{{'at_day'| translate}}:</span>
-              <span class="prom_giorno" ng-if="isActive('prom_week')" ng-click="openDayChooser()">{{currData.prom_week_day | translate}}</span>
-               <!--<select ng-if="isActive('prom_week')" ng-model="currData.prom_week_day" ng-change="save_week_day();">
+              <!--<span class="prom_giorno" ng-if="isActive('prom_week')" ng-click="openDayChooser()">{{currData.prom_week_day | translate}}</span>-->
+               <select ng-if="isActive('prom_week')" ng-model="currData.prom_week_day" ng-change="save_week_day();">
                     <option ng-repeat="option in selectables" value="{{option}}" ng-selected="currData.prom_week_day==option" class="">{{option | translate}}</option>
-                </select>-->
+                </select>
                 <span ng-if="!isActive('prom_week')" class="noneditable2">{{currData.prom_week_day | translate}}</span>
           </div>
           <br/>

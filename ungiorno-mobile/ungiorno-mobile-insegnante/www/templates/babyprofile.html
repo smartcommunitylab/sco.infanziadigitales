@@ -24,6 +24,7 @@
             </div>
           </div>
           <div class="babyprofile-separator"></div>
+          <ion-scroll direction="y">
           <div ng-if="babyInformations.active">
             <div class="baby-info-label">{{'baby_info' | translate}}</div>
             <div>
@@ -97,8 +98,8 @@
 
                         </div>
                         <div class="col" ng-if="otherPeople.length> ($index + 2)">
-                          <div class="babyprofile-other-name"><i class="icon ion-record bullet-other-people"></i>{{otherPeople[$index+1].fullName}}</div>
-
+                          <div class="babyprofile-other-name" ng-if="otherPeople[$index+1].fullName== null"><i class="icon ion-record bullet-other-people"></i>{{otherPeople[$index+1].firstName}} {{otherPeople[$index+1].lastName}}</div>
+                          <div class="babyprofile-other-name" ng-if="otherPeople[$index+1].fullName!= null"><i class="icon ion-record bullet-other-people"></i>{{otherPeople[$index+1].fullName}}</div>
                         </div>
                       </div>
                     </div>

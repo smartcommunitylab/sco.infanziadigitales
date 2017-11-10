@@ -185,7 +185,8 @@ a.item-content {
 input[type=text],
 textarea {
   border-bottom: 1px solid #B0B0B0;
-  width: 100%;
+  /*width: 100%;*/
+  max-width: 80%;
 }
 input[type=date],
 input[type=time] {

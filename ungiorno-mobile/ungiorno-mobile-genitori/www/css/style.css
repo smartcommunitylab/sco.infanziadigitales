@@ -2488,11 +2488,25 @@ textarea {
   width:20%;
   margin-top:-8px;
 }
-
+.day_popup .popup-head {
+  padding: 0px;
+}
 .promcheck{
   padding-left: 40px;
   padding-top:0px;
 }
+.prom_giorno {
+  color: #f8ab15;
+    padding-bottom: 2px;
+    border-bottom: 1px solid #f8ab15;
+}
+ .item.item_day {
+   padding: 4px;
+ }
+ .item.item_day label {
+   width: 100%;
+   margin: 8px!important;
+ }
 .before{
   font-size: 14px;
 }

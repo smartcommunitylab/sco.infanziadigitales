@@ -229,7 +229,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.n
           {
           messagesService.receivedMessage(notification.additionalData["content.schoolId"], notification.additionalData["content.kidId"], notification.additionalData["content.messageId"]);
           chatMessageReceived(notification.additionalData["content.messageId"], notification.additionalData["content.kidId"]);
-          if (!isBackground()) {
+          if (notification.additionalData.foreground){
+          // if (!isBackground()) {
             //update button with message and style with warch
             //create local notification that goes to app.messages
             cordova.plugins.notification.local.schedule({
@@ -267,7 +268,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.n
         if (!isCommunicationReceived(notification.additionalData["content.communicationId"], notification.additionalData["content.schoolId"]) && !notification.additionalData["coldstart"]) {
           //                    dataServerService.receivedCommunications(notification.additionalData["content.schoolId"], notification.additionalData["content.kidId"], notification.additionalData["content.communicationId"]);
           communicationReceived(notification.additionalData["content.communicationId"], notification.additionalData["content.schoolId"]);
-          if (!isBackground()) {
+          if (notification.additionalData.foreground){
+          //if (!isBackground()) {
 
             //create local notification that goes to app.messages
             cordova.plugins.notification.local.schedule({

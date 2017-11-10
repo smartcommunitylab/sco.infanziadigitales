@@ -2075,7 +2075,13 @@ textarea {
   display: flex;
   flex-direction: row;
   margin-top:20px;
+  margin-bottom: 20px;
 }
+
+.button_bottom .button_cancel, .button_bottom .button_save {
+  margin: auto;
+}
+
  
 .button_save{
   text-align: center;

@@ -426,12 +426,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
               $scope.modifyBefore = $scope.getRetireTimeLimit();
             } else {
               jsonTest = {
-                'ore_entrata': moment(fromtime).format('H:mm'), 'ore_uscita': moment($scope.totime).format('H:mm'), 'addressBus': '',
+                'ore_entrata': moment($scope.fromtime).format('H:mm'), 'ore_uscita': moment($scope.totime).format('H:mm'), 'addressBus': '',
                 'delegaName': 'none', 'delegaType': 'none',
                 'bus': false, 'absence': false,
                 'motivazione': { type: '', subtype: '' }
               }
-              var dataTemp = { "entrata": fromtime, "uscita": $scope.totime, 'bus': false, 'absence': false, 'motivazione': { type: '', subtype: '' }, "monday": false, "tuesday": false, "wednesday": false, "thursday": false, "friday": false };
+              var dataTemp = { "entrata": $scope.fromtime, "uscita": $scope.totime, 'bus': false, 'absence': false, 'motivazione': { type: '', subtype: '' }, "monday": false, "tuesday": false, "wednesday": false, "thursday": false, "friday": false };
               $scope.weekInfo = [dataTemp, dataTemp, dataTemp, dataTemp, dataTemp];
               $scope.briefInfo = jsonTest;
               profileService.setBriefInfo($scope.briefInfo);

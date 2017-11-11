@@ -1168,9 +1168,7 @@ public class RepositoryManager implements RepositoryService {
     public List<SectionData> getSections(String appId, String schoolId, Collection<String> sections,
             long date) {
         SchoolProfile profile = getSchoolProfile(appId, schoolId);
-        Date today = new Date();
         Calendar cal = Calendar.getInstance();
-        cal.setTime(today);
         int weeknr = cal.get(Calendar.WEEK_OF_YEAR);
         int daynr = cal.get(Calendar.DAY_OF_WEEK) - 2;
         // all school secton data
@@ -1233,11 +1231,11 @@ public class RepositoryManager implements RepositoryService {
             DayDefault todayConfig = null;
 
             // get Day info from KidWeeks if there is a configuration for this week
-            if (kp.isPartecipateToSperimentation() && kidWeekConfig != null) {
+            if (kp.isPartecipateToSperimentation() && kidWeekConfig != null && daynr < 5) {
                 List<DayDefault> days = kidWeekConfig.getDays();
                 todayConfig = (days.get(daynr) != null ? days.get(daynr) : todayConfig);
             // get DayInfo from WeekDefault if defined    
-            } else if (kp.isPartecipateToSperimentation() && defaultWeek != null) {
+            } else if (kp.isPartecipateToSperimentation() && defaultWeek != null  && daynr < 5) {
                 todayConfig = (defaultWeek.get(daynr) != null ? defaultWeek.get(daynr) : todayConfig);
             // construct data from kid profile    
             } else {

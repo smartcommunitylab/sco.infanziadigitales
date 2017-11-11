@@ -1353,7 +1353,10 @@ public class RepositoryManager implements RepositoryService {
             if (skp.getEntryTime() != null) skp.setEntryTime(skp.getEntryTime().withDate(LocalDate.now()));
             if (skp.getExitTime() != null) skp.setExitTime(skp.getExitTime().withDate(LocalDate.now()));
             
-            if (kp.getSection() != null && kp.getSection().getSectionId() != null) {
+            if (   kp.getSection() != null 
+            	&& kp.getSection().getSectionId() != null 
+            	&& map.containsKey(kp.getSection().getSectionId()) 
+            	&& map.get(kp.getSection().getSectionId()).getChildren() != null) {
                 map.get(kp.getSection().getSectionId()).getChildren().add(skp);
             }
         }

@@ -222,7 +222,15 @@ public class RepositoryManager implements RepositoryService {
 				template.save(kp);
 			}
 		}
-		
+		// align teacher sections
+		List<Teacher> teachers = getTeachers(profile.getAppId(), profile.getSchoolId());
+		if (teachers != null) {
+			for (Teacher teacher: teachers) {
+				if (teacher.getSectionIds().retainAll(sectionIds)) {
+					template.save(teacher);
+				}
+			}
+		}
 	}
 
 	/**

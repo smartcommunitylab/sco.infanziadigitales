@@ -160,6 +160,10 @@ public class RepositoryManager implements RepositoryService {
         } else { // if the a new school profile it must be init
             completeSchoolProfile(profile);
         }
+        // TODO: check for consistency. Check 
+        // - when group / section is deleted, remove kids from group / section
+        // - when bus is deleted, remove kid association from bus
+        // - when time service is removed, removed it from kid configuration
         template.save(profile);
     }
 
@@ -1171,6 +1175,7 @@ public class RepositoryManager implements RepositoryService {
         Calendar cal = Calendar.getInstance();
         int weeknr = cal.get(Calendar.WEEK_OF_YEAR);
         int daynr = cal.get(Calendar.DAY_OF_WEEK) - 2;
+        if (daynr < 0) daynr = 6;
         // all school secton data
         Map<String, SectionData> map = new HashMap<String, SectionData>();       
         for (SectionProfile p : profile.getSections()) {

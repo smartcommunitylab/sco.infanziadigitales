@@ -160,14 +160,72 @@ public class RepositoryManager implements RepositoryService {
         } else { // if the a new school profile it must be init
             completeSchoolProfile(profile);
         }
-        // TODO: check for consistency. Check 
-        // - when group / section is deleted, remove kids from group / section
-        // - when bus is deleted, remove kid association from bus
-        // - when time service is removed, removed it from kid configuration
         template.save(profile);
+        alignSchoolData(profile);
     }
 
     /**
+	 * @param profile
+	 */
+	private void alignSchoolData(SchoolProfile profile) {
+		List<KidProfile> profiles = getKidProfilesBySchool(profile.getAppId(), profile.getSchoolId());
+		if (profiles == null) return;
+
+		Set<String> sectionIds = new HashSet<>();
+		Set<String> busLines = new HashSet<>();
+		Set<String> services = new HashSet<>();
+		for (SectionProfile s: profile.getSections()) {
+			sectionIds.add(s.getSectionId());
+		}
+		for (BusProfile bus: profile.getBuses()) {
+			busLines.add(bus.getBusId());
+		}
+		for (TimeSlotSchoolService s: profile.getServices()) {
+			services.add(s.getName());
+		}
+		
+		for (KidProfile kp: profiles) {
+			boolean changed = false;
+			// check section exists
+			if (kp.getSection() != null && !sectionIds.contains(kp.getSection().getSectionId())) {
+				kp.setSection(null);
+				changed = true;
+			}
+			// check groups
+			if (kp.getGroups() != null) {}
+			for (Iterator<SectionDef> iterator = kp.getGroups().iterator(); iterator.hasNext();) {
+				SectionDef group = iterator.next();
+				if (!sectionIds.contains(group.getSectionId())) {
+					iterator.remove();
+					changed = true;
+				}
+			} 
+			// check bus
+			if (kp.getServices() != null && kp.getServices().getBus() != null) {
+				if (!busLines.contains(kp.getServices().getBus().getBusId())) {
+					kp.getServices().getBus().setBusId(null);
+					changed = true;
+				}
+			}
+			// check time services
+			if (kp.getServices() != null && kp.getServices().getTimeSlotServices() != null) {
+				for (Iterator<TimeSlotSchoolService> iterator = kp.getServices().getTimeSlotServices().iterator(); iterator.hasNext();) {
+					TimeSlotSchoolService svc = iterator.next();
+					if (!services.contains(svc.getName())) {
+						iterator.remove();
+						changed = true;
+					}
+					
+				}
+			}
+			if (changed) {
+				template.save(kp);
+			}
+		}
+		
+	}
+
+	/**
      * The method is null safe
      * 
      * @param {@link SchoolProfile} to complete

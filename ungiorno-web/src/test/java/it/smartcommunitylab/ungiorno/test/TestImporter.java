@@ -20,7 +20,6 @@ import java.util.List;
 
 import it.smartcommunitylab.ungiorno.importer.ImportError;
 import it.smartcommunitylab.ungiorno.importer.Importer;
-import it.smartcommunitylab.ungiorno.model.KidBusData;
 import it.smartcommunitylab.ungiorno.model.KidProfile;
 import it.smartcommunitylab.ungiorno.model.SchoolProfile;
 import it.smartcommunitylab.ungiorno.model.Teacher;
@@ -52,7 +51,5 @@ public class TestImporter {
         List<KidProfile> children = importer.getChildren();
         assertTrue(children.size() > 0);
 
-        List<KidBusData> busData = importer.getBusData();
-        assertTrue(busData.size() > 0);
     }
 }

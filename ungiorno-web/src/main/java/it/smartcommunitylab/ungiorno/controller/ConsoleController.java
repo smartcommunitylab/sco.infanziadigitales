@@ -105,7 +105,8 @@ public class ConsoleController {
                         multiFileMap.getFirst("childrenData").getInputStream());
                 storage.updateChildren(appId, schoolId, importer.getChildren());
                 storage.updateParents(appId, schoolId, importer.getParents());
-                storage.updateKidBusData(appId, schoolId, importer.getBusData());
+                // TODO update kid bus data
+                //storage.updateKidBusData(appId, schoolId, importer.getBusData());
             }
             res = new ObjectMapper().writeValueAsString(storage.getApp(appId));
         } catch (ImportError e) {

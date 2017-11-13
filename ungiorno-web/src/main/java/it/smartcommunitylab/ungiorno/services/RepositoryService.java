@@ -18,7 +18,6 @@ import it.smartcommunitylab.ungiorno.model.CalendarItem;
 import it.smartcommunitylab.ungiorno.model.ChatMessage;
 import it.smartcommunitylab.ungiorno.model.Communication;
 import it.smartcommunitylab.ungiorno.model.InternalNote;
-import it.smartcommunitylab.ungiorno.model.KidBusData;
 import it.smartcommunitylab.ungiorno.model.KidCalAssenza;
 import it.smartcommunitylab.ungiorno.model.KidCalFermata;
 import it.smartcommunitylab.ungiorno.model.KidCalNote;
@@ -397,13 +396,6 @@ public interface RepositoryService {
      * @return
      */
     List<TeacherCalendar> getTeacherCalendar(String appId, String schoolId, long from, long to);
-
-    /**
-     * @param appId
-     * @param schoolId
-     * @param busData
-     */
-    void updateKidBusData(String appId, String schoolId, List<KidBusData> busData);
 
     /**
      * @return

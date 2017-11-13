@@ -309,6 +309,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
 
     if ($scope.checkBusServiceActive()) {
       $scope.babyBusStopBackName = $scope.babyInformations.stopId;
+      if ($scope.babyBusStopBackName=="none_f")
+      {
+        $scope.babyBusStopBackName =$filter('translate')('none_f');
+      }
     }
     for (var i = 0; i < $scope.babyProfile.persons.length; i++) {
       if ($scope.babyProfile.persons[i].personId == $scope.babyInformations.personId)

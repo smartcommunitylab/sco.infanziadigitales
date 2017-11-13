@@ -532,7 +532,9 @@ return {
     all:'Tutti',
     com_dt:'Imposta scadenza comunicazione',
     com_del:'La comunicazione verrà eliminata nel giorno indicato',
-    auth_person:"Incaricato del ritiro"
+    auth_person:"Incaricato del ritiro",
+    none_f:"Nessuna fermata specificata",
+    no_person:"Nessuna persona specificata"
   });
 
   $translateProvider.preferredLanguage("it");

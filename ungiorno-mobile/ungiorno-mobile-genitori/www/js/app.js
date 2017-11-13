@@ -182,7 +182,7 @@ return {
  newAppVersion = function () {
    //check if it is a new app version 
    var isNew =true;
-   var thisversion =Config.getResetVersion();
+   var thisversion = Config.getResetVersion();
    //if localstorage has version and it is equal to this return false else clear localstorage
    if (localStorage.getItem('reset_version'))
    {
@@ -296,68 +296,30 @@ return {
       //            //facebookConnectPlugin.browserInit(appId, version);
       //            // version is optional. It refers to the version of API you may want to use.
       //        }
-      cordova.getAppVersion.getVersionNumber().then(function (version) {
-                 if (!newAppVersion() && LoginService.userIsLogged()) {
-                    console.log("user is logged");
-                    Config.setAppId(localStorage.userId);
-                    dataServerService.getBabyProfiles().then(function (data) {
-                    //pushNotificationService.register();
-                    $state.go('app.home');
-                    $ionicHistory.nextViewOptions({
-                      disableBack: true,
-                      historyRoot: true
-                    });
-
-              },
-              function (error) {
-                console.log("ERROR -> " + error);
-                //Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
-                $ionicLoading.hide();
-                if (error == 406) {
-                  $rootScope.allowed = false;
-                }
-                $state.go('app.home');// go to home in order to see the message 'Ricarica Pagina'
-              })
-//        //
-//        if (localStorage.provider == 'internal') {
-//          $rootScope.login();
-//        } else {
-//          LoginService.login(localStorage.provider).then(
-//            function (data) {
-//              dataServerService.getBabyProfiles().then(function (data) {
-//                //pushNotificationService.register();
-//                $state.go('app.home');
-//                $ionicHistory.nextViewOptions({
-//                  disableBack: true,
-//                  historyRoot: true
-//                });
-//
-//              }, function (error) {
-//                console.log("ERROR -> " + error);
-//                // Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
-//                $ionicLoading.hide();
-//                if (error == 406) {
-//                  LoginService.logout();
-//                  $ionicPopup.alert({
-//                    title: $filter('translate')('not_allowed_popup_title'),
-//                    template: $filter('translate')('not_allowed_signin')
-//                  });
-//                  $state.go('app.login');
-//                  $ionicHistory.nextViewOptions({
-//                    disableBack: true,
-//                    historyRoot: true
-//                  });
-//                }
-//              });
-//            })
-//        };
+      if (!newAppVersion() && LoginService.userIsLogged()) {
+        console.log("user is logged");
+        Config.setAppId(localStorage.userId);
+        dataServerService.getBabyProfiles().then(function (data) {
+          //pushNotificationService.register();
+          $state.go('app.home');
+          $ionicHistory.nextViewOptions({
+            disableBack: true,
+            historyRoot: true
+          });
+        },
+        function (error) {
+          console.log("ERROR -> " + error);
+          //Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+          $ionicLoading.hide();
+          if (error == 406) {
+            $rootScope.allowed = false;
+          }
+          $state.go('app.home');// go to home in order to see the message 'Ricarica Pagina'
+        })
       } else {
         $rootScope.login();
       }
-            });
-     
     });
-
   });
 
 

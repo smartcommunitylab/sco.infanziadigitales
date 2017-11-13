@@ -178,22 +178,25 @@ return {
       }
     );
   };
- newAppVersion = function (thisversion) {
+ 
+ newAppVersion = function () {
    //check if it is a new app version 
    var isNew =true;
+   var thisversion =Config.getResetVersion();
    //if localstorage has version and it is equal to this return false else clear localstorage
-   if (localStorage.getItem('version'))
+   if (localStorage.getItem('reset_version'))
    {
-     var oldVersion = localStorage.getItem('version');
+     var oldVersion = localStorage.getItem('reset_version');
      if (thisversion==oldVersion)
       {
         return false
       }
    }
    localStorage.clear();
-   localStorage.setItem('version',thisversion);
+   localStorage.setItem('reset_version',thisversion);
    return true;
  }
+
   $ionicPlatform.ready(function () {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -294,17 +297,16 @@ return {
       //            // version is optional. It refers to the version of API you may want to use.
       //        }
       cordova.getAppVersion.getVersionNumber().then(function (version) {
-
-                 if (!newAppVersion(version) && LoginService.userIsLogged()) {
-        console.log("user is logged");
-        Config.setAppId(localStorage.userId);
-                      dataServerService.getBabyProfiles().then(function (data) {
-                //pushNotificationService.register();
-                $state.go('app.home');
-                $ionicHistory.nextViewOptions({
-                  disableBack: true,
-                  historyRoot: true
-                });
+                 if (!newAppVersion() && LoginService.userIsLogged()) {
+                    console.log("user is logged");
+                    Config.setAppId(localStorage.userId);
+                    dataServerService.getBabyProfiles().then(function (data) {
+                    //pushNotificationService.register();
+                    $state.go('app.home');
+                    $ionicHistory.nextViewOptions({
+                      disableBack: true,
+                      historyRoot: true
+                    });
 
               },
               function (error) {

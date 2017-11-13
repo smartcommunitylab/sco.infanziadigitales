@@ -445,7 +445,10 @@ week_planService.getIsFromHome= function () {
                                                     { 'name': 'friday_reduced', 'entrata': scope.fromtime, 'uscita': scope.totime, 'bus': false, 'delega_name': '' }];
                                     jsonTest = formatInfo(jsonTest);
                                     data = jsonTest;
-                                    }
+                                }
+                                     if (data == null && dataDefault) {
+                                         data=dataDefault;
+                                     }
                                     for (var i = 0; i < data.length; i++) {
                                         //usa defaults
                                         var orauscita = new Date(scope.totime);

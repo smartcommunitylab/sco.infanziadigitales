@@ -18,6 +18,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.c
   var APP_BUILD = '';
 
   var APP_VERSION = '3.0.0';
+  var RESET_VERSION = '3.0.1';
   var mapJsonConfig = null;
 
 
@@ -61,6 +62,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.c
     },
     getVersion: function () {
       return 'v ' + APP_VERSION + (APP_BUILD && APP_BUILD != '' ? '<br/>(' + APP_BUILD + ')' : '');
+    },
+    getResetVersion: function () {
+      return  RESET_VERSION;
     },
     getLang: function () {
       var browserLanguage = '';

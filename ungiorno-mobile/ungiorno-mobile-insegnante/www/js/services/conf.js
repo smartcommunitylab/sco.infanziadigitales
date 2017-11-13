@@ -16,7 +16,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.conf', 
   var mapJsonConfig = null;
   //    var credits = 'credits.html';
   var APP_VERSION = '3.0.0';
-
+  var RESET_VERSION = '3.0.0';
   return {
     init: function () {
       var deferred = $q.defer();
@@ -45,6 +45,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.conf', 
     },
     getVersion: function () {
       return 'v ' + APP_VERSION + (APP_BUILD && APP_BUILD != '' ? '<br/>(' + APP_BUILD + ')' : '');
+    },
+        getResetVersion: function () {
+      return  RESET_VERSION;
     },
     getLang: function () {
       var browserLanguage = '';

@@ -57,20 +57,21 @@ return {
   $rootScope.loginStarted = false;
   $rootScope.authWindow = null;
 
- newAppVersion = function (thisversion) {
+ newAppVersion = function () {
    //check if it is a new app version 
    var isNew =true;
+   var thisversion =Config.getResetVersion();
    //if localstorage has version and it is equal to this return false else clear localstorage
-   if (localStorage.getItem('version'))
+   if (localStorage.getItem('reset_version'))
    {
-     var oldVersion = localStorage.getItem('version');
+     var oldVersion = localStorage.getItem('reset_version');
      if (thisversion==oldVersion)
       {
         return false
       }
    }
    localStorage.clear();
-   localStorage.setItem('version',thisversion);
+   localStorage.setItem('reset_version',thisversion);
    return true;
  }
 
@@ -103,8 +104,8 @@ return {
     $rootScope.backButtonStyle = $ionicConfig.backButton.icon();
  
  
- cordova.getAppVersion.getVersionNumber().then(function (version) {
-       if (!newAppVersion(version) && loginService.userIsLogged()) {    
+//  cordova.getAppVersion.getVersionNumber().then(function (version) {
+       if (!newAppVersion() && loginService.userIsLogged()) {    
     // if (loginService.userIsLogged()) {
       //            $ionicHistory.clearCache().then(function () {
       //$ionicHistory.clearCache();
@@ -120,7 +121,8 @@ return {
           });
         });
 
-    }})
+    }
+  // })
     $ionicLoading.hide();
     // $rootScope.getConfiguration();
 

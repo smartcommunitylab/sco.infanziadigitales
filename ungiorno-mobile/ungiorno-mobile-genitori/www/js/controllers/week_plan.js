@@ -143,13 +143,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 var day=0;
                  if (copy)
                  {
-                            var limit =  moment('9:20', 'H:mm');
-                            var now =moment();
-                            var day= moment().isoWeekday()
-                            if (now<limit)
-                            {
-                                day=day-1;
-                            }
+                  var limit =  moment('9:20', 'H:mm');
+                  var now =moment();
+                  var day= moment().isoWeekday()
+                  if (now<limit)
+                  {
+                   day=day-1;
+                  }
                 }
                 if (data != null && data != undefined && data.length > 0) {
                     data = $scope.formatInfo(data);
@@ -342,7 +342,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             var actualDate = moment().startOf('day');//var actualDate = moment(moment().format('M D YYYY'));
             var dayData = $scope.days[day];
             var usc = dayData['uscita'];
-            var temp = moment('17:00', 'HH:mm');// it should be 09:10
+            var temp = moment('09:20', 'HH:mm');// it should be 09:10
             if (moment(temp).isBefore(moment()) && day == $scope.currDay && selected.isSame(actualDate)) {
                 $scope.TempPrevent = $ionicPopup.show({
                     title: $filter('translate')('retire_popup_toolate_title'),

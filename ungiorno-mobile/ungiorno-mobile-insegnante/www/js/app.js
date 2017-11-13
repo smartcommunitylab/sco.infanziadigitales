@@ -104,7 +104,7 @@ return {
  
  
  cordova.getAppVersion.getVersionNumber().then(function (version) {
-       if (!newAppVersion(version) && LoginService.userIsLogged()) {    
+       if (!newAppVersion(version) && loginService.userIsLogged()) {    
     // if (loginService.userIsLogged()) {
       //            $ionicHistory.clearCache().then(function () {
       //$ionicHistory.clearCache();

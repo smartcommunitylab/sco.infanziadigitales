@@ -4,7 +4,7 @@ import { GroupModal } from './../Components/Modals/groupModal/groupModal';
 import { WebService } from '../../services/WebService';
 import { School } from './../../app/Classes/school';
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { NavController, AlertController, ModalController } from 'ionic-angular';
+import { NavController, AlertController, ModalController, LoadingController } from 'ionic-angular';
 import { LoginService } from '../../services/login.service'
 import { UserService } from "../../services/user.service";
 
@@ -47,14 +47,15 @@ export class HomePage implements OnInit {
   selectedSchool: School;
   selectedId: string;
   selectedAppId: string;
-rerender = false;
+  rerender = false;
   constructor(public navCtrl: NavController,
-   private webService: WebService,
-    public alertCtrl: AlertController, 
+    private webService: WebService,
+    public alertCtrl: AlertController,
+    public loadingCtrl: LoadingController,
     public modalCtrl: ModalController,
-     public loginService: LoginService,
-             private cdRef: ChangeDetectorRef,
- private userService: UserService) { }
+    public loginService: LoginService,
+    private cdRef: ChangeDetectorRef,
+    private userService: UserService) { }
 
   ngOnInit(): void {
     let authorizedSchools = this.userService.getAuthorizedSchools();
@@ -69,11 +70,11 @@ rerender = false;
     }
 
   }
-    doRerender() {
-        this.rerender = true;
-        this.cdRef.detectChanges();
-        this.rerender = false;
-    }
+  doRerender() {
+    this.rerender = true;
+    this.cdRef.detectChanges();
+    this.rerender = false;
+  }
   changeSchool(selectedId: String) {
     let s: School[] = this.schools.filter(s => s.id === selectedId);
     console.log(s.length);
@@ -81,22 +82,37 @@ rerender = false;
       console.log(JSON.stringify(s));
       this.onSchoolChange(s[0].appId, s[0].id);
     }
-
+    this.settings = "profilo"
   }
   onSchoolChange(selectedAppId: string, selectedId: string) {
+    let loading = this.loadingCtrl.create({
+    });
+
+    loading.present();
     this.webService.getSchool(selectedAppId, selectedId).then(school => {
       this.selectedSchool = school;
       this.webService.getTeachers(this.selectedSchool).then(teachers => {
         this.selectedSchool.teachers = teachers;
         this.webService.getKids(this.selectedSchool).then(kids => {
           this.selectedSchool.kids = kids
-          this.webService.getGroups(this.selectedSchool).then(groups => this.selectedSchool.groups = groups);
-          this.doRerender();
-        });
-      })
+          this.webService.getGroups(this.selectedSchool).then(groups => {
+            this.selectedSchool.groups = groups;
+            this.doRerender();
+            loading.dismiss();
+          }).catch((err => {
+            loading.dismiss();
+          }))
+        }).catch((err => {
+          loading.dismiss();
+        }));
+      }).catch((err => {
+        loading.dismiss();
+      }))
 
     }
-    );
+    ).catch((err => {
+      loading.dismiss();
+    }));
   }
 
   onSegmentChange() {
@@ -105,6 +121,6 @@ rerender = false;
 
   logout() {
     this.loginService.logout();
-   // window.location.reload();
+    // window.location.reload();
   }
 }

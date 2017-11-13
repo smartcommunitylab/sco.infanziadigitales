@@ -29,6 +29,7 @@
     "cordova-plugin-network-information",
     "https://github.com/katzer/cordova-plugin-local-notifications",
     "https://github.com/bez4pieci/Phonegap-Cookies-Plugin.git",
+    "cordova-plugin-app-version",
     {
       "variables": {
         "SENDER_ID": "453601816446"

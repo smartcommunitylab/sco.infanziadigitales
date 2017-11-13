@@ -178,7 +178,22 @@ return {
       }
     );
   };
-
+ newAppVersion = function (thisversion) {
+   //check if it is a new app version 
+   var isNew =true;
+   //if localstorage has version and it is equal to this return false else clear localstorage
+   if (localStorage.getItem('version'))
+   {
+     var oldVersion = localStorage.getItem('version');
+     if (thisversion==oldVersion)
+      {
+        return false
+      }
+   }
+   localStorage.clear();
+   localStorage.setItem('version',thisversion);
+   return true;
+ }
   $ionicPlatform.ready(function () {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -278,7 +293,9 @@ return {
       //            //facebookConnectPlugin.browserInit(appId, version);
       //            // version is optional. It refers to the version of API you may want to use.
       //        }
-      if (LoginService.userIsLogged()) {
+      cordova.getAppVersion.getVersionNumber().then(function (version) {
+
+                 if (!newAppVersion(version) && LoginService.userIsLogged()) {
         console.log("user is logged");
         Config.setAppId(localStorage.userId);
                       dataServerService.getBabyProfiles().then(function (data) {
@@ -335,6 +352,8 @@ return {
       } else {
         $rootScope.login();
       }
+            });
+     
     });
 
   });

@@ -36,6 +36,7 @@
     "com.cordova.plugins.cookiemaster",
     "org.apache.cordova.network-information",
     "https://github.com/katzer/cordova-plugin-local-notifications",
+    "cordova-plugin-app-version",
     {
       "variables": {
         "REVERSED_CLIENT_ID": "myreversedclientid"

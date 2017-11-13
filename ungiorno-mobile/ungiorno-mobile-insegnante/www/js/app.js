@@ -57,6 +57,23 @@ return {
   $rootScope.loginStarted = false;
   $rootScope.authWindow = null;
 
+ newAppVersion = function (thisversion) {
+   //check if it is a new app version 
+   var isNew =true;
+   //if localstorage has version and it is equal to this return false else clear localstorage
+   if (localStorage.getItem('version'))
+   {
+     var oldVersion = localStorage.getItem('version');
+     if (thisversion==oldVersion)
+      {
+        return false
+      }
+   }
+   localStorage.clear();
+   localStorage.setItem('version',thisversion);
+   return true;
+ }
+
   $ionicPlatform.ready(function () {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -84,7 +101,11 @@ return {
     }
     $rootScope.platform = ionic.Platform;
     $rootScope.backButtonStyle = $ionicConfig.backButton.icon();
-    if (loginService.userIsLogged()) {
+ 
+ 
+ cordova.getAppVersion.getVersionNumber().then(function (version) {
+       if (!newAppVersion(version) && LoginService.userIsLogged()) {    
+    // if (loginService.userIsLogged()) {
       //            $ionicHistory.clearCache().then(function () {
       //$ionicHistory.clearCache();
       console.log("user is logged");
@@ -99,7 +120,7 @@ return {
           });
         });
 
-    }
+    }})
     $ionicLoading.hide();
     // $rootScope.getConfiguration();
 

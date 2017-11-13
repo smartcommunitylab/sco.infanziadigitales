@@ -31,6 +31,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.c
       });
       return deferred.promise;
     },
+
     getSenderID: function () {
       return mapJsonConfig['senderID'];;
     },

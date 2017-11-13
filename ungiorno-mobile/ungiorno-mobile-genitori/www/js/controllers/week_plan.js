@@ -143,7 +143,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 var day=0;
                  if (copy)
                  {
-                      day= moment().isoWeekday()-1;
+                            var limit =  moment('9:20', 'H:mm');
+                            var now =moment();
+                            var day= moment().isoWeekday()
+                            if (now<limit)
+                            {
+                                day=day-1;
+                            }
                 }
                 if (data != null && data != undefined && data.length > 0) {
                     data = $scope.formatInfo(data);
@@ -316,7 +322,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
         $scope.callSchool = function () {
             if (profileService.getSchoolProfile().contacts == null || profileService.getSchoolProfile().contacts == undefined) {
-                alert($filter('translate')('missing_phone'));
+                alert($filter('translate')('missing_phone'));format('H:mm')
                 return;
             }
             if (profileService.getSchoolProfile().contacts.telephone.length == 0) {
@@ -389,7 +395,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                     type: 'button_save',
                     onTap: function (e) {
                         week_planService.getDefaultWeekPlan($scope.kidId).then(function (data) {
-                            var day= moment().isoWeekday()-1;
+                            var limit =  moment('9:20', 'H:mm');
+                            var now =moment();
+                            var day= moment().isoWeekday()
+                            if (now<limit)
+                            {
+                                day=day-1;
+                            }
                             if (data != null && data != undefined && data.length > 0) {
                                 data = $scope.formatInfo(data);
                                 //not from monday but from the actual day

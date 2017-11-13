@@ -161,9 +161,79 @@ public class RepositoryManager implements RepositoryService {
             completeSchoolProfile(profile);
         }
         template.save(profile);
+        alignSchoolData(profile);
     }
 
     /**
+	 * @param profile
+	 */
+	private void alignSchoolData(SchoolProfile profile) {
+		List<KidProfile> profiles = getKidProfilesBySchool(profile.getAppId(), profile.getSchoolId());
+		if (profiles == null) return;
+
+		Set<String> sectionIds = new HashSet<>();
+		Set<String> busLines = new HashSet<>();
+		Set<String> services = new HashSet<>();
+		for (SectionProfile s: profile.getSections()) {
+			sectionIds.add(s.getSectionId());
+		}
+		for (BusProfile bus: profile.getBuses()) {
+			busLines.add(bus.getBusId());
+		}
+		for (TimeSlotSchoolService s: profile.getServices()) {
+			services.add(s.getName());
+		}
+		
+		for (KidProfile kp: profiles) {
+			boolean changed = false;
+			// check section exists
+			if (kp.getSection() != null && !sectionIds.contains(kp.getSection().getSectionId())) {
+				kp.setSection(null);
+				changed = true;
+			}
+			// check groups
+			if (kp.getGroups() != null) {}
+			for (Iterator<SectionDef> iterator = kp.getGroups().iterator(); iterator.hasNext();) {
+				SectionDef group = iterator.next();
+				if (!sectionIds.contains(group.getSectionId())) {
+					iterator.remove();
+					changed = true;
+				}
+			} 
+			// check bus
+			if (kp.getServices() != null && kp.getServices().getBus() != null) {
+				if (!busLines.contains(kp.getServices().getBus().getBusId())) {
+					kp.getServices().getBus().setBusId(null);
+					changed = true;
+				}
+			}
+			// check time services
+			if (kp.getServices() != null && kp.getServices().getTimeSlotServices() != null) {
+				for (Iterator<TimeSlotSchoolService> iterator = kp.getServices().getTimeSlotServices().iterator(); iterator.hasNext();) {
+					TimeSlotSchoolService svc = iterator.next();
+					if (!services.contains(svc.getName())) {
+						iterator.remove();
+						changed = true;
+					}
+					
+				}
+			}
+			if (changed) {
+				template.save(kp);
+			}
+		}
+		// align teacher sections
+		List<Teacher> teachers = getTeachers(profile.getAppId(), profile.getSchoolId());
+		if (teachers != null) {
+			for (Teacher teacher: teachers) {
+				if (teacher.getSectionIds().retainAll(sectionIds)) {
+					template.save(teacher);
+				}
+			}
+		}
+	}
+
+	/**
      * The method is null safe
      * 
      * @param {@link SchoolProfile} to complete
@@ -1168,11 +1238,10 @@ public class RepositoryManager implements RepositoryService {
     public List<SectionData> getSections(String appId, String schoolId, Collection<String> sections,
             long date) {
         SchoolProfile profile = getSchoolProfile(appId, schoolId);
-        Date today = new Date();
         Calendar cal = Calendar.getInstance();
-        cal.setTime(today);
         int weeknr = cal.get(Calendar.WEEK_OF_YEAR);
         int daynr = cal.get(Calendar.DAY_OF_WEEK) - 2;
+        if (daynr < 0) daynr = 6;
         // all school secton data
         Map<String, SectionData> map = new HashMap<String, SectionData>();       
         for (SectionProfile p : profile.getSections()) {
@@ -1233,11 +1302,11 @@ public class RepositoryManager implements RepositoryService {
             DayDefault todayConfig = null;
 
             // get Day info from KidWeeks if there is a configuration for this week
-            if (kp.isPartecipateToSperimentation() && kidWeekConfig != null) {
+            if (kp.isPartecipateToSperimentation() && kidWeekConfig != null && daynr < 5) {
                 List<DayDefault> days = kidWeekConfig.getDays();
                 todayConfig = (days.get(daynr) != null ? days.get(daynr) : todayConfig);
             // get DayInfo from WeekDefault if defined    
-            } else if (kp.isPartecipateToSperimentation() && defaultWeek != null) {
+            } else if (kp.isPartecipateToSperimentation() && defaultWeek != null  && daynr < 5) {
                 todayConfig = (defaultWeek.get(daynr) != null ? defaultWeek.get(daynr) : todayConfig);
             // construct data from kid profile    
             } else {
@@ -1355,7 +1424,10 @@ public class RepositoryManager implements RepositoryService {
             if (skp.getEntryTime() != null) skp.setEntryTime(skp.getEntryTime().withDate(LocalDate.now()));
             if (skp.getExitTime() != null) skp.setExitTime(skp.getExitTime().withDate(LocalDate.now()));
             
-            if (kp.getSection() != null && kp.getSection().getSectionId() != null) {
+            if (   kp.getSection() != null 
+            	&& kp.getSection().getSectionId() != null 
+            	&& map.containsKey(kp.getSection().getSectionId()) 
+            	&& map.get(kp.getSection().getSectionId()).getChildren() != null) {
                 map.get(kp.getSection().getSectionId()).getChildren().add(skp);
             }
         }

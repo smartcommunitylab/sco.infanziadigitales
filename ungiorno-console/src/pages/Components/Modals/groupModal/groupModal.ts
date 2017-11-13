@@ -230,7 +230,8 @@ export class GroupModal implements OnInit {
         type: 'checkbox',
         label: element.name + ' ' + element.surname,
         value: element.id,
-        checked: this.copiedGroup.teachers.findIndex(x => x.toLowerCase() === element.id.toLowerCase()) >= 0
+        checked: this.copiedGroup.teachers.findIndex(x => x.toLowerCase() === element.id.toLowerCase()) >= 0,
+        disabled: this.copiedGroup.teachers.findIndex(x => x.toLowerCase() === element.id.toLowerCase()) >= 0
       })
     });
     alert.addButton('Annulla'); //tasto annulla
@@ -261,7 +262,8 @@ export class GroupModal implements OnInit {
         type: 'checkbox',
         label: element.name + ' ' + element.surname,
         value: element.id,
-        checked: this.copiedGroup.kids.findIndex(x => x.toLowerCase() === element.id.toLowerCase()) >= 0
+        checked: this.copiedGroup.kids.findIndex(x => x.toLowerCase() === element.id.toLowerCase()) >= 0,
+        disabled: this.copiedGroup.kids.findIndex(x => x.toLowerCase() === element.id.toLowerCase()) >= 0
       })
     });
 

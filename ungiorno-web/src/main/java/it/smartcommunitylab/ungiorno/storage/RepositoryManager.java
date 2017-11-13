@@ -1181,7 +1181,7 @@ public class RepositoryManager implements RepositoryService {
             if (week == null || week.isEmpty()) {
             	week = getWeekDefault(appId, schoolId, kp.getKidId());
             }
-            if (week == null || week.size() >= daynr) continue;
+            if (week == null || week.size() <= daynr) continue;
             DayDefault day = week.get(daynr);
             
             if (day.getAbsence() || !day.getBus()) continue;

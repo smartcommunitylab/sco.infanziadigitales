@@ -166,23 +166,17 @@ public class ConsoleWebController {
             @PathVariable String schoolId, @RequestBody KidProfile kid) {
         kid.setAppId(appId);
         kid.setSchoolId(schoolId);
-        List<KidProfile> kidProfiles = storage.getKidProfilesBySchool(appId, schoolId);
+//        List<KidProfile> kidProfiles = storage.getKidProfilesBySchool(appId, schoolId);
         KidProfile selectedKidProfile = storage.getKidProfile(appId, schoolId, kid.getKidId());
-        if (selectedKidProfile == null) {
-            kidProfiles.add(kid);
-        } else {
-            int profileIndex = kidProfiles.indexOf(selectedKidProfile);
-            KidProfile removed = kidProfiles.remove(profileIndex);
+        if (selectedKidProfile != null) {
             // maintain images if set server side
-            kid.setImage(removed.getImage());
+            kid.setImage(selectedKidProfile.getImage());
             // maintain groups and section, they are not managed by kid update
             kid.setSection(selectedKidProfile.getSection());
             kid.setGroups(selectedKidProfile.getGroups());
-            
-            kidProfiles.add(profileIndex, kid);
         }
 
-        storage.updateChildren(appId, schoolId, kidProfiles);
+        kidManager.updateKid(kid);
         kidManager.updateParents(kid);
         logger.info("user {} updates kidProfile {}", permissionsManager.getUserId(), kid);
         return new Response<>(kid);

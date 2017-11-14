@@ -53,8 +53,6 @@ import org.springframework.util.StringUtils;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
 
 import it.smartcommunitylab.ungiorno.beans.GroupDTO;
 import it.smartcommunitylab.ungiorno.config.exception.ProfileNotFoundException;
@@ -2161,15 +2159,23 @@ public class RepositoryManager implements RepositoryService {
 
     @Override
     public KidProfile updateKid(KidProfile kid) {
-        Criteria criteria =
-                new Criteria("appId").is(kid.getAppId()).and("schoolId").is(kid.getSchoolId());
-        criteria.and("kidId").is(kid.getKidId());
-        Query q = new Query(criteria);
-        DBObject dbObject = new BasicDBObject();
-        template.getConverter().write(kid, dbObject);
-        Update updateDoc = Update.fromDBObject(dbObject);
-        return template.findAndModify(q, updateDoc, KidProfile.class);
-
+		if (kid.getPersons() != null) {
+	    	for (AuthPerson p : kid.getPersons()) {
+				if (StringUtils.isEmpty(p.getPersonId()) && !p.isParent()) {
+					p.setPersonId(ObjectId.get().toString());
+				}
+			}
+		}	
+//        Criteria criteria =
+//                new Criteria("appId").is(kid.getAppId()).and("schoolId").is(kid.getSchoolId());
+//        criteria.and("kidId").is(kid.getKidId());
+//        Query q = new Query(criteria);
+//        DBObject dbObject = new BasicDBObject();
+//        template.getConverter().write(kid, dbObject);
+//        Update updateDoc = Update.fromDBObject(dbObject);
+//        return template.findAndModify(q, updateDoc, KidProfile.class);
+		template.save(kid);
+		return kid;
     }
 
     @Override

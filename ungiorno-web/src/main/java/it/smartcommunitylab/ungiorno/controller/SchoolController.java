@@ -301,6 +301,7 @@ public class SchoolController {
             BusData buses = storage.getBusData(appId, schoolId, date);
             return new Response<>(buses);
         } catch (Exception e) {
+        	logger.error("Error reading bus data", e);
             return new Response<>(e.getMessage());
         }
     }

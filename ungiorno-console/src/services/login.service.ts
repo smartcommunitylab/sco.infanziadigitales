@@ -25,7 +25,7 @@ export class LoginService  {
   
 
   login(): void {
-    window.location = `${ this.config.getConfig('aacUrl') }/eauth/authorize/google?client_id=${ this.config.getConfig('aacClientId') }&redirect_uri=${ this.config.getConfig('redirectUrl') }&response_type=token`;
+    window.location = `${ this.config.getConfig('aacUrl') }/eauth/authorize/google?client_id=${ this.config.getConfig('aacClientId') }&redirect_uri=${ this.config.getConfig('redirectUrl') }&response_type=token&scope=profile.basicprofile.me,profile.accountprofile.me`;
   }
 
   /**

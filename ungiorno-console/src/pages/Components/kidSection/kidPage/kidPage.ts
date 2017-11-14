@@ -752,8 +752,11 @@ export class KidPage implements OnInit {
         var image = this.apiUrl + "/consoleweb/" + this.selectedSchool.appId + "/" + this.selectedSchool.id + "/kid/" + this.thisKid.id + "/picture";
         return image;
     }
+
+    oldBus:BusService = new BusService();
     onBusEdit() {
         this.editBus = true;
+        this.oldBus = Object.assign({},this.thisKid.bus);
     }
 
     onBusSave() {
@@ -763,6 +766,7 @@ export class KidPage implements OnInit {
 
     onBusCancel() {
         this.editBus = false;
+        this.thisKid.bus = this.oldBus;
     }
 
     addStop(stop: string) {

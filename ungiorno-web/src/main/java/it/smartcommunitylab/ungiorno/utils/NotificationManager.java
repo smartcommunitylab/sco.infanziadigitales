@@ -178,6 +178,8 @@ public class NotificationManager {
             }
         }
 
+        logger.info("Send direct message to parents of "+kidId+": "+userIds);;
+        
         Map<String, Object> content = new TreeMap<String, Object>();
         content.put("type", "chat");
         content.put("kidId", kidId);

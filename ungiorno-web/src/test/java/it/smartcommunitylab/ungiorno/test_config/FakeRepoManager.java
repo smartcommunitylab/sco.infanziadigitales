@@ -18,7 +18,6 @@ import it.smartcommunitylab.ungiorno.model.CalendarItem;
 import it.smartcommunitylab.ungiorno.model.ChatMessage;
 import it.smartcommunitylab.ungiorno.model.Communication;
 import it.smartcommunitylab.ungiorno.model.InternalNote;
-import it.smartcommunitylab.ungiorno.model.KidBusData;
 import it.smartcommunitylab.ungiorno.model.KidCalAssenza;
 import it.smartcommunitylab.ungiorno.model.KidCalFermata;
 import it.smartcommunitylab.ungiorno.model.KidCalNote;
@@ -364,12 +363,6 @@ public class FakeRepoManager implements RepositoryService {
             long to) {
         // TODO Auto-generated method stub
         return null;
-    }
-
-    @Override
-    public void updateKidBusData(String appId, String schoolId, List<KidBusData> busData) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override

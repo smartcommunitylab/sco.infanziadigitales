@@ -72,7 +72,6 @@ import it.smartcommunitylab.ungiorno.model.CalendarItem;
 import it.smartcommunitylab.ungiorno.model.ChatMessage;
 import it.smartcommunitylab.ungiorno.model.Communication;
 import it.smartcommunitylab.ungiorno.model.InternalNote;
-import it.smartcommunitylab.ungiorno.model.KidBusData;
 import it.smartcommunitylab.ungiorno.model.KidCalAssenza;
 import it.smartcommunitylab.ungiorno.model.KidCalFermata;
 import it.smartcommunitylab.ungiorno.model.KidCalNote;
@@ -1161,54 +1160,36 @@ public class RepositoryManager implements RepositoryService {
     @Override
     public BusData getBusData(String appId, String schoolId, long date) {
         Query q = schoolQuery(appId, schoolId);
-        // q.addCriteria(new Criteria("dateFrom").is(timestampToDate(date)));
-        List<KidBusData> kidBusData = template.find(q, KidBusData.class);
+         q.addCriteria(new Criteria("services.bus.enabled").is(true));
+        List<KidProfile> kidProfiles = template.find(q, KidProfile.class);
         ListMultimap<String, BusData.KidProfile> mm = ArrayListMultimap.create();
 
-        Map<String, KidCalAssenza> assenzeMap = readAssenze(appId, schoolId, date);
-        Map<String, KidCalRitiro> ritiriMap = readRitiri(appId, schoolId, date);
-        Map<String, KidCalFermata> stopsMap = readFermate(appId, schoolId, date);
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(date);
+        int weeknr = cal.get(Calendar.WEEK_OF_YEAR);
+        int daynr = cal.get(Calendar.DAY_OF_WEEK) - 2;
+        if (daynr < 0) daynr = 6;
 
-        for (KidBusData kbd : kidBusData) {
+        for (KidProfile kp : kidProfiles) {
             BusData.KidProfile busKidProfile = new BusData.KidProfile();
-            KidProfile kp = getKidProfile(appId, schoolId, kbd.getKidId());
-            KidConfig conf = getKidConfig(appId, schoolId, kbd.getKidId());
 
             busKidProfile.setFullName(kp.getFullName());
             busKidProfile.setImage(kp.getImage());
-            busKidProfile.setKidId(kbd.getKidId());
-
-            KidCalAssenza assenza = assenzeMap.get(kbd.getKidId());
-            if (conf != null && !conf.getServices().getBus().isActive() || assenza != null) {
-                busKidProfile.setVariation(true);
-                busKidProfile.setBusStop(null);
-            } else {
-                KidCalFermata stop = stopsMap.get(kp.getKidId());
-                String personId = null;
-                if (stop != null) {
-                    busKidProfile.setVariation(true);
-                    busKidProfile.setBusStop(stop.getStopId());
-                    personId = stop.getPersonId();
-                } else {
-                    KidCalRitiro ritiro = ritiriMap.get(kp.getKidId());
-                    if (ritiro != null) {
-                        busKidProfile.setVariation(true);
-                        busKidProfile.setBusStop(null);
-                    } else {
-                        personId = conf != null ? conf.getDefaultPerson() : findDefaultPerson(kp);
-                        busKidProfile.setBusStop(
-                                conf != null ? conf.getServices().getBus().getDefaultIdBack()
-                                        : kp.getServices().getBus().getStops().get(0).getStopId());
-                    }
-                }
-                if (personId != null) {
-                    busKidProfile.setPersonWhoWaitId(personId);
-                    AuthPerson ap = getPerson(personId, conf, kp);
-                    busKidProfile.setPersonWhoWaitName(ap.getFullName());
-                    busKidProfile.setPersonWhoWaitRelation(ap.getRelation());
-                }
+            busKidProfile.setKidId(kp.getKidId());
+			
+            List<DayDefault> week = getWeekSpecific(appId, schoolId, kp.getKidId(), weeknr);
+            if (week == null || week.isEmpty()) {
+            	week = getWeekDefault(appId, schoolId, kp.getKidId());
             }
-            mm.put(kbd.getBusId(), busKidProfile);
+            if (week == null || week.size() <= daynr) continue;
+            DayDefault day = week.get(daynr);
+            
+            if (day.getAbsence() || !day.getBus()) continue;
+            
+            busKidProfile.setBusStop(day.getFermata());
+            busKidProfile.setPersonWhoWaitId(day.getDelega_name());
+
+            mm.put(kp.getServices().getBus().getBusId(), busKidProfile);
         }
         BusData data = new BusData();
         data.setAppId(appId);
@@ -1588,17 +1569,6 @@ public class RepositoryManager implements RepositoryService {
         c.set(Calendar.SECOND, 0);
         c.set(Calendar.MILLISECOND, 0);
         return c.getTimeInMillis();
-    }
-
-    /**
-     * @param appId
-     * @param schoolId
-     * @param busData
-     */
-    @Override
-    public void updateKidBusData(String appId, String schoolId, List<KidBusData> busData) {
-        template.remove(schoolQuery(appId, schoolId), KidBusData.class);
-        template.insertAll(busData);
     }
 
     /**

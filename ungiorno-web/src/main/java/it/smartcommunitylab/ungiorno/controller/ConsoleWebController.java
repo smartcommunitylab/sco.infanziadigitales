@@ -184,7 +184,6 @@ public class ConsoleWebController {
 
         storage.updateChildren(appId, schoolId, kidProfiles);
         kidManager.updateParents(kid);
-        kidManager.updateKidBusData(kid);
         logger.info("user {} updates kidProfile {}", permissionsManager.getUserId(), kid);
         return new Response<>(kid);
     }

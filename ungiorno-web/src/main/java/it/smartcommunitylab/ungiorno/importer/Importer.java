@@ -24,7 +24,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -42,7 +41,6 @@ import org.springframework.util.StringUtils;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 
@@ -50,7 +48,6 @@ import it.smartcommunitylab.ungiorno.diary.model.DiaryTeacher;
 import it.smartcommunitylab.ungiorno.model.AuthPerson;
 import it.smartcommunitylab.ungiorno.model.BusService;
 import it.smartcommunitylab.ungiorno.model.Contact;
-import it.smartcommunitylab.ungiorno.model.KidBusData;
 import it.smartcommunitylab.ungiorno.model.KidProfile;
 import it.smartcommunitylab.ungiorno.model.KidProfile.Allergy;
 import it.smartcommunitylab.ungiorno.model.KidServices;
@@ -93,8 +90,6 @@ public class Importer {
 	private List<KidProfile> children = new ArrayList<KidProfile>();
 	private List<Parent> parents = new ArrayList<Parent>();
 	
-	private List<KidBusData> busData = new ArrayList<KidBusData>();
-	
 	//private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
 	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 	private static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("HH:mm");
@@ -104,8 +99,8 @@ public class Importer {
 			HSSFWorkbook wb = readFile(is, expectedKidSheets);
 			children.clear();
 			parents.clear();
-			busData.clear();
 			mapChildrenData(appId, schoolId, wb);
+			// TODO populate bus service data
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -136,39 +131,11 @@ public class Importer {
 			if (SHEET_ALLERGIE.equals(sheet.getSheetName())) {
 				parseAllergie(appId, schoolId, result, kidMap);
 			}
-			if (SHEET_BUS.equals(sheet.getSheetName())) {
-				parseKidBus(appId, schoolId, result, kidMap);
-			}
 			if (SHEET_INSEGNANTI.equals(sheet.getSheetName())) {
 				parseInsegnanti(appId, schoolId, result, kidMap);
 			}			
 			
 		}	
-	}
-
-	/**
-	 * @param appId
-	 * @param schoolId
-	 * @param result
-	 * @param kidMap
-	 * @throws ImportError 
-	 */
-	private void parseKidBus(String appId, String schoolId, List<Map<String, String>> result, Map<String, KidProfile> kidMap) throws ImportError {
-		for (Map<String,String> m : result) {
-			KidBusData data = new KidBusData();
-			data.setAppId(appId);
-			data.setSchoolId(schoolId);
-			String kidId = m.get("IDBAMBINO");
-			if (!kidMap.containsKey(kidId)) {
-				throw new ImportError("Unknown kidId for kid-bus mapping: "+kidId);
-			}
-			data.setKidId(kidId);
-			data.setStopId(kidMap.get(kidId).getServices().getBus().getStops().get(0).getStopId());
-			data.setBusId(m.get("BUS"));
-			data.setPersonId(m.get("PERSON"));
-			busData.add(data);
-		}
-		
 	}
 	
 	/**
@@ -608,10 +575,6 @@ public class Importer {
 
 	public List<Parent> getParents() {
 		return parents;
-	}
-
-	public List<KidBusData> getBusData() {
-		return busData;
 	}
 
 	

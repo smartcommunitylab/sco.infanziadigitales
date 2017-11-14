@@ -37,20 +37,20 @@ import javax.imageio.stream.FileImageOutputStream;
 public class ImageUtils {
 
     public static void compressImage(BufferedImage bi, File f) throws IOException {
-        // rescale(bi, f);
+//         rescale(bi, f);
         compress(bi, f);
     }
-
-
-    public static void store(InputStream in, OutputStream out) throws IOException {
-        byte[] buffer = new byte[1024];
-        int c = 0;
-        while ((c = in.read(buffer)) != -1) {
-            out.write(buffer, 0, c);
-        }
-        out.flush();
-        out.close();
-    }
+//
+//
+//    public static void store(InputStream in, OutputStream out) throws IOException {
+//        byte[] buffer = new byte[1024];
+//        int c = 0;
+//        while ((c = in.read(buffer)) != -1) {
+//            out.write(buffer, 0, c);
+//        }
+//        out.flush();
+//        out.close();
+//    }
 
 
     private static void rescale(BufferedImage bi, File f) throws IOException {
@@ -58,10 +58,20 @@ public class ImageUtils {
         int originalHeight = bi.getHeight();
         int type = bi.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : bi.getType();
 
+        if (originalHeight > originalWidth) {
+        	double prop = 1.0 * originalHeight / originalWidth;
+        	originalHeight = Math.min(originalHeight, 100);
+        	originalWidth = (int)(1.0 * originalHeight / prop);
+        } else {
+        	double prop = 1.0 * originalWidth / originalHeight;
+        	originalWidth = Math.min(originalWidth, 100);
+        	originalHeight = (int)(1.0 * originalWidth / prop);
+        }
+        
         // rescale 50%
-        BufferedImage resizedImage = new BufferedImage(originalWidth / 2, originalHeight / 2, type);
+        BufferedImage resizedImage = new BufferedImage(originalWidth, originalHeight, type);
         Graphics2D g = resizedImage.createGraphics();
-        g.drawImage(bi, 0, 0, originalWidth / 2, originalHeight / 2, null);
+        g.drawImage(bi, 0, 0, originalWidth, originalHeight, null);
         g.dispose();
         g.setComposite(AlphaComposite.Src);
         g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,

@@ -1,11 +1,12 @@
 package it.smartcommunitylab.ungiorno.services.impl;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
@@ -16,9 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import it.smartcommunitylab.ungiorno.model.AuthPerson;
-import it.smartcommunitylab.ungiorno.model.BusService;
-import it.smartcommunitylab.ungiorno.model.BusService.Stop;
-import it.smartcommunitylab.ungiorno.model.KidBusData;
 import it.smartcommunitylab.ungiorno.model.KidProfile;
 import it.smartcommunitylab.ungiorno.model.Parent;
 import it.smartcommunitylab.ungiorno.model.SectionDef;
@@ -51,37 +49,6 @@ public class KidManager {
         return repoManager.updateKid(kid);
     }
 
-    public List<KidBusData> updateKidBusData(KidProfile kid) {
-        List<KidBusData> kidBusData = new ArrayList<>();
-        if (kid != null && kid.getServices() != null) {
-            kidBusData.addAll(convert(kid.getAppId(), kid.getSchoolId(), kid.getKidId(),
-                    kid.getServices().getBus()));
-            repoManager.updateKidBusData(kid.getAppId(), kid.getSchoolId(), kidBusData);
-        }
-
-        return kidBusData;
-    }
-
-    private List<KidBusData> convert(String appId, String schoolId, String kidId,
-            BusService busService) {
-        List<KidBusData> kidBusData = new ArrayList<>();
-        if (busService != null) {
-            List<Stop> stops = busService.getStops();
-            if (stops != null) {
-                for (Stop stop : stops) {
-                    KidBusData kbd = new KidBusData();
-                    kbd.setBusId(busService.getBusId());
-                    kbd.setStopId(stop.getStopId());
-                    kbd.setAppId(appId);
-                    kbd.setSchoolId(schoolId);
-                    kbd.setKidId(kidId);
-                    kidBusData.add(kbd);
-                }
-            }
-        }
-
-        return kidBusData;
-    }
 
     public KidProfile getKidProfile(String appId, String schoolId, String kidId) {
         return repoManager.getKidProfile(appId, schoolId, kidId);
@@ -186,7 +153,8 @@ public class KidManager {
         String name = kidId + ext;
         String pathPicture = imageDownloadDir + "/" + name;
 
-        ImageUtils.store(is, new FileOutputStream(pathPicture));
+        ImageUtils.compressImage(ImageIO.read(is), new File(pathPicture));
+        //ImageUtils.store(is, new FileOutputStream(pathPicture));
 
         return name;
     }

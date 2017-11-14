@@ -18,7 +18,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.c
   var APP_BUILD = '';
 
   var APP_VERSION = '3.0.0';
-  var RESET_VERSION = '3.0.1';
+  var RESET_VERSION = '3.0.0';
   var mapJsonConfig = null;
 
 

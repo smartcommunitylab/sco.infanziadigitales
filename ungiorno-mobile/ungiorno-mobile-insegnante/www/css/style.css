@@ -2048,6 +2048,7 @@ ion-content .scroll {
 
 #home .children-container {
   border: solid 2px darkgray;
+  overflow: hidden;
 }
 
 #home .children-container .present {

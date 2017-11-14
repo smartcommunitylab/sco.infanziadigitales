@@ -392,6 +392,8 @@ export class KidPage implements OnInit {
 
     onServiceEdit() {
         this.editService = true;
+        this.oldService = [];
+        this.thisKid.services.forEach(x => this.oldService.push(x));
     }
 
     onServiceSave() {
@@ -401,6 +403,8 @@ export class KidPage implements OnInit {
 
     onServiceCancel() {
         this.editService = false;
+         this.thisKid.services = [];
+        this.oldService.forEach(x => this.thisKid.services.push(x));
     }
 
     changeServices() {
@@ -641,10 +645,12 @@ export class KidPage implements OnInit {
     }
 
     editDelegaInfo: boolean;
-    oldDelega: Delega = new Delega('', '', '');
+    oldDelega: Delega[] = [];
 
     onDelegaInfoEdit() {
         this.editDelegaInfo = true;
+        this.oldDelega = [];
+        this.thisKid.deleghe.forEach(x => this.oldDelega.push(x));
     }
     private findWord(array, word, field) {
         return -1 < array.map(function (item) {
@@ -688,6 +694,8 @@ export class KidPage implements OnInit {
     onDelegaInfoCancel() {
         this.editDelegaInfo = false;
         this.selectedDelega = null;
+        this.oldDelega = [];
+        this.thisKid.deleghe.forEach(x => this.oldDelega.push(x));
     }
 
     editDelegaContatti: boolean;

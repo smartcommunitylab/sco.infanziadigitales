@@ -893,7 +893,14 @@ $scope.cnt=0;
     lineStroke = (250 / totalNumberOfChildren) * getNumberChildren;
     return lineStroke + ",250";
   }
-
+$scope.getStrokeWith = function(children) {
+  var lineStroke = 13;
+    if (children==0)
+      {
+        lineStroke = 0
+      }
+  return lineStroke;
+}
   $scope.sectionColor = function (period) {
     if (period == $rootScope.selectedPeriod)
       return '#abc';

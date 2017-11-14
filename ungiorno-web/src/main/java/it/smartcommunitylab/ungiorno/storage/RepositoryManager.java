@@ -967,8 +967,8 @@ public class RepositoryManager implements RepositoryService {
         q.addCriteria(new Criteria("kidId").is(kidId));
         q.addCriteria(new Criteria("weeknr").is(weeknr));
         KidWeeks week = template.findOne(q, KidWeeks.class);
-        List<KidProfile.DayDefault> days = week.getDays();
-        return days;
+        if (week != null) return week.getDays();
+        return null;
     }
 
     /**

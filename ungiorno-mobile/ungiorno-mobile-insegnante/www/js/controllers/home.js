@@ -415,6 +415,7 @@ $scope.cnt=0;
           //manage error sections
           Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
           $ionicLoading.hide();
+            $scope.noConnection = true;
         })
         dataServerService.getTeachers($scope.schoolProfile.schoolId).then(function (data) {
           teachersService.setTeachers(data);
@@ -438,6 +439,7 @@ $scope.cnt=0;
           //manage error teachers
           Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
           $ionicLoading.hide();
+            $scope.noConnection = true;
         });
       } else {
         $ionicLoading.hide();
@@ -461,11 +463,13 @@ $scope.cnt=0;
           //manage error communications
           Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
           $ionicLoading.hide();
+            $scope.noConnection = true;
         });
       }
     }, function (err) {
       Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
       $ionicLoading.hide();
+        $scope.noConnection = true;
     });
 
 

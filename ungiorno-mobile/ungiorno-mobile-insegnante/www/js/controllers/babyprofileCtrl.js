@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.babyprofile', [])
 
-.controller('babyprofileCtrl', function ($scope, dataServerService, profileService, babyConfigurationService, Config, $q, $filter, Toast, $location, $ionicLoading, $rootScope, $ionicPopup, $ionicPopover, $interval, $ionicScrollDelegate, teachersService, messagesService) {
+.controller('babyprofileCtrl', function ($scope, dataServerService, profileService, Config, $q, $filter, Toast, $location, $ionicLoading, $rootScope, $ionicPopup, $ionicPopover, $interval, $ionicScrollDelegate, teachersService, messagesService) {
 
   var IS_PARENT = 'parent';
   var IS_TEACHER = 'teacher';
@@ -332,77 +332,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
     document.location.href = 'tel:' + number;
   }
 
-  $scope.sendTeacherNote = function () {
-    //temporarly disabled
-    //if ($scope.newNote.argument === "") {
-    //Toast.show($filter('translate')('select_argument'), 'short', 'bottom');
-    // } else
-    if ($scope.newNote.description === "") {
-      Toast.show($filter('translate')('type_description'), 'short', 'bottom');
-    } else { //all data are correct
-      //            var note = {
-      //                date: new Date().getTime(),
-      //                schoolNotes: [
-      //                    {
-      //                        type: $scope.newNote.argument.typeId,
-      //                        note: $scope.newNote.description
-      //                    }
-      //                ]
-      //            }
-      var note = {
-        "kidId": $scope.babyProfile.kidId,
-        "teacherId": $scope.teacher.teacherId,
-        "text": $scope.newMessage.text
-      }
-      var requestFail = function () {
-        var myPopup = $ionicPopup.show({
-          title: $filter('translate')('note_sent_fail'),
-          scope: $scope,
-          buttons: [
-            {
-              text: $filter('translate')('cancel'),
-              type: 'cancel-button'
-                        },
-            {
-              text: '<b>' + $filter('translate')('retry') + '</b>',
-              type: 'create-button',
-              onTap: function (e) {
-                $scope.sendTeacherNote();
-              }
-                        }
-                    ]
-        });
-      }
-
-      var requestSuccess = function (data) {
-        Toast.show($filter('translate')('note_sent_success'), 'short', 'bottom');
-        $scope.newNote.argument = "";
-        $scope.newNote.description = "";
-        //update the new notes
-
-        if (data != null && data.data != null && data.data.schoolNotes != null) {
-          if (!$scope.notes) {
-            $scope.notes = {};
-          }
-          $scope.notes.schoolNotes = data.data.schoolNotes;
-        }
-        if (data != null && data.data != null && data.data.parentNotes != null) {
-          if (!$scope.notes) {
-            $scope.notes = {};
-          }
-          $scope.notes.parentNotes = data.data.parentNotes;
-        }
-      }
-
-
-      dataServerService.addNewNoteForParents($scope.schoolProfile.schoolId, $scope.babyProfile.kidId, $scope.teacher.teacherId, note).then(function (data) {
-        requestSuccess(data);
-      }, function (data) {
-        requestFail();
-      });
-    }
-
-  }
   $scope.changeTeacher = function (teacher) {
     $scope.popover.hide();
     $scope.teacher = teacher;

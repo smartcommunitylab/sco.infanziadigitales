@@ -14,25 +14,15 @@ import it.smartcommunitylab.ungiorno.diary.model.MultimediaEntry;
 import it.smartcommunitylab.ungiorno.model.AppInfo;
 import it.smartcommunitylab.ungiorno.model.Author;
 import it.smartcommunitylab.ungiorno.model.BusData;
-import it.smartcommunitylab.ungiorno.model.CalendarItem;
 import it.smartcommunitylab.ungiorno.model.ChatMessage;
 import it.smartcommunitylab.ungiorno.model.Communication;
-import it.smartcommunitylab.ungiorno.model.InternalNote;
-import it.smartcommunitylab.ungiorno.model.KidCalAssenza;
-import it.smartcommunitylab.ungiorno.model.KidCalFermata;
-import it.smartcommunitylab.ungiorno.model.KidCalNote;
-import it.smartcommunitylab.ungiorno.model.KidCalNote.Note;
-import it.smartcommunitylab.ungiorno.model.KidCalRitiro;
-import it.smartcommunitylab.ungiorno.model.KidConfig;
 import it.smartcommunitylab.ungiorno.model.KidProfile;
 import it.smartcommunitylab.ungiorno.model.KidProfile.DayDefault;
 import it.smartcommunitylab.ungiorno.model.LoginData;
-import it.smartcommunitylab.ungiorno.model.Menu;
 import it.smartcommunitylab.ungiorno.model.Parent;
 import it.smartcommunitylab.ungiorno.model.SchoolProfile;
 import it.smartcommunitylab.ungiorno.model.SectionData;
 import it.smartcommunitylab.ungiorno.model.Teacher;
-import it.smartcommunitylab.ungiorno.model.TeacherCalendar;
 import it.smartcommunitylab.ungiorno.services.RepositoryService;
 import it.smartcommunitylab.ungiorno.storage.App;
 import it.smartcommunitylab.ungiorno.usage.UsageEntity;
@@ -132,26 +122,7 @@ public class FakeRepoManager implements RepositoryService {
     }
 
     @Override
-    public List<CalendarItem> getCalendar(String appId, String schoolId, String kidId, long from,
-            long to) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public KidProfile getKidProfile(String appId, String schoolId, String kidId) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public KidConfig getKidConfig(String appId, String schoolId, String kidId) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public KidConfig saveConfig(KidConfig config) {
         // TODO Auto-generated method stub
         return null;
     }
@@ -184,75 +155,6 @@ public class FakeRepoManager implements RepositoryService {
     @Override
     public List<DiaryKidProfile> getDiaryKidProfilesByAuthId(String appId, String schoolId,
             String authId, boolean isTeacher) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public KidConfig saveStop(KidCalFermata stop) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public KidCalFermata getStop(String appId, String schoolId, String kidId, long date) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public List<KidCalFermata> getStop(String appId, String schoolId, String kidId, long dateFrom,
-            long dateTo) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public KidCalAssenza getAbsence(String appId, String schoolId, String kidId, long date) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public KidCalRitiro getReturn(String appId, String schoolId, String kidId, long date) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public List<KidCalRitiro> getReturn(String appId, String schoolId, String kidId, long dateFrom,
-            long dateTo) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public KidConfig saveAbsence(KidCalAssenza absence) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public KidConfig saveReturn(KidCalRitiro ritiro) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public List<KidCalNote> getKidCalNotes(String appId, String schoolId, String kidId, long date) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public List<KidCalNote> getKidCalNotesForSection(String appId, String schoolId,
-            String[] sectionIds, long date) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public KidCalNote saveNote(KidCalNote note) {
         // TODO Auto-generated method stub
         return null;
     }
@@ -315,25 +217,6 @@ public class FakeRepoManager implements RepositoryService {
     }
 
     @Override
-    public InternalNote saveInternalNote(InternalNote comm) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public List<InternalNote> getInternalNotes(String appId, String schoolId, String[] sectionIds,
-            long date) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public List<Menu> getMeals(String appId, String schoolId, long from, long to) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public BusData getBusData(String appId, String schoolId, long date) {
         // TODO Auto-generated method stub
         return null;
@@ -358,12 +241,6 @@ public class FakeRepoManager implements RepositoryService {
         return null;
     }
 
-    @Override
-    public List<TeacherCalendar> getTeacherCalendar(String appId, String schoolId, long from,
-            long to) {
-        // TODO Auto-generated method stub
-        return null;
-    }
 
     @Override
     public Teacher getTeacher(String username, String appId, String schoolId) {
@@ -429,12 +306,6 @@ public class FakeRepoManager implements RepositoryService {
 
     @Override
     public void saveMultimediaEntry(MultimediaEntry multimediaEntry) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void sortNotes(List<Note> notes) {
         // TODO Auto-generated method stub
 
     }

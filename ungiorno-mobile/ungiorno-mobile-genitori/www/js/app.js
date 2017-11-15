@@ -54,27 +54,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     'it.smartcommunitylab.infanziadigitales.diario.parents.directives',
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.common',
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.home',
-    'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.absence',
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.babysetting',
-    'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.retire',
-    'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.authorization',
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.communications',
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.messages',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.conf',
-    'it.smartcommunitylab.infanziadigitales.diario.parents.services.assenzaService',
-    'it.smartcommunitylab.infanziadigitales.diario.parents.services.retireService',
-    'it.smartcommunitylab.infanziadigitales.diario.parents.services.busService',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.configurationService',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.dataServerService',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.profileService',
-    'it.smartcommunitylab.infanziadigitales.diario.parents.services.calendarService',
-    'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.calendar',
-    'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.addNote',
-    'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.buses',
-    'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.canteen',
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.login',
-    'it.smartcommunitylab.infanziadigitales.diario.parents.services.canteenService',
-    'it.smartcommunitylab.infanziadigitales.diario.parents.services.loginService',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.communicationsService',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.messagesService',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.notification',
@@ -100,7 +87,7 @@ return {
 })
 
 .run(function ($ionicPlatform, $rootScope, $ionicLoading, $ionicPopup, $filter, $cordovaSplashscreen, $state, $translate, $q, $window, $ionicHistory, $ionicConfig, Config,
-  configurationService, profileService, dataServerService, loginService, pushNotificationService, Toast,LoginService) {
+  configurationService, profileService, dataServerService, pushNotificationService, Toast,LoginService) {
 
   $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
     console.log(fromState.name +' -> '+toState.name);
@@ -369,44 +356,6 @@ return {
     }
   })
 
-  .state('app.absence', {
-    cache: false,
-    url: '/assenza',
-    abstract: false,
-    views: {
-      'menuContent': {
-        templateUrl: "templates/absence.html",
-        controller: 'AbsenceCtrl'
-      }
-    }
-  })
-
-  .state('app.retire', {
-    cache: false,
-    url: '/retire',
-    abstract: false,
-    views: {
-      'menuContent': {
-        templateUrl: "templates/retire.html",
-        controller: 'RetireCtrl'
-      }
-
-    }
-  })
-
-  .state('app.canteen', {
-    cache: false,
-    url: '/canteen',
-    abstract: false,
-    views: {
-      'menuContent': {
-        templateUrl: "templates/canteen.html",
-        controller: 'CanteenCtrl'
-      }
-
-    }
-  })
-
   .state('app.babysetting', {
     cache: false,
     url: '/babysetting',
@@ -415,54 +364,6 @@ return {
       'menuContent': {
         templateUrl: "templates/babysetting.html",
         controller: 'BabySettingCtrl'
-      }
-    }
-  })
-
-  .state('app.calendar', {
-    cache: false,
-    url: '/calendar',
-    abstract: false,
-    views: {
-      'menuContent': {
-        templateUrl: "templates/calendar.html",
-        controller: "CalendarCtrl"
-      }
-    }
-  })
-
-  .state('app.authorization', {
-    cache: false,
-    url: '/authorization',
-    abstract: false,
-    views: {
-      'menuContent': {
-        templateUrl: "templates/authorization.html",
-        controller: 'AuthorizationCtrl'
-      }
-    }
-  })
-
-  .state('app.addnote', {
-    cache: false,
-    url: '/addnote',
-    abstract: false,
-    views: {
-      'menuContent': {
-        templateUrl: "templates/note.html",
-        controller: 'NoteCtrl'
-      }
-    }
-  })
-
-  .state('app.bus', {
-    cache: false,
-    url: '/bus',
-    abstract: false,
-    views: {
-      'menuContent': {
-        templateUrl: "templates/bus.html",
-        controller: 'BusCtrl'
       }
     }
   })

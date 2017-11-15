@@ -14,25 +14,15 @@ import it.smartcommunitylab.ungiorno.diary.model.MultimediaEntry;
 import it.smartcommunitylab.ungiorno.model.AppInfo;
 import it.smartcommunitylab.ungiorno.model.Author;
 import it.smartcommunitylab.ungiorno.model.BusData;
-import it.smartcommunitylab.ungiorno.model.CalendarItem;
 import it.smartcommunitylab.ungiorno.model.ChatMessage;
 import it.smartcommunitylab.ungiorno.model.Communication;
-import it.smartcommunitylab.ungiorno.model.InternalNote;
-import it.smartcommunitylab.ungiorno.model.KidCalAssenza;
-import it.smartcommunitylab.ungiorno.model.KidCalFermata;
-import it.smartcommunitylab.ungiorno.model.KidCalNote;
-import it.smartcommunitylab.ungiorno.model.KidCalNote.Note;
-import it.smartcommunitylab.ungiorno.model.KidCalRitiro;
-import it.smartcommunitylab.ungiorno.model.KidConfig;
 import it.smartcommunitylab.ungiorno.model.KidProfile;
 import it.smartcommunitylab.ungiorno.model.KidProfile.DayDefault;
 import it.smartcommunitylab.ungiorno.model.LoginData;
-import it.smartcommunitylab.ungiorno.model.Menu;
 import it.smartcommunitylab.ungiorno.model.Parent;
 import it.smartcommunitylab.ungiorno.model.SchoolProfile;
 import it.smartcommunitylab.ungiorno.model.SectionData;
 import it.smartcommunitylab.ungiorno.model.Teacher;
-import it.smartcommunitylab.ungiorno.model.TeacherCalendar;
 import it.smartcommunitylab.ungiorno.storage.App;
 import it.smartcommunitylab.ungiorno.usage.UsageEntity;
 import it.smartcommunitylab.ungiorno.usage.UsageEntity.UsageAction;
@@ -140,34 +130,10 @@ public interface RepositoryService {
     /**
      * @param appId
      * @param schoolId
-     * @param studentId
-     * @param from
-     * @param to
-     * @return
-     */
-    List<CalendarItem> getCalendar(String appId, String schoolId, String kidId, long from, long to);
-
-    /**
-     * @param appId
-     * @param schoolId
      * @param kidId
      * @return
      */
     KidProfile getKidProfile(String appId, String schoolId, String kidId);
-
-    /**
-     * @param appId
-     * @param schoolId
-     * @param kidId
-     * @return
-     */
-    KidConfig getKidConfig(String appId, String schoolId, String kidId);
-
-    /**
-     * @param config
-     * @return
-     */
-    KidConfig saveConfig(KidConfig config);
 
     /**
      * @param appId
@@ -201,81 +167,6 @@ public interface RepositoryService {
      */
     List<DiaryKidProfile> getDiaryKidProfilesByAuthId(String appId, String schoolId, String authId,
             boolean isTeacher);
-
-    /**
-     * @param stop
-     * @return
-     */
-    KidConfig saveStop(KidCalFermata stop);
-
-    /**
-     * @param appId
-     * @param schoolId
-     * @param kidId
-     * @param date
-     * @return
-     */
-    KidCalFermata getStop(String appId, String schoolId, String kidId, long date);
-
-    List<KidCalFermata> getStop(String appId, String schoolId, String kidId, long dateFrom,
-            long dateTo);
-
-    /**
-     * @param appId
-     * @param schoolId
-     * @param kidId
-     * @param date
-     * @return
-     */
-    KidCalAssenza getAbsence(String appId, String schoolId, String kidId, long date);
-
-    /**
-     * @param appId
-     * @param schoolId
-     * @param kidId
-     * @param date
-     * @return
-     */
-    KidCalRitiro getReturn(String appId, String schoolId, String kidId, long date);
-
-    List<KidCalRitiro> getReturn(String appId, String schoolId, String kidId, long dateFrom,
-            long dateTo);
-
-    /**
-     * @param absence
-     * @return
-     */
-    KidConfig saveAbsence(KidCalAssenza absence);
-
-    /**
-     * @param ritiro
-     * @return
-     */
-    KidConfig saveReturn(KidCalRitiro ritiro);
-
-    /**
-     * @param appId
-     * @param schoolId
-     * @param kidId
-     * @param date
-     * @return
-     */
-    List<KidCalNote> getKidCalNotes(String appId, String schoolId, String kidId, long date);
-
-    /**
-     * @param appId
-     * @param schoolId
-     * @param sectionIds
-     * @param date
-     * @return
-     */
-    List<KidCalNote> getKidCalNotesForSection(String appId, String schoolId, String[] sectionIds,
-            long date);
-
-    /**
-     * @param note
-     */
-    KidCalNote saveNote(KidCalNote note);
 
     /**
      * @param appId
@@ -345,30 +236,6 @@ public interface RepositoryService {
     void deleteCommunication(String appId, String schoolId, String commId);
 
     /**
-     * @param comm
-     * @return
-     */
-    InternalNote saveInternalNote(InternalNote comm);
-
-    /**
-     * @param appId
-     * @param schoolId
-     * @param kidId
-     * @return
-     */
-    List<InternalNote> getInternalNotes(String appId, String schoolId, String[] sectionIds,
-            long date);
-
-    /**
-     * @param appId
-     * @param schoolId
-     * @param from
-     * @param to
-     * @return
-     */
-    List<Menu> getMeals(String appId, String schoolId, long from, long to);
-
-    /**
      * @param appId
      * @param schoolId
      * @param date
@@ -389,14 +256,7 @@ public interface RepositoryService {
     GroupDTO getGroupData(String appId, String schoolId, String groupId);
 
     List<GroupDTO> getGroupsDataBySchool(String appId, String schoolId);
-
-    /**
-     * @param appId
-     * @param schoolId
-     * @return
-     */
-    List<TeacherCalendar> getTeacherCalendar(String appId, String schoolId, long from, long to);
-
+    
     /**
      * @return
      */
@@ -426,8 +286,6 @@ public interface RepositoryService {
             String multimediaId);
 
     void saveMultimediaEntry(MultimediaEntry multimediaEntry);
-
-    void sortNotes(List<Note> notes);
 
     /**
      * @param appId

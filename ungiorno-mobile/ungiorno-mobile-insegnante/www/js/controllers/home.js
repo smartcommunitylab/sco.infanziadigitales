@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home', [])
 
-.controller('HomeCtrl', function ($scope, $location, dataServerService, profileService, babyConfigurationService, $filter, $q, $state, Toast, $ionicModal, $ionicLoading, moment, teachersService, sectionService, communicationService, Config, $ionicSideMenuDelegate, $ionicPopup, $rootScope, loginService, pushNotificationService, $ionicHistory) {
+.controller('HomeCtrl', function ($scope, $location, dataServerService, profileService, $filter, $q, $state, Toast, $ionicModal, $ionicLoading, moment, teachersService, sectionService, communicationService, Config, $ionicSideMenuDelegate, $ionicPopup, $rootScope, loginService, pushNotificationService, $ionicHistory) {
   $scope.sections = null;
   $scope.section = null;
   $scope.childrenConfigurations = [];
@@ -179,77 +179,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
     showHints: false
   };
 
-  $scope.sendNewNote = function () {
-    var noteToSend = {
-      date: new Date().getTime(),
-      note: $scope.newNote.description
-    };
-    var ids;
-    if ($scope.newNote.assignedBaby) {
-      ids = $scope.newNote.kidIds;
-    } else {
-      if ($scope.section.sectionId !== "all") {
-        ids = [$scope.section.sectionId];
-      }
-    }
-
-    var requestFail = function () {
-      var myPopup = $ionicPopup.show({
-        title: $filter('translate')('new_note_fail'),
-        scope: $scope,
-        buttons: [
-          {
-            text: $filter('translate')('cancel'),
-            type: 'cancel-button'
-                    },
-          {
-            text: '<b>' + $filter('translate')('retry') + '</b>',
-            type: 'create-button',
-            onTap: function (e) {
-              $scope.sendNewNote();
-            }
-                    }
-                ]
-      });
-    }
-
-    var requestSuccess = function (data) {
-      Toast.show($filter('translate')('new_note_sent'), 'short', 'bottom');
-      $scope.newNote = {
-        possibleChildrens: [],
-        associatedKids: [],
-        search: '',
-        kidIds: [],
-        showHints: false
-      };
-      var note = data.data;
-      injectBabyInformationsInNote(note);
-      $scope.teacherNotes.push(note);
-    }
-
-    dataServerService.addNewInternalNote($scope.schoolProfile.schoolId, $scope.newNote.assignedBaby, ids, noteToSend).then(function (data) {
-      requestSuccess(data);
-      $scope.cancelNewNote(); //close panel of new note
-    }, function (data) {
-      requestFail(data);
-    });
-  }
-
-  $scope.selectChildrenForNote = function (children) {
-    if ($scope.newNote.kidIds.indexOf(children.kidId) === -1) {
-      $scope.newNote.kidIds.push(children.kidId);
-      $scope.newNote.associatedKids.push(children);
-    }
-    $scope.newNote.search = "";
-    $scope.newNote.possibleChildrens = [];
-  }
-
-  $scope.deleteChildrenFromNewNote = function (children) {
-    var index = $scope.newNote.kidIds.indexOf(children.kidId);
-    $scope.newNote.kidIds.splice(index, 1);
-    $scope.newNote.associatedKids.splice($scope.newNote.associatedKids.indexOf(children), 1);
-  }
-
   $scope.hintSearchBoxFocus = false;
   $scope.hintPanelFocus = false;
 
@@ -390,8 +319,6 @@ $scope.cnt=0;
           //$scope.changeHorizzontalLineStyle($rootScope.selectedPeriod);
         }
         pushNotificationService.register($scope.schoolProfile.schoolId);
-
-        //loginService.getTeacherName($scope.schoolProfile.schoolId);
 
         dataServerService.getSections($scope.schoolProfile.schoolId, true).then(function (data) {
           if (data != null) {
@@ -616,21 +543,6 @@ $scope.cnt=0;
       $scope.getChildrenNumber(fasciaName);
     }
     $scope.getChildrenProfilesByPeriod($rootScope.selectedPeriod);
-
-    $scope.numberOfChildren = $scope.section.children.length;
-    for (var i = 0; i < $scope.numberOfChildren; i++) {
-      //      profileService.getBabyProfileById($scope.schoolProfile.schoolId, $scope.section.children[i].kidId).then(function (profile) {
-      //        $scope.childrenProfiles.push(profile);
-      //      });
-      //    useless because u can't change configuration
-      //    babyConfigurationService.getBabyConfigurationById($scope.schoolProfile.schoolId, $scope.section.children[i].kidId).then(function (configuration) {
-      //        $scope.childrenConfigurations.push(configuration);
-      //      });
-      /*
-                  babyConfigurationService.getBabyNotesById($scope.schoolProfile.schoolId, $scope.section.children[i].childrenId).then(function (notes) {
-                      $scope.childrenNotes.push(notes);
-                  });*/
-    };
   }
   var getAllChildren = function () {
     var allchildren = [];

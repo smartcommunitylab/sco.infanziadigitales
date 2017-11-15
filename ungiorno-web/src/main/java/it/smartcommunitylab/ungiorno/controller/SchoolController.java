@@ -33,14 +33,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import it.smartcommunitylab.ungiorno.model.BusData;
 import it.smartcommunitylab.ungiorno.model.Communication;
-import it.smartcommunitylab.ungiorno.model.InternalNote;
-import it.smartcommunitylab.ungiorno.model.Menu;
 import it.smartcommunitylab.ungiorno.model.Response;
 import it.smartcommunitylab.ungiorno.model.SchoolProfile;
-import it.smartcommunitylab.ungiorno.model.SchoolProfile.SectionProfile;
 import it.smartcommunitylab.ungiorno.model.SectionData;
 import it.smartcommunitylab.ungiorno.model.Teacher;
-import it.smartcommunitylab.ungiorno.model.TeacherCalendar;
 import it.smartcommunitylab.ungiorno.services.RepositoryService;
 import it.smartcommunitylab.ungiorno.usage.UsageEntity.UsageActor;
 import it.smartcommunitylab.ungiorno.usage.UsageManager;
@@ -153,62 +149,6 @@ public class SchoolController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/school/{appId}/{schoolId}/notes")
-    public @ResponseBody Response<InternalNote> sendNote(@RequestBody InternalNote comm,
-            @PathVariable String appId, @PathVariable String schoolId,
-            @RequestParam(required = false) String[] kidIds,
-            @RequestParam(required = false) String[] sectionIds,
-            @RequestParam(required = false) String pin) {
-
-        try {
-            if (!permissions.isSchoolTeacher(appId, schoolId, permissions.getUserId())) {
-                throw new SecurityException("User is not associated to this school");
-            }
-            comm.setAppId(appId);
-            comm.setSchoolId(schoolId);
-            if (kidIds != null && kidIds.length > 0) {
-                comm.setKidIds(kidIds);
-            } else if (sectionIds != null && sectionIds.length > 0) {
-                comm.setSectionIds(sectionIds);
-            } else {
-                List<SectionProfile> sections =
-                        storage.getSchoolProfile(appId, schoolId).getSections();
-                String[] allSections = new String[sections.size()];
-                int i = 0;
-                for (SectionProfile sp : sections) {
-                    allSections[i++] = sp.getSectionId();
-                }
-                comm.setSectionIds(allSections);
-                // comm.setSectionIds(storage.getTeacher(permissions.getUserId(), appId,
-                // schoolId).getSectionIds().toArray(new String[0]));
-            }
-
-            return new Response<>(storage.saveInternalNote(comm));
-        } catch (Exception e) {
-            return new Response<>(e.getMessage());
-        }
-    }
-
-    @RequestMapping(method = RequestMethod.GET, value = "/school/{appId}/{schoolId}/notes")
-    public @ResponseBody Response<List<InternalNote>> getNotes(@PathVariable String appId,
-            @PathVariable String schoolId, @RequestParam(required = false) String[] sectionIds,
-            @RequestParam long date) {
-
-        try {
-            if (!permissions.isSchoolTeacher(appId, schoolId, permissions.getUserId())) {
-                throw new SecurityException("User is not associated to this school");
-            }
-            // if (sectionIds == null || sectionIds.length == 0) {
-            // sectionIds = (String[])storage.getTeacher(permissions.getUserId(), appId,
-            // schoolId).getSectionIds().toArray(new String[0]);
-            // }
-            List<InternalNote> list = storage.getInternalNotes(appId, schoolId, sectionIds, date);
-            return new Response<>(list);
-        } catch (Exception e) {
-            return new Response<>(e.getMessage());
-        }
-    }
-
     @RequestMapping(method = RequestMethod.DELETE,
             value = "/school/{appId}/{schoolId}/communications/{commId}")
     public @ResponseBody Response<Void> deleteCommunication(@PathVariable String appId,
@@ -220,19 +160,6 @@ public class SchoolController {
             }
             storage.deleteCommunication(appId, schoolId, commId);
             return new Response<>((Void) null);
-        } catch (Exception e) {
-            return new Response<>(e.getMessage());
-        }
-    }
-
-
-    @RequestMapping(method = RequestMethod.GET, value = "/school/{appId}/{schoolId}/menu")
-    public @ResponseBody Response<List<Menu>> getMeals(@PathVariable String appId,
-            @PathVariable String schoolId, @RequestParam long from, @RequestParam long to) {
-
-        try {
-            List<Menu> list = storage.getMeals(appId, schoolId, from, to);
-            return new Response<>(list);
         } catch (Exception e) {
             return new Response<>(e.getMessage());
         }
@@ -274,20 +201,6 @@ public class SchoolController {
             }
             Teacher result = storage.getTeacherByPin(pin, appId, schoolId);
             return new Response<>(result);
-        } catch (Exception e) {
-            return new Response<>(e.getMessage());
-        }
-    }
-
-    @RequestMapping(method = RequestMethod.GET,
-            value = "/school/{appId}/{schoolId}/teachercalendar")
-    public @ResponseBody Response<List<TeacherCalendar>> getTeacherCalendar(
-            @PathVariable String appId, @PathVariable String schoolId, @RequestParam long from,
-            @RequestParam long to) {
-
-        try {
-            List<TeacherCalendar> list = storage.getTeacherCalendar(appId, schoolId, from, to);
-            return new Response<>(list);
         } catch (Exception e) {
             return new Response<>(e.getMessage());
         }

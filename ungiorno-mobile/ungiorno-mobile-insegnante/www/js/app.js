@@ -16,9 +16,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
     'it.smartcommunitylab.infanziadigitales.teachers.controllers.communications',
     'it.smartcommunitylab.infanziadigitales.teachers.controllers.bus',
     'it.smartcommunitylab.infanziadigitales.teachers.controllers.babyprofile',
-    'it.smartcommunitylab.infanziadigitales.teachers.controllers.calendar',
     'it.smartcommunitylab.infanziadigitales.teachers.services.conf',
-    'it.smartcommunitylab.infanziadigitales.teachers.services.babyConfigurationService',
     'it.smartcommunitylab.infanziadigitales.teachers.services.dataServerService',
     'it.smartcommunitylab.infanziadigitales.teachers.services.profileService',
     'it.smartcommunitylab.infanziadigitales.teachers.services.sectionService',
@@ -44,7 +42,7 @@ return {
 }
 })
 .run(function ($ionicPlatform, $rootScope, $cordovaSplashscreen, $state, $translate, $q, $ionicHistory, $ionicConfig, $ionicLoading, Config,
-  babyConfigurationService, profileService, dataServerService, loginService, Toast, $ionicSideMenuDelegate) {
+  profileService, dataServerService, loginService, Toast, $ionicSideMenuDelegate) {
   $ionicLoading.show();
   $rootScope.getUserId = function () {
     return localStorage.userId;
@@ -209,16 +207,6 @@ return {
         'menuContent': {
           templateUrl: "templates/bus.html",
           controller: 'busCtrl'
-        }
-      }
-    })
-    .state('app.calendar', {
-      cache: false,
-      url: "/calendar",
-      views: {
-        'menuContent': {
-          templateUrl: "templates/calendar.html",
-          controller: 'calendarCtrl'
         }
       }
     })

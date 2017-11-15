@@ -4,7 +4,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.conf', 
 
   var DEVELOPMENT = false;
   var URL = 'https://' + (DEVELOPMENT ? 'dev' : 'tn') + '.smartcommunitylab.it';//192.168.43.202
-  //var URL = 'http://localhost:8080';
+  // var URL = 'http://localhost:8080';
   var timeout = 100000;
   var fakeId = '23655';
 

@@ -3,8 +3,6 @@ package it.smartcommunitylab.ungiorno.storage;
 import static org.hamcrest.Matchers.hasSize;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import org.hamcrest.Matchers;
@@ -26,11 +24,7 @@ import it.smartcommunitylab.ungiorno.diary.model.DiaryKid.DiaryKidPerson;
 import it.smartcommunitylab.ungiorno.diary.model.DiaryKidProfile;
 import it.smartcommunitylab.ungiorno.diary.model.DiaryTeacher;
 import it.smartcommunitylab.ungiorno.model.AuthPerson;
-import it.smartcommunitylab.ungiorno.model.CalendarItem;
-import it.smartcommunitylab.ungiorno.model.KidCalAssenza;
-import it.smartcommunitylab.ungiorno.model.KidCalFermata;
-import it.smartcommunitylab.ungiorno.model.KidCalRitiro;
-import it.smartcommunitylab.ungiorno.model.KidConfig;
+import it.smartcommunitylab.ungiorno.model.BusData;
 import it.smartcommunitylab.ungiorno.model.KidProfile;
 import it.smartcommunitylab.ungiorno.model.Parent;
 import it.smartcommunitylab.ungiorno.model.SchoolProfile;
@@ -52,7 +46,7 @@ public class RepositoryManagerTest {
 
     @Before
     public void clean() {
-        mongo.getDb().dropDatabase();
+//        mongo.getDb().dropDatabase();
     }
 
     @Test
@@ -397,37 +391,7 @@ public class RepositoryManagerTest {
         repoManager.updateDiaryKidPersons(appId, schoolId);
     }
 
-    @Test
-    public void test_getCalendar() {
-        String appId = "TEST";
-        String schoolId = "SCHOOL_ID";
-        String kidId = "KID1";
 
-        List<CalendarItem> result =
-                repoManager.getCalendar(appId, schoolId, kidId, 1443528909, 1443528909);
-        Assert.assertEquals("Gita sul pasubio", result.get(0).getTitle());
-    }
-
-    @Test
-    public void test_saveConfig() {
-        String appId = "TEST";
-        String schoolId = "SCHOOL_ID";
-        String kidId = "KID1";
-        KidConfig kidc = new KidConfig();
-        kidc.setAppId(appId);
-        kidc.setSchoolId(schoolId);
-        kidc.setKidId(kidId);
-        String _id = "_id";
-        kidc.set_id(_id);
-        mongo.save(kidc);
-        KidConfig kidToBeUpdated = new KidConfig();
-        kidToBeUpdated.setKidId(kidId);
-        kidToBeUpdated.setAppId(appId);
-        kidToBeUpdated.setSchoolId(schoolId);
-
-        KidConfig result = repoManager.saveConfig(kidToBeUpdated);
-        Assert.assertEquals(_id, result.get_id());
-    }
 
     @Test(expected = ProfileNotFoundException.class)
     public void test_getKidProfilesByParentNonExistingParent() throws ProfileNotFoundException {
@@ -544,138 +508,9 @@ public class RepositoryManagerTest {
         Assert.assertEquals(kidid, r.get(0).getKidId());
     }
 
-    private long timestampToDate(long timestamp) {
-        timestamp = timestamp == 0 ? System.currentTimeMillis() : timestamp;
-        Calendar c = Calendar.getInstance();
-        c.setTimeInMillis(timestamp);
-        c.set(Calendar.HOUR_OF_DAY, 0);
-        c.set(Calendar.MINUTE, 0);
-        c.set(Calendar.SECOND, 0);
-        c.set(Calendar.MILLISECOND, 0);
-        return c.getTimeInMillis();
-    }
-
-    private Date timestampToDate2(long timestamp) {
-        timestamp = timestamp == 0 ? System.currentTimeMillis() : timestamp;
-        Calendar c = Calendar.getInstance();
-        c.setTimeInMillis(timestamp);
-        c.set(Calendar.HOUR_OF_DAY, 0);
-        c.set(Calendar.MINUTE, 0);
-        c.set(Calendar.SECOND, 0);
-        c.set(Calendar.MILLISECOND, 0);
-        return c.getTime();
-    }
-
     @Test
-    public void test_saveStop() {
-        String appId = "TEST";
-        String schoolId = "SCHOOL_ID";
-        KidCalFermata stop = new KidCalFermata();
-        stop.setAppId(appId);
-        stop.setSchoolId(schoolId);
-        String kidId = "kidId";
-        stop.setKidId(kidId);
-        Date date = new Date();
-        long temp = timestampToDate(date.getTime());
-        stop.setDate(temp);
-        mongo.save(stop);
-
-        KidConfig kConfig = new KidConfig();
-        kConfig.setAppId(appId);
-        kConfig.setSchoolId(schoolId);
-        kConfig.setKidId(kidId);
-        mongo.save(kConfig);
-
-        KidCalRitiro kalRitiro = new KidCalRitiro();
-        kalRitiro.setAppId(appId);
-        kalRitiro.setSchoolId(schoolId);
-        kalRitiro.setKidId(kidId);
-        kalRitiro.setDate(temp);
-        mongo.save(kalRitiro);
-
-        KidCalAssenza kalAssenza = new KidCalAssenza();
-        kalAssenza.setAppId(appId);
-        kalAssenza.setSchoolId(schoolId);
-        kalAssenza.setKidId(kidId);
-        kalAssenza.setDateFrom(temp);
-        mongo.save(kalAssenza);
-
-        repoManager.saveStop(stop);
-        Query q = kidQuery(stop.getAppId(), stop.getSchoolId(), stop.getKidId());
-        q.addCriteria(new Criteria("dateFrom").is(stop.getDate()));
-        List<KidCalAssenza> kidCalAss = mongo.find(q, KidCalAssenza.class);
-        Assert.assertEquals(0, kidCalAss.size());
-    }
-
-    @Test
-    public void test_saveAbsence() {
-        String appId = "TEST";
-        String schoolId = "SCHOOL_ID";
-        String kidId = "kidId";
-        Date date = new Date();
-        long temp = timestampToDate(date.getTime());
-        long tempTo = date.getTime() + 1 * 24 * 60 * 60 * 1000;
-        System.out.println(timestampToDate2(tempTo));
-
-        KidCalAssenza kalAssenza = new KidCalAssenza();
-        kalAssenza.setAppId(appId);
-        kalAssenza.setSchoolId(schoolId);
-        kalAssenza.setKidId(kidId);
-        kalAssenza.setDateFrom(temp);
-        kalAssenza.setDateTo(tempTo);
-        mongo.save(kalAssenza);
-
-        KidCalFermata stop = new KidCalFermata();
-        stop.setAppId(appId);
-        stop.setSchoolId(schoolId);
-        stop.setKidId(kidId);
-        stop.setDate(temp);
-        mongo.save(stop);
-
-        KidCalRitiro kalRitiro = new KidCalRitiro();
-        kalRitiro.setAppId(appId);
-        kalRitiro.setSchoolId(schoolId);
-        kalRitiro.setKidId(kidId);
-        kalRitiro.setDate(temp);
-        mongo.save(kalRitiro);
-
-        repoManager.saveAbsence(kalAssenza);
-        Query q = kidQuery(stop.getAppId(), stop.getSchoolId(), stop.getKidId());
-        q.addCriteria(new Criteria("date").is(stop.getDate()));
-        List<KidCalFermata> kidCalFer = mongo.find(q, KidCalFermata.class);
-        List<KidCalRitiro> kidCalRit = mongo.find(q, KidCalRitiro.class);
-
-        q = kidQuery(kalAssenza.getAppId(), kalAssenza.getSchoolId(), kalAssenza.getKidId());
-        q.addCriteria(
-                new Criteria().andOperator(new Criteria("dateFrom").gte(kalAssenza.getDateFrom())));
-        List<KidCalAssenza> kidCalAssenza = mongo.find(q, KidCalAssenza.class);
-
-        Assert.assertEquals(0, kidCalFer.size());
-        Assert.assertEquals(0, kidCalRit.size());
-        Assert.assertEquals(2, kidCalAssenza.size());
-    }
-
-    @Test
-    public void test_saveReturn() {
-        String appId = "TEST";
-        String schoolId = "SCHOOL_ID";
-        String kidId = "kidId";
-        Date date = new Date();
-        long temp = timestampToDate(date.getTime());
-
-        KidCalRitiro kalRitiro = new KidCalRitiro();
-        kalRitiro.setAppId(appId);
-        kalRitiro.setSchoolId(schoolId);
-        kalRitiro.setKidId(kidId);
-        kalRitiro.setDate(temp);
-        kalRitiro.setNote("TEST_NOTE");
-        mongo.save(kalRitiro);
-
-        repoManager.saveReturn(kalRitiro);
-        Query q = kidQuery(appId, schoolId, kidId);
-        q.addCriteria(new Criteria().andOperator(new Criteria("date").gte(temp),
-                new Criteria("date").lt(temp + 1000 * 60 * 60 * 24)));
-        List<KidCalRitiro> kalR = mongo.find(q, KidCalRitiro.class);
-        Assert.assertEquals("TEST_NOTE", kalR.get(0).getNote());
+    public void test_getBusData() {
+    	BusData busData = repoManager.getBusData("trento", "scuola", System.currentTimeMillis());
+    	System.err.println(busData);
     }
 }

@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.home', [])
 
-  .controller('HomeCtrl', function ($scope, $rootScope, $location, $state, $filter, $q, $ionicPopup, $ionicPlatform, $ionicLoading, dataServerService, profileService, configurationService, retireService, busService, Toast, Config, pushNotificationService, messagesService, communicationsService, week_planService) {
+  .controller('HomeCtrl', function ($scope, $rootScope, $location, $state, $filter, $q, $ionicPopup, $ionicPlatform, $ionicLoading, dataServerService, profileService, configurationService, Toast, Config, pushNotificationService, messagesService, communicationsService, week_planService) {
 
     $scope.date = "";
     $scope.kidProfile = {};
@@ -47,12 +47,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     }
     var isBusDisabled = function () {
       if (!$scope.kidConfiguration.services.bus.active) {
-        return true
-      }
-      return false
-    }
-    var isBusSet = function () {
-      if (busService.getDailyBusStop()) {
         return true
       }
       return false
@@ -540,11 +534,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
       // week_planService.setNotification($scope);
       var schoolId = $scope.kidProfile.schoolId;
       var kidId = $scope.kidProfile.kidId;
-      dataServerService.getBabyConfigurationById(schoolId, kidId).then(function (data) {
-        var config = data;
 
-        $scope.kidConfiguration = config;
-        configurationService.setBabyConfiguration(config);
         //getSchoolProfile(appId, schoolId) puo' essere diversa in base al bambino
         //ottengo
         //ottengo la scuola in base alla schoolId del bambino
@@ -553,71 +543,23 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
           profileService.setSchoolProfile(profile);
           $scope.school = profile;
           getBriefInfo($scope.kidProfile.schoolId);
-          dataServerService.getRitiro($scope.kidProfile.schoolId, $scope.kidProfile.kidId, new Date().getTime()).then(function (data) {
-            $scope.dailyRitiro = data;
-            dataServerService.getFermata($scope.kidProfile.schoolId, $scope.kidProfile.kidId, new Date().getTime()).then(function (data) {
-              $scope.dailyFermata = data;
-              if (config == null) {
-                config = {
-                  "appId": Config.appId(),
-                  "schoolId": schoolId,
-                  "kidId": kidId,
-                  "services": $scope.kidProfile.services,
-                  //{"anticipo": {
-                  //  "active": $scope.kidProfile.services.anticipo.enabled
-                  //},
-                  //"posticipo": {
-                  //   "active": $scope.kidProfile.services.posticipo.enabled
-                  // },
-                  // "bus": {
-                  // "active": $scope.kidProfile.services.bus.enabled,
-                  // "defaultIdGo": $scope.kidProfile.services.bus.stops[0].stopId,
-                  // "defaultIdBack": $scope.kidProfile.services.bus.stops[0].stopId
-                  //},
-                  //"mensa": {
-                  // "active": $scope.kidProfile.services.mensa.enabled
-                  // }
-                  //}
-                  "exitTime": $scope.briefInfo['ore_uscita'],
-                  "defaultPerson": $scope.kidProfile.persons[0].personId,
-                  "receiveNotification": true,
-                  "extraPersons": null
-                }
-                $scope.kidConfiguration = config;
-                configurationService.setBabyConfiguration(config);
-              }
-              $scope.noConnection = false;
-              buildHome();
 
-            }, function (error) {
-              console.log("ERROR -> " + error);
-              //Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
-              $scope.noConnection = true;
-              buildHome();
-              $ionicLoading.hide();
-              deferred.reject();
-
-            });
-          }, function (error) {
-            console.log("ERROR -> " + error);
-            //Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
-            $scope.noConnection = true;
-            buildHome();
-            $ionicLoading.hide();
-            deferred.reject();
-          });
+          var config = {
+            "appId": Config.appId(),
+            "schoolId": schoolId,
+            "kidId": kidId,
+            "services": $scope.kidProfile.services,
+            "exitTime": $scope.briefInfo['ore_uscita'],
+            "defaultPerson": $scope.kidProfile.persons[0].personId,
+            "receiveNotification": true,
+            "extraPersons": null
+          }
+          $scope.kidConfiguration = config;
+          configurationService.setBabyConfiguration(config);
+                  
+          $scope.noConnection = false;
+          buildHome();
         });
-
-
-
-      }, function (error) {
-        console.log("ERROR -> " + error);
-        //Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
-        $scope.noConnection = true;
-        buildHome();
-        $ionicLoading.hide();
-        deferred.reject();
-      });
       return deferred.promise;
     }
     var registerPushNotification = function (data) {

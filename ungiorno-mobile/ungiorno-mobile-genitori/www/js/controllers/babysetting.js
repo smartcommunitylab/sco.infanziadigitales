@@ -126,20 +126,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     configurationService.setBabyConfiguration($scope.babyConfiguration);
   };
 
-  $scope.saveNewSetting = function () {
-    //set new data
-    $scope.setBabyConfiguration();
-    dataServerService.sendBabySetting($scope.babyConfiguration.schoolId, $scope.babyConfiguration.kidId, $scope.babyConfiguration).then(function (data) {
-      Toast.show($filter('translate')('setting_sendok'), 'short', 'bottom');
-      $scope.setBabyConfiguration();
-      console.log("SENDING OK -> " + data);
-      $ionicHistory.goBack();
-    }, function (error) {
-      Toast.show($filter('translate')('setting_sendok'), 'short', 'bottom');
-      console.log("SENDING ERROR -> " + error);
-    });
-  }
-
   $scope.briefInfo=profileService.getInfoInitial();
   var ore_uscita=$scope.briefInfo['toTime'];
   var ore_entrata=$scope.briefInfo['fromTime'];

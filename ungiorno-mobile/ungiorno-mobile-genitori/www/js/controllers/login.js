@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.login', [])
 
-.controller('LoginCtrl', function ($scope, $rootScope, $state, $filter, $ionicPopup, $ionicHistory, $ionicLoading, Config, loginService, LoginService,dataServerService, pushNotificationService) {
+.controller('LoginCtrl', function ($scope, $rootScope, $state, $filter, $ionicPopup, $ionicHistory, $ionicLoading, Config, LoginService,dataServerService, pushNotificationService) {
     var loginStarted = false;
     $scope.user = {
         email: '',

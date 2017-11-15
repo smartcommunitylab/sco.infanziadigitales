@@ -80,6 +80,29 @@ public class TeacherManager {
 
         return teacher;
     }
+    
+    /**
+     * This is an operation for updating the teacher properties. PIN and sections are not changed
+     * @param appId
+     * @param schoolId
+     * @param teacher
+     * @return
+     */
+    public Teacher updateTeacher(String appId, String schoolId, Teacher teacher) {
+        teacher.setAppId(appId);
+        teacher.setSchoolId(schoolId);
+    	// keep old pin and section
+        Teacher old = repoManager.getTeacherByTeacherId(teacher.getTeacherId(), appId, schoolId);
+    	if (old != null) {
+        	// keep old pin
+        	teacher.setPin(old.getPin());
+        	// keep old sections
+        	teacher.setSectionIds(old.getSectionIds());
+        	teacher.setId(old.getId());
+    	}
+    	repoManager.saveOrUpdateTeacher(appId, schoolId, teacher);
+    	return teacher;
+    }
 
     private String generatePin() {
         return pinGenerator.nextString();

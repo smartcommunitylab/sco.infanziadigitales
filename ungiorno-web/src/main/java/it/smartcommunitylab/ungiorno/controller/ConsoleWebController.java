@@ -288,19 +288,22 @@ public class ConsoleWebController {
             @PathVariable String schoolId, @RequestBody Teacher teacher) {
         teacher.setAppId(appId);
         teacher.setSchoolId(schoolId);
-        List<Teacher> teacherProfiles = storage.getTeachers(appId, schoolId);
-        Teacher selectedTeacherProfile =
-                storage.getTeacherByTeacherId(teacher.getTeacherId(), appId, schoolId);
-        if (selectedTeacherProfile == null) {
-            teacherProfiles.add(teacher);
-        } else {
-        	// keep old pin
-        	teacher.setPin(selectedTeacherProfile.getPin());
-            int profileIndex = teacherProfiles.indexOf(selectedTeacherProfile);
-            teacherProfiles.add(profileIndex, teacher);
-            teacherProfiles.remove(profileIndex + 1);
-        }
-        storage.updateTeachers(appId, schoolId, teacherProfiles);
+//        List<Teacher> teacherProfiles = storage.getTeachers(appId, schoolId);
+//        Teacher selectedTeacherProfile =
+//                storage.getTeacherByTeacherId(teacher.getTeacherId(), appId, schoolId);
+//        if (selectedTeacherProfile == null) {
+//            teacherProfiles.add(teacher);
+//        } else {
+//        	// keep old pin
+//        	teacher.setPin(selectedTeacherProfile.getPin());
+//        	// keep old sections
+//        	teacher.setSectionIds(selectedTeacherProfile.getSectionIds());
+//            int profileIndex = teacherProfiles.indexOf(selectedTeacherProfile);
+//            teacherProfiles.add(profileIndex, teacher);
+//            teacherProfiles.remove(profileIndex + 1);
+//        }
+//        storage.updateTeachers(appId, schoolId, teacherProfiles);
+        teacherManager.updateTeacher(appId, schoolId, teacher);
         logger.info("user {} saves teacher {}", permissionsManager.getUserId(), teacher);
         return new Response<>(teacher);
     }

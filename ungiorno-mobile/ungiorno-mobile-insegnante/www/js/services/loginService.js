@@ -20,6 +20,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.loginSe
       //        } else if (provider == 'googlelocal' && !$rootScope.login_googlelocal) {
       //            provider = 'google';
     }
+    if (provider == 'googlelocal' && !ionic.Platform.isWebView()) {
+      provider = 'google';
+    }
 
     // log into the system and set userId
     var authapi = {
@@ -36,7 +39,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.loginSe
         }
         //Open the OAuth consent page in the InAppBrowser
         if (!authWindow) {
-          authWindow=cordova.InAppBrowser.open(authUrl,'_self', 'location=no,toolbar=no');
+          if (window.cordova && window.cordova.InAppBrowser) {
+            authWindow = cordova.InAppBrowser.open(authUrl,'_self', 'location=no,toolbar=no');            
+          } else {
+            authWindow = window.open(authUrl, '_blank', 'location=no,toolbar=no');
+          }
           //authWindow = window.open(authUrl, '_blank', 'location=no,toolbar=no');
           processThat = !!authWindow;
         }

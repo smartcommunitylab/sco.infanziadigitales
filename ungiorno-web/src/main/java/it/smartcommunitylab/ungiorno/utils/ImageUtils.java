@@ -16,12 +16,13 @@ package it.smartcommunitylab.ungiorno.utils;
 import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Iterator;
 
 import javax.imageio.IIOImage;
@@ -30,12 +31,21 @@ import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 import javax.imageio.stream.FileImageOutputStream;
 
+import com.drew.imaging.ImageMetadataReader;
+import com.drew.imaging.ImageProcessingException;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.MetadataException;
+import com.drew.metadata.exif.ExifIFD0Directory;
+import com.drew.metadata.jpeg.JpegDirectory;
+
 /**
  * @author raman
  *
  */
 public class ImageUtils {
 
+	private static final int MAX_DIMENSION = 200; // for width/height
+	
     public static void compressImage(BufferedImage bi, File f) throws IOException {
 //         rescale(bi, f);
         compress(bi, f);
@@ -53,22 +63,22 @@ public class ImageUtils {
 //    }
 
 
-    private static void rescale(BufferedImage bi, File f) throws IOException {
-        int originalWidth = bi.getWidth();
+    public static void rescale(BufferedImage bi, File f) throws IOException {
+        // rescale to MAXxMAX
+    	int originalWidth = bi.getWidth();
         int originalHeight = bi.getHeight();
         int type = bi.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : bi.getType();
 
         if (originalHeight > originalWidth) {
         	double prop = 1.0 * originalHeight / originalWidth;
-        	originalHeight = Math.min(originalHeight, 100);
+        	originalHeight = Math.min(originalHeight, MAX_DIMENSION);
         	originalWidth = (int)(1.0 * originalHeight / prop);
         } else {
         	double prop = 1.0 * originalWidth / originalHeight;
-        	originalWidth = Math.min(originalWidth, 100);
+        	originalWidth = Math.min(originalWidth, MAX_DIMENSION);
         	originalHeight = (int)(1.0 * originalWidth / prop);
         }
         
-        // rescale 50%
         BufferedImage resizedImage = new BufferedImage(originalWidth, originalHeight, type);
         Graphics2D g = resizedImage.createGraphics();
         g.drawImage(bi, 0, 0, originalWidth, originalHeight, null);
@@ -98,4 +108,77 @@ public class ImageUtils {
         jpegWriter.dispose();
         out.close();
     }
+    
+    /**
+     * Align (check rotation) and scale down to 100x100 the image passed as input stream.
+     * @param is
+     * @param f
+     * @throws ImageProcessingException
+     * @throws IOException
+     * @throws MetadataException
+     */
+    public static void alignImage(InputStream is, File f) throws ImageProcessingException, IOException, MetadataException {
+    	BufferedImage originalImage = ImageIO.read(is);
+    	rescale(originalImage, f);
+    	
+    	Metadata metadata = ImageMetadataReader.readMetadata(f);
+    	ExifIFD0Directory exifIFD0Directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
+
+        int orientation = 1;
+        try {
+            orientation = exifIFD0Directory.getInt(ExifIFD0Directory.TAG_ORIENTATION);
+        } catch (Exception ex) {
+            //ex.printStackTrace();
+        }
+        
+        int width = originalImage.getWidth();
+        int height = originalImage.getHeight();
+
+        AffineTransform affineTransform = new AffineTransform();
+
+        switch (orientation) {
+        case 1:
+            break;
+        case 2: // Flip X
+            affineTransform.scale(-1.0, 1.0);
+            affineTransform.translate(-width, 0);
+            break;
+        case 3: // PI rotation
+            affineTransform.translate(width, height);
+            affineTransform.rotate(Math.PI);
+            break;
+        case 4: // Flip Y
+            affineTransform.scale(1.0, -1.0);
+            affineTransform.translate(0, -height);
+            break;
+        case 5: // - PI/2 and Flip X
+            affineTransform.rotate(-Math.PI / 2);
+            affineTransform.scale(-1.0, 1.0);
+            break;
+        case 6: // -PI/2 and -width
+            affineTransform.translate(height, 0);
+            affineTransform.rotate(Math.PI / 2);
+            break;
+        case 7: // PI/2 and Flip
+            affineTransform.scale(-1.0, 1.0);
+            affineTransform.translate(-height, 0);
+            affineTransform.translate(0, width);
+            affineTransform.rotate(3 * Math.PI / 2);
+            break;
+        case 8: // PI / 2
+            affineTransform.translate(0, width);
+            affineTransform.rotate(3 * Math.PI / 2);
+            break;
+        default:
+            break;
+        }       
+
+        if (orientation > 1 && orientation <= 8) {
+            AffineTransformOp affineTransformOp = new AffineTransformOp(affineTransform, AffineTransformOp.TYPE_BILINEAR);
+            BufferedImage destinationImage = new BufferedImage(originalImage.getHeight(), originalImage.getWidth(), originalImage.getType());
+            destinationImage = affineTransformOp.filter(originalImage, destinationImage);
+            ImageIO.write(destinationImage, "jpg", f);
+        }
+    }
+    
 }

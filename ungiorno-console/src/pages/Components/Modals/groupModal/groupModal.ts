@@ -5,7 +5,7 @@ import { School } from './../../../../app/Classes/school';
 import { WebService } from '../../../../services/WebService';
 import { Group } from './../../../../app/Classes/group';
 import { Component, OnInit } from '@angular/core';
-import { NavParams, NavController, AlertController,ToastController } from "ionic-angular";
+import { NavParams, NavController, AlertController, ToastController } from "ionic-angular";
 import { ConfigService } from '../../../../services/config.service';
 
 @Component({
@@ -41,7 +41,7 @@ export class GroupModal implements OnInit {
   removeTeacherToGroupMap = {}
   apiUrl: string;
 
-  constructor(public params: NavParams,public toastCtrl: ToastController,  public navCtrl: NavController, private webService: WebService, public alertCtrl: AlertController, private configService: ConfigService,
+  constructor(public params: NavParams, public toastCtrl: ToastController, public navCtrl: NavController, private webService: WebService, public alertCtrl: AlertController, private configService: ConfigService,
   ) {
     this.selectedSchool = this.params.get('school') as School;
     this.selectedGroup = this.params.get('group') as Group;
@@ -221,7 +221,11 @@ export class GroupModal implements OnInit {
 
   }
 
+
+  oldTeacher: string[]=[];
   addTeacher() {
+    this.oldTeacher = [];
+    this.copiedGroup.teachers.forEach(x => this.oldTeacher.push(x));
     let alert = this.alertCtrl.create();
     alert.setTitle('Aggiungi insegnanti');
 
@@ -234,7 +238,16 @@ export class GroupModal implements OnInit {
         disabled: this.copiedGroup.teachers.findIndex(x => x.toLowerCase() === element.id.toLowerCase()) >= 0
       })
     });
-    alert.addButton('Annulla'); //tasto annulla
+    alert.addButton({
+      text: 'Annulla',
+      handler: data => {
+        data.forEach(element => {
+          this.copiedGroup.teachers=[];
+          this.oldTeacher.forEach(x => this.copiedGroup.teachers.push(x));
+
+        });
+      }
+    }); //tasto annulla
     this.copiedGroup.teachers = [];
     alert.addButton({
       text: 'OK',
@@ -252,7 +265,11 @@ export class GroupModal implements OnInit {
     alert.present();
   }
 
+
+  oldKids: string[]=[];
   addKid() {
+    this.oldKids = [];
+    this.copiedGroup.kids.forEach(x => this.oldKids.push(x));
     let alert = this.alertCtrl.create();
     alert.setTitle('Aggiungi bambini');
 
@@ -268,7 +285,15 @@ export class GroupModal implements OnInit {
     });
 
     this.copiedGroup.kids = [];
-    alert.addButton('Annulla');
+    alert.addButton({
+      text: 'Annulla',
+      handler: data => {
+          data.forEach(element => {
+          this.copiedGroup.kids=[];
+          this.oldKids.forEach(x => this.copiedGroup.kids.push(x));
+        });
+      }
+    });
     alert.addButton({
       text: 'OK',
       handler: data => {

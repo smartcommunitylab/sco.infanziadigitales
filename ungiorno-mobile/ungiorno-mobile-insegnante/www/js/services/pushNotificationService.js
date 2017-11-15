@@ -14,6 +14,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.pushNot
 
     $ionicPlatform.ready(function () {
         Config.init().then(function () {
+            if (!window.cordova || !window.cordova.plugins.notification) return;
+
             window.cordova.plugins.notification.local.on("click", function (notification) {
                 if (notification && notification.data) {
 
@@ -189,6 +191,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.pushNot
         }
         // Register to GCM
     pushNotificationService.register = function (schoolId) {
+        if (!window.PushNotification) return;
+
         console.log("registration");
         var schoolIdArray = [];
 

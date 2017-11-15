@@ -53,8 +53,6 @@ import org.springframework.util.StringUtils;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
 
 import it.smartcommunitylab.ungiorno.beans.GroupDTO;
 import it.smartcommunitylab.ungiorno.config.exception.ProfileNotFoundException;
@@ -397,9 +395,10 @@ public class RepositoryManager implements RepositoryService {
     public void updateParents(String appId, String schoolId, List<Parent> parents) {
         for (Parent parent : parents) {
             Query q = appQuery(appId);
-            q.addCriteria(new Criteria("username").is(parent.getUsername()).and("personId")
-                    .is(parent.getPersonId()).and("firstName").is(parent.getFirstName())
-                    .and("lastName").is(parent.getLastName()));
+            q.addCriteria(new Criteria("personId").is(parent.getPersonId()));
+//            q.addCriteria(new Criteria("username").is(parent.getUsername()).and("personId")
+//                    .is(parent.getPersonId()).and("firstName").is(parent.getFirstName())
+//                    .and("lastName").is(parent.getLastName()));
             template.remove(q, Parent.class);
         }
         template.insertAll(parents);
@@ -966,8 +965,8 @@ public class RepositoryManager implements RepositoryService {
         q.addCriteria(new Criteria("kidId").is(kidId));
         q.addCriteria(new Criteria("weeknr").is(weeknr));
         KidWeeks week = template.findOne(q, KidWeeks.class);
-        List<KidProfile.DayDefault> days = week.getDays();
-        return days;
+        if (week != null) return week.getDays();
+        return null;
     }
 
     /**
@@ -1969,7 +1968,7 @@ public class RepositoryManager implements RepositoryService {
     @Override
     public LoginData getTokenDataByPersonId(String personId, String appId) {
         Query q = appQuery(appId);
-        q.addCriteria(new Criteria("personId").is(personId));
+        q.addCriteria(new Criteria("personId").is(personId).and("username").ne(null));
         Parent p = template.findOne(q, Parent.class);
         if (p == null)
             return null;
@@ -2160,15 +2159,26 @@ public class RepositoryManager implements RepositoryService {
 
     @Override
     public KidProfile updateKid(KidProfile kid) {
-        Criteria criteria =
-                new Criteria("appId").is(kid.getAppId()).and("schoolId").is(kid.getSchoolId());
-        criteria.and("kidId").is(kid.getKidId());
-        Query q = new Query(criteria);
-        DBObject dbObject = new BasicDBObject();
-        template.getConverter().write(kid, dbObject);
-        Update updateDoc = Update.fromDBObject(dbObject);
-        return template.findAndModify(q, updateDoc, KidProfile.class);
-
+		if (kid.getPersons() != null) {
+	    	for (AuthPerson p : kid.getPersons()) {
+				if (StringUtils.isEmpty(p.getPersonId()) && !p.isParent()) {
+					p.setPersonId(ObjectId.get().toString());
+				}
+			}
+		}	
+//        Criteria criteria =
+//                new Criteria("appId").is(kid.getAppId()).and("schoolId").is(kid.getSchoolId());
+//        criteria.and("kidId").is(kid.getKidId());
+//        Query q = new Query(criteria);
+//        DBObject dbObject = new BasicDBObject();
+//        template.getConverter().write(kid, dbObject);
+//        Update updateDoc = Update.fromDBObject(dbObject);
+//        return template.findAndModify(q, updateDoc, KidProfile.class);
+		Query q = kidQuery(kid.getAppId(), kid.getSchoolId(), kid.getKidId());
+		template.remove(q, KidProfile.class);
+		
+		template.save(kid);
+		return kid;
     }
 
     @Override

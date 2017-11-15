@@ -37,11 +37,14 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.util.AntPathMatcher;
+import org.springframework.util.PathMatcher;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
@@ -217,5 +220,18 @@ public class AppConfig extends WebMvcConfigurerAdapter {
     @Bean
     public MultipartResolver multipartResolver() {
         return new CommonsMultipartResolver();
+    }
+    
+    @Bean
+    public PathMatcher pathMatcher() {
+
+      AntPathMatcher pathMatcher = new AntPathMatcher();
+      pathMatcher.setTrimTokens(false);
+      return pathMatcher;
+    }
+
+    @Override
+    public void configurePathMatch(PathMatchConfigurer configurer) {        
+      configurer.setPathMatcher(pathMatcher());
     }
 }

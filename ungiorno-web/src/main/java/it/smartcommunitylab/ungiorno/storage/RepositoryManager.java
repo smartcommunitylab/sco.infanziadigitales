@@ -32,6 +32,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.bson.types.ObjectId;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -140,8 +141,6 @@ public class RepositoryManager implements RepositoryService {
                 SchoolProfile.class);
         if (old != null) {
             profile.set_id(old.get_id());
-            profile.setSections(old.getSections());
-            profile.setServices(old.getServices());
         } else { // if the a new school profile it must be init
             completeSchoolProfile(profile);
         }
@@ -149,76 +148,87 @@ public class RepositoryManager implements RepositoryService {
         alignSchoolData(profile);
     }
 
-	/**
-	 * @param profile
-	 */
-	private void alignSchoolData(SchoolProfile profile) {
-		List<KidProfile> profiles = getKidProfilesBySchool(profile.getAppId(), profile.getSchoolId());
-		if (profiles == null) return;
+    /**
+     * @param profile
+     */
+    private void alignSchoolData(SchoolProfile profile) {
+        List<KidProfile> profiles =
+                getKidProfilesBySchool(profile.getAppId(), profile.getSchoolId());
+        if (CollectionUtils.isEmpty(profiles))
+            return;
 
-		Set<String> sectionIds = new HashSet<>();
-		Set<String> busLines = new HashSet<>();
-		Set<String> services = new HashSet<>();
-		for (SectionProfile s: profile.getSections()) {
-			sectionIds.add(s.getSectionId());
-		}
-		for (BusProfile bus: profile.getBuses()) {
-			busLines.add(bus.getBusId());
-		}
-		for (TimeSlotSchoolService s: profile.getServices()) {
-			services.add(s.getName());
-		}
-		
-		for (KidProfile kp: profiles) {
-			boolean changed = false;
-			// check section exists
-			if (kp.getSection() != null && !sectionIds.contains(kp.getSection().getSectionId())) {
-				kp.setSection(null);
-				changed = true;
-			}
-			// check groups
-			if (kp.getGroups() != null) {}
-			for (Iterator<SectionDef> iterator = kp.getGroups().iterator(); iterator.hasNext();) {
-				SectionDef group = iterator.next();
-				if (!sectionIds.contains(group.getSectionId())) {
-					iterator.remove();
-					changed = true;
-				}
-			} 
-			// check bus
-			if (kp.getServices() != null && kp.getServices().getBus() != null) {
-				if (!busLines.contains(kp.getServices().getBus().getBusId())) {
-					kp.getServices().getBus().setBusId(null);
-					changed = true;
-				}
-			}
-			// check time services
-			if (kp.getServices() != null && kp.getServices().getTimeSlotServices() != null) {
-				for (Iterator<TimeSlotSchoolService> iterator = kp.getServices().getTimeSlotServices().iterator(); iterator.hasNext();) {
-					TimeSlotSchoolService svc = iterator.next();
-					if (!services.contains(svc.getName())) {
-						iterator.remove();
-						changed = true;
-					}
-					
-				}
-			}
-			if (changed) {
-				template.save(kp);
-			}
-		}
-		// align teacher sections
-		List<Teacher> teachers = getTeachers(profile.getAppId(), profile.getSchoolId());
-		if (teachers != null) {
-			for (Teacher teacher: teachers) {
-				if (teacher.getSectionIds().retainAll(sectionIds)) {
-					template.save(teacher);
-				}
-			}
-		}
-	}
+        Set<String> sectionIds = new HashSet<>();
+        Set<String> busLines = new HashSet<>();
+        Set<String> services = new HashSet<>();
+        if (CollectionUtils.isNotEmpty(profile.getSections())) {
+            for (SectionProfile s : profile.getSections()) {
+                sectionIds.add(s.getSectionId());
+            }
+        }
+        if (CollectionUtils.isNotEmpty(profile.getBuses())) {
+            for (BusProfile bus : profile.getBuses()) {
+                busLines.add(bus.getBusId());
+            }
+        }
 
-	/**
+        if (CollectionUtils.isNotEmpty(profile.getServices())) {
+            for (TimeSlotSchoolService s : profile.getServices()) {
+                services.add(s.getName());
+            }
+        }
+
+        for (KidProfile kp : profiles) {
+            boolean changed = false;
+            // check section exists
+            if (kp.getSection() != null && !sectionIds.contains(kp.getSection().getSectionId())) {
+                kp.setSection(null);
+                changed = true;
+            }
+            // check groups
+            if (kp.getGroups() != null) {
+            }
+            for (Iterator<SectionDef> iterator = kp.getGroups().iterator(); iterator.hasNext();) {
+                SectionDef group = iterator.next();
+                if (!sectionIds.contains(group.getSectionId())) {
+                    iterator.remove();
+                    changed = true;
+                }
+            }
+            // check bus
+            if (kp.getServices() != null && kp.getServices().getBus() != null) {
+                if (!busLines.contains(kp.getServices().getBus().getBusId())) {
+                    kp.getServices().getBus().setBusId(null);
+                    changed = true;
+                }
+            }
+            // check time services
+            if (kp.getServices() != null && kp.getServices().getTimeSlotServices() != null) {
+                for (Iterator<TimeSlotSchoolService> iterator =
+                        kp.getServices().getTimeSlotServices().iterator(); iterator.hasNext();) {
+                    TimeSlotSchoolService svc = iterator.next();
+                    if (!services.contains(svc.getName())) {
+                        iterator.remove();
+                        changed = true;
+                    }
+
+                }
+            }
+            if (changed) {
+                template.save(kp);
+            }
+        }
+        // align teacher sections
+        List<Teacher> teachers = getTeachers(profile.getAppId(), profile.getSchoolId());
+        if (teachers != null) {
+            for (Teacher teacher : teachers) {
+                if (teacher.getSectionIds().retainAll(sectionIds)) {
+                    template.save(teacher);
+                }
+            }
+        }
+    }
+
+    /**
      * The method is null safe
      * 
      * @param {@link SchoolProfile} to complete
@@ -302,14 +312,14 @@ public class RepositoryManager implements RepositoryService {
      */
     @Override
     public void updateChildren(String appId, String schoolId, List<KidProfile> children) {
-    	for (KidProfile kp : children) {
-    		for (AuthPerson p : kp.getPersons()) {
-    			if (StringUtils.isEmpty(p.getPersonId()) && !p.isParent()) {
-    				p.setPersonId(ObjectId.get().toString());
-    			}
-    		}
-    	}
-    	
+        for (KidProfile kp : children) {
+            for (AuthPerson p : kp.getPersons()) {
+                if (StringUtils.isEmpty(p.getPersonId()) && !p.isParent()) {
+                    p.setPersonId(ObjectId.get().toString());
+                }
+            }
+        }
+
         template.remove(schoolQuery(appId, schoolId), KidProfile.class);
         template.insertAll(children);
 
@@ -384,9 +394,9 @@ public class RepositoryManager implements RepositoryService {
         for (Parent parent : parents) {
             Query q = appQuery(appId);
             q.addCriteria(new Criteria("personId").is(parent.getPersonId()));
-//            q.addCriteria(new Criteria("username").is(parent.getUsername()).and("personId")
-//                    .is(parent.getPersonId()).and("firstName").is(parent.getFirstName())
-//                    .and("lastName").is(parent.getLastName()));
+            // q.addCriteria(new Criteria("username").is(parent.getUsername()).and("personId")
+            // .is(parent.getPersonId()).and("firstName").is(parent.getFirstName())
+            // .and("lastName").is(parent.getLastName()));
             template.remove(q, Parent.class);
         }
         template.insertAll(parents);
@@ -612,7 +622,7 @@ public class RepositoryManager implements RepositoryService {
         q.addCriteria(new Criteria("kidId").is(kidId));
         KidProfile kid = template.findOne(q, KidProfile.class);
         List<KidProfile.DayDefault> weekDefault = kid.getWeekDef();
-        
+
         if (weekDefault == null) {
             SchoolProfile profile = getSchoolProfile(appId, schoolId);
             Date today = new Date();
@@ -628,19 +638,20 @@ public class RepositoryManager implements RepositoryService {
                     break;
                 }
             }
-            
+
             if (regularService != null) {
-            	weekDefault = new LinkedList<>();
-            	for (int i = 0; i < 5; i++) {
-            		KidProfile.DayDefault conf = new KidProfile.DayDefault();
-            		conf.setEntrata(regularService.getTimeSlots().get(0).getFromTime());
-            		conf.setUscita(regularService.getTimeSlots().get(regularService.getTimeSlots().size() - 1).getToTime());
-            		weekDefault.add(conf);
-            	}
-            	saveWeekDefault(appId, schoolId, kidId, weekDefault);
+                weekDefault = new LinkedList<>();
+                for (int i = 0; i < 5; i++) {
+                    KidProfile.DayDefault conf = new KidProfile.DayDefault();
+                    conf.setEntrata(regularService.getTimeSlots().get(0).getFromTime());
+                    conf.setUscita(regularService.getTimeSlots()
+                            .get(regularService.getTimeSlots().size() - 1).getToTime());
+                    weekDefault.add(conf);
+                }
+                saveWeekDefault(appId, schoolId, kidId, weekDefault);
             }
         }
-        
+
         return weekDefault;
     }
 
@@ -671,7 +682,8 @@ public class RepositoryManager implements RepositoryService {
         q.addCriteria(new Criteria("kidId").is(kidId));
         q.addCriteria(new Criteria("weeknr").is(weeknr));
         KidWeeks week = template.findOne(q, KidWeeks.class);
-        if (week != null) return week.getDays();
+        if (week != null)
+            return week.getDays();
         return null;
     }
 
@@ -724,24 +736,25 @@ public class RepositoryManager implements RepositoryService {
     @Override
     public List<Communication> getKidCommunications(String appId, String schoolId, String kidId) {
         Long today = new Date().getTime();
-        
+
         KidProfile profile = getKidProfile(appId, schoolId, kidId);
-        if (profile == null) return Collections.emptyList();
-        
+        if (profile == null)
+            return Collections.emptyList();
+
         List<String> groups = new LinkedList<>();
-        if (profile.getSection() != null) groups.add(profile.getSection().getSectionId());
-        if (profile.getGroups() != null) 
-        	for (SectionDef s: profile.getGroups())
-        		groups.add(s.getSectionId());
-        
+        if (profile.getSection() != null)
+            groups.add(profile.getSection().getSectionId());
+        if (profile.getGroups() != null)
+            for (SectionDef s : profile.getGroups())
+                groups.add(s.getSectionId());
+
         Query q = schoolQuery(appId, schoolId);
-//        q.addCriteria(new Criteria("children").is(kidId));
+        // q.addCriteria(new Criteria("children").is(kidId));
         q.addCriteria(new Criteria().orOperator(
-        	Criteria.where("scadenzaDate").is(null).and("groupId").is(null),
-        	Criteria.where("scadenzaDate").gte(today).and("groupId").is(null),
-        	Criteria.where("scadenzaDate").is(null).and("groupId").in(groups),
-        	Criteria.where("scadenzaDate").gte(today).and("groupId").in(groups)
-        ));
+                Criteria.where("scadenzaDate").is(null).and("groupId").is(null),
+                Criteria.where("scadenzaDate").gte(today).and("groupId").is(null),
+                Criteria.where("scadenzaDate").is(null).and("groupId").in(groups),
+                Criteria.where("scadenzaDate").gte(today).and("groupId").in(groups)));
         q.with(new Sort(Direction.DESC, "creationDate"));
         return template.find(q, Communication.class);
     }
@@ -809,7 +822,7 @@ public class RepositoryManager implements RepositoryService {
     @Override
     public BusData getBusData(String appId, String schoolId, long date) {
         Query q = schoolQuery(appId, schoolId);
-         q.addCriteria(new Criteria("services.bus.enabled").is(true));
+        q.addCriteria(new Criteria("services.bus.enabled").is(true));
         List<KidProfile> kidProfiles = template.find(q, KidProfile.class);
         ListMultimap<String, BusData.KidProfile> mm = ArrayListMultimap.create();
 
@@ -817,7 +830,8 @@ public class RepositoryManager implements RepositoryService {
         cal.setTimeInMillis(date);
         int weeknr = cal.get(Calendar.WEEK_OF_YEAR);
         int daynr = cal.get(Calendar.DAY_OF_WEEK) - 2;
-        if (daynr < 0) daynr = 6;
+        if (daynr < 0)
+            daynr = 6;
 
         for (KidProfile kp : kidProfiles) {
             BusData.KidProfile busKidProfile = new BusData.KidProfile();
@@ -825,16 +839,18 @@ public class RepositoryManager implements RepositoryService {
             busKidProfile.setFullName(kp.getFullName());
             busKidProfile.setImage(kp.getImage());
             busKidProfile.setKidId(kp.getKidId());
-			
+
             List<DayDefault> week = getWeekSpecific(appId, schoolId, kp.getKidId(), weeknr);
             if (week == null || week.isEmpty()) {
-            	week = getWeekDefault(appId, schoolId, kp.getKidId());
+                week = getWeekDefault(appId, schoolId, kp.getKidId());
             }
-            if (week == null || week.size() <= daynr) continue;
+            if (week == null || week.size() <= daynr)
+                continue;
             DayDefault day = week.get(daynr);
-            
-            if (day.getAbsence() || !day.getBus()) continue;
-            
+
+            if (day.getAbsence() || !day.getBus())
+                continue;
+
             busKidProfile.setBusStop(day.getFermata());
             busKidProfile.setPersonWhoWaitId(day.getDelega_name());
 
@@ -871,9 +887,10 @@ public class RepositoryManager implements RepositoryService {
         Calendar cal = Calendar.getInstance();
         int weeknr = cal.get(Calendar.WEEK_OF_YEAR);
         int daynr = cal.get(Calendar.DAY_OF_WEEK) - 2;
-        if (daynr < 0) daynr = 6;
+        if (daynr < 0)
+            daynr = 6;
         // all school secton data
-        Map<String, SectionData> map = new HashMap<String, SectionData>();       
+        Map<String, SectionData> map = new HashMap<String, SectionData>();
         for (SectionProfile p : profile.getSections()) {
             if (sections != null && !sections.isEmpty() && !sections.contains(p.getSectionId()))
                 continue;
@@ -898,7 +915,7 @@ public class RepositoryManager implements RepositoryService {
                 break;
             }
         }
-        
+
         // extract kid service mappings
         for (KidProfile kp : kids) {
 
@@ -911,11 +928,12 @@ public class RepositoryManager implements RepositoryService {
                 allKidFascie.add(fasc.getName());
                 allFascie.add(fasc);
             }
-            
+
             // read other services. Ignore for non-participating kids
-            if (kp.isPartecipateToSperimentation() && kidServices != null && kidServices.getTimeSlotServices() != null) {
+            if (kp.isPartecipateToSperimentation() && kidServices != null
+                    && kidServices.getTimeSlotServices() != null) {
                 for (TimeSlotSchoolService ts : kidServices.getTimeSlotServices()) {
-                	// handle ignore disabled and regular slots
+                    // handle ignore disabled and regular slots
                     if (ts.isEnabled() && !ts.isRegular()) {
                         for (TimeSlotSchoolService.ServiceTimeSlot fasc : ts.getTimeSlots()) {
                             allKidFascie.add(fasc.getName());
@@ -934,10 +952,11 @@ public class RepositoryManager implements RepositoryService {
             if (kp.isPartecipateToSperimentation() && kidWeekConfig != null && daynr < 5) {
                 List<DayDefault> days = kidWeekConfig.getDays();
                 todayConfig = (days.get(daynr) != null ? days.get(daynr) : todayConfig);
-            // get DayInfo from WeekDefault if defined    
-            } else if (kp.isPartecipateToSperimentation() && defaultWeek != null  && daynr < 5) {
-                todayConfig = (defaultWeek.get(daynr) != null ? defaultWeek.get(daynr) : todayConfig);
-            // construct data from kid profile    
+                // get DayInfo from WeekDefault if defined
+            } else if (kp.isPartecipateToSperimentation() && defaultWeek != null && daynr < 5) {
+                todayConfig =
+                        (defaultWeek.get(daynr) != null ? defaultWeek.get(daynr) : todayConfig);
+                // construct data from kid profile
             } else {
                 // get the configuration from the regular school service
                 todayConfig = new DayDefault();
@@ -945,28 +964,28 @@ public class RepositoryManager implements RepositoryService {
                 // baseline for entrance: regular service time start
                 todayConfig.setEntrata(regularService.getTimeSlots().get(0).getFromTime());
                 // baseline for exit: regular service time end
-                todayConfig.setUscita(regularService.getTimeSlots().get(regularService.getTimeSlots().size() - 1).getToTime());
+                todayConfig.setUscita(regularService.getTimeSlots()
+                        .get(regularService.getTimeSlots().size() - 1).getToTime());
                 // baseline for bus: service is enabled
                 if (kidServices != null && kidServices.getBus() != null) {
                     todayConfig.setBus(kidServices.getBus().isEnabled());
                 }
-            	if (kidServices != null && kidServices.getTimeSlotServices() != null && allFascie.size() > 0) {
+                if (kidServices != null && kidServices.getTimeSlotServices() != null
+                        && allFascie.size() > 0) {
                     // get the configuration from the services of kid
                     sortFascie(allFascie);
                     DateTime minSlotDate = allFascie.get(0).getFromTime();
                     LocalTime minhour = minSlotDate.toLocalTime();
-                    if (minhour
-                            .isBefore(todayConfig.getEntrata().toLocalTime())) {
+                    if (minhour.isBefore(todayConfig.getEntrata().toLocalTime())) {
                         todayConfig.setEntrata(minSlotDate);
                     }
                     DateTime maxSlotDate = allFascie.get(allFascie.size() - 1).getToTime();
                     LocalTime maxhour = maxSlotDate.toLocalTime();
-                    if (maxhour
-                            .isAfter(todayConfig.getUscita().toLocalTime())) {
+                    if (maxhour.isAfter(todayConfig.getUscita().toLocalTime())) {
                         todayConfig.setUscita(maxSlotDate);
                     }
-            	}
-            }	
+                }
+            }
 
             SectionData.KidProfile skp = new SectionData.KidProfile();
             skp.setKidId(kp.getKidId());
@@ -980,7 +999,7 @@ public class RepositoryManager implements RepositoryService {
 
             // merge service state from kidProfile Serivces or from schoolProfile
             skp.setServices(kp.getServices());
-            
+
             // if absent, set exit time to null
             if (todayConfig.getAbsence()) {
                 skp.setExitTime(null);
@@ -996,7 +1015,7 @@ public class RepositoryManager implements RepositoryService {
             if (todayConfig.getFermata() != null) {
                 skp.setStopId(todayConfig.getFermata());
             }
-          
+
             // read from ritiro object
             String personId = todayConfig.getDelega_name();
 
@@ -1009,15 +1028,16 @@ public class RepositoryManager implements RepositoryService {
                 if (ap.getPersonId().equals(personId))
                     skp.setPersonName(ap.getFullName());
             }
-            
+
             // normalize times:
-            if (skp.getEntryTime() != null) skp.setEntryTime(skp.getEntryTime().withDate(LocalDate.now()));
-            if (skp.getExitTime() != null) skp.setExitTime(skp.getExitTime().withDate(LocalDate.now()));
-            
-            if (   kp.getSection() != null 
-            	&& kp.getSection().getSectionId() != null 
-            	&& map.containsKey(kp.getSection().getSectionId()) 
-            	&& map.get(kp.getSection().getSectionId()).getChildren() != null) {
+            if (skp.getEntryTime() != null)
+                skp.setEntryTime(skp.getEntryTime().withDate(LocalDate.now()));
+            if (skp.getExitTime() != null)
+                skp.setExitTime(skp.getExitTime().withDate(LocalDate.now()));
+
+            if (kp.getSection() != null && kp.getSection().getSectionId() != null
+                    && map.containsKey(kp.getSection().getSectionId())
+                    && map.get(kp.getSection().getSectionId()).getChildren() != null) {
                 map.get(kp.getSection().getSectionId()).getChildren().add(skp);
             }
         }
@@ -1034,8 +1054,9 @@ public class RepositoryManager implements RepositoryService {
     }
 
     /**
-     * Sort time slots. Assume no overlapping possible so the order is a total order both
-     * for entrance time and exist time
+     * Sort time slots. Assume no overlapping possible so the order is a total order both for
+     * entrance time and exist time
+     * 
      * @param allFascie
      */
     public void sortFascie(List<TimeSlotSchoolService.ServiceTimeSlot> allFascie) {
@@ -1082,7 +1103,8 @@ public class RepositoryManager implements RepositoryService {
      * @return
      */
     private String findDefaultPerson(KidProfile kp) {
-    	if (kp == null || kp.getPersons() == null || kp.getPersons().isEmpty()) return null;
+        if (kp == null || kp.getPersons() == null || kp.getPersons().isEmpty())
+            return null;
         return kp.getPersons().get(0).getPersonId();
     }
 
@@ -1640,26 +1662,26 @@ public class RepositoryManager implements RepositoryService {
 
     @Override
     public KidProfile updateKid(KidProfile kid) {
-		if (kid.getPersons() != null) {
-	    	for (AuthPerson p : kid.getPersons()) {
-				if (StringUtils.isEmpty(p.getPersonId()) && !p.isParent()) {
-					p.setPersonId(ObjectId.get().toString());
-				}
-			}
-		}	
-//        Criteria criteria =
-//                new Criteria("appId").is(kid.getAppId()).and("schoolId").is(kid.getSchoolId());
-//        criteria.and("kidId").is(kid.getKidId());
-//        Query q = new Query(criteria);
-//        DBObject dbObject = new BasicDBObject();
-//        template.getConverter().write(kid, dbObject);
-//        Update updateDoc = Update.fromDBObject(dbObject);
-//        return template.findAndModify(q, updateDoc, KidProfile.class);
-		Query q = kidQuery(kid.getAppId(), kid.getSchoolId(), kid.getKidId());
-		template.remove(q, KidProfile.class);
-		
-		template.save(kid);
-		return kid;
+        if (kid.getPersons() != null) {
+            for (AuthPerson p : kid.getPersons()) {
+                if (StringUtils.isEmpty(p.getPersonId()) && !p.isParent()) {
+                    p.setPersonId(ObjectId.get().toString());
+                }
+            }
+        }
+        // Criteria criteria =
+        // new Criteria("appId").is(kid.getAppId()).and("schoolId").is(kid.getSchoolId());
+        // criteria.and("kidId").is(kid.getKidId());
+        // Query q = new Query(criteria);
+        // DBObject dbObject = new BasicDBObject();
+        // template.getConverter().write(kid, dbObject);
+        // Update updateDoc = Update.fromDBObject(dbObject);
+        // return template.findAndModify(q, updateDoc, KidProfile.class);
+        Query q = kidQuery(kid.getAppId(), kid.getSchoolId(), kid.getKidId());
+        template.remove(q, KidProfile.class);
+
+        template.save(kid);
+        return kid;
     }
 
     @Override

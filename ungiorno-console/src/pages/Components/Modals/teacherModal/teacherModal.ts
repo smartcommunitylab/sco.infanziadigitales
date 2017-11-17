@@ -55,8 +55,6 @@ export class TeacherModal implements OnInit {
         if (teacherId.toLowerCase() === this.copiedTeacher.id.toLowerCase()) this.selectedTeacherGroups.push(group);
       })
     })
-
-    this.webService.update(this.selectedSchool);
   }
 
   close() {
@@ -116,11 +114,6 @@ export class TeacherModal implements OnInit {
 
                   });
                   toastConflict.present()
-                  // let alert = this.alertCtrl.create({
-                  //   subTitle: 'Elemento già presente (conflitto di C.F)',
-                  //   buttons: ['OK']
-                  // });
-                  // alert.present();
                 }
               } else {
                 this.webService.add(this.selectedSchool, this.copiedTeacher);

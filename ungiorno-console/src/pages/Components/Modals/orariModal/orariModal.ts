@@ -73,7 +73,6 @@ export class OrariModal implements OnInit {
                 {
                     text: 'OK',
                     handler: () => {
-                        this.webService.update(this.selectedSchool);
                         this.navCtrl.pop();
                     }
                 }
@@ -114,16 +113,11 @@ export class OrariModal implements OnInit {
 
                                 });
                                 toastConflict.present()
-                                // let alertConflict = this.alertCtrl.create({
-                                //     subTitle: 'Elemenast già presente (conflitto di nomi)',
-                                //     buttons: ['OK']
-                                // });
-                                // alertConflict.present();
                             }
                         } else {
+                            this.webService.update(this.selectedSchool);
                             this.navCtrl.pop();
                         }
-                        this.webService.update(this.selectedSchool);
                     }
                 }
             ]

@@ -29,6 +29,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import eu.trentorise.smartcampus.aac.AACException;
 import eu.trentorise.smartcampus.aac.AACService;
 import it.smartcommunitylab.ungiorno.beans.GroupDTO;
@@ -88,6 +91,9 @@ public class ConsoleWebController {
 
     private AACService aacService = null;
 
+    // used only temporary to log state of objects edited
+    private ObjectMapper mapper = new ObjectMapper();
+
     @PostConstruct
     public void init() {
         aacService = new AACService(oauthServerUrl, clientId, clientSecret);
@@ -140,8 +146,21 @@ public class ConsoleWebController {
         updatedSchoolProfile.setAppId(appId);
         updatedSchoolProfile.setSchoolId(schoolId);
         storage.storeSchoolProfile(updatedSchoolProfile);
-        logger.info("user {} updates schoolProfile {}", permissionsManager.getUserId(), schoolId);
+
+        logger.info("user {} updates schoolProfile {} [serialized: {} ]",
+                permissionsManager.getUserId(), schoolId, serializeObj(updatedSchoolProfile));
         return new Response<SchoolProfile>(updatedSchoolProfile);
+    }
+
+
+    private String serializeObj(Object obj) {
+        String serializedObj = null;
+        try {
+            serializedObj = mapper.writeValueAsString(obj);
+        } catch (JsonProcessingException e) {
+            serializedObj = "failed to serialized obj: " + e.getMessage();
+        }
+        return serializedObj;
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/consoleweb/{appId}/{schoolId}/teacher")
@@ -177,7 +196,8 @@ public class ConsoleWebController {
 
         kidManager.updateKid(kid);
         kidManager.updateParents(kid);
-        logger.info("user {} updates kidProfile {}", permissionsManager.getUserId(), kid);
+        logger.info("user {} updates kidProfile {} [serialized: {} ]",
+                permissionsManager.getUserId(), kid, serializeObj(kid));
         return new Response<>(kid);
     }
 
@@ -232,8 +252,8 @@ public class ConsoleWebController {
     public @ResponseBody Response<KidProfile> addToGroup(@PathVariable String appId,
             @PathVariable String schoolId, @PathVariable String kidId,
             @RequestBody SectionDef group) {
-        logger.info("user {} adds kid {} to group {}", permissionsManager.getUserId(), kidId,
-                group.getSectionId());
+        logger.info("user {} adds kid {} to group {} [serialized: {} ]",
+                permissionsManager.getUserId(), kidId, group.getSectionId(), serializeObj(group));
         return new Response<>(kidManager.addToGroup(appId, schoolId, kidId, group));
     }
 
@@ -263,8 +283,8 @@ public class ConsoleWebController {
     public @ResponseBody Response<KidProfile> addToSection(@PathVariable String appId,
             @PathVariable String schoolId, @PathVariable String kidId,
             @RequestBody SectionDef group) {
-        logger.info("user {} adds kid {} to section {}", permissionsManager.getUserId(), kidId,
-                group.getSectionId());
+        logger.info("user {} adds kid {} to section {} [serialized: {} ]",
+                permissionsManager.getUserId(), kidId, group.getSectionId(), serializeObj(group));
         return new Response<>(kidManager.putInSection(appId, schoolId, kidId, group));
     }
 
@@ -288,7 +308,8 @@ public class ConsoleWebController {
         teacher.setAppId(appId);
         teacher.setSchoolId(schoolId);
         teacherManager.updateTeacher(appId, schoolId, teacher);
-        logger.info("user {} saves teacher {}", permissionsManager.getUserId(), teacher);
+        logger.info("user {} saves teacher {} [serialized: {} ]", permissionsManager.getUserId(),
+                teacher, serializeObj(teacher));
         return new Response<>(teacher);
     }
 

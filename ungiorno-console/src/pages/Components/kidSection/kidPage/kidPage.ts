@@ -150,19 +150,12 @@ export class KidPage implements OnInit {
     }
 
     ngOnInit(): void {
-        // this.thisKid = JSON.parse(JSON.stringify(this.selectedKid)) as Kid;
-        //this.thisKid.copyInto(JSON.parse(JSON.stringify(this.selectedKid)));
         this.selectedKidGroups = this.selectedSchool.groups.filter(x => x.kids.findIndex(d => d.toLowerCase() === this.selectedKid.id.toLowerCase()) >= 0);
-
         this.isNew = this.selectedKid.id == '';
         this.editInfo = this.isNew;
-
         this.initServices();
-        // if (!this.selectedKid.bus) {
-        //     this.newKidBus = new BusService();
-        // } else {
-        //     this.newKidBus
-        // }
+        this.image=this.getImage();
+
     }
     private initServices() {
         this.servicesChecked = {};
@@ -174,32 +167,9 @@ export class KidPage implements OnInit {
         });
         this.selectedKid.services.forEach(x => this.servicesChecked[x.servizio] = true);
     }
-    doRerender() {
-        this.rerender = true;
-        this.cdRef.detectChanges();
-        this.rerender = false;
-    }
+
     goBack() {
-        // if (this.edit && this.thisKid.name !== '' && this.thisKid.id !== '' && this.thisKid.surname !== '') {
-        //     let alert = this.alertCtrl.create({
-        //         subTitle: 'Salvare prima di uscire?',
-        //     });
-        //     alert.addButton({
-        //         text: 'No',
-        //         handler: () => {
-        //             this.kidClick[0] = false;
-        //         }
-        //     });
-        //     alert.addButton({
-        //         text: 'Sì',
-        //         handler: () => {
-        //             this.syncKidObject();
-        //             this.kidClick[0] = false;
-        //         }
-        //     })
-        //     alert.present();
-        // }
-        // else {
+
         let alert = this.alertCtrl.create({
             subTitle: 'Eventuali modifiche non salvate verrano perse. Confermi?',
             buttons: [
@@ -276,11 +246,6 @@ export class KidPage implements OnInit {
     }
 
     onInfoCancel() {
-        // this.thisKid.id = this.oldInfo.id;
-        // this.thisKid.name = this.oldInfo.name;
-        // this.thisKid.surname = this.oldInfo.surname;
-        // this.thisKid.nascita = this.oldInfo.nascita;
-        // this.thisKid.sperimentazione = this.oldInfo.sperimentazione;
         this.editInfo = false;
     }
 
@@ -303,16 +268,15 @@ export class KidPage implements OnInit {
                     handler: () => {
 
                         this.webService.removeKidImage(this.selectedSchool, this.selectedKid).then(() => {
-                            this.doRerender();
+                            // this.doRerender();
+                            this.image=this.getImage();
                         },
                             (err) => {
                                 console.log(err);
                                 this.editFoto = true;
                             });
-                        //this.webService.update(this.selectedSchool);
-                        //this.doRerender();
+
                         this.editFoto = false;
-                        // this.syncKidObject();
                     }
                 }
             ]
@@ -322,35 +286,21 @@ export class KidPage implements OnInit {
     }
     onFotoSave() {
         this.webService.uploadDocumentInPromise(this.uploader, this.uploader.queue[0], this.selectedSchool, this.selectedKid).then(() => {
-            // this.getImage(this.selectedKid)
-            this.doRerender();
-            // this.syncKidObject();
+            // this.doRerender();
+            this.image=this.getImage();
         },
             (err) => {
                 console.log(err);
                 this.editFoto = true;
 
             });
-        //this.webService.add(this.selectedSchool, this.thisKid);
-
-        // this.webService.update(this.selectedSchool);
-        //this.doRerender();
         this.editFoto = false;
 
     }
 
     onFotoCancel() {
-        // this.thisKid.image = this.oldFoto;
         this.editFoto = false;
     }
-
-    // addImage(e) {
-
-    // }
-
-    // handleChange(e) {
-    //     console.log(e.target.value);
-    // }
 
     editAllergia: boolean;
     newAllergie: string[];
@@ -376,8 +326,6 @@ export class KidPage implements OnInit {
     }
 
     onAllergiaCancel() {
-        // this.thisKid.allergie = [];
-        // this.oldAll.forEach(x => this.thisKid.allergie.push(x));
         this.editAllergia = false;
         this.newAllergia = null;
     }
@@ -415,7 +363,6 @@ export class KidPage implements OnInit {
 
     editService: boolean;
 
-    // newChecked = {};
 
     onServiceEdit() {
         this.editService = true;
@@ -425,9 +372,6 @@ export class KidPage implements OnInit {
     onServiceSave() {
         this.editService = false;
         let newService = [];
-        // if (this.servicesChecked.services!=null){
-        //     this.selectedKid.services.forEach(x => newService.push(x));
-        // }
         this.selectedSchool.servizi.forEach(servizio => {
             if (this.servicesChecked[servizio.servizio]) {
                 newService.push(servizio);
@@ -446,55 +390,10 @@ export class KidPage implements OnInit {
     onServiceCancel() {
         this.editService = false;
         this.initServices();
-        //  this.thisKid.services = [];
-        // this.oldService.forEach(x => this.thisKid.services.push(x));
+
     }
 
-    // changeServices() {
-    //     console.log('change servicesss')
-    //     var x = new Array();
-    //     for (var i in this.servicesChecked) {
-    //         if (this.servicesChecked[i]) {
-    //             let selectedSevice = this.selectedSchool.servizi.find(c => c.servizio && c.servizio.toLowerCase() === i.toLowerCase());
-    //             if (selectedSevice != undefined) {
-    //                 x.push(selectedSevice);
-    //             }
-    //         }
-    //     }
-    //     this.newService = x
-    //    // console.log(this.thisKid.services)
-    // }
-
-    // editClick() {
-    //     this.edit = !this.edit;
-    // }
-
-    // syncKidObject() {
-    //    // this.selectedKid.copyInto(JSON.parse(JSON.stringify(this.thisKid)));
-    //     // Object.assign(this.selectedKid, this.thisKid)
-    //     // this.selectedKid.allergie = new Array();
-    //     // this.thisKid.allergie.forEach(x => this.selectedKid.allergie.push(x));
-    //     // this.selectedKid.deleghe = new Array();
-    //     // this.thisKid.deleghe.forEach(x => this.selectedKid.deleghe.push(x));
-    //     // this.selectedKid.ritiro = new Array();
-    //     // this.thisKid.ritiro.forEach(x => this.selectedKid.ritiro.push(x));
-    //     // this.selectedKid.services = new Array();
-    //     // this.thisKid.services.forEach(x => this.selectedKid.services.push(x));
-
-    //  // this.webService.update(this.selectedSchool);
-    //     this.edit = false;
-    // }
-
-    // cancelClick() {
-    //     if (this.isNew) {
-    //         this.edit = false;
-    //         this.goBack();
-    //     }
-    //     else {
-    //       //  Object.assign(this.thisKid, this.selectedKid);
-    //         this.edit = !this.edit;
-    //     }
-    // }
+    
 
     editP1Info: boolean;
     newParent1: Parent = new Parent('', '', '');
@@ -518,9 +417,7 @@ export class KidPage implements OnInit {
     }
 
     onP1InfoCancel() {
-        // this.thisKid.parent1.id = this.oldParent1.id;
-        // this.thisKid.parent1.name = this.oldParent1.name;
-        // this.thisKid.parent1.surname = this.oldParent1.surname;
+
         this.editP1Info = false;
     }
 
@@ -566,33 +463,11 @@ export class KidPage implements OnInit {
         } catch (e) {
             this.manageContactException(e);
 
-            // if (e == this.BreakEmailException) {
-            //     this.toastWrongEmail = this.toastCtrl.create({
-            //         message: 'Formato email non valido',
-            //         duration: 1000,
-            //         position: 'middle',
-            //         dismissOnPageChange: true
-            //     });
-            //     this.toastWrongEmail.present()
-
-            // } else if (e == this.BreakPhoneException) {
-            //     this.toastWrongPhone = this.toastCtrl.create({
-            //         message: 'Formato telefono non valido',
-            //         duration: 1000,
-            //         position: 'middle',
-            //         dismissOnPageChange: true
-
-            //     });
-
-            //     this.toastWrongPhone.present()
-            // }
         }
     }
 
     onP1ContattiCancel() {
         this.editP1Contatti = false;
-        // this.thisKid.parent1.emails = this.oldParent1.emails.slice();
-        // this.thisKid.parent1.phoneNumbers = this.oldParent1.phoneNumbers.slice();
     }
 
     editP2Info: boolean;
@@ -617,9 +492,6 @@ export class KidPage implements OnInit {
     }
 
     onP2InfoCancel() {
-        // this.thisKid.parent2.id = this.oldParent2.id;
-        // this.thisKid.parent2.name = this.oldParent2.name;
-        // this.thisKid.parent2.surname = this.oldParent2.surname;
         this.editP2Info = false;
     }
 
@@ -652,12 +524,7 @@ export class KidPage implements OnInit {
         }
     }
     onP2ContattiSave() {
-        // this.editP2Contatti = false;
-        // if (this.checkEmailAndPhones(this.thisKid.parent1)) {
-        //     this.webService.add(this.selectedSchool, this.thisKid);
-        // } else {
-        //     // Toast
-        // }
+
         try {
             this.checkEmailAndPhones(this.newParent2)
             this.editP2Contatti = false;
@@ -676,21 +543,14 @@ export class KidPage implements OnInit {
 
     onP2ContattiCancel() {
         this.editP2Contatti = false;
-        // this.thisKid.parent2.emails = this.oldParent2.emails.slice();
-        // this.thisKid.parent2.phoneNumbers = this.oldParent2.phoneNumbers.slice();
+
     }
 
     addDelega() {
-        // if(!this.isNewD) {
         this.isNewD = true;
         this.selectedDelega = new Delega('', '', '');
         this.editD = true;
-        // }
-        // else {
-        //     //reset field
-        //     this.selectedDelega = new Delega('', '' ,'');
-        //     this.editD = true;
-        // }
+
     }
 
     onSelectDelega(delega: Delega) {
@@ -794,72 +654,23 @@ export class KidPage implements OnInit {
                 }
 
             }
-        //}
-        // this.webService.add(this.selectedSchool, this.thisKid);
+
     }
 
     onDelegaInfoCancel() {
         this.editDelegaInfo = false;
         this.selectedDelega = null;
         this.isNewD = false;
-        // this.oldDelega = [];
-        // this.thisKid.deleghe.forEach(x => this.oldDelega.push(x));
+
     }
 
-    // editDelegaContatti: boolean;
-
-    // onDelegaContattiEdit() {
-    //     this.editDelegaContatti = true;
-    // }
-
-    // onDelegaContattiSave() {
-    //     this.editDelegaContatti = false;
-    //     this.webService.add(this.selectedSchool, this.thisKid);
-    // }
-
-    // onDelegaContattiCancel() {
-    //     this.editDelegaContatti = false;
-    // }
-
-    // editDelegaAutor: boolean;
-
-    // onDelegaAutorEdit() {
-    //     this.editDelegaAutor = true;
-    // }
-
-    // onDelegaAutorSave() {
-    //     this.editDelegaAutor = false;
-    //     this.webService.add(this.selectedSchool, this.thisKid);
-    // }
-
-    // onDelegaAutorCancel() {
-    //     this.editDelegaAutor = false;
-    // }
-
-
-    // saveDClick() {
-    //     this.isNewD = false;
-    //     this.editD = false;
-    //     this.edit = false;
-    //     this.syncKidObject();
-    // }
-
-    // editDClick() {
-    //     this.editD = !this.editD;
-    // }
-
-    // cancelDClick() {
-    //     if (this.isNewD) { this.isNewD = false; this.selectedDelega = undefined }
-    //     this.editD = false;
-    // }
-    getImage(child) {
-        var image = this.apiUrl + "/picture/" + this.selectedSchool.appId + "/" + this.selectedSchool.id + "/" + child.id + "/" + sessionStorage.getItem('access_token');
-        return image;
-    }
-    // getUploadUrl() {
-    //     var image = this.apiUrl + "/consoleweb/" + this.selectedSchool.appId + "/" + this.selectedSchool.id + "/kid/" + this.thisKid.id + "/picture";
+    image=""
+     getImage() {
+         return this.apiUrl + "/picture/" + this.selectedSchool.appId + "/" + this.selectedSchool.id + "/" + this.selectedKid.id + "/" + sessionStorage.getItem('access_token')+"?timestamp="+new Date().getTime();
+        // this.apiUrl + "/picture/" + this.selectedSchool.appId + "/" + this.selectedSchool.id + "/" + this.selectedKid.id + "/" + sessionStorage.getItem('access_token')+"?timestamp="+new Date().getTime()     var image = this.apiUrl + "/picture/" + this.selectedSchool.appId + "/" + this.selectedSchool.id + "/" + child.id + "/" + sessionStorage.getItem('access_token');
     //     return image;
-    // }
+     }
+ 
 
     newBus: BusService = new BusService();
     onBusEdit() {
@@ -867,9 +678,7 @@ export class KidPage implements OnInit {
         this.newBus.enabled=this.selectedKid.bus.enabled;
         this.newBus.stops=this.selectedKid.bus.stops.slice();
         this.newBus.busId=this.selectedKid.bus.busId;
-        // stops: Stop[];
-        // busId : string;
-        // this.newBus = Object.assign({}, this.thisKid.bus);
+
     }
 
     onBusSave() {
@@ -886,7 +695,6 @@ export class KidPage implements OnInit {
 
     onBusCancel() {
         this.editBus = false;
-        // this.thisKid.bus = this.oldBus;
     }
 
     addStop(stop: string) {

@@ -143,7 +143,7 @@
                                     <ion-card-content margin-top>
                                         <ion-item style="height:120px">
                                             <ion-thumbnail item-start style="height: 100%; width: auto">
-                                                <img [src]="getImage(selectedKid)" style="height: 100%; width: auto" *ngIf='!editFoto && !rerender && selectedKid.id ' />
+                                                <img [src]="image" style="height: 100%; width: auto" *ngIf='!editFoto && !rerender && selectedKid.id ' />
                                                 <img src="../../../../assets/images/placeholder.png" style="height: 100%; width: auto" *ngIf='!editFoto && !rerender && !selectedKid.id '
                                                 />
                                                 <input id="uploadInputFile" accept="image/*" type="file" ng2FileSelect [uploader]="uploader" />

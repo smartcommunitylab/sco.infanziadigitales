@@ -73,7 +73,6 @@ export class OrariModal implements OnInit {
                 {
                     text: 'OK',
                     handler: () => {
-                        this.webService.update(this.selectedSchool);
                         this.navCtrl.pop();
                     }
                 }

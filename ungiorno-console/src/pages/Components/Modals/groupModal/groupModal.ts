@@ -152,7 +152,9 @@ export class GroupModal implements OnInit {
                 toastConflict.present()
               }
             } else {
-              this.webService.update(this.selectedSchool);
+              // when edit a group I can only add or remove children or teacher
+              // so there is not need to update group definition data in profile of school
+              
               let kidsToAdd = this.addKidToGroupMap[this.selectedGroup.name]
               let kidsToRemove = this.removeKidToGroupMap[this.selectedGroup.name]
               let teacherToAdd = this.addTeacherToGroupMap[this.selectedGroup.name]

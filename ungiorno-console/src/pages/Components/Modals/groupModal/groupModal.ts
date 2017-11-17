@@ -32,7 +32,6 @@ export class GroupModal implements OnInit {
 
   isNew: boolean; //true if the group is new
 
-  disabledSection: boolean;
 
   addKidToGroupMap = {}
   removeKidToGroupMap = {}

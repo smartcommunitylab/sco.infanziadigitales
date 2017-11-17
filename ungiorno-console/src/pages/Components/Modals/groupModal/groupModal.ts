@@ -242,6 +242,8 @@ export class GroupModal implements OnInit {
     alert.addButton({
       text: 'Annulla',
       handler: data => {
+        if (!data)
+        return
         data.forEach(element => {
           this.copiedGroup.teachers=[];
           this.oldTeacher.forEach(x => this.copiedGroup.teachers.push(x));
@@ -253,6 +255,8 @@ export class GroupModal implements OnInit {
     alert.addButton({
       text: 'OK',
       handler: data => {
+        if (!data)
+        return
         data.forEach(element => {
           this.copiedGroup.teachers.push(element) //inserimento id teacher in istanza copiedGroup
           if (this.addTeacherToGroupMap[this.copiedGroup.name] == undefined) {
@@ -289,6 +293,8 @@ export class GroupModal implements OnInit {
     alert.addButton({
       text: 'Annulla',
       handler: data => {
+        if (!data)
+        return
           data.forEach(element => {
           this.copiedGroup.kids=[];
           this.oldKids.forEach(x => this.copiedGroup.kids.push(x));
@@ -298,6 +304,8 @@ export class GroupModal implements OnInit {
     alert.addButton({
       text: 'OK',
       handler: data => {
+        if (!data)
+        return
         data.forEach(element => {
           this.copiedGroup.kids.push(element);
           if (this.addKidToGroupMap[this.copiedGroup.name] == undefined) {

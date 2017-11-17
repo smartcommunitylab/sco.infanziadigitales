@@ -31,7 +31,7 @@
                     <ion-card-content>
                         <ion-list inset>
                             <ion-item>
-                                <div>Nome*<input class="text-generic" type="text" [(ngModel)]="copiedOrario.servizio"></div>
+                                <div>Nome*<input class="text-generic" type="text" [(ngModel)]="copiedOrario.servizio" [disabled]="!isNew"></div>
                             </ion-item>
                             <!--<ion-item>
                                 <ion-label *ngIf="giaNorm[0]">Questo è l'orario normale</ion-label>

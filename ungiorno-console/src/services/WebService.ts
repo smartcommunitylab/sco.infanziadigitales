@@ -274,7 +274,7 @@ export class WebService {
     ).catch(this.handleError);
   }
 
-  private addKid(school: School, kidProfile: Kid): Promise<Kid> {
+  public addKid(school: School, kidProfile: Kid): Promise<Kid> {
     let convertedKid: ServerKidData = this.convertToServerKid(kidProfile);
     return this.http.post(`${this.apiUrl}/consoleweb/${school.appId}/${school.id}/kid`, convertedKid).toPromise().then(
       response => this.convertToKid(response.json().data)

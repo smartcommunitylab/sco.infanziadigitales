@@ -40,4 +40,21 @@ export class Kid extends Person {
                     this.sperimentazione = sperimentazione || false;
                     this.services = services || [];
     }
+    static copy(source:Kid): Kid{
+        let kid = new Kid('','','');
+        kid.copyInto(source);
+        return kid;
+    } 
+
+    copyInto(source:any) {
+        Object.assign(this, source)
+        this.allergie = new Array();
+        source.allergie.forEach(x => this.allergie.push(x));
+        this.deleghe = new Array();
+        source.deleghe.forEach(x => this.deleghe.push(x));
+        this.ritiro = new Array();
+        source.ritiro.forEach(x => this.ritiro.push(x));
+        this.services = new Array();
+        source.services.forEach(x => this.services.push(x));
+    }
 }

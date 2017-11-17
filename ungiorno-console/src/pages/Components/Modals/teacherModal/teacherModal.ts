@@ -56,7 +56,7 @@ export class TeacherModal implements OnInit {
       })
     })
 
-    this.webService.update(this.selectedSchool);
+    // this.webService.update(this.selectedSchool);
   }
 
   close() {

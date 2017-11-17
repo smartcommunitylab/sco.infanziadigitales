@@ -55,8 +55,6 @@ export class TeacherModal implements OnInit {
         if (teacherId.toLowerCase() === this.copiedTeacher.id.toLowerCase()) this.selectedTeacherGroups.push(group);
       })
     })
-
-    // this.webService.update(this.selectedSchool);
   }
 
   close() {

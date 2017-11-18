@@ -222,6 +222,14 @@ export class GroupModal implements OnInit {
 
   }
 
+  private compare(a,b) {
+    if (a.surname < b.surname)
+      return -1;
+    if (a.surname > b.surname)
+      return 1;
+    return 0;
+  }
+  
 
   oldTeacher: string[]=[];
   addTeacher() {
@@ -277,7 +285,8 @@ export class GroupModal implements OnInit {
     this.copiedGroup.kids.forEach(x => this.oldKids.push(x));
     let alert = this.alertCtrl.create();
     alert.setTitle('Aggiungi bambini');
-
+    this.selectedSchool.kids.sort(this.compare);
+   
 
     this.selectedSchool.kids.forEach(element => {
       alert.addInput({

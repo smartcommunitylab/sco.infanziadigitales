@@ -39,7 +39,7 @@
                                     <ion-col col-2>Telefono:</ion-col>
                                     <ion-col col-4>
                                         <ion-input [(ngModel)]="newSchoolPhone" type="tel" no-margin *ngIf="editContatti"></ion-input>
-                                        <ion-label no-margin *ngIf="!editContatti">{{newSchoolPhone}}</ion-label>
+                                        <ion-label no-margin *ngIf="!editContatti && this.selectedSchool.phoneNumbers[0]">{{this.selectedSchool.phoneNumbers[0]}}</ion-label>
                                         <p *ngIf='!newSchoolPhone && !editContatti' class="empty-field">Dato non inserito</p>
 
                                     </ion-col>
@@ -177,7 +177,7 @@
                             {{item.busId}}
                             <ion-icon *ngIf="selectedSchool.buses.length > 0 && editBus" name="close" float-end (click)="removeBus(item)"></ion-icon>
                         </ion-item>
-                        <ion-item *ngIf="selectedSchool.buses && selectedSchool.buses.length === 0 && !editBus" text-center class="empty-field ">Nessuno scuolabus inserito</ion-item>
+                        <ion-item *ngIf="(selectedSchool.buses && selectedSchool.buses.length === 0) || (!selectedSchool.buses) && !editBus" text-center class="empty-field ">Nessuno scuolabus inserito</ion-item>
                     </ion-list>
                 </ion-card-content>
             </ion-card>

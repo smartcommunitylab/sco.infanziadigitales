@@ -550,10 +550,12 @@ export class KidPage implements OnInit {
         this.isNewD = true;
         this.selectedDelega = new Delega('', '', '');
         this.editD = true;
+        this.editDelegaInfo = true;
 
     }
 
     onSelectDelega(delega: Delega) {
+        this.editDelegaInfo = false;
         this.selectedDelega = new Delega(delega.id,delega.name,delega.surname,null,null,delega.legame);
     }
 

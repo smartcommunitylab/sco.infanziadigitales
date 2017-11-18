@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { AlertController } from 'ionic-angular';
+import { AlertController, ToastController } from 'ionic-angular';
 
 @Component({
     selector: 'list-widget',
@@ -58,18 +58,21 @@ export class ListWidget {
     @Input() editMode: boolean = false;
     @Input() label: string;
     @Input() type?: string;
+    @Input() validator: (val: string, toastCtrl: ToastController) => boolean;
 
     newItem: string = "";
-    constructor(private alertCtrl:AlertController) { }
+    constructor(private alertCtrl:AlertController, private toastCtrl: ToastController) { }
 
     addItem() {
         if (this.newItem.trim().length == 0) {
             return;
         }
+        if (this.validator && !this.validator(this.newItem.trim(), this.toastCtrl)) return;
+
         if (!this.items) {
             this.items = [];
         }
-        this.items.push(this.newItem);
+        this.items.push(this.newItem.trim());
         this.newItem = "";
     }
 

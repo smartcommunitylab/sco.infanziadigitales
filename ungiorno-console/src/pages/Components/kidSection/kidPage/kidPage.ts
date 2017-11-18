@@ -16,8 +16,13 @@ import { Location } from '@angular/common';
 import { FileUploader, FileItem } from 'ng2-file-upload';
 import { Http, Headers, BaseRequestOptions, RequestOptions } from '@angular/http';
 
+import { ViewChild } from '@angular/core';
+
 import 'rxjs/add/operator/switchMap';
 import { tmpdir } from 'os';
+
+import { ListWidget }from '../../list-widget/list-widget';
+import { setTimeout } from 'timers';
 
 @Component({
     selector: 'kidPage',
@@ -119,25 +124,53 @@ export class KidPage implements OnInit {
     selectedKidGroups: Group[];
 
     kidSettings: string = 'info';
+    image = "";
 
+    // data for info section
+    editInfo: boolean;
+    newInfo: Kid = new Kid('', '', '');
+    // data for foto section
+    editFoto: boolean;
+    newFoto: string;
+    // data for allergia section
+    editAllergia: boolean;
+    newAllergie: string[];
     newAllergia: string;
-    newKidBus: BusService;
-    selectedDelega: Delega;
-    isNewD: boolean = false;
-    editD: boolean = false;
-
-    isNew: boolean = false;
-    apiUrl: string;
+    // data for service section    
+    editService: boolean;
     servicesChecked = {};
+    orarioNormale = "";
+    // data for 1st parent
+    editP1Info: boolean;
+    newParent1: Parent = new Parent('', '', '');
+    editP1Contatti: boolean;
+    @ViewChild('p1Phones') p1Phones;
+    @ViewChild('p1Emails') p1Emails;
+    // data for 2nd parent
+    editP2Info: boolean;
+    newParent2: Parent = new Parent('', '', '');
+    editP2Contatti: boolean;
+    @ViewChild('p2Phones') p2Phones;
+    @ViewChild('p2Emails') p2Emails;
+    // data for delega section    
+    isNewD: boolean = false;
+    editD: boolean = false;    
+    selectedDelega: Delega;
+    editDelegaInfo: boolean;    
+    // data for bus section
     editBus: boolean = false;
+    newBus: BusService = new BusService();
     newStop: string = "";
+
+    // new kid is being created
+    isNew: boolean = false;
+
+    apiUrl: string;
     uploader: FileUploader = new FileUploader({});
-    rerender = false;
+
     BreakEmailException = {};
     BreakPhoneException = {};
-    toastWrongEmail;
-    toastWrongPhone;
-    orarioNormale = "";
+
     constructor(
         private webService: WebService,
         private configService: ConfigService,
@@ -168,8 +201,17 @@ export class KidPage implements OnInit {
         this.selectedKid.services.forEach(x => this.servicesChecked[x.servizio] = true);
     }
 
-    goBack() {
+    isInEdit(): boolean {
+        return this.editInfo || this.editFoto || this.editAllergia || this.editService || this.editBus
+            || this.editP1Info || this.editP1Contatti || this.editP2Info || this.editP2Contatti 
+            || this.editDelegaInfo;
+    }
 
+    goBack() {
+        if (!this.isInEdit()) {
+            this.kidClick[0] = false;
+            return;   
+        }
         let alert = this.alertCtrl.create({
             subTitle: 'Eventuali modifiche non salvate verrano perse. Confermi?',
             buttons: [
@@ -188,8 +230,6 @@ export class KidPage implements OnInit {
         // }
     }
 
-    editInfo: boolean;
-    newInfo: Kid = new Kid('', '', '');
     onInfoEdit() {
         this.editInfo = true;
         this.newInfo.id = this.selectedKid.id;
@@ -225,7 +265,9 @@ export class KidPage implements OnInit {
         tmpKid.id = this.newInfo.id;
         tmpKid.name = this.newInfo.name;
         tmpKid.surname = this.newInfo.surname;
+        tmpKid.gender = this.newInfo.gender;
         tmpKid.nascita = this.newInfo.nascita;
+        tmpKid.nascitaStr = this.newInfo.nascitaStr;
         tmpKid.sperimentazione = this.newInfo.sperimentazione;
 
         // FIX for strange issue
@@ -247,10 +289,10 @@ export class KidPage implements OnInit {
 
     onInfoCancel() {
         this.editInfo = false;
+        if (this.isNew) {
+            this.goBack();
+        }
     }
-
-    editFoto: boolean;
-    newFoto: string;
 
     onFotoEdit() {
         this.editFoto = true;
@@ -302,11 +344,9 @@ export class KidPage implements OnInit {
         this.editFoto = false;
     }
 
-    editAllergia: boolean;
-    newAllergie: string[];
-
     onAllergiaEdit() {
         this.newAllergie = [];
+        this.newAllergia = null;
         this.editAllergia = true;
         if (this.selectedKid.allergie != null) {
             this.selectedKid.allergie.forEach(x => this.newAllergie.push(x));
@@ -314,15 +354,19 @@ export class KidPage implements OnInit {
     }
 
     onAllergiaSave() {
-        this.editAllergia = false;
-        let tmpKid = Kid.copy(this.selectedKid);
-        tmpKid.allergie = this.newAllergie;
-        this.webService.add(this.selectedSchool, tmpKid).then(
-            () => {
-                this.selectedKid.copyInto(tmpKid);
-            }, (err) => {
-                this.editAllergia = true;
-            });
+        let handler = () => {
+            this.editAllergia = false;
+            let tmpKid = Kid.copy(this.selectedKid);
+            tmpKid.allergie = this.newAllergie;
+            this.webService.add(this.selectedSchool, tmpKid).then(
+                () => {
+                    this.selectedKid.copyInto(tmpKid);
+                }, (err) => {
+                    this.editAllergia = true;
+                });
+        }
+        this.checkNonSavedValue(this.newAllergia, handler);
+
     }
 
     onAllergiaCancel() {
@@ -361,9 +405,6 @@ export class KidPage implements OnInit {
         alert.present();
     }
 
-    editService: boolean;
-
-
     onServiceEdit() {
         this.editService = true;
 
@@ -393,11 +434,6 @@ export class KidPage implements OnInit {
 
     }
 
-    
-
-    editP1Info: boolean;
-    newParent1: Parent = new Parent('', '', '');
-
     onP1InfoEdit() {
         this.newParent1.id = this.selectedKid.parent1.id;
         this.newParent1.name = this.selectedKid.parent1.name;
@@ -421,28 +457,35 @@ export class KidPage implements OnInit {
         this.editP1Info = false;
     }
 
-    editP1Contatti: boolean;
-
-
-    private validatePhone(email) {
-        var re = /^[0-9]{5,10}$/;
-
-        return re.test(email);
+    phoneValidator(val: string, toastCtrl: ToastController): boolean {
+        if (!/^[0-9]{5,10}$/.test(val)) {
+            let toastWrong = toastCtrl.create({
+                message: 'Formato telefono non valido',
+                duration: 1000,
+                position: 'middle',
+                dismissOnPageChange: true
+            });
+            toastWrong.present();
+            return false;
+        }
+        return true;
     }
-    private validateEmail(email) {
+    emailValidator(val: string, toastCtrl: ToastController): boolean {
         var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return re.test(email);
+        if (!re.test(val)) {
+            let toastWrong = toastCtrl.create({
+                message: 'Formato email non valido',
+                duration: 1000,
+                position: 'middle',
+                dismissOnPageChange: true
+            });
+            toastWrong.present();
+            return false;
+        }
+        return true;
     }
-    checkEmailAndPhones(parent: Parent) {
-        parent.emails.forEach(email => {
-            if (!this.validateEmail(email))
-                throw this.BreakEmailException
-        });
-        parent.phoneNumbers.forEach(phone => {
-            if (!this.validatePhone(phone))
-                throw this.BreakPhoneException
-        });
-    }
+
+
     onP1ContattiEdit() {
         this.editP1Contatti = true;
         this.newParent1.emails = this.selectedKid.parent1.emails.slice();
@@ -450,8 +493,7 @@ export class KidPage implements OnInit {
     }
 
     onP1ContattiSave() {
-        try {
-            this.checkEmailAndPhones(this.newParent1)
+        let handler = () => {
             this.editP1Contatti = false;
             let tmpKid = Kid.copy(this.selectedKid);
             tmpKid.parent1 = this.newParent1;
@@ -459,19 +501,18 @@ export class KidPage implements OnInit {
                 this.selectedKid.copyInto(tmpKid);
             }, (err) => {
                 this.editP1Info = true;
-            });
-        } catch (e) {
-            this.manageContactException(e);
-
+            });    
         }
+        this.checkNonSavedValue(this.p1Phones.newItem, () => {
+            setTimeout(() => {
+                this.checkNonSavedValue(this.p1Emails.newItem, handler);                
+            },200);
+        });
     }
 
     onP1ContattiCancel() {
         this.editP1Contatti = false;
     }
-
-    editP2Info: boolean;
-    newParent2: Parent = new Parent('', '', '');
 
     onP2InfoEdit() {
         this.newParent2.id = this.selectedKid.parent2.id;
@@ -495,50 +536,28 @@ export class KidPage implements OnInit {
         this.editP2Info = false;
     }
 
-    editP2Contatti: boolean;
-
     onP2ContattiEdit() {
         this.editP2Contatti = true;
         this.newParent2.emails = this.selectedKid.parent2.emails.slice();
         this.newParent2.phoneNumbers = this.selectedKid.parent2.phoneNumbers.slice();
     }
-    private manageContactException(e) {
-        if (e == this.BreakEmailException) {
-            this.toastWrongEmail = this.toastCtrl.create({
-                message: 'Formato email non valido',
-                duration: 1000,
-                position: 'middle',
-                dismissOnPageChange: true
-            });
-            this.toastWrongEmail.present()
 
-        } else if (e == this.BreakPhoneException) {
-            this.toastWrongPhone = this.toastCtrl.create({
-                message: 'Formato telefono non valido',
-                duration: 1000,
-                position: 'middle',
-                dismissOnPageChange: true
-            });
-
-            this.toastWrongPhone.present()
-        }
-    }
     onP2ContattiSave() {
-
-        try {
-            this.checkEmailAndPhones(this.newParent2)
+        let handler = () => {
             this.editP2Contatti = false;
             let tmpKid = Kid.copy(this.selectedKid);
             tmpKid.parent2 = this.newParent2;
             this.webService.add(this.selectedSchool, tmpKid).then(() => {
                 this.selectedKid.copyInto(tmpKid);
             }, (err) => {
-                this.editP2Info = true;
-            });
-        } catch (e) {
-            this.manageContactException(e);
+                this.editP1Info = true;
+            });    
         }
-
+        this.checkNonSavedValue(this.p2Phones.newItem, () => {
+            setTimeout(() => {
+                this.checkNonSavedValue(this.p2Emails.newItem, handler);                
+            },200);
+        });
     }
 
     onP2ContattiCancel() {
@@ -588,7 +607,6 @@ export class KidPage implements OnInit {
         alert.present();
     }
 
-    editDelegaInfo: boolean;
     //newDelega: Delega[] = [];
 
     onDelegaInfoEdit() {
@@ -666,33 +684,37 @@ export class KidPage implements OnInit {
 
     }
 
-    image=""
      getImage() {
          return this.apiUrl + "/picture/" + this.selectedSchool.appId + "/" + this.selectedSchool.id + "/" + this.selectedKid.id + "/" + sessionStorage.getItem('access_token')+"?timestamp="+new Date().getTime();
         // this.apiUrl + "/picture/" + this.selectedSchool.appId + "/" + this.selectedSchool.id + "/" + this.selectedKid.id + "/" + sessionStorage.getItem('access_token')+"?timestamp="+new Date().getTime()     var image = this.apiUrl + "/picture/" + this.selectedSchool.appId + "/" + this.selectedSchool.id + "/" + child.id + "/" + sessionStorage.getItem('access_token');
     //     return image;
      }
- 
-
-    newBus: BusService = new BusService();
+     
     onBusEdit() {
         this.editBus = true;
-        this.newBus.enabled=this.selectedKid.bus.enabled;
-        this.newBus.stops=this.selectedKid.bus.stops.slice();
-        this.newBus.busId=this.selectedKid.bus.busId;
+        this.newStop = "";
+        this.newBus = new BusService();
+        if (this.selectedKid.bus) {
+            this.newBus.enabled = this.selectedKid.bus.enabled;
+            this.newBus.stops = this.selectedKid.bus.stops.slice();
+            this.newBus.busId = this.selectedKid.bus.busId;
+        }
 
     }
 
     onBusSave() {
-        this.editBus = false;
-        let tmpKid = Kid.copy(this.selectedKid);
-        tmpKid.bus=this.newBus;
-        this.webService.add(this.selectedSchool, tmpKid).then(()=> {
-            this.selectedKid.copyInto(tmpKid);
-        },(err)=>{
-            //TODO
-            this.editBus=true;
-        });
+        let handler = () => {
+            this.editBus = false;
+            let tmpKid = Kid.copy(this.selectedKid);
+            tmpKid.bus = this.newBus;
+            this.webService.add(this.selectedSchool, tmpKid).then(()=> {
+                this.selectedKid.copyInto(tmpKid);
+            },(err)=>{
+                //TODO
+                this.editBus=true;
+            });
+        }
+        this.checkNonSavedValue(this.newStop, handler);
     }
 
     onBusCancel() {
@@ -735,5 +757,25 @@ export class KidPage implements OnInit {
             ]
         })
         alert.present();
+    }
+
+    private checkNonSavedValue(field: string, handler) {
+        if (field) {
+            let alert = this.alertCtrl.create({
+                subTitle: `Valore '${field}' non è stato ancora aggiunto e non sarà salvato. Procedere?`,
+                buttons: [
+                    {
+                        text: "Annulla"
+                    },
+                    {
+                        text: 'OK',
+                        handler: handler
+                    }
+                ]
+            })
+            alert.present();
+        } else {
+            handler();
+        }
     }
 }

@@ -25,6 +25,7 @@ export class Bambini implements OnInit {
   filtro: string = '0';
 
   filteredKid: Kid[];
+  searchField = "";
 
   kidClick: boolean[] = [false];
   schoolSections: Group[];
@@ -85,50 +86,54 @@ export class Bambini implements OnInit {
 
   onOrdineChange(ordine: string) {
     switch (ordine) {
-      case '0':
+      case '2':
         this.filteredKid.sort((item1, item2) => item1.name.localeCompare(item2.name));
         break;
-      case '1':
+      case '3':
         this.filteredKid.sort((item1, item2) => item2.name.localeCompare(item1.name));
         break;
-      case '2':
-        this.filteredKid.sort((item1, item2) => item1.surname.localeCompare(item2.surname));
+      case '0':
+        this.filteredKid.sort((item1, item2) => item1.surname.localeCompare(item2.surname) != 0 ? item1.surname.localeCompare(item2.surname) : item1.name.localeCompare(item2.name));
         break;
-      case '3':
-        this.filteredKid.sort((item1, item2) => item2.surname.localeCompare(item1.surname));
+      case '1':
+        this.filteredKid.sort((item1, item2) => item2.surname.localeCompare(item1.surname) != 0 ? item2.surname.localeCompare(item1.surname) : item2.name.localeCompare(item1.name));
         break;
+    }
+  }
+
+  readonly filterArray = {
+    '0': x => true,
+    '1': x => x.gender === "Maschio",
+    '2': x => x.gender === "Femmina",
+    '3': x => x.gender === "Altro",
+    '4': x => x.section,
+    '5': x => !x.section
+  };
+
+  private getFilterFunction() {
+    if (this.searchField && this.searchField.trim() !== '') {
+      let val = this.searchField.trim();
+      return x => {
+        let tmpN = x.name;
+        let tmpS = x.surname;
+        let result = true;
+        if (this.filterArray[this.filtro]) result = this.filterArray[this.filtro](x);
+        return result && (tmpN.toLowerCase().indexOf(val.toLowerCase()) >= 0 || tmpS.toLowerCase().indexOf(val.toLowerCase()) >= 0);        
+      }
+    } else if (this.filterArray[this.filtro]) {
+      return this.filterArray[this.filtro];
+    } else {
+      return x => true;
     }
   }
 
   onFiltroKidChange(filtro: string) {
-    switch (filtro) {
-      case '0':
-        this.filteredKid = this.selectedSchool.kids;
-        break;
-      case '1':
-        this.filteredKid = this.selectedSchool.kids.filter(x => x.gender === "Maschio");
-        break;
-      case '2':
-        this.filteredKid = this.selectedSchool.kids.filter(x => x.gender === "Femmina");;
-        break;
-      case '3':
-        this.filteredKid = this.selectedSchool.kids.filter(x => x.gender === "Altro");;
-        break;
-      case '4':
-        this.filteredKid = this.selectedSchool.kids.filter(x => x.section);
-        break;
-      case '5':
-        this.filteredKid = this.selectedSchool.kids.filter(x => !x.section);
-        break;
-      default:
-        // if filtro is a class fil
-        this.filteredKid = this.selectedSchool.kids.filter(x => filtro == x.section);
+    this.filteredKid = this.selectedSchool.kids.filter(this.getFilterFunction());
 
-    }
     this.onOrdineChange(this.ordine);
   }
   getImage(child) {
-    var image = this.apiUrl + "/picture/" + this.selectedSchool.appId + "/" + this.selectedSchool.id + "/" + child.id + "/" + sessionStorage.getItem('access_token');
+    let image = this.apiUrl + "/picture/" + this.selectedSchool.appId + "/" + this.selectedSchool.id + "/" + child.id + "/" + sessionStorage.getItem('access_token');
     return image;
   }
 
@@ -136,11 +141,7 @@ export class Bambini implements OnInit {
     this.filteredKid = this.selectedSchool.kids;
     let val = item.target.value;
     if (val && val.trim() !== '') {
-      this.filteredKid = this.filteredKid.filter(x => {
-        var tmpN = x.name;
-        var tmpS = x.surname;
-        return (tmpN.toLowerCase().indexOf(val.toLowerCase()) >= 0 || tmpS.toLowerCase().indexOf(val.toLowerCase()) >= 0);
-      })
+      this.filteredKid = this.filteredKid.filter(this.getFilterFunction());
     }
   }
 }

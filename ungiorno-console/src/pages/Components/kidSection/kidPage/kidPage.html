@@ -65,7 +65,7 @@
                                                 </ion-col>
                                                 <ion-col col-10>
                                                     <span *ngIf='!selectedKid.id && !editInfo' class="empty-field">Dato non inserito</span>
-                                                    <ion-input [(ngModel)]="newInfo.id" [disabled]='!isNew' *ngIf="editInfo" no-margin></ion-input>
+                                                    <ion-input [(ngModel)]="newInfo.id" [disabled]="!isNew" *ngIf="editInfo" no-margin></ion-input>
                                                     <span *ngIf="!editInfo">{{selectedKid.id}}</span>
                                                 </ion-col>
                                             </ion-row>
@@ -143,16 +143,12 @@
                                     <ion-card-content margin-top>
                                         <ion-item style="height:120px">
                                             <ion-thumbnail item-start style="height: 100%; width: auto">
-                                                <img [src]="image" style="height: 100%; width: auto" *ngIf='!editFoto && !rerender && selectedKid.id ' />
-                                                <img src="../../../../assets/images/placeholder.png" style="height: 100%; width: auto" *ngIf='!editFoto && !rerender && !selectedKid.id '
-                                                />
-                                                <input id="uploadInputFile" accept="image/*" type="file" ng2FileSelect [uploader]="uploader" />
-                                                <button class='edit' ion-button color='magenta1' margin-right ion-button *ngIf='editFoto' (click)="onRemoveProfileKid()">Rimuovi Immagine</button>
+                                                <img [src]="image" style="height: 100%; width: auto" *ngIf='selectedKid.id ' />
+                                                <img src="../../../../assets/images/placeholder.png" style="height: 100%; width: auto" *ngIf='!selectedKid.id '/>
                                             </ion-thumbnail>
-                                            <!-- <input #inputFile type='file' style='display: none' (change)='handleChange($event)' accept="image/gif, image/png, image/jpeg, image/bmp, image/webp"
-                                            />   -->
+                                            <input id="uploadInputFile" accept="image/*" type="file" ng2FileSelect [uploader]="uploader" *ngIf='editFoto'/>
+                                            <button class='edit' ion-button color='magenta1' margin-right ion-button *ngIf='editFoto' (click)="onRemoveProfileKid()">Rimuovi Immagine</button>
                                             <input #inputFile type='file' style='display: none' accept="image/gif, image/png, image/jpeg, image/bmp, image/webp" />
-
                                         </ion-item>
                                     </ion-card-content>
                                 </ion-card>
@@ -425,8 +421,8 @@
                                             </ion-card-header>
                                             <ion-card-content margin-top>
                                                 <ion-grid inset *ngIf="editP1Contatti">
-                                                    <list-widget [items]="newParent1.phoneNumbers" [type]="'tel'" [editMode]="true" [label]="'Telefono'"></list-widget>
-                                                    <list-widget [items]="newParent1.emails" [editMode]="true" [label]="'Email'"></list-widget>
+                                                    <list-widget [items]="newParent1.phoneNumbers" [type]="'tel'" [editMode]="true" [validator]="phoneValidator" [label]="'Telefono'" #p1Phones ></list-widget>
+                                                    <list-widget [items]="newParent1.emails" [editMode]="true" [validator]="emailValidator" [label]="'Email'" #p1Emails></list-widget>
                                                 </ion-grid>
                                                 <ion-grid inset *ngIf="!editP1Contatti">
                                                     <list-widget [items]="selectedKid.parent1.phoneNumbers" [type]="'tel'" [editMode]="false" [label]="'Telefono'"></list-widget>
@@ -497,8 +493,8 @@
                                             </ion-card-header>
                                             <ion-card-content margin-top>
                                                 <ion-grid inset *ngIf="editP2Contatti">
-                                                    <list-widget [items]="newParent2.phoneNumbers" [type]="'tel'" [editMode]="true" [label]="'Telefono'"></list-widget>
-                                                    <list-widget [items]="newParent2.emails" [editMode]="true" [label]="'Email'"></list-widget>
+                                                    <list-widget [items]="newParent2.phoneNumbers" [type]="'tel'" [editMode]="true" [validator]="phoneValidator" [label]="'Telefono'" #p2Phones ></list-widget>
+                                                    <list-widget [items]="newParent2.emails" [editMode]="true" [validator]="emailValidator" [label]="'Email'" #p2Emails ></list-widget>
                                                 </ion-grid>
                                                 <ion-grid inset *ngIf="!editP2Contatti">
                                                     <list-widget [items]="selectedKid.parent2.phoneNumbers" [type]="'tel'" [editMode]="false" [label]="'Telefono'"></list-widget>

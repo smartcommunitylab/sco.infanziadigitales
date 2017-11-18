@@ -14,10 +14,10 @@
       <ion-item>
         <ion-label floating>Ordine</ion-label>
         <ion-select [(ngModel)]='ordine' (ngModelChange)="onOrdineChange(ordine)" interface='popover'>
-          <ion-option value='0'>Alfabetico (nome) A-Z</ion-option>
-          <ion-option value='1'>Alfabetico (nome) Z-A</ion-option>
-          <ion-option value='2'>Alfabetico (cognome) A-Z</ion-option>
-          <ion-option value='3'>Alfabetico (cognome) Z-A</ion-option>
+          <ion-option value='0'>Alfabetico (cognome) A-Z</ion-option>
+          <ion-option value='1'>Alfabetico (cognome) Z-A</ion-option>
+          <ion-option value='2'>Alfabetico (nome) A-Z</ion-option>
+          <ion-option value='3'>Alfabetico (nome) Z-A</ion-option>
         </ion-select>
       </ion-item>
     </ion-col>
@@ -39,7 +39,7 @@
       <ion-item>
         <!--<ion-label floating>Cerca</ion-label> 
         <ion-input (input)="searchKids($event)"></ion-input>-->
-        <div>Cerca<input class="text-generic" type="text" (input)="searchKids($event)"></div>
+        <div>Cerca<input class="text-generic" type="text" [(ngModel)]="searchField" (input)="searchKids($event)"></div>
       </ion-item>
     </ion-col>
   </ion-row>
@@ -56,7 +56,7 @@
           <ion-thumbnail item-start>
             <img [src]="getImage(item)">
           </ion-thumbnail>
-          <h2>{{item.name}} {{item.surname}}</h2>
+          <h2>{{item.surname}} {{item.name}}</h2>
           <ion-icon name="eye" item-end color="magenta1" style="margin-right: 30px" (click)='onViewKid(item)'></ion-icon> 
           <ion-icon name="trash" item-end color="magenta1" style="margin-right: 10px" (click)="onDeleteKid(item)"></ion-icon>
         </ion-item>

@@ -2,8 +2,9 @@ import { PopoverPage } from './../pages/Components/Modals/orariModal/popoverOrar
 import { Insegnanti } from './../pages/Components/teacherSection/teacher.component';
 import { TeacherModal } from './../pages/Components/Modals/teacherModal/teacherModal';
 import { WebService, requestOptionsProvider } from '../services/WebService';
-import { LoginService } from '../services/login.service'
-import { ConfigService } from '../services/config.service'
+import { LoginService } from '../services/login.service';
+import { ConfigService } from '../services/config.service';
+import { CommonService } from '../services/common.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
@@ -83,6 +84,7 @@ export function initConfig(config: ConfigService) {
     WebService,
     LoginService,
     ConfigService,
+    CommonService,
     { provide: APP_INITIALIZER, useFactory: initConfig, deps: [ConfigService], multi: true },
     UserService,
     requestOptionsProvider

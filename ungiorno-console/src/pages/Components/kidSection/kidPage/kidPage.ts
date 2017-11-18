@@ -10,6 +10,7 @@ import { Stop } from './../../../../app/Classes/stop';
 import { Kid } from './../../../../app/Classes/kid';
 import { WebService } from './../../../../services/WebService';
 import { ConfigService } from './../../../../services/config.service';
+import { CommonService } from  './../../../../services/common.service';
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, ParamMap } from "@angular/router";
 import { Location } from '@angular/common';
@@ -168,9 +169,9 @@ export class KidPage implements OnInit {
     apiUrl: string;
     uploader: FileUploader = new FileUploader({});
 
-    BreakEmailException = {};
-    BreakPhoneException = {};
-
+    emailValidator = CommonService.emailValidator;
+    phoneValidator = CommonService.phoneValidator;
+    
     constructor(
         private webService: WebService,
         private configService: ConfigService,
@@ -456,35 +457,6 @@ export class KidPage implements OnInit {
 
         this.editP1Info = false;
     }
-
-    phoneValidator(val: string, toastCtrl: ToastController): boolean {
-        if (!/^[0-9]{5,10}$/.test(val)) {
-            let toastWrong = toastCtrl.create({
-                message: 'Formato telefono non valido',
-                duration: 1000,
-                position: 'middle',
-                dismissOnPageChange: true
-            });
-            toastWrong.present();
-            return false;
-        }
-        return true;
-    }
-    emailValidator(val: string, toastCtrl: ToastController): boolean {
-        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        if (!re.test(val)) {
-            let toastWrong = toastCtrl.create({
-                message: 'Formato email non valido',
-                duration: 1000,
-                position: 'middle',
-                dismissOnPageChange: true
-            });
-            toastWrong.present();
-            return false;
-        }
-        return true;
-    }
-
 
     onP1ContattiEdit() {
         this.editP1Contatti = true;

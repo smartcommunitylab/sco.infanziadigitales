@@ -39,8 +39,14 @@ export class Insegnanti implements OnInit {
   }
 
   onDeleteTeacher(item : Teacher) {
+    let hasGroups = false;
+    if (this.selectedSchool.groups) {
+      hasGroups = this.selectedSchool.groups.some(g => g.teachers ? g.teachers.some(t => t.toLowerCase() == item.id.toLowerCase()) : false);
+    }
+
     let alert = this.alertCtrl.create({
       subTitle: 'Conferma eliminazione',
+      message : hasGroups ? "Attenzione! L'insegnante è associato ad alcuni sezioni." : null,
       buttons: [
         {
           text: "Annulla"
@@ -50,10 +56,11 @@ export class Insegnanti implements OnInit {
           handler: () => {
             this.webService.remove(this.selectedSchool, item).then(() => {
               this.selectedSchool.teachers = this.selectedSchool.teachers.filter(teacher => teacher.id.toLowerCase() != item.id.toLowerCase());
-              for (let i=0; i<this.selectedSchool.groups.length;i++){
-                this.selectedSchool.groups[i].teachers= this.selectedSchool.groups[i].teachers.filter(teacher => teacher.toLowerCase() != item.id.toLowerCase());
-                
-              }                
+              if (this.selectedSchool.groups) {
+                this.selectedSchool.groups.forEach(g => {
+                  if (g.teachers) g.teachers = g.teachers.filter(teacher => teacher.toLowerCase() != item.id.toLowerCase());
+                });
+              }
               this.onFiltroTeacherChange(this.filtro);
             });
           }

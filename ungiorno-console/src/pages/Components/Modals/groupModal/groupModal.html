@@ -28,7 +28,10 @@
                     <ion-card-content>
                         <ion-list inset>
                             <ion-item>
-                                <div><label class="input-label">Nome*</label><input class="text-generic" type="text" [(ngModel)]="copiedGroup.name" [disabled]="!isNew"></div>
+                                <div>
+                                    <label class="input-label">Nome*</label>
+                                    <input class="text-generic" type="text" [(ngModel)]="copiedGroup.name" [disabled]="!isNew" (blur)="onBlur($event)" >
+                                </div>
                                 <!--<ion-label>Nome*</ion-label>
                                 <ion-input name="name" type="text" [(ngModel)]="copiedGroup.name"></ion-input>-->
                             </ion-item>

@@ -69,7 +69,28 @@ export class GroupModal implements OnInit {
 
   }
 
+  private checkNameDuplicate() {
+    if (this.isNew && this.selectedSchool.groups.findIndex(x => x.name.toLowerCase() == this.copiedGroup.name.toLowerCase()) >= 0) {
+      let toastConflict = this.toastCtrl.create({
+        message: 'Gruppo o sezione con lo stesso nome è già presente',
+        duration: 3000,
+        position: 'middle',
+        dismissOnPageChange: true
+
+      });
+      toastConflict.present();
+      return false;
+    }
+    return true;
+  }
+
+  onBlur(evt: any) {
+    this.checkNameDuplicate();
+  }
+
   save() {
+    if (!this.checkNameDuplicate()) return;
+
     let alert = this.alertCtrl.create({
       subTitle: 'Eventuali modifiche verrano confermate. Confermi?',
       buttons: [
@@ -78,19 +99,7 @@ export class GroupModal implements OnInit {
         },
         {
           text: 'OK',
-          handler: () => {
-            if (this.isNew && this.selectedSchool.groups.findIndex(x => x.name.toLowerCase() == this.selectedGroup.name.toLowerCase()) >= 0) {
-              let toastConflict = this.toastCtrl.create({
-                message: 'Elemento già presente (conflitto di nomi)',
-                duration: 3000,
-                position: 'middle',
-                dismissOnPageChange: true
-
-              });
-              toastConflict.present();
-              return;
-            }
-              
+          handler: () => {              
             // kids to be removed / added
             let oldKids = {};
             let toRemoveKids = [];

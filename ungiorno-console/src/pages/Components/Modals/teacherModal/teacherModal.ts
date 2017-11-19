@@ -31,6 +31,7 @@ export class TeacherModal implements OnInit {
   isNew: boolean;
   toastWrongEmail;
   BreakEmailException = {};
+  editMail:boolean = false;
   constructor(public params: NavParams,
     public navCtrl: NavController,
     private webService: WebService,
@@ -75,7 +76,28 @@ export class TeacherModal implements OnInit {
     alert.present();
 
   }
+  onMailEdit() {
+    this.editMail=true;
+    this.copiedTeacher.email=this.selectedTeacher.email;
+  }
 
+  onMailSave() {
+    this.editMail = false;
+    //save email of the teacher and keep the modal open
+    this.webService.add(this.selectedSchool, this.copiedTeacher).then(()=>{
+      this.selectedTeacher=this.copiedTeacher;
+    },(err) => {
+      //TODO
+      this.editMail = true;
+      
+    });
+   
+  }
+
+  onMailCancel() {
+    this.editMail=false;
+    
+  }
   private validateEmail(email) {
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
@@ -85,11 +107,10 @@ export class TeacherModal implements OnInit {
     if (this.copiedTeacher.email && !this.validateEmail(this.copiedTeacher.email))
       throw this.BreakEmailException
   }
+
   save() {
     try {
       this.checkEmail();
-
-
       let alert = this.alertCtrl.create({
         subTitle: 'Eventuali modifiche verrano confermate. Confermi?',
         buttons: [
@@ -144,7 +165,7 @@ export class TeacherModal implements OnInit {
     //popup di richiesta
     let alert = this.alertCtrl.create({
       title: 'Creazione/ripristino PIN',
-      subTitle: 'Premendo OK un nuovo PIN verrà spedito all’indirizzo email indicato, disabilitando il PIN precedente.',
+      subTitle: 'Premendo OK un nuovo PIN verrà spedito all’indirizzo email '+this.selectedTeacher.email+', disabilitando il PIN precedente.',
       buttons: [
         {
           text: "Annulla"

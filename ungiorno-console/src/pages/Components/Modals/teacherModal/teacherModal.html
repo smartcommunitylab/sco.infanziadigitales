@@ -55,12 +55,18 @@
                     <ion-card>
                         <ion-card-header>
                             Contatti
+                                    <button class='edit' ion-button color='magenta1' float-end *ngIf='!editMail' (click)="onMailEdit()" >Modifica</button>
+                                    <button class='edit' ion-button color='magenta1' float-end *ngIf='editMail' (click)="onMailSave()">Salva</button>
+                                    <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='editMail' (click)="onMailCancel()">Annulla</button>
+                                
                         </ion-card-header>
                         <ion-card-content>
                             <ion-item>
                                 <ion-row>
                                     <ion-col col-2>E-Mail</ion-col>
-                                    <ion-col col-10><input class="text-generic" name="name" type="text" [(ngModel)]="copiedTeacher.email"></ion-col>
+                                    <ion-col col-10  *ngIf='!copiedTeacher.email && !editMail' ><p class="empty-field" style="padding-left: 8px;">Dato non inserito</p></ion-col>
+                                    <ion-col col-10  *ngIf='copiedTeacher.email && !editMail' ><p  style="padding-left: 8px;">{{selectedTeacher.email}}</p></ion-col>
+                                    <ion-col col-10  *ngIf='editMail'><input class="text-generic" name="name" type="text" [(ngModel)]="copiedTeacher.email"></ion-col>
                                 </ion-row>
                             </ion-item>
                         </ion-card-content>
@@ -78,7 +84,7 @@
                             <ion-item>
                                 <ion-row>
                                     <ion-col col-2>PIN</ion-col>
-                                    <ion-col col-10 text-left><button class='edit' ion-button color='magenta1' float-center [disabled]="!copiedTeacher.id || !selectedTeacher.email"
+                                    <ion-col col-10 text-left><button class='edit' ion-button color='magenta1' float-center [disabled]="!copiedTeacher.id || !selectedTeacher.email || editMail"
                                             (click)="generatePin()">Genera PIN</button></ion-col>
                                 </ion-row>
                                 <ion-row *ngIf="!selectedTeacher.id || !selectedTeacher.email">

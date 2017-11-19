@@ -71,6 +71,9 @@ export class Orari implements OnInit {
                     text: 'OK',
                     handler: () => {
                         this.selectedSchool.servizi.splice(this.selectedSchool.servizi.findIndex(tmp => tmp.servizio.toLowerCase() === item.servizio.toLowerCase()), 1);
+                        for (let i=0; i<this.selectedSchool.kids.length;i++){
+                            this.selectedSchool.kids[i].services= this.selectedSchool.kids[i].services.filter(service => service.servizio.toLowerCase() != item.servizio.toLowerCase());
+                          } 
                         this.webService.update(this.selectedSchool);
                     },
                 }

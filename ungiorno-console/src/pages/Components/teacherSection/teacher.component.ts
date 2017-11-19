@@ -73,10 +73,10 @@ export class Insegnanti implements OnInit {
   onOrdineChange(ordine : string) {
     switch(ordine) {
       case '0':
-        this.filteredTeacher.sort((item1, item2) => item1.name.localeCompare(item2.name));
+      this.filteredTeacher.sort((item1, item2) => item1.surname.localeCompare(item2.surname) != 0 ? item1.surname.localeCompare(item2.surname) : item1.name.localeCompare(item2.name));
       break;
       case '1':
-        this.filteredTeacher.sort((item1, item2) => item2.name.localeCompare(item1.name));
+      this.filteredTeacher.sort((item1, item2) => item2.surname.localeCompare(item1.surname) != 0 ? item2.surname.localeCompare(item1.surname) : item2.name.localeCompare(item1.name));
       break;
     } 
   }

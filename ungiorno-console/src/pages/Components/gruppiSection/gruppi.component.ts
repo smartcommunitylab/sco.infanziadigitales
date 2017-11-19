@@ -41,16 +41,19 @@ export class Gruppi implements OnInit {
   ordine: string = '0';
   filtro : string = '0';
   filteredGroups : Group[];
+  searchText: string = '';
 
   constructor(private webService : WebService, public alertCtrl: AlertController, public modalCtrl: ModalController) {}
 
   ngOnInit(): void {
-    this.filteredGroups = this.selectedSchool.groups;
     this.onFiltroGroupChange(this.filtro);
   }
 
   showGroupModal(item: Group, isNew : boolean) {
     let modal = this.modalCtrl.create(GroupModal, {'group' : item, 'school' : this.selectedSchool, 'isNew' : isNew}, {enableBackdropDismiss: false, showBackdrop: false});
+    modal.onDidDismiss(data => {
+      this.onFiltroGroupChange(this.filtro);
+    });
     modal.present();
   }
 
@@ -58,11 +61,18 @@ export class Gruppi implements OnInit {
     var newGroup =  new Group('', [], false, []);
     this.showGroupModal(newGroup, true);
   }
+  newSectionModal() {
+    var newGroup =  new Group('', [], true, []);
+    this.showGroupModal(newGroup, true);
+  }
 
   onDeleteGroup(item : Group) {
+    let hasKids = !!item.kids && item.kids.length > 0;
+    let hasTeachers = !!item.teachers && item.teachers.length > 0;
+
     let alert = this.alertCtrl.create({
-            title: 'Conferma eliminazione',
-            subTitle:'Attenzione: i bambini di questa sezione dovranno essere associati ad un’altra sezione',
+            subTitle: 'Conferma eliminazione',
+            message: (hasKids || hasTeachers) ? 'Attenzione! I bambini/insegnanti di questo gruppo dovranno essere associati ad un’altro gruppo' : null,
             cssClass:'alertWarningCss',
             buttons: [
         {
@@ -71,8 +81,20 @@ export class Gruppi implements OnInit {
         {
           text: 'OK',
           handler: () => {
-            this.selectedSchool.groups.splice(this.selectedSchool.groups.findIndex(tmp => tmp.name.toLowerCase() === item.name.toLowerCase()), 1);
-            this.webService.update(this.selectedSchool);
+            let tmpSchool = School.copy(this.selectedSchool);
+            tmpSchool.groups.splice(this.selectedSchool.groups.findIndex(tmp => tmp.name.toLowerCase() === item.name.toLowerCase()), 1);
+            this.webService.update(tmpSchool).then(() => {
+              // update kids attached
+              if (item.section) {
+                this.selectedSchool.kids.forEach(kid => {
+                  if (kid.section == item.name) kid.section = null;
+                });  
+              }
+              this.selectedSchool.groups = tmpSchool.groups;
+              this.onFiltroGroupChange(this.filtro);              
+            }, err => {
+              // TODO handle error
+            });
           }
         }
       ]
@@ -105,29 +127,38 @@ export class Gruppi implements OnInit {
     }
   }
 
-  onFiltroGroupChange(filtro : string) {
-    switch(filtro) {
-      case '0':
-        this.filteredGroups = this.selectedSchool.groups;
-      break;
-      case '1':
-        this.filteredGroups = this.selectedSchool.groups.filter(x => x.section === false)
-      break;
-      case '2':
-        this.filteredGroups = this.selectedSchool.groups.filter(x => x.section === true)
-      break;
+  readonly filterArray = {
+    '0': x => true,
+    '1': x => x.section === false,
+    '2': x => x.section === true
+  };
+
+  private getFilterFunction() {
+    if (this.searchText && this.searchText.trim() !== '') {
+      let val = this.searchText.trim();
+      return x => {
+        let tmp = x.name;
+        let result = true;
+        if (this.filterArray[this.filtro]) result = this.filterArray[this.filtro](x);
+        return result && (tmp.toLowerCase().indexOf(val.toLowerCase()) >= 0);        
+      }
+    } else if (this.filterArray[this.filtro]) {
+      return this.filterArray[this.filtro];
+    } else {
+      return x => true;
     }
+  }
+
+  onFiltroGroupChange(filtro: string) {
+    this.filteredGroups = this.selectedSchool.groups.filter(this.getFilterFunction());
     this.onOrdineChange(this.ordine);
   }
 
-  searchGroups(item : any) {
+  searchGroups(item: any) {
     this.filteredGroups = this.selectedSchool.groups;
     let val = item.target.value;
-    if(val && val.trim() !== '') {
-      this.filteredGroups = this.filteredGroups.filter(x => {
-        var tmp = x.name;
-        return (tmp.toLowerCase().indexOf(val.toLowerCase()) >= 0);
-      })
+    if (val && val.trim() !== '') {
+      this.filteredGroups = this.filteredGroups.filter(this.getFilterFunction());
     }
   }
 }

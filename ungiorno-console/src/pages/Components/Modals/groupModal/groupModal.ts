@@ -32,12 +32,6 @@ export class GroupModal implements OnInit {
 
   isNew: boolean; //true if the group is new
 
-
-  addKidToGroupMap = {}
-  removeKidToGroupMap = {}
-
-  addTeacherToGroupMap = {}
-  removeTeacherToGroupMap = {}
   apiUrl: string;
 
   constructor(public params: NavParams, public toastCtrl: ToastController, public navCtrl: NavController, private webService: WebService, public alertCtrl: AlertController, private configService: ConfigService,
@@ -47,12 +41,9 @@ export class GroupModal implements OnInit {
     this.isNew = this.params.get('isNew') as boolean;
 
     Object.assign(this.copiedGroup, this.selectedGroup) //copia profonda dei due oggetti    
-    this.copiedGroup.kids = new Array();
-    this.selectedGroup.kids.forEach(x => this.copiedGroup.kids.push(x))
-    this.copiedGroup.teachers = new Array();
-    this.selectedGroup.teachers.forEach(x => this.copiedGroup.teachers.push(x))
+    this.copiedGroup.kids = this.selectedGroup.kids.slice();
+    this.copiedGroup.teachers = this.selectedGroup.teachers.slice();
     this.apiUrl = this.configService.getConfig('apiUrl');
-
   }
 
   ngOnInit() {
@@ -79,7 +70,6 @@ export class GroupModal implements OnInit {
   }
 
   save() {
-
     let alert = this.alertCtrl.create({
       subTitle: 'Eventuali modifiche verrano confermate. Confermi?',
       buttons: [
@@ -89,142 +79,87 @@ export class GroupModal implements OnInit {
         {
           text: 'OK',
           handler: () => {
-            Object.assign(this.selectedGroup, this.copiedGroup); //copia profonda contraria (passaggio modifiche)
-            this.selectedGroup.kids = new Array();
-            this.copiedGroup.kids.forEach(x => this.selectedGroup.kids.push(x))
-            this.selectedGroup.teachers = new Array();
-            this.copiedGroup.teachers.forEach(x => this.selectedGroup.teachers.push(x))
+            if (this.isNew && this.selectedSchool.groups.findIndex(x => x.name.toLowerCase() == this.selectedGroup.name.toLowerCase()) >= 0) {
+              let toastConflict = this.toastCtrl.create({
+                message: 'Elemento già presente (conflitto di nomi)',
+                duration: 3000,
+                position: 'middle',
+                dismissOnPageChange: true
 
-            if (this.isNew) {
-              if (this.selectedSchool.groups.findIndex(x => x.name.toLowerCase() == this.selectedGroup.name.toLowerCase()) < 0) {
-                this.selectedSchool.groups.push(this.selectedGroup);
-                this.webService.update(this.selectedSchool);
-                let kidsToAdd = this.addKidToGroupMap[this.selectedGroup.name]
-                let kidsToRemove = this.removeKidToGroupMap[this.selectedGroup.name]
-                let teacherToAdd = this.addTeacherToGroupMap[this.selectedGroup.name]
-                let teacherToRemove = this.removeTeacherToGroupMap[this.selectedGroup.name]
-
-                if (kidsToAdd != undefined) {
-                  kidsToAdd.forEach(kidId => {
-                    if (this.selectedGroup.section) {
-                      this.webService.putKidInSection(this.selectedSchool, kidId, this.selectedGroup);
-                    } else {
-                      this.webService.addKidToGroup(this.selectedSchool, kidId, this.selectedGroup);
-                    }
-                  })
-                }
-
-                if (kidsToRemove != undefined) {
-                  kidsToRemove.forEach(kidId => {
-                    if (this.selectedGroup.section) {
-                      this.webService.removeKidFromSection(this.selectedSchool, kidId, this.selectedGroup.name);
-                    } else {
-                      this.webService.removeKidFromGroup(this.selectedSchool, kidId, this.selectedGroup.name);
-                    }
-                  });
-                }
-                if (teacherToAdd != undefined) {
-                  teacherToAdd.forEach(teacherId => {
-                    this.webService.addTeacherToSectionOrGroup(this.selectedSchool, teacherId, this.selectedGroup.name)
-                  })
-                }
-
-                if (teacherToRemove != undefined) {
-                  console.log('teacherToRemove ' + teacherToRemove);
-                  teacherToRemove.forEach(teacherId => {
-                    this.webService.removeTeacherToSectionOrGroup(this.selectedSchool, teacherId, this.selectedGroup.name);
-                  });
-                }
-
-                console.log("add kid " + JSON.stringify(this.addKidToGroupMap));
-                console.log("remove kid " + JSON.stringify(this.removeKidToGroupMap));
-                console.log("add teacher " + JSON.stringify(this.addTeacherToGroupMap));
-                console.log("remove teacher " + JSON.stringify(this.removeTeacherToGroupMap));
-                this.navCtrl.pop();
-
-              }
-              else {
-                let toastConflict = this.toastCtrl.create({
-                  message: 'Elemento già presente (conflitto di nomi)',
-                  duration: 3000,
-                  position: 'middle',
-                  dismissOnPageChange: true
-
-                });
-                toastConflict.present()
-              }
-            } else {
-              // when edit a group I can only add or remove children or teacher
-              // so there is not need to update group definition data in profile of school
-
-              let kidsToAdd = this.addKidToGroupMap[this.selectedGroup.name]
-              let kidsToRemove = this.removeKidToGroupMap[this.selectedGroup.name]
-              let teacherToAdd = this.addTeacherToGroupMap[this.selectedGroup.name]
-              let teacherToRemove = this.removeTeacherToGroupMap[this.selectedGroup.name]
-
-              if (kidsToAdd != undefined) {
-                kidsToAdd.forEach(kidId => {
-                  if (this.selectedGroup.section) {
-                    this.webService.putKidInSection(this.selectedSchool, kidId, this.selectedGroup).then(() => {
-                      //TODO
-                    }, (err) => {
-                      //TODO
-                    })
-                  } else {
-                    this.webService.addKidToGroup(this.selectedSchool, kidId, this.selectedGroup).then(() => {
-
-                    }, (err) => {
-
-                    })
-                  }
-                })
-              }
-
-              if (kidsToRemove != undefined) {
-                kidsToRemove.forEach(kidId => {
-                  if (this.selectedGroup.section) {
-                    this.webService.removeKidFromSection(this.selectedSchool, kidId, this.selectedGroup.name).then(() => {
-                      //TODO
-                    }, (err) => {
-                      //TODO
-                    })
-                  } else {
-                    this.webService.removeKidFromGroup(this.selectedSchool, kidId, this.selectedGroup.name).then(() => {
-                      //TODO
-                    }, (err) => {
-                      //TODO
-                    })
-                  }
-                });
-              }
-
-              if (teacherToAdd != undefined) {
-                teacherToAdd.forEach(teacherId => {
-                  this.webService.addTeacherToSectionOrGroup(this.selectedSchool, teacherId, this.selectedGroup.name).then(() => {
-                    //TODO
-                  }, (err) => {
-                    //TODO
-                  })
-                })
-              }
-
-              if (teacherToRemove != undefined) {
-                console.log('teacherToRemove ' + teacherToRemove);
-                teacherToRemove.forEach(teacherId => {
-                  console.log('remove call ' + teacherId)
-                  this.webService.removeTeacherToSectionOrGroup(this.selectedSchool, teacherId, this.selectedGroup.name).then(() => {
-
-                  }, (err) => {
-
-                  })
-                });
-              }
-              console.log("add kid " + JSON.stringify(this.addKidToGroupMap));
-              console.log("remove kid " + JSON.stringify(this.removeKidToGroupMap));
-              console.log("add teacher " + JSON.stringify(this.addTeacherToGroupMap));
-              console.log("remove teacher " + JSON.stringify(this.removeTeacherToGroupMap));
-              this.navCtrl.pop();
+              });
+              toastConflict.present();
+              return;
             }
+              
+            // kids to be removed / added
+            let oldKids = {};
+            let toRemoveKids = [];
+            let toAddKids = [];
+            this.selectedGroup.kids.forEach(kid => oldKids[kid] = true);
+            this.copiedGroup.kids.forEach(kid => {
+              if (!oldKids[kid]) toAddKids.push(kid);
+              oldKids[kid] = null;
+            });
+            for (let kid in oldKids) {
+              if (oldKids[kid]) toRemoveKids.push(kid);
+            }
+
+            // teachers to be removed / added
+            let oldTeachers = {};
+            let toRemoveTeachers = [];
+            let toAddTeachers = [];
+            this.selectedGroup.teachers.forEach(t => oldTeachers[t] = true);
+            this.copiedGroup.teachers.forEach(t => {
+              if (!oldTeachers[t]) toAddTeachers.push(t);
+              oldTeachers[t] = null;
+            });
+            for (let t in oldTeachers) {
+              if (oldTeachers[t]) toRemoveTeachers.push(t);
+            }            
+
+            let promises = [];
+            if (this.isNew) {
+              let tmpSchool = School.copy(this.selectedSchool);
+              tmpSchool.groups.push(this.copiedGroup);
+              promises.push(this.webService.update(this.selectedSchool));
+            }
+            toAddKids.forEach(kidId => {
+              if (this.copiedGroup.section) {
+                promises.push(this.webService.putKidInSection(this.selectedSchool, kidId, this.selectedGroup));
+              } else {
+                promises.push(this.webService.addKidToGroup(this.selectedSchool, kidId, this.selectedGroup));
+              }
+            });
+            toRemoveKids.forEach(kidId => {
+              if (this.selectedGroup.section) {
+                promises.push(this.webService.removeKidFromSection(this.selectedSchool, kidId, this.selectedGroup.name));
+              } else {
+                promises.push(this.webService.removeKidFromGroup(this.selectedSchool, kidId, this.selectedGroup.name));
+              }
+            });
+            toAddTeachers.forEach(teacherId => {
+              promises.push(this.webService.addTeacherToSectionOrGroup(this.selectedSchool, teacherId, this.selectedGroup.name));
+            });
+            toRemoveTeachers.forEach(teacherId => {
+              promises.push(this.webService.removeTeacherToSectionOrGroup(this.selectedSchool, teacherId, this.selectedGroup.name));
+            });            
+            Promise.all(promises).then(data => {
+              Object.assign(this.selectedGroup, this.copiedGroup) //copia profonda dei due oggetti    
+              this.selectedGroup.kids = this.copiedGroup.kids.slice();
+              this.selectedGroup.teachers = this.copiedGroup.teachers.slice();                        
+              // update kid objects: 
+              // - if removed, set section to null
+              // - if added, set section
+              if (this.selectedGroup.section) {
+                this.selectedSchool.kids.forEach(kid => {
+                  if (toAddKids.indexOf(kid.id) >= 0) kid.section = this.selectedGroup.name;
+                  if (toRemoveKids.indexOf(kid.id)>= 0) kid.section = null;
+                });
+              }
+              this.navCtrl.pop(); 
+            }, err => {
+              // TODO handle error
+            });
           }
         }
       ]
@@ -240,117 +175,85 @@ export class GroupModal implements OnInit {
     this.copiedGroup.teachers.forEach(x => {
       this.selectedGroupTeachers.push(this.selectedSchool.teachers.find(f => f.id.toLowerCase() === x.toLowerCase()));
     });
+    this.selectedGroupTeachers.sort(this.compare);
 
     this.copiedGroup.kids.forEach(x => {
       this.selectedGroupKids.push(this.selectedSchool.kids.find(f => f.id.toLowerCase() === x.toLowerCase()));
     });
-
+    this.selectedGroupKids.sort(this.compare);
+    
 
   }
 
-  private compare(a, b) {
-    if (a.surname < b.surname)
-      return -1;
-    if (a.surname > b.surname)
-      return 1;
-    return 0;
+  private compare(item1, item2) {
+    return item1.surname.localeCompare(item2.surname) != 0 ? item1.surname.localeCompare(item2.surname) : item1.name.localeCompare(item2.name);
   }
 
 
-  oldTeacher: string[] = [];
   addTeacher() {
-    this.oldTeacher = [];
-    this.copiedGroup.teachers.forEach(x => this.oldTeacher.push(x));
     let alert = this.alertCtrl.create();
     alert.setTitle('Aggiungi insegnanti');
-    this.selectedSchool.teachers.sort(this.compare);
-    this.selectedSchool.teachers.forEach(element => { //creazione lista di checkbox in alert
+    let allTeachers =  this.selectedSchool.teachers.slice();
+    allTeachers.sort(this.compare);
+    allTeachers.forEach(element => { //creazione lista di checkbox in alert
+      let checked = this.copiedGroup.teachers.findIndex(x => x.toLowerCase() === element.id.toLowerCase()) >= 0;
+      let disabled = checked;
       alert.addInput({
         type: 'checkbox',
-        label: element.name + ' ' + element.surname,
+        label: element.surname + ' ' + element.name,
         value: element.id,
-        checked: this.copiedGroup.teachers.findIndex(x => x.toLowerCase() === element.id.toLowerCase()) >= 0,
-        disabled: this.copiedGroup.teachers.findIndex(x => x.toLowerCase() === element.id.toLowerCase()) >= 0
+        checked: checked,
+        disabled: checked
       })
     });
     alert.addButton({
-      text: 'Annulla',
-      handler: data => {
-        if (!data)
-          return
-        data.forEach(element => {
-          this.copiedGroup.teachers = [];
-          this.oldTeacher.forEach(x => this.copiedGroup.teachers.push(x));
-
-        });
-      }
-    }); //tasto annulla
-    this.copiedGroup.teachers = [];
+      text: 'Annulla'
+    }); 
     alert.addButton({
       text: 'OK',
       handler: data => {
-        if (!data)
-          return
-        data.forEach(element => {
-          this.copiedGroup.teachers.push(element) //inserimento id teacher in istanza copiedGroup
-          if (this.addTeacherToGroupMap[this.copiedGroup.name] == undefined) {
-            this.addTeacherToGroupMap[this.copiedGroup.name] = []
-          }
-          this.addTeacherToGroupMap[this.copiedGroup.name].push(element)
-          this.updateArrays();
-        });
+        if (!data) this.copiedGroup.teachers = [];
+        this.copiedGroup.teachers = data;
+        this.updateArrays();
       }
     })
     alert.present();
   }
 
-
-  oldKids: string[] = [];
   addKid() {
-    this.oldKids = [];
-    this.copiedGroup.kids.forEach(x => this.oldKids.push(x));
     let alert = this.alertCtrl.create();
     alert.setTitle('Aggiungi bambini');
-    this.selectedSchool.kids.sort(this.compare);
+    let allKids = this.selectedSchool.kids.slice();
+    allKids.sort(this.compare);
 
+    allKids.forEach(element => {
+      let checked = this.copiedGroup.kids.findIndex(x => x.toLowerCase() === element.id.toLowerCase()) >= 0;
+      let disabled = checked;
+      let label = element.surname + ' ' + element.name;
+      // if this is a section. disable a possibility to add a kid if he already belongs to another section
+      if (!disabled && this.copiedGroup.section && !!element.section && this.copiedGroup.name != element.section) {
+        disabled = true;
+        label += `(sezione '${element.section}')`;
+      }
 
-    this.selectedSchool.kids.forEach(element => {
       alert.addInput({
         type: 'checkbox',
-        label: element.name + ' ' + element.surname,
+        label: label,
         value: element.id,
-        checked: this.copiedGroup.kids.findIndex(x => x.toLowerCase() === element.id.toLowerCase()) >= 0,
-        disabled: this.copiedGroup.kids.findIndex(x => x.toLowerCase() === element.id.toLowerCase()) >= 0
+        checked: checked,
+        disabled: disabled
       })
     });
 
-    this.copiedGroup.kids = [];
     alert.addButton({
-      text: 'Annulla',
-      handler: data => {
-        if (!data)
-          return
-        data.forEach(element => {
-          this.copiedGroup.kids = [];
-          this.oldKids.forEach(x => this.copiedGroup.kids.push(x));
-        });
-      }
+      text: 'Annulla'
     });
     alert.addButton({
       text: 'OK',
       handler: data => {
-        if (!data)
-          return
-        data.forEach(element => {
-          this.copiedGroup.kids.push(element);
-          if (this.addKidToGroupMap[this.copiedGroup.name] == undefined) {
-            this.addKidToGroupMap[this.copiedGroup.name] = []
-          }
-          this.addKidToGroupMap[this.copiedGroup.name].push(element)
-
-          if (this.copiedGroup.section) this.selectedSchool.kids.find(c => c.id.toLowerCase() === element.toLowerCase()).section = this.copiedGroup.name;
-          this.updateArrays();
-        });
+        if (!data) this.copiedGroup.kids = [];
+        this.copiedGroup.kids = data;
+        this.updateArrays();        
       }
     })
     alert.present();
@@ -370,11 +273,6 @@ export class GroupModal implements OnInit {
           text: 'OK',
           handler: () => {
             this.copiedGroup.kids.splice(this.copiedGroup.kids.findIndex(x => id === x), 1);
-            this.selectedSchool.kids.find(c => c.id.toLowerCase() === id.toLowerCase()).section = "";
-            if (this.removeKidToGroupMap[this.copiedGroup.name] == undefined) {
-              this.removeKidToGroupMap[this.copiedGroup.name] = []
-            }
-            this.removeKidToGroupMap[this.copiedGroup.name].push(id)
             this.updateArrays();
           }
         }
@@ -395,10 +293,6 @@ export class GroupModal implements OnInit {
           text: 'OK',
           handler: () => {
             this.copiedGroup.teachers.splice(this.copiedGroup.teachers.findIndex(x => teacher.id == x), 1);
-            if (this.removeTeacherToGroupMap[this.copiedGroup.name] == undefined) {
-              this.removeTeacherToGroupMap[this.copiedGroup.name] = []
-            }
-            this.removeTeacherToGroupMap[this.copiedGroup.name].push(teacher.id)
             this.updateArrays();
           }
         }

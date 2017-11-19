@@ -1,6 +1,7 @@
 <ion-grid inset *ngIf="selectedSchool">
   <ion-row>
     <ion-col col-12>
+      <button ion-button color="green1" float-end margin-top (click)="newSectionModal()">Aggiungi sezione</button>
       <button ion-button color="green1" float-end margin-top (click)="newGroupModal()">Aggiungi gruppo</button>
     </ion-col>
     <ion-col col-12>
@@ -31,7 +32,7 @@
     </ion-col>
     <ion-col col-4>
       <ion-item>
-        <div>Cerca<input class="text-generic" type="text" (input)="searchGroups($event)"></div>
+        <div>Cerca<input class="text-generic" type="text" (input)="searchGroups($event)" [(ngModel)]="searchText"></div>
         <!--<ion-label floating>Cerca</ion-label> 
         <ion-input (input)="searchGroups($event)"></ion-input>-->
       </ion-item>

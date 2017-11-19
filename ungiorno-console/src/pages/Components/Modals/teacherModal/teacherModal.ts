@@ -7,6 +7,8 @@ import { WebService } from '../../../../services/WebService';
 import { Component, OnInit } from '@angular/core';
 import { NavParams, NavController, AlertController, ToastController } from "ionic-angular";
 
+import { CommonService } from '../../../../services/common.service';
+
 @Component({
   selector: 'teacher-modal',
   templateUrl: 'teacherModal.html',
@@ -29,9 +31,7 @@ export class TeacherModal implements OnInit {
   selectedTeacherGroups: Group[];
 
   isNew: boolean;
-  toastWrongEmail;
-  BreakEmailException = {};
-  editMail:boolean = false;
+
   constructor(public params: NavParams,
     public navCtrl: NavController,
     private webService: WebService,
@@ -76,86 +76,54 @@ export class TeacherModal implements OnInit {
     alert.present();
 
   }
-  onMailEdit() {
-    this.editMail=true;
-    this.copiedTeacher.email=this.selectedTeacher.email;
-  }
 
-  onMailSave() {
-    this.editMail = false;
-    //save email of the teacher and keep the modal open
-    this.webService.add(this.selectedSchool, this.copiedTeacher).then(()=>{
-      this.selectedTeacher=this.copiedTeacher;
-    },(err) => {
-      //TODO
-      this.editMail = true;
-      
-    });
-   
-  }
-
-  onMailCancel() {
-    this.editMail=false;
-    
-  }
-  private validateEmail(email) {
-    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(email);
-  }
-
-  checkEmail() {
-    if (this.copiedTeacher.email && !this.validateEmail(this.copiedTeacher.email))
-      throw this.BreakEmailException
-  }
 
   save() {
-    try {
-      this.checkEmail();
-      let alert = this.alertCtrl.create({
-        subTitle: 'Eventuali modifiche verrano confermate. Confermi?',
-        buttons: [
-          {
-            text: "Annulla"
-          },
-          {
-            text: 'OK',
-            handler: () => {
-              Object.assign(this.selectedTeacher, this.copiedTeacher);
+    if (this.copiedTeacher.email && !CommonService.emailValidator(this.copiedTeacher.email, this.toastCtrl)) return;
 
-              if (this.isNew) {
-                if (this.selectedSchool.teachers.findIndex(x => x.id.toLowerCase() === this.selectedTeacher.id.toLowerCase()) < 0) {
-                  this.webService.add(this.selectedSchool, this.copiedTeacher).then(() => this.selectedSchool.teachers.push(this.selectedTeacher));
-                }
-                else {
-                  let toastConflict = this.toastCtrl.create({
-                    message: 'Elemento già presente (conflitto di nomi)',
-                    duration: 3000,
-                    position: 'middle',
-                    dismissOnPageChange: true
+    let alert = this.alertCtrl.create({
+      subTitle: 'Eventuali modifiche verrano confermate. Confermi?',
+      buttons: [
+        {
+          text: "Annulla"
+        },
+        {
+          text: 'OK',
+          handler: () => {
+            Object.assign(this.selectedTeacher, this.copiedTeacher);
 
-                  });
-                  toastConflict.present()
-                }
-              } else {
-                this.webService.add(this.selectedSchool, this.copiedTeacher);
+            if (this.isNew) {
+              if (this.selectedSchool.teachers.findIndex(x => x.id.toLowerCase() === this.selectedTeacher.id.toLowerCase()) < 0) {
+                this.webService.add(this.selectedSchool, this.copiedTeacher).then(() => {
+                  this.selectedSchool.teachers.push(this.selectedTeacher);
+                  this.navCtrl.pop();
+                }, err => {
+                  // TODO handle error
+                });
               }
-              this.navCtrl.pop();
+              else {
+                let toastConflict = this.toastCtrl.create({
+                  message: 'Insegnante già presente (conflitto di C.F.)',
+                  duration: 3000,
+                  position: 'middle',
+                  dismissOnPageChange: true
+
+                });
+                toastConflict.present()
+              }
+            } else {
+              this.webService.add(this.selectedSchool, this.copiedTeacher).then(() => {
+                Object.assign(this.selectedTeacher, this.copiedTeacher);
+                this.navCtrl.pop();
+              }, err => {
+                // TODO handle error
+              });
             }
           }
-        ]
-      })
-      alert.present();
-    } catch (e) {
-      if (e == this.BreakEmailException) {
-        this.toastWrongEmail = this.toastCtrl.create({
-          message: 'Formato email non valido',
-          duration: 1000,
-          position: 'middle',
-          dismissOnPageChange: true
-        });
-        this.toastWrongEmail.present();
-      }
-    }
+        }
+      ]
+    })
+    alert.present();
   }
   onRemoveGroup(group: Group) {
     group.teachers.splice(group.teachers.findIndex(x => x.toLowerCase() == this.copiedTeacher.id.toLowerCase()), 1);

@@ -27,7 +27,7 @@
     </ion-col>
     <ion-col col-4>
       <ion-item>
-         <div>Cerca<input class="text-generic" type="text" (input)="searchTeachers($event)"></div>
+         <div>Cerca<input class="text-generic" type="text" (input)="searchTeachers($event)" [(ngModel)]="searchString"></div>
         <!--<ion-label floating>Cerca</ion-label> 
         <ion-input (input)="searchTeachers($event)"></ion-input>-->
       </ion-item>

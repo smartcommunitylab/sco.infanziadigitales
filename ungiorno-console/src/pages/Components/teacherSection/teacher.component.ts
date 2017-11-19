@@ -16,17 +16,20 @@ export class Insegnanti implements OnInit {
   
   ordine: string = '0';
   filtro : string = '0';
+  searchString: string = '';
   filteredTeacher : Teacher[];
 
   constructor(private webService : WebService, public alertCtrl: AlertController, public modalCtrl: ModalController) {}
 
   ngOnInit(): void {
-    this.filteredTeacher = this.selectedSchool.teachers;
     this.onFiltroTeacherChange(this.filtro);
   }
 
   showTeacherModal(item: Teacher, isNew : boolean) {
     let modal = this.modalCtrl.create(TeacherModal, {'teacher' : item, 'school' : this.selectedSchool, 'isNew' : isNew}, {enableBackdropDismiss: false, showBackdrop: false});
+    modal.onDidDismiss(data => {
+      this.onFiltroTeacherChange(this.filtro);      
+    });
     modal.present();
   }
 
@@ -45,9 +48,10 @@ export class Insegnanti implements OnInit {
         {
           text: 'OK',
           handler: () => {
-            this.selectedSchool.teachers = this.selectedSchool.teachers.filter(teacher => teacher.id.toLowerCase() != item.id.toLowerCase());
-            this.filteredTeacher = this.selectedSchool.teachers;
-            this.webService.remove(this.selectedSchool, item);
+            this.webService.remove(this.selectedSchool, item).then(() => {
+              this.selectedSchool.teachers = this.selectedSchool.teachers.filter(teacher => teacher.id.toLowerCase() != item.id.toLowerCase());
+              this.onFiltroTeacherChange(this.filtro);
+            });
           }
         }
       ]
@@ -69,15 +73,15 @@ export class Insegnanti implements OnInit {
   onFiltroTeacherChange(filtro : string) {
     switch(filtro) {
       case '0':
-        this.filteredTeacher = this.selectedSchool.teachers;
+        this.filteredTeacher = this.selectedSchool.teachers.filter(x => true);
       break;
     }
+
+    this.applySearchFilter(this.searchString);
     this.onOrdineChange(this.ordine);
   }
 
-  searchTeachers(item : any) {
-    this.filteredTeacher = this.selectedSchool.teachers;
-    let val = item.target.value;
+  private applySearchFilter(val: string) {
     if(val && val.trim() !== '') {
       this.filteredTeacher = this.filteredTeacher.filter(x => {
         var tmpN = x.name;
@@ -85,5 +89,11 @@ export class Insegnanti implements OnInit {
         return (tmpN.toLowerCase().indexOf(val.toLowerCase()) >= 0 || tmpS.toLowerCase().indexOf(val.toLowerCase()) >= 0);
       })
     }
+  }
+
+  searchTeachers(item : any) {
+    this.filteredTeacher = this.selectedSchool.teachers;
+    let val = item.target.value;
+    this.applySearchFilter(this.searchString);
   }
 }

@@ -59,9 +59,14 @@ export class Orari implements OnInit {
         return tmpFasce;
     }
     onDeleteOrario(item: Service) {
+        let hasOrario = false;
+        if (this.selectedSchool.kids) {
+            hasOrario = this.selectedSchool.kids.some(k => k.services ? k.services.some(s => s.servizio.toLowerCase() == item.servizio.toLowerCase()) : false);
+        }
         let alert = this.alertCtrl.create({
             title: 'Conferma eliminazione',
             subTitle:'Attenzione: aggiornare anche le informazioni dei bambini associati a questo orario.',
+            message : hasOrario ? "Attenzione! L'orario è associato ad alcuni bambini." : null,
             cssClass:'alertWarningCss',
             buttons: [
                 {
@@ -71,9 +76,11 @@ export class Orari implements OnInit {
                     text: 'OK',
                     handler: () => {
                         this.selectedSchool.servizi.splice(this.selectedSchool.servizi.findIndex(tmp => tmp.servizio.toLowerCase() === item.servizio.toLowerCase()), 1);
-                        for (let i=0; i<this.selectedSchool.kids.length;i++){
-                            this.selectedSchool.kids[i].services= this.selectedSchool.kids[i].services.filter(service => service.servizio.toLowerCase() != item.servizio.toLowerCase());
-                          } 
+                        if (this.selectedSchool.kids) {
+                            this.selectedSchool.kids.forEach(k => {
+                              if (k.services) k.services = k.services.filter(service => service.servizio.toLowerCase() != item.servizio.toLowerCase());
+                            });
+                          }
                         this.webService.update(this.selectedSchool);
                     },
                 }

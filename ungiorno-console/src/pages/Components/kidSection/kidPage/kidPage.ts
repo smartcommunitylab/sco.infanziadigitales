@@ -11,7 +11,8 @@ import { Kid } from './../../../../app/Classes/kid';
 import { WebService } from './../../../../services/WebService';
 import { ConfigService } from './../../../../services/config.service';
 import { CommonService } from  './../../../../services/common.service';
-import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
+
 import { ActivatedRoute, ParamMap } from "@angular/router";
 import { Location } from '@angular/common';
 import { FileUploader, FileItem } from 'ng2-file-upload';
@@ -117,8 +118,9 @@ import { setTimeout } from 'timers';
 export class KidPage implements OnInit {
     @Input() selectedKid: Kid;
     @Input() selectedSchool: School
-    @Input() kidClick: boolean[];
     @Input() edit: boolean = false;
+
+    @Output() kidUpdated = new EventEmitter();
 
     //thisKid: Kid = new Kid('', '', '');
 
@@ -210,7 +212,7 @@ export class KidPage implements OnInit {
 
     goBack() {
         if (!this.isInEdit()) {
-            this.kidClick[0] = false;
+            this.kidUpdated.emit(this.selectedKid);
             return;   
         }
         let alert = this.alertCtrl.create({
@@ -222,7 +224,7 @@ export class KidPage implements OnInit {
                 {
                     text: 'OK',
                     handler: () => {
-                        this.kidClick[0] = false;
+                        this.kidUpdated.emit(this.selectedKid);
                     }
                 }
             ]
@@ -445,7 +447,9 @@ export class KidPage implements OnInit {
     onP1InfoSave() {
         this.editP1Info = false;
         let tmpKid = Kid.copy(this.selectedKid);
-        tmpKid.parent1 = this.newParent1;
+        tmpKid.parent1.id = this.newParent1.id;
+        tmpKid.parent1.name = this.newParent1.name;
+        tmpKid.parent1.surname = this.newParent1.surname;
         this.webService.add(this.selectedSchool, tmpKid).then(() => {
             this.selectedKid.copyInto(tmpKid);
         }, (err) => {
@@ -468,7 +472,8 @@ export class KidPage implements OnInit {
         let handler = () => {
             this.editP1Contatti = false;
             let tmpKid = Kid.copy(this.selectedKid);
-            tmpKid.parent1 = this.newParent1;
+            tmpKid.parent1.emails = this.newParent1.emails;
+            tmpKid.parent1.phoneNumbers = this.newParent1.phoneNumbers;
             this.webService.add(this.selectedSchool, tmpKid).then(() => {
                 this.selectedKid.copyInto(tmpKid);
             }, (err) => {
@@ -496,7 +501,9 @@ export class KidPage implements OnInit {
     onP2InfoSave() {
         this.editP2Info = false;
         let tmpKid = Kid.copy(this.selectedKid);
-        tmpKid.parent2 = this.newParent2;
+        tmpKid.parent2.id = this.newParent2.id;
+        tmpKid.parent2.name = this.newParent2.name;
+        tmpKid.parent2.surname = this.newParent2.surname;
         this.webService.add(this.selectedSchool, tmpKid).then(() => {
             this.selectedKid.copyInto(tmpKid);
         }, (err) => {
@@ -518,7 +525,8 @@ export class KidPage implements OnInit {
         let handler = () => {
             this.editP2Contatti = false;
             let tmpKid = Kid.copy(this.selectedKid);
-            tmpKid.parent2 = this.newParent2;
+            tmpKid.parent2.emails = this.newParent2.emails;
+            tmpKid.parent2.phoneNumbers = this.newParent2.phoneNumbers;
             this.webService.add(this.selectedSchool, tmpKid).then(() => {
                 this.selectedKid.copyInto(tmpKid);
             }, (err) => {

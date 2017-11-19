@@ -27,7 +27,8 @@ export class Bambini implements OnInit {
   filteredKid: Kid[];
   searchField = "";
 
-  kidClick: boolean[] = [false];
+
+
   schoolSections: Group[];
   edit: boolean;
   private apiUrl;
@@ -53,15 +54,16 @@ export class Bambini implements OnInit {
   onViewKid(kid: Kid) {
     this.selectedKid = kid;
     this.edit = false;
-    this.kidClick[0] = true;
-
   }
 
   onEditKid(kid: Kid) {
     this.selectedKid = kid;
     this.edit = true;
-    this.kidClick[0] = true;
+  }
 
+  onKidUpdated(kid: Kid) {
+    this.selectedKid = null;
+    this.onFiltroKidChange(this.filtro);    
   }
 
   onDeleteKid(item: Kid) {
@@ -74,9 +76,12 @@ export class Bambini implements OnInit {
         {
           text: 'OK',
           handler: () => {
-
-            this.selectedSchool.kids.splice(this.selectedSchool.kids.findIndex(tmp => tmp.id === item.id), 1);
-            this.webService.remove(this.selectedSchool, item);
+            this.webService.remove(this.selectedSchool, item).then(() => {
+              this.selectedSchool.kids.splice(this.selectedSchool.kids.findIndex(tmp => tmp.id === item.id), 1);
+              this.filteredKid.splice(this.filteredKid.findIndex(tmp => tmp.id === item.id), 1);
+            }, err => {
+              // TODO handle error
+            });
           }
         }
       ]

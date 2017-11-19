@@ -237,7 +237,7 @@ export class GroupModal implements OnInit {
     this.copiedGroup.teachers.forEach(x => this.oldTeacher.push(x));
     let alert = this.alertCtrl.create();
     alert.setTitle('Aggiungi insegnanti');
-
+    this.selectedSchool.teachers.sort(this.compare);
     this.selectedSchool.teachers.forEach(element => { //creazione lista di checkbox in alert
       alert.addInput({
         type: 'checkbox',

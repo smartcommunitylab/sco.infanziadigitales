@@ -1,4 +1,4 @@
-<ion-grid inset *ngIf='selectedSchool && !kidClick[0]' >
+<ion-grid inset *ngIf='selectedSchool && !selectedKid' >
   <ion-row>
     <ion-col col-12>
       <input #inputFile type='file' style='display: none' accept='.xls, .xlsx, .csv' (change)="handlerInputChange($event)" />
@@ -57,7 +57,7 @@
             <img [src]="getImage(item)">
           </ion-thumbnail>
           <h2>{{item.surname}} {{item.name}}</h2>
-          <ion-icon name="eye" item-end color="magenta1" style="margin-right: 30px" (click)='onViewKid(item)'></ion-icon> 
+          <ion-icon name="md-create" item-end color="magenta1" style="margin-right: 30px" (click)='onViewKid(item)'></ion-icon> 
           <ion-icon name="trash" item-end color="magenta1" style="margin-right: 10px" (click)="onDeleteKid(item)"></ion-icon>
         </ion-item>
       </ion-list>
@@ -65,4 +65,4 @@
   </ion-row>
 </ion-grid>
 
-<kidPage [selectedKid]='selectedKid' [selectedSchool]='selectedSchool' [kidClick]='kidClick' [edit]='edit' *ngIf="kidClick[0]"></kidPage>
+<kidPage [selectedKid]='selectedKid' [selectedSchool]='selectedSchool' [edit]='edit' *ngIf="selectedKid != null" (kidUpdated)="onKidUpdated($event)"></kidPage>

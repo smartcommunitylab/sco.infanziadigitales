@@ -50,6 +50,10 @@ export class Insegnanti implements OnInit {
           handler: () => {
             this.webService.remove(this.selectedSchool, item).then(() => {
               this.selectedSchool.teachers = this.selectedSchool.teachers.filter(teacher => teacher.id.toLowerCase() != item.id.toLowerCase());
+              for (let i=0; i<this.selectedSchool.groups.length;i++){
+                this.selectedSchool.groups[i].teachers= this.selectedSchool.groups[i].teachers.filter(teacher => teacher.toLowerCase() != item.id.toLowerCase());
+                
+              }                
               this.onFiltroTeacherChange(this.filtro);
             });
           }

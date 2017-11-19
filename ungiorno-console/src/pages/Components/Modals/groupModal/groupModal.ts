@@ -140,6 +140,8 @@ export class GroupModal implements OnInit {
                 console.log("remove kid " + JSON.stringify(this.removeKidToGroupMap));
                 console.log("add teacher " + JSON.stringify(this.addTeacherToGroupMap));
                 console.log("remove teacher " + JSON.stringify(this.removeTeacherToGroupMap));
+                this.navCtrl.pop();
+
               }
               else {
                 let toastConflict = this.toastCtrl.create({
@@ -154,7 +156,7 @@ export class GroupModal implements OnInit {
             } else {
               // when edit a group I can only add or remove children or teacher
               // so there is not need to update group definition data in profile of school
-              
+
               let kidsToAdd = this.addKidToGroupMap[this.selectedGroup.name]
               let kidsToRemove = this.removeKidToGroupMap[this.selectedGroup.name]
               let teacherToAdd = this.addTeacherToGroupMap[this.selectedGroup.name]
@@ -163,9 +165,17 @@ export class GroupModal implements OnInit {
               if (kidsToAdd != undefined) {
                 kidsToAdd.forEach(kidId => {
                   if (this.selectedGroup.section) {
-                    this.webService.putKidInSection(this.selectedSchool, kidId, this.selectedGroup);
+                    this.webService.putKidInSection(this.selectedSchool, kidId, this.selectedGroup).then(() => {
+                      //TODO
+                    }, (err) => {
+                      //TODO
+                    })
                   } else {
-                    this.webService.addKidToGroup(this.selectedSchool, kidId, this.selectedGroup);
+                    this.webService.addKidToGroup(this.selectedSchool, kidId, this.selectedGroup).then(() => {
+
+                    }, (err) => {
+
+                    })
                   }
                 })
               }
@@ -173,16 +183,28 @@ export class GroupModal implements OnInit {
               if (kidsToRemove != undefined) {
                 kidsToRemove.forEach(kidId => {
                   if (this.selectedGroup.section) {
-                    this.webService.removeKidFromSection(this.selectedSchool, kidId, this.selectedGroup.name);
+                    this.webService.removeKidFromSection(this.selectedSchool, kidId, this.selectedGroup.name).then(() => {
+                      //TODO
+                    }, (err) => {
+                      //TODO
+                    })
                   } else {
-                    this.webService.removeKidFromGroup(this.selectedSchool, kidId, this.selectedGroup.name);
+                    this.webService.removeKidFromGroup(this.selectedSchool, kidId, this.selectedGroup.name).then(() => {
+                      //TODO
+                    }, (err) => {
+                      //TODO
+                    })
                   }
                 });
               }
 
               if (teacherToAdd != undefined) {
                 teacherToAdd.forEach(teacherId => {
-                  this.webService.addTeacherToSectionOrGroup(this.selectedSchool, teacherId, this.selectedGroup.name)
+                  this.webService.addTeacherToSectionOrGroup(this.selectedSchool, teacherId, this.selectedGroup.name).then(() => {
+                    //TODO
+                  }, (err) => {
+                    //TODO
+                  })
                 })
               }
 
@@ -190,15 +212,19 @@ export class GroupModal implements OnInit {
                 console.log('teacherToRemove ' + teacherToRemove);
                 teacherToRemove.forEach(teacherId => {
                   console.log('remove call ' + teacherId)
-                  this.webService.removeTeacherToSectionOrGroup(this.selectedSchool, teacherId, this.selectedGroup.name);
+                  this.webService.removeTeacherToSectionOrGroup(this.selectedSchool, teacherId, this.selectedGroup.name).then(() => {
+
+                  }, (err) => {
+
+                  })
                 });
               }
               console.log("add kid " + JSON.stringify(this.addKidToGroupMap));
               console.log("remove kid " + JSON.stringify(this.removeKidToGroupMap));
               console.log("add teacher " + JSON.stringify(this.addTeacherToGroupMap));
               console.log("remove teacher " + JSON.stringify(this.removeTeacherToGroupMap));
+              this.navCtrl.pop();
             }
-            this.navCtrl.pop();
           }
         }
       ]
@@ -222,16 +248,16 @@ export class GroupModal implements OnInit {
 
   }
 
-  private compare(a,b) {
+  private compare(a, b) {
     if (a.surname < b.surname)
       return -1;
     if (a.surname > b.surname)
       return 1;
     return 0;
   }
-  
 
-  oldTeacher: string[]=[];
+
+  oldTeacher: string[] = [];
   addTeacher() {
     this.oldTeacher = [];
     this.copiedGroup.teachers.forEach(x => this.oldTeacher.push(x));
@@ -251,9 +277,9 @@ export class GroupModal implements OnInit {
       text: 'Annulla',
       handler: data => {
         if (!data)
-        return
+          return
         data.forEach(element => {
-          this.copiedGroup.teachers=[];
+          this.copiedGroup.teachers = [];
           this.oldTeacher.forEach(x => this.copiedGroup.teachers.push(x));
 
         });
@@ -264,7 +290,7 @@ export class GroupModal implements OnInit {
       text: 'OK',
       handler: data => {
         if (!data)
-        return
+          return
         data.forEach(element => {
           this.copiedGroup.teachers.push(element) //inserimento id teacher in istanza copiedGroup
           if (this.addTeacherToGroupMap[this.copiedGroup.name] == undefined) {
@@ -279,14 +305,14 @@ export class GroupModal implements OnInit {
   }
 
 
-  oldKids: string[]=[];
+  oldKids: string[] = [];
   addKid() {
     this.oldKids = [];
     this.copiedGroup.kids.forEach(x => this.oldKids.push(x));
     let alert = this.alertCtrl.create();
     alert.setTitle('Aggiungi bambini');
     this.selectedSchool.kids.sort(this.compare);
-   
+
 
     this.selectedSchool.kids.forEach(element => {
       alert.addInput({
@@ -303,9 +329,9 @@ export class GroupModal implements OnInit {
       text: 'Annulla',
       handler: data => {
         if (!data)
-        return
-          data.forEach(element => {
-          this.copiedGroup.kids=[];
+          return
+        data.forEach(element => {
+          this.copiedGroup.kids = [];
           this.oldKids.forEach(x => this.copiedGroup.kids.push(x));
         });
       }
@@ -314,7 +340,7 @@ export class GroupModal implements OnInit {
       text: 'OK',
       handler: data => {
         if (!data)
-        return
+          return
         data.forEach(element => {
           this.copiedGroup.kids.push(element);
           if (this.addKidToGroupMap[this.copiedGroup.name] == undefined) {

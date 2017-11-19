@@ -253,6 +253,12 @@ export class Info implements OnInit {
 
             this.webService.update(schoolCopy).then(() => {
                 this.selectedSchool.copyInto(schoolCopy);
+                // remove from kids non-existing buses
+                this.selectedSchool.kids.forEach(kid => {
+                    if (kid.bus && !this.selectedSchool.buses.some(b => b.busId == kid.bus.busId)) {
+                        kid.bus.busId = null;
+                    }
+                });
             }, err => {
                 // TODO handle error
                 this.editBus = true;                    
@@ -287,9 +293,14 @@ export class Info implements OnInit {
     }
 
     removeBus(bus: Bus) {
+        let hasKids = false;
+        if (this.selectedSchool.kids) {
+          hasKids = this.selectedSchool.kids.some(kid => kid.bus && kid.bus.busId == bus.busId);
+        }
+            
         let alert = this.alertCtrl.create({
-            title: 'Conferma eliminazione',
-            subTitle:'Attenzione: ricordarsi di aggiornare le informazioni dei bambini associati a questa linea.',
+            subTitle: 'Conferma eliminazione',
+            message: hasKids ? 'Attenzione! Ci sono dei bambini associati a questa linea.' : null,
             cssClass:'alertWarningCss',
             buttons: [
                 {

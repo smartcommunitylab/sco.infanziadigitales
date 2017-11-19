@@ -6,12 +6,12 @@ import { School } from './../../../app/Classes/school';
 import { WebService } from './../../../services/WebService';
 import { Component, OnInit, Input } from '@angular/core';
 import { NavController, AlertController, ModalController } from 'ionic-angular';
-function compare(a,b) {
-  if (a.fasce[0] && b.fasce[0] && a.fasce[0].start < b.fasce[0].start)
-    return -1;
-  if (a.fasce[0] && b.fasce[0] && a.fasce[0].start  > b.fasce[0].start )
-    return 1;
-  return 0;
+function compare(a, b) {
+    if (a.fasce[0] && b.fasce[0] && a.fasce[0].start < b.fasce[0].start)
+        return -1;
+    if (a.fasce[0] && b.fasce[0] && a.fasce[0].start > b.fasce[0].start)
+        return 1;
+    return 0;
 }
 @Component({
     selector: 'orari',
@@ -47,7 +47,7 @@ export class Orari implements OnInit {
     }
 
     showOrariModal(item: Service, isNew: boolean) {
-        let modal = this.modalCtrl.create(OrariModal, { 'orario': item, 'school': this.selectedSchool, 'isNew': isNew, 'giaNorm': [item.normale] }, {enableBackdropDismiss: false, showBackdrop: false});
+        let modal = this.modalCtrl.create(OrariModal, { 'orario': item, 'school': this.selectedSchool, 'isNew': isNew, 'giaNorm': [item.normale] }, { enableBackdropDismiss: false, showBackdrop: false });
         modal.present();
     }
 
@@ -65,9 +65,9 @@ export class Orari implements OnInit {
         }
         let alert = this.alertCtrl.create({
             title: 'Conferma eliminazione',
-            subTitle:'Attenzione: aggiornare anche le informazioni dei bambini associati a questo orario.',
-            message : hasOrario ? "Attenzione! L'orario è associato ad alcuni bambini." : null,
-            cssClass:'alertWarningCss',
+            subTitle: 'Attenzione: aggiornare anche le informazioni dei bambini associati a questo orario.',
+            message: hasOrario ? "Attenzione! L'orario è associato ad alcuni bambini." : null,
+            cssClass: 'alertWarningCss',
             buttons: [
                 {
                     text: "Annulla"
@@ -75,14 +75,17 @@ export class Orari implements OnInit {
                 {
                     text: 'OK',
                     handler: () => {
-                        this.selectedSchool.servizi.splice(this.selectedSchool.servizi.findIndex(tmp => tmp.servizio.toLowerCase() === item.servizio.toLowerCase()), 1);
-                        if (this.selectedSchool.kids) {
-                            this.selectedSchool.kids.forEach(k => {
-                              if (k.services) k.services = k.services.filter(service => service.servizio.toLowerCase() != item.servizio.toLowerCase());
-                            });
-                          }
-                        this.webService.update(this.selectedSchool);
-                    },
+                        this.webService.update(this.selectedSchool).then(() => {
+                            this.selectedSchool.servizi.splice(this.selectedSchool.servizi.findIndex(tmp => tmp.servizio.toLowerCase() === item.servizio.toLowerCase()), 1);
+                            if (this.selectedSchool.kids) {
+                                this.selectedSchool.kids.forEach(k => {
+                                    if (k.services) k.services = k.services.filter(service => service.servizio.toLowerCase() != item.servizio.toLowerCase());
+                                });
+                            };
+                        }, () => {
+
+                        })
+                    }
                 }
             ]
         })

@@ -47,7 +47,11 @@ export class Orari implements OnInit {
     }
 
     showOrariModal(item: Service, isNew: boolean) {
-        let modal = this.modalCtrl.create(OrariModal, { 'orario': item, 'school': this.selectedSchool, 'isNew': isNew, 'giaNorm': [item.normale] }, { enableBackdropDismiss: false, showBackdrop: false });
+        let modal = this.modalCtrl.create(OrariModal, {
+             'orario': item,
+              'school': this.selectedSchool,
+               'isNew': isNew,
+                'giaNorm': [item.normale] }, { enableBackdropDismiss: false, showBackdrop: false });
         modal.present();
     }
 
@@ -64,8 +68,7 @@ export class Orari implements OnInit {
             hasOrario = this.selectedSchool.kids.some(k => k.services ? k.services.some(s => s.servizio.toLowerCase() == item.servizio.toLowerCase()) : false);
         }
         let alert = this.alertCtrl.create({
-            title: 'Conferma eliminazione',
-            subTitle: 'Attenzione: aggiornare anche le informazioni dei bambini associati a questo orario.',
+            subTitle: 'Conferma eliminazione',
             message: hasOrario ? "Attenzione! L'orario è associato ad alcuni bambini." : null,
             cssClass: 'alertWarningCss',
             buttons: [
@@ -83,7 +86,7 @@ export class Orari implements OnInit {
                                 });
                             };
                         }, () => {
-
+                            // TODO
                         })
                     }
                 }

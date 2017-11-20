@@ -9,7 +9,7 @@
         </ion-buttons>
         <ion-buttons end>
             <div (mouseover)="sovraPopover($event)">
-                <button ion-button (click)="save()" [disabled]='!(copiedOrario.servizio) || disable || sovrapp'>
+                <button ion-button (click)="save()" [disabled]='!(copiedOrario.servizio) || disable || sovrapp || disableName || (copiedOrario.servizio && copiedOrario.servizio.fasce && copiedOrario.servizio.fasce.length==0) '>
                     Salva
                 </button>
             </div>
@@ -31,7 +31,14 @@
                     <ion-card-content>
                         <ion-list inset>
                             <ion-item>
-                                <div>Nome*<input class="text-generic" type="text" [(ngModel)]="copiedOrario.servizio" [disabled]="!isNew"></div>
+                                <div>Nome*
+                                    <input class="text-generic" type="text" [(ngModel)]="copiedOrario.servizio" [disabled]="!isNew">
+                                </div>
+                                <ion-row [style.visibility]="copiedOrario.servizio ? 'hidden':' visible'">
+                                    <ion-col col-10 class="error-label">
+                                        Nome fascia mancante
+                                    </ion-col>
+                                </ion-row>
                             </ion-item>
                             <!--<ion-item>
                                 <ion-label *ngIf="giaNorm[0]">Questo è l'orario normale</ion-label>
@@ -60,32 +67,53 @@
                                                         Nome*
                                                     </label>
                                                 </ion-col>
-                                                <ion-col col-10><input maxlength="20" class="text-generic" type="text" [(ngModel)]="fascia.name"
-                                                        ng-focus="fascia.name === ''" (ngModelChange)='changeName(fascia.name)'
-                                                        (ionBlur)="blurFascia(fascia)"></ion-col>
+                                                <ion-col col-10>
+                                                    <input maxlength="20" class="text-generic" type="text" [(ngModel)]="fascia.name" ng-focus="fascia.name === ''" (ngModelChange)='changeName(fascia.name)'
+                                                        (ionBlur)="blurFascia(fascia)">
+                                                </ion-col>
                                             </ion-row>
                                         </ion-item>
                                     </ion-col>
                                     <ion-col col-2 style="bottom: 0px">
                                         <ion-item style="height:100%" text-right>
                                             <ion-label>Da</ion-label>
-                                            <ion-datetime cancelText="Annulla" doneText="Fatto" displayFormat="HH:mm" pickerFormat="HH:mm" [(ngModel)]="fascia.start"></ion-datetime>
+                                            <ion-datetime cancelText="Annulla" doneText="Fatto" displayFormat="HH:mm" pickerFormat="HH:mm" [(ngModel)]="fascia.start"
+                                                (ionChange)="changeFascia(fascia)"></ion-datetime>
                                         </ion-item>
                                     </ion-col>
                                     <ion-col col-2 style="bottom: 0px">
                                         <ion-item style="height:100%" text-right>
                                             <ion-label>A</ion-label>
-                                            <ion-datetime cancelText="Annulla" doneText="Fatto" displayFormat="HH:mm" pickerFormat="HH:mm" [(ngModel)]="fascia.end"></ion-datetime>
+                                            <ion-datetime cancelText="Annulla" doneText="Fatto" displayFormat="HH:mm" pickerFormat="HH:mm" [(ngModel)]="fascia.end" (ionChange)="changeFascia(fascia)"></ion-datetime>
                                         </ion-item>
                                     </ion-col>
                                     <ion-col col-2>
-                                        <button style="padding-left: 3px;height:100%" ion-item icon-only (click)='removeFascia(fascia)'><ion-icon style="padding-left: 0" name="trash" item-end color="magenta1"></ion-icon></button>
+                                        <button style="padding-left: 3px;height:100%" ion-item icon-only (click)='removeFascia(fascia)'>
+                                            <ion-icon style="padding-left: 0" name="trash" item-end color="magenta1"></ion-icon>
+                                        </button>
                                     </ion-col>
+                                </ion-row>
+                                <ion-row *ngIf="!fascia.name || fascia.start>fascia.end">
+                                    <ion-col col-6 class="error-label" [style.visibility]="fascia.name ?  'hidden' : 'visible' ">
+                                        <ion-col col-2>
+
+                                        </ion-col>
+                                        <ion-col col-10 class="error-label">
+                                            Nome fascia mancante
+                                        </ion-col>
+                                    </ion-col>
+                                    <ion-col col-6 class="error-label" [style.visibility]="(fascia.start<fascia.end) ?  'hidden' : 'visible'">
+                                        Orario non valido
+                                    </ion-col>
+                                </ion-row>
+                                <ion-row>
+
                                 </ion-row>
                             </ion-grid>
                             <ion-grid>
                                 <ion-row text-center>
-                                    <ion-col><button ion-button color="green1" (click)='addFascia()' [disabled]='disable' margin-top>Aggiungi Fascia</button>
+                                    <ion-col>
+                                        <button ion-button color="green1" (click)='addFascia()' margin-top>Aggiungi Fascia</button>
                                     </ion-col>
                                 </ion-row>
                             </ion-grid>

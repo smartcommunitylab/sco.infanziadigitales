@@ -686,6 +686,10 @@ export class KidPage implements OnInit {
         let handler = () => {
             this.editBus = false;
             let tmpKid = Kid.copy(this.selectedKid);
+            if (!this.newBus.enabled) {
+                this.newBus.stops = [];
+                this.newBus.busId = null;                
+            }
             tmpKid.bus = this.newBus;
             this.webService.add(this.selectedSchool, tmpKid).then(()=> {
                 this.selectedKid.copyInto(tmpKid);

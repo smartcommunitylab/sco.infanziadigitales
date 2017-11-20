@@ -63,6 +63,12 @@ export class LoginService  {
       return Promise.resolve(LOGIN_STATUS.EXISTING);
     }
     if (!sessionStorage.access_token) {
+      if (this.captureOauthToken()) {
+        window.location.hash = '/home';
+        window.location.reload();
+        // this is useless, for consistency
+        return Promise.resolve(LOGIN_STATUS.EXISTING);
+      }
       return Promise.resolve(LOGIN_STATUS.NOTSIGNEDIN);
     }
     console.log('TOKEN ' + sessionStorage.access_token);
@@ -87,7 +93,25 @@ export class LoginService  {
       
     });
   }
- 
+ /**
+  * Try to read access token from hash
+  */
+ private captureOauthToken() {
+    if (!!sessionStorage.access_token && sessionStorage.access_token != 'null' && sessionStorage.access_token != 'undefined') return;
+    console.log('capture token on index.html');
+    var queryString = location.hash.substring(1);
+    var params = {};
+    var regex = /([^&=]+)=([^&]*)/g, m;
+    while (m = regex.exec(queryString)) {
+      params[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
+      // Try to exchange the param values for an access token.
+      if (params['access_token']) {
+        sessionStorage.access_token = params['access_token'];
+        return true;
+      }
+    }
+    return false;
+  } 
   /**
    * Return AAC access token if present
    */

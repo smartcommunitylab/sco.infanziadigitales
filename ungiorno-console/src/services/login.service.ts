@@ -39,6 +39,8 @@ export class LoginService  {
   }
 
   serverLogout(): void {
+    // CONFIGURAZIONE NEL CASO DI SIGNOUT DA GOOGLE
+    // window.location = this.config.getConfig('aacUrl') + '/logout?target=https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=' + window.location.href;
     window.location = this.config.getConfig('aacUrl') + '/logout?target=' + window.location.href;
   }
 

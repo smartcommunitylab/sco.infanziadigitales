@@ -126,55 +126,68 @@ export class GroupModal implements OnInit {
               if (oldTeachers[t]) toRemoveTeachers.push(t);
             }            
 
-            let promises = [];
             if (this.isNew) {
               let tmpSchool = School.copy(this.selectedSchool);
               tmpSchool.groups.push(this.copiedGroup);
-              promises.push(this.webService.update(this.selectedSchool));
+              this.webService.update(tmpSchool).then(() => {
+                this.executeUpdate(toAddKids, toRemoveKids, toAddTeachers, toRemoveTeachers);
+              }, err => {
+                // TODO handle errors
+              });
             }
-            toAddKids.forEach(kidId => {
-              if (this.copiedGroup.section) {
-                promises.push(this.webService.putKidInSection(this.selectedSchool, kidId, this.selectedGroup));
-              } else {
-                promises.push(this.webService.addKidToGroup(this.selectedSchool, kidId, this.selectedGroup));
-              }
-            });
-            toRemoveKids.forEach(kidId => {
-              if (this.selectedGroup.section) {
-                promises.push(this.webService.removeKidFromSection(this.selectedSchool, kidId, this.selectedGroup.name));
-              } else {
-                promises.push(this.webService.removeKidFromGroup(this.selectedSchool, kidId, this.selectedGroup.name));
-              }
-            });
-            toAddTeachers.forEach(teacherId => {
-              promises.push(this.webService.addTeacherToSectionOrGroup(this.selectedSchool, teacherId, this.selectedGroup.name));
-            });
-            toRemoveTeachers.forEach(teacherId => {
-              promises.push(this.webService.removeTeacherToSectionOrGroup(this.selectedSchool, teacherId, this.selectedGroup.name));
-            });            
-            Promise.all(promises).then(data => {
-              Object.assign(this.selectedGroup, this.copiedGroup) //copia profonda dei due oggetti    
-              this.selectedGroup.kids = this.copiedGroup.kids.slice();
-              this.selectedGroup.teachers = this.copiedGroup.teachers.slice();                        
-              // update kid objects: 
-              // - if removed, set section to null
-              // - if added, set section
-              if (this.selectedGroup.section) {
-                this.selectedSchool.kids.forEach(kid => {
-                  if (toAddKids.indexOf(kid.id) >= 0) kid.section = this.selectedGroup.name;
-                  if (toRemoveKids.indexOf(kid.id)>= 0) kid.section = null;
-                });
-              }
-              this.navCtrl.pop(); 
-            }, err => {
-              // TODO handle error
-            });
+            else {
+              this.executeUpdate(toAddKids, toRemoveKids, toAddTeachers, toRemoveTeachers);
+            }
           }
         }
       ]
     })
     alert.present();
 
+  }
+
+  private executeUpdate(toAddKids: string[], toRemoveKids: string[], toAddTeachers: string[], toRemoveTeachers: string[]) {
+    let promises = [];
+    toAddKids.forEach(kidId => {
+      if (this.copiedGroup.section) {
+        promises.push(this.webService.putKidInSection(this.selectedSchool, kidId, this.copiedGroup));
+      } else {
+        promises.push(this.webService.addKidToGroup(this.selectedSchool, kidId, this.copiedGroup));
+      }
+    });
+    toRemoveKids.forEach(kidId => {
+      if (this.selectedGroup.section) {
+        promises.push(this.webService.removeKidFromSection(this.selectedSchool, kidId, this.copiedGroup.name));
+      } else {
+        promises.push(this.webService.removeKidFromGroup(this.selectedSchool, kidId, this.copiedGroup.name));
+      }
+    });
+    toAddTeachers.forEach(teacherId => {
+      promises.push(this.webService.addTeacherToSectionOrGroup(this.selectedSchool, teacherId, this.copiedGroup.name));
+    });
+    toRemoveTeachers.forEach(teacherId => {
+      promises.push(this.webService.removeTeacherToSectionOrGroup(this.selectedSchool, teacherId, this.copiedGroup.name));
+    });            
+    Promise.all(promises).then(data => {
+      Object.assign(this.selectedGroup, this.copiedGroup) //copia profonda dei due oggetti    
+      this.selectedGroup.kids = this.copiedGroup.kids.slice();
+      this.selectedGroup.teachers = this.copiedGroup.teachers.slice();                        
+      if (this.isNew) {
+        this.selectedSchool.groups.push(this.selectedGroup);        
+      }
+      // update kid objects: 
+      // - if removed, set section to null
+      // - if added, set section
+      if (this.selectedGroup.section) {
+        this.selectedSchool.kids.forEach(kid => {
+          if (toAddKids.indexOf(kid.id) >= 0) kid.section = this.selectedGroup.name;
+          if (toRemoveKids.indexOf(kid.id)>= 0) kid.section = null;
+        });
+      }
+      this.navCtrl.pop(); 
+    }, err => {
+      // TODO handle error
+    });    
   }
 
   updateArrays() {

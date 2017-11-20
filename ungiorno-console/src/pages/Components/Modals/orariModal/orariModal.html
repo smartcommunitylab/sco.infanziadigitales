@@ -9,7 +9,7 @@
         </ion-buttons>
         <ion-buttons end>
             <div (mouseover)="sovraPopover($event)">
-                <button ion-button (click)="save()" [disabled]='!(copiedOrario.servizio) || disable || sovrapp || disableName ||(copiedOrario.fasce && copiedOrario.fasce.length==0) '>
+                <button ion-button (click)="save()" [disabled]='!(copiedOrario.servizio) || disable || sovrapp || disableName ||(copiedOrario.fasce && copiedOrario.fasce.length==0) || duplicate '>
                     Salva
                 </button>
             </div>
@@ -68,7 +68,7 @@
                                                     </label>
                                                 </ion-col>
                                                 <ion-col col-10>
-                                                    <input maxlength="20" class="text-generic" type="text" [(ngModel)]="fascia.name" ng-focus="fascia.name === ''" (ngModelChange)='changeName(fascia.name)'
+                                                    <input maxlength="20" class="text-generic" type="text" [(ngModel)]="fascia.name" ng-focus="fascia.name === ''" (ngModelChange)='changeName(fascia.name,i)'
                                                         (ionBlur)="blurFascia(fascia)">
                                                 </ion-col>
                                             </ion-row>
@@ -107,7 +107,14 @@
                                     </ion-col>
                                 </ion-row>
                                 <ion-row>
+                                    <ion-col col-6 class="error-label" [style.visibility]="!isDuplicate(fascia.name,i) ?  'hidden' : 'visible' ">
+                                        <ion-col col-2>
 
+                                        </ion-col>
+                                        <ion-col col-10 class="error-label">
+                                            Nome fascia duplicato
+                                        </ion-col>
+                                    </ion-col>
                                 </ion-row>
                             </ion-grid>
                             <ion-grid>

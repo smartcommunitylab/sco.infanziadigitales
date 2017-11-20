@@ -48,10 +48,11 @@ export class Orari implements OnInit {
 
     showOrariModal(item: Service, isNew: boolean) {
         let modal = this.modalCtrl.create(OrariModal, {
-             'orario': item,
-              'school': this.selectedSchool,
-               'isNew': isNew,
-                'giaNorm': [item.normale] }, { enableBackdropDismiss: false, showBackdrop: false });
+            'orario': item,
+            'school': this.selectedSchool,
+            'isNew': isNew,
+            'giaNorm': [item.normale]
+        }, { enableBackdropDismiss: false, showBackdrop: false });
         modal.present();
     }
 
@@ -78,13 +79,22 @@ export class Orari implements OnInit {
                 {
                     text: 'OK',
                     handler: () => {
-                        this.webService.update(this.selectedSchool).then(() => {
-                            this.selectedSchool.servizi.splice(this.selectedSchool.servizi.findIndex(tmp => tmp.servizio.toLowerCase() === item.servizio.toLowerCase()), 1);
+                        //first local copy
+                        let schoolCopy = School.copy(this.selectedSchool);
+                        schoolCopy.servizi = this.filteredOrari;
+                        //remove from tmp services
+                        schoolCopy.servizi.splice(schoolCopy.servizi.findIndex(tmp => tmp.servizio.toLowerCase() === item.servizio.toLowerCase()), 1);
+                        //send  new school with new services
+                        this.webService.update(schoolCopy).then(() => {
+                            // update kids attached
                             if (this.selectedSchool.kids) {
                                 this.selectedSchool.kids.forEach(k => {
                                     if (k.services) k.services = k.services.filter(service => service.servizio.toLowerCase() != item.servizio.toLowerCase());
                                 });
-                            };
+                            }
+                            this.selectedSchool.servizi = schoolCopy.servizi;
+                            this.filteredOrari = this.orderFasce(this.selectedSchool.servizi);
+                            
                         }, () => {
                             // TODO
                         })

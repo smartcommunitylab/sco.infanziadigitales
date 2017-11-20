@@ -39,12 +39,14 @@ export class LoginService  {
   }
 
   serverLogout(logoutProvider?: boolean): void {
+    let redirect = null;
     if (logoutProvider) {
     // CONFIGURAZIONE NEL CASO DI SIGNOUT DA GOOGLE
-    window.location = this.config.getConfig('aacUrl') + '/logout?target=https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=' + window.location.href;
+      redirect = this.config.getConfig('aacUrl') + '/logout?target=https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=' + window.location.href;
     } else {
-      window.location = this.config.getConfig('aacUrl') + '/logout?target=' + window.location.href;
+      redirect = this.config.getConfig('aacUrl') + '/logout?target=' + window.location.href;
     }
+    window.location = this.config.getConfig('apiUrl') + '/logout?target='+redirect;
   }
 
   /**

@@ -38,4 +38,9 @@ export class CommonService  {
           this.currentToast.present();
     
     }
+    showToastCommunicationError() {
+        this.showToast('Errore di comunicazione con il server');
+    }
+
+    
 }

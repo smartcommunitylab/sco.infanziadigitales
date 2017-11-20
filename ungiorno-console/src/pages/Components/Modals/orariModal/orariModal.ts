@@ -223,8 +223,8 @@ export class OrariModal implements OnInit {
         }
         if (this.copiedOrario.fasce.length > 1)
             for (var i = 1; i < this.copiedOrario.fasce.length; i++) {
-                if (this.isBetween(this.copiedOrario.fasce[i].name, this.copiedOrario.fasce[i].start, this.copiedOrario.fasce[i - 1].start, this.copiedOrario.fasce[i - 1].end, this.copiedOrario.fasce[i - 1].name, null) || this.isBetweenSchool(fascia)) {
-                    this.sovrapp = true;
+                    if (this.isBetween(this.copiedOrario.fasce[i].name, this.copiedOrario.fasce[i].start, this.copiedOrario.fasce[i - 1].start, this.copiedOrario.fasce[i - 1].end, this.copiedOrario.fasce[i - 1].name, fascia.end) || this.isBetweenSchool(fascia)) {
+                        this.sovrapp = true;
                     this.disable = true;
                     return;
                 }

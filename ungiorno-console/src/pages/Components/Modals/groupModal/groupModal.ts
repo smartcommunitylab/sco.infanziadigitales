@@ -7,6 +7,7 @@ import { Group } from './../../../../app/Classes/group';
 import { Component, OnInit } from '@angular/core';
 import { NavParams, NavController, AlertController, ToastController } from "ionic-angular";
 import { ConfigService } from '../../../../services/config.service';
+import { CommonService } from '../../../../services/common.service';
 
 @Component({
   selector: 'group-modal',
@@ -34,7 +35,7 @@ export class GroupModal implements OnInit {
 
   apiUrl: string;
 
-  constructor(public params: NavParams, public toastCtrl: ToastController, public navCtrl: NavController, private webService: WebService, public alertCtrl: AlertController, private configService: ConfigService,
+  constructor(public params: NavParams, public common: CommonService, public navCtrl: NavController, private webService: WebService, public alertCtrl: AlertController, private configService: ConfigService,
   ) {
     this.selectedSchool = this.params.get('school') as School;
     this.selectedGroup = this.params.get('group') as Group;
@@ -71,14 +72,7 @@ export class GroupModal implements OnInit {
 
   private checkNameDuplicate() {
     if (this.isNew && this.selectedSchool.groups.findIndex(x => x.name.toLowerCase() == this.copiedGroup.name.toLowerCase()) >= 0) {
-      let toastConflict = this.toastCtrl.create({
-        message: 'Gruppo o sezione con lo stesso nome è già presente',
-        duration: 3000,
-        position: 'middle',
-        dismissOnPageChange: true
-
-      });
-      toastConflict.present();
+      this.common.showToast('Gruppo o sezione con lo stesso nome è già presente');
       return false;
     }
     return true;

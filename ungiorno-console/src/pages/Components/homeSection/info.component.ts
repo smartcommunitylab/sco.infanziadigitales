@@ -76,7 +76,7 @@ export class Info implements OnInit {
     newBus: string;
     newBuses: Bus[];
 
-    constructor(private alertCtrl: AlertController, private webService: WebService, private toastCtrl: ToastController) { }
+    constructor(private alertCtrl: AlertController, private webService: WebService, private common: CommonService) { }
 
     ngOnInit(): void {
     }
@@ -91,10 +91,10 @@ export class Info implements OnInit {
         this.newContatti.email = this.selectedSchool.email;
         this.newContatti.phone = this.selectedSchool.phoneNumbers.length > 0 ? this.selectedSchool.phoneNumbers[0] : '';        
     }
-
+    
     onContattiSave() {
-        if (!this.newContatti.email || CommonService.emailValidator(this.newContatti.email, this.toastCtrl)) {
-            if (!this.newContatti.phone || CommonService.phoneValidator(this.newContatti.phone, this.toastCtrl)) {
+        if (!this.newContatti.email || CommonService.emailValidator(this.newContatti.email, this.common)) {
+            if (!this.newContatti.phone || CommonService.phoneValidator(this.newContatti.phone, this.common)) {
                 this.editContatti = false;
                 let schoolCopy = School.copy(this.selectedSchool);
                 schoolCopy.email = this.newContatti.email;

@@ -36,7 +36,7 @@ export class TeacherModal implements OnInit {
     public navCtrl: NavController,
     private webService: WebService,
     private alertCtrl: AlertController,
-    private toastCtrl: ToastController) {
+    private common: CommonService) {
     this.selectedSchool = this.params.get('school') as School;
     this.selectedTeacher = this.params.get('teacher') as Teacher;
     this.isNew = this.params.get('isNew') as boolean;
@@ -79,7 +79,7 @@ export class TeacherModal implements OnInit {
 
 
   save() {
-    if (this.copiedTeacher.email && !CommonService.emailValidator(this.copiedTeacher.email, this.toastCtrl)) return;
+    if (this.copiedTeacher.email && !CommonService.emailValidator(this.copiedTeacher.email, this.common)) return;
 
     let alert = this.alertCtrl.create({
       subTitle: 'Eventuali modifiche verrano confermate. Confermi?',
@@ -102,14 +102,7 @@ export class TeacherModal implements OnInit {
                 });
               }
               else {
-                let toastConflict = this.toastCtrl.create({
-                  message: 'Insegnante già presente (conflitto di C.F.)',
-                  duration: 3000,
-                  position: 'middle',
-                  dismissOnPageChange: true
-
-                });
-                toastConflict.present()
+                this.common.showToast('Insegnante già presente (conflitto di C.F.)');
               }
             } else {
               this.webService.add(this.selectedSchool, this.copiedTeacher).then(() => {
@@ -142,20 +135,9 @@ export class TeacherModal implements OnInit {
           text: 'OK',
           handler: () => {
             this.webService.generatePIN(this.selectedSchool, this.selectedTeacher).then(() => {
-              var toast = this.toastCtrl.create({
-                message: "L’email è stata spedita con successo",
-                duration: 3000,
-                position: 'middle'
-              });
-              toast.present();
-
+              this.common.showToast('L’email è stata spedita con successo');
             }, () => {
-              var toast = this.toastCtrl.create({
-                message: 'Purtroppo l’email non è stata inviata',
-                duration: 3000,
-                position: 'middle'
-              });
-              toast.present();
+              this.common.showToast('Purtroppo l’email non è stata inviata');
             });
           }
         }

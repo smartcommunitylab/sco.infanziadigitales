@@ -79,6 +79,11 @@ export class Bambini implements OnInit {
             this.webService.remove(this.selectedSchool, item).then(() => {
               this.selectedSchool.kids.splice(this.selectedSchool.kids.findIndex(tmp => tmp.id === item.id), 1);
               this.filteredKid.splice(this.filteredKid.findIndex(tmp => tmp.id === item.id), 1);
+              if (this.selectedSchool.groups) {
+                    this.selectedSchool.groups.forEach(g => {
+                      if (g.kids) g.kids = g.kids.filter(kid => kid.toLowerCase() != item.id.toLowerCase());
+                    });
+                  }
             }, err => {
               // TODO handle error
             });

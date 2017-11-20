@@ -29,19 +29,22 @@ export class LoginService  {
   }
 
   /**
-   * Logout the user from the portal
+   * Logout the user from the portal and, if specified, also from the provider
    */
-  logout(): Promise<boolean> {
+  logout(logoutProvider?: boolean): Promise<boolean> {
     // TODO: revoke token and return true
     sessionStorage.clear();
-    this.serverLogout();
+    this.serverLogout(logoutProvider);
     return Promise.resolve(true);
   }
 
-  serverLogout(): void {
+  serverLogout(logoutProvider?: boolean): void {
+    if (logoutProvider) {
     // CONFIGURAZIONE NEL CASO DI SIGNOUT DA GOOGLE
-    // window.location = this.config.getConfig('aacUrl') + '/logout?target=https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=' + window.location.href;
-    window.location = this.config.getConfig('aacUrl') + '/logout?target=' + window.location.href;
+    window.location = this.config.getConfig('aacUrl') + '/logout?target=https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=' + window.location.href;
+    } else {
+      window.location = this.config.getConfig('aacUrl') + '/logout?target=' + window.location.href;
+    }
   }
 
   /**

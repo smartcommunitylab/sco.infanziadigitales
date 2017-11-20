@@ -4,7 +4,8 @@ import { Teacher } from './../../../app/Classes/teacher';
 import { WebService } from './../../../services/WebService';
 import { School } from './../../../app/Classes/school';
 import { Component, Input, OnInit } from '@angular/core';
-import { NavController, AlertController, ModalController } from 'ionic-angular';
+import { NavController, AlertController, ModalController, App } from 'ionic-angular';
+import { APP_NAME } from '../../../services/config.service';
 
 @Component({
   selector: 'insegnanti',
@@ -19,7 +20,7 @@ export class Insegnanti implements OnInit {
   searchString: string = '';
   filteredTeacher : Teacher[];
 
-  constructor(private webService : WebService, public alertCtrl: AlertController, public modalCtrl: ModalController) {}
+  constructor(private webService : WebService, private _app: App, public alertCtrl: AlertController, public modalCtrl: ModalController) {}
 
   ngOnInit(): void {
     this.onFiltroTeacherChange(this.filtro);
@@ -29,6 +30,7 @@ export class Insegnanti implements OnInit {
     let modal = this.modalCtrl.create(TeacherModal, {'teacher' : item, 'school' : this.selectedSchool, 'isNew' : isNew}, {enableBackdropDismiss: false, showBackdrop: false});
     modal.onDidDismiss(data => {
       this.onFiltroTeacherChange(this.filtro);      
+      this._app.setTitle(APP_NAME);
     });
     modal.present();
   }

@@ -5,7 +5,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { School } from './../../../../app/Classes/school';
 import { WebService } from '../../../../services/WebService';
 import { Component, OnInit } from '@angular/core';
-import { NavParams, NavController, AlertController, ToastController } from "ionic-angular";
+import { NavParams, NavController, AlertController } from "ionic-angular";
 
 import { CommonService } from '../../../../services/common.service';
 

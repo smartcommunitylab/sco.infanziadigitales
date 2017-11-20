@@ -93,16 +93,20 @@ export class GroupModal implements OnInit {
         },
         {
           text: 'OK',
-          handler: () => {              
+          handler: () => {
             // kids to be removed / added
             let oldKids = {};
             let toRemoveKids = [];
             let toAddKids = [];
-            this.selectedGroup.kids.forEach(kid => oldKids[kid] = true);
-            this.copiedGroup.kids.forEach(kid => {
-              if (!oldKids[kid]) toAddKids.push(kid);
-              oldKids[kid] = null;
-            });
+            if (this.selectedGroup.kids) {
+              this.selectedGroup.kids.forEach(kid => oldKids[kid] = true);
+            }
+            if (this.copiedGroup.kids) {
+              this.copiedGroup.kids.forEach(kid => {
+                if (!oldKids[kid]) toAddKids.push(kid);
+                oldKids[kid] = null;
+              });
+            }
             for (let kid in oldKids) {
               if (oldKids[kid]) toRemoveKids.push(kid);
             }
@@ -111,14 +115,18 @@ export class GroupModal implements OnInit {
             let oldTeachers = {};
             let toRemoveTeachers = [];
             let toAddTeachers = [];
-            this.selectedGroup.teachers.forEach(t => oldTeachers[t] = true);
-            this.copiedGroup.teachers.forEach(t => {
-              if (!oldTeachers[t]) toAddTeachers.push(t);
-              oldTeachers[t] = null;
-            });
+            if (this.selectedGroup.teachers) {
+              this.selectedGroup.teachers.forEach(t => oldTeachers[t] = true);
+            }
+            if (this.copiedGroup.teachers) {
+              this.copiedGroup.teachers.forEach(t => {
+                if (!oldTeachers[t]) toAddTeachers.push(t);
+                oldTeachers[t] = null;
+              });
+            }
             for (let t in oldTeachers) {
               if (oldTeachers[t]) toRemoveTeachers.push(t);
-            }            
+            }
 
             if (this.isNew) {
               let tmpSchool = School.copy(this.selectedSchool);
@@ -142,32 +150,44 @@ export class GroupModal implements OnInit {
 
   private executeUpdate(toAddKids: string[], toRemoveKids: string[], toAddTeachers: string[], toRemoveTeachers: string[]) {
     let promises = [];
-    toAddKids.forEach(kidId => {
-      if (this.copiedGroup.section) {
-        promises.push(this.webService.putKidInSection(this.selectedSchool, kidId, this.copiedGroup));
-      } else {
-        promises.push(this.webService.addKidToGroup(this.selectedSchool, kidId, this.copiedGroup));
-      }
-    });
-    toRemoveKids.forEach(kidId => {
-      if (this.selectedGroup.section) {
-        promises.push(this.webService.removeKidFromSection(this.selectedSchool, kidId, this.copiedGroup.name));
-      } else {
-        promises.push(this.webService.removeKidFromGroup(this.selectedSchool, kidId, this.copiedGroup.name));
-      }
-    });
-    toAddTeachers.forEach(teacherId => {
-      promises.push(this.webService.addTeacherToSectionOrGroup(this.selectedSchool, teacherId, this.copiedGroup.name));
-    });
-    toRemoveTeachers.forEach(teacherId => {
-      promises.push(this.webService.removeTeacherToSectionOrGroup(this.selectedSchool, teacherId, this.copiedGroup.name));
-    });            
+    if (toAddKids) {
+      toAddKids.forEach(kidId => {
+        if (this.copiedGroup.section) {
+          promises.push(this.webService.putKidInSection(this.selectedSchool, kidId, this.copiedGroup));
+        } else {
+          promises.push(this.webService.addKidToGroup(this.selectedSchool, kidId, this.copiedGroup));
+        }
+      });
+    }
+    if (toRemoveKids) {
+      toRemoveKids.forEach(kidId => {
+        if (this.selectedGroup.section) {
+          promises.push(this.webService.removeKidFromSection(this.selectedSchool, kidId, this.copiedGroup.name));
+        } else {
+          promises.push(this.webService.removeKidFromGroup(this.selectedSchool, kidId, this.copiedGroup.name));
+        }
+      });
+    }
+    if (toAddTeachers) {
+      toAddTeachers.forEach(teacherId => {
+        promises.push(this.webService.addTeacherToSectionOrGroup(this.selectedSchool, teacherId, this.copiedGroup.name));
+      });
+    }
+    if (toRemoveTeachers) {
+      toRemoveTeachers.forEach(teacherId => {
+        promises.push(this.webService.removeTeacherToSectionOrGroup(this.selectedSchool, teacherId, this.copiedGroup.name));
+      });
+    }
     Promise.all(promises).then(data => {
-      Object.assign(this.selectedGroup, this.copiedGroup) //copia profonda dei due oggetti    
+      Object.assign(this.selectedGroup, this.copiedGroup) //copia profonda dei due oggetti
+      if (this.copiedGroup.kids)
       this.selectedGroup.kids = this.copiedGroup.kids.slice();
-      this.selectedGroup.teachers = this.copiedGroup.teachers.slice();                        
+      else this.selectedGroup.kids =[];
+      if (this.copiedGroup.teachers)
+      this.selectedGroup.teachers = this.copiedGroup.teachers.slice();
+      else this.selectedGroup.teachers = [];
       if (this.isNew) {
-        this.selectedSchool.groups.push(this.selectedGroup);        
+        this.selectedSchool.groups.push(this.selectedGroup);
       }
       // update kid objects: 
       // - if removed, set section to null
@@ -175,29 +195,30 @@ export class GroupModal implements OnInit {
       if (this.selectedGroup.section) {
         this.selectedSchool.kids.forEach(kid => {
           if (toAddKids.indexOf(kid.id) >= 0) kid.section = this.selectedGroup.name;
-          if (toRemoveKids.indexOf(kid.id)>= 0) kid.section = null;
+          if (toRemoveKids.indexOf(kid.id) >= 0) kid.section = null;
         });
       }
-      this.navCtrl.pop(); 
+      this.navCtrl.pop();
     }, err => {
       // TODO handle error
-    });    
+    });
   }
 
   updateArrays() {
     this.selectedGroupKids = [];
     this.selectedGroupTeachers = [];
-
-    this.copiedGroup.teachers.forEach(x => {
-      this.selectedGroupTeachers.push(this.selectedSchool.teachers.find(f => f.id.toLowerCase() === x.toLowerCase()));
-    });
-    this.selectedGroupTeachers.sort(this.compare);
-
-    this.copiedGroup.kids.forEach(x => {
-      this.selectedGroupKids.push(this.selectedSchool.kids.find(f => f.id.toLowerCase() === x.toLowerCase()));
-    });
-    this.selectedGroupKids.sort(this.compare);
-    
+    if (this.copiedGroup.teachers) {
+      this.copiedGroup.teachers.forEach(x => {
+        this.selectedGroupTeachers.push(this.selectedSchool.teachers.find(f => f.id.toLowerCase() === x.toLowerCase()));
+      });
+      this.selectedGroupTeachers.sort(this.compare);
+    }
+    if (this.copiedGroup.kids) {
+      this.copiedGroup.kids.forEach(x => {
+        this.selectedGroupKids.push(this.selectedSchool.kids.find(f => f.id.toLowerCase() === x.toLowerCase()));
+      });
+      this.selectedGroupKids.sort(this.compare);
+    }
 
   }
 
@@ -209,7 +230,7 @@ export class GroupModal implements OnInit {
   addTeacher() {
     let alert = this.alertCtrl.create();
     alert.setTitle('Aggiungi insegnanti');
-    let allTeachers =  this.selectedSchool.teachers.slice();
+    let allTeachers = this.selectedSchool.teachers.slice();
     allTeachers.sort(this.compare);
     allTeachers.forEach(element => { //creazione lista di checkbox in alert
       let checked = this.copiedGroup.teachers.findIndex(x => x.toLowerCase() === element.id.toLowerCase()) >= 0;
@@ -224,7 +245,7 @@ export class GroupModal implements OnInit {
     });
     alert.addButton({
       text: 'Annulla'
-    }); 
+    });
     alert.addButton({
       text: 'OK',
       handler: data => {
@@ -269,7 +290,7 @@ export class GroupModal implements OnInit {
       handler: data => {
         if (!data) this.copiedGroup.kids = [];
         this.copiedGroup.kids = data;
-        this.updateArrays();        
+        this.updateArrays();
       }
     })
     alert.present();

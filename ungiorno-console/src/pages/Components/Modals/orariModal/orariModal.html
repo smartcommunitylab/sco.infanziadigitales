@@ -9,7 +9,7 @@
         </ion-buttons>
         <ion-buttons end>
             <div (mouseover)="sovraPopover($event)">
-                <button ion-button (click)="save()" [disabled]='!(copiedOrario.servizio) || disable || sovrapp || disableName || (copiedOrario.servizio && copiedOrario.servizio.fasce && copiedOrario.servizio.fasce.length==0) '>
+                <button ion-button (click)="save()" [disabled]='!(copiedOrario.servizio) || disable || sovrapp || disableName ||(copiedOrario.fasce && copiedOrario.fasce.length==0) '>
                     Salva
                 </button>
             </div>

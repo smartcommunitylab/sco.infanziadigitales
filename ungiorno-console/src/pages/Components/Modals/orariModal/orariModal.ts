@@ -68,7 +68,13 @@ export class OrariModal implements OnInit {
     ngOnInit() {
 
     }
-
+    // emptyService() {
+    //     if (!this.copiedOrario.servizio)
+    //         return true
+    //     if (!this.copiedOrario.servizio.fasce)
+    //         return true
+    //     if (this.copiedOrario.servizio && this.copiedOrario.servizio.fasce && this.copiedOrario.servizio.fasce.length == 0)
+    // }
     close() {
         let alert = this.alertCtrl.create({
             subTitle: 'Eventuali modifiche verrano perse. Confermi?',
@@ -135,7 +141,7 @@ export class OrariModal implements OnInit {
         var newFascia = new Time('', new Date(0, 0, 0, 8, 0), new Date(0, 0, 0, 17, 0));
         this.copiedOrario.fasce.push(newFascia);
         this.changeName(this.copiedOrario.fasce[this.copiedOrario.fasce.length - 1].name);
-        this.changeFascia(this.copiedOrario.fasce[this.copiedOrario.fasce.length - 1],false);
+        this.changeFascia(this.copiedOrario.fasce[this.copiedOrario.fasce.length - 1], false);
 
     }
 
@@ -250,7 +256,7 @@ export class OrariModal implements OnInit {
         });
 
         popover.onWillDismiss(() => {
-            this.changeFascia(item,false);
+            this.changeFascia(item, false);
         })
     }
 }

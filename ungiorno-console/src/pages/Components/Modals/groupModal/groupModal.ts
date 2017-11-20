@@ -48,7 +48,7 @@ export class GroupModal implements OnInit {
   }
 
   ngOnInit() {
-    this.updateArrays()
+    this.updateArrays();
   }
 
   close() {

@@ -3,6 +3,7 @@ import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 import { Storage } from '@ionic/storage';
 
+export const APP_NAME = 'Console UGAS';
 class EnvData {
    env: string;
 }

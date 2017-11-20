@@ -5,7 +5,8 @@ import { Service } from './../../../app/Classes/service';
 import { School } from './../../../app/Classes/school';
 import { WebService } from './../../../services/WebService';
 import { Component, OnInit, Input } from '@angular/core';
-import { NavController, AlertController, ModalController } from 'ionic-angular';
+import { NavController, AlertController, ModalController, App } from 'ionic-angular';
+import { APP_NAME } from '../../../services/config.service';
 function compare(a, b) {
     if (a.fasce[0] && b.fasce[0] && a.fasce[0].start < b.fasce[0].start)
         return -1;
@@ -40,7 +41,7 @@ export class Orari implements OnInit {
 
     filteredOrari: Service[];
 
-    constructor(public navCtrl: NavController, private webService: WebService, public alertCtrl: AlertController, public modalCtrl: ModalController) { }
+    constructor(public navCtrl: NavController, private _app: App, private webService: WebService, public alertCtrl: AlertController, public modalCtrl: ModalController) { }
 
     ngOnInit() {
         this.filteredOrari = this.orderFasce(this.selectedSchool.servizi);
@@ -53,6 +54,11 @@ export class Orari implements OnInit {
             'isNew': isNew,
             'giaNorm': [item.normale]
         }, { enableBackdropDismiss: false, showBackdrop: false });
+        modal.onDidDismiss((data) => {
+            this._app.setTitle(APP_NAME);
+            this.filteredOrari = this.orderFasce(this.selectedSchool.servizi);
+           
+        });
         modal.present();
     }
 
@@ -94,7 +100,7 @@ export class Orari implements OnInit {
                             }
                             this.selectedSchool.servizi = schoolCopy.servizi;
                             this.filteredOrari = this.orderFasce(this.selectedSchool.servizi);
-                            
+
                         }, () => {
                             // TODO
                         })

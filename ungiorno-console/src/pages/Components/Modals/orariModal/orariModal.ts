@@ -129,8 +129,13 @@ export class OrariModal implements OnInit {
                             toastConflict.present();
                             return;
                         }
+
                         this.copiedOrario.fasce.sort((item1, item2) => item1.start.localeCompare(item2.start));
-                        this.webService.update(this.selectedSchool).then(() => {
+                        let schoolCopy = School.copy(this.selectedSchool);
+                        if (this.isNew) {
+                            schoolCopy.servizi.push(this.copiedOrario);
+                        } 
+                        this.webService.update(schoolCopy).then(() => {
                             Object.assign(this.selectedOrario, this.copiedOrario);
                             if (this.isNew) {
                                 this.selectedSchool.servizi.push(this.selectedOrario);
@@ -141,6 +146,7 @@ export class OrariModal implements OnInit {
                             //TODO
                         });
                     }
+
                 }
             ]
         })
@@ -151,7 +157,7 @@ export class OrariModal implements OnInit {
     addFascia() {
         var newFascia = new Time('', new Date(0, 0, 0, 8, 0), new Date(0, 0, 0, 17, 0));
         this.copiedOrario.fasce.push(newFascia);
-        this.changeName(this.copiedOrario.fasce[this.copiedOrario.fasce.length - 1].name,this.copiedOrario.fasce.length-1);
+        this.changeName(this.copiedOrario.fasce[this.copiedOrario.fasce.length - 1].name, this.copiedOrario.fasce.length - 1);
         this.changeFascia(this.copiedOrario.fasce[this.copiedOrario.fasce.length - 1], false);
 
     }
@@ -182,24 +188,23 @@ export class OrariModal implements OnInit {
     duplicate: boolean;
     changeName(string: string, index) {
         // for (var i = 0; i < this.copiedOrario.fasce.length; i++) {
-            if (!this.copiedOrario.fasce[index].name) {
-                this.disableName = true;
-                // return;
-            }
-            else {
-                // if (this.isDuplicate(this.copiedOrario.fasce[i].name, i))
-                //     this.duplicate = true;
-                // else this.duplicate = false;
-                this.disableName = false;
+        if (!this.copiedOrario.fasce[index].name) {
+            this.disableName = true;
+            // return;
+        }
+        else {
+            // if (this.isDuplicate(this.copiedOrario.fasce[i].name, i))
+            //     this.duplicate = true;
+            // else this.duplicate = false;
+            this.disableName = false;
             // }
         }
         // for (var i = 0; i < this.copiedOrario.fasce.length; i++) {
-            if (this.isDuplicate(string, index))
-                {
-                    this.duplicate = true;
-                    return
-                }
-            else this.duplicate = false;
+        if (this.isDuplicate(string, index)) {
+            this.duplicate = true;
+            return
+        }
+        else this.duplicate = false;
 
         // }
     }

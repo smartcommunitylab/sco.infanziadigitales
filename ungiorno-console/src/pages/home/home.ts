@@ -4,9 +4,10 @@ import { GroupModal } from './../Components/Modals/groupModal/groupModal';
 import { WebService } from '../../services/WebService';
 import { School } from './../../app/Classes/school';
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { NavController, AlertController, ModalController, LoadingController } from 'ionic-angular';
+import { App, NavController, AlertController, ModalController, LoadingController } from 'ionic-angular';
 import { LoginService } from '../../services/login.service'
 import { UserService } from "../../services/user.service";
+import { APP_NAME } from '../../services/config.service';
 
 @Component({
   selector: 'page-home',
@@ -48,7 +49,9 @@ export class HomePage implements OnInit {
   selectedId: string;
   selectedAppId: string;
   rerender = false;
-  constructor(public navCtrl: NavController,
+  constructor(
+    public navCtrl: NavController,
+    public _app: App,
     private webService: WebService,
     public alertCtrl: AlertController,
     public loadingCtrl: LoadingController,
@@ -61,6 +64,23 @@ export class HomePage implements OnInit {
     let authorizedSchools = this.userService.getAuthorizedSchools();
     if (authorizedSchools.length == 0) {
       console.log('user cannot manage any schools');
+      let alert = this.alertCtrl.create({
+        title: 'Errore di login',
+        subTitle: "L'account Google con cui ci si è autenticati non è associato ad alcuna scuola. Per eseguire il logout dall'account Google (vale per tutte le schede aperte del browser) premere OK, altrimenti premere ANNULLA.",
+        buttons: [
+          {
+            text: "ANNULA"
+          },
+          {
+            text: "OK",
+            handler: () => {
+              this.loginService.logout(true);
+            }
+          }
+        ]
+      })
+      alert.present();      
+      return;
     }
     this.schools = this.userService.getAuthorizedSchools();
     if (this.schools && this.userService.getAuthorizedSchools()[0]) {
@@ -70,6 +90,11 @@ export class HomePage implements OnInit {
     }
 
   }
+
+  ionViewDidEnter() {
+    this._app.setTitle(APP_NAME);
+}
+
   doRerender() {
     this.rerender = true;
     this.cdRef.detectChanges();

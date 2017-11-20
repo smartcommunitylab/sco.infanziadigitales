@@ -3,7 +3,8 @@ import { GroupModal } from './../Modals/groupModal/groupModal';
 import { School } from './../../../app/Classes/school';
 import { Group } from './../../../app/Classes/group';
 import { Component, Input, OnInit } from '@angular/core';
-import { NavController, AlertController, ModalController } from 'ionic-angular';
+import { NavController, AlertController, ModalController, App } from 'ionic-angular';
+import { APP_NAME } from '../../../services/config.service';
 
 @Component({
   selector: 'gruppi',
@@ -43,7 +44,7 @@ export class Gruppi implements OnInit {
   filteredGroups : Group[];
   searchText: string = '';
 
-  constructor(private webService : WebService, public alertCtrl: AlertController, public modalCtrl: ModalController) {}
+  constructor(private webService : WebService, private _app: App, public alertCtrl: AlertController, public modalCtrl: ModalController) {}
 
   ngOnInit(): void {
     this.onFiltroGroupChange(this.filtro);
@@ -53,6 +54,7 @@ export class Gruppi implements OnInit {
     let modal = this.modalCtrl.create(GroupModal, {'group' : item, 'school' : this.selectedSchool, 'isNew' : isNew}, {enableBackdropDismiss: false, showBackdrop: false});
     modal.onDidDismiss(data => {
       this.onFiltroGroupChange(this.filtro);
+      this._app.setTitle(APP_NAME);
     });
     modal.present();
   }

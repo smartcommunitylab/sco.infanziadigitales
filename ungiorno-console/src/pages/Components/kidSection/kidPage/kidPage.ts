@@ -272,18 +272,18 @@ export class KidPage implements OnInit {
 
         // FIX for strange issue
         tmpKid.services = tmpKid.services.filter(service => service != undefined);
-        if (this.isNew) {
-            tmpKid.services.push(this.selectedSchool.servizi.find(x => x.normale));
-        }
+        // if (this.isNew) {
+        //     tmpKid.services.push(this.selectedSchool.servizi.find(x => x.normale));
+        // }
         console.log(this.selectedKid.constructor.name)
 
         this.webService.addKid(this.selectedSchool, tmpKid).then(() => {
-            this.isNew = false;
             this.selectedKid.copyInto(tmpKid);
             if (this.isNew) {
                 this.selectedSchool.kids.push(this.selectedKid);
             }
-        //this.syncKidObject();
+            this.isNew = false;
+            //this.syncKidObject();
         }, (err) => {
             //TODO
             this.editInfo = true;

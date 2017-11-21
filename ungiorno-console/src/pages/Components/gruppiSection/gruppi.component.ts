@@ -74,7 +74,7 @@ export class Gruppi implements OnInit {
 
     let alert = this.alertCtrl.create({
             subTitle: 'Conferma eliminazione',
-            message: (hasKids || hasTeachers) ? 'Attenzione! I bambini/insegnanti di questo gruppo dovranno essere associati ad un’altro gruppo' : null,
+            message: (hasKids || hasTeachers) ? 'Attenzione! I bambini di questo gruppo dovranno essere associati ad un’altro gruppo' : null,
             cssClass:'alertWarningCss',
             buttons: [
         {

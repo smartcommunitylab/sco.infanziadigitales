@@ -69,7 +69,7 @@ export class HomePage implements OnInit {
         subTitle: "L'account Google con cui ci si è autenticati non è associato ad alcuna scuola. Per eseguire il logout dall'account Google (vale per tutte le schede aperte del browser) premere OK, altrimenti premere ANNULLA.",
         buttons: [
           {
-            text: "ANNULA"
+            text: "ANNULLA"
           },
           {
             text: "OK",

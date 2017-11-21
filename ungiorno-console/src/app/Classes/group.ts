@@ -9,8 +9,8 @@ export class Group {
 
     constructor(name:string, kids: string[], section: boolean, teachers: string[]) {
         this.name = name;
-        this.kids = kids;
+        this.kids = kids == null ? [] : kids;
         this.section = section;
-        this.teachers = teachers;
+        this.teachers = teachers == null ? [] : teachers;
     }
 }

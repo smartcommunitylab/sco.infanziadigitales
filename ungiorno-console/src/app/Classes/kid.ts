@@ -49,12 +49,16 @@ export class Kid extends Person {
     copyInto(source:any) {
         Object.assign(this, source)
         this.allergie = new Array();
-        source.allergie.forEach(x => this.allergie.push(x));
+        if (source.allergie)
+            source.allergie.forEach(x => this.allergie.push(x));
         this.deleghe = new Array();
-        source.deleghe.forEach(x => this.deleghe.push(x));
+        if (source.deleghe)
+            source.deleghe.forEach(x => this.deleghe.push(x));
         this.ritiro = new Array();
-        source.ritiro.forEach(x => this.ritiro.push(x));
+        if (source.ritiro)
+            source.ritiro.forEach(x => this.ritiro.push(x));
         this.services = new Array();
-        source.services.forEach(x => this.services.push(x));
+        if (source.services)
+            source.services.forEach(x => this.services.push(x));
     }
 }

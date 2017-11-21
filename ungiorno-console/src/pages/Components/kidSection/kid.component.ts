@@ -40,6 +40,10 @@ export class Bambini implements OnInit {
     this.filteredKid = this.selectedSchool.kids;
     this.onFiltroKidChange(this.filtro);
     this.schoolSections = this.selectedSchool.groups.filter(group => group.section)
+    for (let i=0;i<this.schoolSections.length;i++){
+      this.filterArray[this.schoolSections[i].name]= x => x.section ===this.schoolSections[i].name;
+    }
+    
   }
 
   handlerInputChange(e) {
@@ -111,7 +115,7 @@ export class Bambini implements OnInit {
     }
   }
 
-  readonly filterArray = {
+  filterArray = {
     '0': x => true,
     '1': x => x.gender === "Maschio",
     '2': x => x.gender === "Femmina",
@@ -150,8 +154,8 @@ export class Bambini implements OnInit {
   searchKids(item: any) {
     this.filteredKid = this.selectedSchool.kids;
     let val = item.target.value;
-    if (val && val.trim() !== '') {
+    // if (val && val.trim() !== '') {
       this.filteredKid = this.filteredKid.filter(this.getFilterFunction());
-    }
+    // }
   }
 }

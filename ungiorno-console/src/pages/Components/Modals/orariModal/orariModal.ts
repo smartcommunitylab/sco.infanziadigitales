@@ -134,7 +134,7 @@ export class OrariModal implements OnInit {
                         let schoolCopy = School.copy(this.selectedSchool);
                         if (this.isNew) {
                             schoolCopy.servizi.push(this.copiedOrario);
-                        } 
+                        }
                         this.webService.update(schoolCopy).then(() => {
                             Object.assign(this.selectedOrario, this.copiedOrario);
                             if (this.isNew) {
@@ -175,6 +175,11 @@ export class OrariModal implements OnInit {
                     handler: () => {
                         this.copiedOrario.fasce.splice(this.copiedOrario.fasce.findIndex(t => t.name.toLowerCase() === fascia.name.toLowerCase()), 1);
                         this.disable = this.copiedOrario.fasce.findIndex(t => t.name.toLowerCase() === '') >= 0;
+                        //check new consistency
+                        for (var i = 0; i < this.copiedOrario.fasce.length; i++) {
+                            this.changeName(this.copiedOrario.fasce[i].name, i);
+                            this.changeFascia(this.copiedOrario.fasce[i], false);
+                        }
                     },
                 }
             ]
@@ -187,26 +192,17 @@ export class OrariModal implements OnInit {
     disableName: boolean;
     duplicate: boolean;
     changeName(string: string, index) {
-        // for (var i = 0; i < this.copiedOrario.fasce.length; i++) {
         if (!this.copiedOrario.fasce[index].name) {
             this.disableName = true;
-            // return;
         }
         else {
-            // if (this.isDuplicate(this.copiedOrario.fasce[i].name, i))
-            //     this.duplicate = true;
-            // else this.duplicate = false;
             this.disableName = false;
-            // }
         }
-        // for (var i = 0; i < this.copiedOrario.fasce.length; i++) {
         if (this.isDuplicate(string, index)) {
             this.duplicate = true;
             return
         }
         else this.duplicate = false;
-
-        // }
     }
 
     blurFascia(fascia: Time) {
@@ -223,8 +219,8 @@ export class OrariModal implements OnInit {
         }
         if (this.copiedOrario.fasce.length > 1)
             for (var i = 1; i < this.copiedOrario.fasce.length; i++) {
-                    if (this.isBetween(this.copiedOrario.fasce[i].name, this.copiedOrario.fasce[i].start, this.copiedOrario.fasce[i - 1].start, this.copiedOrario.fasce[i - 1].end, this.copiedOrario.fasce[i - 1].name, fascia.end) || this.isBetweenSchool(fascia)) {
-                        this.sovrapp = true;
+                if (this.isBetween(this.copiedOrario.fasce[i].name, this.copiedOrario.fasce[i].start, this.copiedOrario.fasce[i - 1].start, this.copiedOrario.fasce[i - 1].end, this.copiedOrario.fasce[i - 1].name, fascia.end) || this.isBetweenSchool(fascia)) {
+                    this.sovrapp = true;
                     this.disable = true;
                     return;
                 }
@@ -234,6 +230,11 @@ export class OrariModal implements OnInit {
                 }
             }
         else {
+            if ((this.copiedOrario.fasce[0].start.localeCompare(this.copiedOrario.fasce[0].end) > 0)) {
+                this.sovrapp = false;
+                this.disable = true;
+                return;
+            }
             this.sovrapp = this.isBetweenSchool(fascia);
             this.disable = this.sovrapp;
         }
@@ -250,7 +251,9 @@ export class OrariModal implements OnInit {
                 ((date.localeCompare(start) > 0 && date.localeCompare(end) < 0) || //inizio interno ad una fascia
                     (dateF.localeCompare(start) > 0 && dateF.localeCompare(end) < 0) ||  //fine interna a una fascia
                     (date.localeCompare(start) <= 0 && dateF.localeCompare(end) >= 0) ||  //inizia prima di o assieme a una fascia e finisce dopo o assieme
-                    (date.localeCompare(dateF) >= 0))
+                    (start.localeCompare(end) > 0 )   ||
+                    (date.localeCompare(dateF) > 0 )   
+                )
         }
     }
 

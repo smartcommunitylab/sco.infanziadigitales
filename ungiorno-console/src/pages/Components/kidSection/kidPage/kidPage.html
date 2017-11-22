@@ -55,7 +55,7 @@
                                         Informazioni di base
                                         <button class='edit' ion-button color='magenta1' float-end *ngIf='!editInfo' (click)="onInfoEdit()">Modifica</button>
                                         <button class='edit' ion-button color='magenta1' float-end *ngIf='editInfo' (click)="onInfoSave()" [disabled]='!(newInfo.name && newInfo.surname && newInfo.id )'>Salva</button>
-                                        <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='editInfo' (click)="onInfoCancel()">Annulla</button>
+                                        <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='editInfo' [style.visibility]="isNew ? 'hidden':'visible'" (click)="onInfoCancel()">Annulla</button>
                                     </ion-card-header>
                                     <ion-card-content margin-top>
                                         <ion-grid inset>

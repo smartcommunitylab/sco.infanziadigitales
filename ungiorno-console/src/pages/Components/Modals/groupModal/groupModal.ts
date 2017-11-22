@@ -181,10 +181,10 @@ export class GroupModal implements OnInit {
     Promise.all(promises).then(data => {
       Object.assign(this.selectedGroup, this.copiedGroup) //copia profonda dei due oggetti
       if (this.copiedGroup.kids)
-      this.selectedGroup.kids = this.copiedGroup.kids.slice();
-      else this.selectedGroup.kids =[];
+        this.selectedGroup.kids = this.copiedGroup.kids.slice();
+      else this.selectedGroup.kids = [];
       if (this.copiedGroup.teachers)
-      this.selectedGroup.teachers = this.copiedGroup.teachers.slice();
+        this.selectedGroup.teachers = this.copiedGroup.teachers.slice();
       else this.selectedGroup.teachers = [];
       if (this.isNew) {
         this.selectedSchool.groups.push(this.selectedGroup);
@@ -230,69 +230,83 @@ export class GroupModal implements OnInit {
   addTeacher() {
     let alert = this.alertCtrl.create();
     alert.setTitle('Aggiungi insegnanti');
-    let allTeachers = this.selectedSchool.teachers.slice();
-    allTeachers.sort(this.compare);
-    allTeachers.forEach(element => { //creazione lista di checkbox in alert
-      let checked = this.copiedGroup.teachers.findIndex(x => x.toLowerCase() === element.id.toLowerCase()) >= 0;
-      let disabled = checked;
-      alert.addInput({
-        type: 'checkbox',
-        label: element.surname + ' ' + element.name,
-        value: element.id,
-        checked: checked,
-        disabled: checked
+    if (this.selectedSchool.teachers.length > 0) {
+      let allTeachers = this.selectedSchool.teachers.slice();
+      allTeachers.sort(this.compare);
+      allTeachers.forEach(element => { //creazione lista di checkbox in alert
+        let checked = this.copiedGroup.teachers.findIndex(x => x.toLowerCase() === element.id.toLowerCase()) >= 0;
+        let disabled = checked;
+        alert.addInput({
+          type: 'checkbox',
+          label: element.surname + ' ' + element.name,
+          value: element.id,
+          checked: checked,
+          disabled: checked
+        })
+      });
+      alert.addButton({
+        text: 'Annulla'
+      });
+      alert.addButton({
+        text: 'OK',
+        handler: data => {
+          if (!data) this.copiedGroup.teachers = [];
+          this.copiedGroup.teachers = data;
+          this.updateArrays();
+        }
       })
-    });
-    alert.addButton({
-      text: 'Annulla'
-    });
-    alert.addButton({
-      text: 'OK',
-      handler: data => {
-        if (!data) this.copiedGroup.teachers = [];
-        this.copiedGroup.teachers = data;
-        this.updateArrays();
-      }
-    })
+    } else {
+      alert.setMessage('Non sono ancora stati aggiunti insegnanti alla scuola.');
+      alert.addButton({
+        text: 'OK'
+      })
+    }
     alert.present();
   }
 
   addKid() {
     let alert = this.alertCtrl.create();
     alert.setTitle('Aggiungi bambini');
-    let allKids = this.selectedSchool.kids.slice();
-    allKids.sort(this.compare);
+    if (this.selectedSchool.kids.length > 0) {
+      let allKids = this.selectedSchool.kids.slice();
+      allKids.sort(this.compare);
 
-    allKids.forEach(element => {
-      let checked = this.copiedGroup.kids.findIndex(x => x.toLowerCase() === element.id.toLowerCase()) >= 0;
-      let disabled = checked;
-      let label = element.surname + ' ' + element.name;
-      // if this is a section. disable a possibility to add a kid if he already belongs to another section
-      if (!disabled && this.copiedGroup.section && !!element.section && this.copiedGroup.name != element.section) {
-        disabled = true;
-        label += `(sezione '${element.section}')`;
-      }
+      allKids.forEach(element => {
+        let checked = this.copiedGroup.kids.findIndex(x => x.toLowerCase() === element.id.toLowerCase()) >= 0;
+        let disabled = checked;
+        let label = element.surname + ' ' + element.name;
+        // if this is a section. disable a possibility to add a kid if he already belongs to another section
+        if (!disabled && this.copiedGroup.section && !!element.section && this.copiedGroup.name != element.section) {
+          disabled = true;
+          label += `(sezione '${element.section}')`;
+        }
 
-      alert.addInput({
-        type: 'checkbox',
-        label: label,
-        value: element.id,
-        checked: checked,
-        disabled: disabled
+        alert.addInput({
+          type: 'checkbox',
+          label: label,
+          value: element.id,
+          checked: checked,
+          disabled: disabled
+        })
+      });
+
+      alert.addButton({
+        text: 'Annulla'
+      });
+      alert.addButton({
+        text: 'OK',
+        handler: data => {
+          if (!data) this.copiedGroup.kids = [];
+          this.copiedGroup.kids = data;
+          this.updateArrays();
+        }
       })
-    });
-
-    alert.addButton({
-      text: 'Annulla'
-    });
-    alert.addButton({
-      text: 'OK',
-      handler: data => {
-        if (!data) this.copiedGroup.kids = [];
-        this.copiedGroup.kids = data;
-        this.updateArrays();
-      }
-    })
+    } else {
+      alert.setMessage('Non sono ancora stati aggiunti bambini alla scuola.');
+      alert.addButton({
+        text: 'OK'
+      })
+    }
     alert.present();
   }
   getImage(child) {

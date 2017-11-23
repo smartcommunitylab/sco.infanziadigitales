@@ -3,7 +3,7 @@ import { Group } from './../../app/Classes/group';
 import { GroupModal } from './../Components/Modals/groupModal/groupModal';
 import { WebService } from '../../services/WebService';
 import { School } from './../../app/Classes/school';
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, HostListener } from '@angular/core';
 import { App, NavController, AlertController, ModalController, LoadingController } from 'ionic-angular';
 import { LoginService } from '../../services/login.service'
 import { UserService } from "../../services/user.service";
@@ -51,6 +51,11 @@ export class HomePage implements OnInit {
   selectedId: string;
   selectedAppId: string;
   rerender = false;
+
+  @HostListener('window:beforeunload', ['$event'])
+  doSomething($event) {
+    if (this.common.hasChangedForm()) $event.returnValue = 'Ci sono delle modifiche non salvate!';
+  }
   constructor(
     public navCtrl: NavController,
     public _app: App,
@@ -61,7 +66,8 @@ export class HomePage implements OnInit {
     public loginService: LoginService,
     private cdRef: ChangeDetectorRef,
     private userService: UserService,
-    private common: CommonService) { }
+    private common: CommonService) {
+    }
 
   ngOnInit(): void {
     let authorizedSchools = this.userService.getAuthorizedSchools();
@@ -91,7 +97,6 @@ export class HomePage implements OnInit {
       this.selectedAppId = this.userService.getAuthorizedSchools()[0].appId;
       this.onSchoolChange(this.selectedAppId, this.selectedId);
     }
-
   }
 
   ionViewDidEnter() {
@@ -103,16 +108,51 @@ export class HomePage implements OnInit {
     this.cdRef.detectChanges();
     this.rerender = false;
   }
-  changeSchool(selectedId: String) {
-    let s: School[] = this.schools.filter(s => s.id === selectedId);
-    console.log(s.length);
-    if (s != undefined) {
-      console.log(JSON.stringify(s));
-      this.onSchoolChange(s[0].appId, s[0].id);
-    }
-    this.settings = "profilo"
-    this.settingsSeg = "profilo"
+
+  private checkChanges(ok: ()=>void, cancel: ()=>void) {
+    if (this.common.hasChangedForm()) {
+      let alert = this.alertCtrl.create({
+        subTitle: 'Eventuali modifiche non salvate verrano perse. Confermi?',
+        buttons: [
+            {
+                text: "Annulla",
+                handler: cancel
+            },
+            {
+                text: 'OK',
+                handler: () => {
+                    this.common.clearChanges();
+                    ok();
+                }
+            }
+        ]
+      })
+      alert.present();
+    } else {
+      ok();
+    }        
   }
+    
+    
+
+  changeSchool(selectedId: String) {
+    setTimeout(()=>{
+      this.checkChanges(()=> {
+        let s: School[] = this.schools.filter(s => s.id === selectedId);
+        console.log(s[0].id);
+        if (s != undefined) {
+          console.log(JSON.stringify(s));
+          this.onSchoolChange(s[0].appId, s[0].id);
+        }
+        this.settings = "profilo"
+        this.settingsSeg = "profilo"
+      }, () => {
+        this.selectedId = this.selectedSchool.id;      
+      });
+    }, 10);
+
+  }
+
   onSchoolChange(selectedAppId: string, selectedId: string) {
     let loading = this.loadingCtrl.create({
     });
@@ -145,33 +185,17 @@ export class HomePage implements OnInit {
   }
 
   onSegmentChange(event) {
-    if (this.common.hasChangedForm()) {
-      let alert = this.alertCtrl.create({
-        subTitle: 'Eventuali modifiche non salvate verrano perse. Confermi?',
-        buttons: [
-            {
-                text: "Annulla",
-                handler: () => {
-                  this.settingsSeg = this.settings;
-                }
-            },
-            {
-                text: 'OK',
-                handler: () => {
-                    this.common.clearChanges();
-                    this.settings = this.settingsSeg;
-                }
-            }
-        ]
-      })
-      alert.present();
-    } else {
+    this.checkChanges(()=> {
       this.settings = this.settingsSeg;
-    }    
+    }, () => {
+      this.settingsSeg = this.settings;
+    });
   }
 
   logout() {
-    this.loginService.logout();
+    this.checkChanges(() => {
+      this.loginService.logout();      
+    }, () => {});
     // window.location.reload();
   }
 }

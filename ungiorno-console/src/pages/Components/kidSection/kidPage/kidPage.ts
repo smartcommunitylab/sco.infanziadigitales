@@ -132,6 +132,8 @@ export class KidPage implements OnInit {
     selectedKidGroups: Group[];
 
     kidSettings: string = 'info';
+    kidSettingsSeg: string = 'info';
+
     image = "";
 
     // data for info section
@@ -340,6 +342,46 @@ export class KidPage implements OnInit {
         })
         alert.present();
         // }
+    }
+
+    onSegmentChange(event) {
+        if (this.commonService.hasChangedForm()) {
+          let alert = this.alertCtrl.create({
+            subTitle: 'Eventuali modifiche non salvate verrano perse. Confermi?',
+            buttons: [
+                {
+                    text: "Annulla",
+                    handler: () => {
+                      this.kidSettingsSeg = this.kidSettings;
+                    }
+                },
+                {
+                    text: 'OK',
+                    handler: () => {
+                        this.clearChanges();
+                        this.kidSettings = this.kidSettingsSeg;
+                    }
+                }
+            ]
+          })
+          alert.present();
+        } else {
+          this.kidSettings = this.kidSettingsSeg;
+        }    
+    }
+
+    clearChanges() {
+        if (this.editInfo) this.onInfoCancel();
+        if (this.editFoto) this.onFotoCancel();
+        if (this.editAllergia) this.onAllergiaCancel();
+        if (this.editService) this.onServiceCancel();
+        if (this.editBus) this.onBusCancel();
+        if (this.editP1Info) this.onP1InfoCancel();
+        if (this.editP2Info) this.onP2InfoCancel();
+        if (this.editP1Contatti) this.onP1ContattiCancel();
+        if (this.editP2Contatti) this.onP2ContattiCancel();
+        if (this.editDelegaInfo) this.onDelegaInfoCancel();
+        this.commonService.clearChanges();
     }
 
     onInfoEdit() {

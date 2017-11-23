@@ -145,3 +145,8 @@ ion-picker-cmp   {
     padding-left:16px;
     text-align: center;
 }
+.alert-fixed{
+    .alert-message{
+        overflow: auto;
+    }
+}

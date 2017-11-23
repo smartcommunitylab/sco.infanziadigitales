@@ -228,7 +228,7 @@ export class GroupModal implements OnInit {
 
 
   addTeacher() {
-    let alert = this.alertCtrl.create();
+    let alert = this.alertCtrl.create({cssClass:'alert-fixed'});
     alert.setTitle('Aggiungi insegnanti');
     if (this.selectedSchool.teachers.length > 0) {
       let allTeachers = this.selectedSchool.teachers.slice();
@@ -265,7 +265,7 @@ export class GroupModal implements OnInit {
   }
 
   addKid() {
-    let alert = this.alertCtrl.create();
+    let alert = this.alertCtrl.create({cssClass:'alert-fixed'});
     alert.setTitle('Aggiungi bambini');
     if (this.selectedSchool.kids.length > 0) {
       let allKids = this.selectedSchool.kids.slice();

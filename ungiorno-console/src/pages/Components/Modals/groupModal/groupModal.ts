@@ -9,6 +9,8 @@ import { NavParams, NavController, AlertController, ToastController } from "ioni
 import { ConfigService } from '../../../../services/config.service';
 import { CommonService } from '../../../../services/common.service';
 
+import {Validators, FormBuilder, FormGroup, FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+
 @Component({
   selector: 'group-modal',
   templateUrl: 'groupModal.html',
@@ -35,7 +37,9 @@ export class GroupModal implements OnInit {
 
   apiUrl: string;
 
-  constructor(public params: NavParams, public common: CommonService, public navCtrl: NavController, private webService: WebService, public alertCtrl: AlertController, private configService: ConfigService,
+  groupForm: FormGroup;
+
+  constructor(public params: NavParams, public formBuilder: FormBuilder, public common: CommonService, public navCtrl: NavController, private webService: WebService, public alertCtrl: AlertController, private configService: ConfigService,
   ) {
     this.selectedSchool = this.params.get('school') as School;
     this.selectedGroup = this.params.get('group') as Group;
@@ -49,9 +53,33 @@ export class GroupModal implements OnInit {
 
   ngOnInit() {
     this.updateArrays();
+    this.groupForm = this.formBuilder.group({
+      name: ['', Validators.compose([Validators.required, this.validateId(this)])]
+    });
+  }
+
+  private validateId(data: any): ValidatorFn {
+    return (fc) => {
+        if (data.isNew) {
+            if (data.selectedSchool.groups.findIndex(x => x.name.toLowerCase() === data.copiedGroup.name.toLowerCase()) >= 0) {
+                return {'unique':true};
+            }
+            return null;
+        }
+    };
+  }
+
+  private isChanged() {
+    return this.isNew && this.groupForm.dirty 
+    || JSON.stringify(this.copiedGroup.kids) != JSON.stringify(this.selectedGroup.kids) 
+    || JSON.stringify(this.copiedGroup.teachers) != JSON.stringify(this.selectedGroup.teachers);
   }
 
   close() {
+    if (!this.isChanged()) {
+      this.navCtrl.pop();
+      return;
+    }
     let alert = this.alertCtrl.create({
       subTitle: 'Eventuali modifiche verrano perse. Confermi?',
       buttons: [
@@ -70,81 +98,73 @@ export class GroupModal implements OnInit {
 
   }
 
-  private checkNameDuplicate() {
-    if (this.isNew && this.selectedSchool.groups.findIndex(x => x.name.toLowerCase() == this.copiedGroup.name.toLowerCase()) >= 0) {
-      this.common.showToast('Gruppo o sezione con lo stesso nome è già presente');
-      return false;
-    }
-    return true;
-  }
-
-  onBlur(evt: any) {
-    this.checkNameDuplicate();
-  }
-
   save() {
-    if (!this.checkNameDuplicate()) return;
+    let handler = () => {
+      // kids to be removed / added
+      let oldKids = {};
+      let toRemoveKids = [];
+      let toAddKids = [];
+      if (this.selectedGroup.kids) {
+        this.selectedGroup.kids.forEach(kid => oldKids[kid] = true);
+      }
+      if (this.copiedGroup.kids) {
+        this.copiedGroup.kids.forEach(kid => {
+          if (!oldKids[kid]) toAddKids.push(kid);
+          oldKids[kid] = null;
+        });
+      }
+      for (let kid in oldKids) {
+        if (oldKids[kid]) toRemoveKids.push(kid);
+      }
 
-    let alert = this.alertCtrl.create({
-      subTitle: 'Eventuali modifiche verrano confermate. Confermi?',
-      buttons: [
-        {
-          text: "Annulla"
-        },
-        {
-          text: 'OK',
-          handler: () => {
-            // kids to be removed / added
-            let oldKids = {};
-            let toRemoveKids = [];
-            let toAddKids = [];
-            if (this.selectedGroup.kids) {
-              this.selectedGroup.kids.forEach(kid => oldKids[kid] = true);
-            }
-            if (this.copiedGroup.kids) {
-              this.copiedGroup.kids.forEach(kid => {
-                if (!oldKids[kid]) toAddKids.push(kid);
-                oldKids[kid] = null;
-              });
-            }
-            for (let kid in oldKids) {
-              if (oldKids[kid]) toRemoveKids.push(kid);
-            }
+      // teachers to be removed / added
+      let oldTeachers = {};
+      let toRemoveTeachers = [];
+      let toAddTeachers = [];
+      if (this.selectedGroup.teachers) {
+        this.selectedGroup.teachers.forEach(t => oldTeachers[t] = true);
+      }
+      if (this.copiedGroup.teachers) {
+        this.copiedGroup.teachers.forEach(t => {
+          if (!oldTeachers[t]) toAddTeachers.push(t);
+          oldTeachers[t] = null;
+        });
+      }
+      for (let t in oldTeachers) {
+        if (oldTeachers[t]) toRemoveTeachers.push(t);
+      }
 
-            // teachers to be removed / added
-            let oldTeachers = {};
-            let toRemoveTeachers = [];
-            let toAddTeachers = [];
-            if (this.selectedGroup.teachers) {
-              this.selectedGroup.teachers.forEach(t => oldTeachers[t] = true);
-            }
-            if (this.copiedGroup.teachers) {
-              this.copiedGroup.teachers.forEach(t => {
-                if (!oldTeachers[t]) toAddTeachers.push(t);
-                oldTeachers[t] = null;
-              });
-            }
-            for (let t in oldTeachers) {
-              if (oldTeachers[t]) toRemoveTeachers.push(t);
-            }
+      if (this.isNew) {
+        let tmpSchool = School.copy(this.selectedSchool);
+        tmpSchool.groups.push(this.copiedGroup);
+        this.webService.update(tmpSchool).then(() => {
+          this.executeUpdate(toAddKids, toRemoveKids, toAddTeachers, toRemoveTeachers);
+        }, err => {
+          // TODO handle errors
+        });
+      }
+      else {
+        this.executeUpdate(toAddKids, toRemoveKids, toAddTeachers, toRemoveTeachers);
+      }
+    }
 
-            if (this.isNew) {
-              let tmpSchool = School.copy(this.selectedSchool);
-              tmpSchool.groups.push(this.copiedGroup);
-              this.webService.update(tmpSchool).then(() => {
-                this.executeUpdate(toAddKids, toRemoveKids, toAddTeachers, toRemoveTeachers);
-              }, err => {
-                // TODO handle errors
-              });
-            }
-            else {
-              this.executeUpdate(toAddKids, toRemoveKids, toAddTeachers, toRemoveTeachers);
-            }
+    if (!this.isChanged()) {
+      this.navCtrl.pop();
+    } else {
+      let alert = this.alertCtrl.create({
+        subTitle: 'Eventuali modifiche verrano confermate. Confermi?',
+        buttons: [
+          {
+            text: "Annulla"
+          },
+          {
+            text: 'OK',
+            handler: handler
           }
-        }
-      ]
-    })
-    alert.present();
+        ]
+      })
+      alert.present();
+    }
 
   }
 

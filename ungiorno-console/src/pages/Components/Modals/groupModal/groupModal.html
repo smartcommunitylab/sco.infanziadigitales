@@ -9,7 +9,7 @@
             <button ion-button (click)="close()">Annulla</button>
         </ion-buttons>
         <ion-buttons end>
-            <button ion-button (click)="save()" [disabled]='!(copiedGroup.name)'>Salva</button>
+            <button ion-button (click)="save()" [disabled]='isNew && !groupForm.valid'>Salva</button>
         </ion-buttons>
 
     </ion-navbar>
@@ -34,16 +34,18 @@
                                         Una volta impostato il campo, non sara' piu' possibile modificarlo
                                     </ion-col>
                                 </ion-row>
-                                <ion-row>
+                                <ion-row *ngIf="isNew"  [formGroup]="groupForm">
                                     <ion-col col-2>Nome*</ion-col>
                                     <ion-col col-10>
-                                        <input no-margin class="text-generic" type="text" [(ngModel)]="copiedGroup.name" *ngIf="isNew">
-                                        <div no-margin *ngIf='!isNew' class="unchangable-label">{{copiedGroup.name}}</div>
+                                        <input name="name" formControlName="name" no-margin class="text-generic" type="text" [(ngModel)]="copiedGroup.name" >
+                                        <div class="error-label" [hidden]="!groupForm.controls.name.errors || !groupForm.controls.name.errors.required">Nome mancante</div>
+                                        <div class="error-label" [hidden]="!groupForm.controls.name.errors || !groupForm.controls.name.errors.unique">Nome già in uso</div>
                                     </ion-col>
                                 </ion-row>
-                                <ion-row [style.visibility]="copiedGroup.name ? 'hidden':' visible'">
-                                    <ion-col col-10 class="error-label">
-                                        Nome gruppo mancante
+                                <ion-row  *ngIf="!isNew">
+                                    <ion-col col-2>Nome*</ion-col>
+                                    <ion-col col-10>
+                                        <div no-margin  class="unchangable-label">{{copiedGroup.name}}</div>
                                     </ion-col>
                                 </ion-row>
                             </ion-item>

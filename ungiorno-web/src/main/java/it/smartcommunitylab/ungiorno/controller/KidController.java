@@ -19,7 +19,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -38,6 +40,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -50,6 +53,7 @@ import it.smartcommunitylab.ungiorno.model.Response;
 import it.smartcommunitylab.ungiorno.services.PermissionsService;
 import it.smartcommunitylab.ungiorno.services.RepositoryService;
 import it.smartcommunitylab.ungiorno.services.impl.KidManager;
+import it.smartcommunitylab.ungiorno.utils.JsonUtil;
 
 @RestController
 public class KidController {
@@ -103,6 +107,56 @@ public class KidController {
             @PathVariable String schoolId, @PathVariable String kidId) {
 
         return new Response<>(null);
+    }
+
+    @Deprecated
+    @RequestMapping(method = RequestMethod.GET,
+            value = "/student/{appId}/{schoolId}/{kidId}/return")
+    public @ResponseBody Response<Map<Object,Object>> getRitiro(@PathVariable String appId,
+            @PathVariable String schoolId, @PathVariable String kidId, @RequestParam long date) {
+
+        try {
+            if (!permissions.checkKidProfile(appId, schoolId, kidId, null)) {
+                return new Response<>();
+            }
+
+            return new Response<>(Collections.emptyMap());
+        } catch (Exception e) {
+            return new Response<>(e.getMessage());
+        }
+    }
+
+    @Deprecated
+    @RequestMapping(method = RequestMethod.GET,
+            value = "/student/{appId}/{schoolId}/{kidId}/absence")
+    public @ResponseBody Response<Map<Object,Object>> getAssenza(@PathVariable String appId,
+            @PathVariable String schoolId, @PathVariable String kidId, @RequestParam long date) {
+
+        try {
+            if (!permissions.checkKidProfile(appId, schoolId, kidId, null)) {
+                return new Response<>();
+            }
+
+            return new Response<>(Collections.emptyMap());
+        } catch (Exception e) {
+            return new Response<>(e.getMessage());
+        }
+    }
+    
+    @Deprecated
+    @RequestMapping(method = RequestMethod.GET, value = "/student/{appId}/{schoolId}/{kidId}/stop")
+    public @ResponseBody Response<Map<Object,Object>> getStop(@PathVariable String appId,
+            @PathVariable String schoolId, @PathVariable String kidId, @RequestParam long date) {
+
+        try {
+            if (!permissions.checkKidProfile(appId, schoolId, kidId, null)) {
+                return new Response<>();
+            }
+
+            return new Response<>(Collections.emptyMap());
+        } catch (Exception e) {
+            return new Response<>(e.getMessage());
+        }
     }
 
     @RequestMapping(method = RequestMethod.GET,

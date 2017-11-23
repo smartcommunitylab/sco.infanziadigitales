@@ -1,11 +1,16 @@
 import { Injectable }    from '@angular/core';
 import { ToastController } from 'ionic-angular';
 
-import {FormControl, ValidationErrors } from '@angular/forms';
+import {FormControl, FormGroup, ValidationErrors } from '@angular/forms';
 
+export interface EditFormObserver {
+    isDirty(): boolean;
+}
 @Injectable()
 export class CommonService  {
     private currentToast = null;
+
+    private activeForms = new Map<string,EditFormObserver>();
 
     constructor(private toastCtrl: ToastController) {
     }
@@ -59,5 +64,34 @@ export class CommonService  {
         this.showToast('Errore di comunicazione con il server');
     }
 
-    
+    /**
+     * Add specific form to the global state
+     * @param id 
+     * @param form 
+     */
+    addEditForm(id: string, form: EditFormObserver){
+        this.activeForms.set(id, form);
+    }
+    /**
+     * Remove specific form from the global state
+     * @param id 
+     */
+    removeEditForm(id: string) {
+        this.activeForms.delete(id);
+    }
+    /**
+     * Check whether there is an active form modified
+     */
+    hasChangedForm() {
+        for (let id of Array.from(this.activeForms.keys())) {
+            let form = this.activeForms.get(id);
+            if (form.isDirty()) {
+                return true;
+            }
+        }
+        return false;
+    }
+    clearChanges() {
+        this.activeForms.clear();
+    }
 }

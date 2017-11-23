@@ -7,6 +7,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { App, NavController, AlertController, ModalController, LoadingController } from 'ionic-angular';
 import { LoginService } from '../../services/login.service'
 import { UserService } from "../../services/user.service";
+import { CommonService } from "../../services/common.service";
 import { APP_NAME } from '../../services/config.service';
 
 @Component({
@@ -44,6 +45,7 @@ export class HomePage implements OnInit {
   schools: School[];
 
   settings: string = "profilo";
+  settingsSeg: string = "profilo";
 
   selectedSchool: School;
   selectedId: string;
@@ -58,7 +60,8 @@ export class HomePage implements OnInit {
     public modalCtrl: ModalController,
     public loginService: LoginService,
     private cdRef: ChangeDetectorRef,
-    private userService: UserService) { }
+    private userService: UserService,
+    private common: CommonService) { }
 
   ngOnInit(): void {
     let authorizedSchools = this.userService.getAuthorizedSchools();
@@ -108,6 +111,7 @@ export class HomePage implements OnInit {
       this.onSchoolChange(s[0].appId, s[0].id);
     }
     this.settings = "profilo"
+    this.settingsSeg = "profilo"
   }
   onSchoolChange(selectedAppId: string, selectedId: string) {
     let loading = this.loadingCtrl.create({
@@ -140,8 +144,30 @@ export class HomePage implements OnInit {
     }));
   }
 
-  onSegmentChange() {
-    //this.webService.getSchool(this.selectedId).then(x => this.selectedSchool = x)
+  onSegmentChange(event) {
+    if (this.common.hasChangedForm()) {
+      let alert = this.alertCtrl.create({
+        subTitle: 'Eventuali modifiche non salvate verrano perse. Confermi?',
+        buttons: [
+            {
+                text: "Annulla",
+                handler: () => {
+                  this.settingsSeg = this.settings;
+                }
+            },
+            {
+                text: 'OK',
+                handler: () => {
+                    this.common.clearChanges();
+                    this.settings = this.settingsSeg;
+                }
+            }
+        ]
+      })
+      alert.present();
+    } else {
+      this.settings = this.settingsSeg;
+    }    
   }
 
   logout() {

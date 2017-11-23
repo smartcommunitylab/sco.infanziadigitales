@@ -10,7 +10,7 @@ import { Stop } from './../../../../app/Classes/stop';
 import { Kid } from './../../../../app/Classes/kid';
 import { WebService } from './../../../../services/WebService';
 import { ConfigService } from './../../../../services/config.service';
-import { CommonService } from  './../../../../services/common.service';
+import { CommonService, EditFormObserver } from  './../../../../services/common.service';
 import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 
 import {Validators, FormBuilder, FormGroup, FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
@@ -184,9 +184,21 @@ export class KidPage implements OnInit {
     p2ContattiForm: FormGroup;
     delegaForm: FormGroup;
 
+    infoObserver: EditFormObserver;
+    fotoObserver: EditFormObserver;
+    allergiaObserver: EditFormObserver;
+    orariObserver: EditFormObserver;
+    busObserver: EditFormObserver;
+    p1InfoObserver: EditFormObserver;
+    p1ContattiObserver: EditFormObserver;
+    p2InfoObserver: EditFormObserver;
+    p2ContattiObserver: EditFormObserver;
+    delegaObserver: EditFormObserver;
+    
     constructor(
         private webService: WebService,
         private configService: ConfigService,
+        private commonService: CommonService,
         private alertCtrl: AlertController,
         private http: Http,
         private cdRef: ChangeDetectorRef,
@@ -220,11 +232,62 @@ export class KidPage implements OnInit {
             email: ['', this.emailValidator]
         });
 
-        this.delegaForm = this.formBuilder.group({
-            name: ['', Validators.required],
-            surname: ['', Validators.required],
-            legame: ['', Validators.required]
-        });
+        // change observers
+        this.infoObserver = { isDirty: () => {
+            return this.infoForm.dirty;
+        }};
+        this.fotoObserver = { isDirty: () => this.editFoto };
+        this.allergiaObserver  = { isDirty: () => {
+            if (this.newAllergia) return true;
+            return JSON.stringify(this.newAllergie) != JSON.stringify(this.selectedKid.allergie) 
+        }};
+        this.orariObserver  = { isDirty: () => {
+            let newService = [];
+            this.selectedSchool.servizi.forEach(servizio => {
+                if (this.servicesChecked[servizio.servizio]) {
+                    newService.push(servizio);
+                }
+            });
+            newService.sort();
+            let oldService = this.selectedKid.services? this.selectedKid.services.slice() : [];
+            oldService.sort;
+            return JSON.stringify(newService) != JSON.stringify(oldService);
+        }};
+        this.busObserver = { isDirty: () => {
+            if (this.newStop) return true;
+            if (!this.newBus.enabled && (!this.selectedKid.bus || !this.selectedKid.bus.enabled)) return false;
+            return JSON.stringify(this.newBus) != JSON.stringify(this.selectedKid.bus) 
+
+        }};
+        this.p1InfoObserver = { isDirty: () => this.newParent1.name != this.selectedKid.parent1.name || this.newParent1.surname != this.selectedKid.parent1.surname || this.newParent1.id != this.selectedKid.parent1.id};
+        this.p2InfoObserver = { isDirty: () => this.newParent2.name != this.selectedKid.parent2.name || this.newParent2.surname != this.selectedKid.parent2.surname || this.newParent2.id != this.selectedKid.parent2.id};
+        this.p1ContattiObserver = { isDirty: () => {
+            if (this.p1Phones.newItem) return true;
+            if (JSON.stringify([this.newParent1.email]) != JSON.stringify(this.selectedKid.parent1.emails)) return true;
+            if (JSON.stringify([this.newParent1.phoneNumbers]) != JSON.stringify(this.selectedKid.parent1.phoneNumbers)) return true;
+        }};
+        this.p2ContattiObserver = { isDirty: () => {
+            if (this.p2Phones.newItem) return true;
+            if (JSON.stringify([this.newParent2.email]) != JSON.stringify(this.selectedKid.parent2.emails)) return true;
+            if (JSON.stringify([this.newParent2.phoneNumbers]) != JSON.stringify(this.selectedKid.parent2.phoneNumbers)) return true;
+        }};
+        
+        this.delegaObserver = { isDirty: () => this.delegaForm.dirty };
+        
+        // infoObserver: EditFormObserver;
+        // fotoObserver: EditFormObserver;
+        // allergiaObserver: EditFormObserver;
+        // orariObserver: EditFormObserver;
+        // busObserver: EditFormObserver;
+        // p1InfoObserver: EditFormObserver;
+        // p1ContattiObserver: EditFormObserver;
+        // p2InfoObserver: EditFormObserver;
+        // p2ContattiObserver: EditFormObserver;
+        // delegaObserver: EditFormObserver;
+    
+        if (this.isNew) {
+            this.commonService.addEditForm('kidInfo',this.infoObserver );            
+        }
     }
 
     private validateId(data: any): ValidatorFn {
@@ -233,6 +296,7 @@ export class KidPage implements OnInit {
                 if (data.selectedSchool.kids.findIndex(x => x.id.toLowerCase() === data.newInfo.id.toLowerCase()) >= 0) {
                     return {'unique':true};
                 }
+                return null;
             }
         };
     }
@@ -248,10 +312,6 @@ export class KidPage implements OnInit {
         this.selectedKid.services.forEach(x => this.servicesChecked[x.servizio] = true);
     }
 
-    print(obj:any){
-        return JSON.stringify(obj);
-    }
-
     isInEdit(): boolean {
         return this.editInfo || this.editFoto || this.editAllergia || this.editService || this.editBus
             || this.editP1Info || this.editP1Contatti || this.editP2Info || this.editP2Contatti 
@@ -259,7 +319,7 @@ export class KidPage implements OnInit {
     }
 
     goBack() {
-        if (!this.isInEdit()) {
+        if (!this.commonService.hasChangedForm()) {
             this.kidUpdated.emit(this.selectedKid);
             return;   
         }
@@ -273,6 +333,7 @@ export class KidPage implements OnInit {
                     text: 'OK',
                     handler: () => {
                         this.kidUpdated.emit(this.selectedKid);
+                        this.commonService.clearChanges();
                     }
                 }
             ]
@@ -291,6 +352,7 @@ export class KidPage implements OnInit {
         this.newInfo.sperimentazione = this.selectedKid.sperimentazione;
 
         this.editInfo = true;
+        this.commonService.addEditForm('kidInfo',this.infoObserver );
     }
 
     onInfoSave() {
@@ -332,6 +394,7 @@ export class KidPage implements OnInit {
                 this.selectedSchool.kids.push(this.selectedKid);
             }
             this.isNew = false;
+            this.commonService.removeEditForm('kidInfo');            
             //this.syncKidObject();
         }, (err) => {
             //TODO
@@ -342,6 +405,7 @@ export class KidPage implements OnInit {
     }
 
     onInfoCancel() {
+        this.commonService.removeEditForm('kidInfo');                    
         this.editInfo = false;
         if (this.isNew) {
             this.goBack();
@@ -351,6 +415,8 @@ export class KidPage implements OnInit {
     onFotoEdit() {
         this.editFoto = true;
         this.newFoto = this.selectedKid.image;
+        this.commonService.addEditForm('kidFoto', this.fotoObserver);            
+        
     }
     onRemoveProfileKid() {
         let alert = this.alertCtrl.create({
@@ -366,6 +432,7 @@ export class KidPage implements OnInit {
                         this.webService.removeKidImage(this.selectedSchool, this.selectedKid).then(() => {
                             // this.doRerender();
                             this.image=this.getImage();
+                            this.commonService.removeEditForm('kidFoto');            
                         },
                             (err) => {
                                 console.log(err);
@@ -384,6 +451,7 @@ export class KidPage implements OnInit {
         this.webService.uploadDocumentInPromise(this.uploader, this.uploader.queue[0], this.selectedSchool, this.selectedKid).then(() => {
             // this.doRerender();
             this.image=this.getImage();
+            this.commonService.removeEditForm('kidFoto');                        
         },
             (err) => {
                 console.log(err);
@@ -396,6 +464,7 @@ export class KidPage implements OnInit {
 
     onFotoCancel() {
         this.editFoto = false;
+        this.commonService.removeEditForm('kidFoto');            
     }
 
     onAllergiaEdit() {
@@ -405,6 +474,7 @@ export class KidPage implements OnInit {
         if (this.selectedKid.allergie != null) {
             this.selectedKid.allergie.forEach(x => this.newAllergie.push(x));
         }
+        this.commonService.addEditForm('kidAllergie', this.allergiaObserver);                    
     }
 
     onAllergiaSave() {
@@ -415,6 +485,7 @@ export class KidPage implements OnInit {
             this.webService.add(this.selectedSchool, tmpKid).then(
                 () => {
                     this.selectedKid.copyInto(tmpKid);
+                    this.commonService.removeEditForm('kidAllergie');            
                 }, (err) => {
                     this.editAllergia = true;
                 });
@@ -426,6 +497,7 @@ export class KidPage implements OnInit {
     onAllergiaCancel() {
         this.editAllergia = false;
         this.newAllergia = null;
+        this.commonService.removeEditForm('kidAllergie');            
     }
 
     addAllergia(all: string) {
@@ -461,7 +533,7 @@ export class KidPage implements OnInit {
 
     onServiceEdit() {
         this.editService = true;
-
+        this.commonService.addEditForm('kidOrari', this.orariObserver);            
     }
 
     onServiceSave() {
@@ -476,6 +548,7 @@ export class KidPage implements OnInit {
         tmpKid.services = newService;
         this.webService.add(this.selectedSchool, tmpKid).then(() => {
             this.selectedKid.copyInto(tmpKid);
+            this.commonService.removeEditForm('kidOrari');            
         }, (err) => {
             //TODO
             this.editService = true;
@@ -485,7 +558,7 @@ export class KidPage implements OnInit {
     onServiceCancel() {
         this.editService = false;
         this.initServices();
-
+        this.commonService.removeEditForm('kidOrari');                    
     }
 
     onP1InfoEdit() {
@@ -493,6 +566,7 @@ export class KidPage implements OnInit {
         this.newParent1.name = this.selectedKid.parent1.name;
         this.newParent1.surname = this.selectedKid.parent1.surname;
         this.editP1Info = true;
+        this.commonService.addEditForm('kidP1Info', this.p1InfoObserver);            
     }
 
     onP1InfoSave() {
@@ -503,13 +577,14 @@ export class KidPage implements OnInit {
         tmpKid.parent1.surname = this.newParent1.surname;
         this.webService.add(this.selectedSchool, tmpKid).then(() => {
             this.selectedKid.copyInto(tmpKid);
+            this.commonService.removeEditForm('kidP1Info');            
         }, (err) => {
             this.editP1Info = true;
         })
     }
 
     onP1InfoCancel() {
-
+        this.commonService.removeEditForm('kidP1Info');                    
         this.editP1Info = false;
     }
 
@@ -517,6 +592,7 @@ export class KidPage implements OnInit {
         this.editP1Contatti = true;
         this.newParent1.email = this.selectedKid.parent1.emails.length > 0 ? this.selectedKid.parent1.emails[0] : '';     
         this.newParent1.phoneNumbers = this.selectedKid.parent1.phoneNumbers.slice();
+        this.commonService.addEditForm('kidP1Contatti', this.p1ContattiObserver);            
     }
 
     onP1ContattiSave() {
@@ -527,6 +603,7 @@ export class KidPage implements OnInit {
             tmpKid.parent1.phoneNumbers = this.newParent1.phoneNumbers;
             this.webService.add(this.selectedSchool, tmpKid).then(() => {
                 this.selectedKid.copyInto(tmpKid);
+                this.commonService.removeEditForm('kidP1Contatti');                    
             }, (err) => {
                 this.editP1Info = true;
             });    
@@ -540,6 +617,7 @@ export class KidPage implements OnInit {
 
     onP1ContattiCancel() {
         this.editP1Contatti = false;
+        this.commonService.removeEditForm('kidP1Contatti');                    
     }
 
     onP2InfoEdit() {
@@ -547,6 +625,7 @@ export class KidPage implements OnInit {
         this.newParent2.name = this.selectedKid.parent2.name;
         this.newParent2.surname = this.selectedKid.parent2.surname;
         this.editP2Info = true;
+        this.commonService.addEditForm('kidP2Info', this.p2InfoObserver);            
     }
 
     onP2InfoSave() {
@@ -557,6 +636,7 @@ export class KidPage implements OnInit {
         tmpKid.parent2.surname = this.newParent2.surname;
         this.webService.add(this.selectedSchool, tmpKid).then(() => {
             this.selectedKid.copyInto(tmpKid);
+            this.commonService.removeEditForm('kidP2Info');                    
         }, (err) => {
             this.editP2Info = true;
         })
@@ -564,12 +644,14 @@ export class KidPage implements OnInit {
 
     onP2InfoCancel() {
         this.editP2Info = false;
+        this.commonService.removeEditForm('kidP2Info');                            
     }
 
     onP2ContattiEdit() {
         this.editP2Contatti = true;
         this.newParent2.email = this.selectedKid.parent2.emails.length > 0 ? this.selectedKid.parent2.emails[0] : ''; 
         this.newParent2.phoneNumbers = this.selectedKid.parent2.phoneNumbers.slice();
+        this.commonService.addEditForm('kidP2Contatti', this.p2ContattiObserver);            
     }
 
     onP2ContattiSave() {
@@ -580,6 +662,7 @@ export class KidPage implements OnInit {
             tmpKid.parent2.phoneNumbers = this.newParent2.phoneNumbers;
             this.webService.add(this.selectedSchool, tmpKid).then(() => {
                 this.selectedKid.copyInto(tmpKid);
+                this.commonService.removeEditForm('kidP2Contatti');                    
             }, (err) => {
                 this.editP1Info = true;
             });    
@@ -593,7 +676,7 @@ export class KidPage implements OnInit {
 
     onP2ContattiCancel() {
         this.editP2Contatti = false;
-
+        this.commonService.removeEditForm('kidP2Contatti');                            
     }
 
     addDelega() {
@@ -601,12 +684,31 @@ export class KidPage implements OnInit {
         this.selectedDelega = new Delega('', '', '');
         this.editD = true;
         this.editDelegaInfo = true;
-
+        this.delegaForm = this.formBuilder.group({
+            name: ['', Validators.required],
+            surname: ['', Validators.required],
+            legame: ['', Validators.required]
+        });
+        this.commonService.addEditForm('kidDelega', this.delegaObserver);
+        
     }
 
     onSelectDelega(delega: Delega) {
         this.editDelegaInfo = false;
         this.selectedDelega = new Delega(delega.id,delega.name,delega.surname,null,null,delega.legame);
+        this.delegaForm = this.formBuilder.group({
+            name: [delega.name, Validators.required],
+            surname: [delega.surname, Validators.required],
+            legame: [delega.legame, Validators.required]
+        });
+
+    }
+
+    validId(form: FormGroup) {
+        if (this.selectedKid && this.selectedKid.deleghe && this.selectedDelega && this.findDelega(this.selectedKid.deleghe, this.selectedDelega)) {
+            return false;
+        }
+        return true;
     }
 
     onDeleteDelega(delega: Delega) {
@@ -644,6 +746,7 @@ export class KidPage implements OnInit {
         this.editDelegaInfo = true;
        // this.newDelega = [];
         //this.selectedKid.deleghe.forEach(x => this.newDelega.push(x));
+        this.commonService.addEditForm('kidDelega', this.delegaObserver );
     }
     private findWord(array, word, field) {
         return -1 < array.map(function (item) {
@@ -697,6 +800,7 @@ export class KidPage implements OnInit {
                         this.selectedKid.copyInto(tmpKid);
                         this.selectedDelega = null;
                         this.isNewD = false;
+                        this.commonService.removeEditForm('kidDelega' );
                     }, (err) => {
                         //TODO
                         this.editDelegaInfo = true;
@@ -712,7 +816,8 @@ export class KidPage implements OnInit {
         this.editDelegaInfo = false;
         this.selectedDelega = null;
         this.isNewD = false;
-
+        this.commonService.removeEditForm('kidDelega' );
+        
     }
 
      getImage() {
@@ -730,7 +835,7 @@ export class KidPage implements OnInit {
             this.newBus.stops = this.selectedKid.bus.stops.slice();
             this.newBus.busId = this.selectedKid.bus.busId;
         }
-
+        this.commonService.addEditForm('kidBus',this.busObserver );        
     }
 
     onBusSave() {
@@ -744,6 +849,7 @@ export class KidPage implements OnInit {
             tmpKid.bus = this.newBus;
             this.webService.add(this.selectedSchool, tmpKid).then(()=> {
                 this.selectedKid.copyInto(tmpKid);
+                this.commonService.removeEditForm('kidBus' );
             },(err)=>{
                 //TODO
                 this.editBus=true;
@@ -754,6 +860,7 @@ export class KidPage implements OnInit {
 
     onBusCancel() {
         this.editBus = false;
+        this.commonService.removeEditForm('kidBus' );
     }
 
     addStop(stop: string) {

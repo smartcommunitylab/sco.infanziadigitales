@@ -593,19 +593,23 @@
                                                         <ion-card-header>
                                                             Informazioni di base
                                                             <button class='edit' ion-button color='magenta1' float-end *ngIf='!editDelegaInfo' (click)="onDelegaInfoEdit()" [disabled]='isNew'>Modifica</button>
-                                                            <button class='edit' ion-button color='magenta1' float-end *ngIf='editDelegaInfo' (click)="onDelegaInfoSave()" [disabled]='!delegaForm.valid'>Salva</button>
+                                                            <button class='edit' ion-button color='magenta1' float-end *ngIf='editDelegaInfo' (click)="onDelegaInfoSave()" [disabled]='!delegaForm.valid || !validId(delegaForm)'>Salva</button>
                                                             <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='editDelegaInfo' (click)="onDelegaInfoCancel()">Annulla</button>
                                                         </ion-card-header>
                                                         <ion-card-content margin-top>
-                                                            <ion-grid inset [formGroup]="delegaForm">
+                                                            <ion-grid inset *ngIf="editDelegaInfo" [formGroup]="delegaForm">
+                                                                <ion-row [hidden]="validId(delegaForm)">
+                                                                    <ion-col col-10 offset-2>
+                                                                        <div class="error-label" >Delegato già presente</div>                    
+                                                                    </ion-col>
+                                                                </ion-row>
                                                                 <ion-row margin-bottom>
                                                                     <ion-col col-2>
                                                                         Nome*:
                                                                     </ion-col>
                                                                     <ion-col col-10>
-                                                                        <p *ngIf='!selectedDelega.name && !editDelegaInfo' class="empty-field" style="padding-left: 8px;">Dato non inserito</p>
-                                                                        <ion-input name="name" formControlName="name" [(ngModel)]="selectedDelega.name" [disabled]='!editDelegaInfo' no-margin></ion-input>
-                                                                        <div class="error-label" [hidden]="!editDelegaInfo || delegaForm.controls.name.valid">Nome mancante</div>                    
+                                                                        <ion-input name="name" formControlName="name" [(ngModel)]="selectedDelega.name" no-margin></ion-input>
+                                                                        <div class="error-label" [hidden]="!delegaForm.controls.name.errors || !delegaForm.controls.name.errors.required">Nome mancante</div>                    
                                                                     </ion-col>
                                                                 </ion-row>
                                                                 <ion-row margin-bottom>
@@ -613,9 +617,42 @@
                                                                         Cognome*:
                                                                     </ion-col>
                                                                     <ion-col col-10>
-                                                                        <p *ngIf='!selectedDelega.surname && !editDelegaInfo' class="empty-field" style="padding-left: 8px;">Dato non inserito</p>
-                                                                        <ion-input name="surname" formControlName="surname" [(ngModel)]="selectedDelega.surname" [disabled]='!editDelegaInfo' no-margin></ion-input>
-                                                                        <div class="error-label" [hidden]="!editDelegaInfo || delegaForm.controls.surname.valid">Cognome mancante</div>                    
+                                                                        <ion-input name="surname" formControlName="surname" [(ngModel)]="selectedDelega.surname" no-margin></ion-input>
+                                                                        <div class="error-label" [hidden]="!delegaForm.controls.surname.errors || !delegaForm.controls.surname.errors.required">Cognome mancante</div>                    
+                                                                    </ion-col>
+                                                                </ion-row>
+                                                                <ion-row>
+                                                                    <ion-col col-2>
+                                                                        Relazione*
+                                                                    </ion-col>
+                                                                    <ion-col col-10>
+                                                                        <ion-select name="legame" formControlName="legame" [(ngModel)]="selectedDelega.legame" interface='popover'>
+                                                                            <ion-option value="Nonno/a">Nonno/a</ion-option>
+                                                                            <ion-option value="Zio/a">Zio/a</ion-option>
+                                                                            <ion-option value="Fratello/Sorella">Fratello/Sorella (maggiorenne)</ion-option>
+                                                                            <ion-option value="Altro">Altro</ion-option>
+                                                                        </ion-select>
+                                                                        <div class="error-label" [hidden]="!delegaForm.controls.legame.errors || !delegaForm.controls.legame.errors.required">Relazione mancante</div>                    
+                                                                    </ion-col>
+                                                                </ion-row>
+                                                            </ion-grid>
+                                                            <ion-grid inset *ngIf="!editDelegaInfo">
+                                                                <ion-row margin-bottom>
+                                                                    <ion-col col-2>
+                                                                        Nome*:
+                                                                    </ion-col>
+                                                                    <ion-col col-10>
+                                                                        <p *ngIf='!selectedDelega.name' class="empty-field" style="padding-left: 8px;">Dato non inserito</p>
+                                                                        <ion-input [(ngModel)]="selectedDelega.name" [disabled]='true' no-margin></ion-input>
+                                                                    </ion-col>
+                                                                </ion-row>
+                                                                <ion-row margin-bottom>
+                                                                    <ion-col col-2>
+                                                                        Cognome*:
+                                                                    </ion-col>
+                                                                    <ion-col col-10>
+                                                                        <p *ngIf='!selectedDelega.surname' class="empty-field" style="padding-left: 8px;">Dato non inserito</p>
+                                                                        <ion-input [(ngModel)]="selectedDelega.surname" [disabled]='true' no-margin></ion-input>
                                                                     </ion-col>
                                                                 </ion-row>
                                                                 <ion-row>
@@ -624,17 +661,10 @@
                                                                     </ion-col>
                                                                     <ion-col col-10>
                                                                         <p *ngIf='!selectedDelega.legame && !editDelegaInfo' class="empty-field" style="padding-left: 8px;">Dato non inserito</p>
-                                                                        <ion-select name="legame" formControlName="legame" [(ngModel)]="selectedDelega.legame" interface='popover' *ngIf="editDelegaInfo">
-                                                                            <ion-option value="Nonno/a">Nonno/a</ion-option>
-                                                                            <ion-option value="Zio/a">Zio/a</ion-option>
-                                                                            <ion-option value="Fratello/Sorella">Fratello/Sorella (maggiorenne)</ion-option>
-                                                                            <ion-option value="Altro">Altro</ion-option>
-                                                                        </ion-select>
-                                                                        <div class="error-label" [hidden]="!editDelegaInfo || delegaForm.controls.legame.valid">Relazione mancante</div>                    
-                                                                        <span *ngIf="!editDelegaInfo" style="padding-left: 8px;">{{selectedDelega.legame}}</span>
+                                                                        <span style="padding-left: 8px;">{{selectedDelega.legame}}</span>
                                                                     </ion-col>
                                                                 </ion-row>
-                                                            </ion-grid>
+                                                            </ion-grid>                                                            
                                                         </ion-card-content>
                                                     </ion-card>
 

@@ -3,15 +3,13 @@
         <ion-col col-1>
             <p></p>
         </ion-col>
-        <ion-col col-10>
-            <button *ngIf="!isNew" ion-button color='green1' float-start margin-top (click)='goBack()'>
+        <ion-col col-9>
+            <button ion-button color='green1' float-start margin-top (click)='goBack()'>
                 <ion-icon name='arrow-round-back' margin-right></ion-icon>
-                Dettagli di {{selectedKid.name}} {{selectedKid.surname}}
+                INDIETRO
             </button>
-            <button *ngIf="isNew" ion-button color='green1' float-start margin-top (click)='goBack()'>
-                <ion-icon name='arrow-round-back' margin-right></ion-icon>
-                Nuovo bambino/a
-            </button>
+            <ion-label class="label-kid"  *ngIf="!isNew">{{selectedKid.name | uppercase}} {{selectedKid.surname| uppercase}}</ion-label>
+            <ion-label class="label-kid" *ngIf="isNew">NUOVO BAMBINO/A</ion-label>
         </ion-col>
         <ion-col col-1>
             <p></p>

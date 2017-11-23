@@ -4,7 +4,9 @@ import { School } from './../../../app/Classes/school';
 import { Bus } from './../../../app/Classes/bus';
 import { Component, OnInit, Input } from '@angular/core';
 
-import { CommonService } from  './../../../services/common.service';
+import { CommonService, EditFormObserver } from  './../../../services/common.service';
+
+import {Validators, FormBuilder, FormGroup, FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 @Component({
     selector: 'info',
@@ -76,9 +78,42 @@ export class Info implements OnInit {
     newBus: string;
     newBuses: Bus[];
 
-    constructor(private alertCtrl: AlertController, private webService: WebService, private common: CommonService) { }
+    contactForm: FormGroup;
+    assenzeForm: FormGroup;
+    malattieForm: FormGroup;
+    busForm: FormGroup;
+
+    contactFormObserver: EditFormObserver;
+    assenzeFormObserver: EditFormObserver;
+    malattieFormObserver: EditFormObserver;
+    busFormObserver: EditFormObserver;
+    
+    constructor(private alertCtrl: AlertController, private webService: WebService, private common: CommonService, private formBuilder: FormBuilder) { }
 
     ngOnInit(): void {
+        this.contactForm = this.formBuilder.group({
+            email: ['', CommonService.emailFieldValidator],
+            phone: ['', CommonService.phoneFieldValidator]
+        });
+        this.assenzeForm = this.formBuilder.group({
+            assenza: ['', this.validateAssenze(this)],
+            isMalattiaEnabled: ['']
+        });
+        this.malattieForm = this.formBuilder.group({
+            malattia: ['', this.validateMalattie(this)]
+        });
+        this.busForm = this.formBuilder.group({
+            bus: ['', this.validateBuses(this)]
+        });
+
+        this.contactFormObserver = { isDirty: () => this.contactForm.dirty };
+        this.assenzeFormObserver =  { isDirty: () => this.assenzeForm.dirty || !!this.newAssenza || JSON.stringify(this.newAssenze) != JSON.stringify(this.selectedSchool.assenze)};
+        this.malattieFormObserver =  { isDirty: () => this.malattieForm.dirty || !!this.newMalattia || JSON.stringify(this.newMalattie) != JSON.stringify(this.selectedSchool.malattie)};
+        this.busFormObserver =  { isDirty: () => {
+            let olds = this.selectedSchool.buses.map(bus => bus.busId);
+            let news = this.newBuses.map(bus => bus.busId);
+            return this.busForm.dirty || !!this.newBus || JSON.stringify(news) != JSON.stringify(olds);
+        }};
     }
 
     isInEdit(): boolean {
@@ -90,27 +125,26 @@ export class Info implements OnInit {
         this.editContatti = true;
         this.newContatti.email = this.selectedSchool.email;
         this.newContatti.phone = this.selectedSchool.phoneNumbers.length > 0 ? this.selectedSchool.phoneNumbers[0] : '';        
+        this.common.addEditForm('schoolContacts', this.contactFormObserver);
     }
     
     onContattiSave() {
-        if (!this.newContatti.email || CommonService.emailValidator(this.newContatti.email, this.common)) {
-            if (!this.newContatti.phone || CommonService.phoneValidator(this.newContatti.phone, this.common)) {
-                this.editContatti = false;
-                let schoolCopy = School.copy(this.selectedSchool);
-                schoolCopy.email = this.newContatti.email;
-                schoolCopy.phoneNumbers = [this.newContatti.phone];
-                this.webService.update(schoolCopy).then(() => {
-                    this.selectedSchool.copyInto(schoolCopy);
-                }, err => {
-                    // TODO handle error
-                    this.editContatti = true;                    
-                });
-            }
-        }
+        this.editContatti = false;
+        let schoolCopy = School.copy(this.selectedSchool);
+        schoolCopy.email = this.newContatti.email;
+        schoolCopy.phoneNumbers = [this.newContatti.phone];
+        this.webService.update(schoolCopy).then(() => {
+            this.selectedSchool.copyInto(schoolCopy);
+            this.common.removeEditForm('schoolContacts');
+        }, err => {
+            // TODO handle error
+            this.editContatti = true;                    
+        });
     }
 
     onContattiCancel() {
         this.editContatti = false;
+        this.common.removeEditForm('schoolContacts');        
     }
 
     onAssenzeEdit() {
@@ -121,6 +155,8 @@ export class Info implements OnInit {
         }    
         this.isMalattiaEnabled = this.selectedSchool.malattia;
         this.editAssenze = true;
+        this.common.addEditForm('schoolAssenze', this.assenzeFormObserver);
+        
     }
 
     onAssenzeSave() {
@@ -132,6 +168,7 @@ export class Info implements OnInit {
     
             this.webService.update(schoolCopy).then(() => {
                 this.selectedSchool.copyInto(schoolCopy);
+                this.common.removeEditForm('schoolAssenze');
             }, err => {
                 // TODO handle error
                 this.editAssenze = true;                    
@@ -142,19 +179,24 @@ export class Info implements OnInit {
 
     onAssenzeCancel() {
         this.editAssenze = false;
+        this.common.removeEditForm('schoolAssenze');
     }
 
-    addAssenza(assenza: string) {
-        if (assenza !== undefined && assenza !== '') {
-            if (this.newAssenze.findIndex(x => x.toLowerCase() === assenza.toLowerCase()) < 0) {
-                this.newAssenze.push(assenza);
-                this.newAssenza = '';
-            } else {
-                let alert = this.alertCtrl.create();
-                alert.setSubTitle('Voce già presente');
-                alert.addButton('OK');
-                alert.present();
+    private validateAssenze(data: any): ValidatorFn {
+        return (fc) => {
+            if (data.newAssenze && data.newAssenze.findIndex(x => x.toLowerCase() === fc.value.toLowerCase()) >= 0 ||
+                fc.value.toLowerCase() == 'malattia') {
+                return {'unique':true};
             }
+            return null;
+        };
+    }
+
+
+    addAssenza(assenza: string) {
+        if (assenza !== undefined && assenza !== '' && this.assenzeForm.valid) {
+            this.newAssenze.push(assenza);
+            this.newAssenza = '';
         }    
     }
 
@@ -183,6 +225,7 @@ export class Info implements OnInit {
             this.selectedSchool.malattie.forEach(x => this.newMalattie.push(x));
         }    
         this.editMalattie = true;
+        this.common.addEditForm('schoolMalattie', this.malattieFormObserver);        
     }
 
     onMalattieSave() {
@@ -193,6 +236,7 @@ export class Info implements OnInit {
     
             this.webService.update(schoolCopy).then(() => {
                 this.selectedSchool.copyInto(schoolCopy);
+                this.common.removeEditForm('schoolMalattie');
             }, err => {
                 // TODO handle error
                 this.editMalattie = true;                    
@@ -203,19 +247,23 @@ export class Info implements OnInit {
 
     onMalattieCancel() {
         this.editMalattie = false;
+        this.common.removeEditForm('schoolMalattie');
+    }
+
+    private validateMalattie(data: any): ValidatorFn {
+        return (fc) => {
+            if (data.newMalattie && data.newMalattie.findIndex(x => x.toLowerCase() === fc.value.toLowerCase()) >= 0) {
+                return {'unique':true};
+            }
+            return null;
+        };
     }
 
     addMalattia(malattia: string) {
-        if (malattia !== undefined && malattia.trim() !== '')
-            if (this.newMalattie.findIndex(x => x.toLowerCase() === malattia.toLowerCase()) < 0)
-                this.newMalattie.push(malattia);
-            else {
-                let alert = this.alertCtrl.create();
-                alert.setSubTitle('Voce già presente');
-                alert.addButton('OK');
-                alert.present();
-            }
-        this.newMalattia = '';
+        if (malattia !== undefined && malattia.trim() !== '' && this.malattieForm.valid) {
+            this.newMalattie.push(malattia);
+            this.newMalattia = '';
+        }
     }
 
     removeMalattia(malattia: string) {
@@ -243,6 +291,7 @@ export class Info implements OnInit {
             this.selectedSchool.buses.forEach(bus => this.newBuses.push(bus));
         }
         this.editBus = true;
+        this.common.addEditForm('schoolBuses', this.busFormObserver);        
     }
 
     onBusSave() {
@@ -259,6 +308,7 @@ export class Info implements OnInit {
                         kid.bus.busId = null;
                     }
                 });
+                this.common.removeEditForm('schoolBuses');
             }, err => {
                 // TODO handle error
                 this.editBus = true;                    
@@ -269,25 +319,28 @@ export class Info implements OnInit {
 
     onBusCancel() {
         this.editBus = false;
+        this.common.removeEditForm('schoolBuses');
     }
 
+
+    private validateBuses(data: any): ValidatorFn {
+        return (fc) => {
+            if (data.newBuses && data.newBuses.findIndex(x => x.busId.toLowerCase() === fc.value.toLowerCase()) >= 0) {
+                return {'unique':true};
+            }
+            return null;
+        };
+    }
     addBus(bus: string) {
-        if (bus !== undefined && bus.trim() !== '') {
+        if (bus !== undefined && bus.trim() !== '' && this.busForm.valid) {
             if (!this.newBuses) {
                 this.newBuses = [];
                 this.newBuses.push(new Bus(bus));
                 this.newBus = '';                
             }
             else {
-                if (this.newBuses.findIndex(x => x.busId.toLowerCase() === bus.toLowerCase()) < 0) {
-                    this.newBuses.push(new Bus(bus));
-                    this.newBus = '';                    
-                } else {
-                    let alert = this.alertCtrl.create();
-                    alert.setSubTitle('Voce già presente');
-                    alert.addButton('OK');
-                    alert.present();
-                }
+                this.newBuses.push(new Bus(bus));
+                this.newBus = '';                    
             }
         }    
     }

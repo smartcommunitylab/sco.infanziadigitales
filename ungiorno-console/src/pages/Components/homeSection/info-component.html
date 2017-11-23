@@ -27,10 +27,10 @@
                 <ion-card-header>
                     Contatti
                     <button class='edit' ion-button color='magenta1' float-end *ngIf='!editContatti' (click)="onContattiEdit()">Modifica</button>
-                    <button class='edit' ion-button color='magenta1' float-end *ngIf='editContatti' (click)="onContattiSave()">Salva</button>
+                    <button class='edit' ion-button color='magenta1' float-end *ngIf='editContatti' (click)="onContattiSave()" [disabled]="!contactForm.valid">Salva</button>
                     <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='editContatti' (click)="onContattiCancel()">Annulla</button>
                 </ion-card-header>
-                <ion-card-content margin-top>
+                <ion-card-content margin-top [formGroup]="contactForm">
                     <!--<ion-grid inset>-->
                     <ion-grid no-padding no-margin>
                         <ion-row>
@@ -38,10 +38,10 @@
                                 <ion-row margin-bottom>
                                     <ion-col col-2>Telefono:</ion-col>
                                     <ion-col col-4>
-                                        <ion-input [(ngModel)]="newContatti.phone" type="tel" no-margin *ngIf="editContatti"></ion-input>
+                                        <ion-input name="phone" formControlName="phone" [(ngModel)]="newContatti.phone" type="tel" no-margin *ngIf="editContatti"></ion-input>
+                                        <div class="error-label" [hidden]="!editContatti || contactForm.controls.phone.valid">Formato telefono non valido</div>
                                         <ion-label no-margin *ngIf="!editContatti && selectedSchool.phoneNumbers[0]">{{selectedSchool.phoneNumbers[0]}}</ion-label>
                                         <p *ngIf='!selectedSchool.phoneNumbers[0] && !editContatti' class="empty-field">Dato non inserito</p>
-
                                     </ion-col>
                                 </ion-row>
                             </ion-col>
@@ -53,8 +53,9 @@
                                         Indirizzo email:
                                     </ion-col>
                                     <ion-col col-4>
-                                        <ion-input type="tel" [(ngModel)]="newContatti.email" *ngIf='editContatti' no-margin></ion-input>
+                                        <ion-input name="email" formControlName="email" type="email" [(ngModel)]="newContatti.email" *ngIf='editContatti' no-margin></ion-input>
                                         <ion-label no-margin *ngIf="!editContatti">{{selectedSchool.email}}</ion-label>
+                                        <div class="error-label" [hidden]="!editContatti || contactForm.controls.email.valid">Formato email non valido</div>
                                         <p *ngIf='!selectedSchool.email && !editContatti' class="empty-field">Dato non inserito</p>
                                     </ion-col>
                                 </ion-row>
@@ -73,10 +74,10 @@
                 <ion-card-header>
                     Tipologia di assenze
                     <button class='edit' ion-button color='magenta1' float-end *ngIf='!editAssenze' (click)="onAssenzeEdit()">Modifica</button>
-                    <button class='edit' ion-button color='magenta1' float-end *ngIf='editAssenze' (click)="onAssenzeSave()">Salva</button>
+                    <button class='edit' ion-button color='magenta1' float-end *ngIf='editAssenze' (click)="onAssenzeSave()" [disabled]="!assenzeForm.valid">Salva</button>
                     <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='editAssenze' (click)="onAssenzeCancel()">Annulla</button>
                 </ion-card-header>
-                <ion-card-content margin-top>
+                <ion-card-content margin-top [formGroup]="assenzeForm">
                     <ion-grid *ngIf="editAssenze" no-padding no-margin>
                         <ion-row>
                             <ion-col col-10>
@@ -85,8 +86,9 @@
                                         Nome tipologia:
                                     </ion-col>
                                     <ion-col col-10>
-                                        <input type='text' id='giord' [(ngModel)]="newAssenza" placeholder="Inserisci tipologia di assenza" no-padding no-margin>
+                                        <input type='text' name="assenza" formControlName="assenza" id='giord' [(ngModel)]="newAssenza" placeholder="Inserisci tipologia di assenza" no-padding no-margin>
                                         <ion-icon name="add-circle" color="green3" (click)="addAssenza(newAssenza)" item-end></ion-icon>
+                                        <div class="error-label" [hidden]="!editAssenze || assenzeForm.controls.assenza.valid">Tipologia già definita</div>
                                     </ion-col>
                                 </ion-row>
                             </ion-col>
@@ -95,7 +97,7 @@
                     <ion-list *ngIf="editAssenze">
                         <ion-item>
                             <ion-label>Malattia</ion-label>
-                            <ion-checkbox [(ngModel)]="isMalattiaEnabled"></ion-checkbox>
+                            <ion-checkbox name="isMalattiaEnabled" formControlName="isMalattiaEnabled" [(ngModel)]="isMalattiaEnabled"></ion-checkbox>
                         </ion-item>
                         <ion-item *ngFor="let item of newAssenze">
                             {{item}}
@@ -122,10 +124,10 @@
                 <ion-card-header>
                     Tipologia di malattie
                     <button class='edit' ion-button color='magenta1' float-end *ngIf='!editMalattie' (click)="onMalattieEdit()">Modifica</button>
-                    <button class='edit' ion-button color='magenta1' float-end *ngIf='editMalattie' (click)="onMalattieSave()">Salva</button>
+                    <button class='edit' ion-button color='magenta1' float-end *ngIf='editMalattie' (click)="onMalattieSave()" [disabled]="!malattieForm.valid">Salva</button>
                     <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='editMalattie' (click)="onMalattieCancel()">Annulla</button>
                 </ion-card-header>
-                <ion-card-content margin-top>
+                <ion-card-content margin-top [formGroup]="malattieForm">
                     <ion-grid *ngIf="editMalattie" no-padding no-margin>
                         <ion-row>
                             <ion-col col-10>
@@ -134,8 +136,9 @@
                                         Nome malattia:
                                     </ion-col>
                                     <ion-col col-10>
-                                        <input type='text' id='giord' [(ngModel)]="newMalattia" placeholder="Inserisci tipologia di malattia" no-padding no-margin>
+                                        <input name="malattia" formControlName="malattia" type='text' id='giord' [(ngModel)]="newMalattia" placeholder="Inserisci tipologia di malattia" no-padding no-margin>
                                         <ion-icon name="add-circle" color="green3" (click)="addMalattia(newMalattia)" item-end></ion-icon>
+                                        <div class="error-label" [hidden]="!editMalattie || malattieForm.controls.malattia.valid">Malattia già definita</div>
                                     </ion-col>
                                 </ion-row>
                             </ion-col>
@@ -163,10 +166,10 @@
                 <ion-card-header>
                     Scuolabus
                     <button class='edit' ion-button color='magenta1' float-end *ngIf='!editBus' (click)="onBusEdit()">Modifica</button>
-                    <button class='edit' ion-button color='magenta1' float-end *ngIf='editBus' (click)="onBusSave()">Salva</button>
+                    <button class='edit' ion-button color='magenta1' float-end *ngIf='editBus' (click)="onBusSave()" [disabled]="!busForm.valid">Salva</button>
                     <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='editBus' (click)="onBusCancel()">Annulla</button>
                 </ion-card-header>
-                <ion-card-content margin-top>
+                <ion-card-content margin-top [formGroup]="busForm">
                     <ion-grid *ngIf="editBus" no-padding no-margin>
                         <ion-row>
                             <ion-col col-10>
@@ -175,8 +178,9 @@
                                         Nome scuolabus:
                                     </ion-col>
                                     <ion-col col-10>
-                                        <input type='text' id='giord' [(ngModel)]="newBus" placeholder="Inserisci nome dello scuolabus" no-padding no-margin>
+                                        <input name="bus" formControlName="bus" type='text' id='giord' [(ngModel)]="newBus" placeholder="Inserisci nome dello scuolabus" no-padding no-margin>
                                         <ion-icon name="add-circle" color="green3" (click)="addBus(newBus)" item-end></ion-icon>
+                                        <div class="error-label" [hidden]="!editBus || busForm.controls.bus.valid">Linea già definita</div>
                                     </ion-col>
                                 </ion-row>
                             </ion-col>

@@ -41,6 +41,11 @@
                                         <div no-margin *ngIf='!isNew' class="unchangable-label">{{copiedGroup.name}}</div>
                                     </ion-col>
                                 </ion-row>
+                                <ion-row [style.visibility]="copiedGroup.name ? 'hidden':' visible'">
+                                        <ion-col col-10 class="error-label">
+                                          Nome gruppo mancante
+                                        </ion-col>
+                                      </ion-row>
                             </ion-item>
                         </ion-list>
                     </ion-card-content>

@@ -38,6 +38,11 @@
                                         <div no-margin *ngIf='!isNew' class="unchangable-label">{{copiedOrario.servizio}}</div>
                                     </ion-col>
                                 </ion-row>
+                                <ion-row [style.visibility]="copiedOrario.servizio ? 'hidden':' visible'">
+                                  <ion-col col-10 class="error-label">
+                                    Nome orario mancante
+                                  </ion-col>
+                                </ion-row>
                             </ion-item>
                         </ion-list>
                     </ion-card-content>

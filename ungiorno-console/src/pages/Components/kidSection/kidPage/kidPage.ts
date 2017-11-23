@@ -239,7 +239,7 @@ export class KidPage implements OnInit {
         this.infoObserver = { isDirty: () => {
             return this.infoForm.dirty;
         }};
-        this.fotoObserver = { isDirty: () => this.editFoto };
+        this.fotoObserver = { isDirty: () => this.filePreviewPath != null };
         this.allergiaObserver  = { isDirty: () => {
             if (this.newAllergia) return true;
             return JSON.stringify(this.newAllergie) != JSON.stringify(this.selectedKid.allergie) 
@@ -499,7 +499,8 @@ export class KidPage implements OnInit {
         this.webService.uploadDocumentInPromise(this.uploader, this.uploader.queue[0], this.selectedSchool, this.selectedKid).then(() => {
             // this.doRerender();
             this.image=this.getImage();
-            this.commonService.removeEditForm('kidFoto');                        
+            this.commonService.removeEditForm('kidFoto');    
+            this.filePreviewPath = null;                    
         },
             (err) => {
                 console.log(err);

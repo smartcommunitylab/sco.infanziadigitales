@@ -50,89 +50,95 @@
                             <ion-col col-12>
                                 <p style="color: #ccc; margin-left: 25px;">
                                     <ion-icon name="help-circle"></ion-icon> Tutti i campi contrassegnati dal simbolo * sono obbligatori</p>
-                                <form >
-                                <ion-card>
-                                    <ion-card-header>
-                                        Informazioni di base
-                                        <button class='edit' ion-button color='magenta1' float-end *ngIf='!editInfo' (click)="onInfoEdit()">Modifica</button>
-                                        <button class='edit' ion-button color='magenta1' float-end *ngIf='editInfo' (click)="onInfoSave()" [disabled]='isNew && infoForm.pristine || infoForm.dirty && !infoForm.valid'>Salva</button>
-                                        <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='!isNew && editInfo' (click)="onInfoCancel()">Annulla</button>
-                                    </ion-card-header>
-                                    <ion-card-content margin-top [formGroup]="infoForm">
-                                        <ion-grid inset>
-                                            <ion-row margin-bottom>
-                                                <ion-col col-2>
-                                                    C.F. (ID)*: 
-                                                </ion-col>
-                                                <ion-col col-10>
-                                                    <span *ngIf='!selectedKid.id && !editInfo' class="empty-field">Dato non inserito</span>
-                                                    <ion-input formControlName="id" name="id" [(ngModel)]="newInfo.id" *ngIf="editInfo" no-margin></ion-input>
-                                                    <div class="error-label" [hidden]="!editInfo || !isNew || !infoForm.controls.id.errors || !infoForm.controls.id.errors.required">C.F. (ID) mancante</div>                    
-                                                    <div class="error-label" [hidden]="!editInfo || !isNew || !infoForm.controls.id.errors || !infoForm.controls.id.errors.unique">C.F. (ID) già in uso</div>                    
-                                                    <span *ngIf="!editInfo">{{selectedKid.id}}</span>
-                                                </ion-col>
-                                            </ion-row>
-                                            <ion-row margin-bottom>
-                                                <ion-col col-2>
-                                                    Nome*:
-                                                </ion-col>
-                                                <ion-col col-10>
-                                                    <span *ngIf='!selectedKid.name && !editInfo' class="empty-field">Dato non inserito</span>
-                                                    <ion-input formControlName="name" name="name" [(ngModel)]="newInfo.name" *ngIf="editInfo" no-margin #ref></ion-input>
-                                                    <div class="error-label" [hidden]="!editInfo || infoForm.controls.name.valid">Nome mancante</div>                    
-                                                    <span *ngIf="!editInfo">{{selectedKid.name}}</span>
-                                                    <br> 
-                                                </ion-col>
-                                            </ion-row>
-                                            <ion-row margin-bottom>
-                                                <ion-col col-2>
-                                                    Cognome*:
-                                                </ion-col>
-                                                <ion-col col-10>
-                                                    <span *ngIf='!selectedKid.surname && !editInfo' class="empty-field">Dato non inserito</span>
-                                                    <ion-input formControlName="surname" name="surname" [(ngModel)]="newInfo.surname" *ngIf='editInfo' no-margin></ion-input>
-                                                    <div class="error-label" [hidden]="!editInfo || infoForm.controls.surname.valid">Cognome mancante</div>                    
-                                                    <span *ngIf="!editInfo">{{selectedKid.surname}}</span>
-                                                </ion-col>
-                                            </ion-row>
-                                            <ion-row margin-bottom>
-                                                <ion-col col-2>
-                                                    Genere:
-                                                </ion-col>
-                                                <ion-col col-10>
-                                                    <span *ngIf='!selectedKid.gender && !editInfo' class="empty-field">Dato non inserito</span>
-                                                    <ion-select formControlName="gender" name="gender" interface='popover' [(ngModel)]="newInfo.gender" *ngIf="editInfo">
-                                                        <ion-option value='Maschio'>Maschio</ion-option>
-                                                        <ion-option value='Femmina'>Femmina</ion-option>
-                                                        <ion-option value='Altro'>Altro</ion-option>
-                                                    </ion-select>
-                                                    <span *ngIf="!editInfo">{{selectedKid.gender}}</span>
-                                                </ion-col>
-                                            </ion-row>
-                                            <ion-row margin-bottom>
-                                                <ion-col col-2>
-                                                    Data di nascita:
-                                                </ion-col>
-                                                <ion-col col-10>
-                                                    <span *ngIf='!selectedKid.nascitaStr && !editInfo' class="empty-field">Dato non inserito</span>
-                                                    <ion-datetime formControlName="nascita" name="nascita" cancelText="Annulla" doneText="Fatto" displayFormat="DD/MM/YYYY" [(ngModel)]="newInfo.nascitaStr" *ngIf='editInfo'
-                                                        no-margin></ion-datetime>
-                                                    <span *ngIf="!editInfo">{{selectedKid.nascitaStr | date: 'dd/MM/yyyy'}}</span>
-                                                </ion-col>
-                                            </ion-row>
-                                            <ion-row margin-bottom>
-                                                <ion-col col-12>
-                                                    <span *ngIf='selectedKid.sperimentazione && !editInfo'>Partecipa al servizio UGAS</span>
-                                                    <span *ngIf='!selectedKid.sperimentazione && !editInfo'>Non partecipa al servizio UGAS</span>
-                                                    <ion-item *ngIf='editInfo'>
-                                                        <ion-label>Partecipa al servizio UGAS</ion-label>
-                                                        <ion-checkbox formControlName="sperimentazione" name="sperimentazione" [(ngModel)]="newInfo.sperimentazione"></ion-checkbox>
-                                                    </ion-item>
-                                                </ion-col>
-                                            </ion-row>
-                                        </ion-grid>
-                                    </ion-card-content>
-                                </ion-card>
+                                <form>
+                                    <ion-card>
+                                        <ion-card-header>
+                                            Informazioni di base
+                                            <button class='edit' ion-button color='magenta1' float-end *ngIf='!editInfo' (click)="onInfoEdit()">Modifica</button>
+                                            <button class='edit' ion-button color='magenta1' float-end *ngIf='editInfo' (click)="onInfoSave()" [disabled]='isNew && infoForm.pristine || infoForm.dirty && !infoForm.valid'>Salva</button>
+                                            <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='!isNew && editInfo' (click)="onInfoCancel()">Annulla</button>
+                                        </ion-card-header>
+                                        <ion-card-content margin-top [formGroup]="infoForm">
+                                            <ion-grid inset>
+                                                <ion-row *ngIf="isNew">
+                                                    <ion-col col-2></ion-col>
+                                                    <ion-col col-10 class="adv-unchange">
+                                                        Una volta impostato il campo, non sara' piu' possibile modificarlo
+                                                    </ion-col>
+                                                </ion-row>
+                                                <ion-row margin-bottom>
+                                                    <ion-col col-2>
+                                                        C.F. (ID)*:
+                                                    </ion-col>
+                                                    <ion-col col-10>
+                                                        <span *ngIf='!selectedKid.id && !editInfo' class="empty-field">Dato non inserito</span>
+                                                        <ion-input formControlName="id" name="id" [(ngModel)]="newInfo.id" *ngIf="editInfo" no-margin></ion-input>
+                                                        <div class="error-label" [hidden]="!editInfo || !isNew || !infoForm.controls.id.errors || !infoForm.controls.id.errors.required">C.F. (ID) mancante</div>
+                                                        <div class="error-label" [hidden]="!editInfo || !isNew || !infoForm.controls.id.errors || !infoForm.controls.id.errors.unique">C.F. (ID) già in uso</div>
+                                                        <span *ngIf="!editInfo">{{selectedKid.id}}</span>
+                                                    </ion-col>
+                                                </ion-row>
+                                                <ion-row margin-bottom>
+                                                    <ion-col col-2>
+                                                        Nome*:
+                                                    </ion-col>
+                                                    <ion-col col-10>
+                                                        <span *ngIf='!selectedKid.name && !editInfo' class="empty-field">Dato non inserito</span>
+                                                        <ion-input formControlName="name" name="name" [(ngModel)]="newInfo.name" *ngIf="editInfo" no-margin #ref></ion-input>
+                                                        <div class="error-label" [hidden]="!editInfo || infoForm.controls.name.valid">Nome mancante</div>
+                                                        <span *ngIf="!editInfo">{{selectedKid.name}}</span>
+                                                        <br>
+                                                    </ion-col>
+                                                </ion-row>
+                                                <ion-row margin-bottom>
+                                                    <ion-col col-2>
+                                                        Cognome*:
+                                                    </ion-col>
+                                                    <ion-col col-10>
+                                                        <span *ngIf='!selectedKid.surname && !editInfo' class="empty-field">Dato non inserito</span>
+                                                        <ion-input formControlName="surname" name="surname" [(ngModel)]="newInfo.surname" *ngIf='editInfo' no-margin></ion-input>
+                                                        <div class="error-label" [hidden]="!editInfo || infoForm.controls.surname.valid">Cognome mancante</div>
+                                                        <span *ngIf="!editInfo">{{selectedKid.surname}}</span>
+                                                    </ion-col>
+                                                </ion-row>
+                                                <ion-row margin-bottom>
+                                                    <ion-col col-2>
+                                                        Genere:
+                                                    </ion-col>
+                                                    <ion-col col-10>
+                                                        <span *ngIf='!selectedKid.gender && !editInfo' class="empty-field">Dato non inserito</span>
+                                                        <ion-select formControlName="gender" name="gender" interface='popover' [(ngModel)]="newInfo.gender" *ngIf="editInfo">
+                                                            <ion-option value='Maschio'>Maschio</ion-option>
+                                                            <ion-option value='Femmina'>Femmina</ion-option>
+                                                            <ion-option value='Altro'>Altro</ion-option>
+                                                        </ion-select>
+                                                        <span *ngIf="!editInfo">{{selectedKid.gender}}</span>
+                                                    </ion-col>
+                                                </ion-row>
+                                                <ion-row margin-bottom>
+                                                    <ion-col col-2>
+                                                        Data di nascita:
+                                                    </ion-col>
+                                                    <ion-col col-10>
+                                                        <span *ngIf='!selectedKid.nascitaStr && !editInfo' class="empty-field">Dato non inserito</span>
+                                                        <ion-datetime formControlName="nascita" name="nascita" cancelText="Annulla" doneText="Fatto" displayFormat="DD/MM/YYYY" [(ngModel)]="newInfo.nascitaStr"
+                                                            *ngIf='editInfo' no-margin></ion-datetime>
+                                                        <span *ngIf="!editInfo">{{selectedKid.nascitaStr | date: 'dd/MM/yyyy'}}</span>
+                                                    </ion-col>
+                                                </ion-row>
+                                                <ion-row margin-bottom>
+                                                    <ion-col col-12>
+                                                        <span *ngIf='selectedKid.sperimentazione && !editInfo'>Partecipa al servizio UGAS</span>
+                                                        <span *ngIf='!selectedKid.sperimentazione && !editInfo'>Non partecipa al servizio UGAS</span>
+                                                        <ion-item *ngIf='editInfo'>
+                                                            <ion-label>Partecipa al servizio UGAS</ion-label>
+                                                            <ion-checkbox formControlName="sperimentazione" name="sperimentazione" [(ngModel)]="newInfo.sperimentazione"></ion-checkbox>
+                                                        </ion-item>
+                                                    </ion-col>
+                                                </ion-row>
+                                            </ion-grid>
+                                        </ion-card-content>
+                                    </ion-card>
                                 </form>
                             </ion-col>
                         </ion-row>
@@ -149,9 +155,9 @@
                                         <ion-item style="height:120px">
                                             <ion-thumbnail item-start style="height: 100%; width: auto">
                                                 <img [src]="image" style="height: 100%; width: auto" *ngIf='selectedKid.id ' />
-                                                <img src="../../../../assets/images/placeholder.png" style="height: 100%; width: auto" *ngIf='!selectedKid.id '/>
+                                                <img src="../../../../assets/images/placeholder.png" style="height: 100%; width: auto" *ngIf='!selectedKid.id ' />
                                             </ion-thumbnail>
-                                            <input id="uploadInputFile" accept="image/*" type="file" ng2FileSelect [uploader]="uploader" *ngIf='editFoto'/>
+                                            <input id="uploadInputFile" accept="image/*" type="file" ng2FileSelect [uploader]="uploader" *ngIf='editFoto' />
                                             <button class='edit' ion-button color='magenta1' margin-right ion-button *ngIf='editFoto' (click)="onRemoveProfileKid()">Rimuovi Immagine</button>
                                             <input #inputFile type='file' style='display: none' accept="image/gif, image/png, image/jpeg, image/bmp, image/webp" />
                                         </ion-item>
@@ -425,7 +431,7 @@
                                                 <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='editP1Contatti' (click)="onP1ContattiCancel()">Annulla</button>
                                             </ion-card-header>
                                             <ion-card-content margin-top>
-                                                <ion-grid inset *ngIf="editP1Contatti" >
+                                                <ion-grid inset *ngIf="editP1Contatti">
                                                     <ion-row [formGroup]="p1ContattiForm">
                                                         <ion-col col-2>
                                                             Indirizzo email:
@@ -434,8 +440,9 @@
                                                             <ion-input name="email" formControlName="email" type="email" [(ngModel)]="newParent1.email" no-margin></ion-input>
                                                         </ion-col>
                                                     </ion-row>
-                                                    <div class="error-label" [hidden]="!editP1Contatti || p1ContattiForm.controls.email.valid">Formato email non valido</div>                    
-                                                    <list-widget [items]="newParent1.phoneNumbers" [type]="'tel'" [editMode]="true" [validator]="phoneValidator" [validatorMessage]="'Formato telefono non valido'" [label]="'Telefono'" #p1Phones></list-widget>
+                                                    <div class="error-label" [hidden]="!editP1Contatti || p1ContattiForm.controls.email.valid">Formato email non valido</div>
+                                                    <list-widget [items]="newParent1.phoneNumbers" [type]="'tel'" [editMode]="true" [validator]="phoneValidator" [validatorMessage]="'Formato telefono non valido'"
+                                                        [label]="'Telefono'" #p1Phones></list-widget>
                                                 </ion-grid>
                                                 <ion-grid inset *ngIf="!editP1Contatti">
                                                     <ion-row>
@@ -513,7 +520,7 @@
                                                 <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='editP2Contatti' (click)="onP2ContattiCancel()">Annulla</button>
                                             </ion-card-header>
                                             <ion-card-content margin-top>
-                                                <ion-grid inset *ngIf="editP2Contatti" >
+                                                <ion-grid inset *ngIf="editP2Contatti">
                                                     <ion-row [formGroup]="p2ContattiForm">
                                                         <ion-col col-2>
                                                             Indirizzo email:
@@ -522,8 +529,9 @@
                                                             <ion-input name="email" formControlName="email" type="email" [(ngModel)]="newParent2.email" no-margin></ion-input>
                                                         </ion-col>
                                                     </ion-row>
-                                                    <div class="error-label" [hidden]="!editP2Contatti || p2ContattiForm.controls.email.valid">Formato email non valido</div>                    
-                                                    <list-widget [items]="newParent2.phoneNumbers" [type]="'tel'" [editMode]="true" [validator]="phoneValidator" [validatorMessage]="'Formato telefono non valido'" [label]="'Telefono'" #p2Phones></list-widget>
+                                                    <div class="error-label" [hidden]="!editP2Contatti || p2ContattiForm.controls.email.valid">Formato email non valido</div>
+                                                    <list-widget [items]="newParent2.phoneNumbers" [type]="'tel'" [editMode]="true" [validator]="phoneValidator" [validatorMessage]="'Formato telefono non valido'"
+                                                        [label]="'Telefono'" #p2Phones></list-widget>
                                                 </ion-grid>
                                                 <ion-grid inset *ngIf="!editP2Contatti">
                                                     <ion-row>
@@ -600,7 +608,7 @@
                                                             <ion-grid inset *ngIf="editDelegaInfo" [formGroup]="delegaForm">
                                                                 <ion-row [hidden]="validId(delegaForm)">
                                                                     <ion-col col-10 offset-2>
-                                                                        <div class="error-label" >Delegato già presente</div>                    
+                                                                        <div class="error-label">Delegato già presente</div>
                                                                     </ion-col>
                                                                 </ion-row>
                                                                 <ion-row margin-bottom>
@@ -609,7 +617,7 @@
                                                                     </ion-col>
                                                                     <ion-col col-10>
                                                                         <ion-input name="name" formControlName="name" [(ngModel)]="selectedDelega.name" no-margin></ion-input>
-                                                                        <div class="error-label" [hidden]="!delegaForm.controls.name.errors || !delegaForm.controls.name.errors.required">Nome mancante</div>                    
+                                                                        <div class="error-label" [hidden]="!delegaForm.controls.name.errors || !delegaForm.controls.name.errors.required">Nome mancante</div>
                                                                     </ion-col>
                                                                 </ion-row>
                                                                 <ion-row margin-bottom>
@@ -618,7 +626,7 @@
                                                                     </ion-col>
                                                                     <ion-col col-10>
                                                                         <ion-input name="surname" formControlName="surname" [(ngModel)]="selectedDelega.surname" no-margin></ion-input>
-                                                                        <div class="error-label" [hidden]="!delegaForm.controls.surname.errors || !delegaForm.controls.surname.errors.required">Cognome mancante</div>                    
+                                                                        <div class="error-label" [hidden]="!delegaForm.controls.surname.errors || !delegaForm.controls.surname.errors.required">Cognome mancante</div>
                                                                     </ion-col>
                                                                 </ion-row>
                                                                 <ion-row>
@@ -632,7 +640,7 @@
                                                                             <ion-option value="Fratello/Sorella">Fratello/Sorella (maggiorenne)</ion-option>
                                                                             <ion-option value="Altro">Altro</ion-option>
                                                                         </ion-select>
-                                                                        <div class="error-label" [hidden]="!delegaForm.controls.legame.errors || !delegaForm.controls.legame.errors.required">Relazione mancante</div>                    
+                                                                        <div class="error-label" [hidden]="!delegaForm.controls.legame.errors || !delegaForm.controls.legame.errors.required">Relazione mancante</div>
                                                                     </ion-col>
                                                                 </ion-row>
                                                             </ion-grid>
@@ -664,7 +672,7 @@
                                                                         <span style="padding-left: 8px;">{{selectedDelega.legame}}</span>
                                                                     </ion-col>
                                                                 </ion-row>
-                                                            </ion-grid>                                                            
+                                                            </ion-grid>
                                                         </ion-card-content>
                                                     </ion-card>
 

@@ -27,13 +27,13 @@
                     </ion-card-header>
                     <ion-card-content>
                         <ion-list inset>
-                            <!-- <ion-item>
-                                <div>
-                                    <label class="input-label">Nome*</label>
-                                    <input class="text-generic" type="text" [(ngModel)]="copiedGroup.name" [disabled]="!isNew" (blur)="onBlur($event)" >
-                                </div>
-                            </ion-item> -->
                             <ion-item>
+                                <ion-row *ngIf="isNew">
+                                    <ion-col col-2></ion-col>
+                                    <ion-col col-10 class="adv-unchange">
+                                        Una volta impostato il campo, non sara' piu' possibile modificarlo
+                                    </ion-col>
+                                </ion-row>
                                 <ion-row>
                                     <ion-col col-2>Nome*</ion-col>
                                     <ion-col col-10>
@@ -42,10 +42,10 @@
                                     </ion-col>
                                 </ion-row>
                                 <ion-row [style.visibility]="copiedGroup.name ? 'hidden':' visible'">
-                                        <ion-col col-10 class="error-label">
-                                          Nome gruppo mancante
-                                        </ion-col>
-                                      </ion-row>
+                                    <ion-col col-10 class="error-label">
+                                        Nome gruppo mancante
+                                    </ion-col>
+                                </ion-row>
                             </ion-item>
                         </ion-list>
                     </ion-card-content>

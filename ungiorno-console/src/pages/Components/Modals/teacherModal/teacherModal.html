@@ -27,10 +27,14 @@
                         </ion-card-header>
                         <ion-card-content>
                             <ion-item>
+                                <ion-row *ngIf="isNew">
+                                    <ion-col col-2></ion-col>
+                                    <ion-col col-10 class="adv-unchange">
+                                        Una volta impostato il campo, non sara' piu' possibile modificarlo
+                                    </ion-col>
+                                </ion-row>
                                 <ion-row>
                                     <ion-col col-2>ID (C.F.)*</ion-col>
-                                    <!-- <ion-col col-10><input class="text-generic" name="name" type="text" [(ngModel)]="copiedTeacher.id" [disabled]='!isNew'></ion-col> -->
-
                                     <ion-col col-10>
                                         <input class="text-generic" type="text" [(ngModel)]="copiedTeacher.id" *ngIf="isNew">
                                         <div no-margin *ngIf='!isNew' class="unchangable-label">{{copiedTeacher.id}}</div>

@@ -2,13 +2,14 @@ import { Component, OnInit, Input } from '@angular/core';
 import { AlertController, ToastController } from 'ionic-angular';
 import { CommonService } from '../../../services/common.service';
 
+import { FormBuilder, FormGroup, FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+
 @Component({
     selector: 'list-widget',
     templateUrl: './list-widget.html',
     styles: [`
     ion-grid {
         font-size: 17px !important;
-         padding-left: 16px !important;
     }
     ion-card-header {
         font-size: 20px !important;
@@ -54,21 +55,30 @@ import { CommonService } from '../../../services/common.service';
   `]
 })
 
-export class ListWidget {
+export class ListWidget implements OnInit {
     @Input() items: string[];
     @Input() editMode: boolean = false;
     @Input() label: string;
     @Input() type?: string;
-    @Input() validator: (val: string, common: CommonService) => boolean;
+    @Input() validator: ValidatorFn;
+    @Input() validatorMessage?: string;
+    
+    listWidgetForm: FormGroup;
 
     newItem: string = "";
-    constructor(private alertCtrl:AlertController, private toastCtrl: ToastController, private common: CommonService) { }
+    constructor(private alertCtrl:AlertController, private toastCtrl: ToastController, private common: CommonService, private formBuilder: FormBuilder) {
+    }
+
+    ngOnInit(){
+        this.listWidgetForm = this.validator ? this.formBuilder.group({ field: ['', this.validator] }): this.formBuilder.group({ field: [''] });
+    }
 
     addItem() {
+        if (!this.listWidgetForm.controls.field.valid) return;
+        
         if (this.newItem.trim().length == 0) {
             return;
         }
-        if (this.validator && !this.validator(this.newItem.trim(), this.common)) return;
 
         if (!this.items) {
             this.items = [];

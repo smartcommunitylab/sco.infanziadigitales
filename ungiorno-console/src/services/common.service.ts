@@ -1,6 +1,8 @@
 import { Injectable }    from '@angular/core';
 import { ToastController } from 'ionic-angular';
 
+import {FormControl, ValidationErrors } from '@angular/forms';
+
 @Injectable()
 export class CommonService  {
     private currentToast = null;
@@ -22,6 +24,21 @@ export class CommonService  {
             return false;
         }
         return true;
+    }
+
+    static emailFieldValidator(control: FormControl): ValidationErrors | null {
+        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        if (control.value && !re.test(control.value)) {
+            return {email: true};
+        }
+        return null;
+    }
+    static phoneFieldValidator(control: FormControl): ValidationErrors | null {
+        var re = /^[0-9]{5,10}$/;
+        if (control.value && !re.test(control.value)) {
+            return {phone: true};
+        }
+        return null;
     }
 
     showToast(text: string, position?: string, duration?: number) {

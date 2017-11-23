@@ -13,6 +13,8 @@ import { ConfigService } from './../../../../services/config.service';
 import { CommonService } from  './../../../../services/common.service';
 import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 
+import {Validators, FormBuilder, FormGroup, FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+
 import { ActivatedRoute, ParamMap } from "@angular/router";
 import { Location } from '@angular/common';
 import { FileUploader, FileItem } from 'ng2-file-upload';
@@ -32,6 +34,9 @@ import { setTimeout } from 'timers';
     styles: [`
         ion-grid {
             font-size: 17px !important;
+        }
+        ion-grid .row {
+            min-height: 37px;
         }
         ion-card-header {
             font-size: 20px !important;
@@ -145,13 +150,13 @@ export class KidPage implements OnInit {
     orarioNormale = "";
     // data for 1st parent
     editP1Info: boolean;
-    newParent1: Parent = new Parent('', '', '');
+    newParent1: any = {};
     editP1Contatti: boolean;
     @ViewChild('p1Phones') p1Phones;
     @ViewChild('p1Emails') p1Emails;
     // data for 2nd parent
     editP2Info: boolean;
-    newParent2: Parent = new Parent('', '', '');
+    newParent2: any = {};
     editP2Contatti: boolean;
     @ViewChild('p2Phones') p2Phones;
     @ViewChild('p2Emails') p2Emails;
@@ -171,18 +176,25 @@ export class KidPage implements OnInit {
     apiUrl: string;
     uploader: FileUploader = new FileUploader({});
 
-    emailValidator = CommonService.emailValidator;
-    phoneValidator = CommonService.phoneValidator;
+    emailValidator = CommonService.emailFieldValidator;
+    phoneValidator = CommonService.phoneFieldValidator;
     
+    infoForm : FormGroup;    
+    p1ContattiForm: FormGroup;
+    p2ContattiForm: FormGroup;
+    delegaForm: FormGroup;
+
     constructor(
         private webService: WebService,
         private configService: ConfigService,
         private alertCtrl: AlertController,
         private http: Http,
         private cdRef: ChangeDetectorRef,
-        private toastCtrl: ToastController
+        private toastCtrl: ToastController,
+        private formBuilder: FormBuilder
     ) {
         this.apiUrl = this.configService.getConfig('apiUrl');
+
     }
 
     ngOnInit(): void {
@@ -192,7 +204,39 @@ export class KidPage implements OnInit {
         this.initServices();
         this.image=this.getImage();
 
+        this.infoForm = this.formBuilder.group({
+            id: [{value: '', disabled: !this.isNew}, Validators.compose([Validators.required, this.validateId(this)])],
+            name: ['', Validators.required],
+            surname: ['', Validators.required],
+            gender: [''],
+            nascita: [''],
+            sperimentazione: [''],
+        });
+
+        this.p1ContattiForm = this.formBuilder.group({
+            email: ['', this.emailValidator]
+        });
+        this.p2ContattiForm = this.formBuilder.group({
+            email: ['', this.emailValidator]
+        });
+
+        this.delegaForm = this.formBuilder.group({
+            name: ['', Validators.required],
+            surname: ['', Validators.required],
+            legame: ['', Validators.required]
+        });
     }
+
+    private validateId(data: any): ValidatorFn {
+        return (fc) => {
+            if (data.isNew) {
+                if (data.selectedSchool.kids.findIndex(x => x.id.toLowerCase() === data.newInfo.id.toLowerCase()) >= 0) {
+                    return {'unique':true};
+                }
+            }
+        };
+    }
+
     private initServices() {
         this.servicesChecked = {};
         this.selectedSchool.servizi.forEach(servizio => {
@@ -202,6 +246,10 @@ export class KidPage implements OnInit {
             }
         });
         this.selectedKid.services.forEach(x => this.servicesChecked[x.servizio] = true);
+    }
+
+    print(obj:any){
+        return JSON.stringify(obj);
     }
 
     isInEdit(): boolean {
@@ -234,7 +282,6 @@ export class KidPage implements OnInit {
     }
 
     onInfoEdit() {
-        this.editInfo = true;
         this.newInfo.id = this.selectedKid.id;
         this.newInfo.name = this.selectedKid.name;
         this.newInfo.surname = this.selectedKid.surname;
@@ -242,24 +289,26 @@ export class KidPage implements OnInit {
         this.newInfo.gender = this.selectedKid.gender;
         this.newInfo.nascitaStr = this.selectedKid.nascitaStr;
         this.newInfo.sperimentazione = this.selectedKid.sperimentazione;
+
+        this.editInfo = true;
     }
 
     onInfoSave() {
         this.editInfo = false;
-        if (this.isNew) {
-            if (this.selectedSchool.kids.findIndex(x => x.id.toLowerCase() === this.newInfo.id.toLowerCase()) >= 0) {
-                let alert = this.alertCtrl.create({
-                    subTitle: 'Elemento già presente',
-                    buttons: [
-                        {
-                            text: 'OK'
-                        }
-                    ]
-                });
-                alert.present();
-                return;
-            }
-        }
+        // if (this.isNew) {
+        //     if (this.selectedSchool.kids.findIndex(x => x.id.toLowerCase() === this.newInfo.id.toLowerCase()) >= 0) {
+        //         let alert = this.alertCtrl.create({
+        //             subTitle: 'Elemento già presente',
+        //             buttons: [
+        //                 {
+        //                     text: 'OK'
+        //                 }
+        //             ]
+        //         });
+        //         alert.present();
+        //         return;
+        //     }
+        // }
 
         let tmpKid = Kid.copy(this.selectedKid);
         tmpKid.id = this.newInfo.id;
@@ -466,7 +515,7 @@ export class KidPage implements OnInit {
 
     onP1ContattiEdit() {
         this.editP1Contatti = true;
-        this.newParent1.emails = this.selectedKid.parent1.emails.slice();
+        this.newParent1.email = this.selectedKid.parent1.emails.length > 0 ? this.selectedKid.parent1.emails[0] : '';     
         this.newParent1.phoneNumbers = this.selectedKid.parent1.phoneNumbers.slice();
     }
 
@@ -474,7 +523,7 @@ export class KidPage implements OnInit {
         let handler = () => {
             this.editP1Contatti = false;
             let tmpKid = Kid.copy(this.selectedKid);
-            tmpKid.parent1.emails = this.newParent1.emails;
+            tmpKid.parent1.emails = this.newParent1.email ? [this.newParent1.email] : [];
             tmpKid.parent1.phoneNumbers = this.newParent1.phoneNumbers;
             this.webService.add(this.selectedSchool, tmpKid).then(() => {
                 this.selectedKid.copyInto(tmpKid);
@@ -519,7 +568,7 @@ export class KidPage implements OnInit {
 
     onP2ContattiEdit() {
         this.editP2Contatti = true;
-        this.newParent2.emails = this.selectedKid.parent2.emails.slice();
+        this.newParent2.email = this.selectedKid.parent2.emails.length > 0 ? this.selectedKid.parent2.emails[0] : ''; 
         this.newParent2.phoneNumbers = this.selectedKid.parent2.phoneNumbers.slice();
     }
 
@@ -527,7 +576,7 @@ export class KidPage implements OnInit {
         let handler = () => {
             this.editP2Contatti = false;
             let tmpKid = Kid.copy(this.selectedKid);
-            tmpKid.parent2.emails = this.newParent2.emails;
+            tmpKid.parent2.emails = this.newParent2.email ? [this.newParent2.email] : [];
             tmpKid.parent2.phoneNumbers = this.newParent2.phoneNumbers;
             this.webService.add(this.selectedSchool, tmpKid).then(() => {
                 this.selectedKid.copyInto(tmpKid);

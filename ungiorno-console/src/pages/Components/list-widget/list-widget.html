@@ -11,18 +11,21 @@
         </ion-list>
     </ion-col>
 </ion-row>
-<ion-row margin-bottom *ngIf="editMode">
-    <ion-grid no-padding no-margin>
-        <ion-row>
+<ion-row margin-bottom *ngIf="editMode" [formGroup]="listWidgetForm">
+    <!-- <ion-grid no-padding no-margin>
+        <ion-row> -->
             <ion-col col-2>{{label}}:</ion-col>
             <ion-col col-8>
-                <ion-input [(ngModel)]="newItem" no-margin type="{{type}}"></ion-input>
+                <ion-input name="field" formControlName="field" [(ngModel)]="newItem" no-margin type="{{type}}"></ion-input>
             </ion-col>
             <ion-col col-1>
-                <ion-icon name="add-circle" color="green3" (click)="addItem()" item-end></ion-icon>
+                <ion-icon name="add-circle" color="green3" (click)="addItem()" item-end ></ion-icon>
             </ion-col>
-        </ion-row>
-    </ion-grid>
+        <!-- </ion-row>
+    </ion-grid> -->
+</ion-row>
+<div class="error-label" [hidden]="!editMode || listWidgetForm.controls.field.valid">{{validatorMessage}}</div>                    
+<ion-row margin-bottom  *ngIf="editMode && items && items.length > 0">   
     <ion-col col-12>
         <ion-list>
             <ion-item *ngFor="let item of items">

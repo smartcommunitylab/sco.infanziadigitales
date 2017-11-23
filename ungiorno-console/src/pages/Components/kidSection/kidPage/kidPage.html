@@ -22,7 +22,7 @@
             <p></p>
         </ion-col>
         <ion-col col-10>
-            <ion-segment [(ngModel)]="kidSettings" color="light" style="background-color: #ccc;">
+            <ion-segment [(ngModel)]="kidSettingsSeg" (ngModelChange)="onSegmentChange($event)" color="light" style="background-color: #ccc;">
                 <ion-segment-button value="info">
                     Informazioni
                 </ion-segment-button>

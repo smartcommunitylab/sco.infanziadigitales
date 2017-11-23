@@ -152,8 +152,9 @@
                                     <ion-card-content margin-top>
                                         <ion-item style="height:120px">
                                             <ion-thumbnail item-start style="height: 100%; width: auto">
-                                                <img [src]="image" style="height: 100%; width: auto" *ngIf='selectedKid.id ' />
+                                                <img [src]="image" style="height: 100%; width: auto" *ngIf='selectedKid.id && !filePreviewPath' />
                                                 <img src="../../../../assets/images/placeholder.png" style="height: 100%; width: auto" *ngIf='!selectedKid.id ' />
+                                                <img [src]="filePreviewPath" style="height: 100%; width: auto" *ngIf="filePreviewPath" />                                            
                                             </ion-thumbnail>
                                             <input id="uploadInputFile" accept="image/*" type="file" ng2FileSelect [uploader]="uploader" *ngIf='editFoto' />
                                             <button class='edit' ion-button color='magenta1' margin-right ion-button *ngIf='editFoto' (click)="onRemoveProfileKid()">Rimuovi Immagine</button>

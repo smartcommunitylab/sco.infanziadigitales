@@ -12,7 +12,7 @@ import { WebService } from './../../../../services/WebService';
 import { ConfigService } from './../../../../services/config.service';
 import { CommonService, EditFormObserver } from  './../../../../services/common.service';
 import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
-
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import {Validators, FormBuilder, FormGroup, FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 import { ActivatedRoute, ParamMap } from "@angular/router";
@@ -135,7 +135,7 @@ export class KidPage implements OnInit {
     kidSettingsSeg: string = 'info';
 
     image = "";
-
+    filePreviewPath: SafeUrl;
     // data for info section
     editInfo: boolean;
     newInfo: Kid = new Kid('', '', '');
@@ -205,7 +205,8 @@ export class KidPage implements OnInit {
         private http: Http,
         private cdRef: ChangeDetectorRef,
         private toastCtrl: ToastController,
-        private formBuilder: FormBuilder
+        private formBuilder: FormBuilder,
+        private sanitizer: DomSanitizer
     ) {
         this.apiUrl = this.configService.getConfig('apiUrl');
 
@@ -290,6 +291,10 @@ export class KidPage implements OnInit {
         if (this.isNew) {
             this.commonService.addEditForm('kidInfo',this.infoObserver );            
         }
+
+        this.uploader.onAfterAddingFile = (fileItem) => {
+            this.filePreviewPath  = this.sanitizer.bypassSecurityTrustUrl((window.URL.createObjectURL(fileItem._file)));
+          }
     }
 
     private validateId(data: any): ValidatorFn {
@@ -474,6 +479,7 @@ export class KidPage implements OnInit {
                         this.webService.removeKidImage(this.selectedSchool, this.selectedKid).then(() => {
                             // this.doRerender();
                             this.image=this.getImage();
+                            this.filePreviewPath = null;
                             this.commonService.removeEditForm('kidFoto');            
                         },
                             (err) => {
@@ -506,6 +512,8 @@ export class KidPage implements OnInit {
 
     onFotoCancel() {
         this.editFoto = false;
+        this.filePreviewPath = null;
+       
         this.commonService.removeEditForm('kidFoto');            
     }
 

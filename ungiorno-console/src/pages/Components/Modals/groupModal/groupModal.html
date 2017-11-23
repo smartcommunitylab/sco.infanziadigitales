@@ -27,18 +27,21 @@
                     </ion-card-header>
                     <ion-card-content>
                         <ion-list inset>
-                            <ion-item>
+                            <!-- <ion-item>
                                 <div>
                                     <label class="input-label">Nome*</label>
                                     <input class="text-generic" type="text" [(ngModel)]="copiedGroup.name" [disabled]="!isNew" (blur)="onBlur($event)" >
                                 </div>
-                                <!--<ion-label>Nome*</ion-label>
-                                <ion-input name="name" type="text" [(ngModel)]="copiedGroup.name"></ion-input>-->
-                            </ion-item>
-                            <!-- <ion-item margin-top>
-                                <ion-label inline>Questo gruppo è una sezione</ion-label>
-                                <ion-checkbox [(ngModel)]="copiedGroup.section" [disabled]='true'></ion-checkbox>
                             </ion-item> -->
+                            <ion-item>
+                                <ion-row>
+                                    <ion-col col-2>Nome*</ion-col>
+                                    <ion-col col-10>
+                                        <input no-margin class="text-generic" type="text" [(ngModel)]="copiedGroup.name" *ngIf="isNew">
+                                        <div no-margin *ngIf='!isNew' class="unchangable-label">{{copiedGroup.name}}</div>
+                                    </ion-col>
+                                </ion-row>
+                            </ion-item>
                         </ion-list>
                     </ion-card-content>
                 </ion-card>

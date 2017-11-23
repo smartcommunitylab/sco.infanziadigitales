@@ -31,18 +31,14 @@
                     <ion-card-content>
                         <ion-list inset>
                             <ion-item>
-                                <div>Nome*
-                                    <input class="text-generic" type="text" [(ngModel)]="copiedOrario.servizio" [disabled]="!isNew">
-                                </div>
-                                <ion-row [style.visibility]="copiedOrario.servizio ? 'hidden':' visible'">
-                                    <ion-col col-10 class="error-label">
-                                        Nome orario mancante
+                                <ion-row>
+                                    <ion-col col-1>Nome*</ion-col>
+                                    <ion-col col-11>
+                                        <input no-margin class="text-generic" type="text" [(ngModel)]="copiedOrario.servizio" *ngIf="isNew">
+                                        <div no-margin *ngIf='!isNew' class="unchangable-label">{{copiedOrario.servizio}}</div>
                                     </ion-col>
                                 </ion-row>
                             </ion-item>
-                            <!--<ion-item>
-                                <ion-label *ngIf="giaNorm[0]">Questo è l'orario normale</ion-label>
-                            </ion-item>-->
                         </ion-list>
                     </ion-card-content>
                 </ion-card>

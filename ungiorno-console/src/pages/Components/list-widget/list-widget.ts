@@ -60,7 +60,7 @@ export class ListWidget implements OnInit {
     @Input() editMode: boolean = false;
     @Input() label: string;
     @Input() type?: string;
-    @Input() validator: ValidatorFn;
+    @Input() validator?: ValidatorFn;
     @Input() validatorMessage?: string;
     
     listWidgetForm: FormGroup;

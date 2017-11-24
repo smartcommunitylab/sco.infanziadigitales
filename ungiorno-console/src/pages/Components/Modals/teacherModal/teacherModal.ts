@@ -47,6 +47,7 @@ export class TeacherModal implements OnInit {
 
     Object.assign(this.copiedTeacher, this.selectedTeacher);
   }
+  
 
   ngOnInit(): void {
     this.updateArray();
@@ -57,6 +58,11 @@ export class TeacherModal implements OnInit {
       email: ['', this.emailValidator]
     });
   }
+
+  private isChanged() {
+    return this.teacherForm.dirty; 
+  }
+
   private validateId(data: any): ValidatorFn {
     return (fc) => {
       if (data.isNew && data.selectedSchool.teachers) {
@@ -81,6 +87,11 @@ export class TeacherModal implements OnInit {
   }
 
   close() {
+    if (!this.isChanged()) {
+      this.navCtrl.pop();
+      return;
+    }
+    
     let alert = this.alertCtrl.create({
       subTitle: 'Eventuali modifiche verrano perse. Confermi?',
       buttons: [
@@ -103,42 +114,49 @@ export class TeacherModal implements OnInit {
   save() {
     if (this.copiedTeacher.email && !CommonService.emailValidator(this.copiedTeacher.email, this.common)) return;
 
-    let alert = this.alertCtrl.create({
-      subTitle: 'Eventuali modifiche verrano confermate. Confermi?',
-      buttons: [
-        {
-          text: "Annulla"
-        },
-        {
-          text: 'OK',
-          handler: () => {
-            Object.assign(this.selectedTeacher, this.copiedTeacher);
+    let handler = () => {
+      Object.assign(this.selectedTeacher, this.copiedTeacher);
 
-            if (this.isNew) {
-              if (this.selectedSchool.teachers.findIndex(x => x.id.toLowerCase() === this.selectedTeacher.id.toLowerCase()) < 0) {
-                this.webService.add(this.selectedSchool, this.copiedTeacher).then(() => {
-                  this.selectedSchool.teachers.push(this.selectedTeacher);
-                  this.navCtrl.pop();
-                }, err => {
-                  // TODO handle error
-                });
-              }
-              else {
-                this.common.showToast('Insegnante già presente (conflitto di C.F.)');
-              }
-            } else {
-              this.webService.add(this.selectedSchool, this.copiedTeacher).then(() => {
-                Object.assign(this.selectedTeacher, this.copiedTeacher);
-                this.navCtrl.pop();
-              }, err => {
-                // TODO handle error
-              });
-            }
-          }
+      if (this.isNew) {
+        if (this.selectedSchool.teachers.findIndex(x => x.id.toLowerCase() === this.selectedTeacher.id.toLowerCase()) < 0) {
+          this.webService.add(this.selectedSchool, this.copiedTeacher).then(() => {
+            this.selectedSchool.teachers.push(this.selectedTeacher);
+            this.navCtrl.pop();
+          }, err => {
+            // TODO handle error
+          });
         }
-      ]
-    })
-    alert.present();
+        else {
+          this.common.showToast('Insegnante già presente (conflitto di C.F.)');
+        }
+      } else {
+        this.webService.add(this.selectedSchool, this.copiedTeacher).then(() => {
+          Object.assign(this.selectedTeacher, this.copiedTeacher);
+          this.navCtrl.pop();
+        }, err => {
+          // TODO handle error
+        });
+      }
+    }
+
+    if (!this.isChanged()) {
+      this.navCtrl.pop();
+    } else {
+      let alert = this.alertCtrl.create({
+        subTitle: 'Eventuali modifiche verrano confermate. Confermi?',
+        buttons: [
+          {
+            text: "Annulla"
+          },
+          {
+            text: 'OK',
+            handler: handler
+          }
+        ]
+      })
+      alert.present();
+  
+    }
   }
   onRemoveGroup(group: Group) {
     group.teachers.splice(group.teachers.findIndex(x => x.toLowerCase() == this.copiedTeacher.id.toLowerCase()), 1);

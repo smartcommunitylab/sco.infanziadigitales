@@ -907,13 +907,15 @@ public class RepositoryManager implements RepositoryService {
         List<KidProfile> kids = readKidsForSections(appId, schoolId, sections);
         // school services
         Set<TimeSlotSchoolService> schoolProfileServices = profile.getServices();
+        Map<String, TimeSlotSchoolService> serviceMap = new HashMap<>();
+        
         // 'normal' service
         TimeSlotSchoolService regularService = new TimeSlotSchoolService("test", true);
         for (TimeSlotSchoolService ts : schoolProfileServices) {
             if (ts.isRegular()) {
                 regularService = ts;
-                break;
             }
+            serviceMap.put(ts.getName(), ts);
         }
 
         // extract kid service mappings
@@ -932,9 +934,10 @@ public class RepositoryManager implements RepositoryService {
             // read other services. Ignore for non-participating kids
             if (kp.isPartecipateToSperimentation() && kidServices != null
                     && kidServices.getTimeSlotServices() != null) {
-                for (TimeSlotSchoolService ts : kidServices.getTimeSlotServices()) {
+                for (TimeSlotSchoolService kts : kidServices.getTimeSlotServices()) {
+                	TimeSlotSchoolService ts = serviceMap.get(kts.getName());
                     // handle ignore disabled and regular slots
-                    if (ts.isEnabled() && !ts.isRegular()) {
+                    if (kts.isEnabled() && !ts.isRegular()) {
                         for (TimeSlotSchoolService.ServiceTimeSlot fasc : ts.getTimeSlots()) {
                             allKidFascie.add(fasc.getName());
                             allFascie.add(fasc);

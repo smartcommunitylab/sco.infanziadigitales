@@ -8,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
 import { NavParams, NavController, AlertController } from "ionic-angular";
 
 import { CommonService } from '../../../../services/common.service';
+import { Validators, FormBuilder, FormGroup, FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 @Component({
   selector: 'teacher-modal',
@@ -31,12 +32,15 @@ export class TeacherModal implements OnInit {
   selectedTeacherGroups: Group[];
 
   isNew: boolean;
+  emailValidator = CommonService.emailFieldValidator;
+  teacherForm: FormGroup;
 
   constructor(public params: NavParams,
     public navCtrl: NavController,
     private webService: WebService,
     private alertCtrl: AlertController,
-    private common: CommonService) {
+    private common: CommonService,
+    private formBuilder: FormBuilder) {
     this.selectedSchool = this.params.get('school') as School;
     this.selectedTeacher = this.params.get('teacher') as Teacher;
     this.isNew = this.params.get('isNew') as boolean;
@@ -46,8 +50,23 @@ export class TeacherModal implements OnInit {
 
   ngOnInit(): void {
     this.updateArray();
+    this.teacherForm = this.formBuilder.group({
+      id: [{ value: this.copiedTeacher.id, disabled: !this.isNew }, Validators.compose([Validators.required, this.validateId(this)])],
+      name: ['', Validators.required],
+      surname: ['', Validators.required],
+      email: ['', this.emailValidator]
+    });
   }
-
+  private validateId(data: any): ValidatorFn {
+    return (fc) => {
+      if (data.isNew && data.selectedSchool.teachers) {
+        if (data.selectedSchool.teachers.findIndex(x => x.id.toLowerCase() === this.copiedTeacher.id.toLowerCase()) >= 0) {
+          return { 'unique': true };
+        }
+        return null;
+      }
+    };
+  }
   updateArray() {
     this.selectedTeacherGroups = [];
 
@@ -126,7 +145,7 @@ export class TeacherModal implements OnInit {
     //popup di richiesta
     let alert = this.alertCtrl.create({
       title: 'Creazione/ripristino PIN',
-      subTitle: 'Premendo OK un nuovo PIN verrà spedito all’indirizzo email '+this.selectedTeacher.email+', disabilitando il PIN precedente.',
+      subTitle: 'Premendo OK un nuovo PIN verrà spedito all’indirizzo email ' + this.selectedTeacher.email + ', disabilitando il PIN precedente.',
       buttons: [
         {
           text: "Annulla"

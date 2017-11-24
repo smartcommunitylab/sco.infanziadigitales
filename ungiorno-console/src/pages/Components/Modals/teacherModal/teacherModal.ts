@@ -69,12 +69,15 @@ export class TeacherModal implements OnInit {
   }
   updateArray() {
     this.selectedTeacherGroups = [];
-
-    this.selectedSchool.groups.forEach(group => {
-      group.teachers.forEach(teacherId => {
-        if (teacherId.toLowerCase() === this.copiedTeacher.id.toLowerCase()) this.selectedTeacherGroups.push(group);
+    if (this.selectedSchool.groups) {
+      this.selectedSchool.groups.forEach(group => {
+        if (group.teachers) {
+          group.teachers.forEach(teacherId => {
+            if (teacherId.toLowerCase() === this.copiedTeacher.id.toLowerCase()) this.selectedTeacherGroups.push(group);
+          })
+        }
       })
-    })
+    }
   }
 
   close() {

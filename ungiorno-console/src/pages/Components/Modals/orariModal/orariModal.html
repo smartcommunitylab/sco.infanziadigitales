@@ -9,7 +9,7 @@
         </ion-buttons>
         <ion-buttons end>
             <div (mouseover)="sovraPopover($event)">
-                <button ion-button (click)="save()" [disabled]='!(copiedOrario.servizio) || disable || sovrapp || disableName ||(copiedOrario.fasce && copiedOrario.fasce.length==0) || duplicate '>
+                <button ion-button (click)="save()" [disabled]='!(copiedOrario.servizio) ||getDisabled() '>
                     Salva
                 </button>
             </div>
@@ -85,22 +85,22 @@
                                         <ion-item style="height:100%" text-right>
                                             <ion-label>Da</ion-label>
                                             <ion-datetime cancelText="Annulla" doneText="Fatto" displayFormat="HH:mm" pickerFormat="HH:mm" [(ngModel)]="fascia.start"
-                                                (ionChange)="changeFascia(fascia)"></ion-datetime>
+                                                (ionChange)="changeFascia(fascia,i)"></ion-datetime>
                                         </ion-item>
                                     </ion-col>
                                     <ion-col col-2 style="bottom: 0px">
                                         <ion-item style="height:100%" text-right>
                                             <ion-label>A</ion-label>
-                                            <ion-datetime cancelText="Annulla" doneText="Fatto" displayFormat="HH:mm" pickerFormat="HH:mm" [(ngModel)]="fascia.end" (ionChange)="changeFascia(fascia)"></ion-datetime>
+                                            <ion-datetime cancelText="Annulla" doneText="Fatto" displayFormat="HH:mm" pickerFormat="HH:mm" [(ngModel)]="fascia.end" (ionChange)="changeFascia(fascia,i)"></ion-datetime>
                                         </ion-item>
                                     </ion-col>
                                     <ion-col col-2>
-                                        <button style="padding-left: 3px;height:100%" ion-item icon-only (click)='removeFascia(fascia)'>
+                                        <button style="padding-left: 3px;height:100%" ion-item icon-only (click)='removeFascia(fascia,i)'>
                                             <ion-icon style="padding-left: 0" name="trash" item-end color="magenta1"></ion-icon>
                                         </button>
                                     </ion-col>
                                 </ion-row>
-                                <ion-row *ngIf="!fascia.name || fascia.start>fascia.end">
+                                <ion-row *ngIf="!fascia.name || fascia.start>fascia.end || sovrapp[i] || sovrappSchool[i]">
                                     <ion-col col-6 class="error-label" [style.visibility]="fascia.name ?  'hidden' : 'visible' ">
                                         <ion-col col-2>
 
@@ -109,9 +109,18 @@
                                             Nome fascia mancante
                                         </ion-col>
                                     </ion-col>
-                                    <ion-col col-6 class="error-label" [style.visibility]="(fascia.start<fascia.end) ?  'hidden' : 'visible'">
-                                        Orario non valido
+                                    <ion-col col-6  >
+                                            <p class="error-label" *ngIf="(fascia.start>fascia.end)">Orario non valido</p>
+                                            <p class="error-label" *ngIf="sovrapp[i] && (fascia.start<fascia.end)">Sovrapposizione fascia oraria</p>
+                                            <p class="error-label" *ngIf="sovrappSchool[i] && !sovrapp[i] && (fascia.start<fascia.end)">Sovrapposizione fascia oraria di un altro orario  </p>
+                                            
                                     </ion-col>
+                                    <!-- <ion-col col-6 class="error-label" >
+                                        
+                                    </ion-col>
+                                    <ion-col col-6 class="error-label" >
+                                        
+                                    </ion-col> -->
                                 </ion-row>
                                 <ion-row>
                                     <ion-col col-6 class="error-label" [style.visibility]="!isDuplicate(fascia.name,i) ?  'hidden' : 'visible' ">

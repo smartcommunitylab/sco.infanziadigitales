@@ -39,8 +39,8 @@ export class OrariModal implements OnInit {
 
     late: string;
     early: string;
-
-    sovrapp: boolean;
+    sovrappSchool: any = {};
+    sovrapp: any = {};
     public datePickerConfig: Object = {
     }
     constructor(public params: NavParams,
@@ -66,7 +66,8 @@ export class OrariModal implements OnInit {
     }
 
     ngOnInit() {
-
+        // init sovrap[i]
+        // init sovrappSchool[i]
     }
     // emptyService() {
     //     if (!this.copiedOrario.servizio)
@@ -158,12 +159,12 @@ export class OrariModal implements OnInit {
         var newFascia = new Time('', new Date(0, 0, 0, 8, 0), new Date(0, 0, 0, 17, 0));
         this.copiedOrario.fasce.push(newFascia);
         this.changeName(this.copiedOrario.fasce[this.copiedOrario.fasce.length - 1].name, this.copiedOrario.fasce.length - 1);
-        this.changeFascia(this.copiedOrario.fasce[this.copiedOrario.fasce.length - 1], false);
+        this.changeFascia(this.copiedOrario.fasce[this.copiedOrario.fasce.length - 1], this.copiedOrario.fasce.length - 1, false);
 
     }
 
 
-    removeFascia(fascia: Time) {
+    removeFascia(fascia: Time, index: number) {
         let alert = this.alertCtrl.create({
             subTitle: 'Conferma eliminazione',
             buttons: [
@@ -175,11 +176,14 @@ export class OrariModal implements OnInit {
                     handler: () => {
                         this.copiedOrario.fasce.splice(this.copiedOrario.fasce.findIndex(t => t.name.toLowerCase() === fascia.name.toLowerCase()), 1);
                         this.disable = this.copiedOrario.fasce.findIndex(t => t.name.toLowerCase() === '') >= 0;
+
                         //check new consistency
                         for (var i = 0; i < this.copiedOrario.fasce.length; i++) {
                             this.changeName(this.copiedOrario.fasce[i].name, i);
-                            this.changeFascia(this.copiedOrario.fasce[i], false);
+                            this.changeFascia(this.copiedOrario.fasce[i], index, false);
                         }
+                        // delete this.sovrappSchool[index];
+                        // delete this.sovrapp[index];
                     },
                 }
             ]
@@ -213,34 +217,53 @@ export class OrariModal implements OnInit {
         this.copiedOrario.fasce.sort((item1, item2) => item1.start.localeCompare(item2.start));
     }
 
-    changeFascia(fascia: Time, sort: boolean) {
+    changeFascia(fascia: Time, index: number, sort: boolean) {
         if (sort) {
             this.copiedOrario.fasce.sort((item1, item2) => item1.start.localeCompare(item2.start));
         }
         if (this.copiedOrario.fasce.length > 1)
             for (var i = 1; i < this.copiedOrario.fasce.length; i++) {
-                if (this.isBetween(this.copiedOrario.fasce[i].name, this.copiedOrario.fasce[i].start, this.copiedOrario.fasce[i - 1].start, this.copiedOrario.fasce[i - 1].end, this.copiedOrario.fasce[i - 1].name, fascia.end) || this.isBetweenSchool(fascia)) {
-                    this.sovrapp = true;
+                if (this.isBetween(this.copiedOrario.fasce[i].name, this.copiedOrario.fasce[i].start, this.copiedOrario.fasce[i - 1].start, this.copiedOrario.fasce[i - 1].end, this.copiedOrario.fasce[i - 1].name, this.copiedOrario.fasce[i].end)) {
+                    this.sovrapp[i] = true;
+                    this.sovrapp[i - 1] = true;
                     this.disable = true;
-                    return;
-                }
-                else {
-                    this.sovrapp = false;
-                    this.disable = false;
+
+                } else {
+                    this.sovrapp[i] = false;
+                    this.sovrapp[i - 1] = false;
                 }
             }
+        if (this.isBetweenSchool(fascia)) {
+            this.sovrappSchool[index] = true;
+            this.disable = true;
+        } else {
+            this.sovrappSchool[index] = false;
+        }
+        if (!this.sovrappSchool[index] && !this.sovrapp[index]) {
+            this.sovrapp[index] = false;
+            this.sovrapp[index] = false;
+            this.sovrappSchool[index] = false;
+            this.disable = false;
+        }
+
         else {
             if ((this.copiedOrario.fasce[0].start.localeCompare(this.copiedOrario.fasce[0].end) > 0)) {
-                this.sovrapp = false;
+                this.sovrapp[0] = false;
                 this.disable = true;
                 return;
             }
-            this.sovrapp = this.isBetweenSchool(fascia);
-            this.disable = this.sovrapp;
+            this.sovrappSchool[index] = this.isBetweenSchool(fascia);
+            this.disable = this.sovrappSchool[index];
         }
 
     }
-
+    getDisabled() {
+        for (var i = 0; i < this.copiedOrario.fasce.length; i++) {
+            if (this.sovrapp[i] || this.sovrappSchool[i] || this.copiedOrario.fasce[i].start.localeCompare(this.copiedOrario.fasce[i].end)>0)
+                return true;
+        }
+        return false
+    }
     //check if fascia overlap another one in the same servizio
     isBetween(dateName: string, date: string, start: string, end: string, name: string, dateF: string) {
         if (dateF === null) {
@@ -250,9 +273,8 @@ export class OrariModal implements OnInit {
             return dateName !== name &&
                 ((date.localeCompare(start) > 0 && date.localeCompare(end) < 0) || //inizio interno ad una fascia
                     (dateF.localeCompare(start) > 0 && dateF.localeCompare(end) < 0) ||  //fine interna a una fascia
-                    (date.localeCompare(start) <= 0 && dateF.localeCompare(end) >= 0) ||  //inizia prima di o assieme a una fascia e finisce dopo o assieme
-                    (start.localeCompare(end) > 0 )   ||
-                    (date.localeCompare(dateF) > 0 )   
+                    (date.localeCompare(start) <= 0 && dateF.localeCompare(end) >= 0)   //inizia prima di o assieme a una fascia e finisce dopo o assieme
+
                 )
         }
     }
@@ -264,21 +286,25 @@ export class OrariModal implements OnInit {
             if (element.servizio != this.selectedOrario.servizio) {
                 for (var i = 0; i < element.fasce.length; i++) {
                     ret = this.isBetween(fascia.name, fascia.start, element.fasce[i].start, element.fasce[i].end, element.fasce[i].name, fascia.end);
-                    if (ret) break;
+                    if (ret) {
+                        break
+                    };
                 }
-                if (ret) break;
+                if (ret) {
+                    break
+                };
             }
         }
         return ret
     }
 
     sovraPopover(ev) {
-        if (this.sovrapp) {
-            let popover = this.popoverCtrl.create(PopoverPage, {}, { cssClass: 'alert-popover' });
-            popover.present({
-                ev: ev
-            });
-        }
+        // if (this.sovrappSchool) {
+        //     let popover = this.popoverCtrl.create(PopoverPage, {}, { cssClass: 'alert-popover' });
+        //     popover.present({
+        //         ev: ev
+        //     });
+        // }
     }
 
     timepickerPresent(ev, item, ctrl) {
@@ -288,7 +314,7 @@ export class OrariModal implements OnInit {
         });
 
         popover.onWillDismiss(() => {
-            this.changeFascia(item, false);
+            this.changeFascia(item, null, false);
         })
     }
 }

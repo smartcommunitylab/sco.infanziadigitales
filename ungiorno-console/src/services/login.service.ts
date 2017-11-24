@@ -88,6 +88,7 @@ export class LoginService  {
       },
       err => {
         // TODO handle error
+        sessionStorage.clear();
         resolve(LOGIN_STATUS.NOTSIGNEDIN);
       }); 
       

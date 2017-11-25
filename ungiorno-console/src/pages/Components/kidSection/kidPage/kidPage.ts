@@ -659,7 +659,7 @@ export class KidPage implements OnInit {
                 this.editP1Info = true;
             });    
         }
-        this.checkNonSavedValue(this.p1Phones.newItem, () => {});
+        this.checkNonSavedValue(this.p1Phones.newItem, handler);
     }
 
     onP1ContattiCancel() {
@@ -714,7 +714,7 @@ export class KidPage implements OnInit {
                 this.editP1Info = true;
             });    
         }
-        this.checkNonSavedValue(this.p2Phones.newItem, () => {});
+        this.checkNonSavedValue(this.p2Phones.newItem, handler);
     }
 
     onP2ContattiCancel() {

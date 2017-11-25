@@ -659,11 +659,7 @@ export class KidPage implements OnInit {
                 this.editP1Info = true;
             });    
         }
-        this.checkNonSavedValue(this.p1Phones.newItem, () => {
-            setTimeout(() => {
-                this.checkNonSavedValue(this.p1Emails.newItem, handler);                
-            },200);
-        });
+        this.checkNonSavedValue(this.p1Phones.newItem, () => {});
     }
 
     onP1ContattiCancel() {
@@ -718,11 +714,7 @@ export class KidPage implements OnInit {
                 this.editP1Info = true;
             });    
         }
-        this.checkNonSavedValue(this.p2Phones.newItem, () => {
-            setTimeout(() => {
-                this.checkNonSavedValue(this.p2Emails.newItem, handler);                
-            },200);
-        });
+        this.checkNonSavedValue(this.p2Phones.newItem, () => {});
     }
 
     onP2ContattiCancel() {

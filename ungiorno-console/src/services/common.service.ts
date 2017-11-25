@@ -16,7 +16,7 @@ export class CommonService  {
     }
 
     static phoneValidator(val: string, common: CommonService): boolean {
-        if (!/^[0-9]{9,10}$/.test(val)) {
+        if (!/^[0-9]{9,15}$/.test(val)) {
             common.showToast('Formato telefono non valido', null, 1000);
             return false;
         }
@@ -39,7 +39,7 @@ export class CommonService  {
         return null;
     }
     static phoneFieldValidator(control: FormControl): ValidationErrors | null {
-        var re = /^[0-9]{9,10}$/;
+        var re = /^[0-9]{9,15}$/;
         if (control.value && !re.test(control.value)) {
             return {phone: true};
         }

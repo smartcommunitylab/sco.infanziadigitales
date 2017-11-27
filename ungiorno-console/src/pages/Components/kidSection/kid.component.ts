@@ -40,10 +40,10 @@ export class Bambini implements OnInit {
     this.filteredKid = this.selectedSchool.kids;
     this.onFiltroKidChange(this.filtro);
     this.schoolSections = this.selectedSchool.groups.filter(group => group.section)
-    for (let i=0;i<this.schoolSections.length;i++){
-      this.filterArray[this.schoolSections[i].name]= x => x.section ===this.schoolSections[i].name;
+    for (let i = 0; i < this.schoolSections.length; i++) {
+      this.filterArray[this.schoolSections[i].name] = x => x.section === this.schoolSections[i].name;
     }
-    
+
   }
 
   handlerInputChange(e) {
@@ -67,9 +67,19 @@ export class Bambini implements OnInit {
 
   onKidUpdated(kid: Kid) {
     this.selectedKid = null;
-    this.onFiltroKidChange(this.filtro);    
+    this.onFiltroKidChange(this.filtro);
   }
 
+  onKeyModify(event, item) {
+    if (event.keyCode == 32 || event.keyCode == 13) {
+      this.onViewKid(item);
+    }
+  }
+  onKeyDelete(event, item) {
+    if (event.keyCode == 32 || event.keyCode == 13) {
+      this.onDeleteKid(item);
+    }
+  }
   onDeleteKid(item: Kid) {
     let alert = this.alertCtrl.create({
       subTitle: 'Conferma eliminazione',
@@ -84,10 +94,10 @@ export class Bambini implements OnInit {
               this.selectedSchool.kids.splice(this.selectedSchool.kids.findIndex(tmp => tmp.id === item.id), 1);
               this.filteredKid.splice(this.filteredKid.findIndex(tmp => tmp.id === item.id), 1);
               if (this.selectedSchool.groups) {
-                    this.selectedSchool.groups.forEach(g => {
-                      if (g.kids) g.kids = g.kids.filter(kid => kid.toLowerCase() != item.id.toLowerCase());
-                    });
-                  }
+                this.selectedSchool.groups.forEach(g => {
+                  if (g.kids) g.kids = g.kids.filter(kid => kid.toLowerCase() != item.id.toLowerCase());
+                });
+              }
             }, err => {
               // TODO handle error
             });
@@ -132,7 +142,7 @@ export class Bambini implements OnInit {
         let tmpS = x.surname;
         let result = true;
         if (this.filterArray[this.filtro]) result = this.filterArray[this.filtro](x);
-        return result && (tmpN.toLowerCase().indexOf(val.toLowerCase()) >= 0 || tmpS.toLowerCase().indexOf(val.toLowerCase()) >= 0);        
+        return result && (tmpN.toLowerCase().indexOf(val.toLowerCase()) >= 0 || tmpS.toLowerCase().indexOf(val.toLowerCase()) >= 0);
       }
     } else if (this.filterArray[this.filtro]) {
       return this.filterArray[this.filtro];
@@ -155,7 +165,7 @@ export class Bambini implements OnInit {
     this.filteredKid = this.selectedSchool.kids;
     let val = item.target.value;
     // if (val && val.trim() !== '') {
-      this.filteredKid = this.filteredKid.filter(this.getFilterFunction());
+    this.filteredKid = this.filteredKid.filter(this.getFilterFunction());
     // }
   }
 }

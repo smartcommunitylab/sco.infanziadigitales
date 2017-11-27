@@ -35,23 +35,23 @@ import { APP_NAME } from '../../../services/config.service';
 })
 
 export class Gruppi implements OnInit {
-  @Input() selectedSchool : School;
+  @Input() selectedSchool: School;
 
-  toDeleteGroup : Group = new Group('', [], false, []);
+  toDeleteGroup: Group = new Group('', [], false, []);
 
   ordine: string = '0';
-  filtro : string = '0';
-  filteredGroups : Group[];
+  filtro: string = '0';
+  filteredGroups: Group[];
   searchText: string = '';
 
-  constructor(private webService : WebService, private _app: App, public alertCtrl: AlertController, public modalCtrl: ModalController) {}
+  constructor(private webService: WebService, private _app: App, public alertCtrl: AlertController, public modalCtrl: ModalController) { }
 
   ngOnInit(): void {
     this.onFiltroGroupChange(this.filtro);
   }
 
-  showGroupModal(item: Group, isNew : boolean) {
-    let modal = this.modalCtrl.create(GroupModal, {'group' : item, 'school' : this.selectedSchool, 'isNew' : isNew}, {enableBackdropDismiss: false, showBackdrop: false});
+  showGroupModal(item: Group, isNew: boolean) {
+    let modal = this.modalCtrl.create(GroupModal, { 'group': item, 'school': this.selectedSchool, 'isNew': isNew }, { enableBackdropDismiss: false, showBackdrop: false });
     modal.onDidDismiss(data => {
       this.onFiltroGroupChange(this.filtro);
       this._app.setTitle(APP_NAME);
@@ -60,26 +60,36 @@ export class Gruppi implements OnInit {
   }
 
   newGroupModal() {
-    var newGroup =  new Group('', [], false, []);
+    var newGroup = new Group('', [], false, []);
     this.showGroupModal(newGroup, true);
   }
   newSectionModal() {
-    var newGroup =  new Group('', [], true, []);
+    var newGroup = new Group('', [], true, []);
     this.showGroupModal(newGroup, true);
   }
 
-  onDeleteGroup(item : Group) {
+  onKeyModify(event, item) {
+    if (event.keyCode == 32 || event.keyCode == 13) {
+      this.showGroupModal(item, false);
+    }
+  }
+  onKeyDelete(event, item) {
+    if (event.keyCode == 32 || event.keyCode == 13) {
+      this.onDeleteGroup(item);
+    }
+  }
+  onDeleteGroup(item: Group) {
     let hasKids = !!item.kids && item.kids.length > 0;
     let hasTeachers = !!item.teachers && item.teachers.length > 0;
 
     let alert = this.alertCtrl.create({
-            subTitle: 'Conferma eliminazione',
+      subTitle: 'Conferma eliminazione',
 
-            message:  (hasKids || hasTeachers) && item.section 
-                    ? 'Attenzione! I bambini di questa sezione dovranno essere associati ad un’altra sezione'
-                    : null,
-            cssClass:'alertWarningCss',
-            buttons: [
+      message: (hasKids || hasTeachers) && item.section
+        ? 'Attenzione! I bambini di questa sezione dovranno essere associati ad un’altra sezione'
+        : null,
+      cssClass: 'alertWarningCss',
+      buttons: [
         {
           text: "Annulla"
         },
@@ -93,10 +103,10 @@ export class Gruppi implements OnInit {
               if (item.section) {
                 this.selectedSchool.kids.forEach(kid => {
                   if (kid.section == item.name) kid.section = null;
-                });  
+                });
               }
               this.selectedSchool.groups = tmpSchool.groups;
-              this.onFiltroGroupChange(this.filtro);              
+              this.onFiltroGroupChange(this.filtro);
             }, err => {
               // TODO handle error
             });
@@ -107,28 +117,28 @@ export class Gruppi implements OnInit {
     alert.present();
   }
 
-  onOrdineChange(ordine : string) {
-    switch(ordine) {
+  onOrdineChange(ordine: string) {
+    switch (ordine) {
       case '0':
         this.filteredGroups.sort((item1, item2) => item1.name.localeCompare(item2.name));
-      break;
+        break;
       case '1':
         this.filteredGroups.sort((item1, item2) => item2.name.localeCompare(item1.name));
-      break;
+        break;
       case '2':
         this.filteredGroups.sort((item1, item2) => {
-           if(item1.kids.length > item2.kids.length) return -1
-          else if(item1.kids.length < item2.kids.length) return 1
+          if (item1.kids.length > item2.kids.length) return -1
+          else if (item1.kids.length < item2.kids.length) return 1
           return 0
         })
-      break;
+        break;
       case '3':
         this.filteredGroups.sort((item1, item2) => {
-          if(item1.kids.length > item2.kids.length) return 1
-          else if(item1.kids.length < item2.kids.length) return -1
+          if (item1.kids.length > item2.kids.length) return 1
+          else if (item1.kids.length < item2.kids.length) return -1
           return 0
         })
-      break;
+        break;
     }
   }
 
@@ -145,7 +155,7 @@ export class Gruppi implements OnInit {
         let tmp = x.name;
         let result = true;
         if (this.filterArray[this.filtro]) result = this.filterArray[this.filtro](x);
-        return result && (tmp.toLowerCase().indexOf(val.toLowerCase()) >= 0);        
+        return result && (tmp.toLowerCase().indexOf(val.toLowerCase()) >= 0);
       }
     } else if (this.filterArray[this.filtro]) {
       return this.filterArray[this.filtro];

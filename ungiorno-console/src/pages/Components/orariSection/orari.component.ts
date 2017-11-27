@@ -57,7 +57,7 @@ export class Orari implements OnInit {
         modal.onDidDismiss((data) => {
             this._app.setTitle(APP_NAME);
             this.filteredOrari = this.orderFasce(this.selectedSchool.servizi);
-           
+
         });
         modal.present();
     }
@@ -68,6 +68,16 @@ export class Orari implements OnInit {
     orderFasce(fasce) {
         var tmpFasce = fasce.sort(compare);
         return tmpFasce;
+    }
+    onKeyModify(event, item) {
+        if (event.keyCode == 32 || event.keyCode == 13) {
+            this.showOrariModal(item, false);
+        }
+    }
+    onKeyDelete(event, item) {
+        if (event.keyCode == 32 || event.keyCode == 13) {
+            this.onDeleteOrario(item);
+        }
     }
     onDeleteOrario(item: Service) {
         let hasOrario = false;

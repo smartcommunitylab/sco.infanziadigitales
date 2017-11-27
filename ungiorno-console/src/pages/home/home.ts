@@ -67,7 +67,7 @@ export class HomePage implements OnInit {
     private cdRef: ChangeDetectorRef,
     private userService: UserService,
     private common: CommonService) {
-    }
+  }
 
   ngOnInit(): void {
     let authorizedSchools = this.userService.getAuthorizedSchools();
@@ -88,7 +88,7 @@ export class HomePage implements OnInit {
           }
         ]
       })
-      alert.present();      
+      alert.present();
       return;
     }
     this.schools = this.userService.getAuthorizedSchools();
@@ -101,7 +101,7 @@ export class HomePage implements OnInit {
 
   ionViewDidEnter() {
     this._app.setTitle(APP_NAME);
-}
+  }
 
   doRerender() {
     this.rerender = true;
@@ -109,35 +109,35 @@ export class HomePage implements OnInit {
     this.rerender = false;
   }
 
-  private checkChanges(ok: ()=>void, cancel: ()=>void) {
+  private checkChanges(ok: () => void, cancel: () => void) {
     if (this.common.hasChangedForm()) {
       let alert = this.alertCtrl.create({
         subTitle: 'Eventuali modifiche non salvate verrano perse. Confermi?',
         buttons: [
-            {
-                text: "Annulla",
-                handler: cancel
-            },
-            {
-                text: 'OK',
-                handler: () => {
-                    this.common.clearChanges();
-                    ok();
-                }
+          {
+            text: "Annulla",
+            handler: cancel
+          },
+          {
+            text: 'OK',
+            handler: () => {
+              this.common.clearChanges();
+              ok();
             }
+          }
         ]
       })
       alert.present();
     } else {
       ok();
-    }        
+    }
   }
-    
-    
+
+
 
   changeSchool(selectedId: String) {
-    setTimeout(()=>{
-      this.checkChanges(()=> {
+    setTimeout(() => {
+      this.checkChanges(() => {
         let s: School[] = this.schools.filter(s => s.id === selectedId);
         console.log(s[0].id);
         if (s != undefined) {
@@ -147,10 +147,18 @@ export class HomePage implements OnInit {
         this.settings = "profilo"
         this.settingsSeg = "profilo"
       }, () => {
-        this.selectedId = this.selectedSchool.id;      
+        this.selectedId = this.selectedSchool.id;
       });
     }, 10);
 
+  }
+
+
+  onSelectSegment(event,segment) {
+    if (event.keyCode == 32 || event.keyCode == 13) {
+      this.settings=segment;
+      this.settingsSeg=segment;
+    };
   }
 
   onSchoolChange(selectedAppId: string, selectedId: string) {
@@ -185,7 +193,7 @@ export class HomePage implements OnInit {
   }
 
   onSegmentChange(event) {
-    this.checkChanges(()=> {
+    this.checkChanges(() => {
       this.settings = this.settingsSeg;
     }, () => {
       this.settingsSeg = this.settings;
@@ -194,8 +202,8 @@ export class HomePage implements OnInit {
 
   logout() {
     this.checkChanges(() => {
-      this.loginService.logout();      
-    }, () => {});
+      this.loginService.logout();
+    }, () => { });
     // window.location.reload();
   }
 }

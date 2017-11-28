@@ -231,10 +231,10 @@ public class ConsoleWebController {
             @PathVariable String schoolId, @PathVariable String teacherId,
             @PathVariable String sectionId) throws UnsupportedEncodingException {
     	
-    	byte[] sectionIdBytes = sectionId.getBytes();
+    	byte[] sectionIdBytes = sectionId.getBytes("ISO-8859-1");
     	sectionId = new String(sectionIdBytes, "UTF-8");
     	
-        logger.info("user {} adds teacher {} to section/group {}.", permissionsManager.getUserId(),
+        logger.info("user {} adds teacher {} to section/group {}", permissionsManager.getUserId(),
                 teacherId, sectionId);
         return new Response<>(
                 teacherManager.addToSectionOrGroup(appId, schoolId, teacherId, sectionId));

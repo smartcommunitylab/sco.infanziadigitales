@@ -39,6 +39,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
+import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
@@ -234,4 +235,13 @@ public class AppConfig extends WebMvcConfigurerAdapter {
     public void configurePathMatch(PathMatchConfigurer configurer) {        
       configurer.setPathMatcher(pathMatcher());
     }
+    
+    @Bean 
+    public CharacterEncodingFilter characterEncodingFilter() { 
+        CharacterEncodingFilter filter = new CharacterEncodingFilter(); 
+        filter.setEncoding("UTF-8"); 
+        filter.setForceEncoding(true); 
+        return filter; 
+    } 
+
 }

@@ -135,11 +135,29 @@ export class OrariModal implements OnInit {
                         let schoolCopy = School.copy(this.selectedSchool);
                         if (this.isNew) {
                             schoolCopy.servizi.push(this.copiedOrario);
+                        } else {
+                            //change it
+                            if (schoolCopy.servizi){
+                                for (let i=0;i<schoolCopy.servizi.length;i++){
+                                    if (schoolCopy.servizi[i].servizio.toLowerCase==this.copiedOrario.servizio.toLowerCase)
+                                    {
+                                        schoolCopy.servizi[i] = this.copiedOrario;
+                                    }
+                                }
+                            }
                         }
                         this.webService.update(schoolCopy).then(() => {
                             Object.assign(this.selectedOrario, this.copiedOrario);
                             if (this.isNew) {
                                 this.selectedSchool.servizi.push(this.selectedOrario);
+                            } 
+                            else {
+                                for (let i=0;i<schoolCopy.servizi.length;i++){
+                                    if (this.selectedSchool.servizi[i].servizio.toLowerCase==this.copiedOrario.servizio.toLowerCase)
+                                    {
+                                        this.selectedSchool.servizi[i] = this.selectedOrario;
+                                    }
+                                } 
                             }
                             this.navCtrl.pop();
 

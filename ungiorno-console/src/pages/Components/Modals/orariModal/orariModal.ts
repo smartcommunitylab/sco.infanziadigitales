@@ -139,7 +139,7 @@ export class OrariModal implements OnInit {
                             //change it
                             if (schoolCopy.servizi){
                                 for (let i=0;i<schoolCopy.servizi.length;i++){
-                                    if (schoolCopy.servizi[i].servizio.toLowerCase==this.copiedOrario.servizio.toLowerCase)
+                                    if (schoolCopy.servizi[i].servizio.toLowerCase()==this.copiedOrario.servizio.toLowerCase())
                                     {
                                         schoolCopy.servizi[i] = this.copiedOrario;
                                     }
@@ -153,7 +153,7 @@ export class OrariModal implements OnInit {
                             } 
                             else {
                                 for (let i=0;i<schoolCopy.servizi.length;i++){
-                                    if (this.selectedSchool.servizi[i].servizio.toLowerCase==this.copiedOrario.servizio.toLowerCase)
+                                    if (this.selectedSchool.servizi[i].servizio.toLowerCase()==this.copiedOrario.servizio.toLowerCase())
                                     {
                                         this.selectedSchool.servizi[i] = this.selectedOrario;
                                     }

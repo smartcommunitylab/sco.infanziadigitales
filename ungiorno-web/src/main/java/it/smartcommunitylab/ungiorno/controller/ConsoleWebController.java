@@ -206,7 +206,10 @@ public class ConsoleWebController {
     @RequestMapping(method = RequestMethod.GET,
             value = "/consoleweb/{appId}/{schoolId}/group/{groupId}")
     public @ResponseBody Response<GroupDTO> readGroupInfo(@PathVariable String appId,
-            @PathVariable String schoolId, @PathVariable String groupId) {
+            @PathVariable String schoolId, @PathVariable String groupId) throws UnsupportedEncodingException {
+
+    	byte[] groupIdBytes = groupId.getBytes("ISO-8859-1");
+    	groupId = new String(groupIdBytes, "UTF-8");
 
         GroupDTO group = storage.getGroupData(appId, schoolId, groupId);
         if (group != null) {
@@ -244,7 +247,11 @@ public class ConsoleWebController {
             value = "/consoleweb/{appId}/{schoolId}/teacher/{teacherId}/section/{sectionId}")
     public @ResponseBody Response<Teacher> removeTeacherFromSection(@PathVariable String appId,
             @PathVariable String schoolId, @PathVariable String teacherId,
-            @PathVariable String sectionId) {
+            @PathVariable String sectionId) throws UnsupportedEncodingException {
+    	
+    	byte[] sectionIdBytes = sectionId.getBytes("ISO-8859-1");
+    	sectionId = new String(sectionIdBytes, "UTF-8");
+    	
         logger.info("user {} removes teacher {} to section/group {}",
                 permissionsManager.getUserId(), teacherId, sectionId);
         return new Response<>(
@@ -267,7 +274,11 @@ public class ConsoleWebController {
             value = "/consoleweb/{appId}/{schoolId}/kid/{kidId}/group/{groupId}")
     public @ResponseBody Response<KidProfile> deleteFromGroup(@PathVariable String appId,
             @PathVariable String schoolId, @PathVariable String kidId,
-            @PathVariable String groupId) {
+            @PathVariable String groupId) throws UnsupportedEncodingException {
+    	
+    	byte[] sectionIdBytes = groupId.getBytes("ISO-8859-1");
+    	groupId = new String(sectionIdBytes, "UTF-8");
+
         logger.info("user {} removes kid {} from group {}", permissionsManager.getUserId(), kidId,
                 groupId);
         return new Response<>(kidManager.removeFromGroup(appId, schoolId, kidId, groupId));
@@ -277,7 +288,9 @@ public class ConsoleWebController {
             value = "/consoleweb/{appId}/{schoolId}/kid/{kidId}/section/{sectionId}")
     public @ResponseBody Response<KidProfile> deleteFromSection(@PathVariable String appId,
             @PathVariable String schoolId, @PathVariable String kidId,
-            @PathVariable String sectionId) {
+            @PathVariable String sectionId) throws UnsupportedEncodingException {
+    	byte[] sectionIdBytes = sectionId.getBytes("ISO-8859-1");
+    	sectionId = new String(sectionIdBytes, "UTF-8");
         logger.info("user {} removes kid {} from section {}", permissionsManager.getUserId(), kidId,
                 sectionId);
         return new Response<>(kidManager.removeFromSection(appId, schoolId, kidId, sectionId));

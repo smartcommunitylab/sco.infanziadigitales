@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -228,8 +229,12 @@ public class ConsoleWebController {
             value = "/consoleweb/{appId}/{schoolId}/teacher/{teacherId}/section/{sectionId}")
     public @ResponseBody Response<Teacher> addTeacherToSection(@PathVariable String appId,
             @PathVariable String schoolId, @PathVariable String teacherId,
-            @PathVariable String sectionId) {
-        logger.info("user {} adds teacher {} to section/group {}", permissionsManager.getUserId(),
+            @PathVariable String sectionId) throws UnsupportedEncodingException {
+    	
+    	byte[] sectionIdBytes = sectionId.getBytes();
+    	sectionId = new String(sectionIdBytes, "UTF-8");
+    	
+        logger.info("user {} adds teacher {} to section/group {}.", permissionsManager.getUserId(),
                 teacherId, sectionId);
         return new Response<>(
                 teacherManager.addToSectionOrGroup(appId, schoolId, teacherId, sectionId));

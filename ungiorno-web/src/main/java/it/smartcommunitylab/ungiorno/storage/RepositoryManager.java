@@ -860,7 +860,8 @@ public class RepositoryManager implements RepositoryService {
             for (AuthPerson ap : kp.getPersons()) {
                 if (ap.getPersonId().equals(personId)) {
                 	busKidProfile.setPersonWhoWaitName(ap.getFullName());
-                	busKidProfile.setPersonWhoWaitRelation(ap.getRelation());
+                	if (ap.isParent()) busKidProfile.setPersonWhoWaitIsParent(true);
+                	else busKidProfile.setPersonWhoWaitRelation(ap.getRelation());
                 }
             }
 

@@ -26,6 +26,7 @@ public class BusData extends SchoolObject{
 	public static class KidProfile {
 		private String kidId, personWhoWaitId, personWhoWaitName, personWhoWaitRelation, fullName, busStop, image;
 		private boolean variation;
+		private boolean personWhoWaitIsParent;
 
 		public String getKidId() {
 			return kidId;
@@ -90,6 +91,14 @@ public class BusData extends SchoolObject{
 		public void setVariation(boolean variation) {
 			this.variation = variation;
 		}
+
+		public boolean isPersonWhoWaitIsParent() {
+			return personWhoWaitIsParent;
+		}
+
+		public void setPersonWhoWaitIsParent(boolean personWhoWaitIsParent) {
+			this.personWhoWaitIsParent = personWhoWaitIsParent;
+		}
 	}
 
 	public static class Bus {
@@ -113,6 +122,7 @@ public class BusData extends SchoolObject{
 		public void setChildren(List<KidProfile> children) {
 			this.children = children;
 		}
+		
 	}
 
 	private long date;

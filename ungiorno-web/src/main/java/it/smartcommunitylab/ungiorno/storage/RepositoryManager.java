@@ -1602,7 +1602,7 @@ public class RepositoryManager implements RepositoryService {
     public List<UsageEntity> findUsageEntities(String appId, String schoolId, UsageAction action) {
         Criteria criteria = new Criteria("appId").is(appId).and("schoolId").is(schoolId);
         if (action != null) {
-            criteria = criteria.and("action").is(action);
+            criteria = criteria.and("action").is(action.toString());
         }
 
         Query query = new Query(criteria).with(new Sort(Sort.Direction.ASC, "timestamp"));

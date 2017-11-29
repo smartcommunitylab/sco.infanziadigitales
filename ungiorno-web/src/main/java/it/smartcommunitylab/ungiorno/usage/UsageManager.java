@@ -79,6 +79,7 @@ public class UsageManager {
 		}
 		
 		List<String> dl = Lists.newArrayList(dates);
+		if (dl.size() == 0) return dates;
 		Date start;
 //		Date end = osdf.parse(dl.get(dl.size() - 1));
 		Date end = new Date();
@@ -103,8 +104,6 @@ public class UsageManager {
 
 		} catch (ParseException e) {
 		}
-		
-		System.out.println(dates);
 		
 		return dates;
 	}	

@@ -68,7 +68,7 @@ public class SchoolController {
     }
 
 
-    @RequestMapping(method = RequestMethod.GET, value = "/school/log/{appId}/{schoolId}/{kidId}/{action}")
+    @RequestMapping(method = RequestMethod.PUT, value = "/school/log/{appId}/{schoolId}/{kidId}/{action}")
     public @ResponseBody Response<Void> putLog(@PathVariable String appId, @PathVariable String schoolId,  @PathVariable String kidId, @PathVariable String action) {
     	usageManager.genericAction(appId, schoolId, kidId, UsageAction.valueOf(action));
     	return new Response<Void>();

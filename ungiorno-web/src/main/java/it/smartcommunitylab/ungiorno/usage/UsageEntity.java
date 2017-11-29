@@ -10,7 +10,10 @@ public class UsageEntity implements Comparable<UsageEntity> {
 	};
 
 	public enum UsageAction {
-		MESSAGE, RETURN, ABSENCE
+		COMMUNICATION, MESSAGE_TO_PARENT, MESSAGE_TO_TEACHER, 
+		APP_START, CALL, 
+		DAILY_PLAN, WEEKLY_PLAN, DEFAULT_PLAN, DEFAULT_USAGE, PREVIOUS_WEEK_USAGE,
+		NOTIFICATION_SETUP
 	};
 
 	private String description;

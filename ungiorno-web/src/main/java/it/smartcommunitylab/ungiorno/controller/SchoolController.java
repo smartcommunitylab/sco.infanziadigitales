@@ -38,6 +38,7 @@ import it.smartcommunitylab.ungiorno.model.SchoolProfile;
 import it.smartcommunitylab.ungiorno.model.SectionData;
 import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.services.RepositoryService;
+import it.smartcommunitylab.ungiorno.usage.UsageEntity.UsageAction;
 import it.smartcommunitylab.ungiorno.usage.UsageEntity.UsageActor;
 import it.smartcommunitylab.ungiorno.usage.UsageManager;
 import it.smartcommunitylab.ungiorno.utils.JsonUtil;
@@ -67,6 +68,13 @@ public class SchoolController {
     }
 
 
+    @RequestMapping(method = RequestMethod.GET, value = "/school/log/{appId}/{schoolId}/{kidId}/{action}")
+    public @ResponseBody Response<Void> putLog(@PathVariable String appId, @PathVariable String schoolId,  @PathVariable String kidId, @PathVariable String action) {
+    	usageManager.genericAction(appId, schoolId, kidId, UsageAction.valueOf(action));
+    	return new Response<Void>();
+    }
+
+    
     @RequestMapping(method = RequestMethod.GET, value = "/school/{appId}/{schoolId}/profile")
     public @ResponseBody Response<SchoolProfile> getSchoolProfile(@PathVariable String appId,
             @PathVariable String schoolId) {

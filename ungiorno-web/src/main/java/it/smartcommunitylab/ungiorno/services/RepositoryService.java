@@ -26,7 +26,6 @@ import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.storage.App;
 import it.smartcommunitylab.ungiorno.usage.UsageEntity;
 import it.smartcommunitylab.ungiorno.usage.UsageEntity.UsageAction;
-import it.smartcommunitylab.ungiorno.usage.UsageEntity.UsageActor;
 
 
 public interface RepositoryService {

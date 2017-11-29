@@ -28,7 +28,7 @@ import it.smartcommunitylab.ungiorno.config.exception.ProfileNotFoundException;
 import it.smartcommunitylab.ungiorno.model.Author;
 import it.smartcommunitylab.ungiorno.model.ChatMessage;
 import it.smartcommunitylab.ungiorno.services.RepositoryService;
-import it.smartcommunitylab.ungiorno.usage.UsageEntity.UsageActor;
+import it.smartcommunitylab.ungiorno.usage.UsageEntity.UsageAction;
 import it.smartcommunitylab.ungiorno.usage.UsageManager;
 import it.smartcommunitylab.ungiorno.utils.NotificationManager;
 import it.smartcommunitylab.ungiorno.utils.PermissionsManager;
@@ -132,8 +132,7 @@ public class ChatController {
             logger.info(String.format("sendMessageToTeacher[%s]: %s - %s", appId, schoolId, kidId));
         }
 
-        usageManager.messageSent(appId, schoolId, kidId, null, UsageActor.PARENT,
-                UsageActor.TEACHER, false);
+        usageManager.messageSent(appId, schoolId, permissions.getUserId(), null, kidId, UsageAction.MESSAGE_TO_TEACHER);
 
         return result;
     }
@@ -169,8 +168,7 @@ public class ChatController {
                     kidId, teacherId));
         }
 
-        usageManager.messageSent(appId, schoolId, teacherId, kidId, UsageActor.TEACHER,
-                UsageActor.PARENT, false);
+        usageManager.messageSent(appId, schoolId, teacherId, null, kidId, UsageAction.MESSAGE_TO_PARENT);
 
         return result;
     }

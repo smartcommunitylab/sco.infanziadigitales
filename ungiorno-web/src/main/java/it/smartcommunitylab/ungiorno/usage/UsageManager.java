@@ -1,9 +1,5 @@
 package it.smartcommunitylab.ungiorno.usage;
 
-import it.smartcommunitylab.ungiorno.services.RepositoryService;
-import it.smartcommunitylab.ungiorno.usage.UsageEntity.UsageAction;
-import it.smartcommunitylab.ungiorno.usage.UsageEntity.UsageActor;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -22,6 +18,9 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 
+import it.smartcommunitylab.ungiorno.services.RepositoryService;
+import it.smartcommunitylab.ungiorno.usage.UsageEntity.UsageAction;
+
 @Component
 public class UsageManager {
 
@@ -31,18 +30,13 @@ public class UsageManager {
 	private SimpleDateFormat osdf = new SimpleDateFormat("yy/MM/dd");
 	private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
 	
-	public void messageSent(String appId, String schoolId, String fromId, String toId, UsageActor from, UsageActor to, boolean multi) {
-		String type = multi?"Comunicazione":("Messaggio da " + (from.equals(UsageActor.TEACHER)?"insegnante":"genitore"));
-		UsageAction action = 
-				  from.equals(UsageActor.TEACHER) 
-				? (multi ? UsageAction.COMMUNICATION : UsageAction.MESSAGE_TO_PARENT)
-				: UsageAction.MESSAGE_TO_TEACHER;		
-		UsageEntity ue = new UsageEntity(type, from, to, fromId, toId, action, multi?"multi":"", appId, schoolId);
+	public void messageSent(String appId, String schoolId, String fromId, String toId, String kidId, UsageAction action) {
+		UsageEntity ue = new UsageEntity(fromId, toId, kidId, action, null, appId, schoolId);
 		repository.saveUsageEntity(ue);
 	}
 	
-	public void genericAction(String appId, String schoolId, String kidId, UsageAction action) {
-		UsageEntity ue = new UsageEntity(action.toString(), UsageActor.PARENT, null, kidId, null, action, null, appId, schoolId);
+	public void parentAction(String appId, String schoolId, String kidId, String parentId, UsageAction action) {
+		UsageEntity ue = new UsageEntity(parentId, null, kidId, action, null, appId, schoolId);
 		repository.saveUsageEntity(ue);
 	}
 	

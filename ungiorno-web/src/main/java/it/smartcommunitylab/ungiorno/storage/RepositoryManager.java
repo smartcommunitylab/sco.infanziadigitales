@@ -852,7 +852,18 @@ public class RepositoryManager implements RepositoryService {
                 continue;
 
             busKidProfile.setBusStop(day.getFermata());
-            busKidProfile.setPersonWhoWaitId(day.getDelega_name());
+            String personId = day.getDelega_name();
+            if (personId == null) {
+                personId = findDefaultPerson(kp);
+            }
+            busKidProfile.setPersonWhoWaitId(personId);
+            for (AuthPerson ap : kp.getPersons()) {
+                if (ap.getPersonId().equals(personId)) {
+                	busKidProfile.setPersonWhoWaitName(ap.getFullName());
+                	busKidProfile.setPersonWhoWaitRelation(ap.getRelation());
+                }
+            }
+
 
             mm.put(kp.getServices().getBus().getBusId(), busKidProfile);
         }

@@ -1360,7 +1360,9 @@ textarea {
   padding: 10px;
   margin-bottom: 0px;
 }
-
+#bus .bus-person-name{
+  display:inline;
+} 
 .pin-popup .popup {
   width: 350px;
 }
@@ -2480,7 +2482,9 @@ background-repeat: no-repeat;
   /* ascii code for the ellipsis character */
   width: 0px;
 }
-
+#babyprofile .groups-profile{
+  margin-left: 8px;
+}
 @keyframes ellipsis {
   to {
     width: 1.25em;

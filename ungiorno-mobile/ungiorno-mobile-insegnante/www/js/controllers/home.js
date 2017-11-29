@@ -269,7 +269,7 @@ $scope.cnt=0;
         var fromtime=$scope.getSchoolProfileNormalConfig['fromTime'];
         var totime=$scope.getSchoolProfileNormalConfig['toTime'];
         if(fromtime=='' && totime==''){
-            alert($filter('translate')('missing_school_config'));
+            // alert($filter('translate')('missing_school_config'));
             fromtime=moment('7:30','H:mm');
             totime=moment('13:30','H:mm');
         }

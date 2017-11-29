@@ -15,6 +15,8 @@ package it.smartcommunitylab.ungiorno.model;
 
 import java.util.List;
 
+import org.springframework.util.StringUtils;
+
 import it.smartcommunitylab.ungiorno.diary.model.DiaryKid.DiaryKidPerson;
 
 /**
@@ -51,6 +53,7 @@ public class AuthPerson {
     }
 
     public String getFullName() {
+    	if (StringUtils.isEmpty(fullName)) return firstName + " "+ lastName;
         return fullName;
     }
 

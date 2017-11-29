@@ -1360,7 +1360,9 @@ textarea {
   padding: 10px;
   margin-bottom: 0px;
 }
-
+#bus .bus-person-name{
+  display:inline;
+} 
 .pin-popup .popup {
   width: 350px;
 }

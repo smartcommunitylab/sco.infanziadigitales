@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.home', [])
 
-  .controller('HomeCtrl', function ($scope, $rootScope, $location, $state, $filter, $q, $ionicPopup, $ionicPlatform, $ionicLoading, dataServerService, profileService, configurationService, Toast, Config, pushNotificationService, messagesService, communicationsService, week_planService) {
+  .controller('HomeCtrl', function ($scope, $rootScope, $location, $state, $filter, $q, $ionicPopup, $ionicPlatform, $ionicLoading, dataServerService, profileService, configurationService, logService, Toast, Config, pushNotificationService, messagesService, communicationsService, week_planService) {
 
     $scope.date = "";
     $scope.kidProfile = {};
@@ -198,6 +198,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
       window.open('tel:' + num, '_system');
       if ($scope.contactPopup) {
         $scope.contactPopup.close();
+      }
+      if ($scope.kidProfile) {
+        logService.logCall($scope.kidProfile.schoolId, $scope.kidProfile.kidId);
       }
     }
     $scope.createNote = function () {
@@ -470,7 +473,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
           cssClass: 'expired-popup',
           scope: $scope,
           template: $filter('translate')('retire_popup_toolate_text') + " " + moment($scope.modifyBefore).format('HH:mm') + "<div class\"row\"><span ng-click=\"callSchool();\"  class=\"button button-expired-call\">" + $filter('translate')('home_contatta') + "</span></div>"
-          + "<div class\"row\"><span ng-click=\"gotoChat();\"  class=\"button button-expired-call\">" + $filter('translate')('send_msg') + "</span></div>",
+            + "<div class\"row\"><span ng-click=\"gotoChat();\"  class=\"button button-expired-call\">" + $filter('translate')('send_msg') + "</span></div>",
           buttons: [
             {
               text: $filter('translate')('retire_popup_absent_close'),
@@ -535,31 +538,39 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
       var schoolId = $scope.kidProfile.schoolId;
       var kidId = $scope.kidProfile.kidId;
 
-        //getSchoolProfile(appId, schoolId) puo' essere diversa in base al bambino
-        //ottengo
-        //ottengo la scuola in base alla schoolId del bambino
-        dataServerService.getSchoolProfile(schoolId, kidId).then(function (data) {
-          var profile = data;
-          profileService.setSchoolProfile(profile);
-          $scope.school = profile;
-          getBriefInfo($scope.kidProfile.schoolId);
+      //getSchoolProfile(appId, schoolId) puo' essere diversa in base al bambino
+      //ottengo
+      //ottengo la scuola in base alla schoolId del bambino
+      dataServerService.getSchoolProfile(schoolId, kidId).then(function (data) {
+        var profile = data;
+        profileService.setSchoolProfile(profile);
+        $scope.school = profile;
+        getBriefInfo($scope.kidProfile.schoolId);
 
-          var config = {
-            "appId": Config.appId(),
-            "schoolId": schoolId,
-            "kidId": kidId,
-            "services": $scope.kidProfile.services,
-            "exitTime": $scope.briefInfo['ore_uscita'],
-            "defaultPerson": $scope.kidProfile.persons[0].personId,
-            "receiveNotification": true,
-            "extraPersons": null
-          }
-          $scope.kidConfiguration = config;
-          configurationService.setBabyConfiguration(config);
-                  
-          $scope.noConnection = false;
-          buildHome();
-        });
+        var config = {
+          "appId": Config.appId(),
+          "schoolId": schoolId,
+          "kidId": kidId,
+          "services": $scope.kidProfile.services,
+          "exitTime": $scope.briefInfo['ore_uscita'],
+          "defaultPerson": $scope.kidProfile.persons[0].personId,
+          "receiveNotification": true,
+          "extraPersons": null
+        }
+        $scope.kidConfiguration = config;
+        configurationService.setBabyConfiguration(config);
+
+        $scope.noConnection = false;
+        buildHome();
+      }, function (error){
+        console.log("ERROR -> " + error);
+        // $scope.noConnection = true;
+        Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+        $ionicLoading.hide();
+        // if (error == 406) {
+        //   $rootScope.allowed = false;
+        // }
+      });
       return deferred.promise;
     }
     var registerPushNotification = function (data) {
@@ -610,11 +621,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
     }
     //document.addEventListener("resume", onResume, false);
+    var logStart = function () {
+      if ($scope.kidProfile) {
+        logService.logStart($scope.kidProfile.schoolId, $scope.kidProfile.kidId);
+      }
+    }
     $ionicPlatform.on('resume', onResume);
 
     function onResume() {
       // Handle the resume event
       getCommunications();
+      logStart();
     }
     //corretto tutte e tre annidate? cosa succede se una salta? ma come faccio a settare il profilo temporaneo senza avere conf, prof????
     $scope.getConfiguration = function () {

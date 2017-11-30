@@ -66,6 +66,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.messagesService',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.notification',
     'it.smartcommunitylab.infanziadigitales.diario.parents.services.week_planService',
+    'it.smartcommunitylab.infanziadigitales.diario.parents.services.logService',
     'it.smartcommunitylab.infanziadigitales.diario.parents.controllers.week_plan',
     'it.smartcommunitylab.infanziadigitales.diario.parents.directives',
     'angularMoment',

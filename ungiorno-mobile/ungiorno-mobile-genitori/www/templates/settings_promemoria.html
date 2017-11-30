@@ -12,7 +12,7 @@
         <div class="promemoria">
             <div class="setting-label">
                 <label class="control control-checkbox promcheck">
-                    <input type="checkbox" ng-model="currData['prom_day_summary']" ng-click="setNotify()" />
+                    <input type="checkbox" ng-model="currData['prom_day_summary']" ng-click="setNotify(currData['prom_day_summary'])" />
                     <div class="control_indicator"></div>
                 </label>
                 <span class="prom">{{'prom_day_summary_first' | translate}}
@@ -37,7 +37,7 @@
             <br/>
             <div class="setting-label">
                 <label class="control control-checkbox promcheck">
-                    <input type="checkbox" ng-model="currData['prom_week']" ng-click="setNotify()" />
+                    <input type="checkbox" ng-model="currData['prom_week']" ng-click="setNotify(currData['prom_week'])" />
                     <div class="control_indicator"></div>
                 </label>
                 <span class="prom">{{'prom_week_first' | translate}}
@@ -70,7 +70,7 @@
             <br/>
             <div class="setting-label">
                 <label class="control control-checkbox promcheck">
-                    <input type="checkbox" ng-model="currData['prom_day_ritiro']" ng-click="setNotify()" />
+                    <input type="checkbox" ng-model="currData['prom_day_ritiro']" ng-click="setNotify(currData['prom_day_ritiro'])" />
                     <div class="control_indicator"></div>
                 </label>
                 <span class="prom">{{'prom_day_ritiro_first' | translate}}

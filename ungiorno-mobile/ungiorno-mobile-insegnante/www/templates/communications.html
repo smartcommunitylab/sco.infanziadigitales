@@ -71,6 +71,11 @@
             <button class="button button-icon button-communications icon ion-edit" ng-class="{'button-disabled': isMode('edit')||isMode('new')}" ng-click="editCommunicationMode($index)"></button>
           </div>
         </div>
+        <div class="row">
+            <div class="col">
+              <div class="comm-creation-date">{{'communication_group' | translate}}<span ng-if="communication.groupId">  {{communication.groupId}}</span><span ng-if="!communication.groupId">  {{'communication_group_all' | translate}}</span> </div>
+            </div>
+          </div>
         <div class="row" ng-if="controlDateToCheck($index)">
           <div class="col">
             {{'deadline' | translate}}: {{communication.dateToCheck | date}}</div>

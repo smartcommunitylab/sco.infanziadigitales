@@ -523,7 +523,9 @@ return {
     auth_person:"L'incaricato del ritiro è ",
     none_f:"Nessuna fermata specificata",
     no_person:"Nessuna persona specificata",
-    baby_section:"Fa parte dei gruppi/sezioni:"
+    baby_section:"Fa parte dei gruppi/sezioni:",
+    communication_group_all:"Tutti",
+    communication_group:"Inviato a "
   });
 
   $translateProvider.preferredLanguage("it");

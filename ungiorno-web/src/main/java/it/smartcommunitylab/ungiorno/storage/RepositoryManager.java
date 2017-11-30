@@ -84,7 +84,6 @@ import it.smartcommunitylab.ungiorno.model.TimeSlotSchoolService;
 import it.smartcommunitylab.ungiorno.services.RepositoryService;
 import it.smartcommunitylab.ungiorno.usage.UsageEntity;
 import it.smartcommunitylab.ungiorno.usage.UsageEntity.UsageAction;
-import it.smartcommunitylab.ungiorno.usage.UsageEntity.UsageActor;
 import it.smartcommunitylab.ungiorno.utils.Utils;
 
 @Component
@@ -1600,34 +1599,10 @@ public class RepositoryManager implements RepositoryService {
     }
 
     @Override
-    public List<UsageEntity> findUsageEntities(String appId, String schoolId, UsageAction action,
-            UsageActor from, UsageActor to, Object extra, Long fromTime, Long toTime) {
+    public List<UsageEntity> findUsageEntities(String appId, String schoolId, UsageAction action) {
         Criteria criteria = new Criteria("appId").is(appId).and("schoolId").is(schoolId);
         if (action != null) {
-            criteria = criteria.and("action").is(action);
-        }
-        if (from != null) {
-            criteria = criteria.and("from").is(from);
-        }
-        if (to != null) {
-            criteria = criteria.and("to").is(from);
-        }
-        if (extra != null) {
-            criteria = criteria.and("extra").is(extra);
-        }
-
-        Criteria range = null;
-        if (fromTime != null) {
-            range = new Criteria("timestamp").gte(fromTime);
-        }
-        if (toTime != null) {
-            if (range == null) {
-                range = new Criteria("timestamp");
-            }
-            range = range.lte(toTime);
-        }
-        if (range != null) {
-            criteria = criteria.andOperator(range);
+            criteria = criteria.and("action").is(action.toString());
         }
 
         Query query = new Query(criteria).with(new Sort(Sort.Direction.ASC, "timestamp"));
@@ -1635,44 +1610,6 @@ public class RepositoryManager implements RepositoryService {
         List<UsageEntity> results = template.find(query, UsageEntity.class);
 
         return results;
-    }
-
-    @Override
-    public long countUsageEntities(String appId, String schoolId, UsageAction action,
-            UsageActor from, UsageActor to, Object extra, Long fromTime, Long toTime) {
-        Criteria criteria = new Criteria("appId").is(appId).and("schoolId").is(schoolId);
-        if (action != null) {
-            criteria = criteria.and("action").is(action);
-        }
-        if (from != null) {
-            criteria = criteria.and("from").is(from);
-        }
-        if (to != null) {
-            criteria = criteria.and("to").is(from);
-        }
-        if (extra != null) {
-            criteria = criteria.and("extra").is(extra);
-        }
-
-        Criteria range = null;
-        if (fromTime != null) {
-            range = new Criteria("timestamp").gte(fromTime);
-        }
-        if (toTime != null) {
-            if (range == null) {
-                range = new Criteria("timestamp");
-            }
-            range = range.lte(toTime);
-        }
-        if (range != null) {
-            criteria = criteria.andOperator(range);
-        }
-
-        Query query = new Query(criteria);
-
-        long resultN = template.count(query, UsageEntity.class);
-
-        return resultN;
     }
 
     @Override

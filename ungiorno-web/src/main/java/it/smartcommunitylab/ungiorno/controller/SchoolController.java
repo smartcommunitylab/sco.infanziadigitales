@@ -38,7 +38,7 @@ import it.smartcommunitylab.ungiorno.model.SchoolProfile;
 import it.smartcommunitylab.ungiorno.model.SectionData;
 import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.services.RepositoryService;
-import it.smartcommunitylab.ungiorno.usage.UsageEntity.UsageActor;
+import it.smartcommunitylab.ungiorno.usage.UsageEntity.UsageAction;
 import it.smartcommunitylab.ungiorno.usage.UsageManager;
 import it.smartcommunitylab.ungiorno.utils.JsonUtil;
 import it.smartcommunitylab.ungiorno.utils.NotificationManager;
@@ -67,6 +67,14 @@ public class SchoolController {
     }
 
 
+    @RequestMapping(method = RequestMethod.PUT, value = "/school/log/{appId}/{schoolId}/{kidId}/{action}")
+    public @ResponseBody Response<Void> putLog(@PathVariable String appId, @PathVariable String schoolId,  @PathVariable String kidId, @PathVariable String action) {
+        String userId = permissions.getUserId();
+    	usageManager.parentAction(appId, schoolId, kidId, userId, UsageAction.valueOf(action));
+    	return new Response<Void>();
+    }
+
+    
     @RequestMapping(method = RequestMethod.GET, value = "/school/{appId}/{schoolId}/profile")
     public @ResponseBody Response<SchoolProfile> getSchoolProfile(@PathVariable String appId,
             @PathVariable String schoolId) {
@@ -126,8 +134,7 @@ public class SchoolController {
                 notificationManager.sendCommunicationMessage(appId, schoolId, comm, old != null);
 
                 if (old == null) {
-                    usageManager.messageSent(appId, schoolId, teacherId, null, UsageActor.TEACHER,
-                            UsageActor.PARENT, true);
+                    usageManager.messageSent(appId, schoolId, teacherId, null, null, UsageAction.COMMUNICATION);
                 }
             }
 

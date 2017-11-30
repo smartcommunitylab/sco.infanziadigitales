@@ -5,21 +5,16 @@ public class UsageEntity implements Comparable<UsageEntity> {
 
 	private long timestamp;
 
-	public enum UsageActor {
-		TEACHER, PARENT, KID
-	};
-
 	public enum UsageAction {
-		MESSAGE, RETURN, ABSENCE
+		COMMUNICATION, MESSAGE_TO_PARENT, MESSAGE_TO_TEACHER, 
+		APP_START, CALL, 
+		DAILY_PLAN, WEEKLY_PLAN, DEFAULT_PLAN, DEFAULT_USAGE, PREVIOUS_WEEK_USAGE,
+		NOTIFICATION_SETUP
 	};
 
-	private String description;
-	
-	private UsageActor from;
-	private UsageActor to;
-	
 	private String fromId;
 	private String toId;
+	private String kidId;
 	
 	private UsageAction action;
 
@@ -31,13 +26,11 @@ public class UsageEntity implements Comparable<UsageEntity> {
 	public UsageEntity() {
 	}
 
-	public UsageEntity(String description, UsageActor from, UsageActor to, String fromId, String toId, UsageAction action, Object extra, String appId, String schoolId) {
+	public UsageEntity(String fromId, String toId, String kidId, UsageAction action, Object extra, String appId, String schoolId) {
 		super();
-		this.description = description;
-		this.from = from;
-		this.to = to;
 		this.fromId = fromId;
 		this.toId = toId;
+		this.kidId = kidId;
 		this.action = action;
 		this.extra = extra;
 		this.appId = appId;
@@ -45,12 +38,12 @@ public class UsageEntity implements Comparable<UsageEntity> {
 		this.timestamp = System.currentTimeMillis();
 	}
 
-	public String getDescription() {
-		return description;
+	public String getKidId() {
+		return kidId;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setKidId(String kidId) {
+		this.kidId = kidId;
 	}
 
 	public String getAppId() {
@@ -77,18 +70,6 @@ public class UsageEntity implements Comparable<UsageEntity> {
 		this.timestamp = timestamp;
 	}
 
-	public UsageActor getFrom() {
-		return from;
-	}
-
-	public void setFrom(UsageActor from) {
-		this.from = from;
-	}
-
-	public UsageActor getTo() {
-		return to;
-	}
-
 	public String getFromId() {
 		return fromId;
 	}
@@ -103,10 +84,6 @@ public class UsageEntity implements Comparable<UsageEntity> {
 
 	public void setToId(String toId) {
 		this.toId = toId;
-	}
-
-	public void setTo(UsageActor to) {
-		this.to = to;
 	}
 
 	public UsageAction getAction() {

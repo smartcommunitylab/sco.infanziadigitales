@@ -1,9 +1,5 @@
 package it.smartcommunitylab.ungiorno.usage;
 
-import it.smartcommunitylab.ungiorno.services.RepositoryService;
-import it.smartcommunitylab.ungiorno.usage.UsageEntity.UsageAction;
-import it.smartcommunitylab.ungiorno.usage.UsageEntity.UsageActor;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -22,6 +18,9 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 
+import it.smartcommunitylab.ungiorno.services.RepositoryService;
+import it.smartcommunitylab.ungiorno.usage.UsageEntity.UsageAction;
+
 @Component
 public class UsageManager {
 
@@ -31,44 +30,33 @@ public class UsageManager {
 	private SimpleDateFormat osdf = new SimpleDateFormat("yy/MM/dd");
 	private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
 	
-	public void messageSent(String appId, String schoolId, String fromId, String toId, UsageActor from, UsageActor to, boolean multi) {
-		String type = multi?"Comunicazione":("Messaggio da " + (from.equals(UsageActor.TEACHER)?"insegnante":"genitore"));
-		UsageEntity ue = new UsageEntity(type, from, to, fromId, toId, UsageAction.MESSAGE, multi?"multi":"", appId, schoolId);
+	public void messageSent(String appId, String schoolId, String fromId, String toId, String kidId, UsageAction action) {
+		UsageEntity ue = new UsageEntity(fromId, toId, kidId, action, null, appId, schoolId);
 		repository.saveUsageEntity(ue);
 	}
 	
-	public void kidReturn(String appId, String schoolId, String fromId, boolean bus) {
-		UsageEntity ue = new UsageEntity("Ritiro", UsageActor.PARENT, null, fromId, null, UsageAction.RETURN, bus?"bus":"", appId, schoolId);
+	public void parentAction(String appId, String schoolId, String kidId, String parentId, UsageAction action) {
+		UsageEntity ue = new UsageEntity(parentId, null, kidId, action, null, appId, schoolId);
 		repository.saveUsageEntity(ue);
-	}	
-	
-	public void kidAbsence(String appId, String schoolId, String fromId) {
-		UsageEntity ue = new UsageEntity("Assenza", UsageActor.PARENT, null, fromId, null, UsageAction.ABSENCE, null, appId, schoolId);
-		repository.saveUsageEntity(ue);
-	}	
+	}
 	
 	public String generateCSV(String appId, String schoolId) {
 		StringBuffer sb = new StringBuffer();
 		
-		sb.append("Data,Comunicazioni,Messaggi da insegnanti,Messaggi da genitori,Assenze,Ritiri\r\n");
+		sb.append("Data,");
 
 		List<Map<String, Integer>> typeCount = Lists.newArrayList();
-		for (int i = 0; i < 5; i++) {
+		for (UsageAction a : UsageAction.values()){
 			Map<String, Integer> tc = Maps.newTreeMap();
 			typeCount.add(tc);
+			countByQuery(repository.findUsageEntities(appId, schoolId, a), schoolId, tc);
+			sb.append(a); sb.append(',');
 		}
-		
-		countByQuery(repository.findUsageEntities(appId, schoolId, UsageAction.MESSAGE, UsageActor.TEACHER, null, "multi", null, null), schoolId, typeCount.get(0));
-		countByQuery(repository.findUsageEntities(appId, schoolId, UsageAction.MESSAGE, UsageActor.TEACHER, null, "", null, null), schoolId, typeCount.get(1));
-		countByQuery(repository.findUsageEntities(appId, schoolId, UsageAction.MESSAGE, UsageActor.PARENT, null, "", null, null), schoolId, typeCount.get(2));
-		countByQuery(repository.findUsageEntities(appId, schoolId, UsageAction.ABSENCE, null, null, null, null, null), schoolId, typeCount.get(3));
-		countByQuery(repository.findUsageEntities(appId, schoolId, UsageAction.RETURN, null, null, null, null, null), schoolId, typeCount.get(4));		
+		sb.append("\r\n");
 		
 		for (String d: getDates(typeCount)) {
 			sb.append(csvLine(d, typeCount));
 		}
-		
-//		getDates(typeCount).stream().forEach(x -> sb.append(csvLine(x, typeCount)));
 		
 		return sb.toString();
 	}	
@@ -83,13 +71,7 @@ public class UsageManager {
 		}
 	}		
 	
-	
-//	private void countByQuery(List<UsageEntity> result, String schoolId, Map<String, Integer> countByTimestamp) {
-//		result.stream().collect(Collectors.groupingBy(x -> sdf.format(new Date(x.getTimestamp())))).
-//		forEach((k,v) ->
-//		countByTimestamp.put(k, v.size()));
-//	}	
-	
+		
 	private Set<String> getDates(List<Map<String, Integer>> typeCount) {
 		Set<String> dates = Sets.newTreeSet();
 		for (Map<String, Integer> map: typeCount) {
@@ -97,6 +79,7 @@ public class UsageManager {
 		}
 		
 		List<String> dl = Lists.newArrayList(dates);
+		if (dl.size() == 0) return dates;
 		Date start;
 //		Date end = osdf.parse(dl.get(dl.size() - 1));
 		Date end = new Date();
@@ -121,8 +104,6 @@ public class UsageManager {
 
 		} catch (ParseException e) {
 		}
-		
-		System.out.println(dates);
 		
 		return dates;
 	}	
@@ -151,21 +132,5 @@ public class UsageManager {
 		sb.append("\r\n");
 		return sb.toString();
 	}	
-	
-	
-//	private String csvLine(String date, List<Map<String, Integer>> typeCount) {
-//		StringBuffer sb = new StringBuffer();
-//		sb.append(date + ",");
-//		typeCount.stream().forEach(x -> sb.append(x.getOrDefault(date, 0) + ","));
-//		sb.deleteCharAt(sb.length() - 1);
-//		sb.append("\r\n");
-//		return sb.toString();
-//	}
-	
-	
-	
-	
-	
-	
 	
 }

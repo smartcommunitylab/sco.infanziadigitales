@@ -26,7 +26,6 @@ import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.storage.App;
 import it.smartcommunitylab.ungiorno.usage.UsageEntity;
 import it.smartcommunitylab.ungiorno.usage.UsageEntity.UsageAction;
-import it.smartcommunitylab.ungiorno.usage.UsageEntity.UsageActor;
 
 
 public interface RepositoryService {
@@ -387,10 +386,6 @@ public interface RepositoryService {
 
     void saveUsageEntity(UsageEntity entity);
 
-    List<UsageEntity> findUsageEntities(String appId, String schoolId, UsageAction action,
-            UsageActor from, UsageActor to, Object extra, Long fromTime, Long toTime);
-
-    long countUsageEntities(String appId, String schoolId, UsageAction action, UsageActor from,
-            UsageActor to, Object extra, Long fromTime, Long toTime);
+    List<UsageEntity> findUsageEntities(String appId, String schoolId, UsageAction action);
 
 }

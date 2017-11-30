@@ -2375,6 +2375,7 @@ textarea {
 .busStyle{
   width:40%
 }
+
 .dateStyleHead{
   padding-top: 10px;
 }
@@ -2491,11 +2492,19 @@ textarea {
 
 .prom{
   font-size: 16px;
+  position: relative;
+  left: 30px;
+  margin-left: -30px;
 }
 .prom_param{
   display: flex;
   flex-direction: row;
-  padding-left:40px;
+  padding-left:30px;
+  margin-right: 20px;
+}
+.setting-label {
+  margin-right: 20px;
+  text-align: justify;
 }
 #prom_param_val{
   width:20%;
@@ -2513,7 +2522,8 @@ textarea {
   /*width:100%;*/
 }
 .promcheck{
-  padding-left: 40px;
+  display: inline;
+  /* padding-left: 40px; */
   padding-top:0px;
 }
 .prom_giorno {

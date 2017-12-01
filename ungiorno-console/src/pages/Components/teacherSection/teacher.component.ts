@@ -49,6 +49,7 @@ export class Insegnanti implements OnInit {
     let alert = this.alertCtrl.create({
       subTitle: 'Conferma eliminazione',
       message : hasGroups ? "Attenzione! L'insegnante è associato ad alcuni sezioni." : null,
+      cssClass:'alertWarningCss',
       buttons: [
         {
           text: "Annulla"

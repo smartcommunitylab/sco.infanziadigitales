@@ -257,5 +257,6 @@
   "non_specificate":"Non specificate",
   "no_feature_weekend":"Operazione non consentita sabato e domenica",
   "send_msg":"Invia un messaggio",
-  "ora_invalida": "Gli orari di entrata e uscita sono incompatibili."
+  "ora_invalida": "Gli orari di entrata e uscita sono incompatibili.",
+  "problem_no_connection":"Impossibile accedere alla funzione. Si prega di ricaricare"
 }

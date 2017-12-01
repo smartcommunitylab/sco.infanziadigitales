@@ -16,12 +16,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     value: new Date()
   }
 
-  if ($scope.babyConfiguration.services && $scope.babyConfiguration.services.bus) {
+  if ($scope.babyConfiguration && $scope.babyConfiguration.services && $scope.babyConfiguration.services.bus) {
     $scope.busEnabled = $scope.babyConfiguration.services.bus.enabled;
   }
   var temp;
   $scope.listServicesDb=[];
-  if ($scope.babyConfiguration.services && $scope.babyConfiguration.services.timeSlotServices) {
+  if ($scope.babyConfiguration && $scope.babyConfiguration.services && $scope.babyConfiguration.services.timeSlotServices) {
     $scope.listServicesDb=$scope.babyConfiguration.services.timeSlotServices;
   }
   $scope.listServicesSchool=profileService.getSchoolProfile().services;

@@ -88,7 +88,7 @@ return {
 })
 
 .run(function ($ionicPlatform, $rootScope, $ionicLoading, $ionicPopup, $filter, $cordovaSplashscreen, $state, $translate, $q, $window, $ionicHistory, $ionicConfig, Config,
-  configurationService, profileService, dataServerService, pushNotificationService, Toast,LoginService) {
+  configurationService, profileService, dataServerService, pushNotificationService, Toast,LoginService,logService) {
 
   $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
     console.log(fromState.name +' -> '+toState.name);
@@ -207,7 +207,6 @@ return {
 
 		}
 	};
-
 	LoginService.init(cookieInitOptions);
 
   //update notifications

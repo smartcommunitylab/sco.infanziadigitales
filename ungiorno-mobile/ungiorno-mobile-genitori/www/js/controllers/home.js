@@ -20,7 +20,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     //$rootScope.absenceLimitHours = 9;
     //$rootScope.absenceLimitMinutes = 15;
     $rootScope.retireLimit = 10;
-    $scope.noConnection = false;
+    $rootScope.noConnection = false;
     $scope.gettingComm = false;
     $scope.briefInfo = {};
     $scope.noConnectionMessage = $filter('translate')('home_no_connection');
@@ -226,7 +226,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     }
     $scope.execute = function (element) {
       $scope.checkConnection().then(function () {
-        if (element.class != "button-stable" && !($scope.noConnection && !$scope.isContact(element))) {
+        if (element.class != "button-stable" && !($rootScope.noConnection && !$scope.isContact(element))) {
           if (typeof element.click == "string") {
             $state.go(element.click);
           } else {
@@ -237,7 +237,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         }
       }, function (error) {
         //ricarica pagina
-        $scope.noConnection = true;
+        $rootScope.noConnection = true;
         buildHome();
       });
     }
@@ -518,7 +518,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     }
 
     $scope.getRetireTimeLimit = function () {
-      var temp = moment('09:20', 'HH:mm');//it should be 09:10
+      // var temp = moment('09:20', 'HH:mm');
+      var temp = moment('17:30', 'HH:mm');
       //if ($scope.briefInfo.ore_uscita!==null && $scope.briefInfo.ore_uscita!==undefined) {
       //  temp= moment($scope.briefInfo.ore_uscita,'HH:mm');
       //}
@@ -560,13 +561,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         $scope.kidConfiguration = config;
         configurationService.setBabyConfiguration(config);
 
-        $scope.noConnection = false;
+        $rootScope.noConnection = false;
         buildHome();
-      }, function (error){
+      }, function (error) {
         console.log("ERROR -> " + error);
-        // $scope.noConnection = true;
+        // $rootScope.noConnection = true;
         Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
         $ionicLoading.hide();
+        buildHome();
         // if (error == 406) {
         //   $rootScope.allowed = false;
         // }
@@ -595,6 +597,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         for (var i = 0; i < values.length; i++) {
           $rootScope.numberMessageUnread[profileService.getBabiesProfiles()[i].kidId] = values[i];
         }
+      }, function (err) {
+        //manage error
+        for (var i = 0; i < profileService.getBabiesProfiles().length; i++) {
+          $rootScope.numberMessageUnread[profileService.getBabiesProfiles()[i].kidId] = 0;
+        }
       });
     }
     var getCommunications = function () {
@@ -615,6 +622,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
           }
           $scope.gettingComm = false;
+        }, function (err) {
+          //manage error
+          for (var i = 0; i < profileService.getBabiesProfiles().length; i++) {
+            $rootScope.numberCommunicationsUnread[profileService.getBabiesProfiles()[i].schoolId] = 0;
+          }
+          Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
         });
       }
       console.log("ESCO DA getcommunications" + $rootScope.numberCommunicationsUnread);
@@ -667,11 +680,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
           getCommunications();
 
 
+
+
         },
           function (error) {
             console.log("ERROR -> " + error);
-            $scope.noConnection = true;
-            //Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+            $rootScope.noConnection = true;
+            Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+            buildHome();
             $ionicLoading.hide();
             if (error == 406) {
               $rootScope.allowed = false;

@@ -520,7 +520,7 @@ return {
     all:'Tutti',
     com_dt:'Imposta scadenza comunicazione',
     com_del:'La comunicazione verrà eliminata nel giorno indicato',
-    auth_person:"L'incaricato del ritiro è ",
+    auth_person:"L'incaricato del ritiro è: ",
     none_f:"Nessuna fermata specificata",
     no_person:"Nessuna persona specificata",
     baby_section:"Fa parte dei gruppi/sezioni:",

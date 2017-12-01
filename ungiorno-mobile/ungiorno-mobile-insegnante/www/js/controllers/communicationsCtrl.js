@@ -165,6 +165,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
     }
     if ($rootScope.userAuth) {
       var tmp = $scope.communications[index];
+      $scope.curData.selectedGroup=$scope.communications[index].groupId;
       modifyComm(tmp, index);
 
 

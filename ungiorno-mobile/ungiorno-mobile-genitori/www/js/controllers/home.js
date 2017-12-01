@@ -658,7 +658,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
           //se non settato prendo il primo
           console.log(profileService.getBabyProfile());
           console.log(data);
-          if (profileService.getBabyProfile() == null) {
+          if ( data){
+          if (profileService.getBabyProfile() == null ) {
             $scope.kidProfile = data[0];
             profileService.setBabiesProfiles(data);
             profileService.setBabyProfile(data[0]);
@@ -679,10 +680,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
           //get communication from last time
           getCommunications();
 
-
-
-
-        },
+        } else {
+          // no data arrived
+          $rootScope.noConnection = true;
+          Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+          buildHome();
+          $ionicLoading.hide();
+        }
+      } ,
           function (error) {
             console.log("ERROR -> " + error);
             $rootScope.noConnection = true;

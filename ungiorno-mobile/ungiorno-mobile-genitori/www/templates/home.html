@@ -45,7 +45,7 @@
         </div>
       </div>  
       <hr class="hrstyle"/>
-      <div ng-repeat="element in elements track by $index" class="list" ng-if="!noConnection || isContact(element)">
+      <div ng-repeat="element in elements track by $index" class="list" ng-if="!noConnection">
         <div class="card" ng-class="elements[$index].class">
           <a class=" button-block item-thumbnail-left" ng-click="execute(elements[$index])" ng-disabled="elements[$index].disabled">
             <img ng-src="{{element.img}}">

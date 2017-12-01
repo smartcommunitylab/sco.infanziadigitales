@@ -469,8 +469,11 @@ week_planService.getIsFromHome= function () {
                                         var currentDay = dailyRitiro.at.getDay();
                                         var distance = (i+1 + 7 - currentDay) % 7;
                                         dailyRitiro.at.setDate(dailyRitiro.at.getDate() + distance);
+                                        //calculate the number of week between dailyritiro and now and set the right new notification for that day.
+                                        // If the day of the week is passed, set it in the future
+                                        var weeks= moment(now).diff(moment(dailyRitiro.at), 'week')+1;
                                         if (dailyRitiro.at <= now || (data[i].absence && moment(dailyRitiro.at).isoWeek()==moment(now).isoWeek())) {
-                                            dailyRitiro.at.setDate(dailyRitiro.at.getDate() + 7);
+                                            dailyRitiro.at.setDate(dailyRitiro.at.getDate() + 7*weeks);
                                         }
                                         notific.push(dailyRitiro);
                                         

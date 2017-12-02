@@ -344,8 +344,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             var actualDate = moment().startOf('day');//var actualDate = moment(moment().format('M D YYYY'));
             var dayData = $scope.days[day];
             var usc = dayData['uscita'];
-            // var temp = moment('09:20', 'HH:mm');
-            var temp = moment('17:30', 'HH:mm');// it should be 09:10
+            var temp = moment('09:20', 'HH:mm');
+            // var temp = moment('17:30', 'HH:mm');// it should be 09:10
             if (moment(temp).isBefore(moment()) && day == $scope.currDay && selected.isSame(actualDate)) {
                 $scope.TempPrevent = $ionicPopup.show({
                     title: $filter('translate')('retire_popup_toolate_title'),

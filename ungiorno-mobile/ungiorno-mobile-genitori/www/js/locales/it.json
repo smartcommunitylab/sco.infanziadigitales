@@ -258,5 +258,6 @@
   "no_feature_weekend":"Operazione non consentita sabato e domenica",
   "send_msg":"Invia un messaggio",
   "ora_invalida": "Gli orari di entrata e uscita sono incompatibili.",
-  "problem_no_connection":"Impossibile accedere alla funzione. Si prega di ricaricare"
+  "problem_no_connection":"Impossibile accedere alla funzione. Si prega di ricaricare",
+  "connection_popup":"Errore di comunicazione con il server. Per utilizzare l'applicazione è necessaria una connessione internet"
 }

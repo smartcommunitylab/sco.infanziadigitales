@@ -224,6 +224,54 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
       }
       return deferred.promise;
     }
+
+
+    var isOnline = true;
+
+    if (window.Connection) {
+
+      $rootScope.$on('$cordovaNetwork:online', function (event, networkState) {
+        if (isOnline) return;
+
+        isOnline = true;
+
+        console.log('We Are Online');
+      });
+
+      $rootScope.$on('$cordovaNetwork:offline', function (event, networkState) {
+        if (!isOnline) return;
+
+        isOnline = false;
+
+        $scope.contactPopup = $ionicPopup.show({
+          title: $filter('translate')('connection_popup'),
+          scope: $scope,
+          buttons: [{ // Array[Object] (optional). Buttons to place in the popup footer.
+            text: $filter('translate')('ok'),
+            type: 'button-norm',
+            onTap: function (e) {
+              $state.go('app.home');
+            }
+          }]
+        });
+      });
+    }
+    // document.addEventListener("offline", onOffline, false);
+
+    // function onOffline() {
+    //     // Handle the offline event
+    //     $scope.contactPopup=$ionicPopup.show({
+    //       title: $filter('translate')('communication_error'),
+    //       scope: $scope,
+    //       buttons: [{ // Array[Object] (optional). Buttons to place in the popup footer.
+    //         text: $filter('translate')('ok'),
+    //         type: 'button-norm',
+    //         onTap: function (e) {
+    //           $state.go('app.home');
+    //         }
+    //       }]
+    //     });
+    // }
     $scope.execute = function (element) {
       $scope.checkConnection().then(function () {
         if (element.class != "button-stable" && !($rootScope.noConnection && !$scope.isContact(element))) {
@@ -462,55 +510,63 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     }
 
     $scope.gotoEditDate = function () {
-      var temp = $scope.isRetireTimeLimitExpired();
-      if ($scope.weekend) {
-        Toast.show($filter('translate')('no_feature_weekend'), 'short', 'bottom');
-        return;
-      }
-      else if (temp) {
-        $scope.TempPrevent = $ionicPopup.show({
-          title: $filter('translate')('retire_popup_toolate_title'),
-          cssClass: 'expired-popup',
-          scope: $scope,
-          template: $filter('translate')('retire_popup_toolate_text') + " " + moment($scope.modifyBefore).format('HH:mm') + "<div class\"row\"><span ng-click=\"callSchool();\"  class=\"button button-expired-call\">" + $filter('translate')('home_contatta') + "</span></div>"
-            + "<div class\"row\"><span ng-click=\"gotoChat();\"  class=\"button button-expired-call\">" + $filter('translate')('send_msg') + "</span></div>",
-          buttons: [
-            {
-              text: $filter('translate')('retire_popup_absent_close'),
-              type: 'button-positive'
-            }
-          ]
-        });
-      } else {
-        $scope.currentDate = moment();
-        $scope.currWeek = $scope.currentDate.format('w');
-        var day = $scope.currentDate.format('d') - 1;
-        var selected = moment().weekday(day).week($scope.currWeek);
-
-        $scope.mode = 'edit';
-        console.log($scope.weekInfo);
-        var dayData = $scope.weekInfo[day];
-        for (var i = 0; i <= 4; i++) {
-          if ($scope.weekInfo[i]['uscita'] != null && $scope.weekInfo[i]['uscita'] != undefined)
-            $scope.weekInfo[i]['uscita_display'] = moment($scope.weekInfo[i]['uscita']).format('H:mm');
-          if ($scope.weekInfo[i]['entrata'] != null && $scope.weekInfo[i]['entrata'] != undefined)
-            $scope.weekInfo[i]['entrata_display'] = moment($scope.weekInfo[i]['entrata']).format('H:mm');
-          week_planService.setDayData(i, $scope.weekInfo[i], '');
+      //check connection
+      $scope.checkConnection().then(function () {
+        var temp = $scope.isRetireTimeLimitExpired();
+        if ($scope.weekend) {
+          Toast.show($filter('translate')('no_feature_weekend'), 'short', 'bottom');
+          return;
         }
-        dayData['monday'] = false;
-        dayData['tuesday'] = false;
-        dayData['wednesday'] = false;
-        dayData['thursday'] = false;
-        dayData['friday'] = false;
-        var dateFormat = selected.format('dddd D MMMM');
-        week_planService.setCurrentWeek($scope.currWeek);
-        week_planService.setSelectedDateInfo(dateFormat);
-        week_planService.setDayData(day, dayData, $scope.mode);
-        week_planService.fromHome(true);
-        $state.go('app.week_edit_day', {
-          day: day
-        });
-      }
+        else if (temp) {
+          $scope.TempPrevent = $ionicPopup.show({
+            title: $filter('translate')('retire_popup_toolate_title'),
+            cssClass: 'expired-popup',
+            scope: $scope,
+            template: $filter('translate')('retire_popup_toolate_text') + " " + moment($scope.modifyBefore).format('HH:mm') + "<div class\"row\"><span ng-click=\"callSchool();\"  class=\"button button-expired-call\">" + $filter('translate')('home_contatta') + "</span></div>"
+              + "<div class\"row\"><span ng-click=\"gotoChat();\"  class=\"button button-expired-call\">" + $filter('translate')('send_msg') + "</span></div>",
+            buttons: [
+              {
+                text: $filter('translate')('retire_popup_absent_close'),
+                type: 'button-positive'
+              }
+            ]
+          });
+        } else {
+          $scope.currentDate = moment();
+          $scope.currWeek = $scope.currentDate.format('w');
+          var day = $scope.currentDate.format('d') - 1;
+          var selected = moment().weekday(day).week($scope.currWeek);
+  
+          $scope.mode = 'edit';
+          console.log($scope.weekInfo);
+          var dayData = $scope.weekInfo[day];
+          for (var i = 0; i <= 4; i++) {
+            if ($scope.weekInfo[i]['uscita'] != null && $scope.weekInfo[i]['uscita'] != undefined)
+              $scope.weekInfo[i]['uscita_display'] = moment($scope.weekInfo[i]['uscita']).format('H:mm');
+            if ($scope.weekInfo[i]['entrata'] != null && $scope.weekInfo[i]['entrata'] != undefined)
+              $scope.weekInfo[i]['entrata_display'] = moment($scope.weekInfo[i]['entrata']).format('H:mm');
+            week_planService.setDayData(i, $scope.weekInfo[i], '');
+          }
+          dayData['monday'] = false;
+          dayData['tuesday'] = false;
+          dayData['wednesday'] = false;
+          dayData['thursday'] = false;
+          dayData['friday'] = false;
+          var dateFormat = selected.format('dddd D MMMM');
+          week_planService.setCurrentWeek($scope.currWeek);
+          week_planService.setSelectedDateInfo(dateFormat);
+          week_planService.setDayData(day, dayData, $scope.mode);
+          week_planService.fromHome(true);
+          $state.go('app.week_edit_day', {
+            day: day
+          });
+        }
+      }, function (error) {
+        //ricarica pagina
+        $rootScope.noConnection = true;
+        buildHome();
+      });
+      
     };
 
     $scope.isContact = function (element) {
@@ -518,8 +574,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     }
 
     $scope.getRetireTimeLimit = function () {
-      // var temp = moment('09:20', 'HH:mm');
-      var temp = moment('17:30', 'HH:mm');
+      var temp = moment('09:20', 'HH:mm');
+      // var temp = moment('17:30', 'HH:mm');
       //if ($scope.briefInfo.ore_uscita!==null && $scope.briefInfo.ore_uscita!==undefined) {
       //  temp= moment($scope.briefInfo.ore_uscita,'HH:mm');
       //}
@@ -658,36 +714,36 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
           //se non settato prendo il primo
           console.log(profileService.getBabyProfile());
           console.log(data);
-          if ( data){
-          if (profileService.getBabyProfile() == null ) {
-            $scope.kidProfile = data[0];
-            profileService.setBabiesProfiles(data);
-            profileService.setBabyProfile(data[0]);
-            registerPushNotification(data);
+          if (data) {
+            if (profileService.getBabyProfile() == null) {
+              $scope.kidProfile = data[0];
+              profileService.setBabiesProfiles(data);
+              profileService.setBabyProfile(data[0]);
+              registerPushNotification(data);
+            } else {
+              $scope.kidProfile = profileService.getBabyProfile();
+            }
+            console.log(profileService.getBabyProfile());
+            //                    $scope.loadConfiguration($scope.kidProfile.schoolId, $scope.kidProfile.kidId);
+            $scope.loadConfiguration();
+            $rootScope.allowed = true;
+
+            //get messages from last time
+            //load all message from all profiles
+            getMessages();
+
+
+            //get communication from last time
+            getCommunications();
+
           } else {
-            $scope.kidProfile = profileService.getBabyProfile();
+            // no data arrived
+            $rootScope.noConnection = true;
+            Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+            buildHome();
+            $ionicLoading.hide();
           }
-          console.log(profileService.getBabyProfile());
-          //                    $scope.loadConfiguration($scope.kidProfile.schoolId, $scope.kidProfile.kidId);
-          $scope.loadConfiguration();
-          $rootScope.allowed = true;
-
-          //get messages from last time
-          //load all message from all profiles
-          getMessages();
-
-
-          //get communication from last time
-          getCommunications();
-
-        } else {
-          // no data arrived
-          $rootScope.noConnection = true;
-          Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
-          buildHome();
-          $ionicLoading.hide();
-        }
-      } ,
+        },
           function (error) {
             console.log("ERROR -> " + error);
             $rootScope.noConnection = true;

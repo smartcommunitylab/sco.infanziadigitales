@@ -1176,6 +1176,10 @@ select {
   border-radius: 0;
 }
 
+#babyprofile .label-baby-section {
+  margin-right: -4px;
+}
+
 #babyprofile input[type=text],
 textarea {
   border-bottom: none;

@@ -39,7 +39,7 @@
                 </span>
               </div>
               <a href="http://www.google.it" class=" detailItem" ng-if="personWhoRetire.isDelegate && babyInformations.exitTime !== null">{{'view_delegation' | translate}}</a>
-              <div class=" detailItem" ng-if="babyProfile.groups || babyProfile.section  ">{{'baby_section' | translate}}
+              <div class=" detailItem" ng-if="babyProfile.groups || babyProfile.section"><span class="label-baby-section">{{'baby_section' | translate}}</span>
                 <span ng-repeat="group in babyProfile.groups" class="groups-profile"><b>{{group.sectionId}},</b></span>
                 <span ng-if="babyProfile.section "><b>{{babyProfile.section.sectionId }}</b></span>
                 

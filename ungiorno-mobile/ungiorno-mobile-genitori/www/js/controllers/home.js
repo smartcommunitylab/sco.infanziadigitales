@@ -231,9 +231,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     if (window.Connection) {
 
       $rootScope.$on('$cordovaNetwork:online', function (event, networkState) {
-        if ($rootScope.isOnline) return;
-
-        $rootScope.isOnline = true;
         if ($rootScope.contactPopup) {
           $rootScope.deregister();
           $rootScope.contactPopup.close();
@@ -246,9 +243,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
       });
 
       $rootScope.$on('$cordovaNetwork:offline', function (event, networkState) {
-        if (!$rootScope.isOnline) return;
-
-        $rootScope.isOnline = false;
         if (!$rootScope.contactPopup) {
           $rootScope.deregister=$ionicPlatform.registerBackButtonAction(function(){
             return; 

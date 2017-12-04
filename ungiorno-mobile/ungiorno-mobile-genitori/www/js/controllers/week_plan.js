@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.week_plan', [])
 
-    .controller('WeekPlanCtrl', function ($scope, moment, dataServerService, logService, week_planService, profileService, $ionicModal, $filter, $ionicPopup, $state, Toast) {
+    .controller('WeekPlanCtrl', function ($scope, $ionicLoading, moment, dataServerService, logService, week_planService, profileService, $ionicModal, $filter, $ionicPopup, $state, Toast) {
         $scope.days = [];
         var dated = new Date();
         $scope.currentDate = moment();
@@ -29,6 +29,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         }
 
         $scope.getListServices = function () {
+            $ionicLoading.show()
             var fr = '', fr2 = '';
             var to = '', to2 = '';
             var serviz = [];
@@ -98,7 +99,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 $scope.listServicesPosticipo.sort(sortByTimeAscOut);
                 $scope.totime = $scope.listServicesPosticipo[$scope.listServicesPosticipo.length - 1]['out_val'];
             }
-
+            $ionicLoading.hide()
         };
         $scope.getListServices();
 
@@ -139,6 +140,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         };
 
         $scope.getWeekPlanDB = function (week, copy) {
+            $ionicLoading.show();
             week_planService.getWeekPlan(week, $scope.kidId).then(function (data) {
                 var day = 0;
                 if (copy) {
@@ -148,9 +150,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                     if (now < limit) {
                         day = day - 1;
                     }
-                    if ($scope.currWeek>now.format('w'))
-                    {
-                        day=0;
+                    if ($scope.currWeek > now.format('w')) {
+                        day = 0;
                     }
                 }
                 if (data != null && data != undefined && data.length > 0) {
@@ -160,6 +161,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                         $scope.days[i] = data[i];
                         week_planService.setDayData(i, $scope.days[i], '');
                     }
+                    $ionicLoading.hide();
                 }
                 else {
                     week_planService.getDefaultWeekPlan($scope.kidId).then(function (data) {
@@ -185,11 +187,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                                 week_planService.setDayData(i, $scope.days[i], '');
                             }
                         }
+                        $ionicLoading.hide();
                     }, function (error) {
+                        $ionicLoading.hide();
                     });
                 }
 
             }, function (error) {
+                $ionicLoading.hide();
             });
         };
 
@@ -383,87 +388,131 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         };
 
         $scope.load_def_week = function () {
-            var confirmPopup = $ionicPopup.confirm({
-                title: $filter('translate')('Avviso'),
-                template: 'Questa operazione sovrascriverà i dati attuali. Si vuole procedere ugualmente?',
-                buttons: [{
-                    text: $filter('translate')('cancel'),
-                    type: 'button_cancel',
-                    scope: null,
-                    onTap: function (e) {
-                    }
+            // var confirmPopup = $ionicPopup.confirm({
+            //     title: $filter('translate')('Avviso'),
+            //     template: 'Questa operazione sovrascriverà i dati attuali. Si vuole procedere ugualmente?',
+            //     buttons: [{
+            //         text: $filter('translate')('cancel'),
+            //         type: 'button_cancel',
+            //         scope: null,
+            //         onTap: function (e) {
+            //         }
 
-                }, {
-                    text: 'OK',
-                    type: 'button_save',
-                    onTap: function (e) {
-                        week_planService.getDefaultWeekPlan($scope.kidId).then(function (data) {
-                            var limit = moment('9:20', 'H:mm');
-                            var now = moment();
-                            var day = moment().isoWeekday()
-                            if (now < limit) {
-                                day = day - 1;
-                            }
-                            if (data != null && data != undefined && data.length > 0) {
-                                data = $scope.formatInfo(data);
-                                //not from monday but from the actual day if it is this week
-                                jsonTest = data;
-                                if ($scope.currWeek>now.format('w'))
-                                {
-                                    day=0;
-                                }
-                                for (var i = day; i <= 4; i++) {
-                                // for (var i = 0; i <= 4; i++) {
-                                    $scope.days[i] = data[i];
-                                    week_planService.setDayData(i, $scope.days[i], '');
-                                }
-                            }
-                            else {
-                                var jsonTest = [{ 'name': 'monday_reduced', 'entrata': fromtime, 'uscita': totime, 'bus': false, 'delega_name': '' },
-                                { 'name': 'tuesday_reduced', 'entrata': fromtime, 'uscita': totime, 'bus': false, 'delega_name': '' },
-                                { 'name': 'wednesday_reduced', 'entrata': fromtime, 'uscita': totime, 'bus': false, 'delega_name': '' },
-                                { 'name': 'thursday_reduced', 'entrata': fromtime, 'uscita': totime, 'bus': false, 'delega_name': '' },
-                                { 'name': 'friday_reduced', 'entrata': fromtime, 'uscita': totime, 'bus': false, 'delega_name': '' }];
-                                jsonTest = $scope.formatInfo(jsonTest);
-                                if ($scope.currWeek>now.format('w'))
-                                {
-                                    day=0;
-                                }
-                                for (var i = day; i <= 4; i++) {
-                                    $scope.days[i] = jsonTest[i];
-                                    week_planService.setDayData(i, $scope.days[i], '');
-                                }
-                            }
-                            logService.logDefaultUsage($scope.schoolId, $scope.kidId);
-                        }, function (error) {
-                        });
+            //     }, {
+            //         text: 'OK',
+            //         type: 'button_save',
+            //         onTap: function (e) {
+            //             week_planService.getDefaultWeekPlan($scope.kidId).then(function (data) {
+            //                 var limit = moment('9:20', 'H:mm');
+            //                 var now = moment();
+            //                 var day = moment().isoWeekday()
+            //                 if (now < limit) {
+            //                     day = day - 1;
+            //                 }
+            //                 if (data != null && data != undefined && data.length > 0) {
+            //                     data = $scope.formatInfo(data);
+            //                     //not from monday but from the actual day if it is this week
+            //                     jsonTest = data;
+            //                     if ($scope.currWeek>now.format('w'))
+            //                     {
+            //                         day=0;
+            //                     }
+            //                     for (var i = day; i <= 4; i++) {
+            //                     // for (var i = 0; i <= 4; i++) {
+            //                         $scope.days[i] = data[i];
+            //                         week_planService.setDayData(i, $scope.days[i], '');
+            //                     }
+            //                 }
+            //                 else {
+            //                     var jsonTest = [{ 'name': 'monday_reduced', 'entrata': fromtime, 'uscita': totime, 'bus': false, 'delega_name': '' },
+            //                     { 'name': 'tuesday_reduced', 'entrata': fromtime, 'uscita': totime, 'bus': false, 'delega_name': '' },
+            //                     { 'name': 'wednesday_reduced', 'entrata': fromtime, 'uscita': totime, 'bus': false, 'delega_name': '' },
+            //                     { 'name': 'thursday_reduced', 'entrata': fromtime, 'uscita': totime, 'bus': false, 'delega_name': '' },
+            //                     { 'name': 'friday_reduced', 'entrata': fromtime, 'uscita': totime, 'bus': false, 'delega_name': '' }];
+            //                     jsonTest = $scope.formatInfo(jsonTest);
+            //                     if ($scope.currWeek>now.format('w'))
+            //                     {
+            //                         day=0;
+            //                     }
+            //                     for (var i = day; i <= 4; i++) {
+            //                         $scope.days[i] = jsonTest[i];
+            //                         week_planService.setDayData(i, $scope.days[i], '');
+            //                     }
+            //                 }
+            //                 logService.logDefaultUsage($scope.schoolId, $scope.kidId);
+            //             }, function (error) {
+            //             });
+            //         }
+            //     }]
+            // });
+            $ionicLoading.show();
+            week_planService.getDefaultWeekPlan($scope.kidId).then(function (data) {
+                var limit = moment('9:20', 'H:mm');
+                var now = moment();
+                var day = moment().isoWeekday()
+                if (now < limit) {
+                    day = day - 1;
+                }
+                if (data != null && data != undefined && data.length > 0) {
+                    data = $scope.formatInfo(data);
+                    //not from monday but from the actual day if it is this week
+                    jsonTest = data;
+                    if ($scope.currWeek > now.format('w')) {
+                        day = 0;
                     }
-                }]
+                    for (var i = day; i <= 4; i++) {
+                        // for (var i = 0; i <= 4; i++) {
+                        $scope.days[i] = data[i];
+                        week_planService.setDayData(i, $scope.days[i], '');
+                    }
+                }
+                else {
+                    var jsonTest = [{ 'name': 'monday_reduced', 'entrata': fromtime, 'uscita': totime, 'bus': false, 'delega_name': '' },
+                    { 'name': 'tuesday_reduced', 'entrata': fromtime, 'uscita': totime, 'bus': false, 'delega_name': '' },
+                    { 'name': 'wednesday_reduced', 'entrata': fromtime, 'uscita': totime, 'bus': false, 'delega_name': '' },
+                    { 'name': 'thursday_reduced', 'entrata': fromtime, 'uscita': totime, 'bus': false, 'delega_name': '' },
+                    { 'name': 'friday_reduced', 'entrata': fromtime, 'uscita': totime, 'bus': false, 'delega_name': '' }];
+                    jsonTest = $scope.formatInfo(jsonTest);
+                    if ($scope.currWeek > now.format('w')) {
+                        day = 0;
+                    }
+                    for (var i = day; i <= 4; i++) {
+                        $scope.days[i] = jsonTest[i];
+                        week_planService.setDayData(i, $scope.days[i], '');
+                    }
+                }
+                logService.logDefaultUsage($scope.schoolId, $scope.kidId);
+                $ionicLoading.hide();
+            }, function (error) {
+                $ionicLoading.hide();
             });
         };
 
         $scope.copy_prev_week = function () {
-            var confirmPopup = $ionicPopup.confirm({
-                title: $filter('translate')('Avviso'),
-                template: 'Questa operazione sovrascriverà i dati attuali. Si vuole procedere ugualmente?',
-                buttons: [{
-                    text: $filter('translate')('cancel'),
-                    type: 'button_cancel',
-                    scope: null,
-                    onTap: function (e) {
-                    }
+            var week = $scope.currWeek - 1;
+            $scope.getWeekPlanDB(week, true);
+            logService.logPreviousWeek($scope.schoolId, $scope.kidId);
+            // var confirmPopup = $ionicPopup.confirm({
+            //     title: $filter('translate')('Avviso'),
+            //     template: 'Questa operazione sovrascriverà i dati attuali. Si vuole procedere ugualmente?',
+            //     buttons: [{
+            //         text: $filter('translate')('cancel'),
+            //         type: 'button_cancel',
+            //         scope: null,
+            //         onTap: function (e) {
+            //         }
 
-                }, {
-                    text: 'OK',
-                    type: 'button_save',
-                    onTap: function (e) {
-                        var week = $scope.currWeek - 1;
-                        $scope.getWeekPlanDB(week, true);
-                        logService.logPreviousWeek($scope.schoolId, $scope.kidId);
+            //     }, {
+            //         text: 'OK',
+            //         type: 'button_save',
+            //         onTap: function (e) {
+            //             var week = $scope.currWeek - 1;
+            //             $scope.getWeekPlanDB(week, true);
+            //             logService.logPreviousWeek($scope.schoolId, $scope.kidId);
 
-                    }
-                }]
-            });
+            //         }
+            //     }]
+            // });
         };
         $scope.ritiraOptions = profileService.getBabyProfile().persons;
 
@@ -477,7 +526,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         };
 
     })
-    .controller('DefaultWeekPlanCtrl', function ($scope, moment, logService, dataServerService, week_planService, profileService, $ionicModal, $filter, $ionicPopup, $state, Toast) {
+    .controller('DefaultWeekPlanCtrl', function ($scope, moment, logService, dataServerService, $ionicLoading, week_planService, profileService, $ionicModal, $filter, $ionicPopup, $state, Toast) {
         $scope.days = [];
         var dated = new Date();
         $scope.currWeek = (0 | dated.getDate() / 7) + 1;
@@ -510,6 +559,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         }
 
         $scope.getListServices = function () {
+            $ionicLoading.show();
             var fr = '', fr2 = '';
             var to = '', to2 = '';
             var serviz = [];
@@ -579,7 +629,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 $scope.listServicesPosticipo.sort(sortByTimeAscOut);
                 totime = $scope.listServicesPosticipo[$scope.listServicesPosticipo.length - 1]['out_val'];
             }
-
+            $ionicLoading.hide();
         };
         $scope.getListServices();
         week_planService.setGlobalParam($scope.appId, $scope.schoolId);
@@ -635,6 +685,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         };
 
         $scope.getWeekPlanDB = function (day) {
+            $ionicLoading.show();
             week_planService.getDefaultWeekPlan($scope.kidId).then(function (data) {
                 if (data != null && data != undefined && data.length > 0) {
                     data = $scope.formatInfo(data);
@@ -656,7 +707,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                         week_planService.setDayDataDefault(i, $scope.days[i], '');
                     }
                 }
+                $ionicLoading.hide();
             }, function (error) {
+                $ionicLoading.hide();
             });
         };
 
@@ -767,34 +820,43 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 totimeFormatted = moment(totimeOrig).format('H:mm');
                 totimeOrig = moment(totimeOrig, 'H:mm');
             }
+            var jsonTest = [{ 'name': 'monday_reduced', 'entrata': fromtime, 'uscita': totimeOrig, 'bus': $scope.busEnabled, 'fermata': $scope.busDefaultStop, 'delega_name': '' },
+            { 'name': 'tuesday_reduced', 'entrata': fromtime, 'uscita': totimeOrig, 'bus': $scope.busEnabled, 'fermata': $scope.busDefaultStop, 'delega_name': '' },
+            { 'name': 'wednesday_reduced', 'entrata': fromtime, 'uscita': totimeOrig, 'bus': $scope.busEnabled, 'fermata': $scope.busDefaultStop, 'delega_name': '' },
+            { 'name': 'thursday_reduced', 'entrata': fromtime, 'uscita': totimeOrig, 'bus': $scope.busEnabled, 'fermata': $scope.busDefaultStop, 'delega_name': '' },
+            { 'name': 'friday_reduced', 'entrata': fromtime, 'uscita': totimeOrig, 'bus': $scope.busEnabled, 'fermata': $scope.busDefaultStop, 'delega_name': '' }];
+            jsonTest = $scope.formatInfo(jsonTest);
+            $scope.days = jsonTest;
+            for (var i = 0; i <= 4; i++) {
+                week_planService.setDayDataDefault(i, $scope.days[i], '');
+            }
+            // var confirmPopup = $ionicPopup.confirm({
+            //     title: $filter('translate')('Avviso'),
+            //     template: 'Questa operazione sovrascriverà i dati attuali. Si vuole procedere ugualmente?',
+            //     buttons: [{
+            //         text: $filter('translate')('cancel'),
+            //         type: 'button_cancel',
+            //         scope: null,
+            //         onTap: function (e) {
+            //         }
 
-            var confirmPopup = $ionicPopup.confirm({
-                title: $filter('translate')('Avviso'),
-                template: 'Questa operazione sovrascriverà i dati attuali. Si vuole procedere ugualmente?',
-                buttons: [{
-                    text: $filter('translate')('cancel'),
-                    type: 'button_cancel',
-                    scope: null,
-                    onTap: function (e) {
-                    }
-
-                }, {
-                    text: 'OK',
-                    type: 'button_save',
-                    onTap: function (e) {
-                        var jsonTest = [{ 'name': 'monday_reduced', 'entrata': fromtime, 'uscita': totimeOrig, 'bus': $scope.busEnabled, 'fermata': $scope.busDefaultStop, 'delega_name': '' },
-                        { 'name': 'tuesday_reduced', 'entrata': fromtime, 'uscita': totimeOrig, 'bus': $scope.busEnabled, 'fermata': $scope.busDefaultStop, 'delega_name': '' },
-                        { 'name': 'wednesday_reduced', 'entrata': fromtime, 'uscita': totimeOrig, 'bus': $scope.busEnabled, 'fermata': $scope.busDefaultStop, 'delega_name': '' },
-                        { 'name': 'thursday_reduced', 'entrata': fromtime, 'uscita': totimeOrig, 'bus': $scope.busEnabled, 'fermata': $scope.busDefaultStop, 'delega_name': '' },
-                        { 'name': 'friday_reduced', 'entrata': fromtime, 'uscita': totimeOrig, 'bus': $scope.busEnabled, 'fermata': $scope.busDefaultStop, 'delega_name': '' }];
-                        jsonTest = $scope.formatInfo(jsonTest);
-                        $scope.days = jsonTest;
-                        for (var i = 0; i <= 4; i++) {
-                            week_planService.setDayDataDefault(i, $scope.days[i], '');
-                        }
-                    }
-                }]
-            });
+            //     }, {
+            //         text: 'OK',
+            //         type: 'button_save',
+            //         onTap: function (e) {
+            //             var jsonTest = [{ 'name': 'monday_reduced', 'entrata': fromtime, 'uscita': totimeOrig, 'bus': $scope.busEnabled, 'fermata': $scope.busDefaultStop, 'delega_name': '' },
+            //             { 'name': 'tuesday_reduced', 'entrata': fromtime, 'uscita': totimeOrig, 'bus': $scope.busEnabled, 'fermata': $scope.busDefaultStop, 'delega_name': '' },
+            //             { 'name': 'wednesday_reduced', 'entrata': fromtime, 'uscita': totimeOrig, 'bus': $scope.busEnabled, 'fermata': $scope.busDefaultStop, 'delega_name': '' },
+            //             { 'name': 'thursday_reduced', 'entrata': fromtime, 'uscita': totimeOrig, 'bus': $scope.busEnabled, 'fermata': $scope.busDefaultStop, 'delega_name': '' },
+            //             { 'name': 'friday_reduced', 'entrata': fromtime, 'uscita': totimeOrig, 'bus': $scope.busEnabled, 'fermata': $scope.busDefaultStop, 'delega_name': '' }];
+            //             jsonTest = $scope.formatInfo(jsonTest);
+            //             $scope.days = jsonTest;
+            //             for (var i = 0; i <= 4; i++) {
+            //                 week_planService.setDayDataDefault(i, $scope.days[i], '');
+            //             }
+            //         }
+            //     }]
+            // });
         };
 
 

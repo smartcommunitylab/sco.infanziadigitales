@@ -226,52 +226,42 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     }
 
 
-    var isOnline = true;
+    $rootScope.isOnline = true;
 
     if (window.Connection) {
 
       $rootScope.$on('$cordovaNetwork:online', function (event, networkState) {
-        if (isOnline) return;
+        if ($rootScope.isOnline) return;
 
-        isOnline = true;
-
-        console.log('We Are Online');
+        $rootScope.isOnline = true;
+        if ($rootScope.contactPopup) {
+          $rootScope.deregister();
+          $rootScope.contactPopup.close();
+          $rootScope.contactPopup = null;
+          //se sono in home ricarico altrimenti vado in home
+          if ($state.current.name == 'app.home') {
+            $state.reload();
+          }
+        }
       });
 
       $rootScope.$on('$cordovaNetwork:offline', function (event, networkState) {
-        if (!isOnline) return;
+        if (!$rootScope.isOnline) return;
 
-        isOnline = false;
-
-        $scope.contactPopup = $ionicPopup.show({
-          title: $filter('translate')('connection_popup'),
-          scope: $scope,
-          buttons: [{ // Array[Object] (optional). Buttons to place in the popup footer.
-            text: $filter('translate')('ok'),
-            type: 'button-norm',
-            onTap: function (e) {
-              $state.go('app.home');
-            }
-          }]
-        });
+        $rootScope.isOnline = false;
+        if (!$rootScope.contactPopup) {
+          $rootScope.deregister=$ionicPlatform.registerBackButtonAction(function(){
+            return; 
+        }, 401);
+          $rootScope.contactPopup = $ionicPopup.show({
+            title: $filter('translate')('connection_popup'),
+            scope: $rootScope,
+            hardwareBackButtonClose: false
+          });
+        }
       });
     }
-    // document.addEventListener("offline", onOffline, false);
 
-    // function onOffline() {
-    //     // Handle the offline event
-    //     $scope.contactPopup=$ionicPopup.show({
-    //       title: $filter('translate')('communication_error'),
-    //       scope: $scope,
-    //       buttons: [{ // Array[Object] (optional). Buttons to place in the popup footer.
-    //         text: $filter('translate')('ok'),
-    //         type: 'button-norm',
-    //         onTap: function (e) {
-    //           $state.go('app.home');
-    //         }
-    //       }]
-    //     });
-    // }
     $scope.execute = function (element) {
       $scope.checkConnection().then(function () {
         if (element.class != "button-stable" && !($rootScope.noConnection && !$scope.isContact(element))) {
@@ -536,7 +526,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
           $scope.currWeek = $scope.currentDate.format('w');
           var day = $scope.currentDate.format('d') - 1;
           var selected = moment().weekday(day).week($scope.currWeek);
-  
+
           $scope.mode = 'edit';
           console.log($scope.weekInfo);
           var dayData = $scope.weekInfo[day];
@@ -566,7 +556,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         $rootScope.noConnection = true;
         buildHome();
       });
-      
+
     };
 
     $scope.isContact = function (element) {
@@ -701,6 +691,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
       // Handle the resume event
       getCommunications();
       logStart();
+      $scope.checkConnection().then(function () {
+        if ($rootScope.contactPopup) {
+          $rootScope.contactPopup.close();
+          $rootScope.contactPopup = null;
+          $state.go('app.home');
+        }
+      }, function (err) {
+
+      });
     }
     //corretto tutte e tre annidate? cosa succede se una salta? ma come faccio a settare il profilo temporaneo senza avere conf, prof????
     $scope.getConfiguration = function () {

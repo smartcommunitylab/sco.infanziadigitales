@@ -13,10 +13,10 @@
 -->
   <ion-content has-header="true" scroll="false">
     <ion-scroll class="home-area" scrollbar-y="true">
-      <div class="no-connection-block">
+      <!-- <div class="no-connection-block">
         <div class="no-connection" ng-show="noConnection" ng-bind-html="noConnectionMessage"></div>
         <button ng-show="noConnection" class="button home-reload" ng-click="refresh()"> ricarica pagina</button>
-      </div>
+      </div> -->
       <div class="brief_info_container" ng-if="!noConnection">
       <div class="brief_info" ng-if="!briefInfo.absence && !weekend && !noConnection" ng-click="gotoEditDate();">
         <div class="currentDate"><i class="icon ion-android-calendar iconStyleHome1"></i> {{date | date:'EEEE, d MMMM yyyy' | capitalize}}</div>

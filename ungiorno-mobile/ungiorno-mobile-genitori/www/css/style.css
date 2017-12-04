@@ -2710,6 +2710,7 @@ textarea {
   border: 1px solid #FFAD00;
   box-shadow: 1px 1px 1px #FFAD00;
   padding-bottom: 4px;
+  margin-top: 6px;
 }
 .currentDate{
   margin-bottom:14px;

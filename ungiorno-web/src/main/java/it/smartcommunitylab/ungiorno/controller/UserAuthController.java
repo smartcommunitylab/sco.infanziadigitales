@@ -33,6 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -73,6 +74,12 @@ public class UserAuthController {
 		try {
 			HttpResponse postResult = Utils.postJSON(url, "");
 			int status = postResult.getStatusLine().getStatusCode();
+			String contentType = postResult.getLastHeader("Content-Type").getValue();
+			// tricky case: authentication error is returned as html page 
+			if (!StringUtils.isEmpty(contentType) && !contentType.startsWith("application/json")) {
+				response.setStatus(HttpStatus.SC_UNAUTHORIZED);
+				return null;
+			}
 			if (status == 200) {
 				String str = EntityUtils.toString(postResult.getEntity(),"UTF-8");
 				TokenData data = TokenData.valueOf(str);

@@ -88,6 +88,7 @@ public class UserAuthController {
 			}
 			response.setStatus(status);
 		} catch (Exception e) {
+			logger.error("Error occured: ", e);
 			response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 		}
 		return null;

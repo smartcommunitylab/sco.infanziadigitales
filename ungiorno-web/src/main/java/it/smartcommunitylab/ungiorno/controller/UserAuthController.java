@@ -75,6 +75,7 @@ public class UserAuthController {
 			HttpResponse postResult = Utils.postJSON(url, "");
 			int status = postResult.getStatusLine().getStatusCode();
 			String contentType = postResult.getLastHeader("Content-Type").getValue();
+			logger.info("login response: {} / {}", contentType, status);
 			// tricky case: authentication error is returned as html page 
 			if (!StringUtils.isEmpty(contentType) && !contentType.startsWith("application/json")) {
 				response.setStatus(HttpStatus.SC_UNAUTHORIZED);

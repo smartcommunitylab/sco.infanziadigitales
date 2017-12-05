@@ -83,10 +83,8 @@ public class UserAuthController {
 			if (status == 200) {
 				String str = EntityUtils.toString(postResult.getEntity(),"UTF-8");
 				
-				TokenData data = null;
-				try {
-					data = TokenData.valueOf(str);
-				} catch (Exception e) {
+				TokenData data = TokenData.valueOf(str);
+				if (data == null) {
 					// response is not token, authentication exception
 					response.setStatus(HttpStatus.SC_UNAUTHORIZED);
 					return null;					

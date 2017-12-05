@@ -75,7 +75,6 @@ public class UserAuthController {
 			HttpResponse postResult = Utils.postJSON(url, "");
 			int status = postResult.getStatusLine().getStatusCode();
 			String contentType = postResult.getLastHeader("Content-Type").getValue();
-			logger.info("login response: {} / {}", contentType, status);
 			// tricky case: authentication error is returned as html page 
 			if (!StringUtils.isEmpty(contentType) && !contentType.startsWith("application/json")) {
 				response.setStatus(HttpStatus.SC_UNAUTHORIZED);
@@ -83,7 +82,15 @@ public class UserAuthController {
 			}
 			if (status == 200) {
 				String str = EntityUtils.toString(postResult.getEntity(),"UTF-8");
-				TokenData data = TokenData.valueOf(str);
+				
+				TokenData data = null;
+				try {
+					data = TokenData.valueOf(str);
+				} catch (Exception e) {
+					// response is not token, authentication exception
+					response.setStatus(HttpStatus.SC_UNAUTHORIZED);
+					return null;					
+				}
 				return permissions.authenticate(request, response, data, true);
 			}
 			response.setStatus(status);

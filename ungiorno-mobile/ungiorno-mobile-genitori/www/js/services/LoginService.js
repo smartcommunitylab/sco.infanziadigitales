@@ -743,7 +743,7 @@ angular.module('smartcommunitylab.services.login', [])
 								console.log('[LOGIN] ' + PROVIDER_NATIVE.GOOGLE + ' logout successfully (' + msg + ')');
 								if (settings.loginType == service.LOGIN_TYPE.COOKIE) {
 									if (window.cookieMaster)
-										cookieMaster.clearCookies(function () {
+										cookieMaster.clear(function () {
 											console.log('[LOGIN] Cookies cleared!');
 										});
 								}
@@ -763,7 +763,7 @@ angular.module('smartcommunitylab.services.login', [])
 												console.log('[LOGIN] ' + service.PROVIDER.INTERNAL + ' logout successfully (token revoked)');
 												if (settings.loginType == service.LOGIN_TYPE.COOKIE) {
 													if (window.cookieMaster)
-														cookieMaster.clearCookies(function () {
+														cookieMaster.clear(function () {
 															console.log('[LOGIN] Cookies cleared!');
 														});
 												}
@@ -791,7 +791,7 @@ angular.module('smartcommunitylab.services.login', [])
 								console.log('[LOGIN] ' + PROVIDER_NATIVE.FACEBOOK + ' logout successfully');
 								if (settings.loginType == service.LOGIN_TYPE.COOKIE) {
 									if (window.cookieMaster)
-										cookieMaster.clearCookies(function () {
+										cookieMaster.clear(function () {
 											console.log('[LOGIN] Cookies cleared!');
 										});
 								}
@@ -813,7 +813,7 @@ angular.module('smartcommunitylab.services.login', [])
 								console.log('[LOGIN] ' + service.PROVIDER.INTERNAL + ' logout successfully (token revoked)');
 								if (settings.loginType == service.LOGIN_TYPE.COOKIE && $window.cookies) {
 									if (window.cookieMaster)
-										cookieMaster.clearCookies(function () {
+										cookieMaster.clear(function () {
 											console.log('[LOGIN] Cookies cleared!');
 										});
 								}

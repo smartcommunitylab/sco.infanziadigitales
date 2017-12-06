@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controllers.login', [])
 
-    .controller('LoginCtrl', function ($scope, $rootScope, $state, $filter, $ionicPopup, $ionicHistory, $ionicLoading, Config, LoginService, dataServerService, pushNotificationService) {
+    .controller('LoginCtrl', function ($scope, $rootScope, $state, $filter, $ionicPopup, $ionicHistory, $ionicLoading,Toast, Config, LoginService, dataServerService, pushNotificationService) {
         var loginStarted = false;
         $scope.user = {
             email: '',
@@ -10,7 +10,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
 
         $scope.login = function (provider) {
-
+            if (provider=='internal' && !$scope.user.email  ) {
+                Toast.show($filter('translate')('empty_email'), 'short', 'bottom');
+                return;
+            }
+            if (provider=='internal' && !$scope.user.password ) {
+                Toast.show($filter('translate')('empty_password'), 'short', 'bottom');
+                return;
+            }
 
             LoginService.login(provider, $scope.user).then(
 
@@ -48,6 +55,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                     // loginStarted = false;
                     //Utils.toast(Utils.getErrorMsg(error));
                     // StorageSrv.saveUser(null);
+                    if (error == 'Invalid credentials')
+                    {
+                        Toast.show($filter('translate')('invalid_credentials'), 'short', 'bottom');
+                    } else if (error && error.status== 401) {
+                        Toast.show($filter('translate')('user_not_allowed'), 'short', 'bottom');
+                    }
                     localStorage.userId = null;
                     //ionic.Platform.exitApp();
                 }
@@ -65,7 +78,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             window.open(Config.getAACURL() + '/internal/reset?lang=en', '_system', 'location=no,toolbar=no')
         }
         $scope.signin = function () {
-            //Utils.loading();
+           
             $ionicLoading.show();
 
             LoginService.signin($scope.user).then(
@@ -110,7 +123,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         };
     })
 
-    .controller('RegisterCtrl', function ($scope, $rootScope, $state, $filter, $ionicHistory, $ionicPopup, LoginService, loginService, Config, $translate, $ionicLoading) {
+    .controller('RegisterCtrl', function ($scope, $rootScope, $state, $filter, $ionicHistory, $ionicPopup, LoginService, Config, $translate, $ionicLoading) {
         $scope.user = {
             lang: $translate.preferredLanguage(),
             name: '',

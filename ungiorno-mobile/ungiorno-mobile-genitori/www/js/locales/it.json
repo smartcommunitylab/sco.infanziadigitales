@@ -259,5 +259,9 @@
   "send_msg":"Invia un messaggio",
   "ora_invalida": "Gli orari di entrata e uscita sono incompatibili.",
   "problem_no_connection":"Impossibile accedere alla funzione. Si prega di ricaricare",
-  "connection_popup":"Errore di comunicazione con il server. Per utilizzare l'applicazione è necessaria una connessione internet"
+  "connection_popup":"Errore di comunicazione con il server. Per utilizzare l'applicazione è necessaria una connessione internet",
+  "invalid_credentials":"Credenziali non valide",
+  "empty_email":"Email non valida",
+  "empty_password":"Password non valida",
+  "user_not_allowed":"Utente non autorizzato"
 }

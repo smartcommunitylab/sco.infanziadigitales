@@ -15,7 +15,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.conf', 
 
   var mapJsonConfig = null;
   //    var credits = 'credits.html';
-  var APP_VERSION = '3.0.0';
+  var APP_VERSION = '3.0.1';
   var RESET_VERSION = '3.0.0';
   return {
     init: function () {

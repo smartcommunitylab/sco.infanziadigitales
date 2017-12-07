@@ -623,11 +623,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             }
             if ($scope.listServicesAnticipo.length > 0) {
                 $scope.listServicesAnticipo.sort(sortByTimeAscOut);
-                fromtime = $scope.listServicesAnticipo[0]['out_val'];
+                fromtime = $scope.listServicesAnticipo[0]['entry_val'];
             }
             if ($scope.listServicesPosticipo.length > 0) {
                 $scope.listServicesPosticipo.sort(sortByTimeAscOut);
-                totime = $scope.listServicesPosticipo[$scope.listServicesPosticipo.length - 1]['out_val'];
+                totime = $scope.listServicesPosticipo[$scope.listServicesPosticipo.length - 1]['entry_val'];
             }
             $ionicLoading.hide();
         };
@@ -861,7 +861,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
 
     })
-    .controller('WeekDefaultEditDayCtrl', function ($scope, moment, dataServerService, week_planService, profileService, $ionicModal, $filter, $ionicPopup, $state, Toast) {
+    .controller('WeekDefaultEditDayCtrl', function ($scope,$rootScope, moment, dataServerService, week_planService, profileService, $ionicModal, $filter, $ionicPopup, $state, Toast) {
         $scope.days = {};
         var dated = new Date();
         $scope.currDay = 0;
@@ -1120,8 +1120,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         $scope.getListServices();
 
         $scope.setEntry = function (item) {
-            $scope.currData.entrata = moment(item.out, 'H:mm');
-            $scope.currData.entrata_display = item.out;
+            $scope.currData.entrata = moment(item.entry, 'H:mm');
+            $scope.currData.entrata_display = item.entry;
             $scope.manual_time = false;
             setTimeWidget();
         };
@@ -1139,7 +1139,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         }
         $scope.openPopupEntry = function () {
             $scope.tempData = $scope.currData.entrata;
-            var myPopup = $ionicPopup.show({
+            $rootScope.myPopup = $ionicPopup.show({
                 scope: $scope,
                 title: $filter('translate')('orario_entrata'),
                 templateUrl: 'templates/week_popup_entry.html',
@@ -1172,7 +1172,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
         $scope.openPopupOut = function () {
             $scope.tempData = $scope.currData.uscita;
-            var myPopup = $ionicPopup.show({
+            $rootScope.myPopup = $ionicPopup.show({
                 scope: $scope,
                 title: $filter('translate')('orario_uscita'),
                 templateUrl: 'templates/week_popup_exit.html',
@@ -1221,7 +1221,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         }
 
     })
-    .controller('WeekEditDayCtrl', function ($scope, moment, dataServerService, week_planService, logService, profileService, $ionicModal, $filter, $ionicPopup, $state, Toast) {
+    .controller('WeekEditDayCtrl', function ($scope,$rootScope, moment, dataServerService, week_planService, logService, profileService, $ionicModal, $filter, $ionicPopup, $state, Toast) {
         $scope.days = [];
         var dated = new Date();
         $scope.currDay = 0;
@@ -1577,8 +1577,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
 
         $scope.setEntry = function (item) {
-            $scope.currData.entrata = moment(item.out, 'H:mm');
-            $scope.currData.entrata_display = item.out;
+            $scope.currData.entrata = moment(item.entry, 'H:mm');
+            $scope.currData.entrata_display = item.entry;
             $scope.manual_time = false;
             setTimeWidget();
         };
@@ -1596,7 +1596,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         }
         $scope.openPopupEntry = function () {
             $scope.tempData = $scope.currData.entrata;
-            var myPopup = $ionicPopup.show({
+            $rootScope.myPopup = $ionicPopup.show({
                 scope: $scope,
                 title: $filter('translate')('orario_entrata'),
                 templateUrl: 'templates/week_popup_entry.html',
@@ -1627,9 +1627,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             });
         }
 
+
         $scope.openPopupOut = function () {
             $scope.tempData = $scope.currData.uscita;
-            var myPopup = $ionicPopup.show({
+            $rootScope.myPopup = $ionicPopup.show({
                 scope: $scope,
                 title: $filter('translate')('orario_uscita'),
                 templateUrl: 'templates/week_popup_exit.html',

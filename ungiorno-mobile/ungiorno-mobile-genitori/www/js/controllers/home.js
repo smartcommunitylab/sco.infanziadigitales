@@ -255,7 +255,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         }
       });
     }
-
+    var onPause = function() {
+      if ($rootScope.myPopup){
+          $rootScope.myPopup.close()  
+      }
+  }
+  document.addEventListener("pause", onPause, false);
+  
     $scope.execute = function (element) {
       $scope.checkConnection().then(function () {
         if (element.class != "button-stable" && !($rootScope.noConnection && !$scope.isContact(element))) {

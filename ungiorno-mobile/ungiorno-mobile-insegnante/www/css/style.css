@@ -1481,6 +1481,10 @@ textarea {
   opacity: 0.4;
 }
 
+.img-not-now {
+  opacity: 0.3;
+}
+
 .img-communication {
   opacity: 0.8;
 }

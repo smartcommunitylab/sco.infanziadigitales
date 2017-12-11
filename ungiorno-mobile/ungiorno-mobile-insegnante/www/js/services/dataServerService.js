@@ -214,6 +214,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.dataSer
           data.data.forEach(function(s) {
             s.children.forEach(function(kid) {
               kid.slotPresent = [];
+              kid.notPresent = [];
               if (kid.exitTime != null) {
                 var presStart = moment(kid.entryTime).format('HH:mm');
                 var presEnd = moment(kid.exitTime).format('HH:mm');
@@ -222,6 +223,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.dataSer
                   var slotEnd = moment(slot.toTime).format('HH:mm');
                   if (presStart < slotEnd && presEnd > slotStart) {
                     kid.slotPresent.push(slot.name);              
+                  } else {
+                    kid.notPresent.push(slot.name);              
                   }
                 });
               }

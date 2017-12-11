@@ -467,7 +467,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/login');
 
-    $translateProvider.useUrlLoader('js/locales/it.json');
+    //  $translateProvider.useUrlLoader('js/locales/it.json');
+    $translateProvider.useStaticFilesLoader({
+      prefix: 'js/locales/',
+      suffix: '.json'
+    });
+    // $translateProvider.useLocalStorage();
     $translateProvider.preferredLanguage("it");
     $translateProvider.fallbackLanguage("it");
   });

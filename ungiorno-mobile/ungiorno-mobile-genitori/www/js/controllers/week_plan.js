@@ -213,7 +213,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         $scope.setWeekPlan = function () {
             var confirmPopup = $ionicPopup.confirm({
                 title: $filter('translate')('Avviso'),
-                template: 'Questa operazione sovrascriverà i dati attuali. Si vuole procedere ugualmente?',
+                template: $filter('translate')('overwrite_week_plan'),
                 buttons: [{
                     text: $filter('translate')('cancel'),
                     type: 'button_cancel',
@@ -287,7 +287,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         $scope.cancel = function () {
             var confirmPopup = $ionicPopup.confirm({
                 title: $filter('translate')('Avviso'),
-                template: 'Sei sicuro di voler annullare le informazioni inserite?',
+                template: $filter('translate')('cancel_plan'),
                 buttons: [{
                     text: $filter('translate')('cancel'),
                     type: 'button_cancel',
@@ -729,7 +729,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         $scope.setWeekPlan = function () {
             var confirmPopup = $ionicPopup.confirm({
                 title: $filter('translate')('Avviso'),
-                template: 'Questa operazione sovrascriverà i dati attuali. Si vuole procedere ugualmente?',
+                template: $filter('translate')('overwrite_default_week_plan'),
                 buttons: [{
                     text: $filter('translate')('cancel'),
                     type: 'button_cancel',
@@ -772,7 +772,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         $scope.cancel = function () {
             var confirmPopup = $ionicPopup.confirm({
                 title: $filter('translate')('Avviso'),
-                template: 'Sei sicuro di voler annullare le informazioni inserite?',
+                template: $filter('translate')('cancel_plan'),
                 buttons: [{
                     text: $filter('translate')('cancel'),
                     type: 'button_cancel',
@@ -983,7 +983,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         $scope.cancel = function () {
             var confirmPopup = $ionicPopup.confirm({
                 title: $filter('translate')('Avviso'),
-                template: 'Sei sicuro di voler annullare le informazioni inserite?',
+                template: $filter('translate')('cancel_plan'),
                 buttons: [{
                     text: $filter('translate')('cancel'),
                     type: 'button_cancel',
@@ -1431,7 +1431,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         $scope.cancel = function () {
             var confirmPopup = $ionicPopup.confirm({
                 title: $filter('translate')('Avviso'),
-                template: 'Sei sicuro di voler annullare le informazioni inserite?',
+                template: $filter('translate')('cancel_plan'),
                 buttons: [{
                     text: $filter('translate')('cancel'),
                     type: 'button_cancel',

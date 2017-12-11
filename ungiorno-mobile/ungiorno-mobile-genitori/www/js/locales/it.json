@@ -263,5 +263,8 @@
   "invalid_credentials":"Credenziali non valide",
   "empty_email":"Email non valida",
   "empty_password":"Password non valida",
-  "user_not_allowed":"Utente non autorizzato"
+  "user_not_allowed":"Utente non autorizzato",
+  "overwrite_week_plan":"Questa operazione sovrascriverà i dati attuali. Si vuole procedere ugualmente?",
+"cancel_plan":"Sei sicuro di voler annullare le informazioni inserite?",
+  "overwrite_default_week_plan":"Questa operazione sovrascriverà i dati attuali. Si vuole procedere ugualmente?"
 }

@@ -259,6 +259,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
       if ($rootScope.myPopup){
           $rootScope.myPopup.close()  
       }
+      if ($rootScope.TempPrevent) {
+        $rootScope.TempPrevent.close();
+      }
   }
   document.addEventListener("pause", onPause, false);
   
@@ -480,7 +483,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
     }
     $scope.gotoChat = function () {
       $state.go('app.messages');
-      $scope.TempPrevent.close();
+      $rootScope.TempPrevent.close();
+    }
+
+    $scope.weekPlan = function () {
+      $scope.goToWeekPlan();
+      $rootScope.TempPrevent.close();
+      
     }
     $scope.callSchool = function () {
       if (profileService.getSchoolProfile().contacts == null || profileService.getSchoolProfile().contacts == undefined) {
@@ -494,8 +503,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
       var num = profileService.getSchoolProfile().contacts.telephone[0];
       num = num.replace(/\D/g, '');
       window.open('tel:' + num, '_system');
-      if ($scope.TempPrevent) {
-        $scope.TempPrevent.close();
+      if ($rootScope.TempPrevent) {
+        $rootScope.TempPrevent.close();
       }
     }
 
@@ -508,12 +517,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
           return;
         }
         else if (temp) {
-          $scope.TempPrevent = $ionicPopup.show({
+          $rootScope.TempPrevent = $ionicPopup.show({
             title: $filter('translate')('retire_popup_toolate_title'),
             cssClass: 'expired-popup',
             scope: $scope,
             template: $filter('translate')('retire_popup_toolate_text') + " " + moment($scope.modifyBefore).format('HH:mm') + "<div class\"row\"><span ng-click=\"callSchool();\"  class=\"button button-expired-call\">" + $filter('translate')('home_contatta') + "</span></div>"
-              + "<div class\"row\"><span ng-click=\"gotoChat();\"  class=\"button button-expired-call\">" + $filter('translate')('send_msg') + "</span></div>",
+              + "<div class\"row\"><span ng-click=\"gotoChat();\"  class=\"button button-expired-call\">" + $filter('translate')('send_msg') + "</span></div>"+  "<div class\"row\"><span ng-click=\"weekPlan();\"  class=\"button button-expired-call\">" + $filter('translate')('menu_week_plan') + "</span></div>",
             buttons: [
               {
                 text: $filter('translate')('retire_popup_absent_close'),

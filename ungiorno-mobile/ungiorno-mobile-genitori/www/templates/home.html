@@ -20,8 +20,8 @@
       <div class="brief_info_container" ng-if="!noConnection">
       <div class="brief_info" ng-if="!briefInfo.absence && !weekend && !noConnection" ng-click="gotoEditDate();">
         <div class="currentDate"><i class="icon ion-android-calendar iconStyleHome1"></i> {{date | date:'EEEE, d MMMM yyyy' | capitalize}}</div>
-        <div class="button-norm-brief" >Entrata Ore  {{briefInfo.ore_entrata}}</div>
-        <div class="button-norm-brief" >Uscita Ore   {{briefInfo.ore_uscita}}</div>
+        <div class="button-norm-brief" >{{'enter_at' | translate}} {{briefInfo.ore_entrata}}</div>
+        <div class="button-norm-brief" >{{'exit_at' | translate}} {{briefInfo.ore_uscita}}</div>
         <div class="br_in" ng-if="briefInfo.bus">
             <i class="icon ion-android-bus iconStyleHome"></i>{{briefInfo.addressBus | translate}}</div>
         <div class="br_in">
@@ -33,11 +33,11 @@
         </div>
       </div>
       <div class="brief_info" ng-if="briefInfo.absence && !weekend && !noConnection" ng-click="gotoEditDate();">
-        <div class="currentDate"><i class="icon ion-android-calendar iconStyleHome1"></i> {{date | date:'EEEE, d MMMM yyyy' | capitalize}}</div>
-        <div class="button-norm-brief">Assente   {{briefInfo.motivazione.type}}</div>
+        <div class="currentDate"><i class="icon ion-android-calendar iconStyleHome1"></i> {{date | date:'fullDate' | capitalize}}</div>
+        <div class="button-norm-brief">{{'home_absent' | translate}}   {{briefInfo.motivazione.type}}</div>
       </div>
       <div class="brief_info" ng-if="weekend && !noConnection" ng-click="gotoEditDate();">
-          <div class="currentDate"><i class="icon ion-android-calendar iconStyleHome1"></i> {{date | date:'EEEE, d MMMM yyyy' | capitalize}}</div>
+          <div class="currentDate"><i class="icon ion-android-calendar iconStyleHome1"></i> {{date | date:'fullDate' | capitalize}}</div>
           <div class="button-norm-brief" >{{'none_entry' | translate}} </div>
           <div class="button-norm-brief" >{{'none_exit' | translate}} </div>
           <div class="br_in">

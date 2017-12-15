@@ -77,7 +77,7 @@
       <table class="dayEdit_table" >
         <tr>
           <td>
-              <p>{{'Entrata ore'| translate}}:</p>
+              <p>{{'enter_at'| translate}}:</p>
           </td>
           <td>
               <span class="editable2" ng-click="openPopupEntry()" ng-if="!currData.absence">{{currData.entrata_display}}</span>
@@ -86,7 +86,7 @@
         </tr>
         <tr>
           <td>
-              <p>{{'Uscita ore'| translate}}:</p>
+              <p>{{'exit_at'| translate}}:</p>
           </td>
           <td>
               <span class="editable2" ng-click="openPopupOut()" ng-if="!currData.bus && !currData.absence">{{currData.uscita_display}}</span>
@@ -96,7 +96,7 @@
         </tr>
         <tr>
           <td>
-              <p>{{'Fermata'| translate}}:</p>
+              <p>{{'bus_stop'| translate}}:</p>
           </td>
           <td>
               <div data-tap-disabled="true" ng-class="{'select-div':!currData.absence && currData.bus}">
@@ -109,7 +109,7 @@
         </tr>
         <tr>
           <td>
-              <p>{{'Ritira'| translate}}:</p>
+              <p>{{'ritira'| translate}}:</p>
           </td>
           <td>
               <div data-tap-disabled="true" ng-class="{'select-div':!currData.absence}">
@@ -144,7 +144,7 @@
         </div>
 
         <div class="button_save" ng-click="setDay()">
-          {{'Conferma' | translate | uppercase}}
+          {{'conferma' | translate | uppercase}}
         </div>
       </div>
 

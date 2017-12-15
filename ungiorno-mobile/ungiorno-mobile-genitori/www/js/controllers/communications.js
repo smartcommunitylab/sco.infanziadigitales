@@ -2,7 +2,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
 .controller('CommunicationsCtrl', function ($scope, $rootScope, communicationsService, profileService, $filter, Toast, $ionicLoading, pushNotificationService) {
   $scope.babyProfile = profileService.getBabyProfile();
-   $scope.communications_title = $filter('translate')('communications_title')+' per '+ $scope.babyProfile.firstName
+   $scope.communications_title = $filter('translate')('communications_title')+ $scope.babyProfile.firstName
   $scope.getCommunications = function (schoolId, kidId) {
     $ionicLoading.show();
     communicationsService.getCommunications(schoolId, kidId).then(function (data) {

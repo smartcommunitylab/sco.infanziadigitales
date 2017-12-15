@@ -1155,7 +1155,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                         }
                     },
                     {
-                        text: $filter('translate')('Salva'),
+                        text: $filter('translate')('salva'),
                         type: 'button_save',
                         onTap: function (e) {
                             if (!$scope.validateEntryExit()) {
@@ -1188,7 +1188,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                         }
                     },
                     {
-                        text: $filter('translate')('Salva'),
+                        text: $filter('translate')('salva'),
                         type: 'button_save',
                         onTap: function (e) {
                             if (!$scope.validateEntryExit()) {
@@ -1612,7 +1612,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                         }
                     },
                     {
-                        text: $filter('translate')('Salva'),
+                        text: $filter('translate')('salva'),
                         type: 'button_save',
                         onTap: function (e) {
                             if (!$scope.validateEntryExit()) {
@@ -1646,7 +1646,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                         }
                     },
                     {
-                        text: $filter('translate')('Salva'),
+                        text: $filter('translate')('salva'),
                         type: 'button_save',
                         onTap: function (e) {
                             if (!$scope.validateEntryExit()) {
@@ -1805,7 +1805,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                 wholeStep: 15,  //Optional
                 format: "WHOLE",  //Optional - "WHOLE" or "DECIMAL"
                 unit: "",  //Optional - "m", "kg", "℃" or whatever you want
-                titleLabel: 'Minuti',  //Optional
+                titleLabel: $filter('translate')('minutes'),  //Optional
                 setLabel: $filter('translate')('popup_timepicker_select'),  //Optional
                 closeLabel: $filter('translate')('popup_timepicker_cancel'),  //Optional
                 setButtonType: 'button-norm',  //Optional

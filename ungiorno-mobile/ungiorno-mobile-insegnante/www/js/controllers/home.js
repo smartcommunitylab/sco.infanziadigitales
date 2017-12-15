@@ -70,7 +70,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.home
             communication: communicationService.getCommunication().communicationId,
             description: communicationService.getCommunication().description,
             dateToCheck: new Date(communicationService.getCommunication().dateToCheck),
-            creationDate: new Date(communicationService.getCommunication().creationDate)
+            creationDate: new Date(communicationService.getCommunication().creationDate),
+            groupId: communicationService.getCommunication().groupId
           }
         };
         $scope.childrenCommunicationDelivery = communicationService.getCommunication().children;

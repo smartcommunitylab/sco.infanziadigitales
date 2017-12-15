@@ -108,6 +108,9 @@
             <div class="col">
               <div class="comm-creation-date">{{'communication_of' | translate}} {{data.creationDate | date}}</div>
             </div>
+            <div class="col">
+              <div class="comm-home-group">{{'communication_group' | translate}}<span ng-if="data.groupId">  {{data.groupId}}</span><span ng-if="!data.groupId">  {{'communication_group_all' | translate}}</span></div>
+            </div>
           </div>
           <div class="row">
             <div class="col">

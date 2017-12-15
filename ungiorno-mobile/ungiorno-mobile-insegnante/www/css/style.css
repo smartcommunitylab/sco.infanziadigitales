@@ -2069,7 +2069,9 @@ ion-content .scroll {
   position: relative;
   margin-top: 20px;
 }
-
+#home .comm-home-group {
+  text-align: right;
+}
 #home .ribbon {
   position: absolute;
   top: 0px;

@@ -627,7 +627,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             }
             if ($scope.listServicesPosticipo.length > 0) {
                 $scope.listServicesPosticipo.sort(sortByTimeAscOut);
-                totime = $scope.listServicesPosticipo[$scope.listServicesPosticipo.length - 1]['entry_val'];
+                totime = $scope.listServicesPosticipo[$scope.listServicesPosticipo.length - 1]['out_val'];
             }
             $ionicLoading.hide();
         };

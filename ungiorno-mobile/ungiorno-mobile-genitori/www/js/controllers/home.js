@@ -406,7 +406,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         }
         if ($scope.listServicesAnticipo.length > 0) {
           $scope.listServicesAnticipo.sort(sortByTimeAscOut);
-          $scope.fromtime = $scope.listServicesAnticipo[0]['out_val'];
+          $scope.fromtime = $scope.listServicesAnticipo[0]['entry_val'];
         }
         if ($scope.listServicesPosticipo.length > 0) {
           $scope.listServicesPosticipo.sort(sortByTimeAscOut);

@@ -211,6 +211,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         $scope.getWeekPlan();
 
         $scope.setWeekPlan = function () {
+            $scope.currData['prom_day_summary'] = (localStorage.getItem('prom_day_summary') == 'true' ? true : false);
+            $scope.currData['prom_week'] = (localStorage.getItem('prom_week') == 'true' ? true : false);
+            $scope.currData['prom_day_ritiro'] = (localStorage.getItem('prom_day_ritiro') == 'true' ? true : false);
+            $scope.currData['prom_week_day'] = (localStorage.getItem('prom_week_day') !== null && localStorage.getItem('prom_week_day') !== undefined ? localStorage.getItem('prom_week_day') : $scope.selectables[0]);
+           
             var confirmPopup = $ionicPopup.confirm({
                 title: $filter('translate')('Avviso'),
                 template: $filter('translate')('overwrite_week_plan'),
@@ -1396,6 +1401,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         };
 
         $scope.setDay = function () {
+            $scope.selectables = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+            $scope.currData['prom_day_summary'] = (localStorage.getItem('prom_day_summary') == 'true' ? true : false);
+            $scope.currData['prom_week'] = (localStorage.getItem('prom_week') == 'true' ? true : false);
+            $scope.currData['prom_day_ritiro'] = (localStorage.getItem('prom_day_ritiro') == 'true' ? true : false);
+            $scope.currData['prom_week_day'] = (localStorage.getItem('prom_week_day') !== null && localStorage.getItem('prom_week_day') !== undefined ? localStorage.getItem('prom_week_day') : $scope.selectables[0]);
+            $scope.currData['prom_day_time'] =     (localStorage.getItem('prom_day_time') !== null && localStorage.getItem('prom_day_time') !== undefined ? localStorage.getItem('prom_day_time') : "12:00");
+            $scope.currData['prom_week_time'] =     (localStorage.getItem('prom_week_time') !== null && localStorage.getItem('prom_week_time') !== undefined ? localStorage.getItem('prom_week_time') : "12:00");
             week_planService.setDayData($scope.currDay, $scope.currData, 'edit');
             for (var i = 0; i <= 4; i++) {
                 if ($scope.currData[$scope.repeatDays[i]['name']]) {
@@ -1412,6 +1424,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                     $scope.days[i] = week_planService.getDayData(i);
                 }
                 week_planService.setWeekPlan($scope.days, $scope.kidId, currWeek).then(function (data) {
+                    week_planService.setNotification($scope);
+                    
                     $state.go('app.home');
                 }, function (error) {
                 });

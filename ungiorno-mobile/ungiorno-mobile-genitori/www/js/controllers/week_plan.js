@@ -9,6 +9,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         $scope.currWeek = (currW != '') ? currW : $scope.currentDate.format('w');
         $scope.currYear = (currY != '') ? currY : $scope.currentDate.format('YYYY');
         $scope.currentDate.week($scope.currWeek).year($scope.currYear);
+        $scope.currData = {};
         $scope.currDay = dated.getDay() - 1;//0 ,1 ...6
         $scope.kidId = profileService.getBabyProfile().kidId;
         $scope.appId = profileService.getBabyProfile().appId;
@@ -211,11 +212,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         $scope.getWeekPlan();
 
         $scope.setWeekPlan = function () {
+
+            $scope.selectables = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
             $scope.currData['prom_day_summary'] = (localStorage.getItem('prom_day_summary') == 'true' ? true : false);
             $scope.currData['prom_week'] = (localStorage.getItem('prom_week') == 'true' ? true : false);
             $scope.currData['prom_day_ritiro'] = (localStorage.getItem('prom_day_ritiro') == 'true' ? true : false);
+            $scope.currData['prom_ritiro_time'] = (localStorage.getItem('prom_ritiro_time') !== null && localStorage.getItem('prom_ritiro_time') !== undefined ? localStorage.getItem('prom_ritiro_time') : "30");
             $scope.currData['prom_week_day'] = (localStorage.getItem('prom_week_day') !== null && localStorage.getItem('prom_week_day') !== undefined ? localStorage.getItem('prom_week_day') : $scope.selectables[0]);
-           
+            $scope.currData['prom_day_time'] =     (localStorage.getItem('prom_day_time') !== null && localStorage.getItem('prom_day_time') !== undefined ? localStorage.getItem('prom_day_time') : "12:00");
+            $scope.currData['prom_week_time'] =     (localStorage.getItem('prom_week_time') !== null && localStorage.getItem('prom_week_time') !== undefined ? localStorage.getItem('prom_week_time') : "12:00");
             var confirmPopup = $ionicPopup.confirm({
                 title: $filter('translate')('Avviso'),
                 template: $filter('translate')('overwrite_week_plan'),

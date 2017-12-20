@@ -36,7 +36,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 
     $scope.getDateString = function () {
       var today = new Date();
-      $scope.date = today.getTime();;
+      $scope.date = today.getTime();
     }
 
     var isRetireSet = function () {

@@ -151,7 +151,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                     if (now < limit) {
                         day = day - 1;
                     }
-                    if ($scope.currWeek > now.format('w')) {
+                    if ($scope.currWeek > now.format('w') || $scope.currYear > now.format('YYYY')) {
                         day = 0;
                     }
                 }
@@ -467,7 +467,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                     data = $scope.formatInfo(data);
                     //not from monday but from the actual day if it is this week
                     jsonTest = data;
-                    if ($scope.currWeek > now.format('w')) {
+                    if ($scope.currWeek > now.format('w') || $scope.currYear > now.format('YYYY')) {
                         day = 0;
                     }
                     for (var i = day; i <= 4; i++) {
@@ -483,7 +483,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
                     { 'name': 'thursday_reduced', 'entrata': fromtime, 'uscita': totime, 'bus': false, 'delega_name': '' },
                     { 'name': 'friday_reduced', 'entrata': fromtime, 'uscita': totime, 'bus': false, 'delega_name': '' }];
                     jsonTest = $scope.formatInfo(jsonTest);
-                    if ($scope.currWeek > now.format('w')) {
+                    if ($scope.currWeek > now.format('w') || $scope.currYear > now.format('YYYY')) {
                         day = 0;
                     }
                     for (var i = day; i <= 4; i++) {
@@ -1410,6 +1410,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             $scope.currData['prom_day_summary'] = (localStorage.getItem('prom_day_summary') == 'true' ? true : false);
             $scope.currData['prom_week'] = (localStorage.getItem('prom_week') == 'true' ? true : false);
             $scope.currData['prom_day_ritiro'] = (localStorage.getItem('prom_day_ritiro') == 'true' ? true : false);
+            $scope.currData['prom_ritiro_time'] = (localStorage.getItem('prom_ritiro_time') !== null && localStorage.getItem('prom_ritiro_time') !== undefined ? localStorage.getItem('prom_ritiro_time') : "30");
             $scope.currData['prom_week_day'] = (localStorage.getItem('prom_week_day') !== null && localStorage.getItem('prom_week_day') !== undefined ? localStorage.getItem('prom_week_day') : $scope.selectables[0]);
             $scope.currData['prom_day_time'] =     (localStorage.getItem('prom_day_time') !== null && localStorage.getItem('prom_day_time') !== undefined ? localStorage.getItem('prom_day_time') : "12:00");
             $scope.currData['prom_week_time'] =     (localStorage.getItem('prom_week_time') !== null && localStorage.getItem('prom_week_time') !== undefined ? localStorage.getItem('prom_week_time') : "12:00");

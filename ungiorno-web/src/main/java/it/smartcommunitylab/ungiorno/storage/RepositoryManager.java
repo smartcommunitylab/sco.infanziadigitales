@@ -622,21 +622,14 @@ public class RepositoryManager implements RepositoryService {
         KidProfile kid = template.findOne(q, KidProfile.class);
         List<KidProfile.DayDefault> weekDefault = kid.getWeekDef();
 
+        SchoolProfile profile = getSchoolProfile(appId, schoolId);
+        // school services
+        TimeSlotSchoolService regularService = getRegularService(profile);
         if (weekDefault == null) {
-            SchoolProfile profile = getSchoolProfile(appId, schoolId);
             Date today = new Date();
             Calendar cal = Calendar.getInstance();
             cal.setTime(today);
-            // school services
-            Set<TimeSlotSchoolService> schoolProfileServices = profile.getServices();
             // 'normal' service
-            TimeSlotSchoolService regularService = null;
-            for (TimeSlotSchoolService ts : schoolProfileServices) {
-                if (ts.isRegular()) {
-                    regularService = ts;
-                    break;
-                }
-            }
 
             if (regularService != null) {
                 weekDefault = new LinkedList<>();
@@ -655,10 +648,31 @@ public class RepositoryManager implements RepositoryService {
                 }
                 saveWeekDefault(appId, schoolId, kidId, weekDefault);
             }
+        } else if (regularService != null) {
+        	for (KidProfile.DayDefault day : weekDefault) {
+        		if (day.getBus()) {
+        			day.setUscita(regularService.getTimeSlots()
+                            .get(regularService.getTimeSlots().size() - 1).getToTime());
+        		}
+        	}
         }
 
+        
+        
         return weekDefault;
     }
+
+	private TimeSlotSchoolService getRegularService(SchoolProfile profile) {
+		Set<TimeSlotSchoolService> schoolProfileServices = profile.getServices();
+        TimeSlotSchoolService regularService = null;
+        for (TimeSlotSchoolService ts : schoolProfileServices) {
+            if (ts.isRegular()) {
+                regularService = ts;
+                break;
+            }
+        }
+		return regularService;
+	}
 
     /**
      * @param note
@@ -687,8 +701,19 @@ public class RepositoryManager implements RepositoryService {
         q.addCriteria(new Criteria("kidId").is(kidId));
         q.addCriteria(new Criteria("weeknr").is(weeknr));
         KidWeeks week = template.findOne(q, KidWeeks.class);
-        if (week != null)
-            return week.getDays();
+        if (week != null) {
+            SchoolProfile profile = getSchoolProfile(appId, schoolId);
+            TimeSlotSchoolService regularService = getRegularService(profile);
+            if (regularService != null) {
+                for (DayDefault day : week.getDays()) {
+                	if (day.getBus()) {
+                		day.setUscita(regularService.getTimeSlots()
+                                .get(regularService.getTimeSlots().size() - 1).getToTime());
+                	}
+                }
+            }
+        	return week.getDays();
+        }
         return null;
     }
 

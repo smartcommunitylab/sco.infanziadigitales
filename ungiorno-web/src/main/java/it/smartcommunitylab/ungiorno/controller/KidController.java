@@ -53,7 +53,6 @@ import it.smartcommunitylab.ungiorno.model.Response;
 import it.smartcommunitylab.ungiorno.services.PermissionsService;
 import it.smartcommunitylab.ungiorno.services.RepositoryService;
 import it.smartcommunitylab.ungiorno.services.impl.KidManager;
-import it.smartcommunitylab.ungiorno.utils.JsonUtil;
 
 @RestController
 public class KidController {

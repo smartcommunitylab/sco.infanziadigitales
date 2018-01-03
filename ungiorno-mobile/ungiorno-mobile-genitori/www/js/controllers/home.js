@@ -415,13 +415,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         //bus precedence for exit time by default
         console.log($scope.busEnabled);
         if ($scope.busEnabled) {
-          $scope.getSchoolNormalFascie = $filter('getSchoolNormalFascie')(profileService.getSchoolProfile().services);
-          $scope.getSchoolNormalFascie.sort(sortByTimeAscOut);
-          var length1 = $scope.getSchoolNormalFascie.length;
-          if (length1 > 0) $scope.totime = $scope.getSchoolNormalFascie[length1 - 1]['out_val'];
-          if ($scope.totime == '') $scope.totime = moment('14:00', 'H:mm');
-          totimeFormatted = moment($scope.totime).format('H:mm');
-          $scope.totime = moment($scope.totime, 'H:mm');
+          // $scope.getSchoolNormalFascie = $filter('getSchoolNormalFascie')(profileService.getSchoolProfile().services);
+          // $scope.getSchoolNormalFascie.sort(sortByTimeAscOut);
+          // var length1 = $scope.getSchoolNormalFascie.length;
+          // if (length1 > 0) $scope.totime = $scope.getSchoolNormalFascie[length1 - 1]['out_val'];
+          // if ($scope.totime == '') $scope.totime = moment('14:00', 'H:mm');
+          // totimeFormatted = moment($scope.totime).format('H:mm');
+          totimeFormatted = week_planService.getBusExitTime();
+          $scope.totime = moment(totimeFormatted, 'H:mm');
         }
         var infoInitial = { 'fromTime': $scope.fromtime, 'toTime': $scope.totime };
         profileService.setInfoInitial(infoInitial);

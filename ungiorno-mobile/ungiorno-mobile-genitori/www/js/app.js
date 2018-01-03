@@ -251,14 +251,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
         }
 
         if (typeof navigator.globalization !== "undefined") {
-          navigator.globalization.getPreferredLanguage(function (language) {
-            $translate.use((language.value).split("-")[0]).then(function (data) {
-              console.log("SUCCESS -> " + data);
-              $rootScope.lang = data;
-            }, function (error) {
-              console.log("ERROR -> " + error);
-            });
-          }, null);
+          // TODO reenable for translation
+          // navigator.globalization.getPreferredLanguage(function (language) {
+          //   $translate.use((language.value).split("-")[0]).then(function (data) {
+          //     console.log("SUCCESS -> " + data);
+          //     $rootScope.lang = data;
+          //   }, function (error) {
+          //     console.log("ERROR -> " + error);
+          //   });
+          // }, null);
         }
         $rootScope.platform = ionic.Platform;
         $rootScope.backButtonStyle = $ionicConfig.backButton.icon();

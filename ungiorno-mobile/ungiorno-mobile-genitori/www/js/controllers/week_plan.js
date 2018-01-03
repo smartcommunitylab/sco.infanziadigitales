@@ -822,13 +822,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             var totimeOrig = totime;
             //bus precedence for exit time by default
             if ($scope.busEnabled) {
-                $scope.getSchoolNormalFascie = $filter('getSchoolNormalFascie')(profileService.getSchoolProfile().services);
-                $scope.getSchoolNormalFascie.sort(sortByTimeAscOut);
-                var length1 = $scope.getSchoolNormalFascie.length;
-                if (length1 > 0) totimeOrig = $scope.getSchoolNormalFascie[length1 - 1]['out_val'];
-                if (totimeOrig == '') totimeOrig = moment('14:00', 'H:mm');
-                totimeFormatted = moment(totimeOrig).format('H:mm');
-                totimeOrig = moment(totimeOrig, 'H:mm');
+                // $scope.getSchoolNormalFascie = $filter('getSchoolNormalFascie')(profileService.getSchoolProfile().services);
+                // $scope.getSchoolNormalFascie.sort(sortByTimeAscOut);
+                // var length1 = $scope.getSchoolNormalFascie.length;
+                // if (length1 > 0) totimeOrig = $scope.getSchoolNormalFascie[length1 - 1]['out_val'];
+                // if (totimeOrig == '') totimeOrig = moment('', 'H:mm');
+                // totimeFormatted = moment(totimeOrig).format('H:mm');
+                totimeFormatted = week_planService.getBusExitTime();
+                totimeOrig = moment(totimeFormatted, 'H:mm');
             }
             var jsonTest = [{ 'name': 'monday_reduced', 'entrata': fromtime, 'uscita': totimeOrig, 'bus': $scope.busEnabled, 'fermata': $scope.busDefaultStop, 'delega_name': '' },
             { 'name': 'tuesday_reduced', 'entrata': fromtime, 'uscita': totimeOrig, 'bus': $scope.busEnabled, 'fermata': $scope.busDefaultStop, 'delega_name': '' },
@@ -1218,13 +1219,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             $scope.manual_time = true;
         }
         $scope.setBusHour = function () {
-            $scope.getSchoolNormalFascie = $filter('getSchoolNormalFascie')(profileService.getSchoolProfile().services);
-            $scope.getSchoolNormalFascie.sort(sortByTimeAscOut);
-            var totime = '';
-            var length1 = $scope.getSchoolNormalFascie.length;
-            if (length1 > 0) totime = $scope.getSchoolNormalFascie[length1 - 1]['out_val'];
-            if (totime == '') totime = moment('14:00', 'H:mm');
-            totimeFormatted = moment(totime).format('H:mm');
+            // $scope.getSchoolNormalFascie = $filter('getSchoolNormalFascie')(profileService.getSchoolProfile().services);
+            // $scope.getSchoolNormalFascie.sort(sortByTimeAscOut);
+            // var totime = '';
+            // var length1 = $scope.getSchoolNormalFascie.length;
+            // if (length1 > 0) totime = $scope.getSchoolNormalFascie[length1 - 1]['out_val'];
+            // if (totime == '') totime = moment('14:00', 'H:mm');
+            // totimeFormatted = moment(totime).format('H:mm');
+            totimeFormatted = week_planService.getBusExitTime();
             totimeOrig = moment(totimeFormatted, 'H:mm');
             $scope.currData.uscita = totimeOrig;
             $scope.currData.uscita_display = totimeFormatted;
@@ -1583,13 +1585,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
             //bus precedence for exit time by default
             console.log($scope.busEnabled);
             if ($scope.busEnabled) {
-                $scope.getSchoolNormalFascie = $filter('getSchoolNormalFascie')(profileService.getSchoolProfile().services);
-                $scope.getSchoolNormalFascie.sort(sortByTimeAscOut);
-                var length1 = $scope.getSchoolNormalFascie.length;
-                if (length1 > 0) { $scope.totime = $scope.getSchoolNormalFascie[length1 - 1]['out_val']; }
-                if ($scope.totime == '') { $scope.totime = moment('14:00', 'H:mm'); }
-                totimeFormatted = moment($scope.totime).format('H:mm');
-                $scope.totime = moment($scope.totime, 'H:mm');
+                // $scope.getSchoolNormalFascie = $filter('getSchoolNormalFascie')(profileService.getSchoolProfile().services);
+                // $scope.getSchoolNormalFascie.sort(sortByTimeAscOut);
+                // var length1 = $scope.getSchoolNormalFascie.length;
+                // if (length1 > 0) { $scope.totime = $scope.getSchoolNormalFascie[length1 - 1]['out_val']; }
+                // if ($scope.totime == '') { $scope.totime = moment('14:00', 'H:mm'); }
+                // totimeFormatted = moment($scope.totime).format('H:mm');
+                totimeFormatted = week_planService.getBusExitTime();
+                $scope.totime = moment(totimeFormatted, 'H:mm');
             }
             var infoInitial = { 'fromTime': $scope.fromtime, 'toTime': $scope.totime };
         };
@@ -1687,13 +1690,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
         }
 
         $scope.setBusHour = function () {
-            $scope.getSchoolNormalFascie = $filter('getSchoolNormalFascie')(profileService.getSchoolProfile().services);
-            $scope.getSchoolNormalFascie.sort(sortByTimeAscOut);
-            var totime = '';
-            var length1 = $scope.getSchoolNormalFascie.length;
-            if (length1 > 0) totime = $scope.getSchoolNormalFascie[length1 - 1]['out_val'];
-            if (totime == '') totime = moment('14:00', 'H:mm');
-            totimeFormatted = moment(totime).format('H:mm');
+            // $scope.getSchoolNormalFascie = $filter('getSchoolNormalFascie')(profileService.getSchoolProfile().services);
+            // $scope.getSchoolNormalFascie.sort(sortByTimeAscOut);
+            // var totime = '';
+            // var length1 = $scope.getSchoolNormalFascie.length;
+            // if (length1 > 0) totime = $scope.getSchoolNormalFascie[length1 - 1]['out_val'];
+            // if (totime == '') totime = moment('14:00', 'H:mm');
+            // totimeFormatted = moment(totime).format('H:mm');
+            totimeFormatted = week_planService.getBusExitTime();
             totimeOrig = moment(totimeFormatted, 'H:mm');
             $scope.currData.uscita = totimeOrig;
             $scope.currData.uscita_display = totimeFormatted;

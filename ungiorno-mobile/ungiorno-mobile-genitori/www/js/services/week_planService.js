@@ -231,6 +231,44 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.w
             return deferred.promise;
         }
 
+        var sortByTimeAscOut = function (lhs, rhs) {
+            var results;
+            results = lhs.out_val.hours() > rhs.out_val.hours() ? 1 : lhs.out_val.hours() < rhs.out_val.hours() ? -1 : 0;
+            if (results === 0) results = lhs.out_val.minutes() > rhs.out_val.minutes() ? 1 : lhs.out_val.minutes() < rhs.out_val.minutes() ? -1 : 0;
+            if (results === 0) results = lhs.out_val.seconds() > rhs.out_val.seconds() ? 1 : lhs.out_val.seconds() < rhs.out_val.seconds() ? -1 : 0;
+            return results;
+        };
+
+        var findNormalServices = function(services) {
+            var retArr=[];
+            if(services!==undefined){
+              for(var i=0;i<services.length;i++){
+                  if(services[i].regular==true && services[i]['timeSlots']!==null && services[i]['timeSlots'].length>0){
+                    var tempServ=services[i].timeSlots;
+                    for(var j=0;j<tempServ.length;j++){
+                        fr=moment(tempServ[j]['fromTime']).format('H:mm');
+                        to=moment(tempServ[j]['toTime']).format('H:mm');
+                        var temp={'value':tempServ[j]['name'],'label':tempServ[j]['name'],
+                        'entry':fr,'entry_val':moment(fr,'H:mm'),'out':to,'out_val':moment(to,'H:mm')};
+                        retArr.push(temp);
+                    }
+                  }
+              }
+            }
+            return retArr;
+        }
+
+        week_planService.getBusExitTime = function() {
+            var services = profileService.getSchoolProfile().services;
+            var arr = findNormalServices(services);
+            arr.sort(sortByTimeAscOut);
+            var totime = '';
+            if (arr.length > 0) totime = arr[arr.length - 1]['out_val'];
+            if (totime == '') totime = moment().startOf('day').add(15,'h');
+            else totime = moment(totime);
+            return totime.format('H:mm');
+        }
+
         week_planService.getRitiroOptions = function () {
             var deferred = $q.defer();
 

@@ -645,6 +645,12 @@ public class RepositoryManager implements RepositoryService {
                     conf.setEntrata(regularService.getTimeSlots().get(0).getFromTime());
                     conf.setUscita(regularService.getTimeSlots()
                             .get(regularService.getTimeSlots().size() - 1).getToTime());
+                    if (kid.getServices() != null && kid.getServices().getBus() != null && kid.getServices().getBus().isEnabled()) {
+                        conf.setBus(true);
+                        if (kid.getServices().getBus().getStops() != null && kid.getServices().getBus().getStops().size() > 0) {
+                        	conf.setFermata(kid.getServices().getBus().getStops().get(0).getStopId());
+                        }
+                    }
                     weekDefault.add(conf);
                 }
                 saveWeekDefault(appId, schoolId, kidId, weekDefault);
@@ -843,8 +849,9 @@ public class RepositoryManager implements RepositoryService {
             if (week == null || week.isEmpty()) {
                 week = getWeekDefault(appId, schoolId, kp.getKidId());
             }
-            if (week == null || week.size() <= daynr)
-                continue;
+            if (week == null || week.size() <= daynr) {
+            	continue;
+            }
             DayDefault day = week.get(daynr);
 
             if (day.getAbsence() || !day.getBus())
@@ -892,8 +899,7 @@ public class RepositoryManager implements RepositoryService {
      * @return
      */
     @Override
-    public List<SectionData> getSections(String appId, String schoolId, Collection<String> sections,
-            long date) {
+    public List<SectionData> getSections(String appId, String schoolId, Collection<String> sections, long date) {
         SchoolProfile profile = getSchoolProfile(appId, schoolId);
         Calendar cal = Calendar.getInstance();
         int weeknr = cal.get(Calendar.WEEK_OF_YEAR);
@@ -1001,6 +1007,13 @@ public class RepositoryManager implements RepositoryService {
                 }
             }
 
+            //if bus is set, the exit time is the end of the regular timing
+            if (todayConfig.getBus()) {
+                todayConfig.setUscita(regularService.getTimeSlots()
+                        .get(regularService.getTimeSlots().size() - 1).getToTime());
+
+            }	
+            
             SectionData.KidProfile skp = new SectionData.KidProfile();
             skp.setKidId(kp.getKidId());
             skp.setChildrenName(kp.getFirstName() + " " + kp.getLastName());

@@ -996,7 +996,7 @@ public class RepositoryManager implements RepositoryService {
             // get Day info from KidWeeks if there is a configuration for this week
             if (kp.isPartecipateToSperimentation() && kidWeekConfig != null && daynr < 5) {
                 List<DayDefault> days = kidWeekConfig.getDays();
-                todayConfig = (days.get(daynr) != null ? days.get(daynr) : todayConfig);
+                todayConfig = (days != null && days.size() > daynr && days.get(daynr) != null ? days.get(daynr) : todayConfig);
                 // get DayInfo from WeekDefault if defined
             } else if (kp.isPartecipateToSperimentation() && defaultWeek != null && daynr < 5) {
                 todayConfig =

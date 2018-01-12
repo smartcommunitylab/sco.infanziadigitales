@@ -178,7 +178,7 @@ public class KidManager {
                     Parent parent = Utils.toObject(authorizedPerson, Parent.class);
                     parent.setAppId(appId);
                     if (CollectionUtils.isNotEmpty(parent.getEmail())) {
-                        parent.setUsername(parent.getEmail().get(0));
+                        parent.setUsername(parent.getEmail().get(0).toLowerCase());
                     }
                     parents.add(parent);
                 }

@@ -526,7 +526,10 @@ public class RepositoryManager implements RepositoryService {
     public List<KidProfile> getKidProfilesByParent(String appId, String username)
             throws ProfileNotFoundException {
         Query q = appQuery(appId);
-        q.addCriteria(new Criteria("username").is(username));
+        if (username == null) {
+            throw new ProfileNotFoundException("Profile not found");
+        }
+        q.addCriteria(new Criteria("username").is(username.toLowerCase()));
         Parent p = template.findOne(q, Parent.class);
         if (p == null) {
             throw new ProfileNotFoundException("Profile not found");
@@ -1223,7 +1226,7 @@ public class RepositoryManager implements RepositoryService {
     @Override
     public Parent getParent(String username, String appId, String schoolId) {
         Query q = appQuery(appId);
-        q.addCriteria(new Criteria("username").is(username));
+        q.addCriteria(new Criteria("username").is(username.toLowerCase()));
         Parent p = template.findOne(q, Parent.class);
         return p;
     }

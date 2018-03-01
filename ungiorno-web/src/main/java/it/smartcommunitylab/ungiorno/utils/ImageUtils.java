@@ -23,6 +23,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Iterator;
 
 import javax.imageio.IIOImage;
@@ -36,7 +39,6 @@ import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.MetadataException;
 import com.drew.metadata.exif.ExifIFD0Directory;
-import com.drew.metadata.jpeg.JpegDirectory;
 
 /**
  * @author raman
@@ -46,9 +48,21 @@ public class ImageUtils {
 
 	private static final int MAX_DIMENSION = 200; // for width/height
 	
-    public static void compressImage(BufferedImage bi, File f) throws IOException {
-//         rescale(bi, f);
-        compress(bi, f);
+    public static void compressImage(BufferedImage bi, String name) throws IOException {
+    	Path source = Paths.get(name);
+    	if (Files.exists(Paths.get(name+"_old"))) Files.delete(Paths.get(name+"_old"));
+		Files.move(source, source.resolveSibling(source.getFileName()+"_old"));
+    	try {
+//          rescale(bi, f);
+            compress(bi, new File(name));
+        	Files.delete(Paths.get(name+"_old"));
+    	}catch (IOException e) {
+    		if (Files.exists(source)) Files.delete(source);
+    		Files.move(source.resolveSibling(source.getFileName()+"_old"), source);
+    		throw e;
+    	}	
+
+    	
     }
 //
 //
@@ -180,5 +194,10 @@ public class ImageUtils {
             ImageIO.write(destinationImage, "jpg", f);
         }
     }
+    
+//    public static void main(String[] args) throws FileNotFoundException, IOException {
+//    	String name = "out.jpeg";
+//    	compressImage(ImageIO.read(new FileInputStream("small.jpeg")), name);
+//    }
     
 }

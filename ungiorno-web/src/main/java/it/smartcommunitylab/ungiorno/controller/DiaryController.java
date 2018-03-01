@@ -278,7 +278,7 @@ public class DiaryController {
                     fullName = appSetup.getUploadDirectory() + "/" + name;
                 } while (new File(fullName).exists());
 
-                ImageUtils.compressImage(ImageIO.read(is), new File(fullName));
+                ImageUtils.compressImage(ImageIO.read(is), fullName);
                 // FileOutputStream fos = new FileOutputStream(fullName);
                 // IOUtils.copy(is, fos);
                 // file.getInputStream().close();

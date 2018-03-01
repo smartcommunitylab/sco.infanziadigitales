@@ -153,7 +153,7 @@ public class KidManager {
         String name = kidId + ext;
         String pathPicture = imageDownloadDir + "/" + name;
 
-        ImageUtils.compressImage(ImageIO.read(is), new File(pathPicture));
+        ImageUtils.compressImage(ImageIO.read(is), pathPicture);
         //ImageUtils.store(is, new FileOutputStream(pathPicture));
 
         return name;

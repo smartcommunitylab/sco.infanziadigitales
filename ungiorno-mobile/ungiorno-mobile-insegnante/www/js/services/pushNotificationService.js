@@ -106,7 +106,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.pushNot
             if ($rootScope.sharedSections.hasOwnProperty(section)) {
                 for (var profile in $rootScope.sharedSections[section].children) {
                     if ($rootScope.sharedSections[section].children.hasOwnProperty(profile)) {
-                        if ($rootScope.sharedSections[section].children[profile].kidId = kidId)
+                        if ($rootScope.sharedSections[section].children[profile].kidId == kidId)
                             return $rootScope.sharedSections[section].children[profile]
                     }
                 }

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -42,6 +43,21 @@ public class KidManager {
     public List<Parent> updateParents(KidProfile kid) {
         List<Parent> parents = retrieveParents(kid.getAppId(), kid.getPersons());
         repoManager.updateParents(kid.getAppId(), kid.getSchoolId(), parents);
+        return parents;
+    }
+    public List<Parent> updateNewParentsOnly(KidProfile kid) {
+        List<Parent> parents = retrieveParents(kid.getAppId(), kid.getPersons());
+        for (Iterator<Parent> iterator = parents.iterator(); iterator.hasNext();) {
+			Parent parent = iterator.next();
+			Parent existing = repoManager.getParentByPersonId(parent.getPersonId(), kid.getAppId());
+			if (existing != null) {
+				iterator.remove();
+			}
+			
+		}
+        if (parents.size() > 0) {
+        	repoManager.updateParents(kid.getAppId(), kid.getSchoolId(), parents);
+        }
         return parents;
     }
 

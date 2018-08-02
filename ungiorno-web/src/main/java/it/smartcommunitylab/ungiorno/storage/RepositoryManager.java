@@ -302,6 +302,13 @@ public class RepositoryManager implements RepositoryService {
         }
     }
 
+
+	@Override
+	public void removeKid(String appId, String schoolId, String kidId) {
+        Query q = kidQuery(appId, schoolId, kidId);
+		template.remove(q, KidProfile.class);
+	}
+
     /**
      * Updates profiles of kids
      * 
@@ -311,16 +318,30 @@ public class RepositoryManager implements RepositoryService {
      */
     @Override
     public void updateChildren(String appId, String schoolId, List<KidProfile> children) {
+        Set<String> ids = new HashSet<>();
+
         for (KidProfile kp : children) {
+    		ids.add(kp.getKidId());
             for (AuthPerson p : kp.getPersons()) {
                 if (StringUtils.isEmpty(p.getPersonId()) && !p.isParent()) {
                     p.setPersonId(ObjectId.get().toString());
                 }
             }
         }
-
-        template.remove(schoolQuery(appId, schoolId), KidProfile.class);
-        template.insertAll(children);
+        // remove kids not in the school anymore
+    	Query rq = schoolQuery(appId, schoolId);
+        rq.addCriteria(new Criteria("kidId").nin(ids));
+        template.remove(rq, KidProfile.class);
+        
+        ids.clear();
+    	for (KidProfile kp : children) {
+    		template.save(kp);
+    		ids.add(kp.get_id());
+    	}
+    	// remove possible duplicates (if kidId to save did not contain the object id)
+    	rq = schoolQuery(appId, schoolId);
+        rq.addCriteria(new Criteria("_id").nin(ids));
+        template.remove(rq, KidProfile.class);
 
         for (KidProfile kp : children) {
             Query q = kidQuery(appId, schoolId, kp.getKidId());
@@ -1231,6 +1252,16 @@ public class RepositoryManager implements RepositoryService {
         return p;
     }
 
+    /**
+     * @return
+     */
+    @Override
+    public Parent getParentByPersonId(String personId, String appId) {
+        Query q = appQuery(appId);
+        q.addCriteria(new Criteria("personId").is(personId.toUpperCase()));
+        Parent p = template.findOne(q, Parent.class);
+        return p;
+    }
     @Override
     public List<DiaryEntry> getDiary(String appId, String schoolId, String kidId, String search,
             Integer skip, Integer pageSize, Long from, Long to, String tag) {
@@ -1749,6 +1780,5 @@ public class RepositoryManager implements RepositoryService {
         }
         return kidProfile;
     }
-
 
 }

@@ -30,6 +30,9 @@ import it.smartcommunitylab.ungiorno.diary.model.DiaryTeacher;
  */
 public class KidProfile extends SchoolObject {
 
+	public static final String DS_TOUPDATE = "toupdate";
+	public static final String DS_UPDATED = "updated";
+	
     public static class Allergy {
         private String name, type;
 
@@ -159,6 +162,7 @@ public class KidProfile extends SchoolObject {
     private Date birthDate;
     private boolean partecipateToSperimentation;
     private List<DayDefault> weekdefault;
+    private String dataState;
 
     private List<DiaryTeacher> diaryTeachers;
     private Boolean sharedDiary;
@@ -347,4 +351,12 @@ public class KidProfile extends SchoolObject {
     public void removeFromSection() {
         section = null;
     }
+
+	public String getDataState() {
+		return dataState;
+	}
+
+	public void setDataState(String dataState) {
+		this.dataState = dataState;
+	}
 }

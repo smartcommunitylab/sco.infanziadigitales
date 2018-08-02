@@ -311,10 +311,8 @@ public class ConsoleWebController {
             value = "/consoleweb/{appId}/{schoolId}/kid/{kidId}")
     public Response<KidProfile> removeKidProfile(@PathVariable String appId,
             @PathVariable String schoolId, @PathVariable String kidId) {
-        List<KidProfile> kidProfiles = storage.getKidProfilesBySchool(appId, schoolId);
         KidProfile kidToRemove = storage.getKidProfile(appId, schoolId, kidId);
-        kidProfiles.remove(kidToRemove);
-        storage.updateChildren(appId, schoolId, kidProfiles);
+        storage.removeKid(appId, schoolId, kidId);
         logger.info("user {} deletes kid {}", permissionsManager.getUserId(), kidId);
         return new Response<>(kidToRemove);
     }

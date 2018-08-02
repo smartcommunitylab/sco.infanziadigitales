@@ -27,7 +27,6 @@ import it.smartcommunitylab.ungiorno.services.RepositoryService;
 import it.smartcommunitylab.ungiorno.storage.App;
 import it.smartcommunitylab.ungiorno.usage.UsageEntity;
 import it.smartcommunitylab.ungiorno.usage.UsageEntity.UsageAction;
-import it.smartcommunitylab.ungiorno.usage.UsageEntity.UsageActor;
 
 public class FakeRepoManager implements RepositoryService {
 
@@ -429,18 +428,27 @@ public class FakeRepoManager implements RepositoryService {
 
     }
 
-    @Override
-    public List<UsageEntity> findUsageEntities(String appId, String schoolId, UsageAction action,
-            UsageActor from, UsageActor to, Object extra, Long fromTime, Long toTime) {
-        // TODO Auto-generated method stub
-        return null;
-    }
+	/* (non-Javadoc)
+	 * @see it.smartcommunitylab.ungiorno.services.RepositoryService#findUsageEntities(java.lang.String, java.lang.String, it.smartcommunitylab.ungiorno.usage.UsageEntity.UsageAction)
+	 */
+	@Override
+	public List<UsageEntity> findUsageEntities(String appId, String schoolId, UsageAction action) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    @Override
-    public long countUsageEntities(String appId, String schoolId, UsageAction action,
-            UsageActor from, UsageActor to, Object extra, Long fromTime, Long toTime) {
-        // TODO Auto-generated method stub
-        return 0;
-    }
+	@Override
+	public Parent getParentByPersonId(String personId, String appId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
+	/* (non-Javadoc)
+	 * @see it.smartcommunitylab.ungiorno.services.RepositoryService#removeKid(java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public void removeKid(String appId, String schoolId, String kidId) {
+		// TODO Auto-generated method stub
+		
+	}
 }

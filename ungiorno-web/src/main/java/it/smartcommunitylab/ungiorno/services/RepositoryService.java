@@ -81,6 +81,14 @@ public interface RepositoryService {
     void updateChildren(String appId, String schoolId, List<KidProfile> children);
 
     /**
+     * Remove specified kid
+     * @param appId
+     * @param schoolId
+     * @param kidId
+     */
+    void removeKid(String appId, String schoolId, String kidId);
+    
+    /**
      * Update a kidProfile. If kid doesn't exist it does nothing
      * 
      * @param kid
@@ -387,5 +395,12 @@ public interface RepositoryService {
     void saveUsageEntity(UsageEntity entity);
 
     List<UsageEntity> findUsageEntities(String appId, String schoolId, UsageAction action);
+
+	/**
+	 * @param personId
+	 * @param appId
+	 * @return
+	 */
+	Parent getParentByPersonId(String personId, String appId);
 
 }

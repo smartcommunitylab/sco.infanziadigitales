@@ -20,28 +20,25 @@
                   {{successText}}
                 </div>
               </div>
-              <!-- <div class="row">
+              <div class="row">
                 <div class="col-md-8">
 	              <div class="panel panel-default">
 	                <div class="row">
 		              <div class="col-md-12">
-		                <form name="dataForm" class="col-md-12" action="savefiles" method="post" enctype="multipart/form-data" ng-upload="uploadComplete(content)">
+		                <form name="dataForm" class="col-md-12" action="import" method="post" enctype="multipart/form-data" ng-upload="uploadComplete(content)">
                           <h4>Data import</h4>
                           <div class="form-group">
                             <label for="schoolId">School</label>
-                            <select id="schoolId" name="schoolId" ng-required="true" ng-model="schoolId">
+                            <select id="schoolId" name="schoolId" ng-model="schoolId">
+                                <option value="">TUTTE LE SCUOLE</option>
                                 <option ng-repeat="option in profile.schools" value="{{option.schoolId}}">{{option.schoolId}}</option>
                             </select>
                           </div>
 		                  <div class="form-group">
-		                    <label for="schoolData">School data</label>
-		                    <input id="schoolData" name="schoolData" type="file" />
+		                    <label for="file">School data</label>
+		                    <input id="file" name="file" type="file" />
 		                  </div>
-                          <div class="form-group">
-                            <label for="childrenData">Children data</label>
-                            <input id="childrenData" name="childrenData" type="file" />
-                          </div>
-                          <button ng-disabled="!dataForm.$valid" type="submit" class="form-group btn btn-default">Submit</button>
+                          <button type="submit" class="form-group btn btn-default">Submit</button>
                           <br/>
                           <br/>
 		                </form>
@@ -50,6 +47,7 @@
 	              </div>
                 </div>
               </div>
+              <!-- 
               <div class="row">
                 <div class="col-md-8">
                   <div class="panel panel-default">

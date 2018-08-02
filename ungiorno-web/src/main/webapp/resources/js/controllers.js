@@ -8,7 +8,7 @@ var consoleControllers = angular.module('consoleControllers', [])
     });
 
     $scope.uploadComplete = function (content) {
-    	if (!content.messages) {
+    	if (!content.messages && (!content.status || content.status == 200)) {
         	$scope.errorTexts = [];
         	$scope.successText = 'Data successfully uploaded!';
     		$scope.profile = content;

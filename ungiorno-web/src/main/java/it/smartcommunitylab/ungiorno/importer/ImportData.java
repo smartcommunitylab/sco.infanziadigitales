@@ -149,6 +149,7 @@ public class ImportData {
 			List<KidProfile> kids = storage.getKidProfilesBySchool(appId, schoolId);
 			Set<String> set = new HashSet<String>();
 			existing.put(schoolId, set);
+			newOrUpdate.put(schoolId, new LinkedList<KidProfile>());
 			for (KidProfile kid: kids) {
 				set.add(kid.getKidId());
 			}

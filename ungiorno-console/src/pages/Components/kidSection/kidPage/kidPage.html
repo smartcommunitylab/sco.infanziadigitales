@@ -3,13 +3,22 @@
         <ion-col col-1>
             <p></p>
         </ion-col>
-        <ion-col col-9>
+        <ion-col col-2>
             <button ion-button color='green1' float-start margin-top (click)='goBack()'>
                 <ion-icon name='arrow-round-back' margin-right></ion-icon>
                 INDIETRO
             </button>
+        </ion-col>    
+        <ion-col col-6 text-center>
             <ion-label class="label-kid"  *ngIf="!isNew">{{selectedKid.name | uppercase}} {{selectedKid.surname| uppercase}}</ion-label>
             <ion-label class="label-kid" *ngIf="isNew">NUOVO BAMBINO/A</ion-label>
+            <span class="toupdate" *ngIf="!isNew && selectedKid.dataState == 'toupdate'">Profilo da aggiornare</span>
+        </ion-col>
+        <ion-col col-2>
+            <button *ngIf="!isNew && selectedKid.dataState == 'toupdate'" float-end  ion-button color='magenta1' margin-top (click)='onConfirmKid()'>
+                <ion-icon name='checkmark-circle' margin-right></ion-icon>
+                CONFERMA
+            </button>
         </ion-col>
         <ion-col col-1>
             <p></p>

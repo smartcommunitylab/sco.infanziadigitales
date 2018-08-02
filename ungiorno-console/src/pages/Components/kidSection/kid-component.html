@@ -29,9 +29,11 @@
           <ion-option value='1'>Genere (Maschi)</ion-option>
           <ion-option value='2'>Genere (Femmine)</ion-option>
           <ion-option value='3'>Genere (Altro)</ion-option>
+          <ion-option value='6'>Profili da aggiornare</ion-option>
+          <ion-option value='7'>Profili aggiornati</ion-option>
           <ion-option value='4'>Assegnati ad una sezione</ion-option>
           <ion-option value='5'>Non assegnati ad alcuna sezione</ion-option>
-          <ion-option *ngFor='let section of schoolSections' value='{{section.name}}'>Sezione {{section.name}}</ion-option> 
+          <ion-option *ngFor='let section of schoolSections' value='{{section.name}}'>Sezione {{section.name}}</ion-option>
         </ion-select>
       </ion-item>
     </ion-col>
@@ -57,6 +59,8 @@
             <img [src]="getImage(item)">
           </ion-thumbnail>
           <h2>{{item.surname}} {{item.name}}</h2>
+          <p *ngIf="item.dataState == 'toupdate'" class="toupdate">Profilo da aggiornare</p>
+          <ion-icon *ngIf="item.dataState == 'toupdate'" name="checkmark-circle" item-end color="magenta1" style="margin-right: 30px" (click)='onConfirmKid(item)'></ion-icon> 
           <ion-icon name="md-create" item-end color="magenta1" style="margin-right: 30px" (click)='onViewKid(item)'></ion-icon> 
           <ion-icon name="trash" item-end color="magenta1" style="margin-right: 10px" (click)="onDeleteKid(item)"></ion-icon>
         </ion-item>

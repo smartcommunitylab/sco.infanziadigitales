@@ -98,6 +98,32 @@ export class Bambini implements OnInit {
     alert.present();
   }
 
+  onConfirmKid(item: Kid) {
+    let alert = this.alertCtrl.create({
+      subTitle: 'Confermi approvazione dati? Attenzione! Cambiamento di status non è reversibile.',
+      buttons: [
+        {
+          text: "Annulla"
+        },
+        {
+          text: 'OK',
+          handler: () => {
+            this.webService.approveKid(this.selectedSchool, item.id).then(() => {
+              item.dataState = 'updated';
+              // If current filter is to show only those to update, reapply filter
+              if (this.filtro === '6') {
+                this.onFiltroKidChange(this.filtro);
+              }
+            }, err => {
+              // TODO handle error
+            });
+          }
+        }
+      ]
+    })
+    alert.present();
+  }
+
   onOrdineChange(ordine: string) {
     switch (ordine) {
       case '2':
@@ -121,7 +147,9 @@ export class Bambini implements OnInit {
     '2': x => x.gender === "Femmina",
     '3': x => x.gender === "Altro",
     '4': x => x.section,
-    '5': x => !x.section
+    '5': x => !x.section,
+    '6': x => x.dataState === 'toupdate',
+    '7': x => x.dataState !== 'toupdate'
   };
 
   private getFilterFunction() {

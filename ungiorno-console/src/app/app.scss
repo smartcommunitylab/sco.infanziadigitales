@@ -156,3 +156,7 @@ ion-picker-cmp   {
         overflow: auto;
     }
 }
+
+.toupdate {
+    color: color($colors, 'warning')!important;
+}

@@ -293,6 +293,11 @@ export class WebService {
     ).catch(this.handleError);
   }
 
+  public approveKid(school: School, kidId: string): Promise<Kid> {
+    return this.http.put(`${this.apiUrl}/consoleweb/${school.appId}/${school.id}/kid/${kidId}/approve`, {}).toPromise().then(
+      response => this.convertToKid(response.json().data)
+    ).catch(this.handleError);
+  }
 
 
   private convertToTeacher = function (serverTeacherData: ServerTeacherData): Teacher {
@@ -316,7 +321,7 @@ export class WebService {
   private convertToKid = function (serverKidData: ServerKidData): Kid {
     let allergies = serverKidData.allergies ? serverKidData.allergies.map(allergy => allergy.name) : null;
     let services = serverKidData.services && serverKidData.services.timeSlotServices ? serverKidData.services.timeSlotServices.map(service => this.convertToService(service)) : null;
-    let convertedKid = new Kid(serverKidData.kidId, serverKidData.firstName, serverKidData.lastName, serverKidData.gender, serverKidData.birthDate, serverKidData.image, null, null, null, null, null, null, allergies, serverKidData.partecipateToSperimentation, services);
+    let convertedKid = new Kid(serverKidData.kidId, serverKidData.firstName, serverKidData.lastName, serverKidData.gender, serverKidData.birthDate, serverKidData.image, null, null, null, null, null, null, allergies, serverKidData.partecipateToSperimentation, services, serverKidData.dataState);
     let parents = serverKidData.persons.filter(person => person.parent);
 
     if (parents.length >= 1) {
@@ -335,6 +340,7 @@ export class WebService {
     }
 
     convertedKid.section = serverKidData.section ? serverKidData.section.sectionId : "";
+    convertedKid.dataState = serverKidData.dataState;
     return convertedKid;
   }
 
@@ -369,6 +375,7 @@ export class WebService {
     if (kid.bus && kid.bus.enabled) {
       convertedKid.services.bus = kid.bus;
     }
+    convertedKid.dataState = kid.dataState;
     return convertedKid;
   }
 

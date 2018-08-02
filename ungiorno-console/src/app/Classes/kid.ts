@@ -21,10 +21,11 @@ export class Kid extends Person {
     allergie: string[];
     sperimentazione : boolean;
     services : Service[];
+    dataState: string; 
 
 
     constructor(id:string, name:string, surname:string, gender?:string, nascita?:Date, image?:string, 
-                section?: string, parent1?:Parent, parent2?:Parent, bus?:BusService, ritiro?:Person[], deleghe?: Delega[], allergie?:string[], sperimentazione? : boolean, services?:Service[]) {
+                section?: string, parent1?:Parent, parent2?:Parent, bus?:BusService, ritiro?:Person[], deleghe?: Delega[], allergie?:string[], sperimentazione? : boolean, services?:Service[], dataState?: string) {
                     super(id, name, surname);
                     this.gender = gender || "";
                     this.nascita = nascita ? new Date(nascita) : null;
@@ -39,6 +40,7 @@ export class Kid extends Person {
                     this.allergie = allergie || [];
                     this.sperimentazione = sperimentazione || false;
                     this.services = services || [];
+                    this.dataState = dataState;
     }
     static copy(source:Kid): Kid{
         let kid = new Kid('','','');

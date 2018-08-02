@@ -465,6 +465,29 @@ export class KidPage implements OnInit {
         this.commonService.addEditForm('kidFoto', this.fotoObserver);            
         
     }
+
+    onConfirmKid() {
+        let alert = this.alertCtrl.create({
+          subTitle: 'Confermi approvazione dati? Attenzione! Cambiamento di status non è reversibile.',
+          buttons: [
+            {
+              text: "Annulla"
+            },
+            {
+              text: 'OK',
+              handler: () => {
+                this.webService.approveKid(this.selectedSchool, this.selectedKid.id).then(() => {
+                    this.selectedKid.dataState = 'updated';
+                }, err => {
+                  // TODO handle error
+                });
+              }
+            }
+          ]
+        })
+        alert.present();
+      }
+
     onRemoveProfileKid() {
         let alert = this.alertCtrl.create({
             subTitle: 'Conferma rimozione immagine',

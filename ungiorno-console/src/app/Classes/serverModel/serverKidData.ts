@@ -17,6 +17,7 @@ export class ServerKidData {
 	birthDate: Date;
 	partecipateToSperimentation :boolean;
 	gender: string;
+	dataState?: string;
 
     // private String kidId, fullName, lastName, firstName, image;
 	// private SectionDef section;

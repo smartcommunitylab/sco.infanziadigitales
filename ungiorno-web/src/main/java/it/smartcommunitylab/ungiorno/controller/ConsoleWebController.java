@@ -318,6 +318,18 @@ public class ConsoleWebController {
     }
 
     @CrossOrigin
+    @RequestMapping(method = RequestMethod.PUT,
+            value = "/consoleweb/{appId}/{schoolId}/kid/{kidId}/approve")
+    public Response<KidProfile> approveKidProfile(@PathVariable String appId,
+            @PathVariable String schoolId, @PathVariable String kidId) {
+        KidProfile kidToUpdate = storage.getKidProfile(appId, schoolId, kidId);
+        kidToUpdate.setDataState(KidProfile.DS_UPDATED);
+        storage.updateKid(kidToUpdate);
+        logger.info("user {} approves kid {}", permissionsManager.getUserId(), kidId);
+        return new Response<>(kidToUpdate);
+    }
+
+    @CrossOrigin
     @RequestMapping(method = RequestMethod.POST, value = "/consoleweb/{appId}/{schoolId}/teacher")
     public Response<Teacher> saveTeacherProfile(@PathVariable String appId,
             @PathVariable String schoolId, @RequestBody Teacher teacher) {

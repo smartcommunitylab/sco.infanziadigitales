@@ -1702,7 +1702,10 @@ public class RepositoryManager implements RepositoryService {
         // Update updateDoc = Update.fromDBObject(dbObject);
         // return template.findAndModify(q, updateDoc, KidProfile.class);
         Query q = kidQuery(kid.getAppId(), kid.getSchoolId(), kid.getKidId());
-        template.remove(q, KidProfile.class);
+        KidProfile existing = template.findOne(q, KidProfile.class);
+        if (existing != null) {
+        	kid.set_id(existing.get_id());
+        }
 
         template.save(kid);
         return kid;

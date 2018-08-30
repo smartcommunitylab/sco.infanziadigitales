@@ -51,11 +51,11 @@ public class ImageUtils {
     public static void compressImage(BufferedImage bi, String name) throws IOException {
     	Path source = Paths.get(name);
     	if (Files.exists(Paths.get(name+"_old"))) Files.delete(Paths.get(name+"_old"));
-		Files.move(source, source.resolveSibling(source.getFileName()+"_old"));
+		if (Files.exists(source)) Files.move(source, source.resolveSibling(source.getFileName()+"_old"));
     	try {
 //          rescale(bi, f);
             compress(bi, new File(name));
-        	Files.delete(Paths.get(name+"_old"));
+            if (Files.exists(Paths.get(name+"_old"))) Files.delete(Paths.get(name+"_old"));
     	}catch (IOException e) {
     		if (Files.exists(source)) Files.delete(source);
     		Files.move(source.resolveSibling(source.getFileName()+"_old"), source);

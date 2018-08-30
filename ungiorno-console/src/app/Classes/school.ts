@@ -53,7 +53,7 @@ export class School {
         if (source.kids)
             source.kids.forEach(x => this.kids.push(x));
         this.teachers = new Array();
-        if (source.teacher)
+        if (source.teachers)
             source.teachers.forEach(x => this.teachers.push(x));
         this.buses = new Array();
         if (source.buses)

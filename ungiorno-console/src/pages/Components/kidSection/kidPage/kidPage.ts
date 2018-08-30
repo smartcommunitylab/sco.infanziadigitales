@@ -468,7 +468,7 @@ export class KidPage implements OnInit {
 
     onConfirmKid() {
         let alert = this.alertCtrl.create({
-          subTitle: 'Confermi approvazione dati? Attenzione! Cambiamento di status non è reversibile.',
+          subTitle: 'Confermi l\'aggiornamento dei dati? Attenzione: questo cambiamento di stato non è reversibile',
           buttons: [
             {
               text: "Annulla"

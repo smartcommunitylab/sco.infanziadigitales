@@ -519,7 +519,7 @@ export class KidPage implements OnInit {
 
     }
     onFotoSave() {
-        this.webService.uploadDocumentInPromise(this.uploader, this.uploader.queue[0], this.selectedSchool, this.selectedKid).then(() => {
+        this.webService.uploadDocumentInPromise(this.uploader, this.uploader.queue[this.uploader.queue.length-1], this.selectedSchool, this.selectedKid).then(() => {
             // this.doRerender();
             this.image=this.getImage();
             this.commonService.removeEditForm('kidFoto');    

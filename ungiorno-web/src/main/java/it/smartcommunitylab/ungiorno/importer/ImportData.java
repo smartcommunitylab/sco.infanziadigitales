@@ -52,13 +52,15 @@ public class ImportData {
         XSSFWorkbook wb = null;
         try {
             wb = new XSSFWorkbook(excel);
-            XSSFSheet sheet = wb.getSheet("SMA1359480652504");
+            XSSFSheet sheet = wb.getSheetAt(0);
             if (sheet == null) {
                 throw new ImportError("data sheet not found");
             }
             DataFormatter fmt = new DataFormatter();
             for (int i = 1; i <= sheet.getLastRowNum(); i++) {
                 Row row = sheet.getRow(i);
+                if (row == null || row.getLastCellNum() < 9) continue;
+                
                 String cognomeGen = row.getCell(0).getStringCellValue();
                 String nomeGen = row.getCell(1).getStringCellValue();
                 String cfGen = row.getCell(2).getStringCellValue().toUpperCase();
@@ -115,6 +117,7 @@ public class ImportData {
                 kid.getPersons().add(person);
             }
         } catch (Exception e) {
+        	e.printStackTrace();
             throw new ImportError(e.getMessage());
         } finally {
             if (wb != null)

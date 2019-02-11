@@ -1026,7 +1026,8 @@ public class RepositoryManager implements RepositoryService {
                 todayConfig =
                         (defaultWeek.get(daynr) != null ? defaultWeek.get(daynr) : todayConfig);
                 // construct data from kid profile
-            } else {
+            } 
+            if (todayConfig == null) {
                 // get the configuration from the regular school service
                 todayConfig = new DayDefault();
                 todayConfig.setAbsence(false);

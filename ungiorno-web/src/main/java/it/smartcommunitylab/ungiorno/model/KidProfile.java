@@ -168,11 +168,11 @@ public class KidProfile extends SchoolObject {
     private Boolean sharedDiary;
 
     public String getKidId() {
-        return kidId;
+        return kidId != null ? kidId.trim() : kidId;
     }
 
     public void setKidId(String kidId) {
-        this.kidId = kidId;
+        this.kidId = kidId != null ? kidId.trim() : null;
     }
 
     public String getFullName() {

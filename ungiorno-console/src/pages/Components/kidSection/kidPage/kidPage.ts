@@ -575,7 +575,7 @@ export class KidPage implements OnInit {
     }
 
     addAllergia(all: string) {
-        if (all !== undefined && all !== '')
+        if (all)
             if (this.newAllergie.findIndex(x => x.toLowerCase() === all.toLowerCase()) < 0 && all !== '')
                 this.newAllergie.push(all);
             else {

@@ -393,7 +393,7 @@
                                             <ion-card-header>
                                                 Informazioni di base
                                                 <button class='edit' ion-button color='magenta1' float-end *ngIf='!editP1Info' (click)="onP1InfoEdit()" [disabled]='isNew'>Modifica</button>
-                                                <button class='edit' ion-button color='magenta1' float-end *ngIf='editP1Info' (click)="onP1InfoSave()">Salva</button>
+                                                <button class='edit' ion-button color='magenta1' float-end *ngIf='editP1Info' (click)="onP1InfoSave()" [disabled]="!newParent1.id || !newParent1.name || !newParent1.surname">Salva</button>
                                                 <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='editP1Info' (click)="onP1InfoCancel()">Annulla</button>
                                             </ion-card-header>
                                             <ion-card-content margin-top>
@@ -434,7 +434,7 @@
                                         <ion-card>
                                             <ion-card-header>
                                                 Contatti
-                                                <button class='edit' ion-button color='magenta1' float-end *ngIf='!editP1Contatti' (click)="onP1ContattiEdit()" [disabled]='isNew'>Modifica</button>
+                                                <button class='edit' ion-button color='magenta1' float-end *ngIf='!editP1Contatti' (click)="onP1ContattiEdit()" [disabled]='isNew || !selectedKid.parent1.id'>Modifica</button>
                                                 <button class='edit' ion-button color='magenta1' float-end *ngIf='editP1Contatti' [disabled]="!p1ContattiForm.valid" (click)="onP1ContattiSave()">Salva</button>
                                                 <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='editP1Contatti' (click)="onP1ContattiCancel()">Annulla</button>
                                             </ion-card-header>
@@ -481,7 +481,7 @@
                                             <ion-card-header>
                                                 Informazioni di base
                                                 <button class='edit' ion-button color='magenta1' float-end *ngIf='!editP2Info' (click)="onP2InfoEdit()" [disabled]='isNew'>Modifica</button>
-                                                <button class='edit' ion-button color='magenta1' float-end *ngIf='editP2Info' (click)="onP2InfoSave()">Salva</button>
+                                                <button class='edit' ion-button color='magenta1' float-end *ngIf='editP2Info' (click)="onP2InfoSave()"  [disabled]="!newParent2.id || !newParent2.name || !newParent2.surname">Salva</button>
                                                 <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='editP2Info' (click)="onP2InfoCancel()">Annulla</button>
                                             </ion-card-header>
                                             <ion-card-content margin-top>
@@ -523,7 +523,7 @@
                                         <ion-card>
                                             <ion-card-header>
                                                 Contatti
-                                                <button class='edit' ion-button color='magenta1' float-end *ngIf='!editP2Contatti' (click)="onP2ContattiEdit()" [disabled]='isNew'>Modifica</button>
+                                                <button class='edit' ion-button color='magenta1' float-end *ngIf='!editP2Contatti' (click)="onP2ContattiEdit()" [disabled]='isNew|| !selectedKid.parent2.id'>Modifica</button>
                                                 <button class='edit' ion-button color='magenta1' float-end *ngIf='editP2Contatti' (click)="onP2ContattiSave()">Salva</button>
                                                 <button class='edit' margin-right ion-button color='grey2' float-end *ngIf='editP2Contatti' (click)="onP2ContattiCancel()">Annulla</button>
                                             </ion-card-header>

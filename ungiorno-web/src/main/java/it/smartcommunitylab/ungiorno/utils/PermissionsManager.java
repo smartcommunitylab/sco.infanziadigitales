@@ -2,14 +2,17 @@ package it.smartcommunitylab.ungiorno.utils;
 
 import it.smartcommunitylab.ungiorno.diary.model.DiaryKidProfile;
 import it.smartcommunitylab.ungiorno.diary.model.DiaryUser;
+import it.smartcommunitylab.ungiorno.model.AppInfo;
 import it.smartcommunitylab.ungiorno.model.AuthPerson;
 import it.smartcommunitylab.ungiorno.model.KidProfile;
 import it.smartcommunitylab.ungiorno.model.LoginData;
 import it.smartcommunitylab.ungiorno.model.Parent;
+import it.smartcommunitylab.ungiorno.model.School;
 import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.security.UnGiornoUserDetails;
 import it.smartcommunitylab.ungiorno.services.PermissionsService;
 import it.smartcommunitylab.ungiorno.services.RepositoryService;
+import it.smartcommunitylab.ungiorno.storage.AppSetup;
 
 import java.util.List;
 
@@ -41,6 +44,8 @@ public class PermissionsManager implements PermissionsService {
 
 	@Autowired
 	private RepositoryService storage;
+	@Autowired
+	private AppSetup appSetup;
 
 	private AACService service;
 	@Autowired
@@ -144,9 +149,24 @@ public class PermissionsManager implements PermissionsService {
 
 	@Override
     public boolean isSchoolTeacher(String appId, String schoolId, String username) {
-		return storage.getSchoolProfile(appId, schoolId).getAccessEmail().equalsIgnoreCase(username);
+		return storage.getSchoolProfile(appId, schoolId).getAccessEmail().equalsIgnoreCase(username) ||
+				hasAccessToSchool(appId, schoolId, username);
 	}
 	
+	/**
+	 * @param appId
+	 * @param schoolId
+	 * @param username
+	 * @return
+	 */
+	private boolean hasAccessToSchool(String appId, String schoolId, String username) {
+		AppInfo appInfo = appSetup.findAppById(appId);
+		if (appInfo == null) return false;
+		for (School s : appInfo.getSchools()) {
+			if (s.getAccounts() != null && s.getAccounts().contains(username)) return true;
+		}
+		return false;
+	}
 	/**
 	 * @param du
 	 * @param kidId

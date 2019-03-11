@@ -1,6 +1,5 @@
 {
   "name": "it.smartcommunitylab.infanziadigitales.teachers",
-  "app_id": "",
   "integrations": {
     "cordova": {}
   },

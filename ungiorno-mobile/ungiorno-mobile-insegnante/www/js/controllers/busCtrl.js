@@ -25,7 +25,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.bus'
             children: [],
         };
         for (var i = 0; i < bus.children.length; i++) {
-            if (bus.children[i].busStop)
+            // if (bus.children[i].busStop)
                 $scope.selectedBus.children.push(bus.children[i]);
         }
         $scope.realBabyNumer = $scope.selectedBus.children.length;

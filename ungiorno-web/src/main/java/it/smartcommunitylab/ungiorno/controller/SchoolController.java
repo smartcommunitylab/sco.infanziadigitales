@@ -15,6 +15,7 @@
 package it.smartcommunitylab.ungiorno.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -34,10 +35,12 @@ import org.springframework.web.bind.annotation.RestController;
 import it.smartcommunitylab.ungiorno.model.BusData;
 import it.smartcommunitylab.ungiorno.model.Communication;
 import it.smartcommunitylab.ungiorno.model.Response;
+import it.smartcommunitylab.ungiorno.model.School;
 import it.smartcommunitylab.ungiorno.model.SchoolProfile;
 import it.smartcommunitylab.ungiorno.model.SectionData;
 import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.services.RepositoryService;
+import it.smartcommunitylab.ungiorno.storage.AppSetup;
 import it.smartcommunitylab.ungiorno.usage.UsageEntity.UsageAction;
 import it.smartcommunitylab.ungiorno.usage.UsageManager;
 import it.smartcommunitylab.ungiorno.utils.JsonUtil;
@@ -48,6 +51,9 @@ import it.smartcommunitylab.ungiorno.utils.PermissionsManager;
 public class SchoolController {
     private static final transient Logger logger = LoggerFactory.getLogger(SchoolController.class);
 
+    @Autowired
+    private AppSetup appSetup;
+    
     @Autowired
     private RepositoryService storage;
 
@@ -96,10 +102,26 @@ public class SchoolController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/school/{appId}/profile")
     public @ResponseBody Response<SchoolProfile> getSchoolProfileForTeacher(
-            @PathVariable String appId) {
+            @PathVariable String appId, @RequestParam(required=false) String onBehalf) {
         try {
             String userId = permissions.getUserId();
-            SchoolProfile profile = storage.getSchoolProfileForUser(appId, userId);
+            SchoolProfile profile = null;
+            if (onBehalf != null) {
+            	List<School> schools = appSetup.findSchoolsByAccount(userId);
+            	School school = null;
+            	for (School s: schools) {
+            		if (s.getAccessEmail().equalsIgnoreCase(onBehalf)) {
+            			school = s;
+            			break;
+            		}
+            	}
+            	if (school != null) {
+            		profile = storage.getSchoolProfileForUser(appId, onBehalf);
+            	}
+            } else {
+            	profile = storage.getSchoolProfileForUser(appId, userId);            	
+            }
+            
             if (logger.isDebugEnabled()) {
                 logger.debug("appId: {}, schoolId: {}, schoolProfile for teacher: {}", appId,
                         JsonUtil.convertObject(profile));

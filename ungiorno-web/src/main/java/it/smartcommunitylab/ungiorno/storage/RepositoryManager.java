@@ -551,14 +551,18 @@ public class RepositoryManager implements RepositoryService {
             throw new ProfileNotFoundException("Profile not found");
         }
         q.addCriteria(new Criteria("username").is(username.toLowerCase()));
-        Parent p = template.findOne(q, Parent.class);
-        if (p == null) {
+        List<Parent> parents = template.find(q, Parent.class);
+        if (parents == null || parents.isEmpty()) {
             throw new ProfileNotFoundException("Profile not found");
+        }
+        List<String> ids = new LinkedList<>();
+        for (Parent p : parents) {
+        	ids.add(p.getPersonId());
         }
 
         q = appQuery(appId);
         q.addCriteria(new Criteria("persons")
-                .elemMatch(new Criteria("personId").is(p.getPersonId()).and("parent").is(true)));
+                .elemMatch(new Criteria("personId").in(ids).and("parent").is(true)));
         return template.find(q, KidProfile.class);
     }
 

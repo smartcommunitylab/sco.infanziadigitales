@@ -570,8 +570,8 @@ p {
 }
 
 #home .sectionBabyIndicator-notnow {
-  max-height: 150px;
-  max-width: 150px;
+  max-height: 80px;
+  max-width: 80px;
   margin: auto;
 }
 
@@ -599,8 +599,8 @@ p {
 }
 
 #home .sectionBabyIndicator-now {
-  max-height: 200px;
-  max-width: 200px;
+  max-height: 100px;
+  max-width: 100px;
   margin: auto;
 }
 
@@ -1095,7 +1095,10 @@ select {
   position: relative!important;
   height: 71vh;
 }
-
+#babyprofile #info-box {
+  position: relative!important;
+  /*height: 90vh;*/
+}
 #babyprofile .box-ion-spinner {
   text-align: center;
 }
@@ -1108,9 +1111,10 @@ select {
   /*    height: 100%!important;
     */
 }
-
 #babyprofile .input-chat-footer {
-  background-color: #F6F6F6;
+  background-color: #eeeeee;
+  height: 60px;
+  padding: 12px 6px;
   font-size: 20px;
   line-height: 20px;
 }
@@ -1161,6 +1165,20 @@ select {
 #babyprofile .chat-user>span {
   width: 100%;
 }
+#babyprofile .chat-user div {
+  background-color: #fff;
+  padding-left: 10px;
+}
+#babyprofile .chat-user button {
+  border: 0;
+  min-height: 34px;
+  line-height: 100%;
+  border-radius: 0;
+}
+
+#babyprofile .label-baby-section {
+  margin-right: -4px;
+}
 
 #babyprofile input[type=text],
 textarea {
@@ -1169,13 +1187,8 @@ textarea {
 }
 
 #babyprofile .chat-write {
-  background-color: #eeeeee;
-}
-
-#babyprofile .input-chat-footer {
-  background-color: #eeeeee;
-  height: 60px;
-  padding: 6px 6px;
+  background-color: #fff;
+  padding: 5px 0px;
 }
 
 #babyprofile .button-chat-exit {
@@ -1187,6 +1200,10 @@ textarea {
 #babyprofile .button-chat-send {
   color: white;
   background-color: #bd3e4d;
+  border: 0;
+  border-radius: 0;
+  margin-left: 8px;
+  min-width: 50px;
 }
 
 #babyprofile .button-chat-unlock {
@@ -1347,7 +1364,9 @@ textarea {
   padding: 10px;
   margin-bottom: 0px;
 }
-
+#bus .bus-person-name{
+  display:inline;
+} 
 .pin-popup .popup {
   width: 350px;
 }
@@ -1437,16 +1456,18 @@ textarea {
 }
 
 .children-home img {
-  width: 100%;
-  height: 100%;
+  width: 98px;
+  height: 98px;
 }
 
 .child-assente {
   background-color: #bd3e4d;
+  width:100%;
 }
 
 .img-assente {
   border: 2px solid #bd3e4d;
+  opacity: 0.3;
 }
 
 .img-messages {
@@ -1461,6 +1482,10 @@ textarea {
   opacity: 0.4;
 }
 
+.img-not-now {
+  opacity: 0.3;
+}
+
 .img-communication {
   opacity: 0.8;
 }
@@ -1468,12 +1493,15 @@ textarea {
 .child-presente {
   background-color: #98ba3c;
 }
-
+.child-presente-uscita {
+  background-color: #6D9607;
+}
 .child-uscito {
   opacity: 0.4;
 }
 
 .children-presenza {
+  font-size: 13px;
   /*    position: absolute;
 
     bottom: 0px;
@@ -1598,6 +1626,12 @@ textarea {
 
 .home-section-space {
   padding-top: 10px !important;
+}
+
+.wide-item {
+  width: 10000px;
+/*  overflow-x: scroll; /*
+/*  -webkit-overflow-scrolling: touch;  */
 }
 
 .create-note {
@@ -2025,13 +2059,19 @@ ion-content .scroll {
 
 #home .children-container {
   border: solid 2px darkgray;
+  overflow: hidden;
 }
 
+#home .children-container .present {
+  min-height: 20px;
+}
 #home .children-home {
   position: relative;
   margin-top: 20px;
 }
-
+#home .comm-home-group {
+  text-align: right;
+}
 #home .ribbon {
   position: absolute;
   top: 0px;
@@ -2145,6 +2185,7 @@ ion-content .scroll {
 #communications .label-time-date {
   border-bottom: 2px solid lightgray;
   padding-bottom: 3px;
+  color:black;
 }
 
 #communications .communication-radio {
@@ -2165,8 +2206,18 @@ ion-content .scroll {
 */
 }
 
-#communications .communication-buttons {
-  float: right;
+#communications .bottom_com .communication-buttons {  
+  display: flex;
+  justify-content: flex-end;
+  clear: both;
+  margin: auto;
+  width: 50%;
+  margin-right: 0px;
+  margin-top: 25px;
+}
+
+#communications .communication-scadenza {
+  float: left;
   margin-top: 16px;
 }
 
@@ -2271,7 +2322,40 @@ ion-content .scroll {
 }
 
 #communications select {
-  color: white!important;
+  background-color: white;
+  border-radius: 4px;
+  display: inline-block;
+  font: inherit;
+  line-height: 1.5em;
+  padding: 0.5em 3.5em 0.5em 1em;
+
+  /* reset */
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.listgroup{
+  margin-left: 50px;
+  color:#f8ab15;
+  padding-left: 20px;
+  background-image:
+  linear-gradient(45deg, transparent 50%, #f8ab15 50%),
+  linear-gradient(135deg, #f8ab15 50%, transparent 50%);
+background-position:
+  calc(100% - 20px) calc(1em + 2px),
+  calc(100% - 15px) calc(1em + 2px),
+  100% 0;
+background-size:
+  5px 5px,
+  5px 5px,
+  2.5em 2.5em;
+background-repeat: no-repeat;
+}
+.groups{
+  margin-bottom: 20px;
 }
 
 #communications .chat-chose {
@@ -2409,7 +2493,9 @@ ion-content .scroll {
   /* ascii code for the ellipsis character */
   width: 0px;
 }
-
+#babyprofile .groups-profile{
+  margin-left: 8px;
+}
 @keyframes ellipsis {
   to {
     width: 1.25em;
@@ -2474,4 +2560,67 @@ ion-content .scroll {
 .no-connection-popup .popup-buttons .button {
   color: white;
   background-color: #bd3e4d;
+}
+
+/*.servicesHolder{
+  overflow-y: scroll;
+} */   
+.temp:after {
+    width: 06;
+    height: 5;
+    border-left: 25px solid transparent;
+    border-right: 25px solid transparent;
+    border-bottom: 25px solid #98ba3c;
+    content: " ";
+    bottom: -15px;
+    margin-left: 38%;
+}
+.hrmenu{
+  border: 66;
+  height: 1px;
+  background: #98ba3c;
+  padding-top:5px;
+  margin-top: -8px;
+}
+
+.iconStyle{
+  width:10px;
+  height:15px;
+  font-size: 15px;
+}
+
+.present{
+  display: flex;
+  flex-direction: row;
+  color:white;
+}
+
+.children-info{
+
+  width: 50%;
+  font-size: 13px;
+  white-space: nowrap;
+  padding-right: 3px;
+}
+
+.wide-as-needed {
+  overflow: scroll;
+  white-space: nowrap;
+}
+.scroll { 
+  min-width: 100%;
+}
+
+.bottom_com{
+  display: flex;
+  flex-direction: row;
+}
+
+#communications .bottom_com .dt_scad{
+  float: left;
+  margin-top: 25px;
+}
+
+#delcom{
+  font-size: 10px;
 }

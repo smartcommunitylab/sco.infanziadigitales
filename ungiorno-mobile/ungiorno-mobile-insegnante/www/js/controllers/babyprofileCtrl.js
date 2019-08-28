@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.babyprofile', [])
 
-.controller('babyprofileCtrl', function ($scope, dataServerService, profileService, babyConfigurationService, Config, $q, $filter, Toast, $location, $ionicLoading, $rootScope, $ionicPopup, $ionicPopover, $interval, $ionicScrollDelegate, teachersService, messagesService) {
+.controller('babyprofileCtrl', function ($scope, dataServerService, profileService, Config, $q, $filter, Toast, $location, $ionicLoading, $rootScope, $ionicPopup, $ionicPopover, $interval, $ionicScrollDelegate, teachersService, messagesService) {
 
   var IS_PARENT = 'parent';
   var IS_TEACHER = 'teacher';
@@ -29,7 +29,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
   //    $scope.newMessage.text = ' ';
   //  }
   $scope.checkBusServiceActive = function () {
-    return $scope.babyInformations.bus.active && $scope.babyInformations.bus.enabled && $scope.babyInformations.stopId != null;
+    return $scope.babyInformations.bus.enabled && $scope.babyInformations.stopId != null;
   }
   var getBusStopAddressByID = function (busStopID) {
     for (var i = 0; i < $scope.babyProfile.services.bus.stops.length; i++) {
@@ -47,6 +47,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
         parents.push(babyProfile.persons[i])
     }
     return parents;
+  }
+    var getAllergies = function (babyProfile) {
+    allergies = [];
+    for (var i = 0; i < babyProfile.allergies.length; i++) 
+
+        allergies.push(babyProfile.allergies[i])
+    
+    return allergies;
   }
   var getOtherPeople = function (babyProfile) {
     otherPeople = [];
@@ -250,6 +258,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
         $scope.babyProfile = data;
         $scope.parents = getParents(data);
         $scope.otherPeople = getOtherPeople(data);
+        $scope.allergies =getAllergies(data);
         $scope.babyProfileLoaded = true;
         if ($scope.babyInformations.absenceSubtype != '') {
           for (var i = 0; i < $scope.schoolProfile.frequentIllnesses.length; i++) {
@@ -284,22 +293,26 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
   }
   $scope.calculateOtherData = function () {
 
-    $scope.babyEnterHour = ($scope.babyInformations.anticipo.active && $scope.babyInformations.anticipo.enabled) ? $scope.schoolProfile.anticipoTiming.fromTime : $scope.schoolProfile.regularTiming.fromTime;
-
+    console.log($scope.babyInformations);
+    $scope.babyEnterHour = $scope.babyInformations.oraEntrata;
     //used to get if the baby is present
-    var now = new Date();
+    var now = moment('HH:mm');
     if ($scope.babyInformations.exitTime == null) {
       $scope.babyStatus = $filter('translate')('absent');
     } else {
-      var exitDayWithHour = new Date($scope.babyInformations.exitTime); //TODO: make a decision on server, timestamp in seconds or milliseconds?!?
-
-      $scope.babyStatus = now > exitDayWithHour ? $filter('translate')('exit') : $filter('translate')('present');
+      console.log($scope.babyInformations.exitTime);
+      var exitDayWithHour = moment($scope.babyInformations.exitTime).format('H:mm'); 
+      console.log(now.isAfter(moment(exitDayWithHour,'HH:mm')));
+      console.log(now);console.log(exitDayWithHour);
+      $scope.babyStatus = now.isAfter(moment(exitDayWithHour,'HH:mm')) ? $filter('translate')('exit') : $filter('translate')('present');
     }
 
     if ($scope.checkBusServiceActive()) {
-      //$scope.babyBusStopBackName = getBusStopAddressByID($scope.babyInformations.stopId);
-      //tmp because stops have no data for address
       $scope.babyBusStopBackName = $scope.babyInformations.stopId;
+      if ($scope.babyBusStopBackName=="none_f")
+      {
+        $scope.babyBusStopBackName =$filter('translate')('none_f');
+      }
     }
     for (var i = 0; i < $scope.babyProfile.persons.length; i++) {
       if ($scope.babyProfile.persons[i].personId == $scope.babyInformations.personId)
@@ -319,77 +332,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
     document.location.href = 'tel:' + number;
   }
 
-  $scope.sendTeacherNote = function () {
-    //temporarly disabled
-    //if ($scope.newNote.argument === "") {
-    //Toast.show($filter('translate')('select_argument'), 'short', 'bottom');
-    // } else
-    if ($scope.newNote.description === "") {
-      Toast.show($filter('translate')('type_description'), 'short', 'bottom');
-    } else { //all data are correct
-      //            var note = {
-      //                date: new Date().getTime(),
-      //                schoolNotes: [
-      //                    {
-      //                        type: $scope.newNote.argument.typeId,
-      //                        note: $scope.newNote.description
-      //                    }
-      //                ]
-      //            }
-      var note = {
-        "kidId": $scope.babyProfile.kidId,
-        "teacherId": $scope.teacher.teacherId,
-        "text": $scope.newMessage.text
-      }
-      var requestFail = function () {
-        var myPopup = $ionicPopup.show({
-          title: $filter('translate')('note_sent_fail'),
-          scope: $scope,
-          buttons: [
-            {
-              text: $filter('translate')('cancel'),
-              type: 'cancel-button'
-                        },
-            {
-              text: '<b>' + $filter('translate')('retry') + '</b>',
-              type: 'create-button',
-              onTap: function (e) {
-                $scope.sendTeacherNote();
-              }
-                        }
-                    ]
-        });
-      }
-
-      var requestSuccess = function (data) {
-        Toast.show($filter('translate')('note_sent_success'), 'short', 'bottom');
-        $scope.newNote.argument = "";
-        $scope.newNote.description = "";
-        //update the new notes
-
-        if (data != null && data.data != null && data.data.schoolNotes != null) {
-          if (!$scope.notes) {
-            $scope.notes = {};
-          }
-          $scope.notes.schoolNotes = data.data.schoolNotes;
-        }
-        if (data != null && data.data != null && data.data.parentNotes != null) {
-          if (!$scope.notes) {
-            $scope.notes = {};
-          }
-          $scope.notes.parentNotes = data.data.parentNotes;
-        }
-      }
-
-
-      dataServerService.addNewNoteForParents($scope.schoolProfile.schoolId, $scope.babyProfile.kidId, $scope.teacher.teacherId, note).then(function (data) {
-        requestSuccess(data);
-      }, function (data) {
-        requestFail();
-      });
-    }
-
-  }
   $scope.changeTeacher = function (teacher) {
     $scope.popover.hide();
     $scope.teacher = teacher;
@@ -538,7 +480,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.baby
   }
   $scope.getProfileImage = function () {
     if ($scope.babyProfile) {
-      var image = Config.URL() + "/" + Config.app() + "/student/" + Config.appId() + "/" + $scope.schoolProfile.schoolId + "/" + $scope.babyProfile.kidId + "/true/images";
+      var image = Config.URL() + "/" + Config.app() + "/student/" + Config.appId() + "/" + $scope.schoolProfile.schoolId + "/" + $scope.babyProfile.kidId + "/true/imagesnew";
       return image;
     } else return "";
   }

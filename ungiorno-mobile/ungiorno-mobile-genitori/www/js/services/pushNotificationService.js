@@ -13,7 +13,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.n
   //set behaviour of local notification click: change context, go to the right page and delete entry in the local storage
 
   $ionicPlatform.ready(function () {
-    cordova.plugins.notification.local.on("click", function (notification) {
+    if (window.cordova && cordova.plugins.notification) cordova.plugins.notification.local.on("click", function (notification) {
       if (notification && notification.data) {
         //manage kind of notification if message or communication
         if (JSON.parse(notification.data)["content.type"] == "chat") {
@@ -181,11 +181,17 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.n
     }
     // Register to GCM
   pushNotificationService.register = function (schooldIds) {
+    if (!window.PushNotification) return;
+
     console.log("registration");
     var arrayOfSchools = [];
 
+    var platform = '';
+    if (ionic.Platform.isIOS()) platform = '.ios';
+    else if (ionic.Platform.isAndroid()) platform = '.android';
+    
     for (var i = 0; i < schooldIds.length; i++) {
-      arrayOfSchools.push(Config.getMessagingAppId() + ".comms." + schooldIds[i]);
+      arrayOfSchools.push(Config.getMessagingAppId() + ".comms." + schooldIds[i]+platform);
     }
     var push = PushNotification.init({
       android: {
@@ -216,10 +222,15 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.n
       //send received to server
       if (notification && notification.additionalData && notification.additionalData["content.type"] == "chat") {
         //check if contained in localStorage
-        if (!isChatMessageReceived(notification.additionalData["content.messageId"], notification.additionalData["content.kidId"]) && !notification.additionalData["coldstart"] && !(notification.additionalData["content.kidId"] == profileService.getBabyProfile().kidId && $state.is("app.messages"))) {
+        if ( !isChatMessageReceived(notification.additionalData["content.messageId"], notification.additionalData["content.kidId"]) 
+          && !notification.additionalData["coldstart"] 
+          && !(notification.additionalData["content.kidId"] == profileService.getBabyProfile().kidId 
+          && $state.is("app.messages"))) 
+          {
           messagesService.receivedMessage(notification.additionalData["content.schoolId"], notification.additionalData["content.kidId"], notification.additionalData["content.messageId"]);
           chatMessageReceived(notification.additionalData["content.messageId"], notification.additionalData["content.kidId"]);
-          if (!isBackground()) {
+          if (notification.additionalData.foreground){
+          // if (!isBackground()) {
             //update button with message and style with warch
             //create local notification that goes to app.messages
             cordova.plugins.notification.local.schedule({
@@ -249,16 +260,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.n
             }
 
           }, function (error) {
-
+            console.error('Error switching profile from background: ', error);
           });
-
         }
       } else if (notification && notification.additionalData && notification.additionalData["content.type"] == "communication") {
         //check if contained in localStorage
         if (!isCommunicationReceived(notification.additionalData["content.communicationId"], notification.additionalData["content.schoolId"]) && !notification.additionalData["coldstart"]) {
           //                    dataServerService.receivedCommunications(notification.additionalData["content.schoolId"], notification.additionalData["content.kidId"], notification.additionalData["content.communicationId"]);
           communicationReceived(notification.additionalData["content.communicationId"], notification.additionalData["content.schoolId"]);
-          if (!isBackground()) {
+          if (notification.additionalData.foreground){
+          //if (!isBackground()) {
 
             //create local notification that goes to app.messages
             cordova.plugins.notification.local.schedule({

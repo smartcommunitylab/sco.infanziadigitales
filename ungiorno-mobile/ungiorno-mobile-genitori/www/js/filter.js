@@ -104,4 +104,72 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.filters', 
     input = input.toLowerCase();
     return input.substring(0,1).toUpperCase()+input.substring(1);
   }
-});
+})
+.filter('getRitiroName', function() {
+    return function(input, persons) {
+      for(var i=0;i<persons.length;i++){
+          if(persons[i].personId==input && persons[i].personId!=''){
+              return persons[i].firstName;
+          }
+      }
+      return 'none';
+    }
+  })
+  .filter('getRitiroType', function() {
+    return function(input, persons) {
+      for(var i=0;i<persons.length;i++){
+          if(persons[i].personId==input){
+              var type =(persons[i].parent ? 'parent' : persons[i].relation);
+              return type;
+          }
+      }
+      return 'none';
+    }
+  })
+  .filter('getSchoolNormalService', function() {
+    return function(services) {
+    var retArr={'fromTime':'','toTime':''};
+    if(services!==undefined){
+      for(var i=0;i<services.length;i++){
+          if(services[i].regular==true && services[i]['timeSlots']!==null && services[i]['timeSlots'].length>0){
+             retArr =services[i]['timeSlots'][0];//get the first timeslot supposing there is only one
+             return retArr;
+          }
+      }
+    }
+      return retArr;
+    }
+  })
+  .filter('getSchoolNormalFascie', function() {
+    return function(services) {
+    var retArr=[];
+    if(services!==undefined){
+      for(var i=0;i<services.length;i++){
+          if(services[i].regular==true && services[i]['timeSlots']!==null && services[i]['timeSlots'].length>0){
+            var tempServ=services[i].timeSlots;
+            for(var j=0;j<tempServ.length;j++){
+                fr=moment(tempServ[j]['fromTime']).format('H:mm');
+                to=moment(tempServ[j]['toTime']).format('H:mm');
+                var temp={'value':tempServ[j]['name'],'label':tempServ[j]['name'],
+                'entry':fr,'entry_val':moment(fr,'H:mm'),'out':to,'out_val':moment(to,'H:mm')};
+                retArr.push(temp);
+            }
+          }
+      }
+    }
+      return retArr;
+    }
+  })
+  .filter('getSchoolNormalSlots', function() {
+    return function(services) {
+    var retArr=[];
+    if(services!==undefined){
+      for(var i=0;i<services.length;i++){
+          if(services[i].regular==true && services[i]['timeSlots']!==null && services[i]['timeSlots'].length>0){
+                retArr.push(services[i]);
+          }
+      }
+    }
+      return retArr;
+    }
+  });

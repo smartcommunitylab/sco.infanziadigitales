@@ -2,13 +2,17 @@ package it.smartcommunitylab.ungiorno.utils;
 
 import it.smartcommunitylab.ungiorno.diary.model.DiaryKidProfile;
 import it.smartcommunitylab.ungiorno.diary.model.DiaryUser;
+import it.smartcommunitylab.ungiorno.model.AppInfo;
 import it.smartcommunitylab.ungiorno.model.AuthPerson;
 import it.smartcommunitylab.ungiorno.model.KidProfile;
 import it.smartcommunitylab.ungiorno.model.LoginData;
 import it.smartcommunitylab.ungiorno.model.Parent;
+import it.smartcommunitylab.ungiorno.model.School;
 import it.smartcommunitylab.ungiorno.model.Teacher;
 import it.smartcommunitylab.ungiorno.security.UnGiornoUserDetails;
-import it.smartcommunitylab.ungiorno.storage.RepositoryManager;
+import it.smartcommunitylab.ungiorno.services.PermissionsService;
+import it.smartcommunitylab.ungiorno.services.RepositoryService;
+import it.smartcommunitylab.ungiorno.storage.AppSetup;
 
 import java.util.List;
 
@@ -36,10 +40,12 @@ import eu.trentorise.smartcampus.profileservice.model.AccountProfile;
 import eu.trentorise.smartcampus.profileservice.model.BasicProfile;
 
 @Component
-public class PermissionsManager {
+public class PermissionsManager implements PermissionsService {
 
 	@Autowired
-	private RepositoryManager storage;
+	private RepositoryService storage;
+	@Autowired
+	private AppSetup appSetup;
 
 	private AACService service;
 	@Autowired
@@ -58,7 +64,8 @@ public class PermissionsManager {
 				env.getProperty("ext.clientSecret"));
 		profileService = new BasicProfileService(env.getProperty("ext.aacURL"));
 	}
-	public boolean checkKidProfile(String appId, String schoolId, String kidId, Boolean isTeacher) {
+	@Override
+    public boolean checkKidProfile(String appId, String schoolId, String kidId, Boolean isTeacher) {
 		String userId = getUserId();
 
 		KidProfile kid = storage.getKidProfile(appId, schoolId, kidId);
@@ -89,7 +96,8 @@ public class PermissionsManager {
 		return false;
 	}
 
-	public DiaryUser getDiaryUser(String appId, String schoolId, Boolean isTeacher) {
+	@Override
+    public DiaryUser getDiaryUser(String appId, String schoolId, Boolean isTeacher) {
 		String userId = getUserId();
 
 		DiaryUser du = new DiaryUser();
@@ -133,22 +141,40 @@ public class PermissionsManager {
 //		return ids;
 //	}
 
-	public String getUserId() {
+	@Override
+    public String getUserId() {
 		UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		return principal.getUsername();
 	}
 
-	public boolean isSchoolTeacher(String appId, String schoolId, String username) {
-		return storage.getSchoolProfile(appId, schoolId).getAccessEmail().equalsIgnoreCase(username);
+	@Override
+    public boolean isSchoolTeacher(String appId, String schoolId, String username) {
+		return storage.getSchoolProfile(appId, schoolId).getAccessEmail().equalsIgnoreCase(username) ||
+				hasAccessToSchool(appId, schoolId, username);
 	}
 	
+	/**
+	 * @param appId
+	 * @param schoolId
+	 * @param username
+	 * @return
+	 */
+	private boolean hasAccessToSchool(String appId, String schoolId, String username) {
+		AppInfo appInfo = appSetup.findAppById(appId);
+		if (appInfo == null) return false;
+		for (School s : appInfo.getSchools()) {
+			if (s.getAccounts() != null && s.getAccounts().contains(username)) return true;
+		}
+		return false;
+	}
 	/**
 	 * @param du
 	 * @param kidId
 	 * @param schoolId
 	 * @return
 	 */
-	public boolean hasAccess(DiaryUser du, String kidId, String schoolId) {
+	@Override
+    public boolean hasAccess(DiaryUser du, String kidId, String schoolId) {
 		if (du.getStudents() != null) {
 			for (DiaryKidProfile p : du.getStudents()) {
 				if (p.getKidId().equals(kidId) && p.getSchoolId().equals(schoolId)) {
@@ -167,7 +193,8 @@ public class PermissionsManager {
 	}
 	
 	
-	public String getEmail(AccountProfile account) {
+	@Override
+    public String getEmail(AccountProfile account) {
 		String email = null;
 		for (String aName : account.getAccountNames()) {
 			for (String key : account.getAccountAttributes(aName).keySet()) {
@@ -181,7 +208,8 @@ public class PermissionsManager {
 		return email;
 	}
 
-	public String getUserAccessToken() throws SecurityException, AACException {
+	@Override
+    public String getUserAccessToken() throws SecurityException, AACException {
 		Object credentials = SecurityContextHolder.getContext().getAuthentication().getCredentials();
 		if (credentials instanceof LoginData) {
 			TokenData tokenData = ((LoginData)credentials).getTokenData();
@@ -219,13 +247,16 @@ public class PermissionsManager {
 	 * @throws AACException 
 	 * @throws SecurityException 
 	 */
-	public TokenData codeToToken(String code) throws SecurityException, AACException {
+	@Override
+    public TokenData codeToToken(String code) throws SecurityException, AACException {
 		return service.exchngeCodeForToken(code, env.getProperty("ext.redirect"));
 	}
-	public BasicProfileService getProfileService() {
+	@Override
+    public BasicProfileService getProfileService() {
 		return profileService;
 	}
-	public String getLoginURL(String email, String password) {
+	@Override
+    public String getLoginURL(String email, String password) {
 		return String.format("%s/oauth/token?client_id=%s&client_secret=%s&grant_type=password&username=%s&password=%s", 
 				env.getProperty("ext.aacURL"), 
 				env.getProperty("ext.clientId"), 
@@ -233,10 +264,12 @@ public class PermissionsManager {
 				email,
 				password);
 	}
-	public String getRegisterURL() {
+	@Override
+    public String getRegisterURL() {
 		return String.format("%s/internal/register/rest?client_id=%s&client_secret=%s", env.getProperty("ext.aacURL"), env.getProperty("ext.clientId"), env.getProperty("ext.clientSecret"));
 	}
-	public String getAuthorizationURL(String authority){
+	@Override
+    public String getAuthorizationURL(String authority){
 		if (authority != null) {
 			return service.generateAuthorizationURIForCodeFlow(env.getProperty("ext.redirect"), "/"+authority, null, null);
 		} else {
@@ -244,11 +277,13 @@ public class PermissionsManager {
 		}
 	}
 	
-	public String getAppToken() throws AACException {
+	@Override
+    public String getAppToken() throws AACException {
 		return service.generateClientToken().getAccess_token();
 	}
 
-	public BasicProfile authenticate(HttpServletRequest request, HttpServletResponse response, TokenData tokenData, boolean rememberMe) throws SecurityException, ProfileServiceException 
+	@Override
+    public BasicProfile authenticate(HttpServletRequest request, HttpServletResponse response, TokenData tokenData, boolean rememberMe) throws SecurityException, ProfileServiceException 
 	{
 		BasicProfile basicProfile = profileService.getBasicProfile(tokenData.getAccess_token());
 		AccountProfile accountProfile = profileService.getAccountProfile(tokenData.getAccess_token());

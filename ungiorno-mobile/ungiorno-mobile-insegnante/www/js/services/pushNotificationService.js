@@ -14,6 +14,8 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.pushNot
 
     $ionicPlatform.ready(function () {
         Config.init().then(function () {
+            if (!window.cordova || !window.cordova.plugins.notification) return;
+
             window.cordova.plugins.notification.local.on("click", function (notification) {
                 if (notification && notification.data) {
 
@@ -104,7 +106,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.pushNot
             if ($rootScope.sharedSections.hasOwnProperty(section)) {
                 for (var profile in $rootScope.sharedSections[section].children) {
                     if ($rootScope.sharedSections[section].children.hasOwnProperty(profile)) {
-                        if ($rootScope.sharedSections[section].children[profile].kidId = kidId)
+                        if ($rootScope.sharedSections[section].children[profile].kidId == kidId)
                             return $rootScope.sharedSections[section].children[profile]
                     }
                 }
@@ -189,9 +191,16 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.pushNot
         }
         // Register to GCM
     pushNotificationService.register = function (schoolId) {
+        if (!window.PushNotification) return;
+
         console.log("registration");
         var schoolIdArray = [];
-        schoolIdArray.push(Config.getMessagingAppId() + ".teacher." + schoolId);
+
+        var platform = '';
+        if (ionic.Platform.isIOS()) platform = '.ios';
+        else if (ionic.Platform.isAndroid()) platform = '.android';
+    
+        schoolIdArray.push(Config.getMessagingAppId() + ".teacher." + schoolId + platform);
 
         //        for (var i = 0; i < schooldIds.length; i++) {
         //            arrayOfSchools.push(Config.getMessagingAppId() + ".comms." + schooldIds[i]);
@@ -226,7 +235,10 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.pushNot
             //send received to server
             if (notification && notification.additionalData && notification.additionalData["content.type"] == "chat") {
                 //check if contained in localStorage
-                if (!isChatMessageReceived(notification.additionalData["content.messageId"], notification.additionalData["content.kidId"]) && !notification.additionalData["coldstart"] && (!profileService.getCurrentBaby() || !(notification.additionalData["content.kidId"] == profileService.getCurrentBaby().kidId && $state.is("app.babyprofile")))) {
+                if (   !isChatMessageReceived(notification.additionalData["content.messageId"], notification.additionalData["content.kidId"]) 
+                    && !notification.additionalData["coldstart"] 
+                    && (!profileService.getCurrentBaby() || !(notification.additionalData["content.kidId"] == profileService.getCurrentBaby().kidId && $state.is("app.babyprofile")))) 
+                {
                     messagesService.receivedMessage(notification.additionalData["content.schoolId"], notification.additionalData["content.kidId"], notification.additionalData["content.messageId"]);
                     chatMessageReceived(notification.additionalData["content.messageId"], notification.additionalData["content.kidId"]);
                     if (!isBackground()) {
@@ -297,56 +309,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.pushNot
                     //
                     //                        });
                     //                    }
-                }
-            } else if (notification && notification.additionalData && notification.additionalData["content.type"] == "communication") {
-                //check if contained in localStorage
-                if (!isCommunicationReceived(notification.additionalData["content.communicationId"], notification.additionalData["content.schoolId"]) && !notification.additionalData["coldstart"]) {
-                    //                    dataServerService.receivedCommunications(notification.additionalData["content.schoolId"], notification.additionalData["content.kidId"], notification.additionalData["content.communicationId"]);
-                    communicationReceived(notification.additionalData["content.communicationId"], notification.additionalData["content.schoolId"]);
-                    if (!isBackground()) {
-
-                        //create local notification that goes to app.messages
-                        cordova.plugins.notification.local.schedule({
-                            id: new Date().getTime(),
-                            title: notification.title,
-                            text: notification.message,
-                            icon: 'res://icon.png',
-                            autoClear: false,
-                            at: new Date(),
-                            data: notification.additionalData
-
-                        });
-                        $rootScope.$apply(function () {
-                            $rootScope.numberCommunicationsUnread[notification.additionalData["content.schoolId"]]++;
-                        });
-                    };
-
-                } else {
-                    //switch profile and go to
-                    switchProfileFromBackground(notification, false, false).then(function () {
-                        //if coldstart first send a received
-                        if (notification.additionalData["coldstart"]) {
-                            //                        dataServerService.receivedCommunications(notification.additionalData["content.schoolId"], notification.additionalData["content.kidId"], notification.additionalData["content.communicationId"])
-                        }
-                        //already received-> go, seen and delete from localstorage
-                        if (!$state.is("app.communications")) {
-                            $state.go("app.communications");
-                        } //manage different kids
-                        else {
-                            //updateCommuincations
-                            $rootScope.$apply(function () {
-                                dataServerService.getMessages(null, null, notification.additionalData["content.schoolId"], notification.additionalData["content.kidId"]).then(function (notifications) {
-                                    $rootScope.messages[notification.additionalData["content.kidId"]].push(notifications[0]);
-                                    $ionicScrollDelegate.scrollBottom();
-                                });
-
-                            });
-
-                        }
-                    }, function (err) {
-
-                    });
-
                 }
             }
         });

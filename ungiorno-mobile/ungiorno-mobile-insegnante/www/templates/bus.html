@@ -22,7 +22,8 @@
           <div class="row section-row">
             <div class="tabs-striped tabs-top tabs-background-dark tabs-color-light">
               <div class="tabs section-tabs">
-                <a class="tab-item section-tab" ng-repeat="bus in buses track by $index" class="col" ng-click="changeSelectedBus(bus)" ng-class="{'active' :  (isThisBus(bus.busName))}"> {{bus.busName}} </a>
+                <a class="tab-item section-tab" ng-repeat="bus in buses track by $index" class="col" ng-click="changeSelectedBus(bus)" ng-class="{'active' :  (isThisBus(bus.busName))}">
+                  {{bus.busName}} </a>
               </div>
             </div>
           </div>
@@ -31,7 +32,14 @@
       <div class="babiesDisplay">
         <div class="row">
           <div class="col">
-            <div class="card bus-resume">{{'today' | translate}}, {{nowDate | date:'EEEE dd MMMM y'}}{{'baby_bus_1' | translate}} {{selectedBus.busName}} <span ng-if="realBabyNumer>1">{{'baby_bus_2a' | translate}}</span><span ng-if="realBabyNumer==1">{{'baby_bus_2b' | translate}}</span> <b>{{realBabyNumer}} <span ng-if="realBabyNumer>1">{{'baby_bus_3a'|translate}}</span><span ng-if="realBabyNumer==1">{{'baby_bus_3b'|translate}}</span></b> </div>
+            <div class="card bus-resume">{{'today' | translate}}, {{nowDate | date:'EEEE dd MMMM y'}}{{'baby_bus_1' | translate}} {{selectedBus.busName}}
+              <span ng-if="realBabyNumer != 1">{{'baby_bus_2a' | translate}}</span>
+              <span ng-if="realBabyNumer==1">{{'baby_bus_2b' | translate}}</span>
+              <b>{{realBabyNumer}}
+                <span ng-if="realBabyNumer!=1">{{'baby_bus_3a'|translate}}</span>
+                <span ng-if="realBabyNumer==1">{{'baby_bus_3b'|translate}}</span>
+              </b>
+            </div>
           </div>
         </div>
         <div class="row" ng-repeat="nRow in totalNumRow()">
@@ -43,10 +51,18 @@
               </div>
               <div class="baby-card-element baby-card-element-right">
                 <h3 class="busBabyDetail firstrow">{{baby.fullName}}</h3>
-                <h3 class="busBabyDetail accent-color"><span class="busBabyDetail description-color">{{'bus_stop_drops_off' | translate}} </span>{{baby.busStop}}</h3>
-                <!--<h3 class="busBabyDetail"><span class="busBabyDetail description-color">{{'bus_stop_person_wait' | translate}} </span>{{baby.personWhoWaitName}}-->
-                <!--                                    ({{baby.personWhoWaitRelation}})
-                                </h3>-->
+                <h3 class="busBabyDetail accent-color">
+                  <span class="busBabyDetail description-color">{{'bus_stop_drops_off' | translate}} </span>
+                  <span ng-if="!!baby.busStop && baby.busStop!='none_f'">{{baby.busStop}}</span>
+                  <span ng-if="!baby.busStop || baby.busStop=='none_f'">{{'none_f'|translate}}</span>
+                </h3>
+                <h3 class="busBabyDetail">
+                  <span class="busBabyDetail description-color">{{'bus_stop_person_wait' | translate}} </span>
+                  <div class="bus-person-name">{{baby.personWhoWaitName}} (
+                    <span ng-if="!baby.personWhoWaitIsParent && baby.personWhoWaitId!='none' ">{{baby.personWhoWaitRelation}}</span>
+                    <span ng-if="!baby.personWhoWaitIsParent && (baby.personWhoWaitId=='none'  || !baby.personWhoWaitId) ">{{'no_person'|translate}}</span>
+                    <span ng-if="baby.personWhoWaitIsParent">{{'parent' | translate}}</span>)</div>
+                </h3>
               </div>
             </div>
           </div>

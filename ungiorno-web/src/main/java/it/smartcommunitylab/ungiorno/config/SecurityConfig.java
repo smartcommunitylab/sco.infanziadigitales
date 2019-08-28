@@ -1,9 +1,5 @@
 package it.smartcommunitylab.ungiorno.config;
 
-import it.smartcommunitylab.ungiorno.security.AppDetails;
-import it.smartcommunitylab.ungiorno.security.OAuthFilter;
-import it.smartcommunitylab.ungiorno.security.UnGiornoUserDetails;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -18,92 +14,112 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+
+import it.smartcommunitylab.ungiorno.security.AppDetails;
+import it.smartcommunitylab.ungiorno.security.OAuthFilter;
+import it.smartcommunitylab.ungiorno.security.UnGiornoUserDetails;
 
 @Configuration
 @EnableWebMvcSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-	@Autowired
-	private Environment env;	
-	
-	@Autowired
-	private UserDetailsService userDetailsServiceImpl;	
-	
-	@Autowired
-	private AuthenticationProvider consoleAuthenticationProvider;
+    @Autowired
+    private Environment env;
 
-	@Autowired
-	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-	    auth
-	    .authenticationProvider(consoleAuthenticationProvider)
-	    .authenticationProvider(rememberMeAuthenticationProvider());
-	}	
-	
-	@Autowired
-	@Value("${rememberme.key}")
-	private String rememberMeKey;	
+    @Autowired
+    private UserDetailsService userDetailsServiceImpl;
 
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http
-			.headers()
-				.frameOptions().disable();
-		
+    @Autowired
+    private AuthenticationProvider consoleAuthenticationProvider;
+
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(consoleAuthenticationProvider)
+                .authenticationProvider(rememberMeAuthenticationProvider());
+    }
+
+    @Autowired
+    @Value("${rememberme.key}")
+    private String rememberMeKey;
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.headers().frameOptions().disable();
+
+        http.rememberMe();
+
+        http.authorizeRequests()
+                // .antMatchers("/diary/**", "/student/**", "/school/**", "/chat/**")
+                .antMatchers("/diary/**", "/student/**", "/school/**")
+                .hasAnyAuthority(UnGiornoUserDetails.UNGIORNO).and()
+                .addFilterBefore(rememberMeAuthenticationFilter(), BasicAuthenticationFilter.class)
+                .addFilterBefore(oauthAuthenticationFilter(), BasicAuthenticationFilter.class);
+
+
+        http.csrf().disable().authorizeRequests().antMatchers("/consoleweb/**").permitAll().and()
+                .addFilterBefore(oauthAuthenticationFilter(), BasicAuthenticationFilter.class);
+
+        http.csrf().disable().authorizeRequests().antMatchers("/", "/console/**")
+                .hasAnyAuthority(AppDetails.MANAGER).anyRequest().permitAll();
+
         http
-        .rememberMe();		
-		
-        http
-        .authorizeRequests()
-//        	.antMatchers("/diary/**", "/student/**", "/school/**", "/chat/**")
-        	.antMatchers("/diary/**", "/student/**", "/school/**")
-        		.hasAnyAuthority(UnGiornoUserDetails.UNGIORNO).and()
-        .addFilterBefore(rememberMeAuthenticationFilter(), BasicAuthenticationFilter.class)
-        .addFilterBefore(oauthAuthenticationFilter(), BasicAuthenticationFilter.class);
+        .formLogin()
+        	.loginPage("/login")
+        		.permitAll()
+        	.and()
+        	.logout()
+        		.logoutSuccessHandler(logoutSuccessHandler()).permitAll()
+            .deleteCookies("rememberme", "JSESSIONID");
 
-        
-		http
-    	.csrf()
-			.disable()
-		.authorizeRequests()
-			.antMatchers("/","/console/**")
-				.hasAnyAuthority(AppDetails.MANAGER)
-			.anyRequest()
-				.permitAll();
-		
-		http.formLogin().loginPage("/login").permitAll().and().logout().permitAll().deleteCookies("rememberme","JSESSIONID");
-		
-		
+
+    }
+    
+	/**
+	 * @return
+	 */
+	private LogoutSuccessHandler logoutSuccessHandler() {
+		SimpleUrlLogoutSuccessHandler handler = new SimpleUrlLogoutSuccessHandler();
+		handler.setDefaultTargetUrl("/");
+		handler.setTargetUrlParameter("target");
+		return handler;
 	}
-	
-	@Bean 
-	public OAuthFilter oauthAuthenticationFilter() throws Exception{
-		 return new OAuthFilter();
-	}	
-	
-	@Bean 
-	public RememberMeAuthenticationFilter rememberMeAuthenticationFilter() throws Exception{
-		 return new RememberMeAuthenticationFilter(authenticationManager(), tokenBasedRememberMeService());
-	}
-//	@Bean 
-	public RememberMeAuthenticationProvider rememberMeAuthenticationProvider(){
-		 return new RememberMeAuthenticationProvider(tokenBasedRememberMeService().getKey());
-	}
-	@Bean 
-	public TokenBasedRememberMeServices tokenBasedRememberMeService(){
-		 TokenBasedRememberMeServices service = new TokenBasedRememberMeServices(env.getProperty("rememberme.key"), userDetailsServiceImpl);
-		 service.setAlwaysRemember(true);
-		 service.setCookieName("rememberme");
-		 service.setTokenValiditySeconds(3600*24*365*1);
-		 return service;
-	}
-	@Bean
-	@Override
-	public AuthenticationManager authenticationManagerBean() throws Exception {
-		return super.authenticationManagerBean();
-	}	
-	
+
+    @Bean
+    public OAuthFilter oauthAuthenticationFilter() throws Exception {
+        return new OAuthFilter();
+    }
+
+    @Bean
+    public RememberMeAuthenticationFilter rememberMeAuthenticationFilter() throws Exception {
+        return new RememberMeAuthenticationFilter(authenticationManager(),
+                tokenBasedRememberMeService());
+    }
+
+    // @Bean
+    public RememberMeAuthenticationProvider rememberMeAuthenticationProvider() {
+        return new RememberMeAuthenticationProvider(tokenBasedRememberMeService().getKey());
+    }
+
+    @Bean
+    public TokenBasedRememberMeServices tokenBasedRememberMeService() {
+        TokenBasedRememberMeServices service = new TokenBasedRememberMeServices(
+                env.getProperty("rememberme.key"), userDetailsServiceImpl);
+        service.setAlwaysRemember(true);
+        service.setCookieName("rememberme");
+        service.setTokenValiditySeconds(3600 * 24 * 365 * 1);
+        return service;
+    }
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
 }

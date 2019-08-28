@@ -1,4 +1,4 @@
-<ion-view id="chat" title="{{'messages_title' | translate}}">
+<ion-view id="chat" title="{{messages_title}}">
   <ion-nav-bar class="bar bar-ungiorno">
     <ion-nav-back-button>
     </ion-nav-back-button>
@@ -29,15 +29,16 @@
         </div>
         <div ng-class="{'message-container-parent': isMe(ms.sender), 'message-container-teacher': !isMe(ms.sender) }" class="message-container">
           <div id="{{ ms.creationDate }}" class="card-chat" ng-class="{'card-chat-my': (isMe(ms.sender) && !chatExtraLength(ms.text)), 'card-chat-my-extra': (isMe(ms.sender) && chatExtraLength(ms.text))}">
-            <div class="item">
-              <span>{{ ms.text }}</span>
-            </div>
-            <div ng-if="!isMe(ms.sender)" class="item item-divider teacher-label" ng-init="checkMessage(ms)">
-              <span>{{ ms.author.name }} {{ ms.author.surname }} </span><span class="chat-time">{{ ms.creationDate | date:'HH:mm' }}</span>
-            </div>
+              
+              <div ng-if="!isMe(ms.sender)" class="item teacher-label" ng-init="checkMessage(ms)">
+                  <span>{{ ms.author.name }} {{ ms.author.surname }} </span><span class="chat-time">{{ ms.creationDate | date:'HH:mm' }}</span>
+                </div>
+              <div class="item">
+                 <span>{{ ms.text }}</span>
+              </div>
 
             <div class="item item-divider" ng-if="isMe(ms.sender)">
-              <span><i class="icon ion-checkmark-round" ng-class="{'message-flag': ms.seen}"></i><i ng-if="ms.received" class="icon ion-checkmark-round" ng-class="{'message-flag': ms.seen}"></i></span><span class="chat-time">{{ ms.creationDate | date:'HH:mm' }}</span><span class="parent-label">{{ ms.author.name }} {{ ms.author.surname }} </span>
+              <span><i class="icon ion-checkmark-round" ng-class="{'message-flag': ms.seen}"></i><i ng-if="ms.received" class="icon ion-checkmark-round" ng-class="{'message-flag': ms.seen}"></i></span><span class="parent-label">{{ ms.author.name }} {{ ms.author.surname }} </span><span class="chat-time">{{ ms.creationDate | date:'HH:mm' }}</span>
               <!--                            <span><i class="icon ion-checkmark-round" ng-class="{'message-flag': ms.seen}"></i><i class="icon ion-checkmark-round" ng-class="{'message-flag':  ms.received}"></i></span><span class="chat-time">{{ ms.creationDate | date:'HH:mm' }}</span>-->
             </div>
           </div>
@@ -63,13 +64,13 @@
 
   <ion-footer-bar id="txtfooter" class="input-chat-footer" keyboard-attach class="bar-stable item-input input-chat">
 
-    <!--    <textarea class="input-chat-footer" placeholder="{{'input_chat_placeholder' | translate}}" ng-model="new_message" id="txtnotes" ng-focus="inputUp()" ng-blur="inputDown()" ng-keyup="startTyping()" ng-keydown="expandText()"></textarea>-->
     <div class="input-chat-footer bar-stable item-input input-chat">
-      <textarea class="input-chat-footer" placeholder="{{'input_chat_placeholder' | translate}}" ng-model="new_message" id="txtnotes" ng-focus="inputUp()" ng-blur="inputDown()" ng-keyup="startTyping()" msd-elastic>
-      </textarea>
+        <textarea class="input-chat-footer" placeholder="{{'input_chat_placeholder' | translate}}" ng-model="new_message" id="txtnotes" ng-focus="inputUp()" ng-blur="inputDown()" ng-keyup="startTyping()">
+        </textarea>
       <div class="send-button-container" id="buttonsend">
-        <button class="button button-chat-send icon ion-android-send" ng-click="sendMessage(new_message)">
-        </button>
+        <button class="button button-chat-send ion-android-send send_butt" ng-click="sendMessage(new_message)">
+            <ion-spinner ng-if="sending"></ion-spinner>
+          </button>
       </div>
     </div>
   </ion-footer-bar>

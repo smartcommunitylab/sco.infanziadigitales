@@ -5,9 +5,15 @@ apps:
     messagingAppId : ugas.trento 
     gcmSenderApiKey : GCM_SENDER_API_KEY
     gcmSenderId : GCM_SENDER_ID
+    accountManager: EMAIL_TO_MANAGE_ALL_APP_DATA
     schools:
       - 
         schoolId: scuola
+        name: scuola1
+        address: school1-address
+        accessEmail: EMAIL_TO_ACCESS_APP_TEACHER
+        accounts: 
+          - EMAIL_TO_MANAGE_SCHOOL_DATA
         tags: 
           - tag1
           - tag2
@@ -15,6 +21,8 @@ apps:
         schoolId: scuola2
       - 
         schoolId: cogolo
+        accounts: 
+          - EMAIL_TO_MANAGE_SCHOOL_DATA
   - appId: test
     messagingAppId : ugas.test 
     gcmSenderApiKey : GCM_SENDER_API_KEY

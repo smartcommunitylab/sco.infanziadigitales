@@ -1,0 +1,111 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>
+            <span *ngIf="selectedGroup.name!==''">{{selectedGroup.section ? 'Sezione': 'Gruppo'}} {{selectedGroup.name}}</span>
+            <span *ngIf="selectedGroup.name==='' && !selectedGroup.section">Nuovo gruppo</span>
+            <span *ngIf="selectedGroup.name==='' && selectedGroup.section">Nuova sezione</span>
+        </ion-title>
+        <ion-buttons start>
+            <button ion-button (click)="close()">Annulla</button>
+        </ion-buttons>
+        <ion-buttons end>
+            <button ion-button (click)="save()" [disabled]='isNew && !groupForm.valid'>Salva</button>
+        </ion-buttons>
+
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <p style="color: #ccc; margin-left: 25px">
+        <ion-icon name="help-circle"></ion-icon> Tutti i campi contrassegnati dal simbolo * sono obbligatori</p>
+    <ion-grid inset>
+        <ion-row>
+            <ion-col col-10 offset-1>
+                <ion-card>
+                    <ion-card-header>
+                        Informazioni di base
+                    </ion-card-header>
+                    <ion-card-content>
+                        <ion-list inset>
+                            <ion-item>
+                                <ion-row *ngIf="isNew">
+                                    <ion-col col-2></ion-col>
+                                    <ion-col col-10 class="adv-unchange">
+                                        Una volta impostato il campo, non sara' piu' possibile modificarlo
+                                    </ion-col>
+                                </ion-row>
+                                <ion-row *ngIf="isNew"  [formGroup]="groupForm">
+                                    <ion-col col-2>Nome*</ion-col>
+                                    <ion-col col-10>
+                                        <input name="name" formControlName="name" no-margin class="text-generic" type="text" [(ngModel)]="copiedGroup.name" >
+                                        <div class="error-label" [hidden]="!groupForm.controls.name.errors || !groupForm.controls.name.errors.required">Nome mancante</div>
+                                        <div class="error-label" [hidden]="!groupForm.controls.name.errors || !groupForm.controls.name.errors.unique">Nome già in uso</div>
+                                    </ion-col>
+                                </ion-row>
+                                <ion-row  *ngIf="!isNew">
+                                    <ion-col col-2>Nome*</ion-col>
+                                    <ion-col col-10>
+                                        <div no-margin  class="unchangable-label">{{copiedGroup.name}}</div>
+                                    </ion-col>
+                                </ion-row>
+                            </ion-item>
+                        </ion-list>
+                    </ion-card-content>
+                </ion-card>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col col-10 offset-1>
+                <ion-card>
+                    <ion-card-header>
+                        Insegnanti
+                    </ion-card-header>
+                    <ion-card-content>
+                        <ion-grid>
+                            <ion-row>
+                                <ion-col text-center>
+                                    <button ion-button color="green1" (click)='addTeacher()' margin-top>Aggiungi insegnanti</button>
+                                </ion-col>
+                            </ion-row>
+                        </ion-grid>
+                        <ion-list inset>
+                            <ion-item *ngIf="selectedGroupTeachers.length === 0 " text-center class="empty-field ">Nessun insegnante presente</ion-item>
+                            <ion-item *ngFor="let tea of selectedGroupTeachers">
+                                <div *ngIf="tea">{{tea.surname}} {{tea.name}}</div>
+                                <ion-icon name="close" float-end (click)="removeTeacher(tea)"></ion-icon>
+                            </ion-item>
+                        </ion-list>
+                    </ion-card-content>
+                </ion-card>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col col-10 offset-1>
+                <ion-card>
+                    <ion-card-header>
+                        Bambini
+                    </ion-card-header>
+                    <ion-card-content>
+                        <ion-grid>
+                            <ion-row>
+                                <ion-col text-center>
+                                    <button ion-button color="green1" (click)='addKid()' margin-top>Aggiungi bambini</button>
+                                </ion-col>
+                            </ion-row>
+                        </ion-grid>
+                        <ion-list inset>
+                            <ion-item *ngIf="selectedGroupKids.length === 0 " text-center class="empty-field ">Nessun alunno presente</ion-item>
+                            <ion-item *ngFor="let kid of selectedGroupKids">
+                                <ion-thumbnail item-start>
+                                    <img [src]="getImage(kid)">
+                                </ion-thumbnail>
+                                {{kid.surname}} {{kid.name}}
+                                <ion-icon name="close" float-end (click)="removeKid(kid.id)"></ion-icon>
+                            </ion-item>
+                        </ion-list>
+                    </ion-card-content>
+                </ion-card>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-content>

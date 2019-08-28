@@ -16,23 +16,18 @@
 package it.smartcommunitylab.ungiorno.test;
 
 import static org.junit.Assert.assertNotNull;
-import it.smartcommunitylab.ungiorno.model.BusData;
-import it.smartcommunitylab.ungiorno.model.CalendarItem;
-import it.smartcommunitylab.ungiorno.model.Communication;
-import it.smartcommunitylab.ungiorno.model.InternalNote;
-import it.smartcommunitylab.ungiorno.model.KidCalNote;
-import it.smartcommunitylab.ungiorno.model.KidConfig;
-import it.smartcommunitylab.ungiorno.model.KidProfile;
-import it.smartcommunitylab.ungiorno.model.Menu;
-import it.smartcommunitylab.ungiorno.model.SchoolProfile;
-import it.smartcommunitylab.ungiorno.model.SectionData;
-import it.smartcommunitylab.ungiorno.model.Teacher;
-import it.smartcommunitylab.ungiorno.model.TeacherCalendar;
-import it.smartcommunitylab.ungiorno.storage.DumpDataHelper;
 
 import java.util.List;
 
 import org.junit.Test;
+
+import it.smartcommunitylab.ungiorno.model.BusData;
+import it.smartcommunitylab.ungiorno.model.Communication;
+import it.smartcommunitylab.ungiorno.model.KidProfile;
+import it.smartcommunitylab.ungiorno.model.SchoolProfile;
+import it.smartcommunitylab.ungiorno.model.SectionData;
+import it.smartcommunitylab.ungiorno.model.Teacher;
+import it.smartcommunitylab.ungiorno.storage.DumpDataHelper;
 
 /**
  * @author raman
@@ -40,15 +35,7 @@ import org.junit.Test;
  */
 public class TestDummyDataReader {
 
-	/**
-	 *
-	 */
-	@Test
-	public void testSchoolCalendar() {
-		List<CalendarItem> obj = DumpDataHelper.dummyCalendar("", "", "", 0, 0);
-		System.err.println(obj.toString());
-		assertNotNull(obj);
-	}
+
 	@Test
 	public void testSchoolProfile() {
 		SchoolProfile obj = DumpDataHelper.dummySchoolProfile("", "");
@@ -62,35 +49,12 @@ public class TestDummyDataReader {
 		assertNotNull(obj);
 	}
 	@Test
-	public void testKidConfig() {
-		KidConfig obj = DumpDataHelper.dummyKidConfig("", "", "");
-		System.err.println(obj.toString());
-		assertNotNull(obj);
-	}
-	@Test
-	public void testKidNotes() {
-		List<KidCalNote> obj = DumpDataHelper.dummyKidNotes("", "", "");
-		System.err.println(obj.toString());
-		assertNotNull(obj);
-	}
-	@Test
-	public void testInternalNotes() {
-		List<InternalNote> obj = DumpDataHelper.dummyInternalNotes("", "", null);
-		System.err.println(obj.toString());
-		assertNotNull(obj);
-	}
-	@Test
 	public void testKidComms() {
 		List<Communication> obj = DumpDataHelper.dummyComms("", "");
 		System.err.println(obj.toString());
 		assertNotNull(obj);
 	}
-	@Test
-	public void testMenu() {
-		List<Menu> obj = DumpDataHelper.dummyMenu("", "");
-		System.err.println(obj.toString());
-		assertNotNull(obj);
-	}
+	
 	@Test
 	public void testTeachers() {
 		List<Teacher> obj = DumpDataHelper.dummyTeachers("", "");
@@ -109,10 +73,5 @@ public class TestDummyDataReader {
 		System.err.println(obj.toString());
 		assertNotNull(obj);
 	}
-	@Test
-	public void testTeacherCalendar() {
-		List<TeacherCalendar> obj = DumpDataHelper.dummyTecherCalendar("", "");
-		System.err.println(obj.toString());
-		assertNotNull(obj);
-	}
+
 }

@@ -16,9 +16,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
     'it.smartcommunitylab.infanziadigitales.teachers.controllers.communications',
     'it.smartcommunitylab.infanziadigitales.teachers.controllers.bus',
     'it.smartcommunitylab.infanziadigitales.teachers.controllers.babyprofile',
-    'it.smartcommunitylab.infanziadigitales.teachers.controllers.calendar',
     'it.smartcommunitylab.infanziadigitales.teachers.services.conf',
-    'it.smartcommunitylab.infanziadigitales.teachers.services.babyConfigurationService',
     'it.smartcommunitylab.infanziadigitales.teachers.services.dataServerService',
     'it.smartcommunitylab.infanziadigitales.teachers.services.profileService',
     'it.smartcommunitylab.infanziadigitales.teachers.services.sectionService',
@@ -32,9 +30,19 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
     'angularMoment',
   'monospaced.elastic'
 ])
-
+.directive('select',function(){ //same as "ngSelect"
+return {
+    restrict: 'E',
+    scope: false,
+    link: function (scope, ele) {
+        ele.on('touchmove touchstart',function(e){
+            e.stopPropagation();
+        })
+    }
+}
+})
 .run(function ($ionicPlatform, $rootScope, $cordovaSplashscreen, $state, $translate, $q, $ionicHistory, $ionicConfig, $ionicLoading, Config,
-  babyConfigurationService, profileService, dataServerService, loginService, Toast, $ionicSideMenuDelegate) {
+  profileService, dataServerService, loginService, Toast, $ionicSideMenuDelegate) {
   $ionicLoading.show();
   $rootScope.getUserId = function () {
     return localStorage.userId;
@@ -47,11 +55,29 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
   $rootScope.loginStarted = false;
   $rootScope.authWindow = null;
 
+ newAppVersion = function () {
+   //check if it is a new app version 
+   var isNew =true;
+   var thisversion =Config.getResetVersion();
+   //if localstorage has version and it is equal to this return false else clear localstorage
+   if (localStorage.getItem('reset_version'))
+   {
+     var oldVersion = localStorage.getItem('reset_version');
+     if (thisversion==oldVersion)
+      {
+        return false
+      }
+   }
+   localStorage.clear();
+   localStorage.setItem('reset_version',thisversion);
+   return true;
+ }
+
   $ionicPlatform.ready(function () {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if (window.cordova && window.cordova.plugins.screenorientation) {
-      screen.lockOrientation('landscape');
+      //screen.lockOrientation('landscape');
     }
     if (window.cordova && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
@@ -74,7 +100,11 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
     }
     $rootScope.platform = ionic.Platform;
     $rootScope.backButtonStyle = $ionicConfig.backButton.icon();
-    if (loginService.userIsLogged()) {
+ 
+ 
+//  cordova.getAppVersion.getVersionNumber().then(function (version) {
+       if (!newAppVersion() && loginService.userIsLogged()) {    
+    // if (loginService.userIsLogged()) {
       //            $ionicHistory.clearCache().then(function () {
       //$ionicHistory.clearCache();
       console.log("user is logged");
@@ -90,6 +120,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
         });
 
     }
+  // })
     $ionicLoading.hide();
     // $rootScope.getConfiguration();
 
@@ -105,7 +136,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
 
   // for BlackBerry 10, WP8, iOS
   setTimeout(function () {
-    $cordovaSplashscreen.hide();
+    if (window.$cordovaSplashscreen) $cordovaSplashscreen.hide();
     //navigator.splashscreen.hide();
   }, 3000);
 
@@ -121,9 +152,13 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
 
 })
 
-.config(function ($stateProvider, $urlRouterProvider, $translateProvider, $ionicConfigProvider) {
+.config(function ($stateProvider, $urlRouterProvider, $translateProvider, $ionicConfigProvider, $httpProvider) {
   $ionicConfigProvider.tabs.position('top');
-
+  var view=ionic.Platform.isWebView();
+  console.log(view);
+  if(!view){
+    $httpProvider.defaults.withCredentials=true;
+  }
   $stateProvider.state('app', {
     url: "/app",
     abstract: true,
@@ -172,16 +207,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
         'menuContent': {
           templateUrl: "templates/bus.html",
           controller: 'busCtrl'
-        }
-      }
-    })
-    .state('app.calendar', {
-      cache: false,
-      url: "/calendar",
-      views: {
-        'menuContent': {
-          templateUrl: "templates/calendar.html",
-          controller: 'calendarCtrl'
         }
       }
     })
@@ -425,20 +450,22 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
     absence_type: 'Motivazione: ',
     not_allowed_popup_title: 'Errore',
     not_allowed_signin: 'Utente non autorizzato',
-    child_not_partecipate: 'Il bambino non partecipa alla sperimentazione',
+    child_not_partecipate: 'Il bambino non partecipa al servizio UGAS',
     home_scadenze: "Seleziona i bambini che hanno effettuato la consegna",
     data_updated: "Dati aggiornati",
     function_disabled: 'Funzione disabilitata',
     credits_project: 'Realizzato da:',
     title1: 'Un Giorno A Scuola - Insegnanti',
     //        title2: 'Genitore',
-    credits_sponsored: 'Nell\'ambito del progetto "Inf@nzia DIGItales 3.6" finanziato dal:',
-    credits_collaboration: 'In collaborazione con il Dipartimento della Conoscenza della:',
-    credits_students: 'Hanno partecipato allo sviluppo:',
-    credits_parents: 'Si ringraziano per la collaborazione:',
-    credits_parents_2: 'Gli insegnanti e i genitori delle Scuole dell\'Infanzia di Cogolo di Peio (TN) e di Povo di Trento (TN).',
-    credits_info: 'Per informazioni: ',
-    credits_licenses_button: 'VEDI LICENZE',
+    credits_sponsored1: "Nell'ambito del progetto \"DIGI@school&family\" che fa seguito alla sperimentazione relativa al progetto",
+  credits_sponsored2: "finanziato dal",
+  credits_collaboration: "In collaborazione con il Dipartimento della Conoscenza della:",
+  credits_collaboration_uni:"con la collaborazione di",
+  credits_students: "Hanno partecipato allo sviluppo:",
+  credits_parents: "Si ringraziano per la collaborazione:",
+  credits_parents_2: "Gli insegnanti e i genitori delle Scuole dell’Infanzia di Cogolo e Povo (TN)",
+  credits_info: "Per informazioni: ",
+  credits_licenses_button: "VEDI LICENZE",
     menu_credits: "Credits",
     relation_parent: 'Genitore',
     comm_you_must_save_title: 'Attenzione',
@@ -485,9 +512,20 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers', [
     no_connection_message: 'Nessuna connessione',
     error_pin: 'PIN errato',
     home_number_deliveries: 'Consegne completate: ',
-    home_out_of_deliveries: ' su '
-
-
+    home_out_of_deliveries: ' su ',
+    entry_lbl:'E',
+    exit_lbl:'U',
+    invia:'Invia a',
+    missing_school_config:"Manca Servizio Scolastico Regolare",
+    all:'Tutti',
+    com_dt:'Imposta scadenza comunicazione',
+    com_del:'La comunicazione verrà eliminata nel giorno indicato',
+    auth_person:"L'incaricato del ritiro è: ",
+    none_f:"Nessuna fermata specificata",
+    no_person:"Nessuna persona specificata",
+    baby_section:"Fa parte dei gruppi/sezioni:",
+    communication_group_all:"Tutti",
+    communication_group:"Inviato a "
   });
 
   $translateProvider.preferredLanguage("it");

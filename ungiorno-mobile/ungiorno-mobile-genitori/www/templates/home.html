@@ -1,8 +1,8 @@
 <ion-view id="home">
 
   <ion-nav-title ng-init="getDateString()">
-    <!--        {{date | date:'EEEE, d MMMM yyyy'}}-->
-    {{date | date:'EEEE, d MMMM yyyy'}}
+    <span ng-if="!noConnection">{{'brief_txt' | translate}} {{kidname}}</span>
+    <span ng-if="noConnection">{{'no_conn_title' | translate}}</span>
   </ion-nav-title>
   <!--
 <ion-nav-buttons side="right">
@@ -13,11 +13,39 @@
 -->
   <ion-content has-header="true" scroll="false">
     <ion-scroll class="home-area" scrollbar-y="true">
-      <div class="no-connection-block">
+      <!-- <div class="no-connection-block">
         <div class="no-connection" ng-show="noConnection" ng-bind-html="noConnectionMessage"></div>
         <button ng-show="noConnection" class="button home-reload" ng-click="refresh()"> ricarica pagina</button>
+      </div> -->
+      <div class="brief_info_container" ng-if="!noConnection">
+      <div class="brief_info" ng-if="!briefInfo.absence && !weekend && !noConnection" ng-click="gotoEditDate();">
+        <div class="currentDate"><i class="icon ion-android-calendar iconStyleHome1"></i> {{date | date:'EEEE, d MMMM yyyy' | capitalize}}</div>
+        <div class="button-norm-brief" >{{'enter_at' | translate}} {{briefInfo.ore_entrata}}</div>
+        <div class="button-norm-brief" >{{'exit_at' | translate}} {{briefInfo.ore_uscita}}</div>
+        <div class="br_in" ng-if="briefInfo.bus">
+            <i class="icon ion-android-bus iconStyleHome"></i>{{briefInfo.addressBus | translate}}</div>
+        <div class="br_in">
+            <i class="icon ion-android-person iconStyleHome"></i>
+            <span class="briefDelega">
+              {{briefInfo.delegaName | translate}}
+              <!--span ng-if="briefInfo.delegaType!='' && briefInfo.delegaType!='none' && briefInfo.delegaType!=null">({{briefInfo.delegaType | translate}})</span-->
+            </span>
+        </div>
       </div>
-      <div ng-repeat="element in elements track by $index" class="list" ng-if="!noConnection || isContact(element)">
+      <div class="brief_info" ng-if="briefInfo.absence && !weekend && !noConnection" ng-click="gotoEditDate();">
+        <div class="currentDate"><i class="icon ion-android-calendar iconStyleHome1"></i> {{date | date:'fullDate' | capitalize}}</div>
+        <div class="button-norm-brief">{{'home_absent' | translate}}   {{briefInfo.motivazione.type}}</div>
+      </div>
+      <div class="brief_info" ng-if="weekend && !noConnection" ng-click="gotoEditDate();">
+          <div class="currentDate"><i class="icon ion-android-calendar iconStyleHome1"></i> {{date | date:'fullDate' | capitalize}}</div>
+          <div class="button-norm-brief" >{{'none_entry' | translate}} </div>
+          <div class="button-norm-brief" >{{'none_exit' | translate}} </div>
+          <div class="br_in">
+              <i class="icon ion-android-person iconStyleHome"></i>{{'none' | translate}}</div>
+        </div>
+      </div>  
+      <hr class="hrstyle"/>
+      <div ng-repeat="element in elements track by $index" class="list" ng-if="!noConnection">
         <div class="card" ng-class="elements[$index].class">
           <a class=" button-block item-thumbnail-left" ng-click="execute(elements[$index])" ng-disabled="elements[$index].disabled">
             <img ng-src="{{element.img}}">

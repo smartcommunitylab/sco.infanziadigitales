@@ -20,6 +20,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.loginSe
       //        } else if (provider == 'googlelocal' && !$rootScope.login_googlelocal) {
       //            provider = 'google';
     }
+    if (provider == 'googlelocal' && !ionic.Platform.isWebView()) {
+      provider = 'google';
+    }
 
     // log into the system and set userId
     var authapi = {
@@ -34,10 +37,14 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.loginSe
         if ((provider == 'googlelocal') && !!token) {
           authUrl += '?token=' + encodeURIComponent(token);
         }
-
         //Open the OAuth consent page in the InAppBrowser
         if (!authWindow) {
-          authWindow = window.open(authUrl, '_blank', 'location=no,toolbar=no');
+          if (window.cordova && window.cordova.InAppBrowser) {
+            authWindow = cordova.InAppBrowser.open(authUrl,'_self', 'location=no,toolbar=no');            
+          } else {
+            authWindow = window.open(authUrl, '_blank', 'location=no,toolbar=no');
+          }
+          //authWindow = window.open(authUrl, '_blank', 'location=no,toolbar=no');
           processThat = !!authWindow;
         }
 
@@ -68,7 +75,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.loginSe
         if (ionic.Platform.isWebView()) {
           if (processThat) {
             authWindow.addEventListener('loadstart', function (e) {
-              //console.log(e);
               var url = e.url;
               processURL(url, deferred, authWindow);
             });
@@ -88,11 +94,12 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.loginSe
     if (provider == 'googlelocal') {
       window.plugins.googleplus.login({
           'scopes': 'profile email',
+           'webClientId': '453601816446-sff20g4la1mq62joo05indc34umiu9rh.apps.googleusercontent.com',
           'offline': true
         },
         function (obj) {
           var token = obj.oauthToken;
-          if (!token) token = obj.accessToken;
+          if (!token) token = obj.idToken;
           authapi.authorize(token).then(
             function (data) {
               Config.setAppId(data.userId);
@@ -146,26 +153,6 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.services.loginSe
 
     return deferred.promise;
   };
-  loginService.getTeacherName = function (schoolId) {
-    $http({
-      method: 'GET',
-      url: Config.URL() + '/' + Config.app() + '/school/' + Config.appId() + '/' + schoolId + '/teacher',
-
-      headers: {
-        'Accept': 'application/json'
-      }
-    }).
-    success(function (data, status, headers, config) {
-      if (data && data.data) {
-        $rootScope.teacherName = data.data.teacherFullname;
-      }
-
-    }).
-    error(function (data, status, headers, config) {
-      console.log(data + status + headers + config);
-    });
-  };
-
 
   loginService.logout = function () {
     var deferred = $q.defer();

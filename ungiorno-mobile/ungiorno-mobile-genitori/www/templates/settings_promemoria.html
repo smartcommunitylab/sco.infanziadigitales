@@ -1,0 +1,99 @@
+<ion-view>
+
+    <ion-nav-bar class="bar bar-ungiorno">
+        <ion-nav-back-button>
+        </ion-nav-back-button>
+        <ion-nav-title>
+            {{'menu_promemoria' | translate }}
+        </ion-nav-title>
+    </ion-nav-bar>
+
+    <ion-content has-header="true">
+        <div class="promemoria">
+            <div class="setting-label">
+                <label class="control control-checkbox promcheck">
+                    <input type="checkbox" ng-model="currData['prom_day_summary']" ng-click="setNotify(currData['prom_day_summary'])" />
+                    <div class="control_indicator"></div>
+                </label>
+                <span class="prom">{{'prom_day_summary_first' | translate}}
+                    <b>{{'prom_day_summary_what' | translate}}</b> {{'prom_day_summary_reason' | translate}}</span>
+            </div>
+            <br/>
+            <div class="prom_param prom">
+                <span class="label_prom">{{'at_time'| translate}}:</span>
+                <div class="space-from-top">
+                    <label class="plan-item-time">
+                        <ionic-timepicker input-obj="timePickerObject24Hour" ng-if="isActive('prom_day_summary')">
+                            <button ng-hide="true"></button>
+                            <span>
+                                <standard-time-no-meridian etime="timePickerObject24Hour.inputEpochTime" ng-class="{'editable2': isActive('prom_day_summary'),'noneditable2': !isActive('prom_day_summary')}"></standard-time-no-meridian>
+                            </span>
+                        </ionic-timepicker>
+                        <standard-time-no-meridian ng-if="!isActive('prom_day_summary')" etime="timePickerObject24Hour.inputEpochTime" ng-class="{'editable2': isActive('prom_day_summary'),'noneditable2': !isActive('prom_day_summary')}"></standard-time-no-meridian>
+                    </label>
+                </div>
+            </div>
+
+            <br/>
+            <div class="setting-label">
+                <label class="control control-checkbox promcheck">
+                    <input type="checkbox" ng-model="currData['prom_week']" ng-click="setNotify(currData['prom_week'])" />
+                    <div class="control_indicator"></div>
+                </label>
+                <span class="prom">{{'prom_week_first' | translate}}
+                    <b>{{'prom_week_what' | translate}}</b> {{'prom_week_reason' | translate}}</span>
+            </div>
+            <br/>
+            <div class="prom_param prom">
+                <span class="label_prom">{{'at_day'| translate}}:</span>
+                <!--<span class="prom_giorno" ng-if="isActive('prom_week')" ng-click="openDayChooser()">{{currData.prom_week_day | translate}}</span>-->
+                <select ng-if="isActive('prom_week')" ng-model="currData.prom_week_day" ng-change="save_week_day();">
+                    <option ng-repeat="option in selectables" value="{{option}}" ng-selected="currData.prom_week_day==option" class="">{{option | translate}}</option>
+                </select>
+                <span ng-if="!isActive('prom_week')" class="noneditable2">{{currData.prom_week_day | translate}}</span>
+            </div>
+            <br/>
+            <div class="prom_param prom">
+                <span class="label_prom">{{'at_time'| translate}}: </span>
+                <div class="space-from-top">
+                    <label class="plan-item-time">
+                        <ionic-timepicker input-obj="timePickerObject24HourWeek" ng-if="isActive('prom_week')">
+                            <button ng-hide="true"></button>
+                            <span>
+                                <standard-time-no-meridian etime="timePickerObject24HourWeek.inputEpochTime" ng-class="{'editable2': isActive('prom_week'),'noneditable2': !isActive('prom_week')}"></standard-time-no-meridian>
+                            </span>
+                        </ionic-timepicker>
+                        <standard-time-no-meridian ng-if="!isActive('prom_week')" etime="timePickerObject24HourWeek.inputEpochTime" ng-class="{'editable2': isActive('prom_week'),'noneditable2': !isActive('prom_week')}"></standard-time-no-meridian>
+                    </label>
+                </div>
+            </div>
+            <br/>
+            <div class="setting-label">
+                <label class="control control-checkbox promcheck">
+                    <input type="checkbox" ng-model="currData['prom_day_ritiro']" ng-click="setNotify(currData['prom_day_ritiro'])" />
+                    <div class="control_indicator"></div>
+                </label>
+                <span class="prom">{{'prom_day_ritiro_first' | translate}}
+                    <b>{{'prom_day_ritiro_what' | translate}}</b> {{'prom_day_ritiro_reason' | translate}}</span>
+            </div>
+            <br/>
+            <div class="prom_param prom">
+                <div class="space-from-top">
+                    <div class="">
+                        <ionic-numberpicker input-obj="numberPickerObject" ng-if="isActive('prom_day_ritiro')">
+                            <span ng-class="{'editable2': isActive('prom_day_ritiro'),'noneditable2': !isActive('prom_day_ritiro')}">{{currData['prom_ritiro_time']}}</span>
+                        </ionic-numberpicker>
+                        <span ng-if="!isActive('prom_day_ritiro')" class="noneditable2">{{currData.prom_ritiro_time}}</span>
+                    </div>
+                </div>
+                <span class="before">&nbsp;&nbsp;&nbsp;&nbsp;{{'time_before'| translate}}</span>
+            </div>
+
+        </div>
+    </ion-content>
+</ion-view>
+<!-- 
+  <ion-list class="padlist">
+			<ion-item ng-repeat="option in options" ng-click="changeView(option)">{{option | translate}}</ion-item>
+    </ion-list>
+  -->

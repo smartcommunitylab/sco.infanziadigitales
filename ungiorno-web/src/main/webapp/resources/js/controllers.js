@@ -4,23 +4,21 @@ var consoleControllers = angular.module('consoleControllers', [])
   function ($scope, $rootScope, $location, DataService) {
     DataService.getProfile().then(function(p){
     	$scope.profile = p.appInfo;
-    	$scope.schoolId = null;
+    	$scope.schoolId = "";
     });
 
     $scope.uploadComplete = function (content) {
-    	if (content.appInfo) {
+    	if (!content.messages && (!content.status || content.status == 200)) {
         	$scope.errorTexts = [];
         	$scope.successText = 'Data successfully uploaded!';
     		$scope.profile = content;
     	} else {
         	var txt = [];
-        	if (content.message) {
-        		txt.push(content.message);
+        	if (content.type) {
+        		txt.push(content.type);
         	}
-        	if (content.validationResults) {
-        		for (var i = 0; i < content.validationResults.length;i++) {
-        			txt.push(content.validationResults[i]);
-        		}
+        	if (content.messages) {
+        		txt = content.messages;
         	}
         	$scope.successText = '';
     		$scope.errorTexts = txt;

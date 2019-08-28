@@ -1,0 +1,7 @@
+<!--<ion-list>
+  <ion-radio ng-repeat="option in selectables" ng-model="data.dayChoiche" ng-value="option" >{{option|translate}}</ion-radio>
+</ion-list>-->
+    <div class="item item_day" style="display: flex; flex-direction: row;" ng-repeat="option in selectables" >
+            <input type="radio" id="{{$index}}" name="radio-group" ng-model="data.dayChoiche" ng-value="option" >
+            <label for="{{$index}}">{{option|translate}}</label>
+      </div>

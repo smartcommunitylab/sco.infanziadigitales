@@ -3,6 +3,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
 .controller('MessagesCtrl', function ($scope, $rootScope, $filter, messagesService, Toast, profileService, $interval, $ionicScrollDelegate, $ionicLoading, $ionicScrollDelegate, Config) {
 
   $scope.babyProfile = profileService.getBabyProfile();
+  $scope.messages_title = $filter('translate')('messages_title')+' per '+ $scope.babyProfile.firstName
   var IS_PARENT = 'parent';
   var IS_TEACHER = 'teacher';
   $scope.all = 10;
@@ -170,9 +171,9 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
   }
   $scope.resetText = function () {
     var element = document.getElementById("txtnotes");
-    element.style.height = "44px";
+    //element.style.height = "44px";
     element = document.getElementById("txtfooter");
-    element.style.height = "44px";
+    //element.style.height = "44px";
   }
   var counter = 0;
   $scope.checkMessage = function (message) {
@@ -243,19 +244,21 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
       //create message
 
       $scope.stopTyping();
-      $ionicLoading.show();
+      // $ionicLoading.show();
+      $scope.sending = true;
       messagesService.sendMessage($scope.babyProfile.schoolId, $scope.babyProfile.kidId, text).then(
         function (msg) {
           // init(); temporary commented. why reinitialize the list?
           $rootScope.messages[$scope.babyProfile.kidId] = $rootScope.messages[$scope.babyProfile.kidId].concat(msg);
-          $ionicLoading.hide();
+          // $ionicLoading.hide();
           $ionicScrollDelegate.scrollBottom();
           $scope.new_message = '';
-          $scope.resetText();
+          $scope.sending = false;
         },
         function (err) {
-          $ionicLoading.hide();
+          // $ionicLoading.hide();
           Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+          $scope.sending = false;
         }
       );
     }

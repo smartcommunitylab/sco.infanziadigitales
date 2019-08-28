@@ -1,0 +1,31 @@
+<div class="content">
+    <!--<div ng-repeat="itemValue in listServicesAnticipo">-->
+    <div class="item" style="display: flex; flex-direction: row;" ng-repeat="itemValue in listServicesAnticipo">
+        <div ng-click="setEntry(itemValue)" style="width:100%">
+            <input type="radio" id="{{$index}}" name="radio-group" value="itemValue.entry">
+            <label for="{{$index}}">{{itemValue.entry}} ({{itemValue.value}})</label>
+        </div>
+    </div>
+    <!--</div>-->
+    <div>
+        <div class="item" style="display: flex; flex-direction: row;">
+            <div ng-click="showManualTime()" style="width:100%">
+
+                <input type="radio" id="imposta" name="radio-group">
+                <label for="imposta">Imposta ora:</label>
+                <label class="plan-item-time" ng-class="{'lookeditable': manual_time, looknoneditable: !manual_time}">
+                    <ionic-timepicker input-obj="timePickerObject24HourEntrata">
+                        <button ng-if="manual_time" ng-hide="true"></button>
+                        <span class="">
+                            <standard-time-no-meridian etime="timePickerObject24HourEntrata.inputEpochTime"></standard-time-no-meridian>
+                        </span>
+                    </ionic-timepicker>
+                </label>
+            </div>
+        </div>
+    </div>
+    <!--<div class="popup-buttons row">
+          <button id="" class="button col col-50 button_cancel" onclick="">{{'cancel'|translate}</button>
+          <button id="" class="button col col-50 button_save" onclick="">{{'Salva'|translate}}</button>
+ </div>-->
+</div>

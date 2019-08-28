@@ -1,6 +1,6 @@
 angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.section', [])
 
-.controller('SectionCtrl', function ($scope, $location, dataServerService, profileService, babyConfigurationService, $filter, $state, Toast, $ionicModal, moment, teachersService, $ionicSideMenuDelegate) {
+.controller('SectionCtrl', function ($scope, $location, dataServerService, profileService, $filter, $state, Toast, $ionicModal, moment, teachersService, $ionicSideMenuDelegate) {
     $scope.title = moment().locale('it').format("dddd, D MMMM gggg");
     $scope.initialize = function () {
         dataServerService.getTeachers().then(function (data) {

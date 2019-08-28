@@ -1,0 +1,87 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "ionic-numberpicker",
+        "scope": null,
+        "escapedName": "ionic-numberpicker",
+        "name": "ionic-numberpicker",
+        "rawSpec": "",
+        "spec": "latest",
+        "type": "tag"
+      },
+      "/home/albana/Desktop/www/infanziadigitales/ungiorno-mobile/ungiorno-mobile-genitori"
+    ]
+  ],
+  "_from": "ionic-numberpicker@latest",
+  "_id": "ionic-numberpicker@1.1.4",
+  "_inCache": true,
+  "_location": "/ionic-numberpicker",
+  "_nodeVersion": "5.0.0",
+  "_npmOperationalInternal": {
+    "host": "packages-16-east.internal.npmjs.com",
+    "tmp": "tmp/ionic-numberpicker-1.1.4.tgz_1463877790943_0.8458334754686803"
+  },
+  "_npmUser": {
+    "name": "riddler-dev",
+    "email": "matt@milkcan.io"
+  },
+  "_npmVersion": "2.7.6",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "ionic-numberpicker",
+    "scope": null,
+    "escapedName": "ionic-numberpicker",
+    "name": "ionic-numberpicker",
+    "rawSpec": "",
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/ionic-numberpicker/-/ionic-numberpicker-1.1.4.tgz",
+  "_shasum": "c87cc6b820bbb883fd81ba43d851c0ec9ddde3da",
+  "_shrinkwrap": null,
+  "_spec": "ionic-numberpicker",
+  "_where": "/home/albana/Desktop/www/infanziadigitales/ungiorno-mobile/ungiorno-mobile-genitori",
+  "author": {
+    "name": "https://github.com/milkcan, matt@milkcan.io"
+  },
+  "authors": [
+    "milk can llc <matt@milkcan.io>"
+  ],
+  "dependencies": {},
+  "description": "A number picker for IONIC framework",
+  "devDependencies": {
+    "del": "^2.0.2",
+    "gulp": "^3.9.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-css2js": "^1.0.2",
+    "gulp-minify-html": "^1.0.4",
+    "gulp-ng-html2js": "^0.2.0",
+    "gulp-uglify": "^1.4.1"
+  },
+  "directories": {},
+  "dist": {
+    "shasum": "c87cc6b820bbb883fd81ba43d851c0ec9ddde3da",
+    "tarball": "https://registry.npmjs.org/ionic-numberpicker/-/ionic-numberpicker-1.1.4.tgz"
+  },
+  "gitHead": "8189509c835bdc60073083564e55843dd1d13d71",
+  "license": "MIT",
+  "main": [
+    "./dist/ionic-numberpicker.bundle.min.js"
+  ],
+  "maintainers": [
+    {
+      "name": "riddler-dev",
+      "email": "matt@milkcan.io"
+    }
+  ],
+  "name": "ionic-numberpicker",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "scripts": {},
+  "version": "1.1.4"
+}

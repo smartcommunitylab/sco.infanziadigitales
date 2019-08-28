@@ -1,0 +1,7 @@
+{
+  "name": "InfanziaDigitales_Console",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic-angular"
+}

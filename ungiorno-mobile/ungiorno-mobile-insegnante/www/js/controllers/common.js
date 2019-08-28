@@ -201,7 +201,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
   });
   $scope.sendMail = function () {
     $scope.checkConnection().then(function () {
-        window.open('mailto:infdig-help@smartcommunitylab.it', '_system');
+        window.open('mailto:ugas-help@smartcommunitylab.it?subject=UGAS Insegnanti: segnalazione problema','_system');
         return false;
       },
       function (err) {
@@ -297,7 +297,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
     }
   $scope.checkConnection = function () {
     var deferred = $q.defer();
-    if (window.Connection) {
+    if (navigator.connection) {
       if (navigator.connection.type == Connection.NONE) {
         deferred.reject();
       } else {
@@ -308,6 +308,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.teachers.controllers.comm
     return deferred.promise;
   }
   $scope.goto = function (state) {
+    $state.go(state);
     $scope.checkConnection().then(function () {
       $state.go(state);
     }, function (err) {

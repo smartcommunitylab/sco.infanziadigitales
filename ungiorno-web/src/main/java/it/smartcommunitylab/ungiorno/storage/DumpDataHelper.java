@@ -15,24 +15,18 @@
  ******************************************************************************/
 package it.smartcommunitylab.ungiorno.storage;
 
-import it.smartcommunitylab.ungiorno.model.BusData;
-import it.smartcommunitylab.ungiorno.model.CalendarItem;
-import it.smartcommunitylab.ungiorno.model.Communication;
-import it.smartcommunitylab.ungiorno.model.InternalNote;
-import it.smartcommunitylab.ungiorno.model.KidCalNote;
-import it.smartcommunitylab.ungiorno.model.KidConfig;
-import it.smartcommunitylab.ungiorno.model.KidProfile;
-import it.smartcommunitylab.ungiorno.model.Menu;
-import it.smartcommunitylab.ungiorno.model.SchoolProfile;
-import it.smartcommunitylab.ungiorno.model.SectionData;
-import it.smartcommunitylab.ungiorno.model.Teacher;
-import it.smartcommunitylab.ungiorno.model.TeacherCalendar;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import it.smartcommunitylab.ungiorno.model.BusData;
+import it.smartcommunitylab.ungiorno.model.Communication;
+import it.smartcommunitylab.ungiorno.model.KidProfile;
+import it.smartcommunitylab.ungiorno.model.SchoolProfile;
+import it.smartcommunitylab.ungiorno.model.SectionData;
+import it.smartcommunitylab.ungiorno.model.Teacher;
 
 /**
  * @author raman
@@ -67,26 +61,14 @@ public class DumpDataHelper {
 
 
 
-	public static List<CalendarItem> dummyCalendar(String appId, String schoolId, String kidId, long from, long to) {
-		return readList("calendario-scuola.json", CalendarItem.class);
-	}
 	public static SchoolProfile dummySchoolProfile(String appId, String schoolId) {
 		return readObject("scuola-profilo.json", SchoolProfile.class);
 	}
 	public static KidProfile dummyKidProfile(String appId, String schoolId, String kidId) {
 		return readObject("bambino-profilo.json", KidProfile.class);
 	}
-	public static KidConfig dummyKidConfig(String appId, String schoolId, String kidId) {
-		return readObject("bambino-configurazione.json", KidConfig.class);
-	}
-	public static List<KidCalNote> dummyKidNotes(String appId, String schoolId, String kidId) {
-		return readList("calendario-note.json", KidCalNote.class);
-	}
 	public static List<Communication> dummyComms(String appId, String schoolId) {
 		return readList("calendario-comunicazioni.json", Communication.class);
-	}
-	public static List<Menu> dummyMenu(String appId, String schoolId) {
-		return readList("calendario-mensa.json", Menu.class);
 	}
 	public static List<Teacher> dummyTeachers(String appId, String schoolId) {
 		return readList("teacher-profile.json", Teacher.class);
@@ -96,11 +78,5 @@ public class DumpDataHelper {
 	}
 	public static List<SectionData> dummySections(String appId, String schoolId) {
 		return readList("sections-profile.json", SectionData.class);
-	}
-	public static List<TeacherCalendar> dummyTecherCalendar(String appId, String schoolId) {
-		return readList("calendario-docenti.json", TeacherCalendar.class);
-	}
-	public static List<InternalNote> dummyInternalNotes(String appId, String schoolId, String[] sectionIds) {
-		return readList("calendario-note-interne.json", InternalNote.class);
 	}
 }

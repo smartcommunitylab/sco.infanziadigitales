@@ -1,0 +1,16 @@
+db.name=ungiorno-dev
+rememberme.key=123
+ext.clientId=ID
+ext.clientSecret=SECRET
+ext.aacURL=https://dev.smartcommunitylab.it/aac
+ext.redirect=https://dev.smartcommunitylab.it/ungiorno2/ext_callback
+image.download.dir=/home/mirko/data/temp/infanzia-kid-pictures
+communicatorURL=http://localhost:8080/placeholder
+
+mail.smtp.host=localhost
+mail.smtp.port=2525
+mail.smtp.username=
+mail.smtp.password=
+
+email.address.from=ugas@localhost
+

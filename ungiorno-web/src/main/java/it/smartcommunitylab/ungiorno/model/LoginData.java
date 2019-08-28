@@ -41,7 +41,7 @@ public class LoginData implements Serializable {
 	 * @param tokenData
 	 */
 	public LoginData(String username, String userAACId, TokenData tokenData) {
-		this.username = username;
+		this.username = username.toLowerCase();
 		this.tokenData = tokenData;
 		this.userAACId = userAACId;
 	}

@@ -71,7 +71,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.services.d
             timeout: Config.httpTimout()
         }).
         success(function (data, status, headers, config) {
-            deferred.resolve(data.data);
+            deferred.resolve(data.data || []);
         }).
         error(function (data, status, headers, config) {
             console.log(data + status + headers + config);

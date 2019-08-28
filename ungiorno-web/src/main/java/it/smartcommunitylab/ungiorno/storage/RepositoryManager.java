@@ -1523,6 +1523,18 @@ public class RepositoryManager implements RepositoryService {
         }
         return dbMessage;
     }
+    
+	@Override
+	public ChatMessage getChatMessage(String appId, String schoolId, String messageId) {
+        Criteria criteria = new Criteria("appId").is(appId).and("schoolId")
+                .is(schoolId).and("messageId").is(messageId);
+        Query query = new Query(criteria);
+        ChatMessage dbMessage = template.findOne(query, ChatMessage.class);
+        return dbMessage;
+        
+	}
+
+
 
     @Override
     public ChatMessage chatMessageReceived(String appId, String schoolId, String messageId) {

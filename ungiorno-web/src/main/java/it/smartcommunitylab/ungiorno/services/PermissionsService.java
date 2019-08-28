@@ -17,17 +17,6 @@ public interface PermissionsService {
     boolean checkKidProfile(String appId, String schoolId, String kidId, Boolean isTeacher);
 
     DiaryUser getDiaryUser(String appId, String schoolId, Boolean isTeacher);
-    //
-    //	public List<String> getIds(DiaryUser du) {
-    //		List<String> ids = Lists.newArrayList();
-    //		for (String k : du.getStudents()) {
-    //			ids.add(k);
-    //		}
-    //		for (String k : du.getKids()) {
-    //			ids.add(k);
-    //		}
-    //		return ids;
-    //	}
 
     String getUserId();
 

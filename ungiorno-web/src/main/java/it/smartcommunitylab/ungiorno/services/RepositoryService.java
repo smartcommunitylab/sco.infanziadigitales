@@ -342,6 +342,7 @@ public interface RepositoryService {
 
     List<ChatMessage> getChatMessages(String appId, String schoolId, String kidId, long timestamp,
             int limit);
+    ChatMessage getChatMessage(String appId, String schoolId, String messageId);
 
     ChatMessage saveChatMessage(ChatMessage message);
 

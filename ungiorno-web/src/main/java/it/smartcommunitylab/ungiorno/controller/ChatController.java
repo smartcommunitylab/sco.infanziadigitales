@@ -27,6 +27,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import it.smartcommunitylab.ungiorno.config.exception.ProfileNotFoundException;
 import it.smartcommunitylab.ungiorno.model.Author;
 import it.smartcommunitylab.ungiorno.model.ChatMessage;
+import it.smartcommunitylab.ungiorno.model.Response;
 import it.smartcommunitylab.ungiorno.services.RepositoryService;
 import it.smartcommunitylab.ungiorno.usage.UsageEntity.UsageAction;
 import it.smartcommunitylab.ungiorno.usage.UsageManager;
@@ -53,6 +54,11 @@ public class ChatController {
             @PathVariable String schoolId, @PathVariable String kidId,
             @RequestParam(required = false) Long timestamp,
             @RequestParam(required = false) Integer limit) {
+    	
+        if (!permissions.checkKidProfile(appId, schoolId, kidId, null)) {
+            throw new SecurityException("User has no access to kid data");
+        }
+    	
         List<ChatMessage> result = new ArrayList<ChatMessage>();
         if (timestamp == null) {
             timestamp = 0L;
@@ -72,6 +78,11 @@ public class ChatController {
             value = "/chat/{appId}/{schoolId}/message/{kidId}/unread/fromparent")
     public @ResponseBody Long getUnreadCountFromParent(@PathVariable String appId,
             @PathVariable String schoolId, @PathVariable String kidId) {
+    	
+        if (!permissions.checkKidProfile(appId, schoolId, kidId, null)) {
+            throw new SecurityException("User has no access to kid data");
+        }
+    	
         Long result = storage.getUnreadChatMessageCount(appId, schoolId, kidId,
                 ChatMessage.SENT_BY_PARENT);
         if (logger.isInfoEnabled()) {
@@ -85,6 +96,11 @@ public class ChatController {
             value = "/chat/{appId}/{schoolId}/message/unread/fromparent")
     public @ResponseBody Map<String, Map<String, Integer>> getAllUnreadCountFromParent(
             @PathVariable String appId, @PathVariable String schoolId) {
+    	
+        if (!permissions.isSchoolTeacher(appId, schoolId, permissions.getUserId())) {
+            throw new SecurityException("User has no access to kid data");
+        }
+    	
         Map<String, Map<String, Integer>> result =
                 storage.getAllUnreadChatMessageCount(appId, schoolId, ChatMessage.SENT_BY_PARENT);
         if (logger.isInfoEnabled()) {
@@ -97,7 +113,12 @@ public class ChatController {
             value = "/chat/{appId}/{schoolId}/message/{kidId}/unread/fromteacher")
     public @ResponseBody Long getUnreadCountFromTeacher(@PathVariable String appId,
             @PathVariable String schoolId, @PathVariable String kidId) {
-        Long result = storage.getUnreadChatMessageCount(appId, schoolId, kidId,
+
+        if (!permissions.checkKidProfile(appId, schoolId, kidId, null)) {
+            throw new SecurityException("User has no access to kid data");
+        }
+
+    	Long result = storage.getUnreadChatMessageCount(appId, schoolId, kidId,
                 ChatMessage.SENT_BY_TEACHER);
         if (logger.isInfoEnabled()) {
             logger.info(String.format("getUnreadCountFromTeacher[%s]: %s - %s - %d", appId,
@@ -115,6 +136,11 @@ public class ChatController {
         // JsonNode rootNode = Utils.readJsonFromString(json);
         // String kidId = rootNode.get("kidId").asText();
         // String text = rootNode.get("text").asText();
+        if (!permissions.checkKidProfile(appId, schoolId, data.getKidId(), false)) {
+            throw new SecurityException("User has no rights to send message for kid");
+        }
+        
+        
         String kidId = data.getKidId();
         String text = data.getText();
         data.setAppId(appId);
@@ -147,6 +173,11 @@ public class ChatController {
         // String kidId = rootNode.get("kidId").asText();
         // String teacherId = rootNode.get("teacherId").asText();
         // String text = rootNode.get("text").asText();
+        
+        if (!permissions.checkKidProfile(appId, schoolId, data.getKidId(), true)) {
+            throw new SecurityException("Teacher has no rights to send message for kid");
+        }
+        
         String kidId = data.getKidId();
         String text = data.getText();
         String teacherId = data.getTeacherId();
@@ -181,6 +212,11 @@ public class ChatController {
         String teacherId = rootNode.get("teacherId").asText();
         String text = rootNode.get("text").asText();
         ArrayNode arrayNode = (ArrayNode) rootNode.get("recipients");
+        
+        if (!permissions.isSchoolTeacher(appId, schoolId, teacherId)) {
+            throw new SecurityException("User has no rights to send message for school");
+        }
+
         List<String> recipients = new ArrayList<String>();
         for (JsonNode node : arrayNode) {
             recipients.add(node.asText());
@@ -218,6 +254,10 @@ public class ChatController {
             @PathVariable String schoolId, @RequestBody ChatMessage message) {
         ChatMessage result = null;
         if ((message != null) && (Utils.isNotEmpty(message.getMessageId()))) {
+            if (!permissions.checkKidProfile(appId, schoolId, message.getKidId(), null)) {
+                throw new SecurityException("User has no access to kid data");
+            }
+        	
             message.setAppId(appId);
             message.setSchoolId(schoolId);
             result = storage.updateChatMessage(message);
@@ -234,6 +274,11 @@ public class ChatController {
     public @ResponseBody ChatMessage removeMessage(@PathVariable String appId,
             @PathVariable String schoolId, @PathVariable String messageId) {
         ChatMessage result = null;
+        ChatMessage chatMessage = storage.getChatMessage(appId, schoolId, messageId);
+        if (!permissions.checkKidProfile(appId, schoolId, chatMessage.getKidId(), null)) {
+            throw new SecurityException("User has no access to kid data");
+        }
+        
         result = storage.removeChatMessage(appId, schoolId, messageId);
         if (logger.isInfoEnabled()) {
             logger.info(String.format("removeMessage[%s]: %s - %s", appId, schoolId, messageId));
@@ -245,6 +290,12 @@ public class ChatController {
             value = "/chat/{appId}/{schoolId}/message/{messageId}/received")
     public @ResponseBody ChatMessage receivedMessage(@PathVariable String appId,
             @PathVariable String schoolId, @PathVariable String messageId) {
+    	
+        ChatMessage chatMessage = storage.getChatMessage(appId, schoolId, messageId);
+        if (!permissions.checkKidProfile(appId, schoolId, chatMessage.getKidId(), null)) {
+            throw new SecurityException("User has no access to kid data");
+        }
+    	
         ChatMessage result = null;
         result = storage.chatMessageReceived(appId, schoolId, messageId);
         if (logger.isInfoEnabled()) {
@@ -264,6 +315,12 @@ public class ChatController {
             value = "/chat/{appId}/{schoolId}/message/{messageId}/seen")
     public @ResponseBody ChatMessage seenMessage(@PathVariable String appId,
             @PathVariable String schoolId, @PathVariable String messageId) {
+
+    	ChatMessage chatMessage = storage.getChatMessage(appId, schoolId, messageId);
+        if (!permissions.checkKidProfile(appId, schoolId, chatMessage.getKidId(), null)) {
+            throw new SecurityException("User has no access to kid data");
+        }
+    	
         ChatMessage result = null;
         result = storage.chatMessageSeen(appId, schoolId, messageId);
         if (logger.isInfoEnabled()) {
@@ -277,6 +334,14 @@ public class ChatController {
                     messageId, "seen");
         }
         return result;
+    }
+
+    @ExceptionHandler(SecurityException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseBody
+    public String handleSecurityError(HttpServletRequest request, Exception exception) {
+        exception.printStackTrace();
+        return "{\"error\":\"" + exception.getMessage() + "\"}";
     }
 
     @ExceptionHandler(Exception.class)

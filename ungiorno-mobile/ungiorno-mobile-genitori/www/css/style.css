@@ -1924,6 +1924,12 @@ $dark: #444 !default;
   background-color: #5FC3DF;
   height: 100%;
 }
+
+#chat .button-chat-send ion-spinner {
+  position: absolute;
+    top: calc(50% - 14px);
+    left: -40px;
+}
 #chat input[type=text],
 textarea {
   border-bottom: none;

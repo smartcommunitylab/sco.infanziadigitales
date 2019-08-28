@@ -65,11 +65,12 @@
   <ion-footer-bar id="txtfooter" class="input-chat-footer" keyboard-attach class="bar-stable item-input input-chat">
 
     <div class="input-chat-footer bar-stable item-input input-chat">
-      <textarea class="input-chat-footer" placeholder="{{'input_chat_placeholder' | translate}}" ng-model="new_message" id="txtnotes" ng-focus="inputUp()" ng-blur="inputDown()" ng-keyup="startTyping()">
-      </textarea>
+        <textarea class="input-chat-footer" placeholder="{{'input_chat_placeholder' | translate}}" ng-model="new_message" id="txtnotes" ng-focus="inputUp()" ng-blur="inputDown()" ng-keyup="startTyping()">
+        </textarea>
       <div class="send-button-container" id="buttonsend">
         <button class="button button-chat-send ion-android-send send_butt" ng-click="sendMessage(new_message)">
-        </button>
+            <ion-spinner ng-if="sending"></ion-spinner>
+          </button>
       </div>
     </div>
   </ion-footer-bar>

@@ -247,7 +247,7 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents', [
 
         if (window.StatusBar) {
           // org.apache.cordova.statusbar required
-          StatusBar.styleDefault();
+          StatusBar.styleLightContent();
         }
 
         if (typeof navigator.globalization !== "undefined") {

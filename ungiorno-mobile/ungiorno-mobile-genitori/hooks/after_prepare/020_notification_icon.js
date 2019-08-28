@@ -40,6 +40,7 @@ var filestocopy = [
 
 var fs = require('fs');
 var path = require('path');
+var shelljs = require('shelljs');
 
 // no need to configure below
 var rootdir = process.argv[2];
@@ -52,7 +53,8 @@ filestocopy.forEach(function (obj) {
         //console.log("copying "+srcfile+" to "+destfile);
         var destdir = path.dirname(destfile);
         if (!fs.existsSync(destdir)) {
-            fs.mkdirSync(destdir);
+            shelljs.mkdir('-p', destdir);
+            //fs.mkdirSync(destdir, { recursive: true });
         }
         if (fs.existsSync(srcfile) && fs.existsSync(destdir)) {
             fs.createReadStream(srcfile).pipe(

@@ -244,18 +244,21 @@ angular.module('it.smartcommunitylab.infanziadigitales.diario.parents.controller
       //create message
 
       $scope.stopTyping();
-      $ionicLoading.show();
+      // $ionicLoading.show();
+      $scope.sending = true;
       messagesService.sendMessage($scope.babyProfile.schoolId, $scope.babyProfile.kidId, text).then(
         function (msg) {
           // init(); temporary commented. why reinitialize the list?
           $rootScope.messages[$scope.babyProfile.kidId] = $rootScope.messages[$scope.babyProfile.kidId].concat(msg);
-          $ionicLoading.hide();
+          // $ionicLoading.hide();
           $ionicScrollDelegate.scrollBottom();
           $scope.new_message = '';
+          $scope.sending = false;
         },
         function (err) {
-          $ionicLoading.hide();
+          // $ionicLoading.hide();
           Toast.show($filter('translate')('communication_error'), 'short', 'bottom');
+          $scope.sending = false;
         }
       );
     }

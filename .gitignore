@@ -8,3 +8,10 @@ ungiorno-mobile/ungiorno-mobile-genitori/Certificates-prod.p12
 ungiorno-mobile/ungiorno-mobile-genitori/Certificates.p12
 ungiorno-mobile/ungiorno-mobile-genitori/google-services.json
 ungiorno-mobile/ungiorno-mobile-genitori/GoogleService-Info.plist
+ungiorno-mobile/ungiorno-mobile-insegnante/typings/cordova-typings.d.ts
+ungiorno-mobile/ungiorno-mobile-insegnante/.vscode/plugins.json
+ungiorno-mobile/ungiorno-mobile-insegnante/.vscode/typings/angularjs/angular.d.ts
+ungiorno-mobile/ungiorno-mobile-insegnante/.vscode/typings/cordova/cordova.d.ts
+ungiorno-mobile/ungiorno-mobile-insegnante/.vscode/typings/ionic/ionic.d.ts
+ungiorno-mobile/ungiorno-mobile-insegnante/.vscode/typings/jquery/jquery.d.ts
+ungiorno-mobile/ungiorno-mobile-insegnante/google-services.json

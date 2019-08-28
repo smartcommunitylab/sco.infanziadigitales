@@ -115,7 +115,7 @@ public class ChatController {
             @PathVariable String schoolId, @PathVariable String kidId) {
 
         if (!permissions.checkKidProfile(appId, schoolId, kidId, null)) {
-            throw new SecurityException("User has no access to kid data");
+            throw new SecurityException("User has no access to kid data: " + kidId+" user " + permissions.getUserId());
         }
 
     	Long result = storage.getUnreadChatMessageCount(appId, schoolId, kidId,

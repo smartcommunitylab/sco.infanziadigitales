@@ -93,11 +93,7 @@ public class UserAuthController {
 			}
 			response.setStatus(status);
 		} catch (Exception e) {
-<<<<<<< HEAD
 			logger.error("Internal login failed", e);
-=======
-			logger.error("Error occured: ", e);
->>>>>>> ungiorno-console-clean
 			response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 		}
 		return null;

@@ -55,9 +55,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.rememberMe();
 
         http.authorizeRequests()
-                // .antMatchers("/diary/**", "/student/**", "/school/**", "/chat/**")
-                .antMatchers("/diary/**", "/student/**", "/school/**")
+                 .antMatchers("/diary/**", "/student/**", "/school/**", "/chat/**", "/parent/**", "/diary/**")
                 .hasAnyAuthority(UnGiornoUserDetails.UNGIORNO).and()
+                // DISABLED TEMPORARY
+                //.denyAll().and()
                 .addFilterBefore(rememberMeAuthenticationFilter(), BasicAuthenticationFilter.class)
                 .addFilterBefore(oauthAuthenticationFilter(), BasicAuthenticationFilter.class);
 
@@ -65,7 +66,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable().authorizeRequests().antMatchers("/consoleweb/**").permitAll().and()
                 .addFilterBefore(oauthAuthenticationFilter(), BasicAuthenticationFilter.class);
 
-        http.csrf().disable().authorizeRequests().antMatchers("/", "/console/**")
+        http.csrf().disable().authorizeRequests().antMatchers("/", "/console/**", "/import", "/downloadcsv")
                 .hasAnyAuthority(AppDetails.MANAGER).anyRequest().permitAll();
 
         http

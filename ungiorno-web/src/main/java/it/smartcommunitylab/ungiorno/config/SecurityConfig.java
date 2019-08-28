@@ -56,9 +56,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
                  .antMatchers("/diary/**", "/student/**", "/school/**", "/chat/**", "/parent/**", "/diary/**")
-                .hasAnyAuthority(UnGiornoUserDetails.UNGIORNO).and()
+//                .hasAnyAuthority(UnGiornoUserDetails.UNGIORNO).and()
                 // DISABLED TEMPORARY
-                //.denyAll().and()
+                .denyAll().and()
                 .addFilterBefore(rememberMeAuthenticationFilter(), BasicAuthenticationFilter.class)
                 .addFilterBefore(oauthAuthenticationFilter(), BasicAuthenticationFilter.class);
 

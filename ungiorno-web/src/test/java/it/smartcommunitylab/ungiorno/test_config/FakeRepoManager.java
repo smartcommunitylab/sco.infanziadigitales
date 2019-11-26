@@ -451,4 +451,10 @@ public class FakeRepoManager implements RepositoryService {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public ChatMessage getChatMessage(String appId, String schoolId, String messageId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

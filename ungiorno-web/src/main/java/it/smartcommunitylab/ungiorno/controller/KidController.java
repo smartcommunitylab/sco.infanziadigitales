@@ -76,9 +76,11 @@ public class KidController {
     public @ResponseBody Response<List<KidProfile>> getProfiles(@PathVariable String appId)
             throws ProfileNotFoundException {
 
-        String userId = permissions.getUserId();
-        List<KidProfile> profiles = storage.getKidProfilesByParent(appId, userId);
-        return new Response<>(profiles);
+    	throw new ProfileNotFoundException();
+    	
+//        String userId = permissions.getUserId();
+//        List<KidProfile> profiles = storage.getKidProfilesByParent(appId, userId);
+//        return new Response<>(profiles);
     }
 
     @RequestMapping(method = RequestMethod.GET,

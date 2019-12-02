@@ -34,6 +34,8 @@ public class School implements Serializable {
     private String accessEmail;
     private List<String> tags;
 
+    private Boolean disabled;
+    
     public String getSchoolId() {
         return schoolId;
     }
@@ -90,4 +92,11 @@ public class School implements Serializable {
         this.accessEmail = accessEmail;
     }
 
+	public Boolean getDisabled() {
+		return disabled;
+	}
+
+	public void setDisabled(Boolean disabled) {
+		this.disabled = disabled;
+	}
 }

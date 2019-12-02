@@ -115,6 +115,16 @@ public class AppSetup {
     public AppInfo findAppById(String username) {
         return appsMap.get(username);
     }
+    
+    public School findSchool(String appId, String schoolId) {
+    	AppInfo info = findAppById(appId);
+    	if (info != null) {
+    		for (School school: info.getSchools()) {
+    			if (school.getSchoolId().equals(schoolId)) return school;
+    		}
+    	}
+    	return null;
+    }
 
     public List<School> findSchoolsByAccount(String account) {
         if (account == null) {

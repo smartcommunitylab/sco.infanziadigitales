@@ -1,6 +1,7 @@
 package it.smartcommunitylab.ungiorno.model;
 
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -19,7 +20,19 @@ public class TimeSlotSchoolService extends SchoolService {
     private final boolean regular;
 
     public static final String DEFAULT_REGULAR_SERVICE_NAME = "Normale";
+    public static final String DEFAULT_1 = "Prima ora prolungamento";
+    public static final String DEFAULT_2 = "Seconda ora prolungamento";
+    public static final String DEFAULT_3 = "Terza ora prolungamento";
 
+    public static List<TimeSlotSchoolService> defaultTimeSlots() {
+    	List<TimeSlotSchoolService> res = new LinkedList<TimeSlotSchoolService>();
+    	res.add(new TimeSlotSchoolService(DEFAULT_REGULAR_SERVICE_NAME, true));
+    	res.add(new TimeSlotSchoolService(DEFAULT_1, false));
+    	res.add(new TimeSlotSchoolService(DEFAULT_2, false));
+    	res.add(new TimeSlotSchoolService(DEFAULT_3, false));
+    	return res;
+    }
+    
     public TimeSlotSchoolService(@Nonnull String name, boolean regular) {
         if (name == null) {
             throw new IllegalArgumentException("Name cannot be null");

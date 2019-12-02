@@ -235,10 +235,10 @@ public class RepositoryManager implements RepositoryService {
      */
     private SchoolProfile completeSchoolProfile(SchoolProfile schoolProfile) {
         if (schoolProfile != null) {
-            TimeSlotSchoolService regularService = new TimeSlotSchoolService(
-                    TimeSlotSchoolService.DEFAULT_REGULAR_SERVICE_NAME, true);
+        	List<TimeSlotSchoolService> slots = TimeSlotSchoolService.defaultTimeSlots();
             // if regular service is already present in the service set, it isn't added
-            schoolProfile.getServices().add(regularService);
+        	for (TimeSlotSchoolService slot: slots)
+	            schoolProfile.getServices().add(slot);
         }
 
         return schoolProfile;

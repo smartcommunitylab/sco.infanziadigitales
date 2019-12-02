@@ -20,6 +20,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -50,14 +51,19 @@ import it.smartcommunitylab.ungiorno.model.Communication;
 import it.smartcommunitylab.ungiorno.model.KidProfile;
 import it.smartcommunitylab.ungiorno.model.KidProfile.DayDefault;
 import it.smartcommunitylab.ungiorno.model.Response;
+import it.smartcommunitylab.ungiorno.model.School;
 import it.smartcommunitylab.ungiorno.services.PermissionsService;
 import it.smartcommunitylab.ungiorno.services.RepositoryService;
 import it.smartcommunitylab.ungiorno.services.impl.KidManager;
+import it.smartcommunitylab.ungiorno.storage.AppSetup;
 
 @RestController
 public class KidController {
 
     private static final transient Logger logger = LoggerFactory.getLogger(KidController.class);
+
+    @Autowired
+    private AppSetup appSetup;
 
     @Autowired
     @Value("${image.download.dir}")
@@ -76,11 +82,16 @@ public class KidController {
     public @ResponseBody Response<List<KidProfile>> getProfiles(@PathVariable String appId)
             throws ProfileNotFoundException {
 
-    	throw new ProfileNotFoundException();
-    	
-//        String userId = permissions.getUserId();
-//        List<KidProfile> profiles = storage.getKidProfilesByParent(appId, userId);
-//        return new Response<>(profiles);
+        String userId = permissions.getUserId();
+        List<KidProfile> profiles = storage.getKidProfilesByParent(appId, userId);
+        List<KidProfile> result = new LinkedList<KidProfile>();
+        for (KidProfile p: profiles) {
+        	School s = appSetup.findSchool(appId, p.getSchoolId());
+        	if (s != null && !Boolean.FALSE.equals(s.getDisabled())) {
+        		result.add(p);
+        	}
+        }
+        return new Response<>(result);
     }
 
     @RequestMapping(method = RequestMethod.GET,

@@ -115,7 +115,7 @@
 		<dependency>
 			<groupId>com.fasterxml.jackson.datatype</groupId>
 			<artifactId>jackson-datatype-joda</artifactId>
-			<version>2.3.5</version>
+			<version>2.10.1</version>
 		</dependency>
 
 
@@ -152,13 +152,13 @@
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-core</artifactId>
-			<version>2.3.0</version>
+			<version>2.10.1</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-			<version>2.3.0</version>
+			<version>2.9.10.1</version>
 		</dependency>
 
 		<!-- android version because it supports Java7 -->

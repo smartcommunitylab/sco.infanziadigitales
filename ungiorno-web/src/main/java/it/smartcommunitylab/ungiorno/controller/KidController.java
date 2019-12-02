@@ -87,7 +87,7 @@ public class KidController {
         List<KidProfile> result = new LinkedList<KidProfile>();
         for (KidProfile p: profiles) {
         	School s = appSetup.findSchool(appId, p.getSchoolId());
-        	if (s != null && !Boolean.FALSE.equals(s.getDisabled())) {
+        	if (s != null && !Boolean.TRUE.equals(s.getDisabled())) {
         		result.add(p);
         	}
         }

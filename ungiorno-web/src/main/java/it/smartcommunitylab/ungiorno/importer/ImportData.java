@@ -76,7 +76,8 @@ public class ImportData {
                 if (logger.isInfoEnabled()) {
                     logger.info("read kid:" + cfAlunno);
                 }
-
+                if (schoolId != null && !schoolId.equals(scuolaAlunno)) continue;
+                
                 SchoolProfile schoolProfile = storage.getSchoolProfileByName(appId, scuolaAlunno);
                 if (schoolProfile == null) {
                 	errors.add("School not found:" + scuolaAlunno);
@@ -138,8 +139,15 @@ public class ImportData {
     	Map<String, Set<String>> existing = new HashMap<>();
     	Map<String, List<KidProfile>> newOrUpdate = new HashMap<>();
     	if (schoolId == null) {
+    		Set<String> newSchools = new HashSet<>();
+    		for (KidProfile c : children) {
+    			newSchools.add(c.getSchoolId());
+    		} 
+    		
     		List<School> schools = storage.getApp(appId).getAppInfo().getSchools();
     		for (School school: schools) {
+    			if (!newSchools.contains(school.getSchoolId())) continue;
+    			
     			List<KidProfile> kids = storage.getKidProfilesBySchool(appId, school.getSchoolId());
     			Set<String> set = new HashSet<String>();
     			existing.put(school.getSchoolId(), set);

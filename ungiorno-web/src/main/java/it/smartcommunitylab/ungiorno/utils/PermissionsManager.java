@@ -14,6 +14,7 @@ import it.smartcommunitylab.ungiorno.services.PermissionsService;
 import it.smartcommunitylab.ungiorno.services.RepositoryService;
 import it.smartcommunitylab.ungiorno.storage.AppSetup;
 
+import java.net.URLEncoder;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -262,7 +263,7 @@ public class PermissionsManager implements PermissionsService {
 				env.getProperty("ext.clientId"), 
 				env.getProperty("ext.clientSecret"),
 				email,
-				password);
+				URLEncoder.encode(password));
 	}
 	@Override
     public String getRegisterURL() {

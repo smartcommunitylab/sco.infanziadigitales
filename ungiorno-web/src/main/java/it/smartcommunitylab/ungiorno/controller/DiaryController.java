@@ -273,8 +273,8 @@ public class DiaryController {
                 String fullName = null;
                 String name = null;
                 do {
-                    name = Base64.encodeBase64((kidId + "_" + System.currentTimeMillis() + "_"
-                            + file.getOriginalFilename()).getBytes()) + ext;
+                    name = new String(Base64.encodeBase64((kidId + "_" + System.currentTimeMillis() + "_"
+                            + file.getOriginalFilename()).getBytes())) + ext;
                     fullName = appSetup.getUploadDirectory() + "/" + name;
                 } while (new File(fullName).exists());
 
